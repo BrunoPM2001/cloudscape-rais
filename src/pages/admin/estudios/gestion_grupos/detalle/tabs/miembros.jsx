@@ -218,79 +218,47 @@ export default () => {
   return (
     <Table
       {...collectionProps}
+      trackBy="id"
       items={items}
       columnDefinitions={columnDefinitions}
       columnDisplay={columnDisplay}
-      enableKeyboardNavigation
-      // selectionType="multi"
-      // onSelectionChange={({ detail }) => setSelectedItems(detail.selectedItems)}
-      // selectedItems={selectedItems}
-      // ariaLabels={{
-      //   selectionGroupLabel: "Items selection",
-      //   allItemsSelectionLabel: ({ selectedItems }) =>
-      //     `${selectedItems.length} ${
-      //       selectedItems.length === 1 ? "item" : "items"
-      //     } selected`,
-      //   itemSelectionLabel: ({ selectedItems }, item) => item.name,
-      // }}
-      loadingText="Cargando datos"
       loading={loading}
+      loadingText="Cargando datos"
+      selectionType="multi"
+      selectedItems={selectedItems}
+      onSelectionChange={({ detail }) => setSelectedItems(detail.selectedItems)}
       resizableColumns
-      trackBy="id"
-      // empty={
-      //   <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
-      //     <SpaceBetween size="m">
-      //       <b>No hay registros...</b>
-      //     </SpaceBetween>
-      //   </Box>
-      // }
+      enableKeyboardNavigation
+      ariaLabels={{
+        selectionGroupLabel: "Items selection",
+        allItemsSelectionLabel: ({ selectedItems }) =>
+          `${selectedItems.length} ${
+            selectedItems.length === 1 ? "item" : "items"
+          } selected`,
+        itemSelectionLabel: ({ selectedItems }, item) => item.name,
+      }}
+      empty={
+        <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
+          <SpaceBetween size="m">
+            <b>No hay registros...</b>
+          </SpaceBetween>
+        </Box>
+      }
       filter={
         <PropertyFilter
           {...propertyFilterProps}
+          filteringPlaceholder="Buscar miembro"
           countText={`${filteredItemsCount} coincidencias`}
           expandToViewport
-          i18nStrings={{
-            allPropertiesLabel: "Todos campos",
-            applyActionText: "Aplicar",
-            cancelActionText: "Cancelar",
-            clearAriaLabel: "Limpiar",
-            clearFiltersText: "Limpiar filtros",
-            dismissAriaLabel: "Eliminar",
-            editTokenHeader: "Editar",
-            // enteredTextLabel: (valueText) => `Usar: "${valueText}"`
-            //  Autosuggest
-            groupValuesText: "Valores",
-            removeTokenButtonAriaLabel: "Eliminar token",
-            tokenLimitShowFewer: "Mostrar menos",
-            tokenLimitShowMore: "Mostrar más",
-            tokenOperatorAriaLabel: "Operación token",
-            valueText: "Gaa",
-            groupPropertiesText: "Campos",
-            operatorsText: "Operadores",
-            operationAndText: "Y",
-            operationOrText: "O",
-            operatorContainsText: "Contiene",
-            operatorDoesNotContainText: "No contiene",
-            operatorEqualsText: "Igual a",
-            operatorDoesNotEqualText: "No es igual a",
-            operatorDoesNotStartWithText: "No empieza con",
-            operatorGreaterOrEqualText: "Mayor o igual a",
-            operatorGreaterText: "Mayor que",
-            operatorLessOrEqualText: "Menor o igual a",
-            operatorLessText: "Menor que",
-            operatorStartsWithText: "Empiza con",
-            operatorText: "Operador",
-            propertyText: "Usando:",
-          }}
         />
       }
       header={
         <Header
-          // counter={
-          //   selectedItems.length
-          //     ? "(" + selectedItems.length + "/" + items.length + ")"
-          //     : "(" + items.length + ")"
-          // }
+          counter={
+            selectedItems.length
+              ? "(" + selectedItems.length + "/" + items.length + ")"
+              : "(" + items.length + ")"
+          }
           actions={
             <SpaceBetween direction="horizontal" size="xs">
               <ButtonDropdown
