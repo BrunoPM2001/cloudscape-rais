@@ -16,7 +16,7 @@ export default () => {
     const getData = async () => {
       try {
         const res = await fetch(
-          "http://localhost:8000/api/admin/estudios/grupos/lineas/257"
+          "http://localhost:8000/api/admin/estudios/grupos/docs/257"
         );
         if (!res.ok) {
           setItems([]);
@@ -28,6 +28,8 @@ export default () => {
           setLoading(!loading);
         }
       } catch (error) {
+        setItems([]);
+        setLoading(!loading);
         console.log(error);
       }
     };
@@ -38,24 +40,30 @@ export default () => {
     <Table
       columnDefinitions={[
         {
-          id: "codigo",
-          header: "Código",
-          cell: (item) => item.codigo,
-        },
-        {
           id: "nombre",
           header: "Nombre",
-          cell: (item) => item.nombre,
+          cell: (item) => <Link href="#">{item.nombre}</Link>,
+        },
+        {
+          id: "archivo_tipo",
+          header: "Tipo de archivo",
+          cell: (item) => item.archivo_tipo,
+        },
+        {
+          id: "fecha",
+          header: "Fecha",
+          cell: (item) => item.fecha,
         },
         {
           id: "accion",
-          header: "Eliminar",
-          cell: (item) => <Link href="#">{item.id}</Link>,
+          header: "Acción",
+          cell: (item) => <div>{item.id}</div>,
         },
       ]}
       columnDisplay={[
-        { id: "codigo", visible: true },
         { id: "nombre", visible: true },
+        { id: "archivo_tipo", visible: true },
+        { id: "fecha", visible: true },
         { id: "accion", visible: true },
       ]}
       enableKeyboardNavigation
@@ -71,7 +79,7 @@ export default () => {
           </SpaceBetween>
         </Box>
       }
-      header={<Header>Lineas</Header>}
+      header={<Header>Documentos</Header>}
     />
   );
 };

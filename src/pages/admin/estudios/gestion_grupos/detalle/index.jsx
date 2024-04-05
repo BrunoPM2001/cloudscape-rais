@@ -1,19 +1,15 @@
 import {
   AppLayout,
-  Box,
   BreadcrumbGroup,
-  ColumnLayout,
-  Container,
   ContentLayout,
   Flashbar,
   Header,
   HelpPanel,
   SpaceBetween,
-  StatusIndicator,
   Tabs,
 } from "@cloudscape-design/components";
-import Sidebar from "../../components/sidebar.jsx";
-import Navbar from "../../components/navbar.jsx";
+import Sidebar from "../../../components/sidebar.jsx";
+import Navbar from "../../../components/navbar.jsx";
 import Miembros from "./tabs/miembros.jsx";
 import Documentos from "./tabs/documentos.jsx";
 import Lineas from "./tabs/lineas.jsx";
