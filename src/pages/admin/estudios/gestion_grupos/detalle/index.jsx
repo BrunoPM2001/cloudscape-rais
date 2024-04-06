@@ -21,7 +21,15 @@ import Detalles from "./detalles.jsx";
 
 const breadcrumbs = [
   {
-    text: "Grupos",
+    text: "Admin",
+    href: "#",
+  },
+  {
+    text: "Estudios",
+    href: "#",
+  },
+  {
+    text: "Gestion de grupos",
     href: "#",
   },
   {
@@ -75,20 +83,6 @@ export default function Gestion_grupos() {
       <AppLayout
         breadcrumbs={<BreadcrumbGroup items={breadcrumbs} />}
         navigation={<Sidebar />}
-        notifications={
-          <Flashbar
-            items={
-              [
-                // {
-                //   type: "info",
-                //   dismissible: true,
-                //   content: "This is an info flash message.",
-                //   id: "message_1",
-                // },
-              ]
-            }
-          />
-        }
         tools={
           <HelpPanel header={<h2>Panel de ayuda</h2>}>
             Información sobre la páginal actual para poder mostrarla al público
