@@ -7,7 +7,11 @@ import {
   Button,
 } from "@cloudscape-design/components";
 import { useState, useEffect } from "react";
-import Modal from "../components/modal.jsx";
+import {
+  CreateUserModal,
+  DeleteModal,
+  EditUserModal,
+} from "../components/modal.jsx";
 
 const columnDefinitions = [
   {
@@ -71,7 +75,25 @@ export default () => {
   const [enableBtn, setEnableBtn] = useState(true);
   const [items, setItems] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
-  const [visible, setVisible] = useState(true);
+  const [visible, setVisible] = useState(false);
+  const [editVisible, setEditVisible] = useState(false);
+  const [deleteVisible, setDeleteVisible] = useState(false);
+  const [editForm, setEditForm] = useState({
+    codigo: null,
+    cargo: null,
+    nombres: null,
+    paterno: null,
+    materno: null,
+    sexo: null,
+    mail: null,
+    telefono_casa: null,
+    telefono_trabajo: null,
+    telefono_movil: null,
+    direccion: null,
+    grupo: null,
+    username: null,
+    password: null,
+  });
 
   //  Functions
   const getData = async () => {
@@ -132,6 +154,13 @@ export default () => {
               <SpaceBetween direction="horizontal" size="xs">
                 <ButtonDropdown
                   disabled={!enableBtn}
+                  onItemClick={({ detail }) => {
+                    if (detail.id == "action_1") {
+                      setEditVisible(true);
+                    } else if (detail.id == "action_2") {
+                      setDeleteVisible(true);
+                    }
+                  }}
                   items={[
                     {
                       text: "Editar",
@@ -164,7 +193,14 @@ export default () => {
           </Box>
         }
       ></Table>
-      <Modal visible={visible} setVisible={setVisible} />
+      <CreateUserModal visible={visible} setVisible={setVisible} />
+      <EditUserModal
+        visible={editVisible}
+        setVisible={setEditVisible}
+        form={editForm}
+        setForm={setEditForm}
+      />
+      <DeleteModal visible={deleteVisible} setVisible={setDeleteVisible} />
     </>
   );
 };
