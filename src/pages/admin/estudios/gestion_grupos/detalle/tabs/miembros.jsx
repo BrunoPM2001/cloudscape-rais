@@ -185,21 +185,22 @@ export default () => {
   useEffect(() => {
     const getData = async () => {
       try {
+        setLoading(true);
         const res = await fetch(
           "http://localhost:8000/api/admin/estudios/grupos/miembros/257/1"
         );
         if (!res.ok) {
           setDistribution([]);
-          setLoading(!loading);
+          setLoading(false);
           throw new Error("Error in fetch");
         } else {
           const data = await res.json();
           setDistribution(data.data);
-          setLoading(!loading);
+          setLoading(false);
         }
       } catch (error) {
         setDistribution([]);
-        setLoading(!loading);
+        setLoading(false);
         console.log(error);
       }
     };
