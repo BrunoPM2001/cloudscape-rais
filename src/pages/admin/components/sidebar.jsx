@@ -1,4 +1,5 @@
 import { SideNavigation } from "@cloudscape-design/components";
+import { useLocation } from "react-router-dom";
 
 const navItems = [
   {
@@ -12,7 +13,11 @@ const navItems = [
         href: "#/convocatorias",
       },
       { type: "divider" },
-      { type: "link", text: "Gestión de grupos", href: "#" },
+      {
+        type: "link",
+        text: "Gestión de grupos",
+        href: "/admin/estudios/grupos",
+      },
       { type: "link", text: "Gestión de proyectos de grupos", href: "#" },
       { type: "link", text: "Gestión de proyectos FEX", href: "#" },
       { type: "link", text: "Gestión de proyectos", href: "#" },
@@ -74,23 +79,34 @@ const navItems = [
     text: "Admin",
     defaultExpanded: false,
     items: [
-      { type: "link", text: "Lineas de investigación", href: "#" },
+      {
+        type: "link",
+        text: "Lineas de investigación",
+        href: "/admin/admin/lineas",
+      },
       { type: "divider" },
-      { type: "link", text: "Usuarios administrativos", href: "#" },
-      { type: "link", text: "Usuarios investigadores", href: "#" },
-      { type: "divider" },
-      { type: "link", text: "Asignar temporal", href: "#" },
+      {
+        type: "link",
+        text: "Usuarios administrativos",
+        href: "/admin/admin/usuarios_administrativos",
+      },
+      {
+        type: "link",
+        text: "Usuarios investigadores",
+        href: "/admin/admin/usuarios_investigadores",
+      },
     ],
   },
 ];
 
 export default function Sidebar({ activeHref = "#" }) {
+  const location = useLocation();
   return (
     <SideNavigation
       header={{
         text: "Administrador",
       }}
-      activeHref={activeHref}
+      activeHref={location.pathname}
       items={navItems}
     />
   );

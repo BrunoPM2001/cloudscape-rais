@@ -7,6 +7,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Gestion_grupos from "./pages/admin/estudios/gestion_grupos/detalle/index.jsx";
 import Lineas_investigacion from "./pages/admin/admin/lineas/index.jsx";
 import Usuarios_administrativos from "./pages/admin/admin/usuarios_administrativos/index.jsx";
+import Usuarios_investigadores from "./pages/admin/admin/usuarios_investigadores/index.jsx";
 
 const router = createBrowserRouter([
   {
@@ -39,6 +40,10 @@ const router = createBrowserRouter([
           {
             path: "usuarios_administrativos",
             element: <Usuarios_administrativos />,
+          },
+          {
+            path: "usuarios_investigadores",
+            element: <Usuarios_investigadores />,
           },
         ],
       },

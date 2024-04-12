@@ -1,10 +1,10 @@
 import {
-  Header,
-  Table,
   Box,
-  SpaceBetween,
-  ButtonDropdown,
   Button,
+  ButtonDropdown,
+  Header,
+  SpaceBetween,
+  Table,
 } from "@cloudscape-design/components";
 import { useState, useEffect } from "react";
 import {
@@ -15,11 +15,17 @@ import {
 
 const columnDefinitions = [
   {
-    id: "username",
-    header: "Nombre de usuario",
-    cell: (item) => item.username,
-    sortingField: "username",
+    id: "facultad",
+    header: "Facultad",
+    cell: (item) => item.facultad,
+    sortingField: "facultad",
     isRowHeader: true,
+  },
+  {
+    id: "codigo",
+    header: "Código",
+    cell: (item) => item.codigo,
+    sortingField: "codigo",
   },
   {
     id: "apellido1",
@@ -40,16 +46,22 @@ const columnDefinitions = [
     sortingField: "nombres",
   },
   {
-    id: "telefono_movil",
-    header: "Teléfono móvil",
-    cell: (item) => item.telefono_movil,
-    sortingField: "telefono_movil",
+    id: "sexo",
+    header: "Sexo",
+    cell: (item) => item.sexo,
+    sortingField: "sexo",
   },
   {
-    id: "cargo",
-    header: "Cargo",
-    cell: (item) => item.cargo,
-    sortingField: "cargo",
+    id: "email",
+    header: "Correo",
+    cell: (item) => item.email,
+    sortingField: "email",
+  },
+  {
+    id: "doc_numero",
+    header: "Número de documento",
+    cell: (item) => item.doc_numero,
+    sortingField: "doc_numero",
   },
   {
     id: "estado",
@@ -60,12 +72,14 @@ const columnDefinitions = [
 ];
 
 const columnDisplay = [
-  { id: "username", visible: true },
+  { id: "facultad", visible: true },
+  { id: "codigo", visible: true },
   { id: "apellido1", visible: true },
   { id: "apellido2", visible: true },
   { id: "nombres", visible: true },
-  { id: "telefono_movil", visible: true },
-  { id: "cargo", visible: true },
+  { id: "sexo", visible: true },
+  { id: "email", visible: true },
+  { id: "doc_numero", visible: true },
   { id: "estado", visible: true },
 ];
 
@@ -79,20 +93,15 @@ export default () => {
   const [editVisible, setEditVisible] = useState(false);
   const [deleteVisible, setDeleteVisible] = useState(false);
   const [editForm, setEditForm] = useState({
+    facultad: null,
     codigo: null,
-    cargo: null,
-    nombres: null,
     paterno: null,
     materno: null,
+    nombres: null,
     sexo: null,
-    mail: null,
-    telefono_casa: null,
-    telefono_trabajo: null,
-    telefono_movil: null,
-    direccion: null,
-    grupo: null,
-    username: null,
-    password: null,
+    email: null,
+    doc_numero: null,
+    estado: null,
   });
 
   //  Functions
@@ -100,7 +109,7 @@ export default () => {
     try {
       setLoading(true);
       const res = await fetch(
-        "http://localhost:8000/api/admin/admin/usuarios/getUsuariosAdmin"
+        "http://localhost:8000/api/admin/admin/usuarios/getUsuariosInvest"
       );
       if (!res.ok) {
         setLoading(false);
@@ -127,14 +136,14 @@ export default () => {
     if (selectedItems.length > 0) {
       setEnableBtn(true);
     } else {
-      setEnableBtn(false);
+      setEnableBtn(true);
     }
   }, [selectedItems]);
 
   return (
     <>
       <Table
-        trackBy="username"
+        trackBy="codigo"
         items={items}
         columnDefinitions={columnDefinitions}
         columnDisplay={columnDisplay}
@@ -172,17 +181,25 @@ export default () => {
                       id: "action_2",
                       disabled: false,
                     },
+                    {
+                      text: "Asignar temporal",
+                      id: "action_3",
+                      disabled: false,
+                    },
                   ]}
                 >
                   Acciones para usuario
                 </ButtonDropdown>
-                <Button variant="primary" onClick={() => setCreateVisible(true)}>
-                  Crear usuario administrador
+                <Button
+                  variant="primary"
+                  onClick={() => setCreateVisible(true)}
+                >
+                  Crear usuario investigador
                 </Button>
               </SpaceBetween>
             }
           >
-            Usuarios administradores
+            Usuarios investigadores
           </Header>
         }
         empty={
