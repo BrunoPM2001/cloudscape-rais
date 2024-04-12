@@ -4,29 +4,22 @@ import {
   ColumnLayout,
   Header,
   Box,
-  Icon,
+  Spinner,
 } from "@cloudscape-design/components";
 
-export default () => {
+export default ({ data, loading }) => {
   return (
     <Container header={<Header variant="h2">Extras</Header>}>
       <ColumnLayout columns={2} variant="text-grid">
         <div>
-          <Box variant="awsui-key-label">
-            Ambientes físicos {"  "}
-            <Icon name="external" variant="link" />
-          </Box>
-          <div>
-            Es la oficina de la dirección de aproximadamente 20 metros
-            cuadrados.
-          </div>
+          <Box variant="awsui-key-label">Ambientes físicos</Box>
+          {loading ? <Spinner /> : <div>{data.infraestructura_ambientes}</div>}
         </div>
         <div>
           <Box variant="awsui-key-label">
-            Resoluciones decanales o constancias {"  "}
-            <Icon name="external" variant="link" />
+            Resoluciones decanales o constancias
           </Box>
-          <Link to="#">013569-2023-R</Link>
+          {loading ? <Spinner /> : <Link>{data.grupo_nombre}</Link>}
         </div>
       </ColumnLayout>
     </Container>

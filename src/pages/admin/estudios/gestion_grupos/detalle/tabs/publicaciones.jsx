@@ -9,6 +9,8 @@ import {
 } from "@cloudscape-design/components";
 import { useCollection } from "@cloudscape-design/collection-hooks";
 import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
+import queryString from "query-string";
 
 const stringOperators = [":", "!:", "=", "!=", "^", "!^"];
 
@@ -57,6 +59,7 @@ const columnDisplay = [
 ];
 
 export default () => {
+  //  States
   const [loading, setLoading] = useState(true);
   const [distributions, setDistribution] = useState([]);
   const {
@@ -89,12 +92,16 @@ export default () => {
     selection: {},
   });
 
+  //  Url
+  const location = useLocation();
+  const { id } = queryString.parse(location.search);
+
   //  Data
   useEffect(() => {
     const getData = async () => {
       try {
         const res = await fetch(
-          "http://localhost:8000/api/admin/estudios/grupos/publicaciones/257"
+          "http://localhost:8000/api/admin/estudios/grupos/publicaciones/" + id
         );
         if (!res.ok) {
           setDistribution([]);

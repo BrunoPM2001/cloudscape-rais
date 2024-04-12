@@ -28,7 +28,8 @@ const CreateUserModal = ({ visible, setVisible }) => {
     try {
       setLoading(true);
       const res = await fetch(
-        "http://localhost:8000/api/admin/admin/usuarios/..." + value
+        "http://localhost:8000/api/admin/admin/usuarios/searchInvestigadorBy/" +
+          value
       );
       if (!res.ok) {
         setLoading(false);
@@ -36,7 +37,13 @@ const CreateUserModal = ({ visible, setVisible }) => {
         throw new Error("Error in fetch");
       } else {
         const data = await res.json();
-        setOptions(data.data);
+        const opt = data.map((item) => {
+          return {
+            detail: item.id,
+            value: `${item.codigo} | ${item.doc_numero} | ${item.apellido1} ${item.apellido2}, ${item.nombres}`,
+          };
+        });
+        setOptions(opt);
         setLoading(false);
       }
     } catch (error) {
@@ -48,7 +55,10 @@ const CreateUserModal = ({ visible, setVisible }) => {
 
   //  Effects
   useEffect(() => {
-    getData();
+    const temp = setTimeout(() => {
+      getData();
+    }, 1000);
+    return () => clearTimeout(temp);
   }, [value]);
 
   return (
@@ -74,7 +84,17 @@ const CreateUserModal = ({ visible, setVisible }) => {
             <Header variant="h3">Datos del investigador</Header>
             <FormField label="Investigador" stretch>
               <Autosuggest
-                onChange={({ detail }) => setValue(detail.value)}
+                onChange={({ detail }) => {
+                  setValue(detail.value);
+                }}
+                onSelect={({ detail }) => {
+                  if (detail.selectedOption.detail != undefined) {
+                    setForm((prev) => ({
+                      ...prev,
+                      investigador_id: detail.selectedOption.detail,
+                    }));
+                  }
+                }}
                 value={value}
                 options={options}
                 loadingText="Cargando data"

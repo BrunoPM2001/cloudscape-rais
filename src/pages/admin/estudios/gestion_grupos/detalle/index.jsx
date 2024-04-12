@@ -18,6 +18,9 @@ import Publicaciones from "./tabs/publicaciones.jsx";
 import Laboratorios from "./tabs/laboratorios.jsx";
 import Extras from "./tabs/extras.jsx";
 import Detalles from "./detalles.jsx";
+import { useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
+import queryString from "query-string";
 
 const breadcrumbs = [
   {
@@ -30,7 +33,7 @@ const breadcrumbs = [
   },
   {
     text: "Gestion de grupos",
-    href: "#",
+    href: "../grupos",
   },
   {
     text: "Detalle",
@@ -38,45 +41,81 @@ const breadcrumbs = [
   },
 ];
 
-const tabs = [
-  {
-    id: "miembros",
-    label: "Miembros",
-    content: <Miembros />,
-  },
-  {
-    id: "documentos",
-    label: "Documentos",
-    content: <Documentos />,
-  },
-  {
-    id: "lineas",
-    label: "Lineas",
-    content: <Lineas />,
-  },
-  {
-    id: "proyectos",
-    label: "Proyectos",
-    content: <Proyectos />,
-  },
-  {
-    id: "publicaciones",
-    label: "Publicaciones",
-    content: <Publicaciones />,
-  },
-  {
-    id: "laboratorios",
-    label: "Laboratorios",
-    content: <Laboratorios />,
-  },
-  {
-    id: "extras",
-    label: "Extras",
-    content: <Extras />,
-  },
-];
+export default function Detalle_grupo() {
+  //  State
+  const [data, setData] = useState({});
+  const [loading, setLoading] = useState(true);
 
-export default function Gestion_grupos() {
+  //  Tabs
+  const tabs = [
+    {
+      id: "miembros",
+      label: "Miembros",
+      content: <Miembros />,
+    },
+    {
+      id: "documentos",
+      label: "Documentos",
+      content: <Documentos />,
+    },
+    {
+      id: "lineas",
+      label: "Lineas",
+      content: <Lineas />,
+    },
+    {
+      id: "proyectos",
+      label: "Proyectos",
+      content: <Proyectos />,
+    },
+    {
+      id: "publicaciones",
+      label: "Publicaciones",
+      content: <Publicaciones />,
+    },
+    {
+      id: "laboratorios",
+      label: "Laboratorios",
+      content: <Laboratorios />,
+    },
+    {
+      id: "extras",
+      label: "Extras",
+      content: <Extras data={data} loading={loading} />,
+    },
+  ];
+
+  //  Url
+  const location = useLocation();
+  const { id } = queryString.parse(location.search);
+
+  //  Functions
+  const getData = async () => {
+    try {
+      setLoading(true);
+      const res = await fetch(
+        "http://localhost:8000/api/admin/estudios/grupos/detalle/" + id
+      );
+      if (!res.ok) {
+        setData([]);
+        setLoading(false);
+        throw new Error("Error in fetch");
+      } else {
+        const data = await res.json();
+        setData(data.data[0]);
+        setLoading(false);
+      }
+    } catch (error) {
+      setData([]);
+      setLoading(false);
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
+
   return (
     <>
       <Navbar />
@@ -96,7 +135,7 @@ export default function Gestion_grupos() {
             }
           >
             <SpaceBetween size="l">
-              <Detalles />
+              <Detalles data={data} loading={loading} />
               <Tabs tabs={tabs} ariaLabel="Opciones de grupo" />
             </SpaceBetween>
           </ContentLayout>

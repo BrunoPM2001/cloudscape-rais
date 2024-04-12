@@ -4,10 +4,11 @@ import "@cloudscape-design/global-styles/index.css";
 import { I18nProvider } from "@cloudscape-design/components/i18n";
 import messages from "@cloudscape-design/components/i18n/messages/all.es";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Gestion_grupos from "./pages/admin/estudios/gestion_grupos/detalle/index.jsx";
+import Gestion_grupos from "./pages/admin/estudios/gestion_grupos/index.jsx";
 import Lineas_investigacion from "./pages/admin/admin/lineas/index.jsx";
 import Usuarios_administrativos from "./pages/admin/admin/usuarios_administrativos/index.jsx";
 import Usuarios_investigadores from "./pages/admin/admin/usuarios_investigadores/index.jsx";
+import Detalle_grupo from "./pages/admin/estudios/gestion_grupos/detalle/index.jsx";
 
 const router = createBrowserRouter([
   {
@@ -22,7 +23,16 @@ const router = createBrowserRouter([
         children: [
           {
             path: "grupos",
-            element: <Gestion_grupos />,
+            children: [
+              {
+                path: "",
+                element: <Gestion_grupos />,
+              },
+              {
+                path: "detalle",
+                element: <Detalle_grupo />,
+              },
+            ],
           },
           {
             path: "convocatorias",

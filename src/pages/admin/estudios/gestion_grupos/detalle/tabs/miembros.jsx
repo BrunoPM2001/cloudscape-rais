@@ -9,6 +9,8 @@ import {
 } from "@cloudscape-design/components";
 import { useCollection } from "@cloudscape-design/collection-hooks";
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
+import queryString from "query-string";
 
 const stringOperators = [":", "!:", "=", "!=", "^", "!^"];
 
@@ -177,9 +179,11 @@ export default () => {
     sorting: { defaultState: { sortingColumn: columnDefinitions[0] } },
     selection: {},
   });
-
-  //  Btn
   const [enableBtn, setEnableBtn] = useState(false);
+
+  //  Url
+  const location = useLocation();
+  const { id } = queryString.parse(location.search);
 
   //  Data
   useEffect(() => {
@@ -187,7 +191,9 @@ export default () => {
       try {
         setLoading(true);
         const res = await fetch(
-          "http://localhost:8000/api/admin/estudios/grupos/miembros/257/1"
+          "http://localhost:8000/api/admin/estudios/grupos/miembros/" +
+            id +
+            "/1"
         );
         if (!res.ok) {
           setDistribution([]);
@@ -225,11 +231,11 @@ export default () => {
       columnDisplay={columnDisplay}
       loading={loading}
       loadingText="Cargando datos"
+      resizableColumns
+      enableKeyboardNavigation
       selectionType="multi"
       selectedItems={selectedItems}
       onSelectionChange={({ detail }) => setSelectedItems(detail.selectedItems)}
-      resizableColumns
-      enableKeyboardNavigation
       ariaLabels={{
         selectionGroupLabel: "Items selection",
         allItemsSelectionLabel: ({ selectedItems }) =>

@@ -3,6 +3,8 @@ import {
   Button,
   ButtonDropdown,
   Header,
+  Pagination,
+  PropertyFilter,
   SpaceBetween,
   Table,
 } from "@cloudscape-design/components";
@@ -12,6 +14,60 @@ import {
   DeleteModal,
   EditUserModal,
 } from "../components/modal.jsx";
+import { useCollection } from "@cloudscape-design/collection-hooks";
+
+const stringOperators = [":", "!:", "=", "!=", "^", "!^"];
+
+const FILTER_PROPS = [
+  {
+    propertyLabel: "Facultad",
+    key: "facultad",
+    groupValuesLabel: "Facultades",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "Código",
+    key: "codigo",
+    groupValuesLabel: "Códigos",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "Apellido paterno",
+    key: "apellido1",
+    groupValuesLabel: "Apellidos paternos",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "Apellido materno",
+    key: "apellido2",
+    groupValuesLabel: "Apellidos maternos",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "Nombre",
+    key: "nombres",
+    groupValuesLabel: "Nombres",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "Sexo",
+    key: "sexo",
+    groupValuesLabel: "Sexos",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "N° de documento",
+    key: "doc_numero",
+    groupValuesLabel: "Documentos de identidad",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "Estado",
+    key: "estado",
+    groupValuesLabel: "Estados",
+    operators: stringOperators,
+  },
+];
 
 const columnDefinitions = [
   {
@@ -84,11 +140,40 @@ const columnDisplay = [
 ];
 
 export default () => {
-  //  States
+  //  Data states
   const [loading, setLoading] = useState(true);
-  const [enableBtn, setEnableBtn] = useState(true);
-  const [items, setItems] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
+  const [distributions, setDistribution] = useState([]);
+  const {
+    items,
+    actions,
+    filteredItemsCount,
+    collectionProps,
+    paginationProps,
+    propertyFilterProps,
+  } = useCollection(distributions, {
+    propertyFiltering: {
+      filteringProperties: FILTER_PROPS,
+      empty: (
+        <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
+          <SpaceBetween size="m">
+            <b>No hay registros...</b>
+          </SpaceBetween>
+        </Box>
+      ),
+      noMatch: (
+        <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
+          <SpaceBetween size="m">
+            <b>No hay coincidencias</b>
+          </SpaceBetween>
+        </Box>
+      ),
+    },
+    pagination: { pageSize: 10 },
+    sorting: { defaultState: { sortingColumn: columnDefinitions[0] } },
+    selection: {},
+  });
+  const [enableBtn, setEnableBtn] = useState(true);
   const [createVisible, setCreateVisible] = useState(false);
   const [editVisible, setEditVisible] = useState(false);
   const [deleteVisible, setDeleteVisible] = useState(false);
@@ -109,19 +194,19 @@ export default () => {
     try {
       setLoading(true);
       const res = await fetch(
-        "http://localhost:8000/api/admin/admin/usuarios/getUsuariosInvest"
+        "http://localhost:8000/api/admin/admin/usuarios/getUsuariosInvestigadores"
       );
       if (!res.ok) {
+        setDistribution([]);
         setLoading(false);
-        setItems([]);
         throw new Error("Error in fetch");
       } else {
         const data = await res.json();
-        setItems(data.data);
+        setDistribution(data.data);
         setLoading(false);
       }
     } catch (error) {
-      setItems([]);
+      setDistribution([]);
       setLoading(false);
       console.log(error);
     }
@@ -136,14 +221,15 @@ export default () => {
     if (selectedItems.length > 0) {
       setEnableBtn(true);
     } else {
-      setEnableBtn(true);
+      setEnableBtn(false);
     }
   }, [selectedItems]);
 
   return (
     <>
       <Table
-        trackBy="codigo"
+        {...collectionProps}
+        trackBy="id"
         items={items}
         columnDefinitions={columnDefinitions}
         columnDisplay={columnDisplay}
@@ -158,7 +244,11 @@ export default () => {
         }
         header={
           <Header
-            counter={`(${items.length})`}
+            counter={
+              selectedItems.length
+                ? "(" + selectedItems.length + "/" + items.length + ")"
+                : "(" + items.length + ")"
+            }
             actions={
               <SpaceBetween direction="horizontal" size="xs">
                 <ButtonDropdown
@@ -202,6 +292,15 @@ export default () => {
             Usuarios investigadores
           </Header>
         }
+        filter={
+          <PropertyFilter
+            {...propertyFilterProps}
+            filteringPlaceholder="Buscar investigador"
+            countText={`${filteredItemsCount} coincidencias`}
+            expandToViewport
+          />
+        }
+        pagination={<Pagination {...paginationProps} />}
         empty={
           <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
             <SpaceBetween size="m">

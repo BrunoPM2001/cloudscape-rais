@@ -5,18 +5,25 @@ import {
   Header,
   Link,
 } from "@cloudscape-design/components";
+import queryString from "query-string";
 import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 export default () => {
+  //  States
   const [loading, setLoading] = useState(true);
   const [items, setItems] = useState([]);
+
+  //  Url
+  const location = useLocation();
+  const { id } = queryString.parse(location.search);
 
   //  Data
   useEffect(() => {
     const getData = async () => {
       try {
         const res = await fetch(
-          "http://localhost:8000/api/admin/estudios/grupos/docs/257"
+          "http://localhost:8000/api/admin/estudios/grupos/docs/" + id
         );
         if (!res.ok) {
           setItems([]);
