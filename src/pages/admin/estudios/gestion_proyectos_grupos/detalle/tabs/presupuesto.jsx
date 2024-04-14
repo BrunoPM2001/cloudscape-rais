@@ -93,7 +93,7 @@ export default () => {
         </Box>
       }
       footer={
-        <ColumnLayout columns={2} variant="text-grid">
+        <ColumnLayout columns={3} variant="text-grid">
           <SpaceBetween direction="vertical" size="s">
             <div>
               <Box variant="awsui-key-label">Bienes</Box>
@@ -128,6 +128,25 @@ export default () => {
                 <SpaceBetween direction="horizontal" size="xxs">
                   <Box variant="div">Porcentaje:</Box>
                   {loading ? <Spinner /> : info.servicios_porcentaje + "%"}
+                </SpaceBetween>
+              </SpaceBetween>
+            </div>
+          </SpaceBetween>
+          <SpaceBetween direction="vertical" size="s">
+            <div>
+              <Box variant="awsui-key-label">Otros</Box>
+              <SpaceBetween direction="horizontal" size="m">
+                <SpaceBetween direction="horizontal" size="xxs">
+                  <Box variant="div">Cantidad:</Box>
+                  {loading ? <Spinner /> : info.otros_cantidad}
+                </SpaceBetween>
+                <SpaceBetween direction="horizontal" size="xxs">
+                  <Box variant="div">Monto:</Box>
+                  {loading ? <Spinner /> : info.otros_monto}
+                </SpaceBetween>
+                <SpaceBetween direction="horizontal" size="xxs">
+                  <Box variant="div">Porcentaje:</Box>
+                  {loading ? <Spinner /> : info.otros_porcentaje + "%"}
                 </SpaceBetween>
               </SpaceBetween>
             </div>
