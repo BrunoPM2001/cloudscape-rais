@@ -1,5 +1,4 @@
 import {
-  Badge,
   Box,
   Button,
   Header,
@@ -59,12 +58,6 @@ const FILTER_PROPS = [
     operators: stringOperators,
   },
   {
-    propertyLabel: "R.R.",
-    key: "resolucion_rectoral",
-    groupValuesLabel: "Resoluciones",
-    operators: stringOperators,
-  },
-  {
     propertyLabel: "Estado",
     key: "estado",
     groupValuesLabel: "Estados",
@@ -117,47 +110,9 @@ const columnDefinitions = [
     sortingField: "coordinador",
   },
   {
-    id: "resolucion_rectoral",
-    header: "R.R.",
-    cell: (item) => item.resolucion_rectoral,
-    sortingField: "resolucion_rectoral",
-  },
-  {
     id: "estado",
     header: "Estado",
-    cell: (item) => (
-      <Badge
-        color={
-          item.estado == -1
-            ? "red"
-            : item.estado == 1
-            ? "grey"
-            : item.estado == 2
-            ? "grey"
-            : item.estado == 4
-            ? "green"
-            : item.estado == 5
-            ? "blue"
-            : item.estado == 6
-            ? "grey"
-            : "red"
-        }
-      >
-        {item.estado == -1
-          ? "Eliminado"
-          : item.estado == 1
-          ? "Reconocido"
-          : item.estado == 2
-          ? "Observado"
-          : item.estado == 4
-          ? "Registrado"
-          : item.estado == 5
-          ? "Enviado"
-          : item.estado == 6
-          ? "En proceso"
-          : "Error"}
-      </Badge>
-    ),
+    cell: (item) => item.estado,
     sortingField: "estado",
   },
 ];
@@ -170,7 +125,6 @@ const columnDisplay = [
   { id: "facultad", visible: true },
   { id: "coordinador", visible: true },
   { id: "cantidad_integrantes", visible: true },
-  { id: "resolucion_rectoral", visible: true },
   { id: "estado", visible: true },
 ];
 
@@ -215,7 +169,7 @@ export default () => {
     try {
       setLoading(true);
       const res = await fetch(
-        "http://localhost:8000/api/admin/estudios/grupos/listadoGrupos"
+        "http://localhost:8000/api/admin/estudios/grupos/listadoSolicitudes"
       );
       if (!res.ok) {
         setDistribution([]);
@@ -287,13 +241,13 @@ export default () => {
               </Button>
             }
           >
-            Grupos de investigación
+            Solicitudes de grupos de investigación
           </Header>
         }
         filter={
           <PropertyFilter
             {...propertyFilterProps}
-            filteringPlaceholder="Buscar grupo"
+            filteringPlaceholder="Buscar solicitud"
             countText={`${filteredItemsCount} coincidencias`}
             expandToViewport
           />

@@ -11,6 +11,7 @@ import {
 import Sidebar from "../../components/sidebar.jsx";
 import Navbar from "../../components/navbar.jsx";
 import Grupos from "./tabs/grupos.jsx";
+import Solicitudes from "./tabs/solicitudes.jsx";
 
 const breadcrumbs = [
   {
@@ -34,7 +35,7 @@ const tabs = [
   {
     id: "solicitudes",
     label: "Solicitudes",
-    content: <Grupos />,
+    content: <Solicitudes />,
   },
 ];
 

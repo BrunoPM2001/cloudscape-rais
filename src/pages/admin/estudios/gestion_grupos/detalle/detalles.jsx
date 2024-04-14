@@ -3,50 +3,13 @@ import {
   ColumnLayout,
   Container,
   Header,
+  Link,
   SpaceBetween,
   Spinner,
   StatusIndicator,
 } from "@cloudscape-design/components";
-import queryString from "query-string";
-import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
 
 export default ({ data, loading }) => {
-  // //  State
-  // const [data, setData] = useState({});
-  // const [loading, setLoading] = useState(true);
-
-  // //  Url
-  // const location = useLocation();
-  // const { id } = queryString.parse(location.search);
-
-  // //  Functions
-  // const getData = async () => {
-  //   try {
-  //     setLoading(true);
-  //     const res = await fetch(
-  //       "http://localhost:8000/api/admin/estudios/grupos/detalle/" + id
-  //     );
-  //     if (!res.ok) {
-  //       setData([]);
-  //       setLoading(false);
-  //       throw new Error("Error in fetch");
-  //     } else {
-  //       const data = await res.json();
-  //       setData(data.data[0]);
-  //       setLoading(false);
-  //     }
-  //   } catch (error) {
-  //     setData([]);
-  //     setLoading(false);
-  //     console.log(error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   getData();
-  // }, []);
-
   return (
     <Container header={<Header variant="h2">Detalles del grupo</Header>}>
       <ColumnLayout columns={3} variant="text-grid">
@@ -157,6 +120,16 @@ export default ({ data, loading }) => {
                   ? "Ninguna"
                   : data.observaciones_admin}
               </StatusIndicator>
+            )}
+          </div>
+          <div>
+            <Box variant="awsui-key-label">
+              Resoluciones decanales o constancias
+            </Box>
+            {loading ? (
+              <Spinner />
+            ) : (
+              <Link href={data.infraestructura_sgestion}>Descargar</Link>
             )}
           </div>
         </SpaceBetween>
