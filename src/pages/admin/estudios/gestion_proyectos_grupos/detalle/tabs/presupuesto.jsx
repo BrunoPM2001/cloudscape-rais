@@ -14,6 +14,7 @@ export default () => {
   //  State
   const [loading, setLoading] = useState(true);
   const [items, setItems] = useState([]);
+  const [info, setInfo] = useState([]);
 
   //  Url
   const location = useLocation();
@@ -29,15 +30,18 @@ export default () => {
         );
         if (!res.ok) {
           setItems([]);
+          setInfo({});
           setLoading(!loading);
           throw new Error("Error in fetch");
         } else {
           const data = await res.json();
           setItems(data.data);
+          setInfo(data.info);
           setLoading(!loading);
         }
       } catch (error) {
         setItems([]);
+        setInfo({});
         setLoading(!loading);
         console.log(error);
       }
@@ -89,17 +93,43 @@ export default () => {
         </Box>
       }
       footer={
-        <ColumnLayout columns={2}>
+        <ColumnLayout columns={2} variant="text-grid">
           <SpaceBetween direction="vertical" size="s">
             <div>
               <Box variant="awsui-key-label">Bienes</Box>
-              {loading ? <Spinner /> : <div></div>}
+              <SpaceBetween direction="horizontal" size="m">
+                <SpaceBetween direction="horizontal" size="xxs">
+                  <Box variant="div">Cantidad:</Box>
+                  {loading ? <Spinner /> : info.bienes_cantidad}
+                </SpaceBetween>
+                <SpaceBetween direction="horizontal" size="xxs">
+                  <Box variant="div">Monto:</Box>
+                  {loading ? <Spinner /> : info.bienes_monto}
+                </SpaceBetween>
+                <SpaceBetween direction="horizontal" size="xxs">
+                  <Box variant="div">Porcentaje:</Box>
+                  {loading ? <Spinner /> : info.bienes_porcentaje + "%"}
+                </SpaceBetween>
+              </SpaceBetween>
             </div>
           </SpaceBetween>
           <SpaceBetween direction="vertical" size="s">
             <div>
               <Box variant="awsui-key-label">Servicios</Box>
-              {loading ? <Spinner /> : <div></div>}
+              <SpaceBetween direction="horizontal" size="m">
+                <SpaceBetween direction="horizontal" size="xxs">
+                  <Box variant="div">Cantidad:</Box>
+                  {loading ? <Spinner /> : info.servicios_cantidad}
+                </SpaceBetween>
+                <SpaceBetween direction="horizontal" size="xxs">
+                  <Box variant="div">Monto:</Box>
+                  {loading ? <Spinner /> : info.servicios_monto}
+                </SpaceBetween>
+                <SpaceBetween direction="horizontal" size="xxs">
+                  <Box variant="div">Porcentaje:</Box>
+                  {loading ? <Spinner /> : info.servicios_porcentaje + "%"}
+                </SpaceBetween>
+              </SpaceBetween>
             </div>
           </SpaceBetween>
         </ColumnLayout>
