@@ -13,6 +13,8 @@ import Navbar from "../../../components/navbar.jsx";
 import Detalles from "./detalles.jsx";
 import Integrantes from "./tabs/integrantes.jsx";
 import Descripcion from "./tabs/descripcion.jsx";
+import Calendario from "./tabs/calendario.jsx";
+import Presupuesto from "./tabs/presupuesto.jsx";
 import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import queryString from "query-string";
@@ -56,12 +58,12 @@ export default function Detalle_proyecto_grupo() {
     {
       id: "calendario",
       label: "Calendario",
-      content: <div>Integrantes</div>,
+      content: <Calendario />,
     },
     {
       id: "presupuesto",
       label: "Presupuesto",
-      content: <div>Integrantes</div>,
+      content: <Presupuesto />,
     },
     {
       id: "extras",

@@ -3,6 +3,8 @@ import {
   Box,
   SpaceBetween,
   Header,
+  ColumnLayout,
+  Spinner,
 } from "@cloudscape-design/components";
 import queryString from "query-string";
 import { useState, useEffect } from "react";
@@ -22,7 +24,7 @@ export default () => {
     const getData = async () => {
       try {
         const res = await fetch(
-          "http://localhost:8000/api/admin/estudios/proyectosGrupo/miembros/" +
+          "http://localhost:8000/api/admin/estudios/proyectosGrupo/presupuesto/" +
             id
         );
         if (!res.ok) {
@@ -47,25 +49,31 @@ export default () => {
     <Table
       columnDefinitions={[
         {
-          id: "tipo_integrante",
-          header: "Tipo de integrante",
-          cell: (item) => item.tipo_integrante,
+          id: "tipo",
+          header: "Tipo",
+          cell: (item) => item.tipo,
         },
         {
-          id: "nombre",
-          header: "Nombre",
-          cell: (item) => item.nombre,
+          id: "partida",
+          header: "Partida",
+          cell: (item) => item.partida,
         },
         {
-          id: "tipo_investigador",
-          header: "Tipo de investigador",
-          cell: (item) => item.tipo_investigador,
+          id: "justificacion",
+          header: "Justificación",
+          cell: (item) => item.justificacion,
+        },
+        {
+          id: "monto",
+          header: "Monto",
+          cell: (item) => item.monto,
         },
       ]}
       columnDisplay={[
-        { id: "tipo_integrante", visible: true },
-        { id: "nombre", visible: true },
-        { id: "tipo_investigador", visible: true },
+        { id: "tipo", visible: true },
+        { id: "partida", visible: true },
+        { id: "justificacion", visible: true },
+        { id: "monto", visible: true },
       ]}
       enableKeyboardNavigation
       items={items}
@@ -80,7 +88,23 @@ export default () => {
           </SpaceBetween>
         </Box>
       }
-      header={<Header>Integrantes del proyecto</Header>}
+      footer={
+        <ColumnLayout columns={2}>
+          <SpaceBetween direction="vertical" size="s">
+            <div>
+              <Box variant="awsui-key-label">Bienes</Box>
+              {loading ? <Spinner /> : <div></div>}
+            </div>
+          </SpaceBetween>
+          <SpaceBetween direction="vertical" size="s">
+            <div>
+              <Box variant="awsui-key-label">Servicios</Box>
+              {loading ? <Spinner /> : <div></div>}
+            </div>
+          </SpaceBetween>
+        </ColumnLayout>
+      }
+      header={<Header>Presupuesto del proyecto</Header>}
     />
   );
 };

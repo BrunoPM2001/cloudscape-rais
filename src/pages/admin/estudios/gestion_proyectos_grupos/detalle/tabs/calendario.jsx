@@ -22,7 +22,7 @@ export default () => {
     const getData = async () => {
       try {
         const res = await fetch(
-          "http://localhost:8000/api/admin/estudios/proyectosGrupo/miembros/" +
+          "http://localhost:8000/api/admin/estudios/proyectosGrupo/actividades/" +
             id
         );
         if (!res.ok) {
@@ -47,25 +47,25 @@ export default () => {
     <Table
       columnDefinitions={[
         {
-          id: "tipo_integrante",
-          header: "Tipo de integrante",
-          cell: (item) => item.tipo_integrante,
+          id: "actividad",
+          header: "Actividad",
+          cell: (item) => item.actividad,
         },
         {
-          id: "nombre",
-          header: "Nombre",
-          cell: (item) => item.nombre,
+          id: "fecha_inicio",
+          header: "Fecha de inicio",
+          cell: (item) => item.fecha_inicio,
         },
         {
-          id: "tipo_investigador",
-          header: "Tipo de investigador",
-          cell: (item) => item.tipo_investigador,
+          id: "fecha_fin",
+          header: "Fecha de fin",
+          cell: (item) => item.fecha_fin,
         },
       ]}
       columnDisplay={[
-        { id: "tipo_integrante", visible: true },
-        { id: "nombre", visible: true },
-        { id: "tipo_investigador", visible: true },
+        { id: "actividad", visible: true },
+        { id: "fecha_inicio", visible: true },
+        { id: "fecha_fin", visible: true },
       ]}
       enableKeyboardNavigation
       items={items}
@@ -80,7 +80,7 @@ export default () => {
           </SpaceBetween>
         </Box>
       }
-      header={<Header>Integrantes del proyecto</Header>}
+      header={<Header>Calendario del proyecto</Header>}
     />
   );
 };
