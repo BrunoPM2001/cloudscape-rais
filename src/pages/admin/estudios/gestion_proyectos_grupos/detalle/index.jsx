@@ -65,11 +65,6 @@ export default function Detalle_proyecto_grupo() {
       label: "Presupuesto",
       content: <Presupuesto />,
     },
-    {
-      id: "extras",
-      label: "Extras",
-      content: <div>Integrantes</div>,
-    },
   ];
 
   //  Url

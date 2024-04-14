@@ -6,6 +6,7 @@ import {
   Link,
   ExpandableSection,
   Container,
+  Spinner,
 } from "@cloudscape-design/components";
 import queryString from "query-string";
 import { useState, useEffect } from "react";
@@ -15,7 +16,6 @@ export default () => {
   //  State
   const [loading, setLoading] = useState(true);
   const [items, setItems] = useState([]);
-  const sample = `<div>sample</div>`;
 
   //  Url
   const location = useLocation();
@@ -50,28 +50,68 @@ export default () => {
   return (
     <Container>
       <ExpandableSection headerText="Resumen ejecutivo">
-        {/* {data.resumen} */}
+        {loading ? (
+          <Spinner />
+        ) : (
+          <div dangerouslySetInnerHTML={{ __html: items.resumen_ejecutivo }} />
+        )}
       </ExpandableSection>
       <ExpandableSection headerText="Antecedentes">
-        {/* {data.antecedentes} */}
+        {loading ? (
+          <Spinner />
+        ) : (
+          <div dangerouslySetInnerHTML={{ __html: items.antecedentes }} />
+        )}
       </ExpandableSection>
       <ExpandableSection headerText="Objetivos">
-        {/* {data.objetivos} */}
+        {loading ? (
+          <Spinner />
+        ) : (
+          <div dangerouslySetInnerHTML={{ __html: items.objetivos }} />
+        )}
       </ExpandableSection>
       <ExpandableSection headerText="Justificacion">
-        {/* {data.justificacion} */}
+        {loading ? (
+          <Spinner />
+        ) : (
+          <div dangerouslySetInnerHTML={{ __html: items.justificacion }} />
+        )}
       </ExpandableSection>
       <ExpandableSection headerText="Hipótesis">
-        {/* {data.hipotesis} */}
+        {loading ? (
+          <Spinner />
+        ) : (
+          <div dangerouslySetInnerHTML={{ __html: items.hipotesis }} />
+        )}
       </ExpandableSection>
       <ExpandableSection headerText="Metodología de trabajo">
-        {/* {data.metodologia} */}
+        {loading ? (
+          <Spinner />
+        ) : (
+          <div
+            dangerouslySetInnerHTML={{ __html: items.metodologia_trabajo }}
+          />
+        )}
       </ExpandableSection>
       <ExpandableSection headerText="Referencias bibliográficas">
-        {/* {data.referencias} */}
+        {loading ? (
+          <Spinner />
+        ) : (
+          <div
+            dangerouslySetInnerHTML={{
+              __html: items.referencias_bibliograficas,
+            }}
+          />
+        )}
       </ExpandableSection>
       <ExpandableSection headerText="Contribución">
-        <div dangerouslySetInnerHTML={{ __html: sample }} />
+        {loading ? (
+          <Spinner />
+        ) : (
+          <div
+            dangerouslySetInnerHTML={{ __html: items.contribucion_impacto }}
+          />
+        )}
       </ExpandableSection>
     </Container>
   );
