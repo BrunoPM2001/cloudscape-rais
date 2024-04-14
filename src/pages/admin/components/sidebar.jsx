@@ -18,7 +18,11 @@ const navItems = [
         text: "Gestión de grupos",
         href: "/admin/estudios/grupos",
       },
-      { type: "link", text: "Gestión de proyectos de grupos", href: "#" },
+      {
+        type: "link",
+        text: "Gestión de proyectos de grupos",
+        href: "/admin/estudios/proyectos_grupos",
+      },
       { type: "link", text: "Gestión de proyectos FEX", href: "#" },
       { type: "link", text: "Gestión de proyectos", href: "#" },
       { type: "link", text: "Informes técnicos", href: "#" },

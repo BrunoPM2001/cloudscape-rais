@@ -5,6 +5,7 @@ import {
   Header,
   Pagination,
   PropertyFilter,
+  Select,
   SpaceBetween,
   Table,
 } from "@cloudscape-design/components";
@@ -23,21 +24,39 @@ const FILTER_PROPS = [
     operators: stringOperators,
   },
   {
-    propertyLabel: "Nombre de grupo",
+    propertyLabel: "Tipo de proyecto",
+    key: "tipo_proyecto",
+    groupValuesLabel: "Tipos de proyectos",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "Código",
+    key: "codigo_proyecto",
+    groupValuesLabel: "Códigos",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "Línea",
+    key: "linea",
+    groupValuesLabel: "Líneas",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "Título",
+    key: "titulo",
+    groupValuesLabel: "Títulos",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "Responsable",
+    key: "responsable",
+    groupValuesLabel: "Coordinadores",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "Nombre del grupo",
     key: "grupo_nombre",
-    groupValuesLabel: "Nombres de grupo",
-    operators: stringOperators,
-  },
-  {
-    propertyLabel: "Nombre corto",
-    key: "grupo_nombre_corto",
-    groupValuesLabel: "Nombres cortos",
-    operators: stringOperators,
-  },
-  {
-    propertyLabel: "Categoría",
-    key: "grupo_categoria",
-    groupValuesLabel: "Categorías",
+    groupValuesLabel: "Nombres de los grupos",
     operators: stringOperators,
   },
   {
@@ -47,19 +66,13 @@ const FILTER_PROPS = [
     operators: stringOperators,
   },
   {
-    propertyLabel: "Coordinador",
-    key: "coordinador",
-    groupValuesLabel: "Coordinadores",
+    propertyLabel: "Monto",
+    key: "monto",
+    groupValuesLabel: "Montos",
     operators: stringOperators,
   },
   {
-    propertyLabel: "Integrantes",
-    key: "cantidad_integrantes",
-    groupValuesLabel: "Cantidades",
-    operators: stringOperators,
-  },
-  {
-    propertyLabel: "R.R.",
+    propertyLabel: "R.R",
     key: "resolucion_rectoral",
     groupValuesLabel: "Resoluciones",
     operators: stringOperators,
@@ -81,22 +94,40 @@ const columnDefinitions = [
     isRowHeader: true,
   },
   {
+    id: "tipo_proyecto",
+    header: "Tipo de proyecto",
+    cell: (item) => item.tipo_proyecto,
+    sortingField: "tipo_proyecto",
+  },
+  {
+    id: "codigo_proyecto",
+    header: "Código",
+    cell: (item) => item.codigo_proyecto,
+    sortingField: "codigo_proyecto",
+  },
+  {
+    id: "linea",
+    header: "Línea",
+    cell: (item) => item.linea,
+    sortingField: "linea",
+  },
+  {
+    id: "titulo",
+    header: "Título",
+    cell: (item) => item.titulo,
+    sortingField: "titulo",
+  },
+  {
+    id: "responsable",
+    header: "Responsable",
+    cell: (item) => item.responsable,
+    sortingField: "responsable",
+  },
+  {
     id: "grupo_nombre",
-    header: "Nombre de grupo",
+    header: "Nombre del grupo",
     cell: (item) => item.grupo_nombre,
     sortingField: "grupo_nombre",
-  },
-  {
-    id: "grupo_nombre_corto",
-    header: "Nombre corto",
-    cell: (item) => item.grupo_nombre_corto,
-    sortingField: "grupo_nombre_corto",
-  },
-  {
-    id: "grupo_categoria",
-    header: "Categoría",
-    cell: (item) => item.grupo_categoria,
-    sortingField: "grupo_categoria",
   },
   {
     id: "facultad",
@@ -105,20 +136,14 @@ const columnDefinitions = [
     sortingField: "facultad",
   },
   {
-    id: "coordinador",
-    header: "Coordinador",
-    cell: (item) => item.coordinador,
-    sortingField: "coordinador",
-  },
-  {
-    id: "cantidad_integrantes",
-    header: "Integrantes",
-    cell: (item) => item.cantidad_integrantes,
-    sortingField: "coordinador",
+    id: "monto",
+    header: "Monto",
+    cell: (item) => item.monto,
+    sortingField: "monto",
   },
   {
     id: "resolucion_rectoral",
-    header: "R.R.",
+    header: "R.R",
     cell: (item) => item.resolucion_rectoral,
     sortingField: "resolucion_rectoral",
   },
@@ -164,12 +189,14 @@ const columnDefinitions = [
 
 const columnDisplay = [
   { id: "id", visible: true },
+  { id: "tipo_proyecto", visible: true },
+  { id: "codigo_proyecto", visible: true },
+  { id: "linea", visible: true },
+  { id: "titulo", visible: true },
+  { id: "responsable", visible: true },
   { id: "grupo_nombre", visible: true },
-  { id: "grupo_nombre_corto", visible: true },
-  { id: "grupo_categoria", visible: true },
   { id: "facultad", visible: true },
-  { id: "coordinador", visible: true },
-  { id: "cantidad_integrantes", visible: true },
+  { id: "monto", visible: true },
   { id: "resolucion_rectoral", visible: true },
   { id: "estado", visible: true },
 ];
@@ -208,6 +235,9 @@ export default () => {
     sorting: { defaultState: { sortingColumn: columnDefinitions[0] } },
     selection: {},
   });
+  const [selectedOption, setSelectedOption] = useState({
+    value: "2024",
+  });
   const [enableBtn, setEnableBtn] = useState(true);
 
   //  Functions
@@ -215,7 +245,8 @@ export default () => {
     try {
       setLoading(true);
       const res = await fetch(
-        "http://localhost:8000/api/admin/estudios/grupos/listadoGrupos"
+        "http://localhost:8000/api/admin/estudios/proyectosGrupo/listado/" +
+          selectedOption.value
       );
       if (!res.ok) {
         setDistribution([]);
@@ -237,6 +268,10 @@ export default () => {
   useEffect(() => {
     getData();
   }, []);
+
+  useEffect(() => {
+    getData();
+  }, [selectedOption]);
 
   useEffect(() => {
     if (selectedItems.length > 0) {
@@ -287,16 +322,36 @@ export default () => {
               </Button>
             }
           >
-            Grupos de investigación
+            Proyectos de grupos de investigación
           </Header>
         }
         filter={
-          <PropertyFilter
-            {...propertyFilterProps}
-            filteringPlaceholder="Buscar grupo"
-            countText={`${filteredItemsCount} coincidencias`}
-            expandToViewport
-          />
+          <SpaceBetween alignItems="center" direction="horizontal" size="xxl">
+            <PropertyFilter
+              {...propertyFilterProps}
+              filteringPlaceholder="Buscar proyecto de grupo"
+              countText={`${filteredItemsCount} coincidencias`}
+              expandToViewport
+            />
+            <SpaceBetween alignItems="center" direction="horizontal" size="xs">
+              <Box>Año:</Box>
+              <Select
+                selectedOption={selectedOption}
+                onChange={({ detail }) =>
+                  setSelectedOption(detail.selectedOption)
+                }
+                options={[
+                  { value: "2024" },
+                  { value: "2023" },
+                  { value: "2022" },
+                  { value: "2021" },
+                  { value: "2020" },
+                  { value: "2019" },
+                  { value: "2018" },
+                ]}
+              />
+            </SpaceBetween>
+          </SpaceBetween>
         }
         pagination={<Pagination {...paginationProps} />}
         empty={

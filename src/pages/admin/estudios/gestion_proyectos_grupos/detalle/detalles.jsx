@@ -3,7 +3,6 @@ import {
   ColumnLayout,
   Container,
   Header,
-  Link,
   SpaceBetween,
   Spinner,
   StatusIndicator,
@@ -11,20 +10,22 @@ import {
 
 export default ({ data, loading }) => {
   return (
-    <Container header={<Header variant="h2">Detalles del grupo</Header>}>
+    <Container
+      header={<Header variant="h2">Detalles del proyecto de grupo</Header>}
+    >
       <ColumnLayout columns={3} variant="text-grid">
         <SpaceBetween size="s">
           <div>
-            <Box variant="awsui-key-label">Nombre</Box>
-            {loading ? <Spinner /> : <div>{data.grupo_nombre}</div>}
+            <Box variant="awsui-key-label">Título</Box>
+            {loading ? <Spinner /> : <div>{data.titulo}</div>}
           </div>
           <div>
-            <Box variant="awsui-key-label">Facultad</Box>
-            {loading ? <Spinner /> : <div>{data.facultad}</div>}
+            <Box variant="awsui-key-label">Código</Box>
+            {loading ? <Spinner /> : <div>{data.codigo_proyecto}</div>}
           </div>
           <div>
-            <Box variant="awsui-key-label">Responsable</Box>
-            <div>{data.coordinador}</div>
+            <Box variant="awsui-key-label">Tipo de proyecto</Box>
+            <div>{data.tipo_proyecto}</div>
           </div>
           <div>
             <Box variant="awsui-key-label">Estado</Box>
@@ -67,43 +68,37 @@ export default ({ data, loading }) => {
         </SpaceBetween>
         <SpaceBetween size="s">
           <div>
-            <Box variant="awsui-key-label">Resolución de creación</Box>
-            {loading ? (
-              <Spinner />
-            ) : (
-              <div>{data.resolucion_rectoral_creacion}</div>
-            )}
+            <Box variant="awsui-key-label">Fecha de inicio</Box>
+            {loading ? <Spinner /> : <div>{data.fecha_inicio}</div>}
           </div>
           <div>
-            <Box variant="awsui-key-label">Fecha de resolución de creación</Box>
-            {loading ? (
-              <Spinner />
-            ) : (
-              <div>{data.resolucion_creacion_fecha}</div>
-            )}
+            <Box variant="awsui-key-label">Fecha de fin</Box>
+            {loading ? <Spinner /> : <div>{data.fecha_fin}</div>}
           </div>
           <div>
-            <Box variant="awsui-key-label">Resolución actual</Box>
+            <Box variant="awsui-key-label">Resolución rectoral</Box>
             {loading ? <Spinner /> : <div>{data.resolucion_rectoral}</div>}
           </div>
           <div>
-            <Box variant="awsui-key-label">Fecha de resolución actual</Box>
+            <Box variant="awsui-key-label">Fecha de resolución rectoral</Box>
             {loading ? <Spinner /> : <div>{data.resolucion_fecha}</div>}
           </div>
         </SpaceBetween>
         <SpaceBetween size="s">
           <div>
-            <Box variant="awsui-key-label">Observaciones</Box>
+            <Box variant="awsui-key-label">Comentarios</Box>
             {loading ? (
               <Spinner />
             ) : (
               <StatusIndicator type="info">
-                {data.observaciones}
+                {data.comentarios == "" || data.comentarios == null
+                  ? "Ninguno"
+                  : data.comentarios}
               </StatusIndicator>
             )}
           </div>
           <div>
-            <Box variant="awsui-key-label">Observaciones al investigador</Box>
+            <Box variant="awsui-key-label">Observaciones</Box>
             {loading ? (
               <Spinner />
             ) : (
@@ -120,26 +115,6 @@ export default ({ data, loading }) => {
                   ? "Ninguna"
                   : data.observaciones_admin}
               </StatusIndicator>
-            )}
-          </div>
-          <div>
-            <Box variant="awsui-key-label">
-              Resoluciones decanales o constancias
-            </Box>
-            {loading ? (
-              <Spinner />
-            ) : (
-              <Link
-                href={
-                  data.infraestructura_sgestion == null
-                    ? "#"
-                    : data.infraestructura_sgestion
-                }
-              >
-                {data.infraestructura_sgestion == null
-                  ? "No hay archivos adjuntos"
-                  : "Descargar"}
-              </Link>
             )}
           </div>
         </SpaceBetween>

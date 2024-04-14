@@ -10,8 +10,7 @@ import {
 } from "@cloudscape-design/components";
 import Sidebar from "../../components/sidebar.jsx";
 import Navbar from "../../components/navbar.jsx";
-import Grupos from "./tabs/grupos.jsx";
-import Solicitudes from "./tabs/solicitudes.jsx";
+import Listado from "./tabs/listado.jsx";
 
 const breadcrumbs = [
   {
@@ -22,24 +21,19 @@ const breadcrumbs = [
     text: "Estudios",
   },
   {
-    text: "Gestión de grupos",
+    text: "Gestión de proyectos de grupos",
   },
 ];
 
 const tabs = [
   {
-    id: "grupos",
-    label: "Grupos",
-    content: <Grupos />,
-  },
-  {
-    id: "solicitudes",
-    label: "Solicitudes",
-    content: <Solicitudes />,
+    id: "listado",
+    label: "Listado",
+    content: <Listado />,
   },
 ];
 
-export default function Gestion_grupos() {
+export default function Gestion_proyectos_grupos() {
   return (
     <>
       <Navbar />
@@ -55,13 +49,10 @@ export default function Gestion_grupos() {
         content={
           <ContentLayout
             disableOverlap
-            header={<Header variant="h1">Grupos de investigación:</Header>}
+            header={<Header variant="h1">Proyectos de grupos:</Header>}
           >
             <SpaceBetween size="l">
-              <Tabs
-                tabs={tabs}
-                ariaLabel="Opciones de grupos de investigación"
-              />
+              <Tabs tabs={tabs} ariaLabel="Opciones de proyectos de grupos" />
             </SpaceBetween>
           </ContentLayout>
         }

@@ -9,6 +9,8 @@ import Lineas_investigacion from "./pages/admin/admin/lineas/index.jsx";
 import Usuarios_administrativos from "./pages/admin/admin/usuarios_administrativos/index.jsx";
 import Usuarios_investigadores from "./pages/admin/admin/usuarios_investigadores/index.jsx";
 import Detalle_grupo from "./pages/admin/estudios/gestion_grupos/detalle/index.jsx";
+import Gestion_proyectos_grupos from "./pages/admin/estudios/gestion_proyectos_grupos/index.jsx";
+import Detalle_proyecto_grupo from "./pages/admin/estudios/gestion_proyectos_grupos/detalle/index.jsx";
 
 const router = createBrowserRouter([
   {
@@ -21,6 +23,10 @@ const router = createBrowserRouter([
       {
         path: "estudios",
         children: [
+          {
+            path: "convocatorias",
+            element: <div>convocatorias</div>,
+          },
           {
             path: "grupos",
             children: [
@@ -35,8 +41,17 @@ const router = createBrowserRouter([
             ],
           },
           {
-            path: "convocatorias",
-            element: <div>convocatorias</div>,
+            path: "proyectos_grupos",
+            children: [
+              {
+                path: "",
+                element: <Gestion_proyectos_grupos />,
+              },
+              {
+                path: "detalle",
+                element: <Detalle_proyecto_grupo />,
+              },
+            ],
           },
         ],
       },

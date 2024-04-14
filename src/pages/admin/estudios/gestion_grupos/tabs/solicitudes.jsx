@@ -1,4 +1,5 @@
 import {
+  Badge,
   Box,
   Button,
   Header,
@@ -71,13 +72,13 @@ const columnDefinitions = [
     header: "ID",
     cell: (item) => item.id,
     sortingField: "id",
+    isRowHeader: true,
   },
   {
     id: "grupo_nombre",
     header: "Nombre de grupo",
     cell: (item) => item.grupo_nombre,
     sortingField: "grupo_nombre",
-    isRowHeader: true,
   },
   {
     id: "grupo_nombre_corto",
@@ -112,7 +113,39 @@ const columnDefinitions = [
   {
     id: "estado",
     header: "Estado",
-    cell: (item) => item.estado,
+    cell: (item) => (
+      <Badge
+        color={
+          item.estado == -1
+            ? "red"
+            : item.estado == 1
+            ? "grey"
+            : item.estado == 2
+            ? "grey"
+            : item.estado == 4
+            ? "green"
+            : item.estado == 5
+            ? "blue"
+            : item.estado == 6
+            ? "grey"
+            : "red"
+        }
+      >
+        {item.estado == -1
+          ? "Eliminado"
+          : item.estado == 1
+          ? "Reconocido"
+          : item.estado == 2
+          ? "Observado"
+          : item.estado == 4
+          ? "Registrado"
+          : item.estado == 5
+          ? "Enviado"
+          : item.estado == 6
+          ? "En proceso"
+          : "No aprobado"}
+      </Badge>
+    ),
     sortingField: "estado",
   },
 ];
