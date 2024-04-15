@@ -8,12 +8,13 @@ import Gestion_grupos from "./pages/admin/estudios/gestion_grupos/index.jsx";
 import Lineas_investigacion from "./pages/admin/admin/lineas/index.jsx";
 import Usuarios_administrativos from "./pages/admin/admin/usuarios_administrativos/index.jsx";
 import Usuarios_investigadores from "./pages/admin/admin/usuarios_investigadores/index.jsx";
-import Detalle_grupo from "./pages/admin/estudios/gestion_grupos/detalle/index.jsx";
+import Detalle_grupo from "./pages/admin/estudios/gestion_grupos/detalles/index.jsx";
 import Gestion_proyectos_grupos from "./pages/admin/estudios/gestion_proyectos_grupos/index.jsx";
 import Detalle_proyecto_grupo from "./pages/admin/estudios/gestion_proyectos_grupos/detalle/index.jsx";
 import Gestion_proyectos_fex from "./pages/admin/estudios/gestion_proyectos_fex/index.jsx";
 import Informes_tecnicos from "./pages/admin/estudios/informes_tecnicos/index.jsx";
 import Monitoreo from "./pages/admin/estudios/monitoreo/index.jsx";
+import Detalle_monitoreo from "./pages/admin/estudios/monitoreo/detalles/index.jsx";
 
 const router = createBrowserRouter([
   {
@@ -66,7 +67,16 @@ const router = createBrowserRouter([
           },
           {
             path: "monitoreo",
-            element: <Monitoreo />,
+            children: [
+              {
+                path: "",
+                element: <Monitoreo />,
+              },
+              {
+                path: "detalle",
+                element: <Detalle_monitoreo />,
+              },
+            ],
           },
         ],
       },
