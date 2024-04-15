@@ -11,7 +11,7 @@ import {
 import Sidebar from "../../components/sidebar.jsx";
 import Navbar from "../../components/navbar.jsx";
 import Listado from "./tabs/listado.jsx";
-import Metas from "./tabs/metas.jsx";
+import Generar_deuda from "./tabs/generar_deuda.jsx";
 
 const breadcrumbs = [
   {
@@ -22,7 +22,7 @@ const breadcrumbs = [
     text: "Estudios",
   },
   {
-    text: "Monitoreo",
+    text: "Deudas de proyectos",
   },
 ];
 
@@ -33,13 +33,13 @@ const tabs = [
     content: <Listado />,
   },
   {
-    id: "configuracion_metas",
-    label: "Configuración de metas",
-    content: <Metas />,
+    id: "generar_deuda",
+    label: "Generar deuda",
+    content: <Generar_deuda />,
   },
 ];
 
-export default function Monitoreo() {
+export default function Deudas_proyectos() {
   return (
     <>
       <Navbar />
@@ -55,10 +55,10 @@ export default function Monitoreo() {
         content={
           <ContentLayout
             disableOverlap
-            header={<Header variant="h1">Monitoreo:</Header>}
+            header={<Header variant="h1">Deudas de proyectos</Header>}
           >
             <SpaceBetween size="l">
-              <Tabs tabs={tabs} ariaLabel="Opciones de monitoreo" />
+              <Tabs tabs={tabs} ariaLabel="Opciones de deudas de proyectos" />
             </SpaceBetween>
           </ContentLayout>
         }
