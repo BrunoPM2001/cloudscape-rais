@@ -12,6 +12,8 @@ import Detalle_grupo from "./pages/admin/estudios/gestion_grupos/detalle/index.j
 import Gestion_proyectos_grupos from "./pages/admin/estudios/gestion_proyectos_grupos/index.jsx";
 import Detalle_proyecto_grupo from "./pages/admin/estudios/gestion_proyectos_grupos/detalle/index.jsx";
 import Gestion_proyectos_fex from "./pages/admin/estudios/gestion_proyectos_fex/index.jsx";
+import Informes_tecnicos from "./pages/admin/estudios/informes_tecnicos/index.jsx";
+import Monitoreo from "./pages/admin/estudios/monitoreo/index.jsx";
 
 const router = createBrowserRouter([
   {
@@ -57,6 +59,14 @@ const router = createBrowserRouter([
           {
             path: "proyectos_fex",
             element: <Gestion_proyectos_fex />,
+          },
+          {
+            path: "informes_tecnicos",
+            element: <Informes_tecnicos />,
+          },
+          {
+            path: "monitoreo",
+            element: <Monitoreo />,
           },
         ],
       },

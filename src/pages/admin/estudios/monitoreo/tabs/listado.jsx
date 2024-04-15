@@ -2,9 +2,11 @@ import {
   Badge,
   Box,
   Button,
+  FormField,
   Header,
   Pagination,
   PropertyFilter,
+  Select,
   SpaceBetween,
   Table,
 } from "@cloudscape-design/components";
@@ -17,45 +19,33 @@ const stringOperators = [":", "!:", "=", "!=", "^", "!^"];
 
 const FILTER_PROPS = [
   {
-    propertyLabel: "ID",
-    key: "id",
-    groupValuesLabel: "IDS",
+    propertyLabel: "Código",
+    key: "codigo_proyecto",
+    groupValuesLabel: "Códigos",
     operators: stringOperators,
   },
   {
-    propertyLabel: "Nombre de grupo",
-    key: "grupo_nombre",
-    groupValuesLabel: "Nombres de grupo",
+    propertyLabel: "Título",
+    key: "titulo",
+    groupValuesLabel: "Títulos",
     operators: stringOperators,
   },
   {
-    propertyLabel: "Nombre corto",
-    key: "grupo_nombre_corto",
-    groupValuesLabel: "Nombres cortos",
+    propertyLabel: "Estado meta",
+    key: "estado_meta",
+    groupValuesLabel: "Estados de meta",
     operators: stringOperators,
   },
   {
-    propertyLabel: "Categoría",
-    key: "grupo_categoria",
-    groupValuesLabel: "Categorías",
+    propertyLabel: "Tipo de proyecto",
+    key: "tipo_proyecto",
+    groupValuesLabel: "Tipos de proyecto",
     operators: stringOperators,
   },
   {
-    propertyLabel: "Facultad",
-    key: "facultad",
-    groupValuesLabel: "Facultades",
-    operators: stringOperators,
-  },
-  {
-    propertyLabel: "Coordinador",
-    key: "coordinador",
-    groupValuesLabel: "Coordinadores",
-    operators: stringOperators,
-  },
-  {
-    propertyLabel: "Integrantes",
-    key: "cantidad_integrantes",
-    groupValuesLabel: "Cantidades",
+    propertyLabel: "Periodo",
+    key: "periodo",
+    groupValuesLabel: "Periodos",
     operators: stringOperators,
   },
   {
@@ -75,40 +65,34 @@ const columnDefinitions = [
     isRowHeader: true,
   },
   {
-    id: "grupo_nombre",
-    header: "Nombre de grupo",
-    cell: (item) => item.grupo_nombre,
-    sortingField: "grupo_nombre",
+    id: "codigo_proyecto",
+    header: "Código",
+    cell: (item) => item.codigo_proyecto,
+    sortingField: "codigo_proyecto",
   },
   {
-    id: "grupo_nombre_corto",
-    header: "Nombre corto",
-    cell: (item) => item.grupo_nombre_corto,
-    sortingField: "grupo_nombre_corto",
+    id: "titulo",
+    header: "Título",
+    cell: (item) => item.titulo,
+    sortingField: "titulo",
   },
   {
-    id: "grupo_categoria",
-    header: "Categoría",
-    cell: (item) => item.grupo_categoria,
-    sortingField: "grupo_categoria",
+    id: "estado_meta",
+    header: "Estado de meta",
+    cell: (item) => item.estado_meta,
+    sortingField: "estado_meta",
   },
   {
-    id: "facultad",
-    header: "Facultad",
-    cell: (item) => item.facultad,
-    sortingField: "facultad",
+    id: "tipo_proyecto",
+    header: "Tipo de proyecto",
+    cell: (item) => item.tipo_proyecto,
+    sortingField: "tipo_proyecto",
   },
   {
-    id: "coordinador",
-    header: "Coordinador",
-    cell: (item) => item.coordinador,
-    sortingField: "coordinador",
-  },
-  {
-    id: "cantidad_integrantes",
-    header: "Integrantes",
-    cell: (item) => item.cantidad_integrantes,
-    sortingField: "coordinador",
+    id: "periodo",
+    header: "Periodo",
+    cell: (item) => item.periodo,
+    sortingField: "periodo",
   },
   {
     id: "estado",
@@ -143,7 +127,7 @@ const columnDefinitions = [
           ? "Enviado"
           : item.estado == 6
           ? "En proceso"
-          : "No aprobado"}
+          : "Error"}
       </Badge>
     ),
     sortingField: "estado",
@@ -151,13 +135,11 @@ const columnDefinitions = [
 ];
 
 const columnDisplay = [
-  { id: "id", visible: true },
-  { id: "grupo_nombre", visible: true },
-  { id: "grupo_nombre_corto", visible: true },
-  { id: "grupo_categoria", visible: true },
-  { id: "facultad", visible: true },
-  { id: "coordinador", visible: true },
-  { id: "cantidad_integrantes", visible: true },
+  { id: "codigo_proyecto", visible: true },
+  { id: "titulo", visible: true },
+  { id: "estado_meta", visible: true },
+  { id: "tipo_proyecto", visible: true },
+  { id: "periodo", visible: true },
   { id: "estado", visible: true },
 ];
 
@@ -195,6 +177,15 @@ export default () => {
     sorting: { defaultState: { sortingColumn: columnDefinitions[0] } },
     selection: {},
   });
+  const [periodoOption, setPeriodoOption] = useState({
+    value: "2024",
+  });
+  const [tipoOption, setTipoOption] = useState({
+    value: "PCONFIGI",
+  });
+  const [estadoOption, setEstadoOption] = useState({
+    value: "5",
+  });
   const [enableBtn, setEnableBtn] = useState(true);
 
   //  Functions
@@ -202,7 +193,12 @@ export default () => {
     try {
       setLoading(true);
       const res = await fetch(
-        "http://localhost:8000/api/admin/estudios/grupos/listadoSolicitudes"
+        "http://localhost:8000/api/admin/estudios/monitoreo/listadoProyectos/" +
+          periodoOption.value +
+          "/" +
+          tipoOption.value +
+          "/" +
+          estadoOption.value
       );
       if (!res.ok) {
         setDistribution([]);
@@ -224,6 +220,10 @@ export default () => {
   useEffect(() => {
     getData();
   }, []);
+
+  useEffect(() => {
+    getData();
+  }, [periodoOption, tipoOption, estadoOption]);
 
   useEffect(() => {
     if (selectedItems.length > 0) {
@@ -251,11 +251,6 @@ export default () => {
       onSelectionChange={({ detail }) => setSelectedItems(detail.selectedItems)}
       header={
         <Header
-          counter={
-            selectedItems.length
-              ? "(" + selectedItems.length + "/" + items.length + ")"
-              : "(" + items.length + ")"
-          }
           actions={
             <Button
               disabled={!enableBtn}
@@ -271,15 +266,67 @@ export default () => {
             </Button>
           }
         >
-          Solicitudes de grupos de investigación
+          Proyectos
         </Header>
       }
       filter={
         <PropertyFilter
           {...propertyFilterProps}
-          filteringPlaceholder="Buscar solicitud"
+          filteringPlaceholder="Buscar proyecto"
           countText={`${filteredItemsCount} coincidencias`}
           expandToViewport
+          customControl={
+            <SpaceBetween direction="horizontal" size="m">
+              <FormField label="Año:">
+                <Select
+                  expandToViewport
+                  selectedOption={periodoOption}
+                  onChange={({ detail }) =>
+                    setPeriodoOption(detail.selectedOption)
+                  }
+                  options={[
+                    { value: "2024" },
+                    { value: "2023" },
+                    { value: "2022" },
+                    { value: "2021" },
+                    { value: "2020" },
+                    { value: "2019" },
+                    { value: "2018" },
+                  ]}
+                />
+              </FormField>
+              <FormField label="Tipo de proyecto:">
+                <Select
+                  expandToViewport
+                  selectedOption={tipoOption}
+                  onChange={({ detail }) =>
+                    setTipoOption(detail.selectedOption)
+                  }
+                  options={[
+                    { value: "PCONFIGI" },
+                    { value: "ECI" },
+                    { value: "PINVEST" },
+                  ]}
+                />
+              </FormField>
+              <FormField label="Estado de meta:">
+                <Select
+                  expandToViewport
+                  selectedOption={estadoOption}
+                  onChange={({ detail }) =>
+                    setEstadoOption(detail.selectedOption)
+                  }
+                  options={[
+                    { value: "5" },
+                    { value: "4" },
+                    { value: "3" },
+                    { value: "2" },
+                    { value: "1" },
+                  ]}
+                />
+              </FormField>
+            </SpaceBetween>
+          }
         />
       }
       pagination={<Pagination {...paginationProps} />}

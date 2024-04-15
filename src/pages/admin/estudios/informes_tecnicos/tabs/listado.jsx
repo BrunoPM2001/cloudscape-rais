@@ -1,7 +1,7 @@
 import {
   Badge,
   Box,
-  Button,
+  Link,
   FormField,
   Header,
   Pagination,
@@ -12,8 +12,6 @@ import {
 } from "@cloudscape-design/components";
 import { useState, useEffect } from "react";
 import { useCollection } from "@cloudscape-design/collection-hooks";
-import { useNavigate } from "react-router-dom";
-import queryString from "query-string";
 
 const stringOperators = [":", "!:", "=", "!=", "^", "!^"];
 
@@ -27,7 +25,7 @@ const FILTER_PROPS = [
   {
     propertyLabel: "Tipo de proyecto",
     key: "tipo_proyecto",
-    groupValuesLabel: "Tipos de proyectos",
+    groupValuesLabel: "Tipos de proyecto",
     operators: stringOperators,
   },
   {
@@ -37,9 +35,15 @@ const FILTER_PROPS = [
     operators: stringOperators,
   },
   {
-    propertyLabel: "Línea",
-    key: "linea",
-    groupValuesLabel: "Líneas",
+    propertyLabel: "Deuda",
+    key: "deuda",
+    groupValuesLabel: "Deudas",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "Tipo de deuda",
+    key: "tipo_deuda",
+    groupValuesLabel: "Tipos de deuda",
     operators: stringOperators,
   },
   {
@@ -51,31 +55,13 @@ const FILTER_PROPS = [
   {
     propertyLabel: "Responsable",
     key: "responsable",
-    groupValuesLabel: "Coordinadores",
-    operators: stringOperators,
-  },
-  {
-    propertyLabel: "Nombre del grupo",
-    key: "grupo_nombre",
-    groupValuesLabel: "Nombres de los grupos",
+    groupValuesLabel: "Responsables",
     operators: stringOperators,
   },
   {
     propertyLabel: "Facultad",
     key: "facultad",
     groupValuesLabel: "Facultades",
-    operators: stringOperators,
-  },
-  {
-    propertyLabel: "Monto",
-    key: "monto",
-    groupValuesLabel: "Montos",
-    operators: stringOperators,
-  },
-  {
-    propertyLabel: "R.R",
-    key: "resolucion_rectoral",
-    groupValuesLabel: "Resoluciones",
     operators: stringOperators,
   },
   {
@@ -107,11 +93,18 @@ const columnDefinitions = [
     sortingField: "codigo_proyecto",
   },
   {
-    id: "linea",
-    header: "Línea",
-    cell: (item) => item.linea,
-    sortingField: "linea",
+    id: "deuda",
+    header: "Deuda",
+    cell: (item) => item.deuda,
+    sortingField: "deuda",
   },
+  {
+    id: "tipo_deuda",
+    header: "Tipo de deuda",
+    cell: (item) => item.tipo_deuda,
+    sortingField: "tipo_deuda",
+  },
+
   {
     id: "titulo",
     header: "Título",
@@ -125,28 +118,10 @@ const columnDefinitions = [
     sortingField: "responsable",
   },
   {
-    id: "grupo_nombre",
-    header: "Nombre del grupo",
-    cell: (item) => item.grupo_nombre,
-    sortingField: "grupo_nombre",
-  },
-  {
     id: "facultad",
     header: "Facultad",
     cell: (item) => item.facultad,
     sortingField: "facultad",
-  },
-  {
-    id: "monto",
-    header: "Monto",
-    cell: (item) => item.monto,
-    sortingField: "monto",
-  },
-  {
-    id: "resolucion_rectoral",
-    header: "R.R",
-    cell: (item) => item.resolucion_rectoral,
-    sortingField: "resolucion_rectoral",
   },
   {
     id: "estado",
@@ -192,21 +167,21 @@ const columnDisplay = [
   { id: "id", visible: true },
   { id: "tipo_proyecto", visible: true },
   { id: "codigo_proyecto", visible: true },
-  { id: "linea", visible: true },
+  { id: "deuda", visible: true },
+  { id: "tipo_deuda", visible: true },
   { id: "titulo", visible: true },
   { id: "responsable", visible: true },
-  { id: "grupo_nombre", visible: true },
   { id: "facultad", visible: true },
-  { id: "monto", visible: true },
-  { id: "resolucion_rectoral", visible: true },
   { id: "estado", visible: true },
 ];
 
 export default () => {
   //  Data states
   const [loading, setLoading] = useState(true);
-  const [selectedItems, setSelectedItems] = useState([]);
+  const [loadingInformes, setLoadingInformes] = useState(true);
+  const [informes, setInformes] = useState([]);
   const [distributions, setDistribution] = useState([]);
+  const [selectedItems, setSelectedItems] = useState([]);
   const {
     items,
     actions,
@@ -239,14 +214,13 @@ export default () => {
   const [selectedOption, setSelectedOption] = useState({
     value: "2024",
   });
-  const [enableBtn, setEnableBtn] = useState(true);
 
   //  Functions
   const getData = async () => {
     try {
       setLoading(true);
       const res = await fetch(
-        "http://localhost:8000/api/admin/estudios/proyectosGrupo/listado/" +
+        "http://localhost:8000/api/admin/estudios/informesTecnicos/proyectosListado/" +
           selectedOption.value
       );
       if (!res.ok) {
@@ -265,100 +239,137 @@ export default () => {
     }
   };
 
+  const getInformes = async () => {
+    try {
+      setLoadingInformes(true);
+      const res = await fetch(
+        "http://localhost:8000/api/admin/estudios/informesTecnicos/informes/" +
+          selectedItems[0].id
+      );
+      if (!res.ok) {
+        setInformes([]);
+        setLoadingInformes(false);
+        throw new Error("Error in fetch");
+      } else {
+        const data = await res.json();
+        setInformes(data.data);
+        setLoadingInformes(false);
+      }
+    } catch (error) {
+      setInformes([]);
+      setLoadingInformes(false);
+      console.log(error);
+    }
+  };
+
   //  Effects
   useEffect(() => {
     getData();
   }, []);
 
   useEffect(() => {
+    setInformes([]);
     getData();
   }, [selectedOption]);
 
   useEffect(() => {
-    if (selectedItems.length > 0) {
-      setEnableBtn(true);
-    } else {
-      setEnableBtn(false);
-    }
+    getInformes();
   }, [selectedItems]);
 
-  const navigate = useNavigate();
-
   return (
-    <Table
-      {...collectionProps}
-      trackBy="id"
-      items={items}
-      columnDefinitions={columnDefinitions}
-      columnDisplay={columnDisplay}
-      loading={loading}
-      loadingText="Cargando datos"
-      resizableColumns
-      enableKeyboardNavigation
-      selectionType="single"
-      selectedItems={selectedItems}
-      onSelectionChange={({ detail }) => setSelectedItems(detail.selectedItems)}
-      header={
-        <Header
-          counter={
-            selectedItems.length
-              ? "(" + selectedItems.length + "/" + items.length + ")"
-              : "(" + items.length + ")"
-          }
-          actions={
-            <Button
-              disabled={!enableBtn}
-              variant="primary"
-              onClick={() => {
-                const query = queryString.stringify({
-                  id: selectedItems[0]["id"],
-                });
-                navigate("detalle?" + query);
-              }}
-            >
-              Visualizar
-            </Button>
-          }
-        >
-          Proyectos de grupos de investigación
-        </Header>
-      }
-      filter={
-        <PropertyFilter
-          {...propertyFilterProps}
-          filteringPlaceholder="Buscar proyecto de grupo"
-          countText={`${filteredItemsCount} coincidencias`}
-          expandToViewport
-          customControl={
-            <FormField label="Año:">
-              <Select
-                expandToViewport
-                selectedOption={selectedOption}
-                onChange={({ detail }) =>
-                  setSelectedOption(detail.selectedOption)
-                }
-                options={[
-                  { value: "2024" },
-                  { value: "2023" },
-                  { value: "2022" },
-                  { value: "2021" },
-                  { value: "2020" },
-                  { value: "2019" },
-                  { value: "2018" },
-                ]}
-              />
-            </FormField>
-          }
-        />
-      }
-      pagination={<Pagination {...paginationProps} />}
-      empty={
-        <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
-          <SpaceBetween size="m">
-            <b>No hay registros...</b>
-          </SpaceBetween>
-        </Box>
-      }
-    />
+    <SpaceBetween size="l">
+      <Table
+        {...collectionProps}
+        trackBy="id"
+        items={items}
+        columnDefinitions={columnDefinitions}
+        columnDisplay={columnDisplay}
+        loading={loading}
+        loadingText="Cargando datos"
+        resizableColumns
+        enableKeyboardNavigation
+        header={<Header>Listado de proyectos</Header>}
+        selectionType="single"
+        selectedItems={selectedItems}
+        onSelectionChange={({ detail }) =>
+          setSelectedItems(detail.selectedItems)
+        }
+        onRowClick={({ detail }) => setSelectedItems([detail.item])}
+        filter={
+          <PropertyFilter
+            {...propertyFilterProps}
+            filteringPlaceholder="Buscar grupo"
+            countText={`${filteredItemsCount} coincidencias`}
+            expandToViewport
+            customControl={
+              <FormField label="Año:">
+                <Select
+                  expandToViewport
+                  selectedOption={selectedOption}
+                  onChange={({ detail }) =>
+                    setSelectedOption(detail.selectedOption)
+                  }
+                  options={[
+                    { value: "2024" },
+                    { value: "2023" },
+                    { value: "2022" },
+                    { value: "2021" },
+                    { value: "2020" },
+                    { value: "2019" },
+                    { value: "2018" },
+                  ]}
+                />
+              </FormField>
+            }
+          />
+        }
+        pagination={<Pagination {...paginationProps} />}
+        empty={
+          <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
+            <SpaceBetween size="m">
+              <b>No hay registros...</b>
+            </SpaceBetween>
+          </Box>
+        }
+      />
+      <Table
+        columnDefinitions={[
+          {
+            id: "informe",
+            header: "Informe",
+            cell: (item) => <Link href="#">{item.informe}</Link>,
+          },
+          {
+            id: "fecha_envio",
+            header: "Fecha de envío",
+            cell: (item) => item.fecha_envio,
+          },
+          {
+            id: "estado",
+            header: "Estado",
+            cell: (item) => item.estado,
+          },
+        ]}
+        columnDisplay={[
+          { id: "informe", visible: true },
+          { id: "fecha_envio", visible: true },
+          { id: "estado", visible: true },
+        ]}
+        enableKeyboardNavigation
+        items={informes}
+        loadingText="Cargando datos"
+        loading={loadingInformes}
+        resizableColumns
+        trackBy="id"
+        empty={
+          <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
+            <SpaceBetween size="m">
+              <b>No hay registros...</b>
+            </SpaceBetween>
+          </Box>
+        }
+        header={<Header>Informes</Header>}
+      />
+    </SpaceBetween>
   );
 };

@@ -1,7 +1,6 @@
 import {
   Badge,
   Box,
-  Button,
   Header,
   Pagination,
   PropertyFilter,
@@ -300,35 +299,33 @@ export default () => {
   }, []);
 
   return (
-    <>
-      <Table
-        {...collectionProps}
-        trackBy="id"
-        items={items}
-        columnDefinitions={columnDefinitions}
-        columnDisplay={columnDisplay}
-        loading={loading}
-        loadingText="Cargando datos"
-        resizableColumns
-        enableKeyboardNavigation
-        header={<Header>Proyectos FEX</Header>}
-        filter={
-          <PropertyFilter
-            {...propertyFilterProps}
-            filteringPlaceholder="Buscar grupo"
-            countText={`${filteredItemsCount} coincidencias`}
-            expandToViewport
-          />
-        }
-        pagination={<Pagination {...paginationProps} />}
-        empty={
-          <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
-            <SpaceBetween size="m">
-              <b>No hay registros...</b>
-            </SpaceBetween>
-          </Box>
-        }
-      ></Table>
-    </>
+    <Table
+      {...collectionProps}
+      trackBy="id"
+      items={items}
+      columnDefinitions={columnDefinitions}
+      columnDisplay={columnDisplay}
+      loading={loading}
+      loadingText="Cargando datos"
+      resizableColumns
+      enableKeyboardNavigation
+      header={<Header>Proyectos FEX</Header>}
+      filter={
+        <PropertyFilter
+          {...propertyFilterProps}
+          filteringPlaceholder="Buscar grupo"
+          countText={`${filteredItemsCount} coincidencias`}
+          expandToViewport
+        />
+      }
+      pagination={<Pagination {...paginationProps} />}
+      empty={
+        <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
+          <SpaceBetween size="m">
+            <b>No hay registros...</b>
+          </SpaceBetween>
+        </Box>
+      }
+    />
   );
 };

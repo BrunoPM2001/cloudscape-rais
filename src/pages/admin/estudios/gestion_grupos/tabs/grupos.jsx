@@ -249,64 +249,60 @@ export default () => {
   const navigate = useNavigate();
 
   return (
-    <>
-      <Table
-        {...collectionProps}
-        trackBy="id"
-        items={items}
-        columnDefinitions={columnDefinitions}
-        columnDisplay={columnDisplay}
-        loading={loading}
-        loadingText="Cargando datos"
-        resizableColumns
-        enableKeyboardNavigation
-        selectionType="single"
-        selectedItems={selectedItems}
-        onSelectionChange={({ detail }) =>
-          setSelectedItems(detail.selectedItems)
-        }
-        header={
-          <Header
-            counter={
-              selectedItems.length
-                ? "(" + selectedItems.length + "/" + items.length + ")"
-                : "(" + items.length + ")"
-            }
-            actions={
-              <Button
-                disabled={!enableBtn}
-                variant="primary"
-                onClick={() => {
-                  const query = queryString.stringify({
-                    id: selectedItems[0]["id"],
-                  });
-                  navigate("detalle?" + query);
-                }}
-              >
-                Visualizar
-              </Button>
-            }
-          >
-            Grupos de investigación
-          </Header>
-        }
-        filter={
-          <PropertyFilter
-            {...propertyFilterProps}
-            filteringPlaceholder="Buscar grupo"
-            countText={`${filteredItemsCount} coincidencias`}
-            expandToViewport
-          />
-        }
-        pagination={<Pagination {...paginationProps} />}
-        empty={
-          <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
-            <SpaceBetween size="m">
-              <b>No hay registros...</b>
-            </SpaceBetween>
-          </Box>
-        }
-      ></Table>
-    </>
+    <Table
+      {...collectionProps}
+      trackBy="id"
+      items={items}
+      columnDefinitions={columnDefinitions}
+      columnDisplay={columnDisplay}
+      loading={loading}
+      loadingText="Cargando datos"
+      resizableColumns
+      enableKeyboardNavigation
+      selectionType="single"
+      selectedItems={selectedItems}
+      onSelectionChange={({ detail }) => setSelectedItems(detail.selectedItems)}
+      header={
+        <Header
+          counter={
+            selectedItems.length
+              ? "(" + selectedItems.length + "/" + items.length + ")"
+              : "(" + items.length + ")"
+          }
+          actions={
+            <Button
+              disabled={!enableBtn}
+              variant="primary"
+              onClick={() => {
+                const query = queryString.stringify({
+                  id: selectedItems[0]["id"],
+                });
+                navigate("detalle?" + query);
+              }}
+            >
+              Visualizar
+            </Button>
+          }
+        >
+          Grupos de investigación
+        </Header>
+      }
+      filter={
+        <PropertyFilter
+          {...propertyFilterProps}
+          filteringPlaceholder="Buscar grupo"
+          countText={`${filteredItemsCount} coincidencias`}
+          expandToViewport
+        />
+      }
+      pagination={<Pagination {...paginationProps} />}
+      empty={
+        <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
+          <SpaceBetween size="m">
+            <b>No hay registros...</b>
+          </SpaceBetween>
+        </Box>
+      }
+    />
   );
 };
