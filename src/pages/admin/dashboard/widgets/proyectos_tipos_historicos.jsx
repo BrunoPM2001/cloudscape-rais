@@ -1,132 +1,40 @@
 import { Container, Header, LineChart } from "@cloudscape-design/components";
-
-const data = [
-  {
-    periodo: 2012,
-    PCONFIGI: 500,
-    PFEX: 4,
-  },
-  {
-    periodo: 2013,
-    PCONFIGI: 414,
-    PFEX: 40,
-    "PCONFIGI-INV": 71,
-    PINTERDIS: 3,
-    PTPGRADO: 1,
-    PMULTI: 1,
-    PSINFINV: 188,
-    PSINFIPU: 61,
-    ECI: 95,
-    "PRO-CTIE": 49,
-  },
-  {
-    periodo: 2014,
-    PCONFIGI: 442,
-    PFEX: 48,
-    PMULTI: 51,
-    RFPLU: 63,
-    PINTERDIS: 28,
-    PSINFINV: 120,
-    PSINFIPU: 47,
-    SPINOFF: 11,
-  },
-  {
-    periodo: 2015,
-    PCONFIGI: 502,
-    PFEX: 35,
-    RFPLU: 68,
-    PINTERDIS: 28,
-    PSINFINV: 220,
-    PSINFIPU: 77,
-    SPINOFF: 12,
-  },
-  {
-    periodo: 2016,
-    PCONFIGI: 981,
-    PFEX: 17,
-    PSINFINV: 177,
-    PSINFIPU: 42,
-  },
-  {
-    periodo: 2017,
-    PCONFIGI: 414,
-    PFEX: 40,
-    "PCONFIGI-INV": 71,
-    PINTERDIS: 3,
-    PTPGRADO: 1,
-    PMULTI: 1,
-    PSINFINV: 188,
-    PSINFIPU: 61,
-    ECI: 95,
-    "PRO-CTIE": 49,
-  },
-  {
-    periodo: 2018,
-    PCONFIGI: 500,
-    PFEX: 4,
-  },
-  {
-    periodo: 2019,
-    PCONFIGI: 414,
-    PFEX: 40,
-    "PCONFIGI-INV": 71,
-    PINTERDIS: 3,
-    PTPGRADO: 1,
-    PMULTI: 1,
-    PSINFINV: 188,
-    PSINFIPU: 61,
-    ECI: 95,
-    "PRO-CTIE": 49,
-  },
-  {
-    periodo: 2020,
-    PCONFIGI: 442,
-    PFEX: 48,
-    PMULTI: 51,
-    RFPLU: 63,
-    PINTERDIS: 28,
-    PSINFINV: 120,
-    PSINFIPU: 47,
-    SPINOFF: 11,
-  },
-  {
-    periodo: 2021,
-    PCONFIGI: 502,
-    PFEX: 35,
-    RFPLU: 68,
-    PINTERDIS: 28,
-    PSINFINV: 220,
-    PSINFIPU: 77,
-    SPINOFF: 12,
-  },
-  {
-    periodo: 2022,
-    PCONFIGI: 981,
-    PFEX: 17,
-    PSINFINV: 177,
-    PSINFIPU: 42,
-  },
-  {
-    periodo: 2023,
-    PCONFIGI: 414,
-    PFEX: 40,
-    "PCONFIGI-INV": 71,
-    PINTERDIS: 3,
-    PTPGRADO: 1,
-    PMULTI: 1,
-    PSINFINV: 188,
-    PSINFIPU: 61,
-    ECI: 95,
-    "PRO-CTIE": 49,
-  },
-  {
-    periodo: 2024,
-    PCONFIGI: 500,
-    PFEX: 4,
-  },
-];
+import { useEffect, useState } from "react";
 
 export default function () {
+  //  States
+  const [data, setData] = useState([]);
+  const [tipos, setTipos] = useState([]);
+  const [loading, setLoading] = useState("loading");
+
+  //  Functions
+  const getData = async () => {
+    try {
+      setLoading("loading");
+      const res = await fetch(
+        "http://localhost:8000/api/admin/dashboard/proyectosHistoricoData"
+      );
+      if (!res.ok) {
+        setLoading("error");
+        throw new Error("Error in fetch");
+      } else {
+        const data = await res.json();
+        setTipos(data.tipos);
+        setData(data.cuenta);
+        setLoading("finished");
+      }
+    } catch (error) {
+      setItems([]);
+      setLoading("error");
+      console.log(error);
+    }
+  };
+
+  //  Effects
+  useEffect(() => {
+    getData();
+  }, []);
+
   return (
     <Container
       header={
@@ -140,77 +48,20 @@ export default function () {
       fitHeight={true}
     >
       <LineChart
+        statusType={loading}
         hideFilter
         fitHeight
         height={150}
-        series={[
-          {
-            title: "PCONFIGI",
-            type: "line",
-            data: data.map((item) => ({
-              x: item.periodo,
-              y: item.PCONFIGI ?? 0,
-            })),
-          },
-          {
-            title: "PFEX",
-            type: "line",
-            data: data.map((item) => ({ x: item.periodo, y: item.PFEX ?? 0 })),
-          },
-          {
-            title: "PCONFIGI-INV",
-            type: "line",
-            data: data.map((item) => ({
-              x: item.periodo,
-              y: item["PCONFIGI-INV"] ?? 0,
-            })),
-          },
-          {
-            title: "PINTERDIS",
-            type: "line",
-            data: data.map((item) => ({
-              x: item.periodo,
-              y: item.PINTERDIS ?? 0,
-            })),
-          },
-          {
-            title: "PTPGRADO",
-            type: "line",
-            data: data.map((item) => ({
-              x: item.periodo,
-              y: item.PTPGRADO ?? 0,
-            })),
-          },
-          {
-            title: "PMULTI",
-            type: "line",
-            data: data.map((item) => ({
-              x: item.periodo,
-              y: item.PMULTI ?? 0,
-            })),
-          },
-          {
-            title: "PSINFINV",
-            type: "line",
-            data: data.map((item) => ({
-              x: item.periodo,
-              y: item.PSINFINV ?? 0,
-            })),
-          },
-          {
-            title: "PSINFIPU",
-            type: "line",
-            data: data.map((item) => ({
-              x: item.periodo,
-              y: item.PSINFIPU ?? 0,
-            })),
-          },
-        ]}
+        series={tipos.map((tipo) => ({
+          title: tipo.tipo_proyecto,
+          type: "line",
+          data: data.map((item) => ({
+            x: parseInt(item.periodo),
+            y: item[tipo.tipo_proyecto],
+          })),
+        }))}
         yDomain={[0, 1000]}
-        xDomain={[
-          2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022,
-          2023, 2024,
-        ]}
+        xDomain={[2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024]}
         xScaleType="categorical"
         xTitle="Periodo"
         yTitle="Cantidad de proyectos"
