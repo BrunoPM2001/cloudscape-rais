@@ -103,7 +103,13 @@ const navItems = [
     type: "section",
     text: "Constancias",
     defaultExpanded: false,
-    items: [{ type: "link", text: "Reporte de constancias", href: "#" }],
+    items: [
+      {
+        type: "link",
+        text: "Reporte de constancias",
+        href: "/admin/constancias",
+      },
+    ],
   },
   {
     type: "section",

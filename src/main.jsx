@@ -23,6 +23,7 @@ import Reporte_proyecto from "./pages/admin/reportes/proyecto/index.jsx";
 import Reporte_investigador from "./pages/admin/reportes/investigador/index.jsx";
 import Consolidado_general from "./pages/admin/reportes/consolidado_general/index.jsx";
 import Reporte_presupuesto from "./pages/admin/reportes/presupuesto/index.jsx";
+import Reporte_constancias from "./pages/admin/constancias/reporte_constancias/index.jsx";
 
 const router = createBrowserRouter([
   {
@@ -124,6 +125,10 @@ const router = createBrowserRouter([
             element: <Reporte_presupuesto />,
           },
         ],
+      },
+      {
+        path: "constancias",
+        element: <Reporte_constancias />,
       },
       {
         path: "admin",
