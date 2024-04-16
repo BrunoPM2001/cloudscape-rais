@@ -139,17 +139,13 @@ export default () => {
     sorting: { defaultState: { sortingColumn: columnDefinitions[0] } },
     selection: {},
   });
-  const [selectedOption, setSelectedOption] = useState({
-    value: "2024",
-  });
 
   //  Functions
   const getData = async () => {
     try {
       setLoading(true);
       const res = await fetch(
-        "http://localhost:8000/api/admin/estudios/deudaProyecto/listadoProyectos/" +
-          selectedOption.value
+        "http://localhost:8000/api/admin/estudios/deudaProyecto/listadoProyectos/null/null/null"
       );
       if (!res.ok) {
         setDistribution([]);
@@ -196,11 +192,6 @@ export default () => {
   }, []);
 
   useEffect(() => {
-    setIntegrantes([]);
-    getData();
-  }, [selectedOption]);
-
-  useEffect(() => {
     getIntegrantes();
   }, [selectedItems]);
 
@@ -229,26 +220,6 @@ export default () => {
             filteringPlaceholder="Buscar proyecto"
             countText={`${filteredItemsCount} coincidencias`}
             expandToViewport
-            customControl={
-              <FormField label="Año:">
-                <Select
-                  expandToViewport
-                  selectedOption={selectedOption}
-                  onChange={({ detail }) =>
-                    setSelectedOption(detail.selectedOption)
-                  }
-                  options={[
-                    { value: "2024" },
-                    { value: "2023" },
-                    { value: "2022" },
-                    { value: "2021" },
-                    { value: "2020" },
-                    { value: "2019" },
-                    { value: "2018" },
-                  ]}
-                />
-              </FormField>
-            }
           />
         }
         pagination={<Pagination {...paginationProps} />}

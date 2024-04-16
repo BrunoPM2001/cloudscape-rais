@@ -15,6 +15,8 @@ import Gestion_proyectos_fex from "./pages/admin/estudios/gestion_proyectos_fex/
 import Informes_tecnicos from "./pages/admin/estudios/informes_tecnicos/index.jsx";
 import Monitoreo from "./pages/admin/estudios/monitoreo/index.jsx";
 import Detalle_monitoreo from "./pages/admin/estudios/monitoreo/detalles/index.jsx";
+import Deudas_proyectos from "./pages/admin/estudios/deudas_proyectos/index.jsx";
+import Gestion_publicacion from "./pages/admin/estudios/gestion_publicaciones/index.jsx";
 
 const router = createBrowserRouter([
   {
@@ -77,6 +79,14 @@ const router = createBrowserRouter([
                 element: <Detalle_monitoreo />,
               },
             ],
+          },
+          {
+            path: "deudas_proyectos",
+            element: <Deudas_proyectos />,
+          },
+          {
+            path: "gestion_publicaciones",
+            element: <Gestion_publicacion />,
           },
         ],
       },
