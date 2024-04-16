@@ -51,7 +51,7 @@ export default function () {
         statusType={loading}
         hideFilter
         fitHeight
-        height={150}
+        height={200}
         series={tipos.map((tipo) => ({
           title: tipo.tipo_proyecto,
           type: "line",
@@ -60,7 +60,7 @@ export default function () {
             y: item[tipo.tipo_proyecto],
           })),
         }))}
-        yDomain={[0, 1000]}
+        yDomain={[0, 700]}
         xDomain={[2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024]}
         xScaleType="categorical"
         xTitle="Periodo"
