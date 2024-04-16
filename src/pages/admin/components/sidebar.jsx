@@ -62,13 +62,37 @@ const navItems = [
     text: "Reportes",
     defaultExpanded: false,
     items: [
-      { type: "link", text: "Reporte por estudio", href: "#" },
-      { type: "link", text: "Reporte por grupo", href: "#" },
-      { type: "link", text: "Reporte por proyecto", href: "#" },
-      { type: "link", text: "Reporte por docente", href: "#" },
-      { type: "link", text: "Consolidado general", href: "#" },
+      {
+        type: "link",
+        text: "Reporte por estudio",
+        href: "/admin/reportes/estudio",
+      },
+      {
+        type: "link",
+        text: "Reporte por grupo",
+        href: "/admin/reportes/grupo",
+      },
+      {
+        type: "link",
+        text: "Reporte por proyecto",
+        href: "/admin/reportes/proyecto",
+      },
+      {
+        type: "link",
+        text: "Reporte por investigador",
+        href: "/admin/reportes/investigador",
+      },
+      {
+        type: "link",
+        text: "Consolidado general",
+        href: "/admin/reportes/consolidado_general",
+      },
       { type: "link", text: "Consolidado de tesis", href: "#" },
-      { type: "link", text: "Reporte de presupuesto", href: "#" },
+      {
+        type: "link",
+        text: "Reporte de presupuesto",
+        href: "/admin/reportes/presupuesto",
+      },
       { type: "link", text: "Reporte de deudores", href: "#" },
       { type: "link", text: "Lista de deudores", href: "#" },
       { type: "divider" },

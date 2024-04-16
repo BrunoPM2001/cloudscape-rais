@@ -17,6 +17,12 @@ import Monitoreo from "./pages/admin/estudios/monitoreo/index.jsx";
 import Detalle_monitoreo from "./pages/admin/estudios/monitoreo/detalles/index.jsx";
 import Deudas_proyectos from "./pages/admin/estudios/deudas_proyectos/index.jsx";
 import Gestion_publicacion from "./pages/admin/estudios/gestion_publicaciones/index.jsx";
+import Reporte_estudio from "./pages/admin/reportes/estudio/index.jsx";
+import Reporte_grupo from "./pages/admin/reportes/grupo/index.jsx";
+import Reporte_proyecto from "./pages/admin/reportes/proyecto/index.jsx";
+import Reporte_investigador from "./pages/admin/reportes/investigador/index.jsx";
+import Consolidado_general from "./pages/admin/reportes/consolidado_general/index.jsx";
+import Reporte_presupuesto from "./pages/admin/reportes/presupuesto/index.jsx";
 
 const router = createBrowserRouter([
   {
@@ -87,6 +93,35 @@ const router = createBrowserRouter([
           {
             path: "gestion_publicaciones",
             element: <Gestion_publicacion />,
+          },
+        ],
+      },
+      {
+        path: "reportes",
+        children: [
+          {
+            path: "estudio",
+            element: <Reporte_estudio />,
+          },
+          {
+            path: "grupo",
+            element: <Reporte_grupo />,
+          },
+          {
+            path: "proyecto",
+            element: <Reporte_proyecto />,
+          },
+          {
+            path: "investigador",
+            element: <Reporte_investigador />,
+          },
+          {
+            path: "consolidado_general",
+            element: <Consolidado_general />,
+          },
+          {
+            path: "presupuesto",
+            element: <Reporte_presupuesto />,
           },
         ],
       },
