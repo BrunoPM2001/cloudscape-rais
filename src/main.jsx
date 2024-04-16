@@ -1,9 +1,10 @@
-import React, { Suspense, lazy } from "react";
+import React, { lazy } from "react";
 import ReactDOM from "react-dom/client";
 import "@cloudscape-design/global-styles/index.css";
 import { I18nProvider } from "@cloudscape-design/components/i18n";
 import messages from "@cloudscape-design/components/i18n/messages/all.es";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Admin_main from "./pages/admin/dashboard/index.jsx";
 //  Pages
 const Gestion_grupos = lazy(() =>
   import("./pages/admin/estudios/gestion_grupos/index.jsx")
@@ -74,6 +75,10 @@ const router = createBrowserRouter([
   {
     path: "admin",
     children: [
+      {
+        path: "",
+        element: <Admin_main />,
+      },
       {
         path: "estudios",
         children: [

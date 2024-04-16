@@ -10,7 +10,7 @@ const navItems = [
       {
         type: "link",
         text: "Gestión de convocatorias",
-        href: "#/convocatorias",
+        href: "/admin/estudios/convocatorias",
       },
       { type: "divider" },
       {
@@ -155,6 +155,7 @@ export default function Sidebar({ activeHref = "#" }) {
     <SideNavigation
       header={{
         text: "Administrador",
+        href: "/admin",
       }}
       activeHref={location.pathname}
       items={navItems}

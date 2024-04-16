@@ -31,7 +31,6 @@ export default function Navbar({
   return (
     <TopNavigation
       identity={{
-        href: "#",
         title: "RAIS",
         // logo: { src: logo, alt: "Logo RAIS" },
       }}
