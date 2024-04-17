@@ -4,9 +4,42 @@ import {
   Container,
   Header,
   Link,
+  Spinner,
 } from "@cloudscape-design/components";
+import { useEffect, useState } from "react";
 
 export default function () {
+  //  States
+  const [data, setData] = useState({});
+  const [loading, setLoading] = useState(true);
+
+  //  Functions
+  const getData = async () => {
+    try {
+      setLoading("loading");
+      const res = await fetch(
+        "http://localhost:8000/api/admin/dashboard/metricas"
+      );
+      if (!res.ok) {
+        setLoading("error");
+        throw new Error("Error in fetch");
+      } else {
+        const data = await res.json();
+        setData(data);
+        setLoading(false);
+      }
+    } catch (error) {
+      setItems([]);
+      setLoading(false);
+      console.log(error);
+    }
+  };
+
+  //  Effects
+  useEffect(() => {
+    getData();
+  }, []);
+
   return (
     <Container
       header={
@@ -22,33 +55,53 @@ export default function () {
       <ColumnLayout columns={3} variant="text-grid" minColumnWidth={170}>
         <div>
           <Box variant="awsui-key-label">Grupos de investigación</Box>
-          <Link variant="awsui-value-large" href="#">
-            385
-          </Link>
+          {loading ? (
+            <Spinner size="large" />
+          ) : (
+            <Link variant="awsui-value-large" href="#">
+              {data.grupos}
+            </Link>
+          )}
         </div>
         <div>
           <Box variant="awsui-key-label">Investigadores registrados</Box>
-          <Link variant="awsui-value-large" href="#">
-            31511
-          </Link>
+          {loading ? (
+            <Spinner size="large" />
+          ) : (
+            <Link variant="awsui-value-large" href="#">
+              {data.investigadores}
+            </Link>
+          )}
         </div>
         <div>
           <Box variant="awsui-key-label">Publicaciones</Box>
-          <Link variant="awsui-value-large" href="#">
-            58800
-          </Link>
+          {loading ? (
+            <Spinner size="large" />
+          ) : (
+            <Link variant="awsui-value-large" href="#">
+              {data.publicaciones}
+            </Link>
+          )}
         </div>
         <div>
           <Box variant="awsui-key-label">Proyectos desde el 2017</Box>
-          <Link variant="awsui-value-large" href="#">
-            7117
-          </Link>
+          {loading ? (
+            <Spinner size="large" />
+          ) : (
+            <Link variant="awsui-value-large" href="#">
+              {data.proyectos}
+            </Link>
+          )}
         </div>
         <div>
           <Box variant="awsui-key-label">Proyectos antes del 2017</Box>
-          <Link variant="awsui-value-large" href="#">
-            7117
-          </Link>
+          {loading ? (
+            <Spinner size="large" />
+          ) : (
+            <Link variant="awsui-value-large" href="#">
+              {data.proyectosPasados}
+            </Link>
+          )}
         </div>
       </ColumnLayout>
     </Container>

@@ -1,21 +1,44 @@
-import { Container, Header, PieChart } from "@cloudscape-design/components";
-
-const data = [
-  {
-    title: "PCONFIGI",
-    value: 200,
-  },
-  {
-    title: "ECI",
-    value: 532,
-  },
-  {
-    title: "PINVPOS",
-    value: 476,
-  },
-];
+import {
+  Container,
+  FormField,
+  Header,
+  PieChart,
+  Select,
+} from "@cloudscape-design/components";
+import { useEffect, useState } from "react";
 
 export default function () {
+  //  States
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState("loading");
+
+  //  Functions
+  const getData = async () => {
+    try {
+      setLoading("loading");
+      const res = await fetch(
+        "http://localhost:8000/api/admin/dashboard/proyectos/2024"
+      );
+      if (!res.ok) {
+        setLoading("error");
+        throw new Error("Error in fetch");
+      } else {
+        const data = await res.json();
+        setData(data.data);
+        setLoading("finished");
+      }
+    } catch (error) {
+      setItems([]);
+      setLoading("error");
+      console.log(error);
+    }
+  };
+
+  //  Effects
+  useEffect(() => {
+    getData();
+  }, []);
+
   return (
     <Container
       header={
@@ -28,7 +51,7 @@ export default function () {
       }
       fitHeight={true}
     >
-      <PieChart hideFilter fitHeight size="large" data={data} />
+      <PieChart fitHeight size="large" statusType={loading} data={data} />
     </Container>
   );
 }

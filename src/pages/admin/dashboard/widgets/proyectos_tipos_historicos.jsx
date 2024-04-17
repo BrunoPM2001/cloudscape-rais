@@ -49,7 +49,6 @@ export default function () {
     >
       <LineChart
         statusType={loading}
-        hideFilter
         fitHeight
         height={200}
         series={tipos.map((tipo) => ({
@@ -60,7 +59,7 @@ export default function () {
             y: item[tipo.tipo_proyecto],
           })),
         }))}
-        yDomain={[0, 700]}
+        yDomain={[0, 600]}
         xDomain={[2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024]}
         xScaleType="categorical"
         xTitle="Periodo"

@@ -19,7 +19,7 @@ import { useState } from "react";
 const breadcrumbs = [
   {
     text: "Admin",
-    href: "#",
+    href: "/admin",
   },
   {
     text: "Reportes",

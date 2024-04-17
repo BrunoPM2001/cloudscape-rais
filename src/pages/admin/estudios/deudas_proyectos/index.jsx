@@ -16,7 +16,7 @@ import Generar_deuda from "./tabs/generar_deuda.jsx";
 const breadcrumbs = [
   {
     text: "Admin",
-    href: "#",
+    href: "/admin",
   },
   {
     text: "Estudios",

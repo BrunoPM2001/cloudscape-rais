@@ -15,7 +15,7 @@ import Listado from "./tabs/listado.jsx";
 const breadcrumbs = [
   {
     text: "Admin",
-    href: "#",
+    href: "/admin",
   },
   {
     text: "Admin",

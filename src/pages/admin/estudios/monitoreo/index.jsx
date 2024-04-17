@@ -16,7 +16,7 @@ import Metas from "./tabs/metas.jsx";
 const breadcrumbs = [
   {
     text: "Admin",
-    href: "#",
+    href: "/admin",
   },
   {
     text: "Estudios",

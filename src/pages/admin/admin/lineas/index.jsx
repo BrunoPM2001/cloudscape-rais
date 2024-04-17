@@ -16,7 +16,7 @@ import Nuevo from "./tabs/nuevo.jsx";
 const breadcrumbs = [
   {
     text: "Admin",
-    href: "#",
+    href: "/admin",
   },
   {
     text: "Admin",

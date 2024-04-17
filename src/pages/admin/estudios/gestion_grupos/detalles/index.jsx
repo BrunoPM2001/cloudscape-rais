@@ -25,7 +25,7 @@ import queryString from "query-string";
 const breadcrumbs = [
   {
     text: "Admin",
-    href: "#",
+    href: "/admin",
   },
   {
     text: "Estudios",

@@ -16,7 +16,7 @@ import Solicitudes from "./tabs/solicitudes.jsx";
 const breadcrumbs = [
   {
     text: "Admin",
-    href: "#",
+    href: "/admin",
   },
   {
     text: "Estudios",
