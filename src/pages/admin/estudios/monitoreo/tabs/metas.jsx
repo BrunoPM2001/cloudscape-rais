@@ -132,110 +132,122 @@ export default () => {
         },
       ]}
     >
-      <Table
-        columnDefinitions={[
-          {
-            id: "periodo",
-            header: "Periodo",
-            cell: (item) => item.periodo,
-          },
-          {
-            id: "estado",
-            header: "Estado",
-            cell: (item) => item.estado,
-          },
-          {
-            id: "descripcion",
-            header: "Descripcion",
-            cell: (item) => item.descripcion,
-          },
-        ]}
-        columnDisplay={[
-          { id: "periodo", visible: true },
-          { id: "estado", visible: true },
-          { id: "descripcion", visible: false },
-        ]}
-        trackBy="id"
-        enableKeyboardNavigation
-        items={metasPeriodo}
-        loadingText="Cargando datos"
-        loading={loadingPeriodo}
-        resizableColumns
-        selectionType="single"
-        selectedItems={selectedPeriodos}
-        onSelectionChange={({ detail }) =>
-          setSelectedPeriodos(detail.selectedItems)
-        }
-        onRowClick={({ detail }) => setSelectedPeriodos([detail.item])}
-        empty={
-          <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
-            <SpaceBetween size="m">
-              <b>No hay registros...</b>
-            </SpaceBetween>
-          </Box>
-        }
-        header={
-          <Header
-            variant="h3"
-            actions={
-              <Button variant="primary" onClick={() => console.log("clicked")}>
-                Agregar periodo
-              </Button>
-            }
-          >
-            Periodos
-          </Header>
-        }
-      />
-      <Table
-        columnDefinitions={[
-          {
-            id: "tipo_proyecto",
-            header: "Tipo de proyecto",
-            cell: (item) => item.tipo_proyecto,
-          },
-          {
-            id: "estado",
-            header: "Estado",
-            cell: (item) => item.estado,
-          },
-        ]}
-        columnDisplay={[
-          { id: "tipo_proyecto", visible: true },
-          { id: "estado", visible: true },
-        ]}
-        trackBy="id"
-        enableKeyboardNavigation
-        items={metasTipoProyecto}
-        loadingText="Cargando datos"
-        loading={loadingTipoProyecto}
-        resizableColumns
-        selectionType="single"
-        selectedItems={selectedTipoProyecto}
-        onSelectionChange={({ detail }) =>
-          setSelectedTipoProyecto(detail.selectedItems)
-        }
-        onRowClick={({ detail }) => setSelectedTipoProyecto([detail.item])}
-        empty={
-          <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
-            <SpaceBetween size="m">
-              <b>No hay registros...</b>
-            </SpaceBetween>
-          </Box>
-        }
-        header={
-          <Header
-            variant="h3"
-            actions={
-              <Button variant="primary" onClick={() => console.log("clicked")}>
-                Agregar proyecto
-              </Button>
-            }
-          >
-            Tipos de proyecto
-          </Header>
-        }
-      />
+      <Container fitHeight>
+        <Table
+          variant="embedded"
+          columnDefinitions={[
+            {
+              id: "periodo",
+              header: "Periodo",
+              cell: (item) => item.periodo,
+            },
+            {
+              id: "estado",
+              header: "Estado",
+              cell: (item) => item.estado,
+            },
+            {
+              id: "descripcion",
+              header: "Descripcion",
+              cell: (item) => item.descripcion,
+            },
+          ]}
+          columnDisplay={[
+            { id: "periodo", visible: true },
+            { id: "estado", visible: true },
+            { id: "descripcion", visible: false },
+          ]}
+          trackBy="id"
+          enableKeyboardNavigation
+          items={metasPeriodo}
+          loadingText="Cargando datos"
+          loading={loadingPeriodo}
+          resizableColumns
+          selectionType="single"
+          selectedItems={selectedPeriodos}
+          onSelectionChange={({ detail }) =>
+            setSelectedPeriodos(detail.selectedItems)
+          }
+          onRowClick={({ detail }) => setSelectedPeriodos([detail.item])}
+          empty={
+            <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
+              <SpaceBetween size="m">
+                <b>No hay registros...</b>
+              </SpaceBetween>
+            </Box>
+          }
+          header={
+            <Header
+              variant="h3"
+              actions={
+                <Button
+                  variant="primary"
+                  onClick={() => console.log("clicked")}
+                >
+                  Agregar periodo
+                </Button>
+              }
+            >
+              Periodos
+            </Header>
+          }
+        />
+      </Container>
+      <Container fitHeight>
+        <Table
+          variant="embedded"
+          columnDefinitions={[
+            {
+              id: "tipo_proyecto",
+              header: "Tipo de proyecto",
+              cell: (item) => item.tipo_proyecto,
+            },
+            {
+              id: "estado",
+              header: "Estado",
+              cell: (item) => item.estado,
+            },
+          ]}
+          columnDisplay={[
+            { id: "tipo_proyecto", visible: true },
+            { id: "estado", visible: true },
+          ]}
+          trackBy="id"
+          enableKeyboardNavigation
+          items={metasTipoProyecto}
+          loadingText="Cargando datos"
+          loading={loadingTipoProyecto}
+          resizableColumns
+          selectionType="single"
+          selectedItems={selectedTipoProyecto}
+          onSelectionChange={({ detail }) =>
+            setSelectedTipoProyecto(detail.selectedItems)
+          }
+          onRowClick={({ detail }) => setSelectedTipoProyecto([detail.item])}
+          empty={
+            <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
+              <SpaceBetween size="m">
+                <b>No hay registros...</b>
+              </SpaceBetween>
+            </Box>
+          }
+          header={
+            <Header
+              variant="h3"
+              actions={
+                <Button
+                  variant="primary"
+                  onClick={() => console.log("clicked")}
+                >
+                  Agregar proyecto
+                </Button>
+              }
+            >
+              Tipos de proyecto
+            </Header>
+          }
+        />
+      </Container>
       <Table
         columnDefinitions={[
           {

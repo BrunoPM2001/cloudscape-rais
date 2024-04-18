@@ -12,7 +12,6 @@ import {
 } from "@cloudscape-design/components";
 import { useState, useEffect } from "react";
 import { useCollection } from "@cloudscape-design/collection-hooks";
-import { useNavigate } from "react-router-dom";
 import queryString from "query-string";
 
 const stringOperators = [":", "!:", "=", "!=", "^", "!^"];
@@ -282,8 +281,6 @@ export default () => {
     }
   }, [selectedItems]);
 
-  const navigate = useNavigate();
-
   return (
     <Table
       {...collectionProps}
@@ -313,7 +310,7 @@ export default () => {
                 const query = queryString.stringify({
                   id: selectedItems[0]["id"],
                 });
-                navigate("detalle?" + query);
+                window.location.href = "proyectos_grupos/detalle?" + query;
               }}
             >
               Visualizar

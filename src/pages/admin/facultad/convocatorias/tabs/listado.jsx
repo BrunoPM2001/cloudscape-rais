@@ -1,5 +1,4 @@
 import {
-  Badge,
   Box,
   Button,
   Header,
@@ -16,161 +15,115 @@ const stringOperators = [":", "!:", "=", "!=", "^", "!^"];
 
 const FILTER_PROPS = [
   {
-    propertyLabel: "ID",
-    key: "id",
-    groupValuesLabel: "IDS",
+    propertyLabel: "Tipo de proyecto",
+    key: "tipo_proyecto",
+    groupValuesLabel: "Tipos de proyecto",
     operators: stringOperators,
   },
   {
-    propertyLabel: "Nombre de grupo",
-    key: "grupo_nombre",
-    groupValuesLabel: "Nombres de grupo",
+    propertyLabel: "Periodo",
+    key: "periodo",
+    groupValuesLabel: "Periodos",
     operators: stringOperators,
   },
   {
-    propertyLabel: "Nombre corto",
-    key: "grupo_nombre_corto",
-    groupValuesLabel: "Nombres cortos",
-    operators: stringOperators,
-  },
-  {
-    propertyLabel: "Categoría",
-    key: "grupo_categoria",
-    groupValuesLabel: "Categorías",
-    operators: stringOperators,
-  },
-  {
-    propertyLabel: "Facultad",
-    key: "facultad",
+    propertyLabel: "Facultades",
+    key: "facultades",
     groupValuesLabel: "Facultades",
     operators: stringOperators,
   },
   {
-    propertyLabel: "Coordinador",
-    key: "coordinador",
-    groupValuesLabel: "Coordinadores",
+    propertyLabel: "Cupos",
+    key: "cupos",
+    groupValuesLabel: "Cantidad de cupos",
     operators: stringOperators,
   },
   {
-    propertyLabel: "Integrantes",
-    key: "cantidad_integrantes",
-    groupValuesLabel: "Cantidades",
+    propertyLabel: "Fecha de inicio",
+    key: "fecha_inicio",
+    groupValuesLabel: "Fechas de inicio",
     operators: stringOperators,
   },
   {
-    propertyLabel: "R.R.",
-    key: "resolucion_rectoral",
-    groupValuesLabel: "Resoluciones",
+    propertyLabel: "Fecha de fin",
+    key: "fecha_fin",
+    groupValuesLabel: "Fechas de fin",
     operators: stringOperators,
   },
   {
-    propertyLabel: "Estado",
-    key: "estado",
-    groupValuesLabel: "Estados",
+    propertyLabel: "Fecha de inicio de evaluación",
+    key: "fecha_inicio_evaluacion",
+    groupValuesLabel: "Fechas de inicio de evaluación",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "Fecha de fin de evaluación",
+    key: "fecha_fin_evaluacion",
+    groupValuesLabel: "Fechas de fin de evaluación",
     operators: stringOperators,
   },
 ];
 
 const columnDefinitions = [
   {
-    id: "id",
-    header: "ID",
-    cell: (item) => item.id,
-    sortingField: "id",
-    isRowHeader: true,
+    id: "tipo_proyecto",
+    header: "Tipo de proyecto",
+    cell: (item) => item.tipo_proyecto,
+    sortingField: "tipo_proyecto",
   },
   {
-    id: "grupo_nombre",
-    header: "Nombre de grupo",
-    cell: (item) => item.grupo_nombre,
-    sortingField: "grupo_nombre",
+    id: "periodo",
+    header: "Periodo",
+    cell: (item) => item.periodo,
+    sortingField: "periodo",
   },
   {
-    id: "grupo_nombre_corto",
-    header: "Nombre corto",
-    cell: (item) => item.grupo_nombre_corto,
-    sortingField: "grupo_nombre_corto",
+    id: "facultades",
+    header: "Facultades",
+    cell: (item) => item.facultades,
+    sortingField: "facultades",
   },
   {
-    id: "grupo_categoria",
-    header: "Categoría",
-    cell: (item) => item.grupo_categoria,
-    sortingField: "grupo_categoria",
+    id: "cupos",
+    header: "Cupos",
+    cell: (item) => item.cupos,
+    sortingField: "cupos",
   },
   {
-    id: "facultad",
-    header: "Facultad",
-    cell: (item) => item.facultad,
-    sortingField: "facultad",
+    id: "fecha_inicio",
+    header: "Fecha de inicio",
+    cell: (item) => item.fecha_inicio,
+    sortingField: "fecha_inicio",
   },
   {
-    id: "coordinador",
-    header: "Coordinador",
-    cell: (item) => item.coordinador,
-    sortingField: "coordinador",
+    id: "fecha_fin",
+    header: "Fecha de fin",
+    cell: (item) => item.fecha_fin,
+    sortingField: "fecha_fin",
   },
   {
-    id: "cantidad_integrantes",
-    header: "Integrantes",
-    cell: (item) => item.cantidad_integrantes,
-    sortingField: "coordinador",
+    id: "fecha_inicio_evaluacion",
+    header: "Fecha de inicio de evaluación",
+    cell: (item) => item.fecha_inicio_evaluacion,
+    sortingField: "fecha_inicio_evaluacion",
   },
   {
-    id: "resolucion_rectoral",
-    header: "R.R.",
-    cell: (item) => item.resolucion_rectoral,
-    sortingField: "resolucion_rectoral",
-  },
-  {
-    id: "estado",
-    header: "Estado",
-    cell: (item) => (
-      <Badge
-        color={
-          item.estado == -1
-            ? "red"
-            : item.estado == 1
-            ? "grey"
-            : item.estado == 2
-            ? "grey"
-            : item.estado == 4
-            ? "green"
-            : item.estado == 5
-            ? "blue"
-            : item.estado == 6
-            ? "grey"
-            : "red"
-        }
-      >
-        {item.estado == -1
-          ? "Eliminado"
-          : item.estado == 1
-          ? "Reconocido"
-          : item.estado == 2
-          ? "Observado"
-          : item.estado == 4
-          ? "Registrado"
-          : item.estado == 5
-          ? "Enviado"
-          : item.estado == 6
-          ? "En proceso"
-          : "Error"}
-      </Badge>
-    ),
-    sortingField: "estado",
+    id: "fecha_fin_evaluacion",
+    header: "Fecha de fin de evaluación",
+    cell: (item) => item.fecha_fin_evaluacion,
+    sortingField: "fecha_fin_evaluacion",
   },
 ];
 
 const columnDisplay = [
-  { id: "id", visible: true },
-  { id: "grupo_nombre", visible: true },
-  { id: "grupo_nombre_corto", visible: true },
-  { id: "grupo_categoria", visible: true },
-  { id: "facultad", visible: true },
-  { id: "coordinador", visible: true },
-  { id: "cantidad_integrantes", visible: true },
-  { id: "resolucion_rectoral", visible: true },
-  { id: "estado", visible: true },
+  { id: "tipo_proyecto", visible: true },
+  { id: "periodo", visible: true },
+  { id: "facultades", visible: true },
+  { id: "cupos", visible: true },
+  { id: "fecha_inicio", visible: true },
+  { id: "fecha_fin", visible: true },
+  { id: "fecha_inicio_evaluacion", visible: true },
+  { id: "fecha_fin_evaluacion", visible: true },
 ];
 
 export default () => {
@@ -214,7 +167,7 @@ export default () => {
     try {
       setLoading(true);
       const res = await fetch(
-        "http://localhost:8000/api/admin/estudios/grupos/listadoGrupos"
+        "http://localhost:8000/api/admin/facultad/convocatorias/getConvocatorias"
       );
       if (!res.ok) {
         setDistribution([]);
@@ -272,16 +225,17 @@ export default () => {
               variant="primary"
               onClick={() => {
                 const query = queryString.stringify({
-                  id: selectedItems[0]["id"],
+                  periodo: selectedItems[0]["periodo"],
+                  tipo_proyecto: selectedItems[0]["tipo_proyecto"],
                 });
-                window.location.href = "grupos/detalle?" + query;
+                window.location.href = "convocatorias/detalle?" + query;
               }}
             >
               Visualizar
             </Button>
           }
         >
-          Grupos de investigación
+          Listado de convocatorias
         </Header>
       }
       filter={

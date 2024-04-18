@@ -26,24 +26,22 @@ export default function Navbar({
   user = "Ichajaya",
   mail = "max.ichajaya@unmsm.edu.pe",
 }) {
-  const [searchNav, setSearchNav] = useState();
-
   return (
     <TopNavigation
       identity={{
         title: "RAIS",
         // logo: { src: logo, alt: "Logo RAIS" },
       }}
-      search={
-        <Input
-          ariaLabel="Search input field for navigation"
-          clearAriaLabel="Clear input field for navigation"
-          value={searchNav}
-          type="search"
-          placeholder="Buscar..."
-          onChange={({ detail }) => setSearchNav(detail.value)}
-        />
-      }
+      // search={
+      //   <Input
+      //     ariaLabel="Search input field for navigation"
+      //     clearAriaLabel="Clear input field for navigation"
+      //     value={searchNav}
+      //     type="search"
+      //     placeholder="Buscar..."
+      //     onChange={({ detail }) => setSearchNav(detail.value)}
+      //   />
+      // }
       utilities={[
         {
           type: "menu-dropdown",

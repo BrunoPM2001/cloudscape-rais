@@ -4,8 +4,16 @@ import "@cloudscape-design/global-styles/index.css";
 import { I18nProvider } from "@cloudscape-design/components/i18n";
 import messages from "@cloudscape-design/components/i18n/messages/all.es";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Admin_main from "./pages/admin/dashboard/index.jsx";
+// import Gestion_grupos from "./pages/admin/estudios/gestion_grupos/index.jsx";
+// import Detalle_grupo from "./pages/admin/estudios/gestion_grupos/detalles/index.jsx";
 //  Pages
+const Admin_main = lazy(() => import("./pages/admin/dashboard/index.jsx"));
+const Convocatorias = lazy(() =>
+  import("./pages/admin/facultad/convocatorias/index.jsx")
+);
+const Detalle_convocatoria = lazy(() =>
+  import("./pages/admin/facultad/convocatorias/detalles/index.jsx")
+);
 const Gestion_grupos = lazy(() =>
   import("./pages/admin/estudios/gestion_grupos/index.jsx")
 );
@@ -175,6 +183,24 @@ const router = createBrowserRouter([
       {
         path: "constancias",
         element: <Reporte_constancias />,
+      },
+      {
+        path: "facultad",
+        children: [
+          {
+            path: "convocatorias",
+            children: [
+              {
+                path: "",
+                element: <Convocatorias />,
+              },
+              {
+                path: "detalle",
+                element: <Detalle_convocatoria />,
+              },
+            ],
+          },
+        ],
       },
       {
         path: "admin",

@@ -116,7 +116,11 @@ const navItems = [
     text: "Facultad",
     defaultExpanded: false,
     items: [
-      { type: "link", text: "Convocatorias", href: "#" },
+      {
+        type: "link",
+        text: "Convocatorias",
+        href: "/admin/facultad/convocatorias",
+      },
       { type: "divider" },
       { type: "link", text: "Usuarios facultad", href: "#" },
       { type: "link", text: "Usuarios evaluadores", href: "#" },

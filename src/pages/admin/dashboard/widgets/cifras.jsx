@@ -64,7 +64,7 @@ export default function () {
           )}
         </div>
         <div>
-          <Box variant="awsui-key-label">Investigadores registrados</Box>
+          <Box variant="awsui-key-label">Investigadores</Box>
           {loading ? (
             <Spinner size="large" />
           ) : (
