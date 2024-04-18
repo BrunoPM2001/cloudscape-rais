@@ -6,14 +6,16 @@ import {
   Grid,
   Header,
   HelpPanel,
+  Toggle,
 } from "@cloudscape-design/components";
 import Sidebar from "./../components/sidebar.jsx";
 import Navbar from "./../components/navbar.jsx";
 import Cifras from "./widgets/cifras.jsx";
 import Modulos from "./widgets/modulos.jsx";
-import Deudas from "./widgets/deudas.jsx";
+import Publicaciones from "./widgets/publicaciones.jsx";
 import Proyectos_tipos from "./widgets/proyectos_tipos.jsx";
 import Proyectos_tipos_historicos from "./widgets/proyectos_tipos_historicos.jsx";
+import Helpbar from "../components/helpbar.jsx";
 
 const breadcrumbs = [
   {
@@ -34,10 +36,10 @@ export default function Admin_main() {
         breadcrumbs={<BreadcrumbGroup items={breadcrumbs} />}
         navigation={<Sidebar />}
         tools={
-          <HelpPanel header={<h2>Panel de ayuda</h2>}>
+          <Helpbar>
             Información sobre la páginal actual para poder mostrarla al público
             en general.
-          </HelpPanel>
+          </Helpbar>
         }
         content={
           <ContentLayout header={<Header variant="h1">Resumen</Header>}>
@@ -95,7 +97,7 @@ export default function Admin_main() {
             >
               <Cifras />
               <Modulos />
-              <Deudas />
+              <Publicaciones />
               <Proyectos_tipos />
               <Proyectos_tipos_historicos />
             </Grid>

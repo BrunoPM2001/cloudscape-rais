@@ -1,5 +1,4 @@
 import { TopNavigation, Input } from "@cloudscape-design/components";
-import { useState } from "react";
 
 const profileActions = [
   {
@@ -32,16 +31,6 @@ export default function Navbar({
         title: "RAIS",
         // logo: { src: logo, alt: "Logo RAIS" },
       }}
-      // search={
-      //   <Input
-      //     ariaLabel="Search input field for navigation"
-      //     clearAriaLabel="Clear input field for navigation"
-      //     value={searchNav}
-      //     type="search"
-      //     placeholder="Buscar..."
-      //     onChange={({ detail }) => setSearchNav(detail.value)}
-      //   />
-      // }
       utilities={[
         {
           type: "menu-dropdown",

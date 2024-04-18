@@ -4,8 +4,7 @@ import "@cloudscape-design/global-styles/index.css";
 import { I18nProvider } from "@cloudscape-design/components/i18n";
 import messages from "@cloudscape-design/components/i18n/messages/all.es";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-// import Gestion_grupos from "./pages/admin/estudios/gestion_grupos/index.jsx";
-// import Detalle_grupo from "./pages/admin/estudios/gestion_grupos/detalles/index.jsx";
+
 //  Pages
 const Admin_main = lazy(() => import("./pages/admin/dashboard/index.jsx"));
 const Convocatorias = lazy(() =>
