@@ -59,9 +59,9 @@ export default function () {
             y: item[tipo.tipo_proyecto],
           })),
         }))}
-        yDomain={[0, 600]}
-        xDomain={[2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024]}
         xScaleType="categorical"
+        xDomain={[2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024]}
+        yDomain={[0, 600]}
         xTitle="Periodo"
         yTitle="Cantidad de proyectos"
       />
