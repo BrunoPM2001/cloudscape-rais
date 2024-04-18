@@ -7,6 +7,12 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 //  Pages
 const Admin_main = lazy(() => import("./pages/admin/dashboard/index.jsx"));
+const Gestion_convocatorias = lazy(() =>
+  import("./pages/admin/estudios/gestion_convocatorias/index.jsx")
+);
+const Detalle_evaluacion = lazy(() =>
+  import("./pages/admin/estudios/gestion_convocatorias/detalles/index.jsx")
+);
 const Convocatorias = lazy(() =>
   import("./pages/admin/facultad/convocatorias/index.jsx")
 );
@@ -91,7 +97,16 @@ const router = createBrowserRouter([
         children: [
           {
             path: "convocatorias",
-            element: <div>convocatorias</div>,
+            children: [
+              {
+                path: "",
+                element: <Gestion_convocatorias />,
+              },
+              {
+                path: "detalle",
+                element: <Detalle_evaluacion />,
+              },
+            ],
           },
           {
             path: "grupos",
