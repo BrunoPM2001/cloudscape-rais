@@ -1,7 +1,6 @@
 import {
   AppLayout,
   BreadcrumbGroup,
-  Container,
   ContentLayout,
   Flashbar,
   Grid,

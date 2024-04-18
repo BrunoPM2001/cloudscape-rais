@@ -256,7 +256,7 @@ export default () => {
                 const query = queryString.stringify({
                   id: selectedItems[0]["id"],
                 });
-                window.location.href = "monitoreo/detalle" + query;
+                window.location.href = "monitoreo/detalle?" + query;
               }}
             >
               Visualizar

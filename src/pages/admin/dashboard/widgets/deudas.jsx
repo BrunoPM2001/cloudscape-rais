@@ -1,93 +1,104 @@
 import { BarChart, Container, Header } from "@cloudscape-design/components";
+import { useEffect, useState } from "react";
 
 const data = [
   {
-    periodo: 2017,
-    deuda_academica: 60,
-    deuda_economica: 2,
-    deuda_academica_economica: 2,
+    titulo: "null",
+    cuenta: 5612,
   },
   {
-    periodo: 2018,
-    deuda_academica: 56,
-    deuda_economica: 4,
-    deuda_academica_economica: 9,
+    titulo: "Artículos Publicados en Revistas de Investigación",
+    cuenta: 24061,
   },
   {
-    periodo: 2019,
-    deuda_academica: 58,
-    deuda_economica: 5,
-    deuda_academica_economica: 7,
+    titulo: "Resúmenes de Eventos Científicos",
+    cuenta: 15023,
   },
   {
-    periodo: 2020,
-    deuda_academica: 30,
-    deuda_economica: 6,
-    deuda_academica_economica: 4,
+    titulo: "Tesis de Pre y Postgrado",
+    cuenta: 3382,
   },
   {
-    periodo: 2021,
-    deuda_academica: 40,
-    deuda_economica: 1,
-    deuda_academica_economica: 4,
+    titulo: "Ensayos",
+    cuenta: 238,
   },
   {
-    periodo: 2022,
-    deuda_academica: 20,
-    deuda_economica: 1,
-    deuda_academica_economica: 1,
+    titulo: "Capitulo de Libros",
+    cuenta: 2342,
+  },
+  {
+    titulo: "Libros",
+    cuenta: 2579,
+  },
+  {
+    titulo: "Tesis asesoria",
+    cuenta: 5563,
   },
 ];
 
 export default function () {
+  //  States
+  const [data, setData] = useState([]);
+  const [tipos, setTipos] = useState([]);
+  const [loading, setLoading] = useState("loading");
+
+  //  Functions
+  const getData = async () => {
+    try {
+      setLoading("loading");
+      const res = await fetch(
+        "http://localhost:8000/api/admin/dashboard/tipoPublicaciones"
+      );
+      if (!res.ok) {
+        setLoading("error");
+        throw new Error("Error in fetch");
+      } else {
+        const data = await res.json();
+        setTipos(data.tipos);
+        setData(data.cuenta);
+        setLoading("finished");
+      }
+    } catch (error) {
+      setItems([]);
+      setLoading("error");
+      console.log(error);
+    }
+  };
+
+  //  Effects
+  useEffect(() => {
+    getData();
+  }, []);
+
   return (
     <Container
       header={
         <Header
           variant="h2"
-          description="Cantidad de deudas registradas los últimos años"
+          description="Cantidad de publicaciones registradas los últimos años"
         >
-          Deudas académicas y económicas por año
+          Publicaciones por periodo
         </Header>
       }
       fitHeight={true}
     >
       <BarChart
+        statusType={loading}
         fitHeight
         height={150}
-        yDomain={[0, 80]}
-        xDomain={[2017, 2018, 2019, 2020, 2021, 2022]}
+        series={tipos.map((tipo) => ({
+          title: tipo.tipo,
+          type: "bar",
+          data: data.map((item) => ({
+            x: parseInt(item.periodo),
+            y: item[tipo.tipo],
+          })),
+        }))}
         xScaleType="categorical"
-        stackedBars
-        hideFilter
-        series={[
-          {
-            title: "Deuda académica",
-            type: "bar",
-            data: data.map((item) => ({
-              x: item.periodo,
-              y: item.deuda_academica,
-            })),
-          },
-          {
-            title: "Deuda económica",
-            type: "bar",
-            data: data.map((item) => ({
-              x: item.periodo,
-              y: item.deuda_economica,
-            })),
-          },
-          {
-            title: "Deuda académica y económica",
-            type: "bar",
-            data: data.map((item) => ({
-              x: item.periodo,
-              y: item.deuda_academica_economica,
-            })),
-          },
-        ]}
-        xTitle="Periodo"
-        yTitle="Cantidad total"
+        xDomain={data.map((item) => item.periodo)}
+        yDomain={[0, 3000]}
+        xTitle="Periodos"
+        yTitle="Cantidad de publicaciones"
       />
     </Container>
   );
