@@ -4,6 +4,7 @@ import "@cloudscape-design/global-styles/index.css";
 import { I18nProvider } from "@cloudscape-design/components/i18n";
 import messages from "@cloudscape-design/components/i18n/messages/all.es";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Login from "./pages/login/index.jsx";
 
 //  Pages
 const Admin_main = lazy(() => import("./pages/admin/dashboard/index.jsx"));
@@ -83,7 +84,7 @@ const Reporte_constancias = lazy(() =>
 const router = createBrowserRouter([
   {
     path: "",
-    element: <div>Login</div>,
+    element: <Login />,
   },
   {
     path: "admin",

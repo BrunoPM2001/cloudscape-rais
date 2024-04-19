@@ -65,7 +65,10 @@ export default ({ data, loading, id }) => {
         },
       ]}
     >
-      <Container header={<Header variant="h2">Detalles del proyecto</Header>}>
+      <Container
+        header={<Header variant="h2">Detalles del proyecto</Header>}
+        fitHeight
+      >
         <ColumnLayout columns={2} variant="text-grid">
           <SpaceBetween size="s">
             <div>
@@ -131,44 +134,49 @@ export default ({ data, loading, id }) => {
           </SpaceBetween>
         </ColumnLayout>
       </Container>
-      <Table
-        columnDefinitions={[
-          {
-            id: "tipo_publicacion",
-            header: "Tipo de publicación",
-            cell: (item) => <Link href="#">{item.tipo_publicacion}</Link>,
-          },
-          {
-            id: "cantidad_requerida",
-            header: "Cant. requerida",
-            cell: (item) => item.cantidad_requerida,
-          },
-          {
-            id: "cantidad_completada",
-            header: "Cant. completada",
-            cell: (item) => item.cantidad_completada,
-          },
-        ]}
-        columnDisplay={[
-          { id: "tipo_publicacion", visible: true },
-          { id: "cantidad_requerida", visible: true },
-          { id: "cantidad_completada", visible: true },
-        ]}
-        enableKeyboardNavigation
-        items={items}
-        loadingText="Cargando datos"
-        loading={loadItems}
-        resizableColumns
-        trackBy="id"
-        empty={
-          <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
-            <SpaceBetween size="m">
-              <b>No hay registros...</b>
-            </SpaceBetween>
-          </Box>
-        }
+      <Container
         header={<Header variant="h2">Requisitos cumplidos</Header>}
-      />
+        fitHeight
+      >
+        <Table
+          variant="embedded"
+          columnDefinitions={[
+            {
+              id: "tipo_publicacion",
+              header: "Tipo de publicación",
+              cell: (item) => <Link href="#">{item.tipo_publicacion}</Link>,
+            },
+            {
+              id: "cantidad_requerida",
+              header: "Cant. requerida",
+              cell: (item) => item.cantidad_requerida,
+            },
+            {
+              id: "cantidad_completada",
+              header: "Cant. completada",
+              cell: (item) => item.cantidad_completada,
+            },
+          ]}
+          columnDisplay={[
+            { id: "tipo_publicacion", visible: true },
+            { id: "cantidad_requerida", visible: true },
+            { id: "cantidad_completada", visible: true },
+          ]}
+          enableKeyboardNavigation
+          items={items}
+          loadingText="Cargando datos"
+          loading={loadItems}
+          resizableColumns
+          trackBy="id"
+          empty={
+            <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
+              <SpaceBetween size="m">
+                <b>No hay registros...</b>
+              </SpaceBetween>
+            </Box>
+          }
+        />
+      </Container>
     </Grid>
   );
 };

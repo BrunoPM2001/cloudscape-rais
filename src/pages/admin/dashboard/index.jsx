@@ -16,6 +16,7 @@ import Publicaciones from "./widgets/publicaciones.jsx";
 import Proyectos_tipos from "./widgets/proyectos_tipos.jsx";
 import Proyectos_tipos_historicos from "./widgets/proyectos_tipos_historicos.jsx";
 import Helpbar from "../components/helpbar.jsx";
+import ProtectedRoute from "../components/protectedRoute.jsx";
 
 const breadcrumbs = [
   {
@@ -30,7 +31,7 @@ const breadcrumbs = [
 
 export default function Admin_main() {
   return (
-    <>
+    <ProtectedRoute>
       <Navbar />
       <AppLayout
         breadcrumbs={<BreadcrumbGroup items={breadcrumbs} />}
@@ -104,6 +105,6 @@ export default function Admin_main() {
           </ContentLayout>
         }
       />
-    </>
+    </ProtectedRoute>
   );
 }

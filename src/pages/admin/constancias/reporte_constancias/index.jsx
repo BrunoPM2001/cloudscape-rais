@@ -92,7 +92,7 @@ export default function Reporte_constancias() {
       let tipoConst;
       if (form.tipo == 1) {
         tipoConst = "getConstanciaPuntajePublicaciones";
-      } else if (form.tipo == 1) {
+      } else if (form.tipo == 2) {
         tipoConst = "getConstanciaPublicacionesCientificas";
       } else if (form.tipo == 3) {
         tipoConst = "getConstanciaGrupoInvestigacion";
