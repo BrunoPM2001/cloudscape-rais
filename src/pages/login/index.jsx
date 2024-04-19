@@ -10,14 +10,37 @@ import {
 } from "@cloudscape-design/components";
 import { useState } from "react";
 import styles from "./index.module.css";
+import axios from "axios";
 
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleLogin = () => {
-    setLoading(true);
+  const handleLogin = async () => {
+    try {
+      setLoading(true);
+      const res = await axios({
+        url: "http://localhost:8000/login",
+        method: "POST",
+        data: JSON.stringify({
+          username_mail: username,
+          password: password,
+        }),
+      });
+
+      if (res.status != 200) {
+        setLoading(false);
+        throw new Error("Error in fetch");
+      } else {
+        setLoading(false);
+        const res = await res.data;
+        console.log(res);
+      }
+    } catch (e) {
+      setLoading(false);
+      console.log("Error");
+    }
   };
 
   return (
