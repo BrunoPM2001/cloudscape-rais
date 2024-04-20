@@ -18,15 +18,25 @@ export default function () {
     try {
       setLoading("loading");
       const res = await fetch(
-        "http://localhost:8000/api/admin/dashboard/metricas"
+        "http://localhost:8000/api/admin/dashboard/metricas",
+        {
+          headers: {
+            Authorization: localStorage.getItem("Auth"),
+          },
+        }
       );
-      if (!res.ok) {
+      if (res.status == 401) {
+        localStorage.removeItem("Auth");
         setLoading("error");
-        throw new Error("Error in fetch");
       } else {
-        const data = await res.json();
-        setData(data);
-        setLoading(false);
+        if (!res.ok) {
+          setLoading("error");
+          throw new Error("Error in fetch");
+        } else {
+          const data = await res.json();
+          setData(data);
+          setLoading(false);
+        }
       }
     } catch (error) {
       setItems([]);

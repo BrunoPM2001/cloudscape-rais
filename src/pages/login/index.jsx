@@ -23,10 +23,10 @@ export default function Login() {
       const res = await axios({
         url: "http://localhost:8000/login",
         method: "POST",
-        data: JSON.stringify({
+        data: {
           username_mail: username,
           password: password,
-        }),
+        },
       });
 
       if (res.status != 200) {
@@ -34,12 +34,17 @@ export default function Login() {
         throw new Error("Error in fetch");
       } else {
         setLoading(false);
-        const res = await res.data;
-        console.log(res);
+        const result = await res.data;
+        if (result.data.tabla == "Usuario_admin") {
+          localStorage.setItem("Auth", result.data.token);
+          window.location.href = "/admin";
+        } else {
+          alert("Usuario no habilitado");
+        }
       }
     } catch (e) {
       setLoading(false);
-      console.log("Error");
+      console.log("Error " + e);
     }
   };
 

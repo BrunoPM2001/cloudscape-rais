@@ -5,8 +5,6 @@ import {
   Flashbar,
   Grid,
   Header,
-  HelpPanel,
-  Toggle,
 } from "@cloudscape-design/components";
 import Sidebar from "./../components/sidebar.jsx";
 import Navbar from "./../components/navbar.jsx";
@@ -31,7 +29,7 @@ const breadcrumbs = [
 
 export default function Admin_main() {
   return (
-    <ProtectedRoute>
+    <ProtectedRoute type="Usuario_admin">
       <Navbar />
       <AppLayout
         breadcrumbs={<BreadcrumbGroup items={breadcrumbs} />}
