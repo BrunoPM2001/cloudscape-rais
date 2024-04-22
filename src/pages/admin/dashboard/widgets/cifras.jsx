@@ -27,7 +27,7 @@ export default function () {
       );
       if (res.status == 401) {
         localStorage.removeItem("Auth");
-        setLoading("error");
+        setLoading(false);
       } else {
         if (!res.ok) {
           setLoading("error");

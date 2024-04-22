@@ -47,7 +47,12 @@ export default function () {
     try {
       setLoading("loading");
       const res = await fetch(
-        "http://localhost:8000/api/admin/dashboard/tipoPublicaciones"
+        "http://localhost:8000/api/admin/dashboard/tipoPublicaciones",
+        {
+          headers: {
+            Authorization: localStorage.getItem("Auth"),
+          },
+        }
       );
       if (!res.ok) {
         setLoading("error");

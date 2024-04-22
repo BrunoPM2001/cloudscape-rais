@@ -122,7 +122,12 @@ export default () => {
     try {
       setLoading(true);
       const res = await fetch(
-        "http://localhost:8000/api/admin/estudios/convocatorias/listaEvaluaciones"
+        "http://localhost:8000/api/admin/estudios/convocatorias/listaEvaluaciones",
+        {
+          headers: {
+            Authorization: localStorage.getItem("Auth"),
+          },
+        }
       );
       if (!res.ok) {
         setDistribution([]);

@@ -25,7 +25,12 @@ export default () => {
       setLoading(true);
       const res = await fetch(
         "http://localhost:8000/api/admin/estudios/convocatorias/verCriteriosEvaluacion/" +
-          id
+          id,
+        {
+          headers: {
+            Authorization: localStorage.getItem("Auth"),
+          },
+        }
       );
       if (!res.ok) {
         setData([]);

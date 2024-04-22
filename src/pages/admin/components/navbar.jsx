@@ -17,7 +17,11 @@ const profileActions = [
       },
     ],
   },
-  { id: "signout", text: "Cerrar sesión" },
+  {
+    id: "signout",
+    text: "Cerrar sesión",
+    href: "/",
+  },
 ];
 
 export default function Navbar({
@@ -38,6 +42,12 @@ export default function Navbar({
           description: mail,
           iconName: "user-profile",
           items: profileActions,
+          onItemClick: ({ detail }) => {
+            //  Eliminar token de autenticación
+            if (detail.id == "signout") {
+              localStorage.removeItem("Auth");
+            }
+          },
         },
       ]}
     />

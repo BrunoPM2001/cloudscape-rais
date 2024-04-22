@@ -17,7 +17,12 @@ export default function () {
     try {
       setLoading("loading");
       const res = await fetch(
-        "http://localhost:8000/api/admin/dashboard/proyectos/2024"
+        "http://localhost:8000/api/admin/dashboard/proyectos/2024",
+        {
+          headers: {
+            Authorization: localStorage.getItem("Auth"),
+          },
+        }
       );
       if (!res.ok) {
         setLoading("error");

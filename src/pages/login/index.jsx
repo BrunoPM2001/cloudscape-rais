@@ -21,7 +21,7 @@ export default function Login() {
     try {
       setLoading(true);
       const res = await axios({
-        url: "http://localhost:8000/login",
+        url: "http://localhost:8000/api/login",
         method: "POST",
         data: {
           username_mail: username,
