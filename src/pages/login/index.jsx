@@ -6,7 +6,8 @@ import {
   Button,
   FormField,
   Input,
-  Box,
+  Alert,
+  CopyToClipboard,
 } from "@cloudscape-design/components";
 import { useState } from "react";
 import styles from "./index.module.css";
@@ -16,6 +17,7 @@ export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [viewAlerts, setViewAlerts] = useState([false, true]);
 
   const handleLogin = async () => {
     try {
@@ -38,8 +40,11 @@ export default function Login() {
         if (result.data.tabla == "Usuario_admin") {
           localStorage.setItem("Auth", result.data.token);
           window.location.href = "/admin";
+        } else if (result.data.tabla == "Usuario_investigador") {
+          localStorage.setItem("Auth", result.data.token);
+          window.location.href = "/investigador";
         } else {
-          alert("Usuario no habilitado");
+          setViewAlerts((prev) => [true, prev[1]]);
         }
       }
     } catch (e) {
@@ -52,9 +57,31 @@ export default function Login() {
     <div className={styles["login-container"]}>
       <Container
         footer={
-          <SpaceBetween direction="horizontal" size="s">
-            <Box variant="strong">Consulta técnica: </Box>
-            <Box>rais.vrip@unmsm.edu.pe</Box>
+          <SpaceBetween size="s">
+            {viewAlerts[0] && (
+              <Alert
+                header="Credenciales incorrectas"
+                type="error"
+                dismissible
+                onDismiss={() => setViewAlerts((prev) => [false, prev[1]])}
+              ></Alert>
+            )}
+            {viewAlerts[1] && (
+              <Alert
+                header="Consultas técnicas al siguiente correo"
+                dismissible
+                onDismiss={() => setViewAlerts((prev) => [prev[0], false])}
+              >
+                rais.vrip@unmsm.edu.pe
+                <CopyToClipboard
+                  copyButtonAriaLabel="Copiar correo"
+                  copyErrorText="Error al copiar"
+                  copySuccessText="Correo copiado"
+                  textToCopy="rais.vrip@unmsm.edu.pe"
+                  variant="icon"
+                />
+              </Alert>
+            )}
           </SpaceBetween>
         }
       >
