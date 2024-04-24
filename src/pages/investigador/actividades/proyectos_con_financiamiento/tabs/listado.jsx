@@ -99,12 +99,16 @@ const columnDefinitions = [
         color={
           item.estado == -1
             ? "red"
-            : item.estado == 1
+            : item.estado == 0
             ? "grey"
+            : item.estado == 1
+            ? "green"
             : item.estado == 2
             ? "grey"
-            : item.estado == 4
-            ? "green"
+            : item.estado == 3
+            ? "grey"
+            : item.estado == 5
+            ? "blue"
             : item.estado == 5
             ? "blue"
             : item.estado == 6
@@ -114,12 +118,14 @@ const columnDefinitions = [
       >
         {item.estado == -1
           ? "Eliminado"
+          : item.estado == 0
+          ? "No aprobado"
           : item.estado == 1
-          ? "Reconocido"
+          ? "Aprobado"
           : item.estado == 2
           ? "Observado"
-          : item.estado == 4
-          ? "Registrado"
+          : item.estado == 3
+          ? "En evaluación"
           : item.estado == 5
           ? "Enviado"
           : item.estado == 6
@@ -171,7 +177,7 @@ export default () => {
       ),
     },
     pagination: { pageSize: 10 },
-    sorting: { defaultState: { sortingColumn: columnDefinitions[0] } },
+    sorting: {},
     selection: {},
   });
   const [enableBtn, setEnableBtn] = useState(true);
@@ -181,7 +187,12 @@ export default () => {
     try {
       setLoading(true);
       const res = await fetch(
-        "http://localhost:8000/api/admin/estudios/monitoreo/listadoProyectos/"
+        "http://localhost:8000/api/investigador/actividades/conFinanciamiento/listado",
+        {
+          headers: {
+            Authorization: localStorage.getItem("Auth"),
+          },
+        }
       );
       if (!res.ok) {
         setDistribution([]);
@@ -243,7 +254,7 @@ export default () => {
             </Button>
           }
         >
-          Proyectos
+          Proyectos {distributions.length}
         </Header>
       }
       filter={

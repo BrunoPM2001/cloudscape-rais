@@ -8,17 +8,16 @@ import {
 import Sidebar from "./../components/sidebar.jsx";
 import Navbar from "./../components/navbar.jsx";
 import Cifras from "./widgets/cifras.jsx";
-import Modulos from "./widgets/modulos.jsx";
+import Detalles from "./widgets/detalles.jsx";
 import Publicaciones from "./widgets/publicaciones.jsx";
 import Proyectos_tipos from "./widgets/proyectos_tipos.jsx";
-import Proyectos_tipos_historicos from "./widgets/proyectos_tipos_historicos.jsx";
 import Helpbar from "../components/helpbar.jsx";
 import ProtectedRoute from "../components/protectedRoute.jsx";
 
 const breadcrumbs = [
   {
-    text: "Admin",
-    href: "/admin",
+    text: "Investigador",
+    href: "/investigador",
   },
   {
     text: "Dashboard principal",
@@ -26,17 +25,17 @@ const breadcrumbs = [
   },
 ];
 
-export default function Admin_main() {
+export default function Investigador_main() {
   return (
-    <ProtectedRoute type="Usuario_admin">
+    <ProtectedRoute type="Usuario_investigador">
       <Navbar />
       <AppLayout
         breadcrumbs={<BreadcrumbGroup items={breadcrumbs} />}
         navigation={<Sidebar />}
         tools={
           <Helpbar>
-            Información sobre la páginal actual para poder mostrarla al público
-            en general.
+            Métricas generales respecto a su trayectoria como investigador
+            registrado en el Rais.
           </Helpbar>
         }
         content={
@@ -75,21 +74,12 @@ export default function Admin_main() {
                     xs: 12,
                   },
                 },
-                {
-                  colspan: {
-                    l: 12,
-                    m: 12,
-                    s: 12,
-                    xs: 12,
-                  },
-                },
               ]}
             >
               <Cifras />
-              <Modulos />
-              <Publicaciones />
+              <Detalles />
               <Proyectos_tipos />
-              <Proyectos_tipos_historicos />
+              <Publicaciones />
             </Grid>
           </ContentLayout>
         }

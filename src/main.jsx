@@ -7,6 +7,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Login from "./pages/login/index.jsx";
 import Revistas from "./pages/admin/estudios/revistas/index.jsx";
 import Gestion_laboratorios from "./pages/admin/estudios/gestion_laboratorios/index.jsx";
+import Proyectos_con_financiamiento from "./pages/investigador/actividades/proyectos_con_financiamiento/index.jsx";
 
 //  Pages
 const Admin_main = lazy(() => import("./pages/admin/dashboard/index.jsx"));
@@ -241,6 +242,20 @@ const router = createBrowserRouter([
           {
             path: "usuarios_investigadores",
             element: <Usuarios_investigadores />,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    path: "investigador",
+    children: [
+      {
+        path: "actividades",
+        children: [
+          {
+            path: "proyectosConFinanciamiento",
+            element: <Proyectos_con_financiamiento />,
           },
         ],
       },
