@@ -86,7 +86,7 @@ const navItems = [
       {
         type: "link",
         text: "Artículo en revistas de investigación",
-        href: "#",
+        href: "/investigador/publicaciones/articulos",
       },
       {
         type: "link",

@@ -19,6 +19,7 @@ import Eventos from "./pages/investigador/actividades/eventos/index.jsx";
 import Proyectos_eci from "./pages/investigador/actividades/proyecto_eci/index.jsx";
 import Comite_editorial from "./pages/investigador/actividades/comite_editorial/index.jsx";
 import Grupos_estudio from "./pages/investigador/actividades/grupos_estudio/index.jsx";
+import Articulos from "./pages/investigador/publicaciones/articulo/index.jsx";
 
 //  Pages
 const Admin_main = lazy(() => import("./pages/admin/dashboard/index.jsx"));
@@ -311,6 +312,15 @@ const router = createBrowserRouter([
           {
             path: "gruposEstudio",
             element: <Grupos_estudio />,
+          },
+        ],
+      },
+      {
+        path: "publicaciones",
+        children: [
+          {
+            path: "articulos",
+            element: <Articulos />,
           },
         ],
       },
