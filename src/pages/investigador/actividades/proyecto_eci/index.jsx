@@ -20,7 +20,7 @@ const breadcrumbs = [
     text: "Actividades",
   },
   {
-    text: "Proyectos FEX",
+    text: "Proyectos ECI",
   },
 ];
 
@@ -32,7 +32,7 @@ const tabs = [
   },
 ];
 
-export default function Proyectos_FEX() {
+export default function Proyecto_eci() {
   return (
     <>
       <Navbar />
@@ -41,16 +41,16 @@ export default function Proyectos_FEX() {
         navigation={<Sidebar />}
         tools={
           <Helpbar>
-            Listado de los proyectos FEX en los que ha participado usted.
+            Listado de los proyectos ECI en los que ha participado usted.
           </Helpbar>
         }
         content={
           <ContentLayout
             disableOverlap
-            header={<Header variant="h1">Proyectos FEX:</Header>}
+            header={<Header variant="h1">Proyectos ECI:</Header>}
           >
             <SpaceBetween size="l">
-              <Tabs tabs={tabs} ariaLabel="Ventanas de proyectos FEX" />
+              <Tabs tabs={tabs} ariaLabel="Ventanas de proyectos ECI" />
             </SpaceBetween>
           </ContentLayout>
         }

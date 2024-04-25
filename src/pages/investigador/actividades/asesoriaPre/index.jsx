@@ -20,7 +20,7 @@ const breadcrumbs = [
     text: "Actividades",
   },
   {
-    text: "Proyectos FEX",
+    text: "Asesoría de tesis de pregrado",
   },
 ];
 
@@ -32,7 +32,7 @@ const tabs = [
   },
 ];
 
-export default function Proyectos_FEX() {
+export default function Asesoria_pregrado() {
   return (
     <>
       <Navbar />
@@ -41,16 +41,19 @@ export default function Proyectos_FEX() {
         navigation={<Sidebar />}
         tools={
           <Helpbar>
-            Listado de los proyectos FEX en los que ha participado usted.
+            Listado de las asesorías de tesis de pregrado en los que ha
+            participado usted.
           </Helpbar>
         }
         content={
           <ContentLayout
             disableOverlap
-            header={<Header variant="h1">Proyectos FEX:</Header>}
+            header={
+              <Header variant="h1">Asesoría de tesis de pregrado:</Header>
+            }
           >
             <SpaceBetween size="l">
-              <Tabs tabs={tabs} ariaLabel="Ventanas de proyectos FEX" />
+              <Tabs tabs={tabs} ariaLabel="Ventanas de asesoría de pregrado" />
             </SpaceBetween>
           </ContentLayout>
         }

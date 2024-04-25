@@ -11,6 +11,14 @@ import Proyectos_con_financiamiento from "./pages/investigador/actividades/proye
 import Proyectos_sin_financiamiento from "./pages/investigador/actividades/proyectos_sin_financiamiento/index.jsx";
 import Proyectos_FEX from "./pages/investigador/actividades/proyecto_fex/index.jsx";
 import Proyectos_multi from "./pages/investigador/actividades/proyecto_multi/index.jsx";
+import Proyectos_pubLibro from "./pages/investigador/actividades/proyecto_pubLibro/index.jsx";
+import Asesoria_pregrado from "./pages/investigador/actividades/asesoriaPre/index.jsx";
+import Asesoria_posgrado from "./pages/investigador/actividades/asesoriaPos/index.jsx";
+import Talleres from "./pages/investigador/actividades/talleres/index.jsx";
+import Eventos from "./pages/investigador/actividades/eventos/index.jsx";
+import Proyectos_eci from "./pages/investigador/actividades/proyecto_eci/index.jsx";
+import Comite_editorial from "./pages/investigador/actividades/comite_editorial/index.jsx";
+import Grupos_estudio from "./pages/investigador/actividades/grupos_estudio/index.jsx";
 
 //  Pages
 const Admin_main = lazy(() => import("./pages/admin/dashboard/index.jsx"));
@@ -271,6 +279,38 @@ const router = createBrowserRouter([
           {
             path: "proyectosMulti",
             element: <Proyectos_multi />,
+          },
+          {
+            path: "pubLibroUni",
+            element: <Proyectos_pubLibro />,
+          },
+          {
+            path: "asesoriaPre",
+            element: <Asesoria_pregrado />,
+          },
+          {
+            path: "asesoriaPos",
+            element: <Asesoria_posgrado />,
+          },
+          {
+            path: "talleres",
+            element: <Talleres />,
+          },
+          {
+            path: "eventos",
+            element: <Eventos />,
+          },
+          {
+            path: "eci",
+            element: <Proyectos_eci />,
+          },
+          {
+            path: "comiteEdi",
+            element: <Comite_editorial />,
+          },
+          {
+            path: "gruposEstudio",
+            element: <Grupos_estudio />,
           },
         ],
       },

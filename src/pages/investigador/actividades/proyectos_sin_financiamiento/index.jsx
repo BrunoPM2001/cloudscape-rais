@@ -3,12 +3,12 @@ import {
   BreadcrumbGroup,
   ContentLayout,
   Header,
-  HelpPanel,
   SpaceBetween,
   Tabs,
 } from "@cloudscape-design/components";
 import Sidebar from "../../components/sidebar.jsx";
 import Navbar from "../../components/navbar.jsx";
+import Helpbar from "../../components/helpbar.jsx";
 import Listado from "./tabs/listado.jsx";
 
 const breadcrumbs = [
@@ -40,10 +40,10 @@ export default function Proyectos_sin_financiamiento() {
         breadcrumbs={<BreadcrumbGroup items={breadcrumbs} />}
         navigation={<Sidebar />}
         tools={
-          <HelpPanel header={<h2>Panel de ayuda</h2>}>
+          <Helpbar>
             Listado de los proyectos sin fondos monetarios en los que ha
             participado usted.
-          </HelpPanel>
+          </Helpbar>
         }
         content={
           <ContentLayout
