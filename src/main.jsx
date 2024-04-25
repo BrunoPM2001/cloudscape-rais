@@ -8,6 +8,9 @@ import Login from "./pages/login/index.jsx";
 import Revistas from "./pages/admin/estudios/revistas/index.jsx";
 import Gestion_laboratorios from "./pages/admin/estudios/gestion_laboratorios/index.jsx";
 import Proyectos_con_financiamiento from "./pages/investigador/actividades/proyectos_con_financiamiento/index.jsx";
+import Proyectos_sin_financiamiento from "./pages/investigador/actividades/proyectos_sin_financiamiento/index.jsx";
+import Proyectos_FEX from "./pages/investigador/actividades/proyecto_fex/index.jsx";
+import Proyectos_multi from "./pages/investigador/actividades/proyecto_multi/index.jsx";
 
 //  Pages
 const Admin_main = lazy(() => import("./pages/admin/dashboard/index.jsx"));
@@ -256,6 +259,18 @@ const router = createBrowserRouter([
           {
             path: "proyectosConFinanciamiento",
             element: <Proyectos_con_financiamiento />,
+          },
+          {
+            path: "proyectosSinFinanciamiento",
+            element: <Proyectos_sin_financiamiento />,
+          },
+          {
+            path: "proyectosFEX",
+            element: <Proyectos_FEX />,
+          },
+          {
+            path: "proyectosMulti",
+            element: <Proyectos_multi />,
           },
         ],
       },

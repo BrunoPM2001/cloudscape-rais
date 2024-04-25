@@ -187,7 +187,7 @@ export default () => {
     try {
       setLoading(true);
       const res = await fetch(
-        "http://localhost:8000/api/investigador/actividades/conFinanciamiento/listado",
+        "http://localhost:8000/api/investigador/actividades/fex/listado",
         {
           headers: {
             Authorization: localStorage.getItem("Auth"),
