@@ -45,42 +45,42 @@ export default function Admin_main() {
               gridDefinition={[
                 {
                   colspan: {
+                    default: 12,
                     l: 8,
                     m: 8,
                     s: 8,
-                    xs: 12,
                   },
                 },
                 {
                   colspan: {
+                    default: 12,
                     l: 4,
                     m: 4,
                     s: 4,
-                    xs: 12,
                   },
                 },
                 {
                   colspan: {
+                    default: 12,
                     l: 6,
                     m: 6,
                     s: 6,
-                    xs: 12,
                   },
                 },
                 {
                   colspan: {
+                    default: 12,
                     l: 6,
                     m: 6,
                     s: 6,
-                    xs: 12,
                   },
                 },
                 {
                   colspan: {
+                    default: 12,
                     l: 12,
                     m: 12,
                     s: 12,
-                    xs: 12,
                   },
                 },
               ]}

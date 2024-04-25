@@ -106,37 +106,39 @@ const columnDefinitions = [
         color={
           item.estado == -1
             ? "red"
-            : item.estado == 0
-            ? "grey"
             : item.estado == 1
             ? "green"
             : item.estado == 2
             ? "grey"
-            : item.estado == 3
-            ? "grey"
-            : item.estado == 5
-            ? "blue"
             : item.estado == 5
             ? "blue"
             : item.estado == 6
             ? "grey"
+            : item.estado == 7
+            ? "red"
+            : item.estado == 8
+            ? "grey"
+            : item.estado == 9
+            ? "red"
             : "red"
         }
       >
         {item.estado == -1
           ? "Eliminado"
-          : item.estado == 0
-          ? "No aprobado"
           : item.estado == 1
-          ? "Aprobado"
+          ? "Registrado"
           : item.estado == 2
           ? "Observado"
-          : item.estado == 3
-          ? "En evaluación"
           : item.estado == 5
           ? "Enviado"
           : item.estado == 6
           ? "En proceso"
+          : item.estado == 7
+          ? "Anulado"
+          : item.estado == 8
+          ? "No registrado"
+          : item.estado == 9
+          ? "Duplicado"
           : "Error"}
       </Badge>
     ),
