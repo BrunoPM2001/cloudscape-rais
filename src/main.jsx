@@ -20,6 +20,12 @@ import Proyectos_eci from "./pages/investigador/actividades/proyecto_eci/index.j
 import Comite_editorial from "./pages/investigador/actividades/comite_editorial/index.jsx";
 import Grupos_estudio from "./pages/investigador/actividades/grupos_estudio/index.jsx";
 import Articulos from "./pages/investigador/publicaciones/articulo/index.jsx";
+import Libros from "./pages/investigador/publicaciones/libro/index.jsx";
+import Capitulos from "./pages/investigador/publicaciones/capitulo/index.jsx";
+import Investigador_Evento from "./pages/investigador/publicaciones/evento/index.jsx";
+import Tesis_propias from "./pages/investigador/publicaciones/tesis_propia/index.jsx";
+import Tesis_asesorias from "./pages/investigador/publicaciones/tesis_asesoria/index.jsx";
+import Patentes from "./pages/investigador/publicaciones/patente/index.jsx";
 
 //  Pages
 const Admin_main = lazy(() => import("./pages/admin/dashboard/index.jsx"));
@@ -321,6 +327,30 @@ const router = createBrowserRouter([
           {
             path: "articulos",
             element: <Articulos />,
+          },
+          {
+            path: "libros",
+            element: <Libros />,
+          },
+          {
+            path: "capitulos",
+            element: <Capitulos />,
+          },
+          {
+            path: "eventos",
+            element: <Investigador_Evento />,
+          },
+          {
+            path: "tesisPropias",
+            element: <Tesis_propias />,
+          },
+          {
+            path: "tesisAsesorias",
+            element: <Tesis_asesorias />,
+          },
+          {
+            path: "patentes",
+            element: <Patentes />,
           },
         ],
       },

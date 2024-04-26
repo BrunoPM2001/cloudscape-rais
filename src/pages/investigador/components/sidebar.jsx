@@ -1,4 +1,4 @@
-import { SideNavigation } from "@cloudscape-design/components";
+import { Badge, SideNavigation } from "@cloudscape-design/components";
 import { useLocation } from "react-router-dom";
 
 const navItems = [
@@ -74,7 +74,7 @@ const navItems = [
       {
         type: "link",
         text: "Deudas",
-        href: "#",
+        info: <Badge color="grey">En desarrollo</Badge>,
       },
     ],
   },
@@ -91,33 +91,37 @@ const navItems = [
       {
         type: "link",
         text: "Libro",
-        href: "#",
+        href: "/investigador/publicaciones/libros",
       },
       {
         type: "link",
         text: "Capítulo de libro",
-        href: "#",
+        href: "/investigador/publicaciones/capitulos",
       },
       {
         type: "link",
         text: "Resumen de evento científico",
-        href: "#",
+        href: "/investigador/publicaciones/eventos",
       },
       {
         type: "link",
         text: "Tesis propias",
-        href: "#",
+        href: "/investigador/publicaciones/tesisPropias",
       },
-      { type: "link", text: "Tesis asesoría", href: "#" },
+      {
+        type: "link",
+        text: "Tesis asesoría",
+        href: "/investigador/publicaciones/tesisAsesorias",
+      },
       {
         type: "link",
         text: "Propiedad intelectual",
-        href: "#",
+        href: "/investigador/publicaciones/patentes",
       },
       {
         type: "link",
         text: "Listado de revistas y editoriales reconocidas",
-        href: "#",
+        info: <Badge color="grey">En desarrollo</Badge>,
       },
     ],
   },

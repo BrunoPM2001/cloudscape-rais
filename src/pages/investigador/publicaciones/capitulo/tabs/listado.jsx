@@ -35,9 +35,9 @@ const FILTER_PROPS = [
     operators: stringOperators,
   },
   {
-    propertyLabel: "Observaciones",
-    key: "observaciones_usuario",
-    groupValuesLabel: "Observaciones",
+    propertyLabel: "Isbn",
+    key: "isbn",
+    groupValuesLabel: "Isbns",
     operators: stringOperators,
   },
   {
@@ -81,10 +81,10 @@ const columnDefinitions = [
     sortingField: "revista",
   },
   {
-    id: "observaciones",
-    header: "observaciones_usuario",
-    cell: (item) => item.observaciones_usuario,
-    sortingField: "observaciones_usuario",
+    id: "isbn",
+    header: "Isbn",
+    cell: (item) => item.isbn,
+    sortingField: "isbn",
   },
   {
     id: "año_publicacion",
@@ -150,7 +150,7 @@ const columnDisplay = [
   { id: "id", visible: true },
   { id: "titulo", visible: true },
   { id: "revista", visible: true },
-  { id: "observaciones_usuario", visible: true },
+  { id: "isbn", visible: true },
   { id: "año_publicacion", visible: true },
   { id: "puntaje", visible: true },
   { id: "estado", visible: true },
@@ -197,7 +197,7 @@ export default () => {
     try {
       setLoading(true);
       const res = await fetch(
-        "http://localhost:8000/api/investigador/publicaciones/articulos/listado",
+        "http://localhost:8000/api/investigador/publicaciones/capitulos/listado",
         {
           headers: {
             Authorization: localStorage.getItem("Auth"),
@@ -273,7 +273,7 @@ export default () => {
                   },
                 ]}
               >
-                Acciones para publicaciones
+                Acciones para capítulos
               </ButtonDropdown>
               <Button variant="primary">Registrar</Button>
             </SpaceBetween>

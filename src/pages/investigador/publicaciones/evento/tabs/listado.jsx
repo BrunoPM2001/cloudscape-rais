@@ -81,8 +81,8 @@ const columnDefinitions = [
     sortingField: "revista",
   },
   {
-    id: "observaciones",
-    header: "observaciones_usuario",
+    id: "observaciones_usuario",
+    header: "Observaciones",
     cell: (item) => item.observaciones_usuario,
     sortingField: "observaciones_usuario",
   },
@@ -197,7 +197,7 @@ export default () => {
     try {
       setLoading(true);
       const res = await fetch(
-        "http://localhost:8000/api/investigador/publicaciones/articulos/listado",
+        "http://localhost:8000/api/investigador/publicaciones/eventos/listado",
         {
           headers: {
             Authorization: localStorage.getItem("Auth"),
@@ -273,7 +273,7 @@ export default () => {
                   },
                 ]}
               >
-                Acciones para publicaciones
+                Acciones para eventos
               </ButtonDropdown>
               <Button variant="primary">Registrar</Button>
             </SpaceBetween>

@@ -29,12 +29,6 @@ const FILTER_PROPS = [
     operators: stringOperators,
   },
   {
-    propertyLabel: "Revista",
-    key: "revista",
-    groupValuesLabel: "Revistas",
-    operators: stringOperators,
-  },
-  {
     propertyLabel: "Observaciones",
     key: "observaciones_usuario",
     groupValuesLabel: "Observaciones",
@@ -75,14 +69,8 @@ const columnDefinitions = [
     sortingField: "titulo",
   },
   {
-    id: "revista",
-    header: "Revista",
-    cell: (item) => item.revista,
-    sortingField: "revista",
-  },
-  {
-    id: "observaciones",
-    header: "observaciones_usuario",
+    id: "observaciones_usuario",
+    header: "Observaciones",
     cell: (item) => item.observaciones_usuario,
     sortingField: "observaciones_usuario",
   },
@@ -149,7 +137,6 @@ const columnDefinitions = [
 const columnDisplay = [
   { id: "id", visible: true },
   { id: "titulo", visible: true },
-  { id: "revista", visible: true },
   { id: "observaciones_usuario", visible: true },
   { id: "año_publicacion", visible: true },
   { id: "puntaje", visible: true },
@@ -197,7 +184,7 @@ export default () => {
     try {
       setLoading(true);
       const res = await fetch(
-        "http://localhost:8000/api/investigador/publicaciones/articulos/listado",
+        "http://localhost:8000/api/investigador/publicaciones/tesisAsesoria/listado",
         {
           headers: {
             Authorization: localStorage.getItem("Auth"),
@@ -273,7 +260,7 @@ export default () => {
                   },
                 ]}
               >
-                Acciones para publicaciones
+                Acciones para tesis
               </ButtonDropdown>
               <Button variant="primary">Registrar</Button>
             </SpaceBetween>

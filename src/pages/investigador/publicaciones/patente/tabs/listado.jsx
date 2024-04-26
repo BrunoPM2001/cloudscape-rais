@@ -29,21 +29,9 @@ const FILTER_PROPS = [
     operators: stringOperators,
   },
   {
-    propertyLabel: "Revista",
-    key: "revista",
-    groupValuesLabel: "Revistas",
-    operators: stringOperators,
-  },
-  {
-    propertyLabel: "Observaciones",
-    key: "observaciones_usuario",
-    groupValuesLabel: "Observaciones",
-    operators: stringOperators,
-  },
-  {
-    propertyLabel: "Año de publicación",
-    key: "año_publicacion",
-    groupValuesLabel: "Años de publicación",
+    propertyLabel: "Fecha de actualización",
+    key: "updated_at",
+    groupValuesLabel: "Fechas de actualización",
     operators: stringOperators,
   },
   {
@@ -75,22 +63,10 @@ const columnDefinitions = [
     sortingField: "titulo",
   },
   {
-    id: "revista",
-    header: "Revista",
-    cell: (item) => item.revista,
-    sortingField: "revista",
-  },
-  {
-    id: "observaciones",
-    header: "observaciones_usuario",
-    cell: (item) => item.observaciones_usuario,
-    sortingField: "observaciones_usuario",
-  },
-  {
-    id: "año_publicacion",
-    header: "Año de publicación",
-    cell: (item) => item.año_publicacion,
-    sortingField: "año_publicacion",
+    id: "updated_at",
+    header: "Fecha de actualización",
+    cell: (item) => item.updated_at,
+    sortingField: "updated_at",
   },
   {
     id: "puntaje",
@@ -149,9 +125,7 @@ const columnDefinitions = [
 const columnDisplay = [
   { id: "id", visible: true },
   { id: "titulo", visible: true },
-  { id: "revista", visible: true },
-  { id: "observaciones_usuario", visible: true },
-  { id: "año_publicacion", visible: true },
+  { id: "updated_at", visible: true },
   { id: "puntaje", visible: true },
   { id: "estado", visible: true },
 ];
@@ -197,7 +171,7 @@ export default () => {
     try {
       setLoading(true);
       const res = await fetch(
-        "http://localhost:8000/api/investigador/publicaciones/articulos/listado",
+        "http://localhost:8000/api/investigador/publicaciones/propiedadInt/listado",
         {
           headers: {
             Authorization: localStorage.getItem("Auth"),
@@ -273,7 +247,7 @@ export default () => {
                   },
                 ]}
               >
-                Acciones para publicaciones
+                Acciones para patentes
               </ButtonDropdown>
               <Button variant="primary">Registrar</Button>
             </SpaceBetween>
