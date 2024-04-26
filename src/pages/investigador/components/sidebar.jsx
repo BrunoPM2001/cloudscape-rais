@@ -133,7 +133,7 @@ const navItems = [
       {
         type: "link",
         text: "Grupos",
-        href: "#",
+        href: "/investigador/grupo",
       },
     ],
   },
