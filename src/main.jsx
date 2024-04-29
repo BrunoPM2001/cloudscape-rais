@@ -27,6 +27,8 @@ import Tesis_propias from "./pages/investigador/publicaciones/tesis_propia/index
 import Tesis_asesorias from "./pages/investigador/publicaciones/tesis_asesoria/index.jsx";
 import Patentes from "./pages/investigador/publicaciones/patente/index.jsx";
 import Grupo from "./pages/investigador/grupo/grupo/index.jsx";
+import Registrar_articulo from "./pages/investigador/publicaciones/articulo/registrar/index.jsx";
+import Investigador_main from "./pages/investigador/dashboard/index.jsx";
 
 //  Pages
 const Admin_main = lazy(() => import("./pages/admin/dashboard/index.jsx"));
@@ -270,6 +272,10 @@ const router = createBrowserRouter([
     path: "investigador",
     children: [
       {
+        path: "",
+        element: <Investigador_main />,
+      },
+      {
         path: "actividades",
         children: [
           {
@@ -352,6 +358,10 @@ const router = createBrowserRouter([
           {
             path: "patentes",
             element: <Patentes />,
+          },
+          {
+            path: "registrar",
+            element: <Registrar_articulo />,
           },
         ],
       },

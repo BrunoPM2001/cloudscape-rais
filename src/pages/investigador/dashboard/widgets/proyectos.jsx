@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 export default function () {
   //  States
   const [data, setData] = useState([]);
-  const [tipos, setTipos] = useState([]);
   const [loading, setLoading] = useState("loading");
 
   //  Functions
@@ -12,7 +11,7 @@ export default function () {
     try {
       setLoading("loading");
       const res = await fetch(
-        "http://localhost:8000/api/admin/dashboard/tipoPublicaciones",
+        "http://localhost:8000/api/investigador/dashboard/tipoProyectos",
         {
           headers: {
             Authorization: localStorage.getItem("Auth"),
@@ -24,8 +23,7 @@ export default function () {
         throw new Error("Error in fetch");
       } else {
         const data = await res.json();
-        setTipos(data.tipos);
-        setData(data.cuenta);
+        setData(data.data);
         setLoading("finished");
       }
     } catch (error) {
@@ -45,9 +43,9 @@ export default function () {
       header={
         <Header
           variant="h2"
-          description="Cantidad de publicaciones registradas los últimos años"
+          description="Cantidad de proyectos en los que participó"
         >
-          Publicaciones por periodo
+          Tipos de proyecto
         </Header>
       }
       fitHeight={true}
@@ -56,19 +54,21 @@ export default function () {
         statusType={loading}
         fitHeight
         height={150}
-        series={tipos.map((tipo) => ({
-          title: tipo.tipo,
-          type: "bar",
-          data: data.map((item) => ({
-            x: parseInt(item.periodo),
-            y: item[tipo.tipo],
-          })),
-        }))}
+        series={[
+          {
+            title: "Tipo de proyecto",
+            type: "bar",
+            data: data.map((item) => ({
+              x: item.title,
+              y: parseInt(item.cuenta),
+            })),
+          },
+        ]}
         xScaleType="categorical"
-        xDomain={data.map((item) => item.periodo)}
-        yDomain={[0, 3000]}
-        xTitle="Periodos"
-        yTitle="Cantidad de publicaciones"
+        xDomain={data.map((item) => item.title)}
+        yDomain={[0, 20]}
+        xTitle="Tipos de proyecto"
+        yTitle="Cantidad de proyectos"
       />
     </Container>
   );

@@ -101,7 +101,12 @@ export default function Reporte_constancias() {
         "http://localhost:8000/api/admin/constancias/" +
           tipoConst +
           "/" +
-          form.investigadorId
+          form.investigadorId,
+        {
+          headers: {
+            Authorization: localStorage.getItem("Auth"),
+          },
+        }
       );
       if (!res.ok) {
         setLoadingReporte(false);

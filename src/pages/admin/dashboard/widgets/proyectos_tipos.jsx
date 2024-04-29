@@ -1,10 +1,4 @@
-import {
-  Container,
-  FormField,
-  Header,
-  PieChart,
-  Select,
-} from "@cloudscape-design/components";
+import { Container, Header, PieChart } from "@cloudscape-design/components";
 import { useEffect, useState } from "react";
 
 export default function () {

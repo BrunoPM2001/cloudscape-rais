@@ -1,10 +1,9 @@
-import { BarChart, Container, Header } from "@cloudscape-design/components";
+import { Container, Header, PieChart } from "@cloudscape-design/components";
 import { useEffect, useState } from "react";
 
 export default function () {
   //  States
   const [data, setData] = useState([]);
-  const [tipos, setTipos] = useState([]);
   const [loading, setLoading] = useState("loading");
 
   //  Functions
@@ -12,7 +11,7 @@ export default function () {
     try {
       setLoading("loading");
       const res = await fetch(
-        "http://localhost:8000/api/admin/dashboard/tipoPublicaciones",
+        "http://localhost:8000/api/investigador/dashboard/tipoPublicaciones",
         {
           headers: {
             Authorization: localStorage.getItem("Auth"),
@@ -24,8 +23,7 @@ export default function () {
         throw new Error("Error in fetch");
       } else {
         const data = await res.json();
-        setTipos(data.tipos);
-        setData(data.cuenta);
+        setData(data.data);
         setLoading("finished");
       }
     } catch (error) {
@@ -45,31 +43,14 @@ export default function () {
       header={
         <Header
           variant="h2"
-          description="Cantidad de publicaciones registradas los últimos años"
+          description="Cantidad de publicaciones registradas"
         >
-          Publicaciones por periodo
+          Tipos de publicaciones
         </Header>
       }
       fitHeight={true}
     >
-      <BarChart
-        statusType={loading}
-        fitHeight
-        height={150}
-        series={tipos.map((tipo) => ({
-          title: tipo.tipo,
-          type: "bar",
-          data: data.map((item) => ({
-            x: parseInt(item.periodo),
-            y: item[tipo.tipo],
-          })),
-        }))}
-        xScaleType="categorical"
-        xDomain={data.map((item) => item.periodo)}
-        yDomain={[0, 3000]}
-        xTitle="Periodos"
-        yTitle="Cantidad de publicaciones"
-      />
+      <PieChart fitHeight size="large" statusType={loading} data={data} />
     </Container>
   );
 }

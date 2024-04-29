@@ -8,11 +8,10 @@ import {
 import Sidebar from "./../components/sidebar.jsx";
 import Navbar from "./../components/navbar.jsx";
 import Cifras from "./widgets/cifras.jsx";
-import Detalles from "./widgets/detalles.jsx";
-import Publicaciones from "./widgets/publicaciones.jsx";
-import Proyectos_tipos from "./widgets/proyectos_tipos.jsx";
 import Helpbar from "../components/helpbar.jsx";
-import ProtectedRoute from "../components/protectedRoute.jsx";
+import Publicaciones from "./widgets/publicaciones.jsx";
+import Extras from "./widgets/extras.jsx";
+import Proyectos from "./widgets/proyectos.jsx";
 
 const breadcrumbs = [
   {
@@ -27,7 +26,7 @@ const breadcrumbs = [
 
 export default function Investigador_main() {
   return (
-    <ProtectedRoute type="Usuario_investigador">
+    <>
       <Navbar />
       <AppLayout
         breadcrumbs={<BreadcrumbGroup items={breadcrumbs} />}
@@ -77,13 +76,13 @@ export default function Investigador_main() {
               ]}
             >
               <Cifras />
-              <Detalles />
-              <Proyectos_tipos />
+              <Extras />
               <Publicaciones />
+              <Proyectos />
             </Grid>
           </ContentLayout>
         }
       />
-    </ProtectedRoute>
+    </>
   );
 }
