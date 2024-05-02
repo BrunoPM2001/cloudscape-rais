@@ -4,33 +4,85 @@ import "@cloudscape-design/global-styles/index.css";
 import { I18nProvider } from "@cloudscape-design/components/i18n";
 import messages from "@cloudscape-design/components/i18n/messages/all.es";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Login from "./pages/login/index.jsx";
-import Revistas from "./pages/admin/estudios/revistas/index.jsx";
-import Gestion_laboratorios from "./pages/admin/estudios/gestion_laboratorios/index.jsx";
-import Proyectos_con_financiamiento from "./pages/investigador/actividades/proyectos_con_financiamiento/index.jsx";
-import Proyectos_sin_financiamiento from "./pages/investigador/actividades/proyectos_sin_financiamiento/index.jsx";
-import Proyectos_FEX from "./pages/investigador/actividades/proyecto_fex/index.jsx";
-import Proyectos_multi from "./pages/investigador/actividades/proyecto_multi/index.jsx";
-import Proyectos_pubLibro from "./pages/investigador/actividades/proyecto_pubLibro/index.jsx";
-import Asesoria_pregrado from "./pages/investigador/actividades/asesoriaPre/index.jsx";
-import Asesoria_posgrado from "./pages/investigador/actividades/asesoriaPos/index.jsx";
-import Talleres from "./pages/investigador/actividades/talleres/index.jsx";
-import Eventos from "./pages/investigador/actividades/eventos/index.jsx";
-import Proyectos_eci from "./pages/investigador/actividades/proyecto_eci/index.jsx";
-import Comite_editorial from "./pages/investigador/actividades/comite_editorial/index.jsx";
-import Grupos_estudio from "./pages/investigador/actividades/grupos_estudio/index.jsx";
-import Articulos from "./pages/investigador/publicaciones/articulo/index.jsx";
-import Libros from "./pages/investigador/publicaciones/libro/index.jsx";
-import Capitulos from "./pages/investigador/publicaciones/capitulo/index.jsx";
-import Investigador_Evento from "./pages/investigador/publicaciones/evento/index.jsx";
-import Tesis_propias from "./pages/investigador/publicaciones/tesis_propia/index.jsx";
-import Tesis_asesorias from "./pages/investigador/publicaciones/tesis_asesoria/index.jsx";
-import Patentes from "./pages/investigador/publicaciones/patente/index.jsx";
-import Grupo from "./pages/investigador/grupo/grupo/index.jsx";
-import Registrar_articulo from "./pages/investigador/publicaciones/articulo/registrar/index.jsx";
-import Investigador_main from "./pages/investigador/dashboard/index.jsx";
 
 //  Pages
+const Login = lazy(() => import("./pages/login/index.jsx"));
+const Revistas = lazy(() =>
+  import("./pages/admin/estudios/revistas/index.jsx")
+);
+const Gestion_laboratorios = lazy(() =>
+  import("./pages/admin/estudios/gestion_laboratorios/index.jsx")
+);
+const Proyectos_con_financiamiento = lazy(() =>
+  import(
+    "./pages/investigador/actividades/proyectos_con_financiamiento/index.jsx"
+  )
+);
+const Proyectos_sin_financiamiento = lazy(() =>
+  import(
+    "./pages/investigador/actividades/proyectos_sin_financiamiento/index.jsx"
+  )
+);
+const Proyectos_FEX = lazy(() =>
+  import("./pages/investigador/actividades/proyecto_fex/index.jsx")
+);
+const Proyectos_multi = lazy(() =>
+  import("./pages/investigador/actividades/proyecto_multi/index.jsx")
+);
+const Proyectos_pubLibro = lazy(() =>
+  import("./pages/investigador/actividades/proyecto_pubLibro/index.jsx")
+);
+const Asesoria_pregrado = lazy(() =>
+  import("./pages/investigador/actividades/asesoriaPre/index.jsx")
+);
+const Asesoria_posgrado = lazy(() =>
+  import("./pages/investigador/actividades/asesoriaPos/index.jsx")
+);
+const Talleres = lazy(() =>
+  import("./pages/investigador/actividades/talleres/index.jsx")
+);
+const Eventos = lazy(() =>
+  import("./pages/investigador/actividades/eventos/index.jsx")
+);
+const Proyectos_eci = lazy(() =>
+  import("./pages/investigador/actividades/proyecto_eci/index.jsx")
+);
+const Comite_editorial = lazy(() =>
+  import("./pages/investigador/actividades/comite_editorial/index.jsx")
+);
+const Grupos_estudio = lazy(() =>
+  import("./pages/investigador/actividades/grupos_estudio/index.jsx")
+);
+const Articulos = lazy(() =>
+  import("./pages/investigador/publicaciones/articulo/index.jsx")
+);
+const Libros = lazy(() =>
+  import("./pages/investigador/publicaciones/libro/index.jsx")
+);
+const Capitulos = lazy(() =>
+  import("./pages/investigador/publicaciones/capitulo/index.jsx")
+);
+const Investigador_Evento = lazy(() =>
+  import("./pages/investigador/publicaciones/evento/index.jsx")
+);
+const Tesis_propias = lazy(() =>
+  import("./pages/investigador/publicaciones/tesis_propia/index.jsx")
+);
+const Tesis_asesorias = lazy(() =>
+  import("./pages/investigador/publicaciones/tesis_asesoria/index.jsx")
+);
+const Patentes = lazy(() =>
+  import("./pages/investigador/publicaciones/patente/index.jsx")
+);
+const Grupo = lazy(() => import("./pages/investigador/grupo/grupo/index.jsx"));
+const Registrar_articulo = lazy(() =>
+  import("./pages/investigador/publicaciones/articulo/registrar/index.jsx")
+);
+
+const Investigador_main = lazy(() =>
+  import("./pages/investigador/dashboard/index.jsx")
+);
+
 const Admin_main = lazy(() => import("./pages/admin/dashboard/index.jsx"));
 const Gestion_convocatorias = lazy(() =>
   import("./pages/admin/estudios/gestion_convocatorias/index.jsx")

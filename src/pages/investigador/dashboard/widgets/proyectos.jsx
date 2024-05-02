@@ -1,5 +1,6 @@
 import { BarChart, Container, Header } from "@cloudscape-design/components";
 import { useEffect, useState } from "react";
+import axiosBase from "../../../../api/axios";
 
 export default function () {
   //  States
@@ -10,24 +11,16 @@ export default function () {
   const getData = async () => {
     try {
       setLoading("loading");
-      const res = await fetch(
-        "http://localhost:8000/api/investigador/dashboard/tipoProyectos",
-        {
-          headers: {
-            Authorization: localStorage.getItem("Auth"),
-          },
-        }
-      );
-      if (!res.ok) {
-        setLoading("error");
-        throw new Error("Error in fetch");
+      const res = await axiosBase.get("investigador/dashboard/tipoProyectos");
+      if (res.status == 401 || res.status == 500) {
+        localStorage.removeItem("Auth");
+        setLoading(false);
       } else {
-        const data = await res.json();
+        const data = await res.data;
         setData(data.data);
         setLoading("finished");
       }
     } catch (error) {
-      setItems([]);
       setLoading("error");
       console.log(error);
     }

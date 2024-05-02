@@ -24,11 +24,7 @@ const profileActions = [
   },
 ];
 
-export default function Navbar({
-  idUser = 1,
-  user = "Ichajaya",
-  mail = "max.ichajaya@unmsm.edu.pe",
-}) {
+export default function Navbar() {
   return (
     <TopNavigation
       identity={{
@@ -38,8 +34,8 @@ export default function Navbar({
       utilities={[
         {
           type: "menu-dropdown",
-          text: user,
-          description: mail,
+          text: localStorage.getItem("User"),
+          description: localStorage.getItem("Type"),
           iconName: "user-profile",
           items: profileActions,
           onItemClick: ({ detail }) => {

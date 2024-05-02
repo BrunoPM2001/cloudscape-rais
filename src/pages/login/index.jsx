@@ -39,9 +39,13 @@ export default function Login() {
         const result = await res.data;
         if (result.data.tabla == "Usuario_admin") {
           localStorage.setItem("Auth", result.data.token);
+          localStorage.setItem("User", result.data.usuario);
+          localStorage.setItem("Type", result.data.tabla);
           window.location.href = "/admin";
         } else if (result.data.tabla == "Usuario_investigador") {
           localStorage.setItem("Auth", result.data.token);
+          localStorage.setItem("User", result.data.usuario);
+          localStorage.setItem("Type", result.data.tabla);
           window.location.href = "/investigador";
         } else {
           setViewAlerts((prev) => [true, prev[1]]);
