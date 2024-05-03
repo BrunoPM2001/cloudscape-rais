@@ -26,7 +26,7 @@ const breadcrumbs = [
 
 export default function Investigador_main() {
   return (
-    <>
+    <ProtectedRoute>
       <Navbar />
       <AppLayout
         breadcrumbs={<BreadcrumbGroup items={breadcrumbs} />}
@@ -83,6 +83,6 @@ export default function Investigador_main() {
           </ContentLayout>
         }
       />
-    </>
+    </ProtectedRoute>
   );
 }
