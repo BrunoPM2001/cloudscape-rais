@@ -26,6 +26,7 @@ export default () => {
           "http://localhost:8000/api/admin/estudios/grupos/proyectos/" + id
         );
         if (!res.ok) {
+          localStorage.clear();
           setItems([]);
           setLoading(!loading);
           throw new Error("Error in fetch");

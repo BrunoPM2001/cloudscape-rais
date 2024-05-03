@@ -18,6 +18,7 @@ import Presupuesto from "./tabs/presupuesto.jsx";
 import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import queryString from "query-string";
+import ProtectedRoute from "../../../components/protectedRoute.jsx";
 
 const breadcrumbs = [
   {
@@ -79,6 +80,7 @@ export default function Detalle_proyecto_grupo() {
         "http://localhost:8000/api/admin/estudios/proyectosGrupo/detalle/" + id
       );
       if (!res.ok) {
+        localStorage.clear();
         setData([]);
         setLoading(false);
         throw new Error("Error in fetch");
@@ -99,7 +101,7 @@ export default function Detalle_proyecto_grupo() {
   }, []);
 
   return (
-    <>
+    <ProtectedRoute>
       <Navbar />
       <AppLayout
         breadcrumbs={<BreadcrumbGroup items={breadcrumbs} />}
@@ -123,6 +125,6 @@ export default function Detalle_proyecto_grupo() {
           </ContentLayout>
         }
       />
-    </>
+    </ProtectedRoute>
   );
 }

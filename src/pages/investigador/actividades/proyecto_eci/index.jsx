@@ -10,6 +10,7 @@ import Sidebar from "../../components/sidebar.jsx";
 import Navbar from "../../components/navbar.jsx";
 import Helpbar from "../../components/helpbar.jsx";
 import Listado from "./tabs/listado.jsx";
+import ProtectedRoute from "../../components/protectedRoute.jsx";
 
 const breadcrumbs = [
   {
@@ -34,7 +35,7 @@ const tabs = [
 
 export default function Proyecto_eci() {
   return (
-    <>
+    <ProtectedRoute>
       <Navbar />
       <AppLayout
         breadcrumbs={<BreadcrumbGroup items={breadcrumbs} />}
@@ -55,6 +56,6 @@ export default function Proyecto_eci() {
           </ContentLayout>
         }
       />
-    </>
+    </ProtectedRoute>
   );
 }

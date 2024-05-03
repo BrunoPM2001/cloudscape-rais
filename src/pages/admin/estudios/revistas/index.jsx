@@ -13,6 +13,7 @@ import Helpbar from "../../components/helpbar.jsx";
 import Listado from "./tabs/listado.jsx";
 import Bd_indizacion from "./tabs/bd_indizacion.jsx";
 import Bd_wos from "./tabs/bd_wos.jsx";
+import ProtectedRoute from "../../components/protectedRoute.jsx";
 
 const breadcrumbs = [
   {
@@ -47,7 +48,7 @@ const tabs = [
 
 export default function Revistas() {
   return (
-    <>
+    <ProtectedRoute>
       <Navbar />
       <AppLayout
         breadcrumbs={<BreadcrumbGroup items={breadcrumbs} />}
@@ -69,6 +70,6 @@ export default function Revistas() {
           </ContentLayout>
         }
       />
-    </>
+    </ProtectedRoute>
   );
 }

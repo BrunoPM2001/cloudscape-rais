@@ -249,6 +249,7 @@ export default () => {
         "http://localhost:8000/api/admin/estudios/publicaciones/listado/"
       );
       if (!res.ok) {
+        localStorage.clear();
         setDistribution([]);
         setLoading(false);
         throw new Error("Error in fetch");

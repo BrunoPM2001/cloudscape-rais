@@ -224,6 +224,7 @@ export default () => {
           selectedOption.value
       );
       if (!res.ok) {
+        localStorage.clear();
         setDistribution([]);
         setLoading(false);
         throw new Error("Error in fetch");
@@ -247,6 +248,7 @@ export default () => {
           selectedItems[0].id
       );
       if (!res.ok) {
+        localStorage.clear();
         setInformes([]);
         setLoadingInformes(false);
         throw new Error("Error in fetch");

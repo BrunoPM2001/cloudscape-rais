@@ -29,6 +29,7 @@ export default () => {
         "http://localhost:8000/api/admin/estudios/monitoreo/listadoPeriodos"
       );
       if (!res.ok) {
+        localStorage.clear();
         setMetasPeriodo([]);
         setLoadingPeriodo(false);
         throw new Error("Error in fetch");
@@ -52,6 +53,7 @@ export default () => {
           selectedPeriodos[0].id
       );
       if (!res.ok) {
+        localStorage.clear();
         setMetasTipoProyecto([]);
         setLoadingTipoProyecto(false);
         throw new Error("Error in fetch");
@@ -75,6 +77,7 @@ export default () => {
           selectedTipoProyecto[0].id
       );
       if (!res.ok) {
+        localStorage.clear();
         setMetasPublicaciones([]);
         setLoadingPublicaciones(false);
         throw new Error("Error in fetch");

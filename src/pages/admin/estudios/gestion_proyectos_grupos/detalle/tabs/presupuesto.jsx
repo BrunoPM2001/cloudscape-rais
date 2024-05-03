@@ -29,6 +29,7 @@ export default () => {
             id
         );
         if (!res.ok) {
+          localStorage.clear();
           setItems([]);
           setInfo({});
           setLoading(!loading);

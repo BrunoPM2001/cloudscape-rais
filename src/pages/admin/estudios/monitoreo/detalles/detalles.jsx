@@ -24,6 +24,7 @@ export default ({ data, loading, id }) => {
           id
       );
       if (!res.ok) {
+        localStorage.clear();
         setItems([]);
         setLoadItems(false);
         throw new Error("Error in fetch");

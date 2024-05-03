@@ -20,6 +20,7 @@ export default function () {
         }
       );
       if (!res.ok) {
+        localStorage.clear();
         setLoading("error");
         throw new Error("Error in fetch");
       } else {

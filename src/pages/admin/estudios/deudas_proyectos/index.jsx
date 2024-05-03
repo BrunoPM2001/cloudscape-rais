@@ -12,6 +12,7 @@ import Sidebar from "../../components/sidebar.jsx";
 import Navbar from "../../components/navbar.jsx";
 import Listado from "./tabs/listado.jsx";
 import Generar_deuda from "./tabs/generar_deuda.jsx";
+import ProtectedRoute from "../../components/protectedRoute.jsx";
 
 const breadcrumbs = [
   {
@@ -41,7 +42,7 @@ const tabs = [
 
 export default function Deudas_proyectos() {
   return (
-    <>
+    <ProtectedRoute>
       <Navbar />
       <AppLayout
         breadcrumbs={<BreadcrumbGroup items={breadcrumbs} />}
@@ -63,6 +64,6 @@ export default function Deudas_proyectos() {
           </ContentLayout>
         }
       />
-    </>
+    </ProtectedRoute>
   );
 }

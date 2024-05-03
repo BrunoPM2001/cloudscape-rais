@@ -12,6 +12,7 @@ import Navbar from "../../components/navbar.jsx";
 import Helpbar from "../../components/helpbar.jsx";
 import Listado_convocatorias from "./tabs/listado_convocatorias.jsx";
 import Listado_evaluaciones from "./tabs/listado_evaluaciones.jsx";
+import ProtectedRoute from "../../components/protectedRoute.jsx";
 
 const breadcrumbs = [
   {
@@ -41,7 +42,7 @@ const tabs = [
 
 export default function Gestion_convocatorias() {
   return (
-    <>
+    <ProtectedRoute>
       <Navbar />
       <AppLayout
         breadcrumbs={<BreadcrumbGroup items={breadcrumbs} />}
@@ -66,6 +67,6 @@ export default function Gestion_convocatorias() {
           </ContentLayout>
         }
       />
-    </>
+    </ProtectedRoute>
   );
 }

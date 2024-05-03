@@ -191,6 +191,7 @@ export default () => {
           tipo_proyecto
       );
       if (!res.ok) {
+        localStorage.clear();
         setDistribution([]);
         setLoadingConvocatorias(false);
         throw new Error("Error in fetch");
@@ -214,6 +215,7 @@ export default () => {
           selectedItems[0].id
       );
       if (!res.ok) {
+        localStorage.clear();
         setEvaluadores([]);
         setLoadingEvaluadores(false);
         throw new Error("Error in fetch");

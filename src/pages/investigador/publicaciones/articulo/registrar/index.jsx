@@ -14,6 +14,7 @@ import Navbar from "../../../components/navbar.jsx";
 import Helpbar from "../../../components/helpbar.jsx";
 import { useState } from "react";
 import Paso1 from "./paso1.jsx";
+import ProtectedRoute from "../../../components/protectedRoute.jsx";
 
 const breadcrumbs = [
   {
@@ -34,7 +35,7 @@ const breadcrumbs = [
 export default function Registrar_articulo() {
   const [activeStepIndex, setActiveStepIndex] = useState(0);
   return (
-    <>
+    <ProtectedRoute>
       <Navbar />
       <AppLayout
         breadcrumbs={<BreadcrumbGroup items={breadcrumbs} />}
@@ -103,6 +104,6 @@ export default function Registrar_articulo() {
           />
         }
       />
-    </>
+    </ProtectedRoute>
   );
 }

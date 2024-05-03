@@ -12,6 +12,7 @@ import Helpbar from "../components/helpbar.jsx";
 import Publicaciones from "./widgets/publicaciones.jsx";
 import Extras from "./widgets/extras.jsx";
 import Proyectos from "./widgets/proyectos.jsx";
+import ProtectedRoute from "../components/protectedRoute.jsx";
 
 const breadcrumbs = [
   {

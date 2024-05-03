@@ -33,6 +33,7 @@ export default () => {
         }
       );
       if (!res.ok) {
+        localStorage.clear();
         setData([]);
         setLoading(false);
         throw new Error("Error in fetch");

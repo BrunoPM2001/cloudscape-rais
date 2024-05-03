@@ -11,6 +11,7 @@ import {
 import Sidebar from "../../components/sidebar.jsx";
 import Navbar from "../../components/navbar.jsx";
 import Listado from "./tabs/listado.jsx";
+import ProtectedRoute from "../../components/protectedRoute.jsx";
 
 const breadcrumbs = [
   {
@@ -35,7 +36,7 @@ const tabs = [
 
 export default function Gestion_publicacion() {
   return (
-    <>
+    <ProtectedRoute>
       <Navbar />
       <AppLayout
         breadcrumbs={<BreadcrumbGroup items={breadcrumbs} />}
@@ -57,6 +58,6 @@ export default function Gestion_publicacion() {
           </ContentLayout>
         }
       />
-    </>
+    </ProtectedRoute>
   );
 }

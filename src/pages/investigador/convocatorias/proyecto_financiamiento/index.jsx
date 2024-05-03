@@ -9,6 +9,8 @@ import {
 import Sidebar from "../../components/sidebar.jsx";
 import Navbar from "../../components/navbar.jsx";
 import Helpbar from "../../components/helpbar.jsx";
+import ProtectedRoute from "../../components/protectedRoute.jsx";
+
 const breadcrumbs = [
   {
     text: "Investigador",
@@ -24,7 +26,7 @@ const breadcrumbs = [
 
 export default function Convocatoria_registro() {
   return (
-    <>
+    <ProtectedRoute>
       <Navbar />
       <AppLayout
         breadcrumbs={<BreadcrumbGroup items={breadcrumbs} />}
@@ -44,6 +46,6 @@ export default function Convocatoria_registro() {
           </ContentLayout>
         }
       />
-    </>
+    </ProtectedRoute>
   );
 }

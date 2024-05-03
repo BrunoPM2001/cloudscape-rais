@@ -30,6 +30,7 @@ export default function () {
         setLoading(false);
       } else {
         if (!res.ok) {
+          localStorage.clear();
           setLoading("error");
           throw new Error("Error in fetch");
         } else {

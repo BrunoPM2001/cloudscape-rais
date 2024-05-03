@@ -16,6 +16,7 @@ import {
 import Sidebar from "../../components/sidebar.jsx";
 import Navbar from "../../components/navbar.jsx";
 import { useEffect, useState } from "react";
+import ProtectedRoute from "../../components/protectedRoute.jsx";
 
 const breadcrumbs = [
   {
@@ -65,6 +66,7 @@ export default function Reporte_constancias() {
           value
       );
       if (!res.ok) {
+        localStorage.clear();
         setLoading(false);
         setOptions([]);
         throw new Error("Error in fetch");
@@ -109,6 +111,7 @@ export default function Reporte_constancias() {
         }
       );
       if (!res.ok) {
+        localStorage.clear();
         setLoadingReporte(false);
         throw new Error("Error in fetch");
       } else {
@@ -132,7 +135,7 @@ export default function Reporte_constancias() {
   }, [value]);
 
   return (
-    <>
+    <ProtectedRoute>
       <Navbar />
       <AppLayout
         breadcrumbs={<BreadcrumbGroup items={breadcrumbs} />}
@@ -229,6 +232,6 @@ export default function Reporte_constancias() {
           </ContentLayout>
         }
       />
-    </>
+    </ProtectedRoute>
   );
 }

@@ -2,7 +2,6 @@ import {
   AppLayout,
   BreadcrumbGroup,
   ContentLayout,
-  Flashbar,
   Header,
   HelpPanel,
   SpaceBetween,
@@ -11,6 +10,7 @@ import {
 import Sidebar from "../../components/sidebar.jsx";
 import Navbar from "../../components/navbar.jsx";
 import Listado from "./tabs/listado.jsx";
+import ProtectedRoute from "../../components/protectedRoute.jsx";
 
 const breadcrumbs = [
   {
@@ -35,7 +35,7 @@ const tabs = [
 
 export default function Gestion_proyectos_fex() {
   return (
-    <>
+    <ProtectedRoute>
       <Navbar />
       <AppLayout
         breadcrumbs={<BreadcrumbGroup items={breadcrumbs} />}
@@ -61,6 +61,6 @@ export default function Gestion_proyectos_fex() {
           </ContentLayout>
         }
       />
-    </>
+    </ProtectedRoute>
   );
 }

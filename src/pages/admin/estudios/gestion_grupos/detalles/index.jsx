@@ -10,6 +10,7 @@ import {
 } from "@cloudscape-design/components";
 import Sidebar from "../../../components/sidebar.jsx";
 import Navbar from "../../../components/navbar.jsx";
+import ProtectedRoute from "../../../components/protectedRoute.jsx";
 import Miembros from "./tabs/miembros.jsx";
 import Documentos from "./tabs/documentos.jsx";
 import Lineas from "./tabs/lineas.jsx";
@@ -97,6 +98,7 @@ export default function Detalle_grupo() {
         "http://localhost:8000/api/admin/estudios/grupos/detalle/" + id
       );
       if (!res.ok) {
+        localStorage.clear();
         setData([]);
         setLoading(false);
         throw new Error("Error in fetch");
@@ -117,7 +119,7 @@ export default function Detalle_grupo() {
   }, []);
 
   return (
-    <>
+    <ProtectedRoute>
       <Navbar />
       <AppLayout
         breadcrumbs={<BreadcrumbGroup items={breadcrumbs} />}
@@ -141,6 +143,6 @@ export default function Detalle_grupo() {
           </ContentLayout>
         }
       />
-    </>
+    </ProtectedRoute>
   );
 }

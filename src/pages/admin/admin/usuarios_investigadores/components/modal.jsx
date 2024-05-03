@@ -32,6 +32,7 @@ const CreateUserModal = ({ visible, setVisible }) => {
           value
       );
       if (!res.ok) {
+        localStorage.clear();
         setLoading(false);
         setOptions([]);
         throw new Error("Error in fetch");

@@ -116,6 +116,7 @@ export default () => {
         }
       );
       if (!res.ok) {
+        localStorage.clear();
         setDistribution([]);
         setLoading(false);
         throw new Error("Error in fetch");

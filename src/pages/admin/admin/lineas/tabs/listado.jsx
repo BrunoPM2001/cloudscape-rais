@@ -54,6 +54,7 @@ export default () => {
           selectedOption.value
       );
       if (!res.ok) {
+        localStorage.clear();
         setLoading(false);
         setItems([]);
         throw new Error("Error in fetch");

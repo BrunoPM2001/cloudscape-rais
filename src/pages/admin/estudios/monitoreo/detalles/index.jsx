@@ -16,6 +16,7 @@ import Detalles from "./detalles.jsx";
 import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import queryString from "query-string";
+import ProtectedRoute from "../../../components/protectedRoute.jsx";
 
 const breadcrumbs = [
   {
@@ -68,6 +69,7 @@ export default function Detalle_monitoreo() {
           id
       );
       if (!res.ok) {
+        localStorage.clear();
         setData([]);
         setLoading(false);
         throw new Error("Error in fetch");
@@ -88,7 +90,7 @@ export default function Detalle_monitoreo() {
   }, []);
 
   return (
-    <>
+    <ProtectedRoute>
       <Navbar />
       <AppLayout
         breadcrumbs={<BreadcrumbGroup items={breadcrumbs} />}
@@ -112,6 +114,6 @@ export default function Detalle_monitoreo() {
           </ContentLayout>
         }
       />
-    </>
+    </ProtectedRoute>
   );
 }

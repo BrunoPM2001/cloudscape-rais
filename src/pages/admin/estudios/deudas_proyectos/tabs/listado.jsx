@@ -148,6 +148,7 @@ export default () => {
         "http://localhost:8000/api/admin/estudios/deudaProyecto/listadoProyectos/null/null/null"
       );
       if (!res.ok) {
+        localStorage.clear();
         setDistribution([]);
         setLoading(false);
         throw new Error("Error in fetch");
@@ -171,6 +172,7 @@ export default () => {
           selectedItems[0].id
       );
       if (!res.ok) {
+        localStorage.clear();
         setIntegrantes([]);
         setLoadingIntegrantes(false);
         throw new Error("Error in fetch");

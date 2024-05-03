@@ -11,6 +11,7 @@ import Navbar from "../../../components/navbar.jsx";
 import Helpbar from "../../../components/helpbar.jsx";
 import Detalles from "./detalles.jsx";
 import Criterios from "./criterios.jsx";
+import ProtectedRoute from "../../../components/protectedRoute.jsx";
 
 const breadcrumbs = [
   {
@@ -33,7 +34,7 @@ const breadcrumbs = [
 
 export default function Detalle_evaluacion() {
   return (
-    <>
+    <ProtectedRoute>
       <Navbar />
       <AppLayout
         breadcrumbs={<BreadcrumbGroup items={breadcrumbs} />}
@@ -55,6 +56,6 @@ export default function Detalle_evaluacion() {
           </ContentLayout>
         }
       />
-    </>
+    </ProtectedRoute>
   );
 }

@@ -103,6 +103,7 @@ export default () => {
         "http://localhost:8000/api/admin/admin/usuarios/getUsuariosAdmin"
       );
       if (!res.ok) {
+        localStorage.clear();
         setLoading(false);
         setItems([]);
         throw new Error("Error in fetch");
@@ -176,7 +177,10 @@ export default () => {
                 >
                   Acciones para usuario
                 </ButtonDropdown>
-                <Button variant="primary" onClick={() => setCreateVisible(true)}>
+                <Button
+                  variant="primary"
+                  onClick={() => setCreateVisible(true)}
+                >
                   Crear usuario administrador
                 </Button>
               </SpaceBetween>

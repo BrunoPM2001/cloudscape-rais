@@ -11,6 +11,7 @@ import Navbar from "../../components/navbar.jsx";
 import Helpbar from "../../components/helpbar.jsx";
 import Grupos from "./tabs/grupos.jsx";
 import Solicitudes from "./tabs/solicitudes.jsx";
+import ProtectedRoute from "../../components/protectedRoute.jsx";
 
 const breadcrumbs = [
   {
@@ -40,7 +41,7 @@ const tabs = [
 
 export default function Grupo() {
   return (
-    <>
+    <ProtectedRoute>
       <Navbar />
       <AppLayout
         breadcrumbs={<BreadcrumbGroup items={breadcrumbs} />}
@@ -62,6 +63,6 @@ export default function Grupo() {
           </ContentLayout>
         }
       />
-    </>
+    </ProtectedRoute>
   );
 }

@@ -47,6 +47,7 @@ export default function () {
         }
       );
       if (!res.ok) {
+        localStorage.clear();
         setLoading("error");
         setRevistasIndexadas([]);
         throw new Error("Error in fetch");
