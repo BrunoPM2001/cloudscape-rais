@@ -9,27 +9,38 @@ import {
   ColumnLayout,
   Select,
   Button,
+  DatePicker,
 } from "@cloudscape-design/components";
 import { useState } from "react";
+import axiosBase from "../../../../../api/axios";
 
 const CreateUserModal = ({ visible, setVisible }) => {
+  //  State
+  const [creating, setCreating] = useState(false);
   const [selectedOption, setSelectedOption] = useState();
   const [form, setForm] = useState({
-    codigo: null,
+    codigo_trabajador: null,
     cargo: null,
     nombres: null,
-    paterno: null,
-    materno: null,
+    apellido1: null,
+    apellido2: null,
     sexo: null,
-    mail: null,
+    email_admin: null,
+    fecha_nacimiento: undefined,
     telefono_casa: null,
     telefono_trabajo: null,
     telefono_movil: null,
-    direccion: null,
-    grupo: null,
+    direccion1: null,
     username: null,
-    password: null,
+    tipo: "Usuario_admin",
   });
+
+  //  Function
+  const create = async () => {
+    setCreating(true);
+    await axiosBase.post("admin/admin/usuarios/create", form);
+    setCreating(false);
+  };
 
   return (
     <Modal
@@ -42,7 +53,13 @@ const CreateUserModal = ({ visible, setVisible }) => {
             <Button variant="normal" onClick={() => setVisible(false)}>
               Cancelar
             </Button>
-            <Button variant="primary">Crear usuario</Button>
+            <Button
+              variant="primary"
+              loading={creating}
+              onClick={() => create()}
+            >
+              Crear usuario
+            </Button>
           </SpaceBetween>
         </Box>
       }
@@ -55,13 +72,13 @@ const CreateUserModal = ({ visible, setVisible }) => {
             <ColumnLayout columns={2}>
               <FormField label="Código de trabajador">
                 <Input
-                  controlId="codigo"
+                  controlId="codigo_trabajador"
                   placeholder="Código del trabajador"
-                  value={form.codigo}
+                  value={form.codigo_trabajador}
                   onChange={({ detail }) =>
                     setForm((prev) => ({
                       ...prev,
-                      codigo: detail.value,
+                      codigo_trabajador: detail.value,
                     }))
                   }
                 />
@@ -86,26 +103,26 @@ const CreateUserModal = ({ visible, setVisible }) => {
             <ColumnLayout columns={3}>
               <FormField label="Apellido paterno">
                 <Input
-                  controlId="paterno"
+                  controlId="apellido1"
                   placeholder="Apellido paterno del trabajador"
-                  value={form.paterno}
+                  value={form.apellido1}
                   onChange={({ detail }) =>
                     setForm((prev) => ({
                       ...prev,
-                      paterno: detail.value,
+                      apellido1: detail.value,
                     }))
                   }
                 />
               </FormField>
               <FormField label="Apellido materno">
                 <Input
-                  controlId="materno"
+                  controlId="apellido2"
                   placeholder="Apellido materno del trabajador"
-                  value={form.materno}
+                  value={form.apellido2}
                   onChange={({ detail }) =>
                     setForm((prev) => ({
                       ...prev,
-                      materno: detail.value,
+                      apellido2: detail.value,
                     }))
                   }
                 />
@@ -147,15 +164,28 @@ const CreateUserModal = ({ visible, setVisible }) => {
                   ]}
                 />
               </FormField>
-              <FormField label="Correo">
-                <Input
-                  controlId="mail"
-                  placeholder="Correo del trabajador"
-                  value={form.mail}
+              <FormField label="Fecha_nacimiento">
+                <DatePicker
+                  controlId="fecha_nacimiento"
+                  placeholder="YYYY/MM/DD"
+                  value={form.fecha_nacimiento}
                   onChange={({ detail }) =>
                     setForm((prev) => ({
                       ...prev,
-                      mail: detail.value,
+                      fecha_nacimiento: detail.value,
+                    }))
+                  }
+                />
+              </FormField>
+              <FormField label="Correo">
+                <Input
+                  controlId="email_admin"
+                  placeholder="Correo del trabajador"
+                  value={form.email_admin}
+                  onChange={({ detail }) =>
+                    setForm((prev) => ({
+                      ...prev,
+                      email_admin: detail.value,
                     }))
                   }
                 />
@@ -188,13 +218,13 @@ const CreateUserModal = ({ visible, setVisible }) => {
               </FormField>
               <FormField label="Dirección">
                 <Input
-                  controlId="direccion"
+                  controlId="direccion1"
                   placeholder="Domicilio del trabajador"
-                  value={form.direccion}
+                  value={form.direccion1}
                   onChange={({ detail }) =>
                     setForm((prev) => ({
                       ...prev,
-                      direccion: detail.value,
+                      direccion1: detail.value,
                     }))
                   }
                 />
@@ -203,47 +233,19 @@ const CreateUserModal = ({ visible, setVisible }) => {
           </div>
           <div>
             <Header variant="h3">Datos de acceso</Header>
-            <ColumnLayout columns={3}>
-              <FormField label="Grupo" stretch>
-                <Input
-                  controlId="grupo"
-                  placeholder="Grupo de permisos"
-                  value={form.grupo}
-                  onChange={({ detail }) =>
-                    setForm((prev) => ({
-                      ...prev,
-                      grupo: detail.value,
-                    }))
-                  }
-                />
-              </FormField>
-              <FormField label="Usuario" stretch>
-                <Input
-                  controlId="usuario"
-                  placeholder="Username"
-                  value={form.usuario}
-                  onChange={({ detail }) =>
-                    setForm((prev) => ({
-                      ...prev,
-                      usuario: detail.value,
-                    }))
-                  }
-                />
-              </FormField>
-              <FormField label="Contraseña" stretch>
-                <Input
-                  controlId="password"
-                  placeholder="Escriba la contraseña del usuario"
-                  value={form.password}
-                  onChange={({ detail }) =>
-                    setForm((prev) => ({
-                      ...prev,
-                      password: detail.value,
-                    }))
-                  }
-                />
-              </FormField>
-            </ColumnLayout>
+            <FormField label="Usuario" stretch>
+              <Input
+                controlId="username"
+                placeholder="Nombre de usuario"
+                value={form.username}
+                onChange={({ detail }) =>
+                  setForm((prev) => ({
+                    ...prev,
+                    username: detail.value,
+                  }))
+                }
+              />
+            </FormField>
           </div>
         </SpaceBetween>
       </Form>
@@ -369,13 +371,13 @@ const EditUserModal = ({ visible, setVisible, form, setForm }) => {
               </FormField>
               <FormField label="Correo">
                 <Input
-                  controlId="mail"
+                  controlId="email"
                   placeholder="Correo del trabajador"
-                  value={form.mail}
+                  value={form.email}
                   onChange={({ detail }) =>
                     setForm((prev) => ({
                       ...prev,
-                      mail: detail.value,
+                      email: detail.value,
                     }))
                   }
                 />
@@ -441,11 +443,11 @@ const EditUserModal = ({ visible, setVisible, form, setForm }) => {
                 <Input
                   controlId="usuario"
                   placeholder="Username"
-                  value={form.usuario}
+                  value={form.username}
                   onChange={({ detail }) =>
                     setForm((prev) => ({
                       ...prev,
-                      usuario: detail.value,
+                      username: detail.value,
                     }))
                   }
                 />

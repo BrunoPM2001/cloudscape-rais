@@ -8,4 +8,28 @@ const axiosBase = axios.create({
 axiosBase.defaults.headers.common["Authorization"] =
   localStorage.getItem("Auth") ?? "";
 
+//  Handle some status code
+axiosBase.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (error) => {
+    if (error.response) {
+      if (error.response.status === 401) {
+        localStorage.clear();
+        window.location.href = "/";
+        console.error("Unauthorized");
+      } else if (error.response.status === 500) {
+        localStorage.clear();
+        console.error("Server error");
+      }
+    } else if (error.request) {
+      console.error("No response of server: ", error.request);
+    } else {
+      console.error("Error: ", error.message);
+    }
+    return Promise.reject(error);
+  }
+);
+
 export default axiosBase;

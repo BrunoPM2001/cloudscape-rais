@@ -15,6 +15,7 @@ import {
   EditUserModal,
 } from "../components/modal.jsx";
 import { useCollection } from "@cloudscape-design/collection-hooks";
+import axiosBase from "../../../../../api/axios.js";
 
 const stringOperators = [":", "!:", "=", "!=", "^", "!^"];
 
@@ -193,21 +194,18 @@ export default () => {
   const getData = async () => {
     try {
       setLoading(true);
-      const res = await fetch(
-        "http://localhost:8000/api/admin/admin/usuarios/getUsuariosInvestigadores"
+      const res = await axiosBase.get(
+        "admin/admin/usuarios/getUsuariosInvestigadores"
       );
-      if (!res.ok) {
+      if (res.status == 401 || res.status == 500) {
         localStorage.clear();
-        setDistribution([]);
-        setLoading(false);
         throw new Error("Error in fetch");
       } else {
-        const data = await res.json();
+        const data = await res.data;
         setDistribution(data.data);
-        setLoading(false);
       }
+      setLoading(false);
     } catch (error) {
-      setDistribution([]);
       setLoading(false);
       console.log(error);
     }

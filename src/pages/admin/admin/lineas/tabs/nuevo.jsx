@@ -10,6 +10,7 @@ import {
   Input,
 } from "@cloudscape-design/components";
 import { useEffect, useState } from "react";
+import axiosBase from "../../../../../api/axios";
 
 export default () => {
   //  States
@@ -22,6 +23,7 @@ export default () => {
     codigo: null,
     padre: null,
     linea: null,
+    resolucion: null,
   });
 
   //  Functions
@@ -30,25 +32,31 @@ export default () => {
       setLoading(true);
       setItems([]);
       setSelectedPadre(null);
-      const res = await fetch(
-        "http://localhost:8000/api/admin/admin/lineasInvestigacion/getAll/" +
-          selectedOption.value
+      const res = await axiosBase.get(
+        "admin/admin/lineasInvestigacion/getAll/" + selectedOption.value
       );
-      if (!res.ok) {
+      if (res.status == 401 || res.status == 500) {
         localStorage.clear();
-        setLoading(false);
-        setItems([]);
         throw new Error("Error in fetch");
       } else {
-        const data = await res.json();
+        const data = await res.data;
         setItems(data.data);
-        setLoading(false);
       }
+      setLoading(false);
     } catch (error) {
-      setItems([]);
       setLoading(false);
       console.log(error);
     }
+  };
+
+  const create = async () => {
+    const res = await axiosBase.post("admin/admin/lineasInvestigacion/create", {
+      facultad_id: form.facultad,
+      parent_id: form.padre,
+      codigo: form.codigo,
+      nombre: form.linea,
+      resolucion: form.resolucion,
+    });
   };
 
   //  Effects
@@ -65,7 +73,9 @@ export default () => {
             <Button formAction="none" variant="normal">
               Limpiar campos
             </Button>
-            <Button variant="primary">Crear</Button>
+            <Button variant="primary" onClick={() => create()}>
+              Crear
+            </Button>
           </SpaceBetween>
         }
         header={<Header variant="h2">Crear línea de investigación</Header>}
@@ -166,6 +176,18 @@ export default () => {
                   setForm((prev) => ({
                     ...prev,
                     linea: detail.value,
+                  }))
+                }
+              />
+            </FormField>
+            <FormField label="Resolución rectoral" stretch>
+              <Input
+                controlId="resolucion"
+                value={form.resolucion}
+                onChange={({ detail }) =>
+                  setForm((prev) => ({
+                    ...prev,
+                    resolucion: detail.value,
                   }))
                 }
               />

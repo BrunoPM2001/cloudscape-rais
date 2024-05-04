@@ -11,6 +11,7 @@ import {
   Autosuggest,
 } from "@cloudscape-design/components";
 import { useEffect, useState } from "react";
+import axiosBase from "../../../../../api/axios";
 
 const CreateUserModal = ({ visible, setVisible }) => {
   //  States
@@ -27,17 +28,14 @@ const CreateUserModal = ({ visible, setVisible }) => {
   const getData = async () => {
     try {
       setLoading(true);
-      const res = await fetch(
-        "http://localhost:8000/api/admin/admin/usuarios/searchInvestigadorBy/" +
-          value
+      const res = await axiosBase.get(
+        "admin/admin/usuarios/searchInvestigadorBy/" + value
       );
-      if (!res.ok) {
+      if (res.status == 401 || res.status == 500) {
         localStorage.clear();
-        setLoading(false);
-        setOptions([]);
         throw new Error("Error in fetch");
       } else {
-        const data = await res.json();
+        const data = await res.data;
         const opt = data.map((item) => {
           return {
             detail: item.id,
@@ -45,10 +43,9 @@ const CreateUserModal = ({ visible, setVisible }) => {
           };
         });
         setOptions(opt);
-        setLoading(false);
       }
+      setLoading(false);
     } catch (error) {
-      setOptions([]);
       setLoading(false);
       console.log(error);
     }

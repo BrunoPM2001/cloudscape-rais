@@ -6,6 +6,7 @@ import {
   Select,
 } from "@cloudscape-design/components";
 import { useState, useEffect } from "react";
+import axiosBase from "../../../../../api/axios";
 
 const columnDefinitions = [
   {
@@ -47,27 +48,12 @@ export default () => {
 
   //  Functions
   const getData = async () => {
-    try {
-      setLoading(true);
-      const res = await fetch(
-        "http://localhost:8000/api/admin/admin/lineasInvestigacion/getAllFacultad/" +
-          selectedOption.value
-      );
-      if (!res.ok) {
-        localStorage.clear();
-        setLoading(false);
-        setItems([]);
-        throw new Error("Error in fetch");
-      } else {
-        const data = await res.json();
-        setItems(data.data);
-        setLoading(false);
-      }
-    } catch (error) {
-      setItems([]);
-      setLoading(false);
-      console.log(error);
-    }
+    setLoading(true);
+    const res = await axiosBase.get(
+      "admin/admin/lineasInvestigacion/getAllFacultad/" + selectedOption.value
+    );
+    const data = await res.data;
+    setItems(data.data);
   };
 
   //  Effects

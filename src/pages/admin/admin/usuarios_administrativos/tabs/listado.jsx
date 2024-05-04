@@ -12,6 +12,7 @@ import {
   DeleteModal,
   EditUserModal,
 } from "../components/modal.jsx";
+import axiosBase from "../../../../../api/axios.js";
 
 const columnDefinitions = [
   {
@@ -97,26 +98,10 @@ export default () => {
 
   //  Functions
   const getData = async () => {
-    try {
-      setLoading(true);
-      const res = await fetch(
-        "http://localhost:8000/api/admin/admin/usuarios/getUsuariosAdmin"
-      );
-      if (!res.ok) {
-        localStorage.clear();
-        setLoading(false);
-        setItems([]);
-        throw new Error("Error in fetch");
-      } else {
-        const data = await res.json();
-        setItems(data.data);
-        setLoading(false);
-      }
-    } catch (error) {
-      setItems([]);
-      setLoading(false);
-      console.log(error);
-    }
+    const res = await axiosBase.get("admin/admin/usuarios/getUsuariosAdmin");
+    const data = await res.data;
+    setItems(data.data);
+    setLoading(false);
   };
 
   //  Effects
