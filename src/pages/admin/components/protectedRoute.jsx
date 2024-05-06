@@ -6,6 +6,11 @@ export default function ProtectedRoute({ children }) {
     try {
       const token = localStorage.getItem("Auth");
       if (!token) {
+        localStorage.clear();
+        window.location.href = "/";
+      }
+      if (localStorage.getItem("Type") != "Usuario_admin") {
+        localStorage.clear();
         window.location.href = "/";
       }
     } catch (e) {

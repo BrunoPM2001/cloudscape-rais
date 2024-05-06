@@ -276,7 +276,15 @@ export default () => {
               >
                 Acciones para publicaciones
               </ButtonDropdown>
-              <Button variant="primary">Registrar</Button>
+              <Button
+                variant="primary"
+                onClick={() =>
+                  (window.location.href =
+                    "/investigador/publicaciones/registrar")
+                }
+              >
+                Registrar
+              </Button>
             </SpaceBetween>
           }
         >
