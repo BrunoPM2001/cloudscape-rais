@@ -1,33 +1,57 @@
 import { lazy } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { Provider } from "react-redux";
 import "@cloudscape-design/global-styles/index.css";
 import adminRoutes from "./routes/admin.jsx";
 import investigadorRoutes from "./routes/investigador.jsx";
-import { store } from "./app/store";
+import AdminRoutes from "./routes/admin.jsx";
 
 //  Login page
 const Login = lazy(() => import("./pages/login/index.jsx"));
 
-const router = createBrowserRouter([
+const router1 = createBrowserRouter(
+  [
+    {
+      path: "",
+      element: <Login />,
+    },
+    {
+      path: "*",
+      element: <div></div>,
+    },
+  ],
   {
-    path: "",
-    element: <Login />,
-  },
+    basename: "/",
+  }
+);
+
+// const router2 = createBrowserRouter(
+//   [
+//     {
+//       children: adminRoutes,
+//     },
+//   ],
+//   {
+//     basename: "/admin",
+//   }
+// );
+
+const router3 = createBrowserRouter(
+  [
+    {
+      children: investigadorRoutes,
+    },
+  ],
   {
-    path: "admin",
-    children: adminRoutes,
-  },
-  {
-    path: "investigador",
-    children: investigadorRoutes,
-  },
-]);
+    basename: "/investigador",
+  }
+);
 
 export default function App() {
   return (
-    <Provider store={store}>
-      <RouterProvider router={router} />;
-    </Provider>
+    <>
+      <RouterProvider router={router1} />
+      <AdminRoutes />
+      <RouterProvider router={router3} />
+    </>
   );
 }

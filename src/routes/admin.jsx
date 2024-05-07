@@ -1,4 +1,8 @@
 import { lazy } from "react";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { useState, createContext } from "react";
+
+const NotificationContext = createContext(null);
 
 const Admin_main = lazy(() => import("../pages/admin/dashboard/index.jsx"));
 const Gestion_convocatorias = lazy(() =>
@@ -81,158 +85,181 @@ const Gestion_laboratorios = lazy(() =>
   import("../pages/admin/estudios/gestion_laboratorios/index.jsx")
 );
 
-export default [
+const routes = createBrowserRouter(
+  [
+    {
+      path: "",
+      element: <Admin_main />,
+    },
+    {
+      path: "estudios",
+      children: [
+        {
+          path: "convocatorias",
+          children: [
+            {
+              path: "",
+              element: <Gestion_convocatorias />,
+            },
+            {
+              path: "detalle",
+              element: <Detalle_evaluacion />,
+            },
+          ],
+        },
+        {
+          path: "grupos",
+          children: [
+            {
+              path: "",
+              element: <Gestion_grupos />,
+            },
+            {
+              path: "detalle",
+              element: <Detalle_grupo />,
+            },
+          ],
+        },
+        {
+          path: "proyectos_grupos",
+          children: [
+            {
+              path: "",
+              element: <Gestion_proyectos_grupos />,
+            },
+            {
+              path: "detalle",
+              element: <Detalle_proyecto_grupo />,
+            },
+          ],
+        },
+        {
+          path: "proyectos_fex",
+          element: <Gestion_proyectos_fex />,
+        },
+        {
+          path: "informes_tecnicos",
+          element: <Informes_tecnicos />,
+        },
+        {
+          path: "monitoreo",
+          children: [
+            {
+              path: "",
+              element: <Monitoreo />,
+            },
+            {
+              path: "detalle",
+              element: <Detalle_monitoreo />,
+            },
+          ],
+        },
+        {
+          path: "deudas_proyectos",
+          element: <Deudas_proyectos />,
+        },
+        {
+          path: "gestion_publicaciones",
+          element: <Gestion_publicacion />,
+        },
+        {
+          path: "revistas",
+          element: <Revistas />,
+        },
+        {
+          path: "laboratorios",
+          element: <Gestion_laboratorios />,
+        },
+      ],
+    },
+    {
+      path: "reportes",
+      children: [
+        {
+          path: "estudio",
+          element: <Reporte_estudio />,
+        },
+        {
+          path: "grupo",
+          element: <Reporte_grupo />,
+        },
+        {
+          path: "proyecto",
+          element: <Reporte_proyecto />,
+        },
+        {
+          path: "investigador",
+          element: <Reporte_investigador />,
+        },
+        {
+          path: "consolidado_general",
+          element: <Consolidado_general />,
+        },
+        {
+          path: "presupuesto",
+          element: <Reporte_presupuesto />,
+        },
+      ],
+    },
+    {
+      path: "constancias",
+      element: <Reporte_constancias />,
+    },
+    {
+      path: "facultad",
+      children: [
+        {
+          path: "convocatorias",
+          children: [
+            {
+              path: "",
+              element: <Convocatorias />,
+            },
+            {
+              path: "detalle",
+              element: <Detalle_convocatoria />,
+            },
+          ],
+        },
+      ],
+    },
+    {
+      path: "admin",
+      children: [
+        {
+          path: "lineas",
+          element: <Lineas_investigacion />,
+        },
+        {
+          path: "usuarios_administrativos",
+          element: <Usuarios_administrativos />,
+        },
+        {
+          path: "usuarios_investigadores",
+          element: <Usuarios_investigadores />,
+        },
+      ],
+    },
+  ],
   {
-    path: "",
-    element: <Admin_main />,
-  },
-  {
-    path: "estudios",
-    children: [
-      {
-        path: "convocatorias",
-        children: [
-          {
-            path: "",
-            element: <Gestion_convocatorias />,
-          },
-          {
-            path: "detalle",
-            element: <Detalle_evaluacion />,
-          },
-        ],
-      },
-      {
-        path: "grupos",
-        children: [
-          {
-            path: "",
-            element: <Gestion_grupos />,
-          },
-          {
-            path: "detalle",
-            element: <Detalle_grupo />,
-          },
-        ],
-      },
-      {
-        path: "proyectos_grupos",
-        children: [
-          {
-            path: "",
-            element: <Gestion_proyectos_grupos />,
-          },
-          {
-            path: "detalle",
-            element: <Detalle_proyecto_grupo />,
-          },
-        ],
-      },
-      {
-        path: "proyectos_fex",
-        element: <Gestion_proyectos_fex />,
-      },
-      {
-        path: "informes_tecnicos",
-        element: <Informes_tecnicos />,
-      },
-      {
-        path: "monitoreo",
-        children: [
-          {
-            path: "",
-            element: <Monitoreo />,
-          },
-          {
-            path: "detalle",
-            element: <Detalle_monitoreo />,
-          },
-        ],
-      },
-      {
-        path: "deudas_proyectos",
-        element: <Deudas_proyectos />,
-      },
-      {
-        path: "gestion_publicaciones",
-        element: <Gestion_publicacion />,
-      },
-      {
-        path: "revistas",
-        element: <Revistas />,
-      },
-      {
-        path: "laboratorios",
-        element: <Gestion_laboratorios />,
-      },
-    ],
-  },
-  {
-    path: "reportes",
-    children: [
-      {
-        path: "estudio",
-        element: <Reporte_estudio />,
-      },
-      {
-        path: "grupo",
-        element: <Reporte_grupo />,
-      },
-      {
-        path: "proyecto",
-        element: <Reporte_proyecto />,
-      },
-      {
-        path: "investigador",
-        element: <Reporte_investigador />,
-      },
-      {
-        path: "consolidado_general",
-        element: <Consolidado_general />,
-      },
-      {
-        path: "presupuesto",
-        element: <Reporte_presupuesto />,
-      },
-    ],
-  },
-  {
-    path: "constancias",
-    element: <Reporte_constancias />,
-  },
-  {
-    path: "facultad",
-    children: [
-      {
-        path: "convocatorias",
-        children: [
-          {
-            path: "",
-            element: <Convocatorias />,
-          },
-          {
-            path: "detalle",
-            element: <Detalle_convocatoria />,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    path: "admin",
-    children: [
-      {
-        path: "lineas",
-        element: <Lineas_investigacion />,
-      },
-      {
-        path: "usuarios_administrativos",
-        element: <Usuarios_administrativos />,
-      },
-      {
-        path: "usuarios_investigadores",
-        element: <Usuarios_investigadores />,
-      },
-    ],
-  },
-];
+    basename: "/admin",
+  }
+);
+
+export default function AdminRoutes() {
+  //  States
+  const [notifications, setNotifications] = useState([]);
+
+  return (
+    <NotificationContext.Provider
+      value={{
+        notifications,
+        setNotifications,
+      }}
+    >
+      <RouterProvider router={routes} />
+    </NotificationContext.Provider>
+  );
+}
+
+export { NotificationContext };

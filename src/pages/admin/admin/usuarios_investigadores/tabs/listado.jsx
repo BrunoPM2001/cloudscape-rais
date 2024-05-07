@@ -16,6 +16,8 @@ import {
 } from "../components/modal.jsx";
 import { useCollection } from "@cloudscape-design/collection-hooks";
 import axiosBase from "../../../../../api/axios.js";
+import { useContext } from "react";
+import { NotificationContext } from "../../../../../routes/admin.jsx";
 
 const stringOperators = [":", "!:", "=", "!=", "^", "!^"];
 
@@ -141,6 +143,9 @@ const columnDisplay = [
 ];
 
 export default () => {
+  //  Context
+  const { pushNotification } = useContext(NotificationContext);
+
   //  Data states
   const [loading, setLoading] = useState(true);
   const [selectedItems, setSelectedItems] = useState([]);

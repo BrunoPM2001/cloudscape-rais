@@ -4,7 +4,15 @@ import { useEffect, useState } from "react";
 
 export default function Helpbar({ children }) {
   //  States
-  const [checked, setChecked] = useState(false);
+  const [checked, setChecked] = useState(
+    localStorage.getItem("DarkTheme") == "true" ? true : false
+  );
+
+  //  Functions
+  const changeTheme = (value) => {
+    setChecked(value);
+    localStorage.setItem("DarkTheme", value);
+  };
 
   //  Effects
   useEffect(() => {
@@ -18,7 +26,7 @@ export default function Helpbar({ children }) {
           variant="h2"
           actions={
             <Toggle
-              onChange={({ detail }) => setChecked(detail.checked)}
+              onChange={({ detail }) => changeTheme(detail.checked)}
               checked={checked}
             >
               Modo oscuro
