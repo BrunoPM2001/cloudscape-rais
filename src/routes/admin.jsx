@@ -250,11 +250,26 @@ export default function AdminRoutes() {
   //  States
   const [notifications, setNotifications] = useState([]);
 
+  //  Functions
+  const pushNotification = (message, type, id) => {
+    setNotifications((prev) => [
+      ...prev,
+      {
+        type: type,
+        dismissible: true,
+        content: message,
+        id: id,
+        onDismiss: () =>
+          setNotifications((items) => items.filter((item) => item.id !== id)),
+      },
+    ]);
+  };
+
   return (
     <NotificationContext.Provider
       value={{
         notifications,
-        setNotifications,
+        pushNotification,
       }}
     >
       <RouterProvider router={routes} />

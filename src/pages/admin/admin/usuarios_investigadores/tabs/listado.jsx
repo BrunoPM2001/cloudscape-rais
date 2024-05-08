@@ -15,9 +15,9 @@ import {
   EditUserModal,
 } from "../components/modal.jsx";
 import { useCollection } from "@cloudscape-design/collection-hooks";
-import axiosBase from "../../../../../api/axios.js";
+import axiosBase from "../../../../../api/axios";
 import { useContext } from "react";
-import { NotificationContext } from "../../../../../routes/admin.jsx";
+import { NotificationContext } from "../../../../../routes/admin";
 
 const stringOperators = [":", "!:", "=", "!=", "^", "!^"];
 
@@ -144,7 +144,7 @@ const columnDisplay = [
 
 export default () => {
   //  Context
-  const { pushNotification } = useContext(NotificationContext);
+  const { notifications, pushNotification } = useContext(NotificationContext);
 
   //  Data states
   const [loading, setLoading] = useState(true);

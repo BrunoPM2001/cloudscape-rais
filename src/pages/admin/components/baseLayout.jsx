@@ -8,7 +8,8 @@ import {
 } from "@cloudscape-design/components";
 import Sidebar from "./sidebar";
 import Navbar from "./navbar";
-import { useState } from "react";
+import { useContext } from "react";
+import { NotificationContext } from "../../../routes/admin";
 
 export default function BaseLayout({
   children,
@@ -17,10 +18,9 @@ export default function BaseLayout({
   helpInfo,
   disableOverlap = false,
 }) {
-  //  State
-  const [notifications, setNotifications] = useState([]);
+  //  Context
+  const { notifications } = useContext(NotificationContext);
 
-  //  Functions
   return (
     <>
       <Navbar />

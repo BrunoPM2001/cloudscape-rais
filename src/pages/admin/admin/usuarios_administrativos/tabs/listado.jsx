@@ -98,6 +98,7 @@ export default () => {
 
   //  Functions
   const getData = async () => {
+    setLoading(true);
     const res = await axiosBase.get("admin/admin/usuarios/getUsuariosAdmin");
     const data = await res.data;
     setItems(data.data);
@@ -144,6 +145,7 @@ export default () => {
                     if (detail.id == "action_1") {
                       setEditVisible(true);
                     } else if (detail.id == "action_2") {
+                      console.log(selectedItems);
                       setDeleteVisible(true);
                     }
                   }}
@@ -182,14 +184,24 @@ export default () => {
           </Box>
         }
       ></Table>
-      <CreateUserModal visible={createVisible} setVisible={setCreateVisible} />
+      <CreateUserModal
+        visible={createVisible}
+        setVisible={setCreateVisible}
+        reload={getData}
+      />
       <EditUserModal
         visible={editVisible}
         setVisible={setEditVisible}
         form={editForm}
         setForm={setEditForm}
+        reload={getData}
       />
-      <DeleteModal visible={deleteVisible} setVisible={setDeleteVisible} />
+      <DeleteModal
+        visible={deleteVisible}
+        setVisible={setDeleteVisible}
+        idUser={selectedItems}
+        reload={getData}
+      />
     </>
   );
 };

@@ -11,10 +11,14 @@ import {
   Button,
   DatePicker,
 } from "@cloudscape-design/components";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import axiosBase from "../../../../../api/axios";
+import { NotificationContext } from "../../../../../routes/admin";
 
-const CreateUserModal = ({ visible, setVisible }) => {
+const CreateUserModal = ({ visible, setVisible, reload }) => {
+  //  Context
+  const { notifications, pushNotification } = useContext(NotificationContext);
+
   //  State
   const [creating, setCreating] = useState(false);
   const [selectedOption, setSelectedOption] = useState();
@@ -35,11 +39,15 @@ const CreateUserModal = ({ visible, setVisible }) => {
     tipo: "Usuario_admin",
   });
 
-  //  Function
-  const create = async () => {
+  //  Functions
+  const createUser = async () => {
     setCreating(true);
-    await axiosBase.post("admin/admin/usuarios/create", form);
+    const response = await axiosBase.post("admin/admin/usuarios/create", form);
+    const data = await response.data;
     setCreating(false);
+    setVisible(false);
+    pushNotification(data.detail, data.message, notifications.length + 1);
+    reload();
   };
 
   return (
@@ -56,7 +64,7 @@ const CreateUserModal = ({ visible, setVisible }) => {
             <Button
               variant="primary"
               loading={creating}
-              onClick={() => create()}
+              onClick={() => createUser()}
             >
               Crear usuario
             </Button>
@@ -253,7 +261,7 @@ const CreateUserModal = ({ visible, setVisible }) => {
   );
 };
 
-const EditUserModal = ({ visible, setVisible, form, setForm }) => {
+const EditUserModal = ({ visible, setVisible, form, setForm, reload }) => {
   return (
     <Modal
       onDismiss={() => setVisible(false)}
@@ -473,7 +481,29 @@ const EditUserModal = ({ visible, setVisible, form, setForm }) => {
   );
 };
 
-const DeleteModal = ({ visible, setVisible }) => {
+const DeleteModal = ({ visible, setVisible, idUser, reload }) => {
+  //  Context
+  const { notifications, pushNotification } = useContext(NotificationContext);
+
+  //  States
+  const [loading, setLoading] = useState(false);
+
+  //  Functions
+  const deleteUser = async () => {
+    setLoading(true);
+    const response = await axiosBase.delete("admin/admin/usuarios/delete", {
+      data: {
+        idUser: idUser[0].id,
+        tipo: "Usuario_admin",
+      },
+    });
+    const data = await response.data;
+    setLoading(false);
+    setVisible(false);
+    pushNotification(data.detail, data.message, notifications.length + 1);
+    reload();
+  };
+
   return (
     <Modal
       onDismiss={() => setVisible(false)}
@@ -485,7 +515,13 @@ const DeleteModal = ({ visible, setVisible }) => {
             <Button variant="normal" onClick={() => setVisible(false)}>
               Cancelar
             </Button>
-            <Button variant="primary">Eliminar usuario</Button>
+            <Button
+              variant="primary"
+              loading={loading}
+              onClick={() => deleteUser()}
+            >
+              Eliminar usuario
+            </Button>
           </SpaceBetween>
         </Box>
       }
