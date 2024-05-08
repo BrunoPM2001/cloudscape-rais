@@ -1,18 +1,7 @@
-import {
-  AppLayout,
-  BreadcrumbGroup,
-  ContentLayout,
-  Flashbar,
-  Header,
-  HelpPanel,
-  SpaceBetween,
-  Tabs,
-} from "@cloudscape-design/components";
-import Sidebar from "../../components/sidebar.jsx";
-import Navbar from "../../components/navbar.jsx";
+import { SpaceBetween, Tabs } from "@cloudscape-design/components";
 import Listado from "./tabs/listado.jsx";
-import Generar_deuda from "./tabs/generar_deuda.jsx";
-import ProtectedRoute from "../../components/protectedRoute.jsx";
+import Generar_deuda from "./tabs/generar_deuda";
+import BaseLayout from "../../components/baseLayout.jsx";
 
 const breadcrumbs = [
   {
@@ -42,28 +31,16 @@ const tabs = [
 
 export default function Deudas_proyectos() {
   return (
-    <ProtectedRoute>
-      <Navbar />
-      <AppLayout
-        breadcrumbs={<BreadcrumbGroup items={breadcrumbs} />}
-        navigation={<Sidebar />}
-        tools={
-          <HelpPanel header={<h2>Panel de ayuda</h2>}>
-            Información sobre la páginal actual para poder mostrarla al público
-            en general.
-          </HelpPanel>
-        }
-        content={
-          <ContentLayout
-            disableOverlap
-            header={<Header variant="h1">Deudas de proyectos</Header>}
-          >
-            <SpaceBetween size="l">
-              <Tabs tabs={tabs} ariaLabel="Opciones de deudas de proyectos" />
-            </SpaceBetween>
-          </ContentLayout>
-        }
-      />
-    </ProtectedRoute>
+    <BaseLayout
+      breadcrumbs={breadcrumbs}
+      header="Deudas de proyectos:"
+      helpInfo="Información sobre la páginal actual para poder mostrarla al público
+      en general."
+      disableOverlap
+    >
+      <SpaceBetween size="l">
+        <Tabs tabs={tabs} ariaLabel="Opciones de deudas de proyectos" />
+      </SpaceBetween>
+    </BaseLayout>
   );
 }

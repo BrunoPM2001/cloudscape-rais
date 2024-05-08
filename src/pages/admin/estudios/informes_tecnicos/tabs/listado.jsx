@@ -12,6 +12,7 @@ import {
 } from "@cloudscape-design/components";
 import { useState, useEffect } from "react";
 import { useCollection } from "@cloudscape-design/collection-hooks";
+import axiosBase from "../../../../../api/axios";
 
 const stringOperators = [":", "!:", "=", "!=", "^", "!^"];
 
@@ -217,58 +218,26 @@ export default () => {
 
   //  Functions
   const getData = async () => {
-    try {
-      setLoading(true);
-      const res = await fetch(
-        "http://localhost:8000/api/admin/estudios/informesTecnicos/proyectosListado/" +
-          selectedOption.value
-      );
-      if (!res.ok) {
-        localStorage.clear();
-        setDistribution([]);
-        setLoading(false);
-        throw new Error("Error in fetch");
-      } else {
-        const data = await res.json();
-        setDistribution(data.data);
-        setLoading(false);
-      }
-    } catch (error) {
-      setDistribution([]);
-      setLoading(false);
-      console.log(error);
-    }
+    setLoading(true);
+    const res = await axiosBase.get(
+      "admin/estudios/informesTecnicos/proyectosListado/" + selectedOption.value
+    );
+    const data = await res.data;
+    setDistribution(data.data);
+    setLoading(false);
   };
 
   const getInformes = async () => {
-    try {
-      setLoadingInformes(true);
-      const res = await fetch(
-        "http://localhost:8000/api/admin/estudios/informesTecnicos/informes/" +
-          selectedItems[0].id
-      );
-      if (!res.ok) {
-        localStorage.clear();
-        setInformes([]);
-        setLoadingInformes(false);
-        throw new Error("Error in fetch");
-      } else {
-        const data = await res.json();
-        setInformes(data.data);
-        setLoadingInformes(false);
-      }
-    } catch (error) {
-      setInformes([]);
-      setLoadingInformes(false);
-      console.log(error);
-    }
+    setLoadingInformes(true);
+    const res = await axiosBase.get(
+      "admin/estudios/informesTecnicos/informes/" + selectedItems[0].id
+    );
+    const data = await res.data;
+    setInformes(data.data);
+    setLoadingInformes(false);
   };
 
   //  Effects
-  useEffect(() => {
-    getData();
-  }, []);
-
   useEffect(() => {
     setInformes([]);
     getData();

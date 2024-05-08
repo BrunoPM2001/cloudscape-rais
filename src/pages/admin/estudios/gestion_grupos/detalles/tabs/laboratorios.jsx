@@ -8,6 +8,7 @@ import {
 import queryString from "query-string";
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import axiosBase from "../../../../../../api/axios";
 
 export default () => {
   //  States
@@ -21,23 +22,12 @@ export default () => {
   //  Data
   useEffect(() => {
     const getData = async () => {
-      try {
-        const res = await fetch(
-          "http://localhost:8000/api/admin/estudios/grupos/laboratorios/" + id
-        );
-        if (!res.ok) {
-          localStorage.clear();
-          setItems([]);
-          setLoading(!loading);
-          throw new Error("Error in fetch");
-        } else {
-          const data = await res.json();
-          setItems(data.data);
-          setLoading(!loading);
-        }
-      } catch (error) {
-        console.log(error);
-      }
+      const res = await axiosBase.get(
+        "admin/estudios/grupos/laboratorios/" + id
+      );
+      const data = await res.data;
+      setItems(data.data);
+      setLoading(!loading);
     };
     getData();
   }, []);

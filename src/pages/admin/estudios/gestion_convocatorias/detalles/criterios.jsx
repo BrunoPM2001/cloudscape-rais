@@ -8,6 +8,7 @@ import {
 import queryString from "query-string";
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import axiosBase from "../../../../../api/axios";
 
 export default () => {
   //  State
@@ -22,31 +23,12 @@ export default () => {
   //  Data
   useEffect(() => {
     const getData = async () => {
-      try {
-        const res = await fetch(
-          "http://localhost:8000/api/admin/estudios/convocatorias/verCriteriosEvaluacion/" +
-            id,
-          {
-            headers: {
-              Authorization: localStorage.getItem("Auth"),
-            },
-          }
-        );
-        if (!res.ok) {
-          localStorage.clear();
-          setItems([]);
-          setLoading(!loading);
-          throw new Error("Error in fetch");
-        } else {
-          const data = await res.json();
-          setItems(data.criterios);
-          setLoading(!loading);
-        }
-      } catch (error) {
-        setItems([]);
-        setLoading(!loading);
-        console.log(error);
-      }
+      const res = await axiosBase.get(
+        "admin/estudios/convocatorias/verCriteriosEvaluacion/" + id
+      );
+      const data = await res.data;
+      setItems(data.criterios);
+      setLoading(!loading);
     };
     getData();
   }, []);

@@ -1,27 +1,17 @@
-import {
-  AppLayout,
-  BreadcrumbGroup,
-  ContentLayout,
-  Flashbar,
-  Header,
-  HelpPanel,
-  SpaceBetween,
-  Tabs,
-} from "@cloudscape-design/components";
-import Sidebar from "../../../components/sidebar.jsx";
-import Navbar from "../../../components/navbar.jsx";
-import ProtectedRoute from "../../../components/protectedRoute.jsx";
-import Miembros from "./tabs/miembros.jsx";
-import Documentos from "./tabs/documentos.jsx";
-import Lineas from "./tabs/lineas.jsx";
-import Proyectos from "./tabs/proyectos.jsx";
-import Publicaciones from "./tabs/publicaciones.jsx";
-import Laboratorios from "./tabs/laboratorios.jsx";
-import Extras from "./tabs/extras.jsx";
-import Detalles from "./detalles.jsx";
+import { SpaceBetween, Tabs } from "@cloudscape-design/components";
+import Miembros from "./tabs/miembros";
+import Documentos from "./tabs/documentos";
+import Lineas from "./tabs/lineas";
+import Proyectos from "./tabs/proyectos";
+import Publicaciones from "./tabs/publicaciones";
+import Laboratorios from "./tabs/laboratorios";
+import Extras from "./tabs/extras";
+import Detalles from "./detalles";
 import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import queryString from "query-string";
+import BaseLayout from "../../../components/baseLayout";
+import axiosBase from "../../../../../api/axios";
 
 const breadcrumbs = [
   {
@@ -92,26 +82,11 @@ export default function Detalle_grupo() {
 
   //  Functions
   const getData = async () => {
-    try {
-      setLoading(true);
-      const res = await fetch(
-        "http://localhost:8000/api/admin/estudios/grupos/detalle/" + id
-      );
-      if (!res.ok) {
-        localStorage.clear();
-        setData([]);
-        setLoading(false);
-        throw new Error("Error in fetch");
-      } else {
-        const data = await res.json();
-        setData(data.data[0]);
-        setLoading(false);
-      }
-    } catch (error) {
-      setData([]);
-      setLoading(false);
-      console.log(error);
-    }
+    setLoading(true);
+    const res = await axiosBase.get("admin/estudios/grupos/detalle/" + id);
+    const data = await res.data;
+    setData(data.data[0]);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -119,30 +94,16 @@ export default function Detalle_grupo() {
   }, []);
 
   return (
-    <ProtectedRoute>
-      <Navbar />
-      <AppLayout
-        breadcrumbs={<BreadcrumbGroup items={breadcrumbs} />}
-        navigation={<Sidebar />}
-        tools={
-          <HelpPanel header={<h2>Panel de ayuda</h2>}>
-            Información sobre la páginal actual para poder mostrarla al público
-            en general.
-          </HelpPanel>
-        }
-        content={
-          <ContentLayout
-            header={
-              <Header variant="h1">Detalle del grupo de investigación:</Header>
-            }
-          >
-            <SpaceBetween size="l">
-              <Detalles data={data} loading={loading} />
-              <Tabs tabs={tabs} ariaLabel="Opciones de grupo" />
-            </SpaceBetween>
-          </ContentLayout>
-        }
-      />
-    </ProtectedRoute>
+    <BaseLayout
+      breadcrumbs={breadcrumbs}
+      header="Detalle del grupo de investigación:"
+      helpInfo="Información sobre la páginal actual para poder mostrarla al público
+      en general."
+    >
+      <SpaceBetween size="l">
+        <Detalles data={data} loading={loading} />
+        <Tabs tabs={tabs} ariaLabel="Opciones de grupo" />
+      </SpaceBetween>
+    </BaseLayout>
   );
 }

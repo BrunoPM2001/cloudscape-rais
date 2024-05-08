@@ -1,17 +1,6 @@
-import {
-  AppLayout,
-  BreadcrumbGroup,
-  ContentLayout,
-  Flashbar,
-  Header,
-  SpaceBetween,
-  Tabs,
-} from "@cloudscape-design/components";
-import Sidebar from "../../components/sidebar.jsx";
-import Navbar from "../../components/navbar.jsx";
-import Helpbar from "../../components/helpbar.jsx";
-import Listado from "./tabs/listado.jsx";
-import ProtectedRoute from "../../components/protectedRoute.jsx";
+import { SpaceBetween, Tabs } from "@cloudscape-design/components";
+import Listado from "./tabs/listado";
+import BaseLayout from "../../components/baseLayout";
 
 const breadcrumbs = [
   {
@@ -36,28 +25,16 @@ const tabs = [
 
 export default function Gestion_laboratorios() {
   return (
-    <ProtectedRoute>
-      <Navbar />
-      <AppLayout
-        breadcrumbs={<BreadcrumbGroup items={breadcrumbs} />}
-        navigation={<Sidebar />}
-        tools={
-          <Helpbar>
-            Información sobre la páginal actual para poder mostrarla al público
-            en general.
-          </Helpbar>
-        }
-        content={
-          <ContentLayout
-            disableOverlap
-            header={<Header variant="h1">Laboratorios:</Header>}
-          >
-            <SpaceBetween size="l">
-              <Tabs tabs={tabs} ariaLabel="Opciones de laboratorios" />
-            </SpaceBetween>
-          </ContentLayout>
-        }
-      />
-    </ProtectedRoute>
+    <BaseLayout
+      breadcrumbs={breadcrumbs}
+      header="Laboratorios:"
+      helpInfo="Información sobre la páginal actual para poder mostrarla al público
+      en general."
+      disableOverlap
+    >
+      <SpaceBetween size="l">
+        <Tabs tabs={tabs} ariaLabel="Opciones de laboratorios" />
+      </SpaceBetween>
+    </BaseLayout>
   );
 }

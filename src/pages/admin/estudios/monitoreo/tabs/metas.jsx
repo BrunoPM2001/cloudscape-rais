@@ -8,6 +8,7 @@ import {
   Table,
 } from "@cloudscape-design/components";
 import { useState, useEffect } from "react";
+import axiosBase from "../../../../../api/axios";
 
 export default () => {
   //  Data states
@@ -23,74 +24,32 @@ export default () => {
 
   //  Functions
   const getPeriodos = async () => {
-    try {
-      setLoadingPeriodo(true);
-      const res = await fetch(
-        "http://localhost:8000/api/admin/estudios/monitoreo/listadoPeriodos"
-      );
-      if (!res.ok) {
-        localStorage.clear();
-        setMetasPeriodo([]);
-        setLoadingPeriodo(false);
-        throw new Error("Error in fetch");
-      } else {
-        const data = await res.json();
-        setMetasPeriodo(data.data);
-        setLoadingPeriodo(false);
-      }
-    } catch (error) {
-      setMetasPeriodo([]);
-      setLoadingPeriodo(false);
-      console.log(error);
-    }
+    setLoadingPeriodo(true);
+    const res = await axiosBase.get("admin/estudios/monitoreo/listadoPeriodos");
+    const data = await res.data;
+    setMetasPeriodo(data.data);
+    setLoadingPeriodo(false);
   };
 
   const getTiposProyecto = async () => {
-    try {
-      setLoadingTipoProyecto(true);
-      const res = await fetch(
-        "http://localhost:8000/api/admin/estudios/monitoreo/listadoTipoProyectos/" +
-          selectedPeriodos[0].id
-      );
-      if (!res.ok) {
-        localStorage.clear();
-        setMetasTipoProyecto([]);
-        setLoadingTipoProyecto(false);
-        throw new Error("Error in fetch");
-      } else {
-        const data = await res.json();
-        setMetasTipoProyecto(data.data);
-        setLoadingTipoProyecto(false);
-      }
-    } catch (error) {
-      setMetasTipoProyecto([]);
-      setLoadingTipoProyecto(false);
-      console.log(error);
-    }
+    setLoadingTipoProyecto(true);
+    const res = await axiosBase.get(
+      "admin/estudios/monitoreo/listadoTipoProyectos/" + selectedPeriodos[0].id
+    );
+    const data = await res.data;
+    setMetasTipoProyecto(data.data);
+    setLoadingTipoProyecto(false);
   };
 
   const getPublicaciones = async () => {
-    try {
-      setLoadingPublicaciones(true);
-      const res = await fetch(
-        "http://localhost:8000/api/admin/estudios/monitoreo/listadoPublicaciones/" +
-          selectedTipoProyecto[0].id
-      );
-      if (!res.ok) {
-        localStorage.clear();
-        setMetasPublicaciones([]);
-        setLoadingPublicaciones(false);
-        throw new Error("Error in fetch");
-      } else {
-        const data = await res.json();
-        setMetasPublicaciones(data.data);
-        setLoadingPublicaciones(false);
-      }
-    } catch (error) {
-      setMetasPublicaciones([]);
-      setLoadingPublicaciones(false);
-      console.log(error);
-    }
+    setLoadingPublicaciones(true);
+    const res = await axiosBase.get(
+      "admin/estudios/monitoreo/listadoPublicaciones/" +
+        selectedTipoProyecto[0].id
+    );
+    const data = await res.data;
+    setMetasPublicaciones(data.data);
+    setLoadingPublicaciones(false);
   };
 
   //  Effects

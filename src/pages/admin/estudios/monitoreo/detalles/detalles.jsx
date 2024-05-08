@@ -11,33 +11,21 @@ import {
   Table,
 } from "@cloudscape-design/components";
 import { useEffect, useState } from "react";
+import axiosBase from "../../../../../api/axios";
 
 export default ({ data, loading, id }) => {
   //  States
   const [items, setItems] = useState([]);
   const [loadItems, setLoadItems] = useState(true);
 
+  //  Functions
   const getData = async () => {
-    try {
-      const res = await fetch(
-        "http://localhost:8000/api/admin/estudios/monitoreo/metasCumplidas/" +
-          id
-      );
-      if (!res.ok) {
-        localStorage.clear();
-        setItems([]);
-        setLoadItems(false);
-        throw new Error("Error in fetch");
-      } else {
-        const data = await res.json();
-        setItems(data.data);
-        setLoadItems(false);
-      }
-    } catch (error) {
-      setItems([]);
-      setLoadItems(false);
-      console.log(error);
-    }
+    const res = await axiosBase.get(
+      "admin/estudios/monitoreo/metasCumplidas/" + id
+    );
+    const data = await res.data;
+    setItems(data.data);
+    setLoadItems(false);
   };
 
   //  Effects

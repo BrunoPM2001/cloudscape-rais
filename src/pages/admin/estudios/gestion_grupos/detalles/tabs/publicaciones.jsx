@@ -11,6 +11,7 @@ import { useCollection } from "@cloudscape-design/collection-hooks";
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import queryString from "query-string";
+import axiosBase from "../../../../../../api/axios";
 
 const stringOperators = [":", "!:", "=", "!=", "^", "!^"];
 
@@ -99,25 +100,12 @@ export default () => {
   //  Data
   useEffect(() => {
     const getData = async () => {
-      try {
-        const res = await fetch(
-          "http://localhost:8000/api/admin/estudios/grupos/publicaciones/" + id
-        );
-        if (!res.ok) {
-          localStorage.clear();
-          setDistribution([]);
-          setLoading(!loading);
-          throw new Error("Error in fetch");
-        } else {
-          const data = await res.json();
-          setDistribution(data.data);
-          setLoading(!loading);
-        }
-      } catch (error) {
-        setDistribution([]);
-        setLoading(!loading);
-        console.log(error);
-      }
+      const res = await axiosBase.get(
+        "admin/estudios/grupos/publicaciones/" + id
+      );
+      const data = await res.data;
+      setDistribution(data.data);
+      setLoading(!loading);
     };
     getData();
   }, []);
