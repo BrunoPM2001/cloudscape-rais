@@ -481,7 +481,7 @@ const EditUserModal = ({ visible, setVisible, form, setForm, reload }) => {
   );
 };
 
-const DeleteModal = ({ visible, setVisible, idUser, reload }) => {
+const DeleteModal = ({ visible, setVisible, item, reload }) => {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
 
@@ -493,7 +493,7 @@ const DeleteModal = ({ visible, setVisible, idUser, reload }) => {
     setLoading(true);
     const response = await axiosBase.delete("admin/admin/usuarios/delete", {
       data: {
-        idUser: idUser[0].id,
+        idUser: item[0].id,
         tipo: "Usuario_admin",
       },
     });

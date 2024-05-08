@@ -1,19 +1,10 @@
-import {
-  AppLayout,
-  BreadcrumbGroup,
-  ContentLayout,
-  Flashbar,
-  Header,
-  HelpPanel,
-  SpaceBetween,
-} from "@cloudscape-design/components";
-import Sidebar from "../../../components/sidebar.jsx";
-import Navbar from "../../../components/navbar.jsx";
+import { SpaceBetween } from "@cloudscape-design/components";
 import Detalle from "./detalle.jsx";
 import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import queryString from "query-string";
-import ProtectedRoute from "../../../components/protectedRoute.jsx";
+import BaseLayout from "../../../components/baseLayout.jsx";
+import axiosBase from "../../../../../api/axios.js";
 
 const breadcrumbs = [
   {
@@ -45,26 +36,11 @@ export default function Detalle_convocatoria() {
 
   //  Functions
   const getData = async () => {
-    try {
-      setLoading(true);
-      const res = await fetch(
-        "http://localhost:8000/api/admin/estudios/grupos/detalle/" + id
-      );
-      if (!res.ok) {
-        localStorage.clear();
-        setData([]);
-        setLoading(false);
-        throw new Error("Error in fetch");
-      } else {
-        const data = await res.json();
-        setData(data.data[0]);
-        setLoading(false);
-      }
-    } catch (error) {
-      setData([]);
-      setLoading(false);
-      console.log(error);
-    }
+    setLoading(true);
+    const res = await axiosBase.get("admin/estudios/grupos/detalle/" + id);
+    const data = await res.data;
+    setData(data.data[0]);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -72,27 +48,15 @@ export default function Detalle_convocatoria() {
   }, []);
 
   return (
-    <ProtectedRoute>
-      <Navbar />
-      <AppLayout
-        breadcrumbs={<BreadcrumbGroup items={breadcrumbs} />}
-        navigation={<Sidebar />}
-        tools={
-          <HelpPanel header={<h2>Panel de ayuda</h2>}>
-            Información sobre la páginal actual para poder mostrarla al público
-            en general.
-          </HelpPanel>
-        }
-        content={
-          <ContentLayout
-            header={<Header variant="h1">Detalle del convocatoria:</Header>}
-          >
-            <SpaceBetween size="l">
-              <Detalle data={data} loading={loading} />
-            </SpaceBetween>
-          </ContentLayout>
-        }
-      />
-    </ProtectedRoute>
+    <BaseLayout
+      breadcrumbs={breadcrumbs}
+      header="Detalle del convocatoria:"
+      helpInfo="Información sobre la páginal actual para poder mostrarla al público
+      en general."
+    >
+      <SpaceBetween size="l">
+        <Detalle data={data} loading={loading} />
+      </SpaceBetween>
+    </BaseLayout>
   );
 }

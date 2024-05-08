@@ -30,7 +30,7 @@ export default function Usuarios_administrativos() {
       header="Usuarios administrativos:"
       helpInfo="Información sobre la páginal actual para poder mostrarla al público
       en general."
-      disableOverlap={true}
+      disableOverlap
     >
       <SpaceBetween size="l">
         <Tabs tabs={tabs} ariaLabel="Opciones de usuarios administrativos" />

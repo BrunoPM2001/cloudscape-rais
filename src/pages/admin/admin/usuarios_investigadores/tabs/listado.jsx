@@ -143,10 +143,7 @@ const columnDisplay = [
 ];
 
 export default () => {
-  //  Context
-  const { notifications, pushNotification } = useContext(NotificationContext);
-
-  //  Data states
+  //  States
   const [loading, setLoading] = useState(true);
   const [selectedItems, setSelectedItems] = useState([]);
   const [distributions, setDistribution] = useState([]);
@@ -197,23 +194,13 @@ export default () => {
 
   //  Functions
   const getData = async () => {
-    try {
-      setLoading(true);
-      const res = await axiosBase.get(
-        "admin/admin/usuarios/getUsuariosInvestigadores"
-      );
-      if (res.status == 401 || res.status == 500) {
-        localStorage.clear();
-        throw new Error("Error in fetch");
-      } else {
-        const data = await res.data;
-        setDistribution(data.data);
-      }
-      setLoading(false);
-    } catch (error) {
-      setLoading(false);
-      console.log(error);
-    }
+    setLoading(true);
+    const res = await axiosBase.get(
+      "admin/admin/usuarios/getUsuariosInvestigadores"
+    );
+    const data = await res.data;
+    setDistribution(data.data);
+    setLoading(false);
   };
 
   //  Effects
@@ -313,14 +300,24 @@ export default () => {
           </Box>
         }
       ></Table>
-      <CreateUserModal visible={createVisible} setVisible={setCreateVisible} />
+      <CreateUserModal
+        visible={createVisible}
+        setVisible={setCreateVisible}
+        reload={getData}
+      />
       <EditUserModal
         visible={editVisible}
         setVisible={setEditVisible}
         form={editForm}
         setForm={setEditForm}
+        reload={getData}
       />
-      <DeleteModal visible={deleteVisible} setVisible={setDeleteVisible} />
+      <DeleteModal
+        visible={deleteVisible}
+        setVisible={setDeleteVisible}
+        item={selectedItems}
+        reload={getData}
+      />
     </>
   );
 };

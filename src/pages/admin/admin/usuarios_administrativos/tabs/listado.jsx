@@ -199,7 +199,7 @@ export default () => {
       <DeleteModal
         visible={deleteVisible}
         setVisible={setDeleteVisible}
-        idUser={selectedItems}
+        item={selectedItems}
         reload={getData}
       />
     </>

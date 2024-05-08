@@ -10,6 +10,7 @@ import { useState, useEffect } from "react";
 import { useCollection } from "@cloudscape-design/collection-hooks";
 import { useLocation } from "react-router-dom";
 import queryString from "query-string";
+import axiosBase from "../../../../../api/axios";
 
 const stringOperators = [":", "!:", "=", "!=", "^", "!^"];
 
@@ -182,53 +183,27 @@ export default () => {
 
   //  Functions
   const getData = async () => {
-    try {
-      setLoadingConvocatorias(true);
-      const res = await fetch(
-        "http://localhost:8000/api/admin/facultad/convocatorias/getDetalleConvocatoria/" +
-          periodo +
-          "/" +
-          tipo_proyecto
-      );
-      if (!res.ok) {
-        localStorage.clear();
-        setDistribution([]);
-        setLoadingConvocatorias(false);
-        throw new Error("Error in fetch");
-      } else {
-        const data = await res.json();
-        setDistribution(data.data);
-        setLoadingConvocatorias(false);
-      }
-    } catch (error) {
-      setDistribution([]);
-      setLoadingConvocatorias(false);
-      console.log(error);
-    }
+    setLoadingConvocatorias(true);
+    const res = await axiosBase.get(
+      "admin/facultad/convocatorias/getDetalleConvocatoria/" +
+        periodo +
+        "/" +
+        tipo_proyecto
+    );
+    const data = await res.data;
+    setDistribution(data.data);
+    setLoadingConvocatorias(false);
   };
 
   const getEvaluadores = async () => {
-    try {
-      setLoadingEvaluadores(true);
-      const res = await fetch(
-        "http://localhost:8000/api/admin/facultad/convocatorias/getEvaluadoresConvocatoria/" +
-          selectedItems[0].id
-      );
-      if (!res.ok) {
-        localStorage.clear();
-        setEvaluadores([]);
-        setLoadingEvaluadores(false);
-        throw new Error("Error in fetch");
-      } else {
-        const data = await res.json();
-        setEvaluadores(data.data);
-        setLoadingEvaluadores(false);
-      }
-    } catch (error) {
-      setEvaluadores([]);
-      setLoadingEvaluadores(false);
-      console.log(error);
-    }
+    setLoadingEvaluadores(true);
+    const res = await axiosBase.get(
+      "admin/facultad/convocatorias/getEvaluadoresConvocatoria/" +
+        selectedItems[0].id
+    );
+    const data = await res.data;
+    setEvaluadores(data.data);
+    setLoadingEvaluadores(false);
   };
 
   //  Effects

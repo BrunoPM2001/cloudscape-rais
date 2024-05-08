@@ -10,15 +10,21 @@ import {
   Button,
   Autosuggest,
 } from "@cloudscape-design/components";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axiosBase from "../../../../../api/axios";
+import { NotificationContext } from "../../../../../routes/admin";
 
-const CreateUserModal = ({ visible, setVisible }) => {
+const CreateUserModal = ({ visible, setVisible, reload }) => {
+  //  Context
+  const { notifications, pushNotification } = useContext(NotificationContext);
+
   //  States
   const [value, setValue] = useState("");
+  const [creating, setCreating] = useState(false);
   const [loading, setLoading] = useState(true);
   const [options, setOptions] = useState([]);
   const [form, setForm] = useState({
+    tipo: "Usuario_investigador",
     investigador_id: null,
     email: null,
     password: null,
@@ -26,29 +32,29 @@ const CreateUserModal = ({ visible, setVisible }) => {
 
   //  Functions
   const getData = async () => {
-    try {
-      setLoading(true);
-      const res = await axiosBase.get(
-        "admin/admin/usuarios/searchInvestigadorBy/" + value
-      );
-      if (res.status == 401 || res.status == 500) {
-        localStorage.clear();
-        throw new Error("Error in fetch");
-      } else {
-        const data = await res.data;
-        const opt = data.map((item) => {
-          return {
-            detail: item.id,
-            value: `${item.codigo} | ${item.doc_numero} | ${item.apellido1} ${item.apellido2}, ${item.nombres}`,
-          };
-        });
-        setOptions(opt);
-      }
-      setLoading(false);
-    } catch (error) {
-      setLoading(false);
-      console.log(error);
-    }
+    setLoading(true);
+    const res = await axiosBase.get(
+      "admin/admin/usuarios/searchInvestigadorBy/" + value
+    );
+    const data = await res.data;
+    const opt = data.map((item) => {
+      return {
+        detail: item.id,
+        value: `${item.codigo} | ${item.doc_numero} | ${item.apellido1} ${item.apellido2}, ${item.nombres}`,
+      };
+    });
+    setOptions(opt);
+    setLoading(false);
+  };
+
+  const createUser = async () => {
+    setCreating(true);
+    const response = await axiosBase.post("admin/admin/usuarios/create", form);
+    const data = await response.data;
+    setCreating(false);
+    setVisible(false);
+    pushNotification(data.detail, data.message, notifications.length + 1);
+    reload();
   };
 
   //  Effects
@@ -70,7 +76,13 @@ const CreateUserModal = ({ visible, setVisible }) => {
             <Button variant="normal" onClick={() => setVisible(false)}>
               Cancelar
             </Button>
-            <Button variant="primary">Crear usuario</Button>
+            <Button
+              variant="primary"
+              loading={creating}
+              onClick={() => createUser()}
+            >
+              Crear usuario
+            </Button>
           </SpaceBetween>
         </Box>
       }
@@ -193,7 +205,29 @@ const EditUserModal = ({ visible, setVisible, form, setForm }) => {
   );
 };
 
-const DeleteModal = ({ visible, setVisible }) => {
+const DeleteModal = ({ visible, setVisible, item, reload }) => {
+  //  Context
+  const { notifications, pushNotification } = useContext(NotificationContext);
+
+  //  States
+  const [loading, setLoading] = useState(false);
+
+  //  Functions
+  const deleteUser = async () => {
+    setLoading(true);
+    const response = await axiosBase.delete("admin/admin/usuarios/delete", {
+      data: {
+        idUser: item[0].id,
+        tipo: "Usuario_investigador",
+      },
+    });
+    const data = await response.data;
+    setLoading(false);
+    setVisible(false);
+    pushNotification(data.detail, data.message, notifications.length + 1);
+    reload();
+  };
+
   return (
     <Modal
       onDismiss={() => setVisible(false)}
@@ -205,7 +239,13 @@ const DeleteModal = ({ visible, setVisible }) => {
             <Button variant="normal" onClick={() => setVisible(false)}>
               Cancelar
             </Button>
-            <Button variant="primary">Eliminar usuario</Button>
+            <Button
+              variant="primary"
+              loading={loading}
+              onClick={() => deleteUser()}
+            >
+              Eliminar usuario
+            </Button>
           </SpaceBetween>
         </Box>
       }

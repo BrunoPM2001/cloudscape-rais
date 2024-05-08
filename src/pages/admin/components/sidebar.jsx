@@ -1,4 +1,4 @@
-import { SideNavigation } from "@cloudscape-design/components";
+import { Badge, SideNavigation } from "@cloudscape-design/components";
 import { useLocation } from "react-router-dom";
 
 const navItems = [
@@ -124,6 +124,7 @@ const navItems = [
         type: "link",
         text: "Convocatorias",
         href: "/admin/facultad/convocatorias",
+        info: <Badge color="blue">Histórico</Badge>,
       },
       { type: "divider" },
       { type: "link", text: "Usuarios facultad", href: "#" },
@@ -157,7 +158,7 @@ const navItems = [
   },
 ];
 
-export default function Sidebar({ activeHref = "#" }) {
+export default function Sidebar() {
   const location = useLocation();
   return (
     <SideNavigation

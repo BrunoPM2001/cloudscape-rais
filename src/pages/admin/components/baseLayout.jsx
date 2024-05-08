@@ -4,12 +4,12 @@ import {
   ContentLayout,
   Flashbar,
   Header,
-  HelpPanel,
 } from "@cloudscape-design/components";
 import Sidebar from "./sidebar";
 import Navbar from "./navbar";
 import { useContext } from "react";
 import { NotificationContext } from "../../../routes/admin";
+import Helpbar from "./helpbar";
 
 export default function BaseLayout({
   children,
@@ -28,9 +28,7 @@ export default function BaseLayout({
         breadcrumbs={<BreadcrumbGroup items={breadcrumbs} />}
         navigation={<Sidebar />}
         notifications={<Flashbar items={notifications} stackItems />}
-        tools={
-          <HelpPanel header={<h2>Panel de ayuda</h2>}>{helpInfo}</HelpPanel>
-        }
+        tools={<Helpbar>{helpInfo}</Helpbar>}
         content={
           <ContentLayout
             disableOverlap={disableOverlap}

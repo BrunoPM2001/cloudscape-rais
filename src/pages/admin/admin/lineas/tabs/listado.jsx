@@ -54,12 +54,8 @@ export default () => {
     );
     const data = await res.data;
     setItems(data.data);
+    setLoading(false);
   };
-
-  //  Effects
-  useEffect(() => {
-    getData();
-  }, []);
 
   useEffect(() => {
     getData();

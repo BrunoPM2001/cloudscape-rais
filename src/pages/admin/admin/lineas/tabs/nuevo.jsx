@@ -9,11 +9,16 @@ import {
   FormField,
   Input,
 } from "@cloudscape-design/components";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axiosBase from "../../../../../api/axios";
+import { NotificationContext } from "../../../../../routes/admin";
 
 export default () => {
+  //  Context
+  const { notifications, pushNotification } = useContext(NotificationContext);
+
   //  States
+  const [creating, setCreating] = useState(false);
   const [loading, setLoading] = useState(true);
   const [items, setItems] = useState([]);
   const [selectedOption, setSelectedOption] = useState();
@@ -28,28 +33,19 @@ export default () => {
 
   //  Functions
   const getData = async () => {
-    try {
-      setLoading(true);
-      setItems([]);
-      setSelectedPadre(null);
-      const res = await axiosBase.get(
-        "admin/admin/lineasInvestigacion/getAll/" + selectedOption.value
-      );
-      if (res.status == 401 || res.status == 500) {
-        localStorage.clear();
-        throw new Error("Error in fetch");
-      } else {
-        const data = await res.data;
-        setItems(data.data);
-      }
-      setLoading(false);
-    } catch (error) {
-      setLoading(false);
-      console.log(error);
-    }
+    setLoading(true);
+    setItems([]);
+    setSelectedPadre(null);
+    const res = await axiosBase.get(
+      "admin/admin/lineasInvestigacion/getAll/" + selectedOption.value
+    );
+    const data = await res.data;
+    setItems(data.data);
+    setLoading(false);
   };
 
   const create = async () => {
+    setCreating(true);
     const res = await axiosBase.post("admin/admin/lineasInvestigacion/create", {
       facultad_id: form.facultad,
       parent_id: form.padre,
@@ -57,6 +53,9 @@ export default () => {
       nombre: form.linea,
       resolucion: form.resolucion,
     });
+    setCreating(false);
+    const data = await res.data;
+    pushNotification(data.detail, data.message, notifications.length + 1);
   };
 
   //  Effects
@@ -73,7 +72,11 @@ export default () => {
             <Button formAction="none" variant="normal">
               Limpiar campos
             </Button>
-            <Button variant="primary" onClick={() => create()}>
+            <Button
+              variant="primary"
+              onClick={() => create()}
+              loading={creating}
+            >
               Crear
             </Button>
           </SpaceBetween>
