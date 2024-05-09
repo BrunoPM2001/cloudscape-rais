@@ -1,26 +1,6 @@
 import { Container, Header, PieChart } from "@cloudscape-design/components";
-import { useEffect, useState } from "react";
-import axiosBase from "../../../../api/axios";
 
-export default function () {
-  //  States
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState("loading");
-
-  //  Functions
-  const getData = async () => {
-    setLoading("loading");
-    const res = await axiosBase.get("admin/dashboard/proyectos/2024");
-    const data = await res.data;
-    setData(data.data);
-    setLoading("finished");
-  };
-
-  //  Effects
-  useEffect(() => {
-    getData();
-  }, []);
-
+export default function ({ data, loading }) {
   return (
     <Container
       header={
@@ -33,7 +13,12 @@ export default function () {
       }
       fitHeight={true}
     >
-      <PieChart fitHeight size="large" statusType={loading} data={data} />
+      <PieChart
+        fitHeight
+        size="large"
+        statusType={loading ? "loading" : "finished"}
+        data={data}
+      />
     </Container>
   );
 }

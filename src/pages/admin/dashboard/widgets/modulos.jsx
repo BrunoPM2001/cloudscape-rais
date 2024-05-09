@@ -3,10 +3,11 @@ import {
   ColumnLayout,
   Container,
   Header,
+  Spinner,
   StatusIndicator,
 } from "@cloudscape-design/components";
 
-export default function () {
+export default function ({ loading }) {
   return (
     <Container
       header={
@@ -19,19 +20,35 @@ export default function () {
       <ColumnLayout columns={2} minColumnWidth={140}>
         <div>
           <Box variant="awsui-key-label">Administrador</Box>
-          <StatusIndicator type="success">Ok</StatusIndicator>
+          {loading ? (
+            <Spinner />
+          ) : (
+            <StatusIndicator type="success">Ok</StatusIndicator>
+          )}
         </div>
         <div>
           <Box variant="awsui-key-label">Investigador</Box>
-          <StatusIndicator type="pending">En mantenimiento</StatusIndicator>
+          {loading ? (
+            <Spinner />
+          ) : (
+            <StatusIndicator type="pending">En mantenimiento</StatusIndicator>
+          )}
         </div>
         <div>
           <Box variant="awsui-key-label">Evaluador</Box>
-          <StatusIndicator type="stopped">Deshabilitado</StatusIndicator>
+          {loading ? (
+            <Spinner />
+          ) : (
+            <StatusIndicator type="stopped">Deshabilitado</StatusIndicator>
+          )}
         </div>
         <div>
           <Box variant="awsui-key-label">Facultad</Box>
-          <StatusIndicator type="warning">En desarrollo</StatusIndicator>
+          {loading ? (
+            <Spinner />
+          ) : (
+            <StatusIndicator type="warning">En desarrollo</StatusIndicator>
+          )}
         </div>
       </ColumnLayout>
     </Container>

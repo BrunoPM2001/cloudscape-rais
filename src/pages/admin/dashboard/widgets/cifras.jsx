@@ -6,27 +6,8 @@ import {
   Link,
   Spinner,
 } from "@cloudscape-design/components";
-import { useEffect, useState } from "react";
-import axiosBase from "../../../../api/axios";
 
-export default function () {
-  //  States
-  const [data, setData] = useState({});
-  const [loading, setLoading] = useState(true);
-
-  //  Functions
-  const getData = async () => {
-    const res = await axiosBase.get("admin/dashboard/metricas");
-    const data = await res.data;
-    setData(data);
-    setLoading(false);
-  };
-
-  //  Effects
-  useEffect(() => {
-    getData();
-  }, []);
-
+export default function ({ data, loading }) {
   return (
     <Container
       header={

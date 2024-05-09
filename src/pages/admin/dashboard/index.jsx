@@ -5,6 +5,8 @@ import Publicaciones from "./widgets/publicaciones";
 import Proyectos_tipos from "./widgets/proyectos_tipos";
 import Proyectos_tipos_historicos from "./widgets/proyectos_tipos_historicos";
 import BaseLayout from "../components/baseLayout";
+import { useEffect, useState } from "react";
+import axiosBase from "../../../api/axios";
 
 const breadcrumbs = [
   {
@@ -61,6 +63,35 @@ const gridDefinition = [
 ];
 
 export default function Admin_main() {
+  //  States
+  const [data, setData] = useState({
+    metricas: null,
+    publicaciones: {
+      cuenta: [],
+      tipos: [],
+    },
+    proyectos: [],
+    proyectos_historicos: {
+      cuenta: [{}],
+      tipos: [{}],
+    },
+  });
+  const [loading, setLoading] = useState(true);
+
+  //  Functions
+  const getData = async () => {
+    const res = await axiosBase.get("admin/dashboard/getData");
+    const data = await res.data;
+    console.log(data);
+    setData(data);
+    setLoading(false);
+  };
+
+  //  Effects
+  useEffect(() => {
+    getData();
+  }, []);
+
   return (
     <BaseLayout
       breadcrumbs={breadcrumbs}
@@ -69,11 +100,19 @@ export default function Admin_main() {
       en general."
     >
       <Grid gridDefinition={gridDefinition}>
-        <Cifras />
-        <Modulos />
-        <Publicaciones />
-        <Proyectos_tipos />
-        <Proyectos_tipos_historicos />
+        <Cifras data={data.metricas} loading={loading} />
+        <Modulos loading={loading} />
+        <Publicaciones
+          loading={loading}
+          data={data.publicaciones.cuenta}
+          tipos={data.publicaciones.tipos}
+        />
+        <Proyectos_tipos data={data.proyectos} loading={loading} />
+        <Proyectos_tipos_historicos
+          data={data.proyectos_historicos.cuenta}
+          tipos={data.proyectos_historicos.tipos}
+          loading={loading}
+        />
       </Grid>
     </BaseLayout>
   );

@@ -1,28 +1,6 @@
 import { BarChart, Container, Header } from "@cloudscape-design/components";
-import { useEffect, useState } from "react";
-import axiosBase from "../../../../api/axios";
 
-export default function () {
-  //  States
-  const [data, setData] = useState([]);
-  const [tipos, setTipos] = useState([]);
-  const [loading, setLoading] = useState("loading");
-
-  //  Functions
-  const getData = async () => {
-    setLoading("loading");
-    const res = await axiosBase.get("admin/dashboard/tipoPublicaciones");
-    const data = await res.data;
-    setTipos(data.tipos);
-    setData(data.cuenta);
-    setLoading("finished");
-  };
-
-  //  Effects
-  useEffect(() => {
-    getData();
-  }, []);
-
+export default function ({ data, tipos, loading }) {
   return (
     <Container
       header={
@@ -36,7 +14,7 @@ export default function () {
       fitHeight={true}
     >
       <BarChart
-        statusType={loading}
+        statusType={loading ? "loading" : "finished"}
         fitHeight
         height={150}
         series={tipos.map((tipo) => ({

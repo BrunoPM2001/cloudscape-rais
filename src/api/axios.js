@@ -5,8 +5,9 @@ const axiosBase = axios.create({
 });
 
 //  Token requests
-axiosBase.defaults.headers.common["Authorization"] =
+axiosBase.defaults.headers.common.Authorization =
   localStorage.getItem("Auth") ?? "";
+// axiosBase.defaults.headers.common["Access-Control-Max-Age"] = 172000;
 
 //  Handle some status code
 axiosBase.interceptors.response.use(
