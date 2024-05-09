@@ -7,6 +7,7 @@ import {
   Spinner,
 } from "@cloudscape-design/components";
 import { useEffect, useState } from "react";
+import axiosBase from "../../../../api/axios";
 
 export default function () {
   //  States
@@ -15,35 +16,10 @@ export default function () {
 
   //  Functions
   const getData = async () => {
-    try {
-      setLoading("loading");
-      const res = await fetch(
-        "http://localhost:8000/api/admin/dashboard/metricas",
-        {
-          headers: {
-            Authorization: localStorage.getItem("Auth"),
-          },
-        }
-      );
-      if (res.status == 401) {
-        localStorage.removeItem("Auth");
-        setLoading(false);
-      } else {
-        if (!res.ok) {
-          localStorage.clear();
-          setLoading("error");
-          throw new Error("Error in fetch");
-        } else {
-          const data = await res.json();
-          setData(data);
-          setLoading(false);
-        }
-      }
-    } catch (error) {
-      setItems([]);
-      setLoading(false);
-      console.log(error);
-    }
+    const res = await axiosBase.get("admin/dashboard/metricas");
+    const data = await res.data;
+    setData(data);
+    setLoading(false);
   };
 
   //  Effects

@@ -1,5 +1,6 @@
 import { Container, Header, PieChart } from "@cloudscape-design/components";
 import { useEffect, useState } from "react";
+import axiosBase from "../../../../api/axios";
 
 export default function () {
   //  States
@@ -8,30 +9,11 @@ export default function () {
 
   //  Functions
   const getData = async () => {
-    try {
-      setLoading("loading");
-      const res = await fetch(
-        "http://localhost:8000/api/admin/dashboard/proyectos/2024",
-        {
-          headers: {
-            Authorization: localStorage.getItem("Auth"),
-          },
-        }
-      );
-      if (!res.ok) {
-        localStorage.clear();
-        setLoading("error");
-        throw new Error("Error in fetch");
-      } else {
-        const data = await res.json();
-        setData(data.data);
-        setLoading("finished");
-      }
-    } catch (error) {
-      setItems([]);
-      setLoading("error");
-      console.log(error);
-    }
+    setLoading("loading");
+    const res = await axiosBase.get("admin/dashboard/proyectos/2024");
+    const data = await res.data;
+    setData(data.data);
+    setLoading("finished");
   };
 
   //  Effects

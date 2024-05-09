@@ -1,5 +1,6 @@
 import { Container, Header, LineChart } from "@cloudscape-design/components";
 import { useEffect, useState } from "react";
+import axiosBase from "../../../../api/axios";
 
 export default function () {
   //  States
@@ -9,31 +10,12 @@ export default function () {
 
   //  Functions
   const getData = async () => {
-    try {
-      setLoading("loading");
-      const res = await fetch(
-        "http://localhost:8000/api/admin/dashboard/proyectosHistoricoData",
-        {
-          headers: {
-            Authorization: localStorage.getItem("Auth"),
-          },
-        }
-      );
-      if (!res.ok) {
-        localStorage.clear();
-        setLoading("error");
-        throw new Error("Error in fetch");
-      } else {
-        const data = await res.json();
-        setTipos(data.tipos);
-        setData(data.cuenta);
-        setLoading("finished");
-      }
-    } catch (error) {
-      setItems([]);
-      setLoading("error");
-      console.log(error);
-    }
+    setLoading("loading");
+    const res = await axiosBase.get("admin/dashboard/proyectosHistoricoData");
+    const data = await res.data;
+    setTipos(data.tipos);
+    setData(data.cuenta);
+    setLoading("finished");
   };
 
   //  Effects
