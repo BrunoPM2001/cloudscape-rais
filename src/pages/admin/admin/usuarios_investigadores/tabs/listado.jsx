@@ -1,4 +1,5 @@
 import {
+  Badge,
   Box,
   Button,
   ButtonDropdown,
@@ -11,13 +12,11 @@ import {
 import { useState, useEffect } from "react";
 import {
   CreateUserModal,
+  ResetPasswordModal,
   DeleteModal,
-  EditUserModal,
 } from "../components/modal.jsx";
 import { useCollection } from "@cloudscape-design/collection-hooks";
 import axiosBase from "../../../../../api/axios";
-import { useContext } from "react";
-import { NotificationContext } from "../../../../../routes/admin";
 
 const stringOperators = [":", "!:", "=", "!=", "^", "!^"];
 
@@ -125,7 +124,12 @@ const columnDefinitions = [
   {
     id: "estado",
     header: "Estado",
-    cell: (item) => item.estado,
+    cell: (item) =>
+      item.estado == 1 ? (
+        <Badge color="green">Activo</Badge>
+      ) : (
+        <Badge color="red">Inactivo</Badge>
+      ),
     sortingField: "estado",
   },
 ];
@@ -178,8 +182,9 @@ export default () => {
   });
   const [enableBtn, setEnableBtn] = useState(true);
   const [createVisible, setCreateVisible] = useState(false);
-  const [editVisible, setEditVisible] = useState(false);
+  const [passVisible, setPassVisible] = useState(false);
   const [deleteVisible, setDeleteVisible] = useState(false);
+  const [temporalVisible, setTemporalVisible] = useState(false);
   const [editForm, setEditForm] = useState({
     facultad: null,
     codigo: null,
@@ -246,14 +251,16 @@ export default () => {
                   disabled={!enableBtn}
                   onItemClick={({ detail }) => {
                     if (detail.id == "action_1") {
-                      setEditVisible(true);
+                      setPassVisible(true);
                     } else if (detail.id == "action_2") {
                       setDeleteVisible(true);
+                    } else if (detail.id == "action_3") {
+                      setTemporalVisible(true);
                     }
                   }}
                   items={[
                     {
-                      text: "Editar",
+                      text: "Reestablecer contraseña",
                       id: "action_1",
                       disabled: false,
                     },
@@ -300,24 +307,36 @@ export default () => {
           </Box>
         }
       ></Table>
-      <CreateUserModal
-        visible={createVisible}
-        setVisible={setCreateVisible}
-        reload={getData}
-      />
-      <EditUserModal
-        visible={editVisible}
-        setVisible={setEditVisible}
-        form={editForm}
-        setForm={setEditForm}
-        reload={getData}
-      />
-      <DeleteModal
-        visible={deleteVisible}
-        setVisible={setDeleteVisible}
-        item={selectedItems}
-        reload={getData}
-      />
+      {createVisible && (
+        <CreateUserModal
+          visible={createVisible}
+          setVisible={setCreateVisible}
+          reload={getData}
+        />
+      )}
+      {passVisible && (
+        <ResetPasswordModal
+          visible={passVisible}
+          setVisible={setPassVisible}
+          item={selectedItems}
+        />
+      )}
+      {deleteVisible && (
+        <DeleteModal
+          visible={deleteVisible}
+          setVisible={setDeleteVisible}
+          item={selectedItems}
+          reload={getData}
+        />
+      )}
+      {temporalVisible && (
+        <DeleteModal
+          visible={deleteVisible}
+          setVisible={setDeleteVisible}
+          item={selectedItems}
+          reload={getData}
+        />
+      )}
     </>
   );
 };

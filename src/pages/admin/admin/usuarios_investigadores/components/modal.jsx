@@ -152,55 +152,50 @@ const CreateUserModal = ({ visible, setVisible, reload }) => {
   );
 };
 
-const EditUserModal = ({ visible, setVisible, form, setForm }) => {
+const ResetPasswordModal = ({ visible, setVisible, item }) => {
+  //  Context
+  const { notifications, pushNotification } = useContext(NotificationContext);
+
+  //  States
+  const [loading, setLoading] = useState(false);
+
+  //  Functions
+  const resetPass = async () => {
+    setLoading(true);
+    const response = await axiosBase.put("admin/admin/usuarios/resetPass", {
+      id: item[0].id,
+    });
+    const data = await response.data;
+    setLoading(false);
+    setVisible(false);
+    pushNotification(data.detail, data.message, notifications.length + 1);
+  };
+
   return (
     <Modal
       onDismiss={() => setVisible(false)}
       visible={visible}
-      size="large"
+      size="medium"
       footer={
         <Box float="right">
           <SpaceBetween direction="horizontal" size="xs">
             <Button variant="normal" onClick={() => setVisible(false)}>
               Cancelar
             </Button>
-            <Button variant="primary">Crear usuario</Button>
+            <Button
+              variant="primary"
+              loading={loading}
+              onClick={() => resetPass()}
+            >
+              Resetar contraseña
+            </Button>
           </SpaceBetween>
         </Box>
       }
-      header="Editar usuario investigador"
+      header="Reiniciar contraseña"
     >
-      <Form variant="embedded">
-        <Header variant="h3">Datos de acceso</Header>
-        <ColumnLayout columns={2}>
-          <FormField label="Correo" stretch>
-            <Input
-              controlId="email"
-              placeholder="Correo del usuario"
-              value={form.email}
-              onChange={({ detail }) =>
-                setForm((prev) => ({
-                  ...prev,
-                  email: detail.value,
-                }))
-              }
-            />
-          </FormField>
-          <FormField label="Contraseña" stretch>
-            <Input
-              controlId="password"
-              placeholder="Escriba la contraseña del usuario"
-              value={form.password}
-              onChange={({ detail }) =>
-                setForm((prev) => ({
-                  ...prev,
-                  password: detail.value,
-                }))
-              }
-            />
-          </FormField>
-        </ColumnLayout>
-      </Form>
+      ¿Estás seguro de reiniciar la contraseña de este usuario? La contraseña
+      regresará a la por defecto
     </Modal>
   );
 };
@@ -256,4 +251,4 @@ const DeleteModal = ({ visible, setVisible, item, reload }) => {
   );
 };
 
-export { CreateUserModal, EditUserModal, DeleteModal };
+export { CreateUserModal, ResetPasswordModal, DeleteModal };

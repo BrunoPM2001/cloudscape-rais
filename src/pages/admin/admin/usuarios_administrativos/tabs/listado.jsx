@@ -5,12 +5,14 @@ import {
   SpaceBetween,
   ButtonDropdown,
   Button,
+  Badge,
 } from "@cloudscape-design/components";
 import { useState, useEffect } from "react";
 import {
   CreateUserModal,
   DeleteModal,
   EditUserModal,
+  ResetPasswordModal,
 } from "../components/modal.jsx";
 import axiosBase from "../../../../../api/axios.js";
 
@@ -55,7 +57,12 @@ const columnDefinitions = [
   {
     id: "estado",
     header: "Estado",
-    cell: (item) => item.estado,
+    cell: (item) =>
+      item.estado == 1 ? (
+        <Badge color="green">Activo</Badge>
+      ) : (
+        <Badge color="red">Inactivo</Badge>
+      ),
     sortingField: "estado",
   },
 ];
@@ -78,23 +85,8 @@ export default () => {
   const [selectedItems, setSelectedItems] = useState([]);
   const [createVisible, setCreateVisible] = useState(false);
   const [editVisible, setEditVisible] = useState(false);
+  const [passwordVisible, setPasswordVisible] = useState(false);
   const [deleteVisible, setDeleteVisible] = useState(false);
-  const [editForm, setEditForm] = useState({
-    codigo: null,
-    cargo: null,
-    nombres: null,
-    paterno: null,
-    materno: null,
-    sexo: null,
-    mail: null,
-    telefono_casa: null,
-    telefono_trabajo: null,
-    telefono_movil: null,
-    direccion: null,
-    grupo: null,
-    username: null,
-    password: null,
-  });
 
   //  Functions
   const getData = async () => {
@@ -112,6 +104,7 @@ export default () => {
 
   useEffect(() => {
     if (selectedItems.length > 0) {
+      console.log(selectedItems[0]);
       setEnableBtn(true);
     } else {
       setEnableBtn(false);
@@ -145,7 +138,8 @@ export default () => {
                     if (detail.id == "action_1") {
                       setEditVisible(true);
                     } else if (detail.id == "action_2") {
-                      console.log(selectedItems);
+                      setPasswordVisible(true);
+                    } else if (detail.id == "action_3") {
                       setDeleteVisible(true);
                     }
                   }}
@@ -156,8 +150,13 @@ export default () => {
                       disabled: false,
                     },
                     {
-                      text: "Eliminar",
+                      text: "Reinicar contraseña",
                       id: "action_2",
+                      disabled: false,
+                    },
+                    {
+                      text: "Eliminar",
+                      id: "action_3",
                       disabled: false,
                     },
                   ]}
@@ -184,24 +183,35 @@ export default () => {
           </Box>
         }
       ></Table>
-      <CreateUserModal
-        visible={createVisible}
-        setVisible={setCreateVisible}
-        reload={getData}
-      />
-      <EditUserModal
-        visible={editVisible}
-        setVisible={setEditVisible}
-        form={editForm}
-        setForm={setEditForm}
-        reload={getData}
-      />
-      <DeleteModal
-        visible={deleteVisible}
-        setVisible={setDeleteVisible}
-        item={selectedItems}
-        reload={getData}
-      />
+      {createVisible && (
+        <CreateUserModal
+          visible={createVisible}
+          setVisible={setCreateVisible}
+          reload={getData}
+        />
+      )}
+      {editVisible && (
+        <EditUserModal
+          visible={editVisible}
+          setVisible={setEditVisible}
+          id={selectedItems}
+          reload={getData}
+        />
+      )}
+      {deleteVisible && (
+        <DeleteModal
+          visible={deleteVisible}
+          setVisible={setDeleteVisible}
+          item={selectedItems}
+        />
+      )}
+      {passwordVisible && (
+        <ResetPasswordModal
+          visible={passwordVisible}
+          setVisible={setPasswordVisible}
+          item={selectedItems}
+        />
+      )}
     </>
   );
 };
