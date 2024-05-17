@@ -14,6 +14,7 @@ import {
   CreateUserModal,
   ResetPasswordModal,
   DeleteModal,
+  TemporalModal,
 } from "../components/modal.jsx";
 import { useCollection } from "@cloudscape-design/collection-hooks";
 import axiosBase from "../../../../../api/axios";
@@ -330,11 +331,10 @@ export default () => {
         />
       )}
       {temporalVisible && (
-        <DeleteModal
-          visible={deleteVisible}
-          setVisible={setDeleteVisible}
+        <TemporalModal
+          visible={temporalVisible}
+          setVisible={setTemporalVisible}
           item={selectedItems}
-          reload={getData}
         />
       )}
     </>

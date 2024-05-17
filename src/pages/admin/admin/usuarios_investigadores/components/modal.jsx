@@ -251,4 +251,55 @@ const DeleteModal = ({ visible, setVisible, item, reload }) => {
   );
 };
 
-export { CreateUserModal, ResetPasswordModal, DeleteModal };
+const TemporalModal = ({ visible, setVisible, item }) => {
+  //  Context
+  const { notifications, pushNotification } = useContext(NotificationContext);
+
+  //  States
+  const [loading, setLoading] = useState(false);
+
+  //  Functions
+  const createTemporal = async () => {
+    setLoading(true);
+    const response = await axiosBase.put(
+      "admin/admin/usuarios/createTemporal",
+      {
+        id: item[0].id,
+      }
+    );
+    const data = await response.data;
+    setLoading(false);
+    setVisible(false);
+    pushNotification(data.detail, data.message, notifications.length + 1);
+  };
+
+  return (
+    <Modal
+      onDismiss={() => setVisible(false)}
+      visible={visible}
+      size="large"
+      footer={
+        <Box float="right">
+          <SpaceBetween direction="horizontal" size="xs">
+            <Button variant="normal" onClick={() => setVisible(false)}>
+              Cancelar
+            </Button>
+            <Button
+              variant="primary"
+              loading={loading}
+              onClick={() => createTemporal()}
+            >
+              Crear usuario temporal
+            </Button>
+          </SpaceBetween>
+        </Box>
+      }
+      header="Crear usuario temporal"
+    >
+      ¿Estás seguro de crear un usuario temporal a este investigador? La sesión
+      del usuario creado durará hasta la media noche del día de hoy
+    </Modal>
+  );
+};
+
+export { CreateUserModal, ResetPasswordModal, DeleteModal, TemporalModal };
