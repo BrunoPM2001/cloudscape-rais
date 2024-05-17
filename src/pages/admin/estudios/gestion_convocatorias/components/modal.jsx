@@ -66,7 +66,7 @@ const CreateModal = ({ visible, setVisible, reload }) => {
         <SpaceBetween direction="vertical" size="s">
           <Container header={<Header variant="h3">Datos del Registro</Header>}>
             <ColumnLayout columns={2}>
-              <>
+              <div>
                 <FormField label="Tipo de proyecto" stretch>
                   <Input
                     controlId="tipo"
@@ -103,8 +103,8 @@ const CreateModal = ({ visible, setVisible, reload }) => {
                     }
                   />
                 </FormField>
-              </>
-              <>
+              </div>
+              <div>
                 <FormField label="Fecha de inicio" stretch>
                   <DatePicker
                     controlId="fecha_inicio_registro"
@@ -144,7 +144,7 @@ const CreateModal = ({ visible, setVisible, reload }) => {
                     }
                   />
                 </FormField>
-              </>
+              </div>
             </ColumnLayout>
           </Container>
           <Container header={<Header variant="h3">Datos de calendario</Header>}>
@@ -278,7 +278,7 @@ const EditModal = ({ visible, setVisible, item, reload }) => {
         <SpaceBetween direction="vertical" size="s">
           <Container header={<Header variant="h3">Datos del Registro</Header>}>
             <ColumnLayout columns={2}>
-              <>
+              <div>
                 <FormField label="Tipo de proyecto" stretch>
                   {loading ? (
                     <Spinner />
@@ -318,8 +318,8 @@ const EditModal = ({ visible, setVisible, item, reload }) => {
                     />
                   )}
                 </FormField>
-              </>
-              <>
+              </div>
+              <div>
                 <FormField label="Fecha de inicio" stretch>
                   {loading ? (
                     <Spinner />
@@ -371,7 +371,7 @@ const EditModal = ({ visible, setVisible, item, reload }) => {
                     />
                   )}
                 </FormField>
-              </>
+              </div>
             </ColumnLayout>
           </Container>
           <Container header={<Header variant="h3">Datos de calendario</Header>}>
@@ -561,7 +561,7 @@ const AddCriterioModal = ({ visible, setVisible, reload }) => {
     >
       <Form variant="embedded">
         <SpaceBetween direction="vertical" size="s">
-          <>
+          <div>
             <Header variant="h3">Datos del template</Header>
             <ColumnLayout columns={2}>
               <FormField label="Tipo de proyecto" stretch>
@@ -589,8 +589,8 @@ const AddCriterioModal = ({ visible, setVisible, reload }) => {
                 />
               </FormField>
             </ColumnLayout>
-          </>
-          <>
+          </div>
+          <div>
             <Header variant="h3">Reutilizar criterios pasados</Header>
             <FormField
               label="Copiar los criterios de ese tipo de proyecto de año anterior"
@@ -607,7 +607,7 @@ const AddCriterioModal = ({ visible, setVisible, reload }) => {
                 options={[{ value: "Sí" }, { value: "No" }]}
               />
             </FormField>
-          </>
+          </div>
         </SpaceBetween>
       </Form>
     </Modal>

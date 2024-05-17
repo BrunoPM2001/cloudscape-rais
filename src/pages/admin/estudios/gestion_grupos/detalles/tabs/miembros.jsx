@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import queryString from "query-string";
 import axiosBase from "../../../../../../api/axios";
+import { IncluirMiembroModal } from "../components/modal";
 
 const stringOperators = [":", "!:", "=", "!=", "^", "!^"];
 
@@ -148,6 +149,7 @@ const columnDisplay = [
 
 export default () => {
   //  Data state
+  const [incluirVisible, setIncluirVisible] = useState(false);
   const [loading, setLoading] = useState(true);
   const [selectedItems, setSelectedItems] = useState([]);
   const [distributions, setDistribution] = useState([]);
@@ -186,21 +188,20 @@ export default () => {
   const location = useLocation();
   const { id } = queryString.parse(location.search);
 
-  //  Data
+  //  Functions
+  const getData = async () => {
+    setLoading(true);
+    const res = await axiosBase("admin/estudios/grupos/miembros/" + id + "/1");
+    const data = await res.data;
+    setDistribution(data.data);
+    setLoading(false);
+  };
+
+  //  Effects
   useEffect(() => {
-    const getData = async () => {
-      setLoading(true);
-      const res = await axiosBase(
-        "admin/estudios/grupos/miembros/" + id + "/1"
-      );
-      const data = await res.data;
-      setDistribution(data.data);
-      setLoading(false);
-    };
     getData();
   }, []);
 
-  //  Items seleccionados
   useEffect(() => {
     if (selectedItems.length > 0) {
       setEnableBtn(true);
@@ -210,107 +211,125 @@ export default () => {
   }, [selectedItems]);
 
   return (
-    <Table
-      {...collectionProps}
-      trackBy="id"
-      items={items}
-      columnDefinitions={columnDefinitions}
-      columnDisplay={columnDisplay}
-      loading={loading}
-      loadingText="Cargando datos"
-      resizableColumns
-      enableKeyboardNavigation
-      selectionType="multi"
-      selectedItems={selectedItems}
-      onSelectionChange={({ detail }) => setSelectedItems(detail.selectedItems)}
-      ariaLabels={{
-        selectionGroupLabel: "Items selection",
-        allItemsSelectionLabel: ({ selectedItems }) =>
-          `${selectedItems.length} ${
-            selectedItems.length === 1 ? "item" : "items"
-          } selected`,
-        itemSelectionLabel: ({ selectedItems }, item) => item.name,
-      }}
-      empty={
-        <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
-          <SpaceBetween size="m">
-            <b>No hay registros...</b>
-          </SpaceBetween>
-        </Box>
-      }
-      filter={
-        <PropertyFilter
-          {...propertyFilterProps}
-          filteringPlaceholder="Buscar miembro"
-          countText={`${filteredItemsCount} coincidencias`}
-          expandToViewport
-        />
-      }
-      header={
-        <Header
-          counter={
-            selectedItems.length
-              ? "(" + selectedItems.length + "/" + items.length + ")"
-              : "(" + items.length + ")"
-          }
-          actions={
-            <SpaceBetween direction="horizontal" size="xs">
-              <ButtonDropdown
-                items={[
-                  {
-                    text: "Incluir titular UNMSM",
-                    id: "action_1_1",
-                    disabled: false,
-                  },
-                  {
-                    text: "Incluir adherente",
-                    id: "action_1_2",
-                    disabled: false,
-                  },
-                ]}
-              >
-                Acciones para el grupo
-              </ButtonDropdown>
-              <ButtonDropdown
-                disabled={!enableBtn}
-                variant="primary"
-                items={[
-                  {
-                    text: "Excluir",
-                    id: "action_2_1",
-                    disabled: false,
-                  },
-                  {
-                    text: "Visualizar",
-                    id: "action_2_2",
-                    disabled: false,
-                  },
-                  {
-                    text: "Editar",
-                    id: "action_2_3",
-                    disabled: false,
-                  },
-                  {
-                    text: "Cambiar condición",
-                    id: "action_2_4",
-                    disabled: false,
-                  },
-                  {
-                    text: "Cambiar cargo",
-                    id: "action_2_5",
-                    disabled: false,
-                  },
-                ]}
-              >
-                Acciones para miembros
-              </ButtonDropdown>
+    <>
+      <Table
+        {...collectionProps}
+        trackBy="id"
+        items={items}
+        columnDefinitions={columnDefinitions}
+        columnDisplay={columnDisplay}
+        loading={loading}
+        loadingText="Cargando datos"
+        resizableColumns
+        enableKeyboardNavigation
+        selectionType="multi"
+        selectedItems={selectedItems}
+        onSelectionChange={({ detail }) =>
+          setSelectedItems(detail.selectedItems)
+        }
+        ariaLabels={{
+          selectionGroupLabel: "Items selection",
+          allItemsSelectionLabel: ({ selectedItems }) =>
+            `${selectedItems.length} ${
+              selectedItems.length === 1 ? "item" : "items"
+            } selected`,
+          itemSelectionLabel: ({ selectedItems }, item) => item.name,
+        }}
+        empty={
+          <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
+            <SpaceBetween size="m">
+              <b>No hay registros...</b>
             </SpaceBetween>
-          }
-        >
-          Miembros del grupo
-        </Header>
-      }
-      pagination={<Pagination {...paginationProps} />}
-    />
+          </Box>
+        }
+        filter={
+          <PropertyFilter
+            {...propertyFilterProps}
+            filteringPlaceholder="Buscar miembro"
+            countText={`${filteredItemsCount} coincidencias`}
+            expandToViewport
+          />
+        }
+        header={
+          <Header
+            counter={
+              selectedItems.length
+                ? "(" + selectedItems.length + "/" + items.length + ")"
+                : "(" + items.length + ")"
+            }
+            actions={
+              <SpaceBetween direction="horizontal" size="xs">
+                <ButtonDropdown
+                  items={[
+                    {
+                      text: "Incluir titular UNMSM",
+                      id: "action_1_1",
+                      disabled: false,
+                    },
+                    {
+                      text: "Incluir adherente",
+                      id: "action_1_2",
+                      disabled: false,
+                    },
+                  ]}
+                  onItemClick={({ detail }) => {
+                    if (detail.id == "action_1_1") {
+                      setIncluirVisible(true);
+                    } else if (detail.id == "action_1_2") {
+                      setIncluirVisible(true);
+                    }
+                  }}
+                >
+                  Acciones para el grupo
+                </ButtonDropdown>
+                <ButtonDropdown
+                  disabled={!enableBtn}
+                  variant="primary"
+                  items={[
+                    {
+                      text: "Excluir",
+                      id: "action_2_1",
+                      disabled: false,
+                    },
+                    {
+                      text: "Visualizar",
+                      id: "action_2_2",
+                      disabled: false,
+                    },
+                    {
+                      text: "Editar",
+                      id: "action_2_3",
+                      disabled: false,
+                    },
+                    {
+                      text: "Cambiar condición",
+                      id: "action_2_4",
+                      disabled: false,
+                    },
+                    {
+                      text: "Cambiar cargo",
+                      id: "action_2_5",
+                      disabled: false,
+                    },
+                  ]}
+                >
+                  Acciones para miembros
+                </ButtonDropdown>
+              </SpaceBetween>
+            }
+          >
+            Miembros del grupo
+          </Header>
+        }
+        pagination={<Pagination {...paginationProps} />}
+      />
+      {incluirVisible && (
+        <IncluirMiembroModal
+          visible={incluirVisible}
+          setVisible={setIncluirVisible}
+          reload={getData}
+        />
+      )}
+    </>
   );
 };
