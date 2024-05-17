@@ -12,6 +12,7 @@ import {
 import { useState, useEffect } from "react";
 import { useCollection } from "@cloudscape-design/collection-hooks";
 import axiosBase from "../../../../../api/axios";
+import { CreateModal, DeleteModal, EditModal } from "../components/modal";
 
 const stringOperators = [":", "!:", "=", "!=", "^", "!^"];
 
@@ -126,36 +127,8 @@ const columnDefinitions = [
     id: "estado",
     header: "Estado",
     cell: (item) => (
-      <Badge
-        color={
-          item.estado == -1
-            ? "red"
-            : item.estado == 1
-            ? "green"
-            : item.estado == 2
-            ? "grey"
-            : item.estado == 4
-            ? "green"
-            : item.estado == 5
-            ? "blue"
-            : item.estado == 6
-            ? "grey"
-            : "red"
-        }
-      >
-        {item.estado == -1
-          ? "Eliminado"
-          : item.estado == 1
-          ? "Ok"
-          : item.estado == 2
-          ? "Observado"
-          : item.estado == 4
-          ? "Registrado"
-          : item.estado == 5
-          ? "Enviado"
-          : item.estado == 6
-          ? "En proceso"
-          : "Error"}
+      <Badge color={item.estado == 1 ? "green" : "red"}>
+        {item.estado == 1 ? "Activo" : "No activo"}
       </Badge>
     ),
     sortingField: "estado",
@@ -177,6 +150,9 @@ const columnDisplay = [
 export default () => {
   //  Data states
   const [loading, setLoading] = useState(true);
+  const [createVisible, setCreateVisible] = useState(false);
+  const [editVisible, setEditVisible] = useState(false);
+  const [deleteVisible, setDeleteVisible] = useState(false);
   const [selectedItems, setSelectedItems] = useState([]);
   const [distributions, setDistribution] = useState([]);
   const {
@@ -235,68 +211,108 @@ export default () => {
   }, [selectedItems]);
 
   return (
-    <Table
-      {...collectionProps}
-      trackBy="id"
-      items={items}
-      columnDefinitions={columnDefinitions}
-      columnDisplay={columnDisplay}
-      loading={loading}
-      loadingText="Cargando datos"
-      resizableColumns
-      enableKeyboardNavigation
-      selectionType="single"
-      selectedItems={selectedItems}
-      onSelectionChange={({ detail }) => setSelectedItems(detail.selectedItems)}
-      header={
-        <Header
-          counter={
-            selectedItems.length
-              ? "(" + selectedItems.length + "/" + items.length + ")"
-              : "(" + items.length + ")"
-          }
-          actions={
-            <SpaceBetween size="s" direction="horizontal">
-              <ButtonDropdown
-                disabled={!enableBtn}
-                items={[
-                  {
-                    text: "Editar",
-                    id: "action_1",
-                    disabled: false,
-                  },
-                  {
-                    text: "Eliminar",
-                    id: "action_2",
-                    disabled: false,
-                  },
-                ]}
-              >
-                Acciones para convocatoria
-              </ButtonDropdown>
-              <Button variant="primary">Añadir convocatoria</Button>
+    <>
+      <Table
+        {...collectionProps}
+        isItemDisabled={(item) => item.estado != 1}
+        trackBy="id"
+        items={items}
+        columnDefinitions={columnDefinitions}
+        columnDisplay={columnDisplay}
+        loading={loading}
+        loadingText="Cargando datos"
+        resizableColumns
+        enableKeyboardNavigation
+        selectionType="single"
+        selectedItems={selectedItems}
+        onSelectionChange={({ detail }) =>
+          setSelectedItems(detail.selectedItems)
+        }
+        header={
+          <Header
+            counter={
+              selectedItems.length
+                ? "(" + selectedItems.length + "/" + items.length + ")"
+                : "(" + items.length + ")"
+            }
+            actions={
+              <SpaceBetween size="s" direction="horizontal">
+                <ButtonDropdown
+                  disabled={!enableBtn}
+                  onItemClick={({ detail }) => {
+                    if (detail.id == "action_1") {
+                      setEditVisible(true);
+                    } else if (detail.id == "action_2") {
+                      setDeleteVisible(true);
+                    }
+                  }}
+                  items={[
+                    {
+                      text: "Editar",
+                      id: "action_1",
+                      disabled: false,
+                    },
+                    {
+                      text: "Eliminar",
+                      id: "action_2",
+                      disabled: false,
+                    },
+                  ]}
+                >
+                  Acciones para convocatoria
+                </ButtonDropdown>
+                <Button
+                  variant="primary"
+                  onClick={() => setCreateVisible(true)}
+                >
+                  Añadir convocatoria
+                </Button>
+              </SpaceBetween>
+            }
+          >
+            Convocatorias
+          </Header>
+        }
+        filter={
+          <PropertyFilter
+            {...propertyFilterProps}
+            filteringPlaceholder="Buscar grupo"
+            countText={`${filteredItemsCount} coincidencias`}
+            expandToViewport
+          />
+        }
+        pagination={<Pagination {...paginationProps} />}
+        empty={
+          <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
+            <SpaceBetween size="m">
+              <b>No hay registros...</b>
             </SpaceBetween>
-          }
-        >
-          Convocatorias
-        </Header>
-      }
-      filter={
-        <PropertyFilter
-          {...propertyFilterProps}
-          filteringPlaceholder="Buscar grupo"
-          countText={`${filteredItemsCount} coincidencias`}
-          expandToViewport
+          </Box>
+        }
+      />
+      {createVisible && (
+        <CreateModal
+          visible={createVisible}
+          setVisible={setCreateVisible}
+          reload={getData}
         />
-      }
-      pagination={<Pagination {...paginationProps} />}
-      empty={
-        <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
-          <SpaceBetween size="m">
-            <b>No hay registros...</b>
-          </SpaceBetween>
-        </Box>
-      }
-    />
+      )}
+      {editVisible && (
+        <EditModal
+          visible={editVisible}
+          setVisible={setEditVisible}
+          item={selectedItems}
+          reload={getData}
+        />
+      )}
+      {deleteVisible && (
+        <DeleteModal
+          visible={deleteVisible}
+          setVisible={setDeleteVisible}
+          item={selectedItems}
+          reload={getData}
+        />
+      )}
+    </>
   );
 };

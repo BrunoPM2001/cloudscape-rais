@@ -82,7 +82,6 @@ export default function Admin_main() {
   const getData = async () => {
     const res = await axiosBase.get("admin/dashboard/getData");
     const data = await res.data;
-    console.log(data);
     setData(data);
     setLoading(false);
   };

@@ -307,7 +307,7 @@ export default () => {
             </SpaceBetween>
           </Box>
         }
-      ></Table>
+      />
       {createVisible && (
         <CreateUserModal
           visible={createVisible}

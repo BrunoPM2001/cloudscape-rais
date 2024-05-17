@@ -104,7 +104,6 @@ export default () => {
 
   useEffect(() => {
     if (selectedItems.length > 0) {
-      console.log(selectedItems[0]);
       setEnableBtn(true);
     } else {
       setEnableBtn(false);
