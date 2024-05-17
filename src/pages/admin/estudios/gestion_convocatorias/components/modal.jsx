@@ -11,6 +11,7 @@ import {
   DatePicker,
   Container,
   Spinner,
+  Select,
 } from "@cloudscape-design/components";
 import { useContext, useEffect, useState } from "react";
 import axiosBase from "../../../../../api/axios";
@@ -509,4 +510,108 @@ const DeleteModal = ({ visible, setVisible, item, reload }) => {
   );
 };
 
-export { CreateModal, EditModal, DeleteModal };
+const AddCriterioModal = ({ visible, setVisible, reload }) => {
+  //  Context
+  const { notifications, pushNotification } = useContext(NotificationContext);
+
+  //  States
+  const [creating, setCreating] = useState(false);
+  const [form, setForm] = useState({
+    selectedOption: {
+      value: "No",
+    },
+  });
+
+  //  Functions
+  const createCriterio = async () => {
+    setCreating(true);
+    const response = await axiosBase.post(
+      "admin/estudios/convocatorias/createCriterio",
+      form
+    );
+    const data = await response.data;
+    setCreating(false);
+    setVisible(false);
+    pushNotification(data.detail, data.message, notifications.length + 1);
+    reload();
+  };
+
+  return (
+    <Modal
+      onDismiss={() => setVisible(false)}
+      visible={visible}
+      size="medium"
+      footer={
+        <Box float="right">
+          <SpaceBetween direction="horizontal" size="xs">
+            <Button variant="normal" onClick={() => setVisible(false)}>
+              Cancelar
+            </Button>
+            <Button
+              variant="primary"
+              loading={creating}
+              onClick={() => createCriterio()}
+            >
+              Guardar
+            </Button>
+          </SpaceBetween>
+        </Box>
+      }
+      header="Añadir criterio"
+    >
+      <Form variant="embedded">
+        <SpaceBetween direction="vertical" size="s">
+          <>
+            <Header variant="h3">Datos del template</Header>
+            <ColumnLayout columns={2}>
+              <FormField label="Tipo de proyecto" stretch>
+                <Input
+                  controlId="tipo"
+                  value={form.tipo}
+                  onChange={({ detail }) =>
+                    setForm((prev) => ({
+                      ...prev,
+                      tipo: detail.value,
+                    }))
+                  }
+                />
+              </FormField>
+              <FormField label="Año" stretch>
+                <Input
+                  controlId="periodo"
+                  value={form.periodo}
+                  onChange={({ detail }) =>
+                    setForm((prev) => ({
+                      ...prev,
+                      periodo: detail.value,
+                    }))
+                  }
+                />
+              </FormField>
+            </ColumnLayout>
+          </>
+          <>
+            <Header variant="h3">Reutilizar criterios pasados</Header>
+            <FormField
+              label="Copiar los criterios de ese tipo de proyecto de año anterior"
+              stretch
+            >
+              <Select
+                selectedOption={form.selectedOption}
+                onChange={({ detail }) =>
+                  setForm((prev) => ({
+                    ...prev,
+                    selectedOption: detail.selectedOption,
+                  }))
+                }
+                options={[{ value: "Sí" }, { value: "No" }]}
+              />
+            </FormField>
+          </>
+        </SpaceBetween>
+      </Form>
+    </Modal>
+  );
+};
+
+export { CreateModal, EditModal, DeleteModal, AddCriterioModal };

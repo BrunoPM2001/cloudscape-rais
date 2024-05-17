@@ -12,6 +12,7 @@ import { useState, useEffect } from "react";
 import { useCollection } from "@cloudscape-design/collection-hooks";
 import queryString from "query-string";
 import axiosBase from "../../../../../api/axios";
+import { AddCriterioModal } from "../components/modal";
 
 const stringOperators = [":", "!:", "=", "!=", "^", "!^"];
 
@@ -83,6 +84,7 @@ const columnDisplay = [
 
 export default () => {
   //  Data states
+  const [createVisible, setCreateVisible] = useState(false);
   const [loading, setLoading] = useState(true);
   const [selectedItems, setSelectedItems] = useState([]);
   const [distributions, setDistribution] = useState([]);
@@ -142,66 +144,81 @@ export default () => {
   }, [selectedItems]);
 
   return (
-    <Table
-      {...collectionProps}
-      trackBy="id"
-      items={items}
-      columnDefinitions={columnDefinitions}
-      columnDisplay={columnDisplay}
-      loading={loading}
-      loadingText="Cargando datos"
-      resizableColumns
-      enableKeyboardNavigation
-      selectionType="single"
-      selectedItems={selectedItems}
-      onSelectionChange={({ detail }) => setSelectedItems(detail.selectedItems)}
-      header={
-        <Header
-          counter={
-            selectedItems.length
-              ? "(" + selectedItems.length + "/" + items.length + ")"
-              : "(" + items.length + ")"
-          }
-          actions={
-            <SpaceBetween size="s" direction="horizontal">
-              <Button
-                variant="normal"
-                iconName="edit"
-                disabled={!enableBtn}
-                onClick={() => {
-                  const query = queryString.stringify({
-                    id: selectedItems[0]["id"],
-                  });
-                  window.location.href = "convocatorias/detalle?" + query;
-                }}
-              >
-                Ver detalle
-              </Button>
-              <Button variant="primary" iconName="add-plus">
-                Añadir criterio
-              </Button>
+    <>
+      <Table
+        {...collectionProps}
+        trackBy="id"
+        items={items}
+        columnDefinitions={columnDefinitions}
+        columnDisplay={columnDisplay}
+        loading={loading}
+        loadingText="Cargando datos"
+        resizableColumns
+        enableKeyboardNavigation
+        selectionType="single"
+        selectedItems={selectedItems}
+        onSelectionChange={({ detail }) =>
+          setSelectedItems(detail.selectedItems)
+        }
+        header={
+          <Header
+            counter={
+              selectedItems.length
+                ? "(" + selectedItems.length + "/" + items.length + ")"
+                : "(" + items.length + ")"
+            }
+            actions={
+              <SpaceBetween size="s" direction="horizontal">
+                <Button
+                  variant="normal"
+                  iconName="edit"
+                  disabled={!enableBtn}
+                  onClick={() => {
+                    const query = queryString.stringify({
+                      id: selectedItems[0]["id"],
+                    });
+                    window.location.href = "convocatorias/detalle?" + query;
+                  }}
+                >
+                  Ver detalle
+                </Button>
+                <Button
+                  variant="primary"
+                  iconName="add-plus"
+                  onClick={() => setCreateVisible(true)}
+                >
+                  Añadir criterio
+                </Button>
+              </SpaceBetween>
+            }
+          >
+            Evaluaciones
+          </Header>
+        }
+        filter={
+          <PropertyFilter
+            {...propertyFilterProps}
+            filteringPlaceholder="Buscar grupo"
+            countText={`${filteredItemsCount} coincidencias`}
+            expandToViewport
+          />
+        }
+        pagination={<Pagination {...paginationProps} />}
+        empty={
+          <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
+            <SpaceBetween size="m">
+              <b>No hay registros...</b>
             </SpaceBetween>
-          }
-        >
-          Evaluaciones
-        </Header>
-      }
-      filter={
-        <PropertyFilter
-          {...propertyFilterProps}
-          filteringPlaceholder="Buscar grupo"
-          countText={`${filteredItemsCount} coincidencias`}
-          expandToViewport
+          </Box>
+        }
+      />
+      {createVisible && (
+        <AddCriterioModal
+          visible={createVisible}
+          setVisible={setCreateVisible}
+          reload={getData}
         />
-      }
-      pagination={<Pagination {...paginationProps} />}
-      empty={
-        <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
-          <SpaceBetween size="m">
-            <b>No hay registros...</b>
-          </SpaceBetween>
-        </Box>
-      }
-    />
+      )}
+    </>
   );
 };
