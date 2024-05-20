@@ -23,16 +23,15 @@ const IncluirMiembroModal = ({ visible, setVisible, reload }) => {
   const { notifications, pushNotification } = useContext(NotificationContext);
 
   //  States
-  const { loading, options, setOptions, value, setValue } = useAutosuggest();
+  const { loading, options, setOptions, value, setValue } =
+    useAutosuggest("rrhh");
   const [loadingData, setLoadingData] = useState(false);
   const [form, setForm] = useState({});
   const [creating, setCreating] = useState(false);
 
-  //  Functions
-  const getData = async () => {
-    setLoadingData(true);
-    const res = await axiosBase.get("admin/admin/usuarios/");
-  };
+  useEffect(() => {
+    console.log(form);
+  }, [form]);
 
   return (
     <Modal
@@ -72,11 +71,9 @@ const IncluirMiembroModal = ({ visible, setVisible, reload }) => {
                 setValue(detail.value);
               }}
               onSelect={({ detail }) => {
-                if (detail.selectedOption.detail != undefined) {
-                  setForm((prev) => ({
-                    ...prev,
-                    investigador_id: detail.selectedOption.detail,
-                  }));
+                if (detail.selectedOption.id != undefined) {
+                  const { value, ...rest } = detail.selectedOption;
+                  setForm(rest);
                 }
               }}
               value={value}
@@ -87,43 +84,47 @@ const IncluirMiembroModal = ({ visible, setVisible, reload }) => {
               empty="No se encontraron resultados"
             />
           </FormField>
-          {form.investigador_id != null && (
+          {form.id != null && (
             <Alert header="Detalles">
               <ColumnLayout columns={2} variant="text-grid">
                 <SpaceBetween size="s">
                   <div>
                     <Box variant="awsui-key-label">Apellidos y nombres:</Box>
-                    {loading ? <Spinner /> : <>Sample</>}
+                    {loadingData ? (
+                      <Spinner />
+                    ) : (
+                      <>{`${form.ser_ape_pat} ${form.ser_ape_mat}, ${form.ser_nom}`}</>
+                    )}
                   </div>
                   <div>
                     <Box variant="awsui-key-label">N° de documento:</Box>
-                    {loading ? <Spinner /> : <>Sample</>}
+                    {loadingData ? <Spinner /> : <>{form.ser_doc_id_act}</>}
                   </div>
                   <div>
                     <Box variant="awsui-key-label">Código de docente:</Box>
-                    {loading ? <Spinner /> : <>Sample</>}
+                    {loadingData ? <Spinner /> : <>{form.ser_cod_ant}</>}
                   </div>
                   <div>
                     <Box variant="awsui-key-label">Categoría / Clase:</Box>
-                    {loading ? <Spinner /> : <>Sample</>}
+                    {loadingData ? <Spinner /> : <>Sample</>}
                   </div>
                 </SpaceBetween>
                 <SpaceBetween size="s">
                   <div>
                     <Box variant="awsui-key-label">Dependencia:</Box>
-                    {loading ? <Spinner /> : <>Sample</>}
+                    {loadingData ? <Spinner /> : <>Sample</>}
                   </div>
                   <div>
                     <Box variant="awsui-key-label">Facultad:</Box>
-                    {loading ? <Spinner /> : <>Sample</>}
+                    {loadingData ? <Spinner /> : <>Sample</>}
                   </div>
                   <div>
                     <Box variant="awsui-key-label">Puntaje total:</Box>
-                    {loading ? <Spinner /> : <>Sample</>}
+                    {loadingData ? <Spinner /> : <>Sample</>}
                   </div>
                   <div>
                     <Box variant="awsui-key-label">Deudas:</Box>
-                    {loading ? <Spinner /> : <>Sample</>}
+                    {loadingData ? <Spinner /> : <>Sample</>}
                   </div>
                 </SpaceBetween>
               </ColumnLayout>
