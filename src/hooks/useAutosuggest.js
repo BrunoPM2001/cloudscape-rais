@@ -6,6 +6,7 @@ const useAutosuggest = (type) => {
   const [loading, setLoading] = useState(false);
   const [options, setOptions] = useState([]);
   const [value, setValue] = useState("");
+  const [avoidSelect, setAvoidSelect] = useState(true);
 
   //  Functions
   const getData = async () => {
@@ -32,17 +33,11 @@ const useAutosuggest = (type) => {
             "admin/estudios/grupos/searchDocenteRrhh",
             {
               params: {
-                query: "macazana",
+                query: value,
               },
             }
           );
           const data = await res.data;
-          // const opt = data.map((item) => {
-          //   return {
-          //     detail: item.id,
-          //     value: item.search,
-          //   };
-          // });
           setOptions(data);
         }
         break;
@@ -55,14 +50,16 @@ const useAutosuggest = (type) => {
   //  Effects
   useEffect(() => {
     const temp = setTimeout(() => {
-      if (value) {
+      if (value && avoidSelect) {
         getData();
+      } else {
+        setAvoidSelect(true);
       }
     }, 1000);
     return () => clearTimeout(temp);
   }, [value]);
 
-  return { loading, options, setOptions, value, setValue };
+  return { loading, options, setOptions, value, setValue, setAvoidSelect };
 };
 
 export { useAutosuggest };

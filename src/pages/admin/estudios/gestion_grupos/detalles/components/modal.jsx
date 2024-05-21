@@ -23,14 +23,35 @@ const IncluirMiembroModal = ({ visible, setVisible, reload }) => {
   const { notifications, pushNotification } = useContext(NotificationContext);
 
   //  States
-  const { loading, options, setOptions, value, setValue } =
+  const { loading, options, setOptions, value, setValue, setAvoidSelect } =
     useAutosuggest("rrhh");
   const [loadingData, setLoadingData] = useState(false);
   const [form, setForm] = useState({});
-  const [creating, setCreating] = useState(false);
+  const [incluirMiembroData, setIncluirMiembroData] = useState({});
+  const [enableCreate, setEnableCreate] = useState(true);
+  const [createForm, setCreateForm] = useState({});
+
+  //  Functions
+  const getData = async () => {
+    setLoadingData(true);
+    const res = await axiosBase.get(
+      "admin/estudios/grupos/incluirMiembroData",
+      {
+        params: {
+          investigador_id: form.investigador_id,
+        },
+      }
+    );
+    const data = await res.data;
+    setIncluirMiembroData(data);
+    setLoadingData(false);
+    setEnableCreate(data.message == "success" ? false : true);
+  };
 
   useEffect(() => {
-    console.log(form);
+    if (Object.keys(form).length != 0) {
+      getData();
+    }
   }, [form]);
 
   return (
@@ -44,7 +65,7 @@ const IncluirMiembroModal = ({ visible, setVisible, reload }) => {
             <Button variant="normal" onClick={() => setVisible(false)}>
               Cancelar
             </Button>
-            <Button disabled variant="primary" loading={creating}>
+            <Button disabled={enableCreate} variant="primary">
               Incluir miembro
             </Button>
           </SpaceBetween>
@@ -69,11 +90,16 @@ const IncluirMiembroModal = ({ visible, setVisible, reload }) => {
               onChange={({ detail }) => {
                 setOptions([]);
                 setValue(detail.value);
+                if (detail.value == "") {
+                  setForm({});
+                }
+                setEnableCreate(true);
               }}
               onSelect={({ detail }) => {
                 if (detail.selectedOption.id != undefined) {
                   const { value, ...rest } = detail.selectedOption;
                   setForm(rest);
+                  setAvoidSelect(false);
                 }
               }}
               value={value}
@@ -85,50 +111,82 @@ const IncluirMiembroModal = ({ visible, setVisible, reload }) => {
             />
           </FormField>
           {form.id != null && (
-            <Alert header="Detalles">
-              <ColumnLayout columns={2} variant="text-grid">
-                <SpaceBetween size="s">
-                  <div>
-                    <Box variant="awsui-key-label">Apellidos y nombres:</Box>
-                    {loadingData ? (
-                      <Spinner />
-                    ) : (
+            <>
+              <Alert>
+                <ColumnLayout columns={2} variant="text-grid">
+                  <SpaceBetween size="xxs">
+                    <div>
+                      <Box variant="awsui-key-label">Apellidos y nombres:</Box>
                       <>{`${form.ser_ape_pat} ${form.ser_ape_mat}, ${form.ser_nom}`}</>
-                    )}
-                  </div>
-                  <div>
-                    <Box variant="awsui-key-label">N° de documento:</Box>
-                    {loadingData ? <Spinner /> : <>{form.ser_doc_id_act}</>}
-                  </div>
-                  <div>
-                    <Box variant="awsui-key-label">Código de docente:</Box>
-                    {loadingData ? <Spinner /> : <>{form.ser_cod_ant}</>}
-                  </div>
-                  <div>
-                    <Box variant="awsui-key-label">Categoría / Clase:</Box>
-                    {loadingData ? <Spinner /> : <>Sample</>}
-                  </div>
+                    </div>
+                    <div>
+                      <Box variant="awsui-key-label">N° de documento:</Box>
+                      <>{form.ser_doc_id_act}</>
+                    </div>
+                    <div>
+                      <Box variant="awsui-key-label">Código de docente:</Box>
+                      <>{form.ser_cod_ant}</>
+                    </div>
+                  </SpaceBetween>
+                  <SpaceBetween size="xxs">
+                    <div>
+                      <Box variant="awsui-key-label">
+                        Categoría / Clase / Horas:
+                      </Box>
+                      <>{`${form.categoria} / ${form.clase} / ${form.horas}`}</>
+                    </div>
+                    <div>
+                      <Box variant="awsui-key-label">Dependencia:</Box>
+                      <>{form.des_dep_cesantes}</>
+                    </div>
+                    <div>
+                      <Box variant="awsui-key-label">Facultad:</Box>
+                      <>{form.facultad}</>
+                    </div>
+                  </SpaceBetween>
+                </ColumnLayout>
+              </Alert>
+              {loadingData ? (
+                <SpaceBetween
+                  direction="horizontal"
+                  size="xs"
+                  alignItems="center"
+                >
+                  <Spinner />
+                  <Box variant="p">
+                    Verificando si pertenece a algún grupo de investigación
+                  </Box>
                 </SpaceBetween>
-                <SpaceBetween size="s">
-                  <div>
-                    <Box variant="awsui-key-label">Dependencia:</Box>
-                    {loadingData ? <Spinner /> : <>Sample</>}
-                  </div>
-                  <div>
-                    <Box variant="awsui-key-label">Facultad:</Box>
-                    {loadingData ? <Spinner /> : <>Sample</>}
-                  </div>
-                  <div>
-                    <Box variant="awsui-key-label">Puntaje total:</Box>
-                    {loadingData ? <Spinner /> : <>Sample</>}
-                  </div>
-                  <div>
-                    <Box variant="awsui-key-label">Deudas:</Box>
-                    {loadingData ? <Spinner /> : <>Sample</>}
-                  </div>
-                </SpaceBetween>
-              </ColumnLayout>
-            </Alert>
+              ) : (
+                <>
+                  <Alert
+                    type={incluirMiembroData.message}
+                    header={incluirMiembroData.detail}
+                  />
+                  {enableCreate == false && (
+                    <Form variant="embedded">
+                      <SpaceBetween direction="vertical" size="xs">
+                        <FormField label="CTI Vitae" stretch>
+                          <Input
+                            controlId="cti_vitae"
+                            value={createForm.cti_vitae}
+                          />
+                        </FormField>
+                        <FormField label="Instituto" stretch>
+                          <Input
+                            controlId="instituto"
+                            value={createForm.instituto}
+                          />
+                        </FormField>
+                        <FormField label="Orcid" stretch>
+                          <Input controlId="orcid" value={createForm.orcid} />
+                        </FormField>
+                      </SpaceBetween>
+                    </Form>
+                  )}
+                </>
+              )}
+            </>
           )}
         </SpaceBetween>
       </Form>
