@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 const useFormValidation = (initialState, validationRules) => {
   //  States
   const [formValues, setFormValues] = useState(initialState);
   const [formErrors, setFormErrors] = useState({});
+  const fileInputRefs = useRef({});
 
   //  Functions
   const validateField = (name, value) => {
@@ -18,7 +19,17 @@ const useFormValidation = (initialState, validationRules) => {
       return "Valor inválido";
     }
 
+    if (rule.isFile && value) {
+      if (rule.maxSize && value[0].size > rule.maxSize) {
+        return `El archivo debe ser menor a ${rule.maxSize / 1024 / 1024} MB.`;
+      }
+    }
+
     return true;
+  };
+
+  const registerFileInput = (name, ref) => {
+    fileInputRefs.current[name] = ref;
   };
 
   const handleChange = (name, value) => {
@@ -52,6 +63,7 @@ const useFormValidation = (initialState, validationRules) => {
     formErrors,
     handleChange,
     validateForm,
+    registerFileInput,
   };
 };
 

@@ -183,6 +183,7 @@ export default () => {
     selection: {},
   });
   const [enableBtn, setEnableBtn] = useState(false);
+  const [typeModal, setTypeModal] = useState("");
 
   //  Url
   const location = useLocation();
@@ -275,8 +276,10 @@ export default () => {
                   onItemClick={({ detail }) => {
                     if (detail.id == "action_1_1") {
                       setIncluirVisible(true);
+                      setTypeModal("Titular");
                     } else if (detail.id == "action_1_2") {
                       setIncluirVisible(true);
+                      setTypeModal("Adherente");
                     }
                   }}
                 >
@@ -325,6 +328,7 @@ export default () => {
       />
       {incluirVisible && (
         <IncluirMiembroModal
+          type={typeModal}
           visible={incluirVisible}
           setVisible={setIncluirVisible}
           reload={getData}
