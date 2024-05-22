@@ -5,31 +5,57 @@ import {
   SpaceBetween,
   Form,
   Button,
-  Select,
   Autosuggest,
   ColumnLayout,
   Spinner,
   DatePicker,
   Textarea,
   Alert,
+  Input,
 } from "@cloudscape-design/components";
 import { useContext, useEffect, useState } from "react";
 import axiosBase from "../../../../../../api/axios";
 import { NotificationContext } from "../../../../../../routes/admin";
 import { useAutosuggest } from "../../../../../../hooks/useAutosuggest";
+import { useFormValidation } from "../../../../../../hooks/useFormValidation";
+import { useLocation } from "react-router-dom";
+import queryString from "query-string";
 
 const IncluirMiembroModal = ({ visible, setVisible, reload }) => {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
 
   //  States
-  const { loading, options, setOptions, value, setValue, setAvoidSelect } =
-    useAutosuggest("rrhh");
   const [loadingData, setLoadingData] = useState(false);
+  const [enableCreate, setEnableCreate] = useState(true);
+  const [loadingCreate, setLoadingCreate] = useState(false);
   const [form, setForm] = useState({});
   const [incluirMiembroData, setIncluirMiembroData] = useState({});
-  const [enableCreate, setEnableCreate] = useState(true);
-  const [createForm, setCreateForm] = useState({});
+  const [dataInvestForm, setDataInvestForm] = useState({});
+
+  //  Const
+  const createForm = {
+    fecha_inclusion: "",
+    resolucion_oficina: "",
+    resolucion: "",
+    resolucion_fecha: "",
+  };
+  const formRules = {
+    fecha_inclusion: { required: true },
+    resolucion_oficina: { required: false },
+    resolucion: { required: false },
+    resolucion_fecha: { required: false },
+  };
+
+  //  Hooks
+  const { loading, options, setOptions, value, setValue, setAvoidSelect } =
+    useAutosuggest("rrhh");
+  const { formValues, formErrors, handleChange, validateForm } =
+    useFormValidation(createForm, formRules);
+
+  //  Url
+  const location = useLocation();
+  const { id } = queryString.parse(location.search);
 
   //  Functions
   const getData = async () => {
@@ -45,9 +71,36 @@ const IncluirMiembroModal = ({ visible, setVisible, reload }) => {
     const data = await res.data;
     setIncluirMiembroData(data);
     setLoadingData(false);
-    setEnableCreate(data.message == "success" ? false : true);
+    if (data.message == "success") {
+      setEnableCreate(false);
+      setDataInvestForm({
+        codigo_orcid: data.codigo_orcid,
+        dependencia: data.dependencia,
+        facultad: data.facultad,
+        instituto: data.instituto,
+      });
+    }
   };
 
+  const agregarMiembro = async () => {
+    if (validateForm()) {
+      setLoadingCreate(true);
+      const res = await axiosBase.put("admin/estudios/grupos/agregarMiembro", {
+        ...formValues,
+        grupo_id: id,
+        investigador_id: form.investigador_id,
+        condicion: "Titular",
+        tipo: "DOCENTE PERMANENTE",
+      });
+      const data = res.data;
+      setLoadingCreate(false);
+      setVisible(false);
+      reload();
+      pushNotification(data.detail, data.message, notifications.length + 1);
+    }
+  };
+
+  //  Effects
   useEffect(() => {
     if (Object.keys(form).length != 0) {
       getData();
@@ -58,14 +111,19 @@ const IncluirMiembroModal = ({ visible, setVisible, reload }) => {
     <Modal
       onDismiss={() => setVisible(false)}
       visible={visible}
-      size="medium"
+      size="large"
       footer={
         <Box float="right">
           <SpaceBetween direction="horizontal" size="xs">
             <Button variant="normal" onClick={() => setVisible(false)}>
               Cancelar
             </Button>
-            <Button disabled={enableCreate} variant="primary">
+            <Button
+              disabled={enableCreate}
+              variant="primary"
+              onClick={() => agregarMiembro()}
+              loading={loadingCreate}
+            >
               Incluir miembro
             </Button>
           </SpaceBetween>
@@ -75,16 +133,6 @@ const IncluirMiembroModal = ({ visible, setVisible, reload }) => {
     >
       <Form variant="embedded">
         <SpaceBetween direction="vertical" size="s">
-          <FormField label="Tipo de miembro" stretch>
-            <Select
-              placeholder="Escoga una opción"
-              options={[
-                {
-                  label: "Docente ordinario",
-                },
-              ]}
-            />
-          </FormField>
           <FormField label="Buscar docente ordinario" stretch>
             <Autosuggest
               onChange={({ detail }) => {
@@ -120,8 +168,8 @@ const IncluirMiembroModal = ({ visible, setVisible, reload }) => {
                       <>{`${form.ser_ape_pat} ${form.ser_ape_mat}, ${form.ser_nom}`}</>
                     </div>
                     <div>
-                      <Box variant="awsui-key-label">N° de documento:</Box>
-                      <>{form.ser_doc_id_act}</>
+                      <Box variant="awsui-key-label">Dependencia:</Box>
+                      <>{form.des_dep_cesantes}</>
                     </div>
                     <div>
                       <Box variant="awsui-key-label">Código de docente:</Box>
@@ -136,9 +184,10 @@ const IncluirMiembroModal = ({ visible, setVisible, reload }) => {
                       <>{`${form.categoria} / ${form.clase} / ${form.horas}`}</>
                     </div>
                     <div>
-                      <Box variant="awsui-key-label">Dependencia:</Box>
-                      <>{form.des_dep_cesantes}</>
+                      <Box variant="awsui-key-label">N° de documento:</Box>
+                      <>{form.ser_doc_id_act}</>
                     </div>
+
                     <div>
                       <Box variant="awsui-key-label">Facultad:</Box>
                       <>{form.facultad}</>
@@ -165,23 +214,98 @@ const IncluirMiembroModal = ({ visible, setVisible, reload }) => {
                   />
                   {enableCreate == false && (
                     <Form variant="embedded">
-                      <SpaceBetween direction="vertical" size="xs">
-                        <FormField label="CTI Vitae" stretch>
-                          <Input
-                            controlId="cti_vitae"
-                            value={createForm.cti_vitae}
+                      <ColumnLayout columns={2} variant="text-grid">
+                        <SpaceBetween direction="vertical" size="xs">
+                          <FormField label="Código ORCID" stretch>
+                            <Input
+                              controlId="codigo_orcid"
+                              value={dataInvestForm.codigo_orcid}
+                              disabled
+                            />
+                          </FormField>
+                          <FormField label="Instituto" stretch>
+                            <Input
+                              controlId="instituto"
+                              value={dataInvestForm.instituto}
+                              disabled
+                            />
+                          </FormField>
+                        </SpaceBetween>
+                        <SpaceBetween direction="vertical" size="xs">
+                          <FormField label="Dependencia" stretch>
+                            <Input
+                              controlId="dependencia"
+                              value={dataInvestForm.dependencia}
+                              disabled
+                            />
+                          </FormField>
+                          <FormField label="Facultad" stretch>
+                            <Input
+                              controlId="facultad"
+                              value={dataInvestForm.facultad}
+                              disabled
+                            />
+                          </FormField>
+                        </SpaceBetween>
+                      </ColumnLayout>
+                      <ColumnLayout columns={4}>
+                        <FormField
+                          label="Fecha de inclusión"
+                          stretch
+                          errorText={formErrors.fecha_inclusion}
+                        >
+                          <DatePicker
+                            controlId="fecha_inclusion"
+                            placeholder="YYYY/MM/DD"
+                            value={formValues.fecha_inclusion}
+                            onChange={({ detail }) =>
+                              handleChange("fecha_inclusion", detail.value)
+                            }
                           />
                         </FormField>
-                        <FormField label="Instituto" stretch>
+                        <FormField
+                          label="R.OF."
+                          stretch
+                          errorText={formErrors.resolucion_oficina}
+                        >
                           <Input
-                            controlId="instituto"
-                            value={createForm.instituto}
+                            controlId="resolucion_oficina"
+                            placeholder="Resolución de oficina"
+                            value={formValues.resolucion_oficina}
+                            onChange={({ detail }) =>
+                              handleChange("resolucion_oficina", detail.value)
+                            }
                           />
                         </FormField>
-                        <FormField label="Orcid" stretch>
-                          <Input controlId="orcid" value={createForm.orcid} />
+                        <FormField
+                          label="R.R."
+                          stretch
+                          errorText={formErrors.resolucion}
+                        >
+                          <Input
+                            controlId="resolucion"
+                            placeholder="Resolución rectoral"
+                            value={formValues.resolucion}
+                            onChange={({ detail }) =>
+                              handleChange("resolucion", detail.value)
+                            }
+                          />
                         </FormField>
-                      </SpaceBetween>
+                        <FormField
+                          label="R.R. Fecha"
+                          stretch
+                          errorText={formErrors.resolucion_fecha}
+                        >
+                          <DatePicker
+                            controlId="resolucion_fecha"
+                            placeholder="YYYY/MM/DD"
+                            value={formValues.resolucion_fecha}
+                            onChange={({ detail }) =>
+                              handleChange("resolucion_fecha", detail.value)
+                            }
+                          />
+                        </FormField>
+                      </ColumnLayout>
                     </Form>
                   )}
                 </>
