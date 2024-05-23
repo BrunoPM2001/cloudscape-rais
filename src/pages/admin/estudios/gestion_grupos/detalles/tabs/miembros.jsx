@@ -12,7 +12,9 @@ import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import queryString from "query-string";
 import axiosBase from "../../../../../../api/axios";
-import { IncluirMiembroModal } from "../components/modal";
+import ModalIncluirTitular from "../components/modalIncluirTitular";
+import ModalIncluirExterno from "../components/modalIncluirExterno";
+import ModalIncluirEstudiante from "../components/modalIncluirEstudiante";
 
 const stringOperators = [":", "!:", "=", "!=", "^", "!^"];
 
@@ -261,25 +263,44 @@ export default () => {
             actions={
               <SpaceBetween direction="horizontal" size="xs">
                 <ButtonDropdown
+                  expandableGroups
                   items={[
                     {
-                      text: "Incluir titular UNMSM",
                       id: "action_1_1",
-                      disabled: false,
+                      text: "Incluir titular UNMSM",
                     },
                     {
-                      text: "Incluir adherente",
                       id: "action_1_2",
-                      disabled: false,
+                      text: "Incluir adherente",
+                      items: [
+                        {
+                          id: "action_1_2_1",
+                          text: "Externo",
+                        },
+                        {
+                          id: "action_1_2_2",
+                          text: "Estudiante UNMSM",
+                        },
+                        {
+                          id: "action_1_2_3",
+                          text: "Egresado UNMSM",
+                        },
+                      ],
                     },
                   ]}
                   onItemClick={({ detail }) => {
                     if (detail.id == "action_1_1") {
                       setIncluirVisible(true);
                       setTypeModal("Titular");
-                    } else if (detail.id == "action_1_2") {
+                    } else if (detail.id == "action_1_2_1") {
                       setIncluirVisible(true);
-                      setTypeModal("Adherente");
+                      setTypeModal("Externo");
+                    } else if (detail.id == "action_1_2_2") {
+                      setIncluirVisible(true);
+                      setTypeModal("Estudiante");
+                    } else if (detail.id == "action_1_2_3") {
+                      setIncluirVisible(true);
+                      setTypeModal("Egresado");
                     }
                   }}
                 >
@@ -326,14 +347,28 @@ export default () => {
         }
         pagination={<Pagination {...paginationProps} />}
       />
-      {incluirVisible && (
-        <IncluirMiembroModal
-          type={typeModal}
-          visible={incluirVisible}
-          setVisible={setIncluirVisible}
-          reload={getData}
-        />
-      )}
+      {incluirVisible &&
+        (typeModal == "Titular" ? (
+          <ModalIncluirTitular
+            visible={incluirVisible}
+            setVisible={setIncluirVisible}
+            reload={getData}
+          />
+        ) : typeModal == "Externo" ? (
+          <ModalIncluirExterno
+            visible={incluirVisible}
+            setVisible={setIncluirVisible}
+            reload={getData}
+          />
+        ) : typeModal == "Estudiante" ? (
+          <ModalIncluirEstudiante
+            visible={incluirVisible}
+            setVisible={setIncluirVisible}
+            reload={getData}
+          />
+        ) : (
+          <div>sample</div>
+        ))}
     </>
   );
 };

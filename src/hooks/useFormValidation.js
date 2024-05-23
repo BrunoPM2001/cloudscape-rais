@@ -19,6 +19,10 @@ const useFormValidation = (initialState, validationRules) => {
       return "Valor inválido";
     }
 
+    if (rule.required && rule.isFile && !value[0]) {
+      return "Archivo necesario";
+    }
+
     if (rule.isFile && value[0]) {
       if (rule.maxSize && value[0].size > rule.maxSize) {
         return `El archivo debe ser menor a ${rule.maxSize / 1024 / 1024} MB.`;
