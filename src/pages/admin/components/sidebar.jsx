@@ -166,7 +166,7 @@ export default function Sidebar() {
         text: "Administrador",
         href: "/admin",
       }}
-      activeHref={location.pathname}
+      activeHref={"/admin" + location.pathname}
       items={navItems}
     />
   );

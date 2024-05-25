@@ -40,7 +40,7 @@ export default ({ visible, setVisible, reload }) => {
 
   //  Hooks
   const { loading, options, setOptions, value, setValue, setAvoidSelect } =
-    useAutosuggest("estudiante");
+    useAutosuggest("egresado");
   const {
     formValues,
     formErrors,
@@ -60,7 +60,7 @@ export default ({ visible, setVisible, reload }) => {
       "admin/estudios/grupos/incluirMiembroData",
       {
         params: {
-          tipo: "estudiante",
+          tipo: "egresado",
           codigo: form.codigo_alumno,
         },
       }
@@ -124,7 +124,7 @@ export default ({ visible, setVisible, reload }) => {
     >
       <Form variant="embedded">
         <SpaceBetween direction="vertical" size="s">
-          <FormField label="Buscar estudiante" stretch>
+          <FormField label="Buscar egresado" stretch>
             <Autosuggest
               onChange={({ detail }) => {
                 setOptions([]);
@@ -144,7 +144,7 @@ export default ({ visible, setVisible, reload }) => {
               value={value}
               options={options}
               loadingText="Cargando data"
-              placeholder="Código, dni o nombre del estudiante"
+              placeholder="Código, dni o nombre del egresado"
               statusType={loading ? "loading" : "finished"}
               empty="No se encontraron resultados"
             />

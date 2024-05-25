@@ -11,14 +11,6 @@ const useFormValidation = (initialState, validationRules) => {
     const rule = validationRules[name];
     if (!rule) return true;
 
-    if (rule.required && !value) {
-      return "Campo requerido";
-    }
-
-    if (rule.regex && !rule.regex.test(value)) {
-      return "Valor inválido";
-    }
-
     if (rule.required && rule.isFile && !value[0]) {
       return "Archivo necesario";
     }
@@ -27,6 +19,14 @@ const useFormValidation = (initialState, validationRules) => {
       if (rule.maxSize && value[0].size > rule.maxSize) {
         return `El archivo debe ser menor a ${rule.maxSize / 1024 / 1024} MB.`;
       }
+    }
+
+    if (rule.required && !value) {
+      return "Campo requerido";
+    }
+
+    if (rule.regex && !rule.regex.test(value)) {
+      return "Valor inválido";
     }
 
     return true;

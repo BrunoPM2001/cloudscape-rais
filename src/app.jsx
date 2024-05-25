@@ -1,7 +1,6 @@
 import { lazy } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "@cloudscape-design/global-styles/index.css";
-import adminRoutes from "./routes/admin.jsx";
 import investigadorRoutes from "./routes/investigador.jsx";
 import AdminRoutes from "./routes/admin.jsx";
 

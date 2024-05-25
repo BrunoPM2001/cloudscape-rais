@@ -15,6 +15,7 @@ import axiosBase from "../../../../../../api/axios";
 import ModalIncluirTitular from "../components/modalIncluirTitular";
 import ModalIncluirExterno from "../components/modalIncluirExterno";
 import ModalIncluirEstudiante from "../components/modalIncluirEstudiante";
+import ModalIncluirEgresado from "../components/modalIncluirEgresado";
 
 const stringOperators = [":", "!:", "=", "!=", "^", "!^"];
 
@@ -367,7 +368,11 @@ export default () => {
             reload={getData}
           />
         ) : (
-          <div>sample</div>
+          <ModalIncluirEgresado
+            visible={incluirVisible}
+            setVisible={setIncluirVisible}
+            reload={getData}
+          />
         ))}
     </>
   );

@@ -41,7 +41,7 @@ const initialForm = {
 };
 
 const formRules = {
-  codigo_orcid: { required: true },
+  codigo_orcid: { required: true, regex: /^(\d{4}-){3}\d{3}[\dX]$/ },
   apellido1: { required: true },
   apellido2: { required: true },
   nombres: { required: true },
@@ -368,7 +368,7 @@ export default ({ visible, setVisible, reload }) => {
               }
             />
           </FormField>
-          <FormField label="Formato de adhesión">
+          <FormField label="Formato de adhesión" errorText={formErrors.file}>
             <FileUpload
               value={formValues.file}
               onChange={({ detail }) => handleChange("file", detail.value)}
@@ -388,7 +388,6 @@ export default ({ visible, setVisible, reload }) => {
                 errorIconAriaLabel: "Error",
               }}
               accept=".docx, .doc,  .pdf"
-              fileErrors={[formErrors.file ?? ""]}
             />
           </FormField>
         </SpaceBetween>

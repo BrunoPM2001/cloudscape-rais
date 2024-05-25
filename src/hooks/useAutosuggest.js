@@ -41,18 +41,34 @@ const useAutosuggest = (type) => {
           setOptions(data);
         }
         break;
-      case "estudiante": {
-        const res = await axiosBase.get(
-          "admin/estudios/grupos/searchEstudiante",
-          {
-            params: {
-              query: value,
-            },
-          }
-        );
-        const data = res.data;
-        setOptions(data);
-      }
+      case "estudiante":
+        {
+          const res = await axiosBase.get(
+            "admin/estudios/grupos/searchEstudiante",
+            {
+              params: {
+                query: value,
+              },
+            }
+          );
+          const data = res.data;
+          setOptions(data);
+        }
+        break;
+      case "egresado":
+        {
+          const res = await axiosBase.get(
+            "admin/estudios/grupos/searchEgresado",
+            {
+              params: {
+                query: value,
+              },
+            }
+          );
+          const data = res.data;
+          setOptions(data);
+        }
+        break;
       default:
         break;
     }
