@@ -7,7 +7,6 @@ const axiosBase = axios.create({
 //  Token requests
 axiosBase.defaults.headers.common.Authorization =
   localStorage.getItem("Auth") ?? "";
-// axiosBase.defaults.headers.common["Access-Control-Max-Age"] = 172000;
 
 //  Handle some status code
 axiosBase.interceptors.response.use(
@@ -21,7 +20,7 @@ axiosBase.interceptors.response.use(
         window.location.href = "/";
         console.error("Unauthorized");
       } else if (error.response.status === 500) {
-        localStorage.clear();
+        // localStorage.clear();
         console.error("Server error");
       }
     } else if (error.request) {

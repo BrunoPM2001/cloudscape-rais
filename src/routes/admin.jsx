@@ -1,4 +1,4 @@
-import { lazy } from "react";
+import { Suspense, lazy } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { useState, createContext } from "react";
 
@@ -272,7 +272,9 @@ export default function AdminRoutes() {
         pushNotification,
       }}
     >
-      <RouterProvider router={routes} />
+      <Suspense fallback>
+        <RouterProvider router={routes} />
+      </Suspense>
     </NotificationContext.Provider>
   );
 }

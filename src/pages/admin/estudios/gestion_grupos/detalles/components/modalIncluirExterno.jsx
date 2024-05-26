@@ -13,8 +13,12 @@ import {
   SpaceBetween,
   Textarea,
 } from "@cloudscape-design/components";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useFormValidation } from "../../../../../../hooks/useFormValidation";
+import { useLocation } from "react-router-dom";
+import queryString from "query-string";
+import axiosBase from "../../../../../../api/axios";
+import { NotificationContext } from "../../../../../../routes/admin";
 
 const initialForm = {
   codigo_orcid: "",
@@ -24,18 +28,18 @@ const initialForm = {
   sexo: null,
   institucion: "",
   pais: null,
-  correo: "",
-  tipo_doc: "",
+  direccion1: "",
+  doc_tipo: "",
   doc_numero: "",
-  telefono: "",
-  titulo: "",
+  telefono_movil: "",
+  titulo_profesional: "",
   grado: "",
   especialidad: "",
   researcher_id: "",
   scopus_id: "",
-  web: "",
+  link: "",
   posicion_unmsm: "",
-  perfil: "",
+  biografia: "",
   observacion: "",
   file: [],
 };
@@ -48,26 +52,27 @@ const formRules = {
   sexo: { required: true },
   institucion: { required: false },
   pais: { required: true },
-  correo: { required: true },
-  tipo_doc: { required: true },
+  direccion1: { required: true },
+  doc_tipo: { required: true },
   doc_numero: { required: true },
-  telefono: { required: false },
-  titulo: { required: true },
+  telefono_movil: { required: false },
+  titulo_profesional: { required: true },
   grado: { required: true },
   especialidad: { required: false },
   researcher_id: { required: false },
   scopus_id: { required: false },
-  web: { required: false },
+  link: { required: false },
   posicion_unmsm: { required: true },
-  perfil: { required: false },
+  biografia: { required: false },
   observacion: { required: false },
   file: { required: true, isFile: true, maxSize: 2 * 1024 * 1024 },
 };
 
 export default ({ visible, setVisible, reload }) => {
+  //  Context
+  const { notifications, pushNotification } = useContext(NotificationContext);
+
   //  States
-  const [loadingData, setLoadingData] = useState(false);
-  const [enableCreate, setEnableCreate] = useState(true);
   const [loadingCreate, setLoadingCreate] = useState(false);
 
   //  Hooks
@@ -79,14 +84,29 @@ export default ({ visible, setVisible, reload }) => {
     registerFileInput,
   } = useFormValidation(initialForm, formRules);
 
+  //  Url
+  const location = useLocation();
+  const { id } = queryString.parse(location.search);
+
   //  Functions
-  const agregarMiembro = () => {
+  const agregarMiembro = async () => {
     if (validateForm()) {
       setLoadingCreate(true);
+      const res = await axiosBase.post("admin/estudios/grupos/agregarMiembro", {
+        ...formValues,
+        sexo: formValues.sexo.value,
+        pais: formValues.pais.value,
+        doc_tipo: formValues.doc_tipo.value,
+        tipo_registro: "externo",
+        grupo_id: id,
+        condicion: "Adherente",
+        tipo: "Externo",
+      });
+      const data = res.data;
       setLoadingCreate(false);
       setVisible(false);
       reload();
-      pushNotification("info", "Mensaje de prueba", notifications.length + 1);
+      pushNotification(data.detail, data.message, notifications.length + 1);
     }
   };
 
@@ -102,7 +122,6 @@ export default ({ visible, setVisible, reload }) => {
               Cancelar
             </Button>
             <Button
-              disabled={!enableCreate}
               variant="primary"
               onClick={() => agregarMiembro()}
               loading={loadingCreate}
@@ -203,6 +222,7 @@ export default ({ visible, setVisible, reload }) => {
                   handleChange("pais", detail.selectedOption)
                 }
                 options={[
+                  // TODO - LISTA DE PAISES ESTÁTICA O DESDE EL BACKEND
                   {
                     label: "Perú",
                     value: "M",
@@ -217,32 +237,38 @@ export default ({ visible, setVisible, reload }) => {
             <FormField
               label="Correo principal"
               stretch
-              errorText={formErrors.correo}
+              errorText={formErrors.direccion1}
             >
               <Input
-                value={formValues.correo}
-                onChange={({ detail }) => handleChange("correo", detail.value)}
+                value={formValues.direccion1}
+                onChange={({ detail }) =>
+                  handleChange("direccion1", detail.value)
+                }
               />
             </FormField>
             <FormField
               label="Tipo doc."
               stretch
-              errorText={formErrors.tipo_doc}
+              errorText={formErrors.doc_tipo}
             >
               <Select
                 placeholder="Escoga una opción"
-                selectedOption={formValues.tipo_doc}
+                selectedOption={formValues.doc_tipo}
                 onChange={({ detail }) =>
-                  handleChange("tipo_doc", detail.selectedOption)
+                  handleChange("doc_tipo", detail.selectedOption)
                 }
                 options={[
                   {
                     label: "DNI",
-                    value: "M",
+                    value: "DNI",
                   },
                   {
-                    label: "Argentina",
-                    value: "F",
+                    label: "Carné de extranjería",
+                    value: "CEX",
+                  },
+                  {
+                    label: "Pasaporte",
+                    value: "PASAPORTE",
                   },
                 ]}
               />
@@ -262,23 +288,25 @@ export default ({ visible, setVisible, reload }) => {
             <FormField
               label="N° celular"
               stretch
-              errorText={formErrors.telefono}
+              errorText={formErrors.telefono_movil}
             >
               <Input
-                value={formValues.telefono}
+                value={formValues.telefono_movil}
                 onChange={({ detail }) =>
-                  handleChange("telefono", detail.value)
+                  handleChange("telefono_movil", detail.value)
                 }
               />
             </FormField>
             <FormField
               label="Título profesional"
               stretch
-              errorText={formErrors.titulo}
+              errorText={formErrors.titulo_profesional}
             >
               <Input
-                value={formValues.titulo}
-                onChange={({ detail }) => handleChange("titulo", detail.value)}
+                value={formValues.titulo_profesional}
+                onChange={({ detail }) =>
+                  handleChange("titulo_profesional", detail.value)
+                }
               />
             </FormField>
             <FormField
@@ -327,10 +355,10 @@ export default ({ visible, setVisible, reload }) => {
                 }
               />
             </FormField>
-            <FormField label="Sitio web" stretch errorText={formErrors.web}>
+            <FormField label="Sitio web" stretch errorText={formErrors.link}>
               <Input
-                value={formValues.web}
-                onChange={({ detail }) => handleChange("web", detail.value)}
+                value={formValues.link}
+                onChange={({ detail }) => handleChange("link", detail.value)}
               />
             </FormField>
             <FormField
@@ -349,11 +377,11 @@ export default ({ visible, setVisible, reload }) => {
           <FormField
             label="Perfil de investigador"
             stretch
-            errorText={formErrors.perfil}
+            errorText={formErrors.biografia}
           >
             <Textarea
-              value={formValues.perfil}
-              onChange={({ detail }) => handleChange("perfil", detail.value)}
+              value={formValues.biografia}
+              onChange={({ detail }) => handleChange("biografia", detail.value)}
             />
           </FormField>
           <FormField

@@ -76,12 +76,11 @@ export default ({ visible, setVisible, reload }) => {
   const agregarMiembro = async () => {
     if (validateForm()) {
       setLoadingCreate(true);
-      const res = await axiosBase.put("admin/estudios/grupos/agregarMiembro", {
-        ...formValues,
-        grupo_id: id,
+      const res = await axiosBase.post("admin/estudios/grupos/agregarMiembro", {
+        tipo_registro: "estudiante",
         investigador_id: form.investigador_id,
-        condicion: "Titular",
-        tipo: "DOCENTE PERMANENTE",
+        grupo_id: id,
+        condicion: "Adherente",
       });
       const data = res.data;
       setLoadingCreate(false);

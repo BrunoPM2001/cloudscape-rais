@@ -16,6 +16,7 @@ import ModalIncluirTitular from "../components/modalIncluirTitular";
 import ModalIncluirExterno from "../components/modalIncluirExterno";
 import ModalIncluirEstudiante from "../components/modalIncluirEstudiante";
 import ModalIncluirEgresado from "../components/modalIncluirEgresado";
+import ModalExcluirMiembro from "../components/modalExcluirMiembro";
 
 const stringOperators = [":", "!:", "=", "!=", "^", "!^"];
 
@@ -24,12 +25,6 @@ const FILTER_PROPS = [
     propertyLabel: "Condicion",
     key: "condicion",
     groupValuesLabel: "Condiciones",
-    operators: stringOperators,
-  },
-  {
-    propertyLabel: "Cargo",
-    key: "cargo",
-    groupValuesLabel: "Cargos",
     operators: stringOperators,
   },
   {
@@ -59,12 +54,6 @@ const columnDefinitions = [
     cell: (item) => item.condicion,
     sortingField: "condicion",
     isRowHeader: true,
-  },
-  {
-    id: "cargo",
-    header: "Cargo",
-    cell: (item) => item.cargo,
-    sortingField: "cargo",
   },
   {
     id: "doc_numero",
@@ -136,7 +125,6 @@ const columnDefinitions = [
 
 const columnDisplay = [
   { id: "condicion", visible: true },
-  { id: "cargo", visible: true },
   { id: "doc_numero", visible: true },
   { id: "nombres", visible: true },
   { id: "codigo_orcid", visible: true },
@@ -226,7 +214,7 @@ export default () => {
         loadingText="Cargando datos"
         resizableColumns
         enableKeyboardNavigation
-        selectionType="multi"
+        selectionType="single"
         selectedItems={selectedItems}
         onSelectionChange={({ detail }) =>
           setSelectedItems(detail.selectedItems)
@@ -331,12 +319,13 @@ export default () => {
                       id: "action_2_4",
                       disabled: false,
                     },
-                    {
-                      text: "Cambiar cargo",
-                      id: "action_2_5",
-                      disabled: false,
-                    },
                   ]}
+                  onItemClick={({ detail }) => {
+                    if (detail.id == "action_2_1") {
+                      setIncluirVisible(true);
+                      setTypeModal("Excluir");
+                    }
+                  }}
                 >
                   Acciones para miembros
                 </ButtonDropdown>
@@ -367,11 +356,18 @@ export default () => {
             setVisible={setIncluirVisible}
             reload={getData}
           />
-        ) : (
+        ) : typeModal == "Egresado" ? (
           <ModalIncluirEgresado
             visible={incluirVisible}
             setVisible={setIncluirVisible}
             reload={getData}
+          />
+        ) : (
+          <ModalExcluirMiembro
+            visible={incluirVisible}
+            setVisible={setIncluirVisible}
+            reload={getData}
+            item={selectedItems}
           />
         ))}
     </>
