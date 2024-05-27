@@ -6,6 +6,8 @@ import {
   Header,
   ButtonDropdown,
   Pagination,
+  FormField,
+  Select,
 } from "@cloudscape-design/components";
 import { useCollection } from "@cloudscape-design/collection-hooks";
 import { useEffect, useState } from "react";
@@ -175,6 +177,10 @@ export default () => {
   });
   const [enableBtn, setEnableBtn] = useState(false);
   const [typeModal, setTypeModal] = useState("");
+  const [tipoMiembros, setTipoMiembros] = useState({
+    label: "Integrantes",
+    value: 1,
+  });
 
   //  Url
   const location = useLocation();
@@ -183,7 +189,9 @@ export default () => {
   //  Functions
   const getData = async () => {
     setLoading(true);
-    const res = await axiosBase("admin/estudios/grupos/miembros/" + id + "/1");
+    const res = await axiosBase(
+      "admin/estudios/grupos/miembros/" + id + "/" + tipoMiembros.value
+    );
     const data = await res.data;
     setDistribution(data.data);
     setLoading(false);
@@ -192,7 +200,7 @@ export default () => {
   //  Effects
   useEffect(() => {
     getData();
-  }, []);
+  }, [tipoMiembros]);
 
   useEffect(() => {
     if (selectedItems.length > 0) {
@@ -240,15 +248,27 @@ export default () => {
             filteringPlaceholder="Buscar miembro"
             countText={`${filteredItemsCount} coincidencias`}
             expandToViewport
+            customControl={
+              <FormField label="Tipo">
+                <Select
+                  disabled={loading}
+                  expandToViewport
+                  selectedOption={tipoMiembros}
+                  onChange={({ detail }) =>
+                    setTipoMiembros(detail.selectedOption)
+                  }
+                  options={[
+                    { label: "Integrantes", value: 1 },
+                    { label: "Ex integrantes", value: 0 },
+                  ]}
+                />
+              </FormField>
+            }
           />
         }
         header={
           <Header
-            counter={
-              selectedItems.length
-                ? "(" + selectedItems.length + "/" + items.length + ")"
-                : "(" + items.length + ")"
-            }
+            counter={"(" + distributions.length + ")"}
             actions={
               <SpaceBetween direction="horizontal" size="xs">
                 <ButtonDropdown

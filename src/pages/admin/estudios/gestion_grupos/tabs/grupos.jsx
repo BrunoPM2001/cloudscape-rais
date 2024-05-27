@@ -208,7 +208,7 @@ export default () => {
     sorting: { defaultState: { sortingColumn: columnDefinitions[0] } },
     selection: {},
   });
-  const [enableBtn, setEnableBtn] = useState(true);
+  const [enableBtn, setEnableBtn] = useState(false);
 
   //  Functions
   const getData = async () => {
@@ -248,11 +248,7 @@ export default () => {
       onSelectionChange={({ detail }) => setSelectedItems(detail.selectedItems)}
       header={
         <Header
-          counter={
-            selectedItems.length
-              ? "(" + selectedItems.length + "/" + items.length + ")"
-              : "(" + items.length + ")"
-          }
+          counter={"(" + distributions.length + ")"}
           actions={
             <Button
               disabled={!enableBtn}

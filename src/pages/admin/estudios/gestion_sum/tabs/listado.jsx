@@ -20,193 +20,259 @@ const stringOperators = [":", "!:", "=", "!=", "^", "!^"];
 
 const FILTER_PROPS = [
   {
-    propertyLabel: "ID",
-    key: "id",
-    groupValuesLabel: "IDS",
+    propertyLabel: "Código",
+    key: "codigo_alumno",
+    groupValuesLabel: "Códigos",
     operators: stringOperators,
   },
   {
-    propertyLabel: "Código de registro",
-    key: "codigo_registro",
-    groupValuesLabel: "Códigos de registro",
+    propertyLabel: "Nombre",
+    key: "nombres",
+    groupValuesLabel: "Nombres",
     operators: stringOperators,
   },
   {
-    propertyLabel: "Tipo",
-    key: "tipo",
-    groupValuesLabel: "Tipos",
+    propertyLabel: "Ap. Paterno",
+    key: "apellido_paterno",
+    groupValuesLabel: "Ap. Paterno",
     operators: stringOperators,
   },
   {
-    propertyLabel: "Isbn",
-    key: "isbn",
-    groupValuesLabel: "Isbns",
+    propertyLabel: "Ap. Materno",
+    key: "apellido_materno",
+    groupValuesLabel: "Ap. Materno",
     operators: stringOperators,
   },
   {
-    propertyLabel: "Issn",
-    key: "issn",
-    groupValuesLabel: "Issns",
+    propertyLabel: "Dni",
+    key: "dni",
+    groupValuesLabel: "Dnis",
     operators: stringOperators,
   },
   {
-    propertyLabel: "Editorial",
-    key: "editorial",
-    groupValuesLabel: "Editoriales",
+    propertyLabel: "Sexo",
+    key: "sexo",
+    groupValuesLabel: "Sexo",
     operators: stringOperators,
   },
   {
-    propertyLabel: "Nombre de evento",
-    key: "evento_nombre",
-    groupValuesLabel: "Nombres de eventos",
+    propertyLabel: "Fecha de nacimiento",
+    key: "fecha_nacimiento",
+    groupValuesLabel: "Fechas de nacimiento",
     operators: stringOperators,
   },
   {
-    propertyLabel: "Título",
-    key: "titulo",
-    groupValuesLabel: "Títulos",
+    propertyLabel: "Lugar de nacimiento",
+    key: "lugar_nacimiento",
+    groupValuesLabel: "Lugares de nacimiento",
     operators: stringOperators,
   },
   {
-    propertyLabel: "Fecha de publicación",
-    key: "fecha_publicacion",
-    groupValuesLabel: "Fechas",
+    propertyLabel: "Teléfono",
+    key: "telefono",
+    groupValuesLabel: "Teléfonos",
     operators: stringOperators,
   },
   {
-    propertyLabel: "Estado",
-    key: "estado",
-    groupValuesLabel: "Estados",
+    propertyLabel: "Teléfono personal",
+    key: "telefono_personal",
+    groupValuesLabel: "Teléfonos personales",
     operators: stringOperators,
   },
   {
-    propertyLabel: "Procedencia",
-    key: "procedencia",
-    groupValuesLabel: "Procedencias",
+    propertyLabel: "Correo electrónico",
+    key: "correo_electronico",
+    groupValuesLabel: "Correos electrónicos",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "Correo electrónico personal",
+    key: "correo_electronico_personal",
+    groupValuesLabel: "Correos electrónicos personales",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "Domicilio",
+    key: "domicilio",
+    groupValuesLabel: "Domicilios",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "Facultad",
+    key: "facultad",
+    groupValuesLabel: "Facultades",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "Programa",
+    key: "programa",
+    groupValuesLabel: "Programas",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "Año / ciclo de estudio",
+    key: "año_ciclo_estudio",
+    groupValuesLabel: "Años / ciclos de estudio",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "N° de matrículas",
+    key: "num_periodo_acad_matric",
+    groupValuesLabel: "N° de matrículas",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "Situación Académica",
+    key: "situacion_academica",
+    groupValuesLabel: "Situaciónes Académicas",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "Última matrícula",
+    key: "ultimo_periodo_matriculado",
+    groupValuesLabel: "Últimas matrículas",
     operators: stringOperators,
   },
 ];
 
 const columnDefinitions = [
   {
-    id: "id",
-    header: "ID",
-    cell: (item) => item.id,
-    sortingField: "id",
+    id: "codigo_alumno",
+    header: "Código",
+    cell: (item) => item.codigo_alumno,
+    sortingField: "codigo_alumno",
     isRowHeader: true,
   },
   {
-    id: "codigo_registro",
-    header: "Código de registro",
-    cell: (item) => item.codigo_registro,
-    sortingField: "codigo_registro",
+    id: "nombres",
+    header: "Nombre",
+    cell: (item) => item.nombres,
+    sortingField: "nombres",
   },
   {
-    id: "codigo_proyecto",
-    header: "Código",
-    cell: (item) => item.codigo_proyecto,
-    sortingField: "codigo_proyecto",
+    id: "apellido_paterno",
+    header: "Ap. Paterno",
+    cell: (item) => item.apellido_paterno,
+    sortingField: "apellido_paterno",
   },
   {
-    id: "tipo",
-    header: "Tipo",
-    cell: (item) => item.tipo,
-    sortingField: "tipo",
+    id: "apellido_materno",
+    header: "Ap. Materno",
+    cell: (item) => item.apellido_materno,
+    sortingField: "apellido_materno",
   },
   {
-    id: "isbn",
-    header: "Isbn",
-    cell: (item) => item.isbn,
-    sortingField: "isbn",
+    id: "dni",
+    header: "Dni",
+    cell: (item) => item.dni,
+    sortingField: "dni",
   },
   {
-    id: "issn",
-    header: "Issn",
-    cell: (item) => item.issn,
-    sortingField: "issn",
+    id: "sexo",
+    header: "Sexo",
+    cell: (item) => item.sexo,
+    sortingField: "sexo",
   },
   {
-    id: "editorial",
-    header: "Editorial",
-    cell: (item) => item.editorial,
-    sortingField: "editorial",
+    id: "fecha_nacimiento",
+    header: "Fecha de nacimiento",
+    cell: (item) => item.fecha_nacimiento,
+    sortingField: "fecha_nacimiento",
   },
   {
-    id: "evento_nombre",
-    header: "Nombre de evento",
-    cell: (item) => item.evento_nombre,
-    sortingField: "evento_nombre",
+    id: "lugar_nacimiento",
+    header: "Lugar de nacimiento",
+    cell: (item) => item.lugar_nacimiento,
+    sortingField: "lugar_nacimiento",
   },
   {
-    id: "titulo",
-    header: "Título",
-    cell: (item) => item.titulo,
-    sortingField: "titulo",
+    id: "telefono",
+    header: "Teléfono",
+    cell: (item) => item.telefono,
+    sortingField: "telefono",
   },
   {
-    id: "fecha_publicacion",
-    header: "Fecha de publicación",
-    cell: (item) => item.fecha_publicacion,
-    sortingField: "fecha_publicacion",
+    id: "telefono_personal",
+    header: "Teléfono personal",
+    cell: (item) => item.telefono_personal,
+    sortingField: "telefono_personal",
   },
   {
-    id: "estado",
-    header: "Estado",
-    cell: (item) => (
-      <Badge
-        color={
-          item.estado == -1
-            ? "red"
-            : item.estado == 1
-            ? "grey"
-            : item.estado == 2
-            ? "grey"
-            : item.estado == 4
-            ? "green"
-            : item.estado == 5
-            ? "blue"
-            : item.estado == 6
-            ? "grey"
-            : "red"
-        }
-      >
-        {item.estado == -1
-          ? "Eliminado"
-          : item.estado == 1
-          ? "Reconocido"
-          : item.estado == 2
-          ? "Observado"
-          : item.estado == 4
-          ? "Registrado"
-          : item.estado == 5
-          ? "Enviado"
-          : item.estado == 6
-          ? "En proceso"
-          : "Error"}
-      </Badge>
-    ),
-    sortingField: "estado",
+    id: "correo_electronico",
+    header: "Correo electrónico",
+    cell: (item) => item.correo_electronico,
+    sortingField: "correo_electronico",
   },
   {
-    id: "procedencia",
-    header: "Procedencia",
-    cell: (item) => item.procedencia,
-    sortingField: "procedencia",
+    id: "correo_electronico_personal",
+    header: "Correo electrónico personal",
+    cell: (item) => item.correo_electronico_personal,
+    sortingField: "correo_electronico_personal",
+  },
+  {
+    id: "domicilio",
+    header: "Domicilio",
+    cell: (item) => item.domicilio,
+    sortingField: "domicilio",
+  },
+  {
+    id: "facultad",
+    header: "Facultad",
+    cell: (item) => item.facultad,
+    sortingField: "facultad",
+  },
+  {
+    id: "programa",
+    header: "Programa",
+    cell: (item) => item.programa,
+    sortingField: "programa",
+  },
+  {
+    id: "año_ciclo_estudio",
+    header: "Año / ciclo de estudio",
+    cell: (item) => item.año_ciclo_estudio,
+    sortingField: "año_ciclo_estudio",
+  },
+  {
+    id: "num_periodo_acad_matric",
+    header: "N° de matrículas",
+    cell: (item) => item.num_periodo_acad_matric,
+    sortingField: "num_periodo_acad_matric",
+  },
+  {
+    id: "situacion_academica",
+    header: "Situación Académica",
+    cell: (item) => item.situacion_academica,
+    sortingField: "situacion_academica",
+  },
+  {
+    id: "ultimo_periodo_matriculado",
+    header: "Última matrícula",
+    cell: (item) => item.ultimo_periodo_matriculado,
+    sortingField: "ultimo_periodo_matriculado",
   },
 ];
 
 const columnDisplay = [
-  { id: "id", visible: true },
-  { id: "codigo_registro", visible: true },
-  { id: "tipo", visible: true },
-  { id: "isbn", visible: true },
-  { id: "issn", visible: true },
-  { id: "editorial", visible: true },
-  { id: "evento_nombre", visible: true },
-  { id: "titulo", visible: true },
-  { id: "fecha_publicacion", visible: true },
-  { id: "estado", visible: true },
-  { id: "procedencia", visible: true },
+  { id: "codigo_alumno", visible: true },
+  { id: "nombres", visible: true },
+  { id: "apellido_paterno", visible: true },
+  { id: "apellido_materno", visible: true },
+  { id: "dni", visible: true },
+  { id: "sexo", visible: true },
+  { id: "fecha_nacimiento", visible: true },
+  { id: "lugar_nacimiento", visible: true },
+  { id: "telefono", visible: true },
+  { id: "telefono_personal", visible: true },
+  { id: "correo_electronico", visible: true },
+  { id: "correo_electronico_personal", visible: true },
+  { id: "domicilio", visible: true },
+  { id: "facultad", visible: true },
+  { id: "programa", visible: true },
+  { id: "año_ciclo_estudio", visible: true },
+  { id: "num_periodo_acad_matric", visible: true },
+  { id: "situacion_academica", visible: true },
+  { id: "ultimo_periodo_matriculado", visible: true },
 ];
 
 export default () => {
@@ -240,24 +306,16 @@ export default () => {
         </Box>
       ),
     },
-    pagination: { pageSize: 10 },
+    pagination: { pageSize: 25 },
     sorting: { defaultState: { sortingColumn: columnDefinitions[0] } },
     selection: {},
   });
   const [enableBtn, setEnableBtn] = useState(true);
 
-  //  Hooks
-  const { loading, options, setOptions, value, setValue, setAvoidSelect } =
-    useAutosuggest("investigador");
-
   //  Functions
   const getData = async () => {
     setLoadingData(true);
-    const res = await axiosBase.get("admin/estudios/publicaciones/listado", {
-      params: {
-        investigador_id: form.investigador_id,
-      },
-    });
+    const res = await axiosBase.get("admin/estudios/sum/listado");
     const data = await res.data;
     setDistribution(data.data);
     setLoadingData(false);

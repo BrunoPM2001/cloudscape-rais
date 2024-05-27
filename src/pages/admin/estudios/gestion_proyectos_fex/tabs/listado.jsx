@@ -188,32 +188,60 @@ const columnDefinitions = [
         color={
           item.estado == -1
             ? "red"
+            : item.estado == 0
+            ? "red"
             : item.estado == 1
-            ? "grey"
+            ? "green"
             : item.estado == 2
             ? "grey"
-            : item.estado == 4
-            ? "green"
-            : item.estado == 5
+            : item.estado == 3
             ? "blue"
+            : item.estado == 5
+            ? "green"
             : item.estado == 6
+            ? "blue"
+            : item.estado == 7
             ? "grey"
+            : item.estado == 8
+            ? "blue"
+            : item.estado == 9
+            ? "blue"
+            : item.estado == 10
+            ? "green"
+            : item.estado == 11
+            ? "blue"
+            : item.estado == 12
+            ? "red"
             : "red"
         }
       >
         {item.estado == -1
           ? "Eliminado"
+          : item.estado == 0
+          ? "No aprobado"
           : item.estado == 1
-          ? "Reconocido"
+          ? "Aprobado"
           : item.estado == 2
           ? "Observado"
-          : item.estado == 4
-          ? "Registrado"
+          : item.estado == 3
+          ? "En evaluación"
           : item.estado == 5
           ? "Enviado"
           : item.estado == 6
           ? "En proceso"
-          : "Error"}
+          : item.estado == 7
+          ? "Anulado"
+          : item.estado == 8
+          ? "Sustentado"
+          : item.estado == 9
+          ? "En ejecución"
+          : item.estado == 10
+          ? "Ejecutado"
+          : item.estado == 11
+          ? "Concluido"
+          : item.estado == 12
+          ? "Renunció"
+          : "Sin estado"}
       </Badge>
     ),
     sortingField: "estado",
@@ -296,7 +324,11 @@ export default () => {
       loadingText="Cargando datos"
       resizableColumns
       enableKeyboardNavigation
-      header={<Header>Proyectos FEX</Header>}
+      header={
+        <Header counter={"(" + distributions.length + ")"}>
+          Proyectos FEX
+        </Header>
+      }
       filter={
         <PropertyFilter
           {...propertyFilterProps}

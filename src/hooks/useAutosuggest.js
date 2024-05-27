@@ -15,16 +15,15 @@ const useAutosuggest = (type) => {
       case "investigador":
         {
           const res = await axiosBase.get(
-            "admin/admin/usuarios/searchInvestigadorBy/" + value
+            "admin/admin/usuarios/searchInvestigadorBy",
+            {
+              params: {
+                query: value,
+              },
+            }
           );
           const data = await res.data;
-          const opt = data.map((item) => {
-            return {
-              detail: item.id,
-              value: `${item.codigo} | ${item.doc_numero} | ${item.apellido1} ${item.apellido2}, ${item.nombres}`,
-            };
-          });
-          setOptions(opt);
+          setOptions(data);
         }
         break;
       case "rrhh":

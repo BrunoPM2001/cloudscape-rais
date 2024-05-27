@@ -28,7 +28,12 @@ const navItems = [
         text: "Gestión de proyectos FEX",
         href: "/admin/estudios/proyectos_fex",
       },
-      { type: "link", text: "Gestión de proyectos", href: "#" },
+      {
+        type: "link",
+        text: "Gestión de proyectos",
+        href: "#",
+        info: <Badge color="blue">Histórico</Badge>,
+      },
       {
         type: "link",
         text: "Informes técnicos",

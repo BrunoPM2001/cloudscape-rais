@@ -262,6 +262,7 @@ export default () => {
             <SpaceBetween direction="horizontal" size="m">
               <FormField label="Año:">
                 <Select
+                  disabled={loading}
                   expandToViewport
                   selectedOption={periodoOption}
                   onChange={({ detail }) =>
@@ -280,6 +281,7 @@ export default () => {
               </FormField>
               <FormField label="Tipo de proyecto:">
                 <Select
+                  disabled={loading}
                   expandToViewport
                   selectedOption={tipoOption}
                   onChange={({ detail }) =>
@@ -294,6 +296,7 @@ export default () => {
               </FormField>
               <FormField label="Estado de meta:">
                 <Select
+                  disabled={loading}
                   expandToViewport
                   selectedOption={estadoOption}
                   onChange={({ detail }) =>
