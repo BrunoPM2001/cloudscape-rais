@@ -4,8 +4,10 @@ import {
   Box,
   Button,
   ButtonDropdown,
+  Container,
   FormField,
   Header,
+  Input,
   Pagination,
   PropertyFilter,
   SpaceBetween,
@@ -278,7 +280,6 @@ const columnDisplay = [
 export default () => {
   //  States
   const [loadingData, setLoadingData] = useState(true);
-  const [form, setForm] = useState({});
   const [selectedItems, setSelectedItems] = useState([]);
   const [distributions, setDistribution] = useState([]);
   const {
@@ -310,7 +311,6 @@ export default () => {
     sorting: { defaultState: { sortingColumn: columnDefinitions[0] } },
     selection: {},
   });
-  const [enableBtn, setEnableBtn] = useState(true);
 
   //  Functions
   const getData = async () => {
@@ -322,145 +322,50 @@ export default () => {
   };
 
   //  Effects
-  useEffect(() => {
-    getData();
-  }, []);
-
-  useEffect(() => {
-    if (selectedItems.length > 0) {
-      setEnableBtn(true);
-    } else {
-      setEnableBtn(false);
-    }
-  }, [selectedItems]);
-
-  useEffect(() => {
-    if (Object.keys(form).length != 0) {
-      getData();
-    }
-  }, [form]);
 
   return (
-    <Table
-      {...collectionProps}
-      trackBy="id"
-      items={items}
-      columnDefinitions={columnDefinitions}
-      columnDisplay={columnDisplay}
-      loading={loadingData}
-      loadingText="Cargando datos"
-      resizableColumns
-      enableKeyboardNavigation
-      selectionType="single"
-      selectedItems={selectedItems}
-      onSelectionChange={({ detail }) => setSelectedItems(detail.selectedItems)}
-      header={
-        <Header
-          counter={"(" + distributions.length + ")"}
-          actions={
-            <SpaceBetween direction="horizontal" size="xs">
-              <ButtonDropdown
-                onItemClick={({ detail }) => {
-                  if (detail.id == "action_1") {
-                    setEditVisible(true);
-                  } else if (detail.id == "action_2") {
-                    setDeleteVisible(true);
-                  }
-                }}
-                items={[
-                  {
-                    text: "Artículo de revista",
-                    id: "action_1",
-                    disabled: false,
-                  },
-                  {
-                    text: "Capítulo de libro",
-                    id: "action_2",
-                    disabled: false,
-                  },
-                  {
-                    text: "Libro",
-                    id: "action_3",
-                    disabled: false,
-                  },
-                  {
-                    text: "Evento científico",
-                    id: "action_4",
-                    disabled: false,
-                  },
-                  {
-                    text: "Tesis propia",
-                    id: "action_5",
-                    disabled: false,
-                  },
-                  {
-                    text: "Tesis asesoría",
-                    id: "action_6",
-                    disabled: false,
-                  },
-                  {
-                    text: "Patente",
-                    id: "action_7",
-                    disabled: false,
-                  },
-                ]}
-              >
-                Nuevo
-              </ButtonDropdown>
-              <Button variant="normal" disabled={!enableBtn}>
-                Reporte
-              </Button>
-              <Button variant="primary" disabled={!enableBtn}>
-                Editar
-              </Button>
+    <Container>
+      <FormField label="Buscar por código, dni o nombre">
+        <Input />
+      </FormField>
+      <Table
+        {...collectionProps}
+        trackBy="id"
+        variant="embedded"
+        items={items}
+        columnDefinitions={columnDefinitions}
+        columnDisplay={columnDisplay}
+        loading={loadingData}
+        loadingText="Cargando datos"
+        resizableColumns
+        enableKeyboardNavigation
+        selectionType="single"
+        selectedItems={selectedItems}
+        onSelectionChange={({ detail }) =>
+          setSelectedItems(detail.selectedItems)
+        }
+        header={
+          <Header counter={"(" + distributions.length + ")"}>
+            Estudiantes registrados
+          </Header>
+        }
+        // filter={
+        //   <PropertyFilter
+        //     {...propertyFilterProps}
+        //     filteringPlaceholder="Buscar estudiante"
+        //     countText={`${filteredItemsCount} coincidencias`}
+        //     expandToViewport
+        //   />
+        // }
+        pagination={<Pagination {...paginationProps} />}
+        empty={
+          <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
+            <SpaceBetween size="m">
+              <b>No hay registros...</b>
             </SpaceBetween>
-          }
-        >
-          Publicaciones
-        </Header>
-      }
-      filter={
-        <PropertyFilter
-          {...propertyFilterProps}
-          filteringPlaceholder="Buscar proyecto de grupo"
-          countText={`${filteredItemsCount} coincidencias`}
-          expandToViewport
-          customControl={
-            <FormField label="Buscar por investigador" stretch>
-              <Autosuggest
-                onChange={({ detail }) => {
-                  setOptions([]);
-                  setValue(detail.value);
-                  if (detail.value == "") {
-                    setForm({});
-                  }
-                }}
-                onSelect={({ detail }) => {
-                  if (detail.selectedOption.investigador_id != undefined) {
-                    setAvoidSelect(false);
-                    const { value, ...rest } = detail.selectedOption;
-                    setForm(rest);
-                  }
-                }}
-                value={value}
-                options={options}
-                loadingText="Cargando data"
-                placeholder="Código, dni o nombre del investigador"
-                statusType={loading ? "loading" : "finished"}
-                empty="No se encontraron resultados"
-              />
-            </FormField>
-          }
-        />
-      }
-      pagination={<Pagination {...paginationProps} />}
-      empty={
-        <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
-          <SpaceBetween size="m">
-            <b>No hay registros...</b>
-          </SpaceBetween>
-        </Box>
-      }
-    />
+          </Box>
+        }
+      />
+    </Container>
   );
 };

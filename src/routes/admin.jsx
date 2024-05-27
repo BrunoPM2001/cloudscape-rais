@@ -83,6 +83,10 @@ const Gestion_laboratorios = lazy(() =>
   import("../pages/admin/estudios/gestion_laboratorios/index.jsx")
 );
 
+const Gestion_sum = lazy(() =>
+  import("../pages/admin/estudios/gestion_sum/index.jsx")
+);
+
 const routes = createBrowserRouter(
   [
     {
@@ -167,6 +171,10 @@ const routes = createBrowserRouter(
         {
           path: "laboratorios",
           element: <Gestion_laboratorios />,
+        },
+        {
+          path: "gestion_sum",
+          element: <Gestion_sum />,
         },
       ],
     },
