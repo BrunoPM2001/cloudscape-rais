@@ -304,21 +304,6 @@ export default () => {
                       id: "action_2_1",
                       disabled: false,
                     },
-                    {
-                      text: "Visualizar",
-                      id: "action_2_2",
-                      disabled: false,
-                    },
-                    {
-                      text: "Editar",
-                      id: "action_2_3",
-                      disabled: false,
-                    },
-                    {
-                      text: "Cambiar condición",
-                      id: "action_2_4",
-                      disabled: false,
-                    },
                   ]}
                   onItemClick={({ detail }) => {
                     if (detail.id == "action_2_1") {

@@ -43,16 +43,10 @@ export default () => {
           header: "Nombre",
           cell: (item) => item.nombre,
         },
-        {
-          id: "accion",
-          header: "Eliminar",
-          cell: (item) => <Link href="#">{item.id}</Link>,
-        },
       ]}
       columnDisplay={[
         { id: "codigo", visible: true },
         { id: "nombre", visible: true },
-        { id: "accion", visible: true },
       ]}
       enableKeyboardNavigation
       items={items}

@@ -12,7 +12,7 @@ import {
 } from "@cloudscape-design/components";
 import { useContext, useEffect, useState } from "react";
 import axiosBase from "../../../../../api/axios";
-import { NotificationContext } from "../../../../../routes/admin";
+import NotificationContext from "../../../../../providers/notificationProvider";
 
 const CreateUserModal = ({ visible, setVisible, reload }) => {
   //  Context

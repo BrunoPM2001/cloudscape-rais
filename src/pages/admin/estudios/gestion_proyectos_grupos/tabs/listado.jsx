@@ -156,35 +156,56 @@ const columnDefinitions = [
         color={
           item.estado == -1
             ? "red"
+            : item.estado == 0
+            ? "grey"
             : item.estado == 1
-            ? "grey"
-            : item.estado == 2
-            ? "grey"
-            : item.estado == 4
             ? "green"
+            : item.estado == 3
+            ? "blue"
             : item.estado == 5
             ? "blue"
             : item.estado == 6
             ? "grey"
+            : item.estado == 7
+            ? "red"
+            : item.estado == 8
+            ? "blue"
+            : item.estado == 9
+            ? "blue"
+            : item.estado == 10
+            ? "green"
+            : item.estado == 11
+            ? "blue"
             : "red"
         }
       >
         {item.estado == -1
           ? "Eliminado"
+          : item.estado == 0
+          ? "No aprobado"
           : item.estado == 1
-          ? "Reconocido"
-          : item.estado == 2
-          ? "Observado"
-          : item.estado == 4
-          ? "Registrado"
+          ? "Aprobado"
+          : item.estado == 3
+          ? "En evaluación"
           : item.estado == 5
           ? "Enviado"
           : item.estado == 6
           ? "En proceso"
+          : item.estado == 7
+          ? "Anulado"
+          : item.estado == 8
+          ? "Sustentado"
+          : item.estado == 9
+          ? "En ejecución"
+          : item.estado == 10
+          ? "Ejecutado"
+          : item.estado == 11
+          ? "Concluido"
           : "Error"}
       </Badge>
     ),
     sortingField: "estado",
+    minWidth: 135,
   },
 ];
 
@@ -244,6 +265,8 @@ export default () => {
   //  Functions
   const getData = async () => {
     setLoading(true);
+    setDistribution([]);
+    setEnableBtn(false);
     const res = await axiosBase.get(
       "admin/estudios/proyectosGrupo/listado/" + selectedOption.value
     );
@@ -280,11 +303,7 @@ export default () => {
       onSelectionChange={({ detail }) => setSelectedItems(detail.selectedItems)}
       header={
         <Header
-          counter={
-            selectedItems.length
-              ? "(" + selectedItems.length + "/" + items.length + ")"
-              : "(" + items.length + ")"
-          }
+          counter={"(" + distributions.length + ")"}
           actions={
             <Button
               disabled={!enableBtn}
@@ -312,6 +331,7 @@ export default () => {
           customControl={
             <FormField label="Año:">
               <Select
+                disabled={loading}
                 expandToViewport
                 selectedOption={selectedOption}
                 onChange={({ detail }) =>

@@ -18,7 +18,7 @@ import { useAutosuggest } from "../../../../../../hooks/useAutosuggest";
 import { useLocation } from "react-router-dom";
 import queryString from "query-string";
 import axiosBase from "../../../../../../api/axios";
-import { NotificationContext } from "../../../../../../routes/admin";
+import NotificationContext from "../../../../../../providers/notificationProvider";
 
 const initialForm = {
   fecha_inclusion: "",

@@ -8,7 +8,7 @@ import {
 import Sidebar from "./sidebar";
 import Navbar from "./navbar";
 import { useContext } from "react";
-import { NotificationContext } from "../../../routes/admin";
+import NotificationContext from "../../../providers/notificationProvider";
 import Helpbar from "./helpbar";
 
 export default function BaseLayout({

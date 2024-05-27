@@ -36,32 +36,52 @@ export default ({ data, loading }) => {
                 type={
                   data.estado == -1
                     ? "error"
-                    : data.estado == 1
-                    ? "info"
-                    : data.estado == 2
+                    : data.estado == 0
                     ? "stopped"
-                    : data.estado == 4
+                    : data.estado == 1
                     ? "success"
+                    : data.estado == 3
+                    ? "in-progress"
                     : data.estado == 5
-                    ? "pending"
+                    ? "in-progress"
                     : data.estado == 6
                     ? "in-progress"
+                    : data.estado == 7
+                    ? "stopped"
+                    : data.estado == 8
+                    ? "info"
+                    : data.estado == 9
+                    ? "in-progress"
+                    : data.estado == 10
+                    ? "success"
+                    : data.estado == 11
+                    ? "success"
                     : "error"
                 }
               >
                 {data.estado == -1
                   ? "Eliminado"
+                  : data.estado == 0
+                  ? "No aprobado"
                   : data.estado == 1
-                  ? "Reconocido"
-                  : data.estado == 2
-                  ? "Observado"
-                  : data.estado == 4
-                  ? "Registrado"
+                  ? "Aprobado"
+                  : data.estado == 3
+                  ? "En evaluación"
                   : data.estado == 5
                   ? "Enviado"
                   : data.estado == 6
                   ? "En proceso"
-                  : "error"}
+                  : data.estado == 7
+                  ? "Anulado"
+                  : data.estado == 8
+                  ? "Sustentado"
+                  : data.estado == 9
+                  ? "En ejecución"
+                  : data.estado == 10
+                  ? "Ejecutado"
+                  : data.estado == 11
+                  ? "Concluido"
+                  : "Error"}
               </StatusIndicator>
             )}
           </div>

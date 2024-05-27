@@ -1,8 +1,6 @@
 import { Suspense, lazy } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import { useState, createContext } from "react";
-
-const NotificationContext = createContext(null);
+import { NotificationProvider } from "../providers/notificationProvider";
 
 const Admin_main = lazy(() => import("../pages/admin/dashboard/index.jsx"));
 const Gestion_convocatorias = lazy(() =>
@@ -247,36 +245,11 @@ const routes = createBrowserRouter(
 );
 
 export default function AdminRoutes() {
-  //  States
-  const [notifications, setNotifications] = useState([]);
-
-  //  Functions
-  const pushNotification = (message, type, id) => {
-    setNotifications((prev) => [
-      ...prev,
-      {
-        type: type,
-        dismissible: true,
-        content: message,
-        id: id,
-        onDismiss: () =>
-          setNotifications((items) => items.filter((item) => item.id !== id)),
-      },
-    ]);
-  };
-
   return (
-    <NotificationContext.Provider
-      value={{
-        notifications,
-        pushNotification,
-      }}
-    >
+    <NotificationProvider>
       <Suspense fallback>
         <RouterProvider router={routes} />
       </Suspense>
-    </NotificationContext.Provider>
+    </NotificationProvider>
   );
 }
-
-export { NotificationContext };

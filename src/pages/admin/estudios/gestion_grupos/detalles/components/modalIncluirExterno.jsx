@@ -18,7 +18,7 @@ import { useFormValidation } from "../../../../../../hooks/useFormValidation";
 import { useLocation } from "react-router-dom";
 import queryString from "query-string";
 import axiosBase from "../../../../../../api/axios";
-import { NotificationContext } from "../../../../../../routes/admin";
+import NotificationContext from "../../../../../../providers/notificationProvider";
 
 const initialForm = {
   codigo_orcid: "",
@@ -29,7 +29,7 @@ const initialForm = {
   institucion: "",
   pais: null,
   direccion1: "",
-  doc_tipo: "",
+  doc_tipo: null,
   doc_numero: "",
   telefono_movil: "",
   titulo_profesional: "",
