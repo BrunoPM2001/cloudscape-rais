@@ -59,12 +59,9 @@ export default () => {
           </FormField>
         </Form>
         {form.codigo_alumno != null && (
-          <Alert
-            header="Datos extraídos"
-            action={<Button variant="primary">Actualizar información</Button>}
-          >
+          <Alert header="Datos extraídos" action={<Button>Actualizar</Button>}>
             <ColumnLayout columns={3} variant="text-grid">
-              <SpaceBetween size="xxs">
+              <SpaceBetween size="xs">
                 <div>
                   <Box variant="awsui-key-label">Apellidos y nombres:</Box>
                   <CopyToClipboard
@@ -106,7 +103,7 @@ export default () => {
                   />
                 </div>
               </SpaceBetween>
-              <SpaceBetween size="xxs">
+              <SpaceBetween size="xs">
                 <div>
                   <Box variant="awsui-key-label">Código de estudiante:</Box>
                   <CopyToClipboard
@@ -150,7 +147,7 @@ export default () => {
                   />
                 </div>
               </SpaceBetween>
-              <SpaceBetween size="xxs">
+              <SpaceBetween size="xs">
                 <div>
                   <Box variant="awsui-key-label">Teléfono:</Box>
                   <CopyToClipboard
