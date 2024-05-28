@@ -33,7 +33,7 @@ export default function Gestion_sum() {
   return (
     <BaseLayout
       breadcrumbs={breadcrumbs}
-      header="Publicaciones:"
+      header="Gestión de estudiantes:"
       helpInfo="Información sobre la páginal actual para poder mostrarla al público
       en general."
       disableOverlap

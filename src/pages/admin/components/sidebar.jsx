@@ -63,10 +63,14 @@ const navItems = [
       {
         type: "link",
         text: "Docente investigador",
-        href: "/admin/estudios/gestion_sum",
+        href: "#",
       },
       { type: "link", text: "Gestión de RRHH", href: "#" },
-      { type: "link", text: "Gestión de SUM", href: "#" },
+      {
+        type: "link",
+        text: "Gestión de SUM",
+        href: "/admin/estudios/gestion_sum",
+      },
       { type: "link", text: "Gestión de Resoluciones", href: "#" },
     ],
   },
