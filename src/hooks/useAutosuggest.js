@@ -68,6 +68,17 @@ const useAutosuggest = (type) => {
           setOptions(data);
         }
         break;
+      case "sum":
+        {
+          const res = await axiosBase.get("admin/estudios/sum/listadoSum", {
+            params: {
+              query: value,
+            },
+          });
+          const data = res.data;
+          setOptions(data);
+        }
+        break;
       default:
         break;
     }
@@ -77,7 +88,7 @@ const useAutosuggest = (type) => {
   //  Effects
   useEffect(() => {
     const temp = setTimeout(() => {
-      if (value && avoidSelect) {
+      if (value.length > 2 && avoidSelect) {
         getData();
       } else {
         setAvoidSelect(true);

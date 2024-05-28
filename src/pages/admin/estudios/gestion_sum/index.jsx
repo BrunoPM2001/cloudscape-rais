@@ -1,7 +1,7 @@
 import { SpaceBetween, Tabs } from "@cloudscape-design/components";
-import Listado from "./tabs/listado";
-// import ListadoSum from "./tabs/listadoSum";
 import BaseLayout from "../../components/baseLayout";
+import Listado from "./tabs/listado";
+import ListadoSum from "./tabs/listadoSum";
 
 const breadcrumbs = [
   {
@@ -25,7 +25,7 @@ const tabs = [
   {
     id: "listado_sum",
     label: "Búsqueda en la BD del SUM",
-    // content: <ListadoSum />,
+    content: <ListadoSum />,
   },
 ];
 
