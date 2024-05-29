@@ -54,6 +54,12 @@ const Deudas_proyectos = lazy(() =>
 const Gestion_publicacion = lazy(() =>
   import("../pages/admin/estudios/gestion_publicaciones/index.jsx")
 );
+const Gestion_investigadores = lazy(() =>
+  import("../pages/admin/estudios/gestion_investigadores/index.jsx")
+);
+const Editar_investigador = lazy(() =>
+  import("../pages/admin/estudios/gestion_investigadores/editar/index.jsx")
+);
 const Reporte_estudio = lazy(() =>
   import("../pages/admin/reportes/estudio/index.jsx")
 );
@@ -171,6 +177,19 @@ const routes = createBrowserRouter(
         {
           path: "laboratorios",
           element: <Gestion_laboratorios />,
+        },
+        {
+          path: "gestion_investigadores",
+          children: [
+            {
+              path: "",
+              element: <Gestion_investigadores />,
+            },
+            {
+              path: "editar",
+              element: <Editar_investigador />,
+            },
+          ],
         },
         {
           path: "gestion_sum",

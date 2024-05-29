@@ -59,7 +59,11 @@ const navItems = [
         href: "/admin/estudios/laboratorios",
       },
       { type: "divider" },
-      { type: "link", text: "Gestión de investigadores", href: "#" },
+      {
+        type: "link",
+        text: "Gestión de investigadores",
+        href: "/admin/estudios/gestion_investigadores",
+      },
       {
         type: "link",
         text: "Docente investigador",

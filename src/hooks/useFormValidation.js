@@ -25,7 +25,17 @@ const useFormValidation = (initialState, validationRules) => {
       return "Campo requerido";
     }
 
-    if (rule.regex && !rule.regex.test(value)) {
+    if (rule.required && rule.regex && !rule.regex.test(value)) {
+      return "Valor inválido";
+    }
+
+    if (
+      !rule.required &&
+      rule.regex &&
+      !rule.regex.test(value) &&
+      value != ""
+    ) {
+      console.log(value == 0);
       return "Valor inválido";
     }
 
