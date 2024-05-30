@@ -9,34 +9,26 @@ const useFormValidation = (initialState, validationRules) => {
   //  Functions
   const validateField = (name, value) => {
     const rule = validationRules[name];
-    if (!rule) return true;
+    if (!rule) return true; // Si no hay reglas, el campo es válido por defecto.
 
-    if (rule.required && rule.isFile && !value[0]) {
-      return "Archivo necesario";
-    }
-
-    if (rule.isFile && value[0]) {
-      if (rule.maxSize && value[0].size > rule.maxSize) {
+    // Validación para archivos
+    if (rule.isFile) {
+      if (rule.required && !value[0]) {
+        return "Archivo necesario";
+      }
+      if (value[0] && rule.maxSize && value[0].size > rule.maxSize) {
         return `El archivo debe ser menor a ${rule.maxSize / 1024 / 1024} MB.`;
       }
-    }
-
-    if (rule.required && !value) {
-      return "Campo requerido";
-    }
-
-    if (rule.required && rule.regex && !rule.regex.test(value)) {
-      return "Valor inválido";
-    }
-
-    if (
-      !rule.required &&
-      rule.regex &&
-      !rule.regex.test(value) &&
-      value != ""
-    ) {
-      console.log(value == 0);
-      return "Valor inválido";
+    } else {
+      // Validación para campos no archivos
+      if (rule.required && !value) {
+        return "Campo requerido";
+      }
+      if (rule.regex && value !== null && !rule.regex.test(value)) {
+        if (rule.required || value !== "") {
+          return "Valor inválido";
+        }
+      }
     }
 
     return true;
@@ -78,6 +70,7 @@ const useFormValidation = (initialState, validationRules) => {
     handleChange,
     validateForm,
     registerFileInput,
+    setFormValues,
   };
 };
 
