@@ -79,6 +79,20 @@ const useAutosuggest = (type) => {
           setOptions(data);
         }
         break;
+      case "investigador_docente":
+        {
+          const res = await axiosBase.get(
+            "admin/estudios/investigadores/searchDocenteRrhh",
+            {
+              params: {
+                query: value,
+              },
+            }
+          );
+          const data = res.data;
+          setOptions(data);
+        }
+        break;
       default:
         break;
     }

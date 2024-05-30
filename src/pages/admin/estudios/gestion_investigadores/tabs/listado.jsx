@@ -295,43 +295,73 @@ export default () => {
               <ButtonDropdown
                 disabled={!enableBtn}
                 onItemClick={({ detail }) => {
-                  if (detail.id == "action_1") {
+                  if (detail.id == "action_1_1") {
                     const query = queryString.stringify({
                       id: collectionProps.selectedItems[0]["id"],
                     });
                     window.location.href =
                       "gestion_investigadores/editar?" + query;
-                  } else if (detail.id == "action_2") {
+                  } else if (detail.id == "action_1_2") {
                     // setPasswordVisible(true);
                   }
                 }}
                 items={[
                   {
                     text: "Editar",
-                    id: "action_1",
+                    id: "action_1_1",
                     disabled: false,
                   },
                   {
                     text: "Agregar licencia",
-                    id: "action_2",
+                    id: "action_1_2",
                     disabled: false,
                   },
                 ]}
               >
                 Acciones para un investigador
               </ButtonDropdown>
-              <Button
-                variant="primary"
-                onClick={() => {
-                  const query = queryString.stringify({
-                    id: collectionProps.selectedItems[0]["id"],
-                  });
-                  window.location.href =
-                    "gestion_investigadores/detalle?" + query;
+              <ButtonDropdown
+                onItemClick={({ detail }) => {
+                  if (detail.id == "action_2_1") {
+                    const query = queryString.stringify({
+                      tipo: "docente",
+                    });
+                    window.location.href =
+                      "gestion_investigadores/agregar?" + query;
+                  } else if (detail.id == "action_2_2") {
+                    const query = queryString.stringify({
+                      tipo: "estudiante",
+                    });
+                    window.location.href =
+                      "gestion_investigadores/agregar?" + query;
+                  } else if (detail.id == "action_2_3") {
+                    const query = queryString.stringify({
+                      tipo: "externo",
+                    });
+                    window.location.href =
+                      "gestion_investigadores/agregar?" + query;
+                  }
                 }}
+                items={[
+                  {
+                    text: "Docente",
+                    id: "action_2_1",
+                    disabled: false,
+                  },
+                  {
+                    text: "Estudiante",
+                    id: "action_2_2",
+                    disabled: false,
+                  },
+                  {
+                    text: "Externo",
+                    id: "action_2_3",
+                    disabled: false,
+                  },
+                ]}
               >
                 Agregar investigador
-              </Button>
+              </ButtonDropdown>
             </SpaceBetween>
           }
         >

@@ -1,4 +1,6 @@
 import {
+  Alert,
+  Autosuggest,
   Button,
   ColumnLayout,
   Container,
@@ -10,7 +12,6 @@ import {
   Link,
   Select,
   SpaceBetween,
-  Spinner,
   Textarea,
 } from "@cloudscape-design/components";
 import BaseLayout from "../../../components/baseLayout";
@@ -20,7 +21,7 @@ import axiosBase from "../../../../../api/axios";
 import { useLocation } from "react-router-dom";
 import queryString from "query-string";
 import NotificationContext from "../../../../../providers/notificationProvider";
-import Formulario from "../components/form";
+import { useAutosuggest } from "../../../../../hooks/useAutosuggest";
 
 const initialForm = {
   tipo_investigador: "",
@@ -58,8 +59,6 @@ const initialForm = {
   palabras_clave: "",
   indice_h: "",
   indice_h_url: "",
-  facultad_id: null,
-  dependencia_id: null,
   codigo: "",
   docente_categoria: null,
   posicion_unmsm: "",
@@ -125,8 +124,6 @@ const formRules = {
   palabras_clave: { required: false },
   indice_h: { required: false },
   indice_h_url: { required: false },
-  facultad_id: { required: false },
-  dependencia_id: { required: false },
   codigo: { required: false },
   docente_categoria: { required: false },
   posicion_unmsm: { required: false },
@@ -146,136 +143,27 @@ const breadcrumbs = [
     href: "/admin/estudios/gestion_investigadores",
   },
   {
-    text: "Editar investigador",
+    text: "Agregar investigador",
   },
 ];
 
-const doc_opt = [
-  {
-    label: "DNI",
-    value: "DNI",
-  },
-  {
-    label: "Carné de extranjería",
-    value: "CEX",
-  },
-  {
-    label: "Pasaporte",
-    value: "PASAPORTE",
-  },
-];
-
-const tipo_opt = [
-  {
-    value: "Docente permanente",
-  },
-  {
-    value: "Estudiante pregrado",
-  },
-  {
-    value: "Estudiante posgrado",
-  },
-  {
-    value: "Externo",
-  },
-];
-
-const estado_opt = [
-  {
-    label: "Activo",
-    value: "1",
-  },
-  {
-    label: "No activo",
-    value: "0",
-  },
-];
-
-const sexo_opt = [
-  {
-    label: "Masculino",
-    value: "M",
-  },
-  {
-    label: "Femenino",
-    value: "F",
-  },
-];
-
-export default function Editar_investigador() {
+export default function Agregar_investigador() {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
 
-  //  States
-  const [loading, setLoading] = useState(true);
-  const [updating, setUpdating] = useState(false);
-  const [paises, setPaises] = useState([]);
-  const [facultades, setFacultades] = useState([]);
-  const [dependencias, setDependencias] = useState([]);
-  const [institutos, setInstitutos] = useState([]);
+  //  Url
+  const location = useLocation();
+  const { tipo } = queryString.parse(location.search);
 
   //  Hooks
+  const { loading, options, setOptions, value, setValue, setAvoidSelect } =
+    useAutosuggest("investigador_" + tipo);
   const { formValues, formErrors, handleChange, validateForm, setFormValues } =
     useFormValidation(initialForm, formRules);
 
-  //  Url
-  const location = useLocation();
-  const { id } = queryString.parse(location.search);
-
-  //  Functions
-  const getData = async () => {
-    const res = await axiosBase.get("admin/estudios/investigadores/getOne", {
-      params: {
-        id: id,
-      },
-    });
-    const data = res.data.data;
-    setPaises(res.data.paises);
-    setFacultades(res.data.facultades);
-    setDependencias(res.data.dependencias);
-    setInstitutos(res.data.institutos);
-    const initialData = {
-      ...data,
-      tipo: tipo_opt.find((opt) => opt.value == data.tipo),
-      estado: estado_opt.find((opt) => opt.value == data.estado),
-      sexo: sexo_opt.find((opt) => opt.value == data.sexo),
-      doc_tipo: doc_opt.find((opt) => opt.value == data.doc_tipo),
-      pais: res.data.paises.find((opt) => opt.value == data.pais),
-      fecha_icsi: data.fecha_icsi ?? "",
-      fecha_nac: data.fecha_nac ?? "",
-      facultad_id: res.data.facultades.find(
-        (opt) => opt.value == data.facultad_id
-      ),
-      dependencia_id: res.data.dependencias.find(
-        (opt) => opt.value == data.dependencia_id
-      ),
-    };
-    setLoading(false);
-    setFormValues(initialData);
-  };
-
-  const saveData = async () => {
-    if (validateForm()) {
-      setUpdating(true);
-      const res = await axiosBase.put("admin/estudios/investigadores/update", {
-        ...formValues,
-        id: id,
-        tipo: formValues.tipo.value,
-        estado: formValues.estado.value,
-        sexo: formValues.sexo.value,
-        doc_tipo: formValues.doc_tipo.value,
-        pais: formValues.pais.value,
-      });
-      const data = res.data;
-      setUpdating(false);
-      pushNotification(data.detail, data.message, notifications.length + 1);
-    }
-  };
-
-  //  Effects
   useEffect(() => {
-    getData();
-  }, []);
+    console.log(formValues);
+  }, [formValues]);
 
   return (
     <BaseLayout
@@ -284,35 +172,57 @@ export default function Editar_investigador() {
       helpInfo="Información sobre la páginal actual para poder mostrarla al público
       en general."
     >
-      <Form
-        actions={
-          <Button
-            variant="primary"
-            disabled={loading}
-            loading={updating}
-            onClick={saveData}
-          >
-            Guardar
-          </Button>
-        }
-        variant="embedded"
-      >
+      <SpaceBetween size="xl">
         <Container>
-          {loading ? (
-            <Spinner size="big" />
-          ) : (
-            <Formulario
-              formValues={formValues}
-              formErrors={formErrors}
-              handleChange={handleChange}
-              facultades={facultades}
-              paises={paises}
-              dependencias={dependencias}
-              institutos={institutos}
-            />
-          )}
+          <Form
+            variant="embedded"
+            header={<Header variant="h2">Buscar investigador</Header>}
+          >
+            <FormField label="Docente" stretch>
+              <Autosuggest
+                onChange={({ detail }) => {
+                  setOptions([]);
+                  setValue(detail.value);
+                }}
+                onSelect={({ detail }) => {
+                  if (detail.selectedOption.id != undefined) {
+                    const { value, ...rest } = detail.selectedOption;
+                    // console.log(rest);
+                    setFormValues((prev) => ({
+                      ...prev,
+                      ...rest,
+                    }));
+                    setAvoidSelect(false);
+                  }
+                }}
+                value={value}
+                options={options}
+                loadingText="Cargando data"
+                placeholder="DNI o nombre del investigador"
+                statusType={loading ? "loading" : "finished"}
+                empty="No se encontraron resultados"
+              />
+            </FormField>
+          </Form>
         </Container>
-      </Form>
+        {formValues.id && (
+          <>
+            {formValues.investigador_id != null ? (
+              <Alert
+                header="Esta persona ya está registrada como investigador"
+                type="error"
+              />
+            ) : (
+              <Container>
+                <Form
+                  actions={<Button variant="primary">Guardar</Button>}
+                  variant="embedded"
+                ></Form>
+              </Container>
+            )}
+          </>
+        )}
+      </SpaceBetween>
     </BaseLayout>
   );
 }

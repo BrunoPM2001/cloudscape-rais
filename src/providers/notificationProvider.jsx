@@ -18,6 +18,7 @@ export const NotificationProvider = ({ children }) => {
           setNotifications((items) => items.filter((item) => item.id !== id)),
       },
     ]);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
