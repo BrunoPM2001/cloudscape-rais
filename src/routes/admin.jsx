@@ -63,6 +63,9 @@ const Editar_investigador = lazy(() =>
 const Agregar_investigador = lazy(() =>
   import("../pages/admin/estudios/gestion_investigadores/agregar/index.jsx")
 );
+const Licencias_investigador = lazy(() =>
+  import("../pages/admin/estudios/gestion_investigadores/licencias/index.jsx")
+);
 const Reporte_estudio = lazy(() =>
   import("../pages/admin/reportes/estudio/index.jsx")
 );
@@ -195,6 +198,10 @@ const routes = createBrowserRouter(
             {
               path: "agregar",
               element: <Agregar_investigador />,
+            },
+            {
+              path: "licencias",
+              element: <Licencias_investigador />,
             },
           ],
         },

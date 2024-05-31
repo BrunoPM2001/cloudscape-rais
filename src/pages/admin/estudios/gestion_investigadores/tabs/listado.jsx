@@ -1,7 +1,6 @@
 import {
   Badge,
   Box,
-  Button,
   ButtonDropdown,
   Header,
   Pagination,
@@ -302,7 +301,11 @@ export default () => {
                     window.location.href =
                       "gestion_investigadores/editar?" + query;
                   } else if (detail.id == "action_1_2") {
-                    // setPasswordVisible(true);
+                    const query = queryString.stringify({
+                      investigador_id: collectionProps.selectedItems[0]["id"],
+                    });
+                    window.location.href =
+                      "gestion_investigadores/licencias?" + query;
                   }
                 }}
                 items={[

@@ -23,7 +23,7 @@ const tabs = [
   },
 ];
 
-export default function Gestion_grupos() {
+export default function Gestion_investigadores() {
   return (
     <BaseLayout
       breadcrumbs={breadcrumbs}
