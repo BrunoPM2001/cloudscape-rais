@@ -60,6 +60,7 @@ const initialForm = {
   indice_h_url: "",
   facultad_id: null,
   dependencia_id: null,
+  instituto_id: null,
   codigo: "",
   docente_categoria: null,
   posicion_unmsm: "",
@@ -127,6 +128,7 @@ const formRules = {
   indice_h_url: { required: false },
   facultad_id: { required: false },
   dependencia_id: { required: false },
+  instituto_id: { required: false },
   codigo: { required: false },
   docente_categoria: { required: false },
   posicion_unmsm: { required: false },
@@ -213,6 +215,7 @@ export default function Editar_investigador() {
   const [facultades, setFacultades] = useState([]);
   const [dependencias, setDependencias] = useState([]);
   const [institutos, setInstitutos] = useState([]);
+  const [docenteCategorias, setDocenteCategorias] = useState([]);
 
   //  Hooks
   const { formValues, formErrors, handleChange, validateForm, setFormValues } =
@@ -234,6 +237,7 @@ export default function Editar_investigador() {
     setFacultades(res.data.facultades);
     setDependencias(res.data.dependencias);
     setInstitutos(res.data.institutos);
+    setDocenteCategorias(res.data.docente_categorias);
     const initialData = {
       ...data,
       tipo: tipo_opt.find((opt) => opt.value == data.tipo),
@@ -248,6 +252,12 @@ export default function Editar_investigador() {
       ),
       dependencia_id: res.data.dependencias.find(
         (opt) => opt.value == data.dependencia_id
+      ),
+      instituto_id: res.data.institutos.find(
+        (opt) => opt.value == data.instituto_id
+      ),
+      docente_categoria: res.data.docente_categorias.find(
+        (opt) => opt.value == data.docente_categoria
       ),
     };
     setLoading(false);
@@ -265,6 +275,10 @@ export default function Editar_investigador() {
         sexo: formValues.sexo.value,
         doc_tipo: formValues.doc_tipo.value,
         pais: formValues.pais.value,
+        facultad_id: formValues.facultad_id.value,
+        dependencia_id: formValues.dependencia_id.value,
+        instituto_id: formValues.instituto_id.value,
+        docente_categoria: formValues.docente_categoria.value,
       });
       const data = res.data;
       setUpdating(false);
@@ -309,6 +323,7 @@ export default function Editar_investigador() {
               paises={paises}
               dependencias={dependencias}
               institutos={institutos}
+              docente_categorias={docenteCategorias}
             />
           )}
         </Container>

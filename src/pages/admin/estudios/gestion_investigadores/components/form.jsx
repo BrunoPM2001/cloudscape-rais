@@ -70,6 +70,7 @@ export default function Formulario({
   paises,
   dependencias,
   institutos,
+  docente_categorias,
 }) {
   return (
     <SpaceBetween direction="vertical" size="s">
@@ -585,10 +586,11 @@ export default function Formulario({
           >
             <Select
               placeholder="Escoja una opción"
-              value={formValues.docente_categoria}
+              selectedOption={formValues.docente_categoria}
               onChange={({ detail }) =>
                 handleChange("docente_categoria", detail.selectedOption)
               }
+              options={docente_categorias}
             />
           </FormField>
           <FormField

@@ -2,17 +2,11 @@ import {
   Alert,
   Autosuggest,
   Button,
-  ColumnLayout,
   Container,
-  DatePicker,
   Form,
   FormField,
   Header,
-  Input,
-  Link,
-  Select,
   SpaceBetween,
-  Textarea,
 } from "@cloudscape-design/components";
 import BaseLayout from "../../../components/baseLayout";
 import { useFormValidation } from "../../../../../hooks/useFormValidation";
@@ -22,6 +16,7 @@ import { useLocation } from "react-router-dom";
 import queryString from "query-string";
 import NotificationContext from "../../../../../providers/notificationProvider";
 import { useAutosuggest } from "../../../../../hooks/useAutosuggest";
+import Formulario from "../components/form";
 
 const initialForm = {
   tipo_investigador: "",
@@ -29,7 +24,7 @@ const initialForm = {
   tipo_investigador_programa: "",
   tipo_investigador_estado: "",
   tipo: null,
-  estado: null,
+  estado: { value: 1, label: "Activo" },
   rrhh_status: "",
   fecha_icsi: "",
   nombres: "",
@@ -59,6 +54,9 @@ const initialForm = {
   palabras_clave: "",
   indice_h: "",
   indice_h_url: "",
+  facultad_id: null,
+  dependencia_id: null,
+  instituto_id: null,
   codigo: "",
   docente_categoria: null,
   posicion_unmsm: "",
@@ -124,6 +122,9 @@ const formRules = {
   palabras_clave: { required: false },
   indice_h: { required: false },
   indice_h_url: { required: false },
+  facultad_id: { required: false },
+  dependencia_id: { required: false },
+  instituto_id: { required: false },
   codigo: { required: false },
   docente_categoria: { required: false },
   posicion_unmsm: { required: false },
@@ -147,9 +148,69 @@ const breadcrumbs = [
   },
 ];
 
+const doc_opt = [
+  {
+    label: "DNI",
+    value: "DNI",
+  },
+  {
+    label: "Carné de extranjería",
+    value: "CEX",
+  },
+  {
+    label: "Pasaporte",
+    value: "PASAPORTE",
+  },
+];
+
+const tipo_opt = [
+  {
+    value: "Docente permanente",
+  },
+  {
+    value: "Estudiante pregrado",
+  },
+  {
+    value: "Estudiante posgrado",
+  },
+  {
+    value: "Externo",
+  },
+];
+
+const estado_opt = [
+  {
+    label: "Activo",
+    value: "1",
+  },
+  {
+    label: "No activo",
+    value: "0",
+  },
+];
+
+const sexo_opt = [
+  {
+    label: "Masculino",
+    value: "M",
+  },
+  {
+    label: "Femenino",
+    value: "F",
+  },
+];
+
 export default function Agregar_investigador() {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
+
+  //  States
+  const [creating, setCreating] = useState(false);
+  const [paises, setPaises] = useState([]);
+  const [facultades, setFacultades] = useState([]);
+  const [dependencias, setDependencias] = useState([]);
+  const [institutos, setInstitutos] = useState([]);
+  const [docenteCategorias, setDocenteCategorias] = useState([]);
 
   //  Url
   const location = useLocation();
@@ -161,66 +222,150 @@ export default function Agregar_investigador() {
   const { formValues, formErrors, handleChange, validateForm, setFormValues } =
     useFormValidation(initialForm, formRules);
 
+  //  Functions
+  const getSelectsData = async () => {
+    const res = await axiosBase.get(
+      "admin/estudios/investigadores/getSelectsData"
+    );
+    const data = res.data;
+    setPaises(data.paises);
+    setFacultades(data.facultades);
+    setDependencias(data.dependencias);
+    setInstitutos(data.institutos);
+    setDocenteCategorias(data.docente_categorias);
+  };
+
+  const handleSelect = (detail) => {
+    if (detail.selectedOption.id != undefined) {
+      const { value, ...rest } = detail.selectedOption;
+      setFormValues((prev) => ({
+        ...prev,
+        ...rest,
+        tipo: tipo_opt.find((opt) => opt.value == tipo),
+        sexo: sexo_opt.find((opt) => opt.value == rest.sexo),
+        doc_tipo: doc_opt.find((opt) => opt.value == rest.doc_tipo),
+      }));
+      setAvoidSelect(false);
+    }
+  };
+
+  const saveData = async () => {
+    if (validateForm()) {
+      setCreating(true);
+      const res = await axiosBase.post("admin/estudios/investigadores/create", {
+        ...formValues,
+        tipo: formValues.tipo.value,
+        estado: formValues.estado.value,
+        sexo: formValues.sexo.value,
+        doc_tipo: formValues.doc_tipo.value,
+        pais: formValues.pais.value,
+        facultad_id: formValues.facultad_id?.value,
+        dependencia_id: formValues.dependencia_id?.value,
+        instituto_id: formValues.instituto_id?.value,
+        docente_categoria: formValues.docente_categoria?.value,
+      });
+      const data = res.data;
+      setCreating(false);
+      pushNotification(data.detail, data.message, notifications.length + 1);
+    }
+  };
+
+  //  Effects
   useEffect(() => {
-    console.log(formValues);
-  }, [formValues]);
+    getSelectsData();
+  }, []);
 
   return (
     <BaseLayout
       breadcrumbs={breadcrumbs}
-      header="Editar investigador:"
+      header="Agregar investigador:"
       helpInfo="Información sobre la páginal actual para poder mostrarla al público
       en general."
     >
       <SpaceBetween size="xl">
-        <Container>
-          <Form
-            variant="embedded"
-            header={<Header variant="h2">Buscar investigador</Header>}
-          >
-            <FormField label="Docente" stretch>
-              <Autosuggest
-                onChange={({ detail }) => {
-                  setOptions([]);
-                  setValue(detail.value);
-                }}
-                onSelect={({ detail }) => {
-                  if (detail.selectedOption.id != undefined) {
-                    const { value, ...rest } = detail.selectedOption;
-                    // console.log(rest);
-                    setFormValues((prev) => ({
-                      ...prev,
-                      ...rest,
-                    }));
-                    setAvoidSelect(false);
-                  }
-                }}
-                value={value}
-                options={options}
-                loadingText="Cargando data"
-                placeholder="DNI o nombre del investigador"
-                statusType={loading ? "loading" : "finished"}
-                empty="No se encontraron resultados"
-              />
-            </FormField>
-          </Form>
-        </Container>
-        {formValues.id && (
+        {tipo != "Externo" ? (
           <>
-            {formValues.investigador_id != null ? (
-              <Alert
-                header="Esta persona ya está registrada como investigador"
-                type="error"
-              />
-            ) : (
-              <Container>
-                <Form
-                  actions={<Button variant="primary">Guardar</Button>}
-                  variant="embedded"
-                ></Form>
-              </Container>
+            <Container>
+              <Form
+                variant="embedded"
+                header={<Header variant="h2">Buscar investigador</Header>}
+              >
+                <FormField label={tipo} stretch>
+                  <Autosuggest
+                    onChange={({ detail }) => {
+                      setOptions([]);
+                      setValue(detail.value);
+                    }}
+                    onSelect={({ detail }) => handleSelect(detail)}
+                    value={value}
+                    options={options}
+                    loadingText="Cargando data"
+                    placeholder="DNI o nombre del investigador"
+                    statusType={loading ? "loading" : "finished"}
+                    empty="No se encontraron resultados"
+                  />
+                </FormField>
+              </Form>
+            </Container>
+            {formValues.id && (
+              <>
+                {formValues.investigador_id != null ? (
+                  <Alert
+                    header="Esta persona ya está registrada como investigador"
+                    type="error"
+                  />
+                ) : (
+                  <Form
+                    actions={
+                      <Button
+                        variant="primary"
+                        loading={creating}
+                        onClick={saveData}
+                      >
+                        Guardar
+                      </Button>
+                    }
+                    variant="embedded"
+                  >
+                    <Container>
+                      <Formulario
+                        formValues={formValues}
+                        formErrors={formErrors}
+                        handleChange={handleChange}
+                        facultades={facultades}
+                        paises={paises}
+                        dependencias={dependencias}
+                        institutos={institutos}
+                        docente_categorias={docenteCategorias}
+                      />
+                    </Container>
+                  </Form>
+                )}
+              </>
             )}
           </>
+        ) : (
+          <Form
+            actions={
+              <Button variant="primary" loading={creating} onClick={saveData}>
+                Guardar
+              </Button>
+            }
+            variant="embedded"
+          >
+            <Container>
+              <Formulario
+                formValues={formValues}
+                formErrors={formErrors}
+                handleChange={handleChange}
+                facultades={facultades}
+                paises={paises}
+                dependencias={dependencias}
+                institutos={institutos}
+                docente_categorias={docenteCategorias}
+              />
+            </Container>
+          </Form>
         )}
       </SpaceBetween>
     </BaseLayout>

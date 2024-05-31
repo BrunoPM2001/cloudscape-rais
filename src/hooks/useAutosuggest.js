@@ -79,10 +79,38 @@ const useAutosuggest = (type) => {
           setOptions(data);
         }
         break;
-      case "investigador_docente":
+      case "investigador_Docente permanente":
         {
           const res = await axiosBase.get(
             "admin/estudios/investigadores/searchDocenteRrhh",
+            {
+              params: {
+                query: value,
+              },
+            }
+          );
+          const data = res.data;
+          setOptions(data);
+        }
+        break;
+      case "investigador_Docente permanente":
+        {
+          const res = await axiosBase.get(
+            "admin/estudios/investigadores/searchDocenteRrhh",
+            {
+              params: {
+                query: value,
+              },
+            }
+          );
+          const data = res.data;
+          setOptions(data);
+        }
+        break;
+      case "investigador_Estudiante":
+        {
+          const res = await axiosBase.get(
+            "admin/estudios/investigadores/searchEstudiante",
             {
               params: {
                 query: value,

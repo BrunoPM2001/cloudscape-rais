@@ -324,19 +324,19 @@ export default () => {
                 onItemClick={({ detail }) => {
                   if (detail.id == "action_2_1") {
                     const query = queryString.stringify({
-                      tipo: "docente",
+                      tipo: "Docente permanente",
                     });
                     window.location.href =
                       "gestion_investigadores/agregar?" + query;
                   } else if (detail.id == "action_2_2") {
                     const query = queryString.stringify({
-                      tipo: "estudiante",
+                      tipo: "Estudiante",
                     });
                     window.location.href =
                       "gestion_investigadores/agregar?" + query;
                   } else if (detail.id == "action_2_3") {
                     const query = queryString.stringify({
-                      tipo: "externo",
+                      tipo: "Externo",
                     });
                     window.location.href =
                       "gestion_investigadores/agregar?" + query;
@@ -344,7 +344,7 @@ export default () => {
                 }}
                 items={[
                   {
-                    text: "Docente",
+                    text: "Docente permanente",
                     id: "action_2_1",
                     disabled: false,
                   },
