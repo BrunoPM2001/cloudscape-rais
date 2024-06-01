@@ -266,10 +266,10 @@ export default function Editar_investigador() {
         sexo: formValues.sexo.value,
         doc_tipo: formValues.doc_tipo.value,
         pais: formValues.pais.value,
-        facultad_id: formValues.facultad_id.value,
-        dependencia_id: formValues.dependencia_id.value,
-        instituto_id: formValues.instituto_id.value,
-        docente_categoria: formValues.docente_categoria.value,
+        facultad_id: formValues.facultad_id?.value,
+        dependencia_id: formValues.dependencia_id?.value,
+        instituto_id: formValues.instituto_id?.value,
+        docente_categoria: formValues.docente_categoria?.value,
       });
       const data = res.data;
       setUpdating(false);

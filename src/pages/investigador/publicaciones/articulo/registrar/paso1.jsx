@@ -11,55 +11,68 @@ import {
   SpaceBetween,
 } from "@cloudscape-design/components";
 import { useEffect, useState } from "react";
+import { useFormValidation } from "../../../../../hooks/useFormValidation";
+import axiosBase from "../../../../../api/axios";
 
-export default function () {
+const initialForm = {
+  doi: "",
+  tipo: null,
+  titulo: "",
+  palabras_clave: "",
+  pagina_inicio: "",
+  pagina_fin: "",
+  año_publicacion: "",
+  revista: "",
+  issn: "",
+  issne: "",
+  volumen: "",
+  numero: "",
+  indexada: [],
+  url: "",
+  anexo: [],
+};
+
+const formRules = {
+  doi: { required: false },
+  tipo: { required: true },
+  titulo: { required: true },
+  palabras_clave: { required: false },
+  pagina_inicio: { required: true },
+  pagina_fin: { required: true },
+  año_publicacion: { required: true },
+  revista: { required: true },
+  issn: { required: false },
+  issne: { required: false },
+  volumen: { required: false },
+  numero: { required: false },
+  indexada: { required: false },
+  url: { required: false },
+  anexo: { required: false },
+};
+
+export default function ({ index }) {
   //  State
   const [loading, setLoading] = useState("loading");
   const [revistasIndexadas, setRevistasIndexadas] = useState([]);
-  const [form, setForm] = useState({
-    doi: "",
-    tipo: "",
-    titulo: "",
-    palabras_clave: "",
-    pagina_inicio: "",
-    pagina_fin: "",
-    año_publicacion: "",
-    revista: "",
-    issn: "",
-    issne: "",
-    volumen: "",
-    numero: "",
-    indexada: [],
-    url: "",
-    anexo: [],
-  });
+
+  //  Hooks
+  const { formValues, formErrors, handleChange, validateForm, setFormValues } =
+    useFormValidation(initialForm, formRules);
 
   //  Function
   const listaRevistasIndexadas = async () => {
-    try {
-      setLoading("loading");
-      const res = await fetch(
-        "http://localhost:8000/api/investigador/publicaciones/listadoRevistasIndexadas",
-        {
-          headers: {
-            Authorization: localStorage.getItem("Auth"),
-          },
-        }
-      );
-      if (!res.ok) {
-        localStorage.clear();
-        setLoading("error");
-        setRevistasIndexadas([]);
-        throw new Error("Error in fetch");
-      } else {
-        const data = await res.json();
-        setRevistasIndexadas(data);
-        setLoading("finished");
-      }
-    } catch (error) {
-      setRevistasIndexadas([]);
-      setLoading("error");
-      console.log(error);
+    setLoading("loading");
+    const res = await axiosBase.get(
+      "investigador/publicaciones/listadoRevistasIndexadas"
+    );
+    const data = res.data;
+    setRevistasIndexadas(data);
+    setLoading("finished");
+  };
+
+  const registrar = async () => {
+    if (validateForm()) {
+      console.log("Done!");
     }
   };
 
@@ -68,32 +81,31 @@ export default function () {
     listaRevistasIndexadas();
   }, []);
 
+  useEffect(() => {
+    registrar();
+  }, [index]);
+
   return (
     <Container>
       <SpaceBetween size="l">
         <Form variant="embedded" header={<Header>Datos del artículo</Header>}>
           <SpaceBetween direction="vertical" size="s">
             <ColumnLayout columns={2}>
-              <FormField label="DOI">
+              <FormField label="DOI" stretch errorText={formErrors.doi}>
                 <Input
-                  inputMode="url"
-                  value={form.doi}
-                  onChange={({ detail }) =>
-                    setForm((prev) => ({
-                      ...prev,
-                      doi: detail.value,
-                    }))
-                  }
+                  value={formValues.doi}
+                  onChange={({ detail }) => handleChange("doi", detail.value)}
                 />
               </FormField>
-              <FormField label="Tipo de artículo">
+              <FormField
+                label="Tipo de artículo"
+                stretch
+                errorText={formErrors.tipo}
+              >
                 <Select
-                  selectedOption={form.tipo}
+                  selectedOption={formValues.tipo}
                   onChange={({ detail }) => {
-                    setForm((prev) => ({
-                      ...prev,
-                      tipo: detail.selectedOption,
-                    }));
+                    handleChange("tipo", detail.value);
                   }}
                   options={[
                     { label: "Artículo original", value: "1" },
@@ -106,138 +118,114 @@ export default function () {
                 ></Select>
               </FormField>
             </ColumnLayout>
-            <FormField label="Título" stretch>
+            <FormField label="Título" stretch errorText={formErrors.titulo}>
               <Input
-                value={form.titulo}
-                onChange={({ detail }) =>
-                  setForm((prev) => ({
-                    ...prev,
-                    titulo: detail.value,
-                  }))
-                }
+                value={formValues.titulo}
+                onChange={({ detail }) => handleChange("titulo", detail.value)}
               />
             </FormField>
-            <FormField label="Palabras clave" stretch>
+            <FormField
+              label="Palabras clave"
+              stretch
+              errorText={formErrors.palabras_clave}
+            >
               <Input
-                value={form.palabras_clave}
+                value={formValues.palabras_clave}
                 onChange={({ detail }) =>
-                  setForm((prev) => ({
-                    ...prev,
-                    palabras_clave: detail.value,
-                  }))
+                  handleChange("palabras_clave", detail.value)
                 }
               />
             </FormField>
             <ColumnLayout columns={3}>
-              <FormField label="Página inicio">
+              <FormField
+                label="Página inicio"
+                stretch
+                errorText={formErrors.pagina_inicio}
+              >
                 <Input
                   inputMode="numeric"
-                  value={form.pagina_inicio}
+                  value={formValues.pagina_inicio}
                   onChange={({ detail }) =>
-                    setForm((prev) => ({
-                      ...prev,
-                      pagina_inicio: detail.value,
-                    }))
+                    handleChange("pagina_inicio", detail.value)
                   }
                 />
               </FormField>
-              <FormField label="Página final">
+              <FormField
+                label="Página final"
+                stretch
+                errorText={formErrors.pagina_fin}
+              >
                 <Input
                   inputMode="numeric"
-                  value={form.pagina_fin}
+                  value={formValues.pagina_fin}
                   onChange={({ detail }) =>
-                    setForm((prev) => ({
-                      ...prev,
-                      pagina_fin: detail.value,
-                    }))
+                    handleChange("pagina_fin", detail.value)
                   }
                 />
               </FormField>
-              <FormField label="Año de publicación">
+              <FormField
+                label="Año de publicación"
+                stretch
+                errorText={formErrors.año_publicacion}
+              >
                 <Input
                   inputMode="numeric"
-                  value={form.año_publicacion}
+                  value={formValues.año_publicacion}
                   onChange={({ detail }) =>
-                    setForm((prev) => ({
-                      ...prev,
-                      año_publicacion: detail.value,
-                    }))
+                    handleChange("año_publicacion", detail.value)
                   }
                 />
               </FormField>
             </ColumnLayout>
-          </SpaceBetween>
-        </Form>
-        <Form variant="embedded" header={<Header>Datos de la revista</Header>}>
-          <SpaceBetween direction="vertical" size="s">
-            <FormField label="Revista" stretch>
+            <Header>Datos de la revista</Header>
+            <FormField label="Revista" stretch errorText={formErrors.revista}>
               <Input
-                value={form.revista}
-                onChange={({ detail }) =>
-                  setForm((prev) => ({
-                    ...prev,
-                    revista: detail.value,
-                  }))
-                }
+                value={formValues.revista}
+                onChange={({ detail }) => handleChange("revista", detail.value)}
               />
             </FormField>
             <ColumnLayout columns={4}>
-              <FormField label="ISSN">
+              <FormField label="ISSN" stretch errorText={formErrors.issn}>
                 <Input
-                  value={form.issn}
+                  value={formValues.issn}
+                  onChange={({ detail }) => handleChange("issn", detail.value)}
+                />
+              </FormField>
+              <FormField label="ISSN-E" stretch errorText={formErrors.issne}>
+                <Input
+                  value={formValues.issne}
+                  onChange={({ detail }) => handleChange("issne", detail.value)}
+                />
+              </FormField>
+              <FormField label="Volumen" stretch errorText={formErrors.volumen}>
+                <Input
+                  value={formValues.volumen}
                   onChange={({ detail }) =>
-                    setForm((prev) => ({
-                      ...prev,
-                      issn: detail.value,
-                    }))
+                    handleChange("volumen", detail.value)
                   }
                 />
               </FormField>
-              <FormField label="ISSN-E">
+              <FormField label="Número" stretch errorText={formErrors.numero}>
                 <Input
-                  value={form.issne}
+                  value={formValues.numero}
                   onChange={({ detail }) =>
-                    setForm((prev) => ({
-                      ...prev,
-                      issne: detail.value,
-                    }))
-                  }
-                />
-              </FormField>
-              <FormField label="Volumen">
-                <Input
-                  value={form.volumen}
-                  onChange={({ detail }) =>
-                    setForm((prev) => ({
-                      ...prev,
-                      volumen: detail.value,
-                    }))
-                  }
-                />
-              </FormField>
-              <FormField label="Número">
-                <Input
-                  value={form.numero}
-                  onChange={({ detail }) =>
-                    setForm((prev) => ({
-                      ...prev,
-                      numero: detail.value,
-                    }))
+                    handleChange("numero", detail.value)
                   }
                 />
               </FormField>
             </ColumnLayout>
-            <FormField label="Publicación indexada en" stretch>
+            <FormField
+              label="Publicación indexada en"
+              stretch
+              errorText={formErrors.indexada}
+            >
               <Multiselect
                 statusType={loading}
-                selectedOptions={form.indexada}
                 filteringType="auto"
                 placeholder="Escoga las revistas"
+                selectedOptions={formValues.indexada}
                 onChange={({ detail }) =>
-                  setForm((prev) => ({
-                    ...prev,
-                    indexada: detail.selectedOptions,
-                  }))
+                  handleChange("indexada", detail.selectedOptions)
                 }
                 options={[
                   {
@@ -247,27 +235,20 @@ export default function () {
                 ]}
               ></Multiselect>
             </FormField>
-            <FormField label="URL de la publicación" stretch>
+            <FormField
+              label="URL de la publicación"
+              stretch
+              errorText={formErrors.url}
+            >
               <Input
-                inputMode="url"
-                value={form.url}
-                onChange={({ detail }) =>
-                  setForm((prev) => ({
-                    ...prev,
-                    url: detail.value,
-                  }))
-                }
+                value={formValues.url}
+                onChange={({ detail }) => handleChange("url", detail.value)}
               />
             </FormField>
             <FormField label="Anexo">
               <FileUpload
-                value={form.anexo}
-                onChange={({ detail }) =>
-                  setForm((prev) => ({
-                    ...prev,
-                    anexo: detail.value,
-                  }))
-                }
+                value={formValues.anexo}
+                onChange={({ detail }) => handleChange("anexo", detail.value)}
                 showFileLastModified
                 showFileSize
                 showFileThumbnail

@@ -1,16 +1,5 @@
-import {
-  AppLayout,
-  BreadcrumbGroup,
-  ContentLayout,
-  Header,
-  SpaceBetween,
-  Tabs,
-} from "@cloudscape-design/components";
-import Sidebar from "../../components/sidebar.jsx";
-import Navbar from "../../components/navbar.jsx";
-import Helpbar from "../../components/helpbar.jsx";
-import Listado from "./tabs/listado.jsx";
-import ProtectedRoute from "../../components/protectedRoute.jsx";
+import { SpaceBetween, Tabs } from "@cloudscape-design/components";
+import Listado from "./tabs/listado";
 
 const breadcrumbs = [
   {
@@ -35,30 +24,16 @@ const tabs = [
 
 export default function Asesoria_posgrado() {
   return (
-    <ProtectedRoute>
-      <Navbar />
-      <AppLayout
-        breadcrumbs={<BreadcrumbGroup items={breadcrumbs} />}
-        navigation={<Sidebar />}
-        tools={
-          <Helpbar>
-            Listado de las asesorías de tesis de posgrado en los que ha
-            participado usted.
-          </Helpbar>
-        }
-        content={
-          <ContentLayout
-            disableOverlap
-            header={
-              <Header variant="h1">Asesoría de tesis de posgrado:</Header>
-            }
-          >
-            <SpaceBetween size="l">
-              <Tabs tabs={tabs} ariaLabel="Ventanas de asesoría de posgrado" />
-            </SpaceBetween>
-          </ContentLayout>
-        }
-      />
-    </ProtectedRoute>
+    <BaseLayout
+      breadcrumbs={breadcrumbs}
+      header="Deudas de proyectos:"
+      helpInfo="Información sobre la páginal actual para poder mostrarla al público
+      en general."
+      disableOverlap
+    >
+      <SpaceBetween size="l">
+        <Tabs tabs={tabs} ariaLabel="Ventanas de asesoría de posgrado" />
+      </SpaceBetween>
+    </BaseLayout>
   );
 }

@@ -1,4 +1,6 @@
-import { lazy } from "react";
+import { Suspense, lazy } from "react";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { NotificationProvider } from "../providers/notificationProvider.jsx";
 
 const Proyectos_con_financiamiento = lazy(() =>
   import(
@@ -70,108 +72,123 @@ const Investigador_main = lazy(() =>
   import("../pages/investigador/dashboard/index.jsx")
 );
 
-export default [
+const routes = createBrowserRouter(
+  [
+    {
+      path: "",
+      element: <Investigador_main />,
+    },
+    {
+      path: "actividades",
+      children: [
+        {
+          path: "proyectosConFinanciamiento",
+          element: <Proyectos_con_financiamiento />,
+        },
+        {
+          path: "proyectosSinFinanciamiento",
+          element: <Proyectos_sin_financiamiento />,
+        },
+        {
+          path: "proyectosFEX",
+          element: <Proyectos_FEX />,
+        },
+        {
+          path: "proyectosMulti",
+          element: <Proyectos_multi />,
+        },
+        {
+          path: "pubLibroUni",
+          element: <Proyectos_pubLibro />,
+        },
+        {
+          path: "asesoriaPre",
+          element: <Asesoria_pregrado />,
+        },
+        {
+          path: "asesoriaPos",
+          element: <Asesoria_posgrado />,
+        },
+        {
+          path: "talleres",
+          element: <Talleres />,
+        },
+        {
+          path: "eventos",
+          element: <Eventos />,
+        },
+        {
+          path: "eci",
+          element: <Proyectos_eci />,
+        },
+        {
+          path: "comiteEdi",
+          element: <Comite_editorial />,
+        },
+        {
+          path: "gruposEstudio",
+          element: <Grupos_estudio />,
+        },
+      ],
+    },
+    {
+      path: "publicaciones",
+      children: [
+        {
+          path: "articulos",
+          element: <Articulos />,
+        },
+        {
+          path: "libros",
+          element: <Libros />,
+        },
+        {
+          path: "capitulos",
+          element: <Capitulos />,
+        },
+        {
+          path: "eventos",
+          element: <Investigador_Evento />,
+        },
+        {
+          path: "tesisPropias",
+          element: <Tesis_propias />,
+        },
+        {
+          path: "tesisAsesorias",
+          element: <Tesis_asesorias />,
+        },
+        {
+          path: "patentes",
+          element: <Patentes />,
+        },
+        {
+          path: "registrar",
+          element: <Registrar_articulo />,
+        },
+      ],
+    },
+    {
+      path: "grupo",
+      children: [
+        {
+          path: "",
+          element: <Grupo />,
+        },
+      ],
+    },
+  ],
   {
-    path: "",
-    element: <Investigador_main />,
-  },
-  {
-    path: "actividades",
-    children: [
-      {
-        path: "proyectosConFinanciamiento",
-        element: <Proyectos_con_financiamiento />,
-      },
-      {
-        path: "proyectosSinFinanciamiento",
-        element: <Proyectos_sin_financiamiento />,
-      },
-      {
-        path: "proyectosFEX",
-        element: <Proyectos_FEX />,
-      },
-      {
-        path: "proyectosMulti",
-        element: <Proyectos_multi />,
-      },
-      {
-        path: "pubLibroUni",
-        element: <Proyectos_pubLibro />,
-      },
-      {
-        path: "asesoriaPre",
-        element: <Asesoria_pregrado />,
-      },
-      {
-        path: "asesoriaPos",
-        element: <Asesoria_posgrado />,
-      },
-      {
-        path: "talleres",
-        element: <Talleres />,
-      },
-      {
-        path: "eventos",
-        element: <Eventos />,
-      },
-      {
-        path: "eci",
-        element: <Proyectos_eci />,
-      },
-      {
-        path: "comiteEdi",
-        element: <Comite_editorial />,
-      },
-      {
-        path: "gruposEstudio",
-        element: <Grupos_estudio />,
-      },
-    ],
-  },
-  {
-    path: "publicaciones",
-    children: [
-      {
-        path: "articulos",
-        element: <Articulos />,
-      },
-      {
-        path: "libros",
-        element: <Libros />,
-      },
-      {
-        path: "capitulos",
-        element: <Capitulos />,
-      },
-      {
-        path: "eventos",
-        element: <Investigador_Evento />,
-      },
-      {
-        path: "tesisPropias",
-        element: <Tesis_propias />,
-      },
-      {
-        path: "tesisAsesorias",
-        element: <Tesis_asesorias />,
-      },
-      {
-        path: "patentes",
-        element: <Patentes />,
-      },
-      {
-        path: "registrar",
-        element: <Registrar_articulo />,
-      },
-    ],
-  },
-  {
-    path: "grupo",
-    children: [
-      {
-        path: "",
-        element: <Grupo />,
-      },
-    ],
-  },
-];
+    basename: "/investigador",
+  }
+);
+
+export default function InvestigadorRoutes() {
+  return (
+    <NotificationProvider>
+      <Suspense fallback>
+        <RouterProvider router={routes} />
+      </Suspense>
+    </NotificationProvider>
+  );
+}

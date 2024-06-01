@@ -63,18 +63,18 @@ const columnDefinitions = [
     cell: (item) => item.documento,
     sortingField: "documento",
   },
-  {
-    id: "user_create",
-    header: "Creada por",
-    cell: (item) => item.user_create,
-    sortingField: "user_create",
-  },
-  {
-    id: "user_edit",
-    header: "Editada por",
-    cell: (item) => item.user_edit,
-    sortingField: "user_edit",
-  },
+  // {
+  //   id: "user_create",
+  //   header: "Creada por",
+  //   cell: (item) => item.user_create,
+  //   sortingField: "user_create",
+  // },
+  // {
+  //   id: "user_edit",
+  //   header: "Editada por",
+  //   cell: (item) => item.user_edit,
+  //   sortingField: "user_edit",
+  // },
 ];
 
 const columnDisplay = [
@@ -83,8 +83,8 @@ const columnDisplay = [
   { id: "fecha_fin", visible: true },
   { id: "comentario", visible: true },
   { id: "documento", visible: true },
-  { id: "user_create", visible: true },
-  { id: "user_edit", visible: true },
+  // { id: "user_create", visible: true },
+  // { id: "user_edit", visible: true },
 ];
 
 export default function Licencias_investigador() {

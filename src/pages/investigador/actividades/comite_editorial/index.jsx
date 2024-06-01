@@ -1,16 +1,6 @@
-import {
-  AppLayout,
-  BreadcrumbGroup,
-  ContentLayout,
-  Header,
-  SpaceBetween,
-  Tabs,
-} from "@cloudscape-design/components";
-import Sidebar from "../../components/sidebar.jsx";
-import Navbar from "../../components/navbar.jsx";
-import Helpbar from "../../components/helpbar.jsx";
+import { SpaceBetween, Tabs } from "@cloudscape-design/components";
 import Listado from "./tabs/listado.jsx";
-import ProtectedRoute from "../../components/protectedRoute.jsx";
+import BaseLayout from "../../components/baseLayout.jsx";
 
 const breadcrumbs = [
   {
@@ -35,27 +25,16 @@ const tabs = [
 
 export default function Comite_editorial() {
   return (
-    <ProtectedRoute>
-      <Navbar />
-      <AppLayout
-        breadcrumbs={<BreadcrumbGroup items={breadcrumbs} />}
-        navigation={<Sidebar />}
-        tools={
-          <Helpbar>
-            Listado de los comités editoriales en los que ha participado usted.
-          </Helpbar>
-        }
-        content={
-          <ContentLayout
-            disableOverlap
-            header={<Header variant="h1">Comité editorial:</Header>}
-          >
-            <SpaceBetween size="l">
-              <Tabs tabs={tabs} ariaLabel="Ventanas de comité editorial" />
-            </SpaceBetween>
-          </ContentLayout>
-        }
-      />
-    </ProtectedRoute>
+    <BaseLayout
+      breadcrumbs={breadcrumbs}
+      header="Deudas de proyectos:"
+      helpInfo="Información sobre la páginal actual para poder mostrarla al público
+      en general."
+      disableOverlap
+    >
+      <SpaceBetween size="l">
+        <Tabs tabs={tabs} ariaLabel="Ventanas de comité editorial" />
+      </SpaceBetween>
+    </BaseLayout>
   );
 }
