@@ -93,20 +93,6 @@ const useAutosuggest = (type) => {
           setOptions(data);
         }
         break;
-      case "investigador_Docente permanente":
-        {
-          const res = await axiosBase.get(
-            "admin/estudios/investigadores/searchDocenteRrhh",
-            {
-              params: {
-                query: value,
-              },
-            }
-          );
-          const data = res.data;
-          setOptions(data);
-        }
-        break;
       case "investigador_Estudiante":
         {
           const res = await axiosBase.get(
@@ -125,6 +111,48 @@ const useAutosuggest = (type) => {
         {
           const res = await axiosBase.get(
             "investigador/publicaciones/proyectos_registrados",
+            {
+              params: {
+                query: value,
+              },
+            }
+          );
+          const data = res.data;
+          setOptions(data);
+        }
+        break;
+      case "investigador_docente_registrado":
+        {
+          const res = await axiosBase.get(
+            "investigador/publicaciones/searchDocenteRegistrado",
+            {
+              params: {
+                query: value,
+              },
+            }
+          );
+          const data = res.data;
+          setOptions(data);
+        }
+        break;
+      case "investigador_estudiante_registrado":
+        {
+          const res = await axiosBase.get(
+            "investigador/publicaciones/searchEstudianteRegistrado",
+            {
+              params: {
+                query: value,
+              },
+            }
+          );
+          const data = res.data;
+          setOptions(data);
+        }
+        break;
+      case "investigador_externo_registrado":
+        {
+          const res = await axiosBase.get(
+            "investigador/publicaciones/searchExternoRegistrado",
             {
               params: {
                 query: value,
