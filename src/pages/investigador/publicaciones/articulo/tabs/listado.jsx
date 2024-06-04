@@ -256,19 +256,22 @@ export default () => {
                 disabled={!enableBtn}
                 onItemClick={({ detail }) => {
                   if (detail.id == "action_1") {
-                    // setEditVisible(true);
+                    const query = queryString.stringify({
+                      publicacion_id: selectedItems[0].id,
+                    });
+                    window.location.href = "articulos/registrar/paso1?" + query;
                   } else if (detail.id == "action_2") {
                     // setDeleteVisible(true);
                   }
                 }}
                 items={[
                   {
-                    text: "Ver detalle",
+                    text: "Editar",
                     id: "action_1",
                     disabled: false,
                   },
                   {
-                    text: "Reporte",
+                    text: "Eliminar",
                     id: "action_2",
                     disabled: false,
                   },

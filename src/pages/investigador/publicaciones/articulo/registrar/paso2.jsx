@@ -15,6 +15,7 @@ import { useLocation } from "react-router-dom";
 import queryString from "query-string";
 import ModalRegistrado from "./components/modalRegistrado";
 import ModalNoRegistrado from "./components/modalNoRegistrado";
+import ModalEliminarProyecto from "./components/modalEliminarProyecto";
 
 const columnDefinitions = [
   {
@@ -101,7 +102,16 @@ export default function () {
             counter={"(" + distributions.length + ")"}
             actions={
               <SpaceBetween direction="horizontal" size="xs">
-                <Button variant="normal" disabled>
+                <Button
+                  variant="normal"
+                  disabled={
+                    collectionProps.selectedItems.length > 0 ? false : true
+                  }
+                  onClick={() => {
+                    setTypeModal("eliminar");
+                    setVisible(true);
+                  }}
+                >
                   Eliminar
                 </Button>
                 <ButtonDropdown
@@ -154,6 +164,14 @@ export default function () {
       {visible && typeModal == "no_registrado" && (
         <ModalNoRegistrado
           id={publicacion_id}
+          reload={getData}
+          setVisible={setVisible}
+          visible={visible}
+        />
+      )}
+      {visible && typeModal == "eliminar" && (
+        <ModalEliminarProyecto
+          id={collectionProps.selectedItems[0].id}
           reload={getData}
           setVisible={setVisible}
           visible={visible}

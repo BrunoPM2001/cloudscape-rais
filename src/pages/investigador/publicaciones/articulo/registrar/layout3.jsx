@@ -62,6 +62,9 @@ export default function Registrar_articulo_3() {
       <Wizard
         onNavigate={({ detail }) => handleNavigate(detail)}
         activeStepIndex={2}
+        onCancel={() => {
+          window.location.href = "../../articulos";
+        }}
         steps={[
           {
             title: "Descripción de la publicación",

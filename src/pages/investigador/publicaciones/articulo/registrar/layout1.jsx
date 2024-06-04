@@ -1,5 +1,5 @@
 import { Wizard } from "@cloudscape-design/components";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import Paso1 from "./paso1.jsx";
 import BaseLayout from "../../../components/baseLayout";
 import { useLocation } from "react-router-dom";
@@ -22,6 +22,9 @@ const breadcrumbs = [
 ];
 
 export default function Registrar_articulo_1() {
+  //  States
+  const [loading, setLoading] = useState(false);
+
   //  Url
   const location = useLocation();
   const { publicacion_id } = queryString.parse(location.search);
@@ -32,11 +35,16 @@ export default function Registrar_articulo_1() {
   //  Functions
   const handleNavigate = async (detail) => {
     if (detail.requestedStepIndex > 0) {
+      setLoading(true);
       const isValid = await pasoRefs.current[0]?.registrar();
+      setLoading(false);
       if (!isValid) {
         return;
       }
-      window.location.href = "paso2";
+      const query = queryString.stringify({
+        publicacion_id,
+      });
+      window.location.href = "paso2?" + query;
     }
   };
 
@@ -51,6 +59,10 @@ export default function Registrar_articulo_1() {
       <Wizard
         onNavigate={({ detail }) => handleNavigate(detail)}
         activeStepIndex={0}
+        isLoadingNextStep={loading}
+        onCancel={() => {
+          window.location.href = "../../articulos";
+        }}
         steps={[
           {
             title: "Descripción de la publicación",
