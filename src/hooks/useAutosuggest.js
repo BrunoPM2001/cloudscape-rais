@@ -121,6 +121,20 @@ const useAutosuggest = (type) => {
           setOptions(data);
         }
         break;
+      case "proyectos_registrados":
+        {
+          const res = await axiosBase.get(
+            "investigador/publicaciones/proyectos_registrados",
+            {
+              params: {
+                query: value,
+              },
+            }
+          );
+          const data = res.data;
+          setOptions(data);
+        }
+        break;
       default:
         break;
     }

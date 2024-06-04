@@ -280,7 +280,7 @@ export default () => {
                 variant="primary"
                 onClick={() =>
                   (window.location.href =
-                    "/investigador/publicaciones/registrar")
+                    "/investigador/publicaciones/articulos/registrar/paso1")
                 }
               >
                 Registrar

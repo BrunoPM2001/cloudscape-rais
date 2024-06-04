@@ -64,10 +64,15 @@ const Patentes = lazy(() =>
   import("../pages/investigador/publicaciones/patente/index.jsx")
 );
 const Grupo = lazy(() => import("../pages/investigador/grupo/grupo/index.jsx"));
-const Registrar_articulo = lazy(() =>
-  import("../pages/investigador/publicaciones/articulo/registrar/index.jsx")
+const Registrar_articulo_paso1 = lazy(() =>
+  import("../pages/investigador/publicaciones/articulo/registrar/layout1.jsx")
 );
-
+const Registrar_articulo_paso2 = lazy(() =>
+  import("../pages/investigador/publicaciones/articulo/registrar/layout2.jsx")
+);
+const Registrar_articulo_paso3 = lazy(() =>
+  import("../pages/investigador/publicaciones/articulo/registrar/layout3.jsx")
+);
 const Investigador_main = lazy(() =>
   import("../pages/investigador/dashboard/index.jsx")
 );
@@ -136,7 +141,29 @@ const routes = createBrowserRouter(
       children: [
         {
           path: "articulos",
-          element: <Articulos />,
+          children: [
+            {
+              path: "",
+              element: <Articulos />,
+            },
+            {
+              path: "registrar",
+              children: [
+                {
+                  path: "paso1",
+                  element: <Registrar_articulo_paso1 />,
+                },
+                {
+                  path: "paso2",
+                  element: <Registrar_articulo_paso2 />,
+                },
+                {
+                  path: "paso3",
+                  element: <Registrar_articulo_paso3 />,
+                },
+              ],
+            },
+          ],
         },
         {
           path: "libros",
@@ -161,10 +188,6 @@ const routes = createBrowserRouter(
         {
           path: "patentes",
           element: <Patentes />,
-        },
-        {
-          path: "registrar",
-          element: <Registrar_articulo />,
         },
       ],
     },

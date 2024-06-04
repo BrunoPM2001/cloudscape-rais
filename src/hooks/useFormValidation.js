@@ -19,6 +19,10 @@ const useFormValidation = (initialState, validationRules) => {
       if (value[0] && rule.maxSize && value[0].size > rule.maxSize) {
         return `El archivo debe ser menor a ${rule.maxSize / 1024 / 1024} MB.`;
       }
+    } else if (rule.noEmpty) {
+      if (rule.required && value.length == 0) {
+        return "Campo requerido";
+      }
     } else {
       // Validación para campos no archivos
       if (rule.required && !value) {

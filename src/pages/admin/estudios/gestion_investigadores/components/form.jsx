@@ -259,6 +259,8 @@ export default function Formulario({
                 handleChange("pais", detail.selectedOption)
               }
               options={paises}
+              statusType={paises.length == 0 ? "loading" : "finished"}
+              loadingText="Cargando"
             />
           </FormField>
         </ColumnLayout>
@@ -541,6 +543,8 @@ export default function Formulario({
                 handleChange("facultad_id", detail.selectedOption)
               }
               options={facultades}
+              statusType={facultades.length == 0 ? "loading" : "finished"}
+              loadingText="Cargando"
             />
           </FormField>
           <FormField
@@ -555,6 +559,8 @@ export default function Formulario({
                 handleChange("dependencia_id", detail.selectedOption)
               }
               options={dependencias}
+              statusType={dependencias.length == 0 ? "loading" : "finished"}
+              loadingText="Cargando"
             />
           </FormField>
           <FormField
@@ -569,6 +575,8 @@ export default function Formulario({
                 handleChange("instituto_id", detail.selectedOption)
               }
               options={institutos}
+              statusType={institutos.length == 0 ? "loading" : "finished"}
+              loadingText="Cargando"
             />
           </FormField>
         </ColumnLayout>
@@ -591,6 +599,10 @@ export default function Formulario({
                 handleChange("docente_categoria", detail.selectedOption)
               }
               options={docente_categorias}
+              statusType={
+                docente_categorias.length == 0 ? "loading" : "finished"
+              }
+              loadingText="Cargando"
             />
           </FormField>
           <FormField

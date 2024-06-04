@@ -20,7 +20,7 @@ export default function ({ data, loading }) {
       }
       fitHeight={true}
     >
-      <ColumnLayout columns={3} variant="text-grid" minColumnWidth={170}>
+      <ColumnLayout columns={3} minColumnWidth={170}>
         <div>
           <Box variant="awsui-key-label">Grupos de investigación</Box>
           {loading ? (

@@ -6,38 +6,8 @@ import {
   Link,
   Spinner,
 } from "@cloudscape-design/components";
-import { useEffect, useState } from "react";
-import axiosBase from "../../../../api/axios";
 
-export default function () {
-  //  States
-  const [data, setData] = useState({});
-  const [loading, setLoading] = useState(true);
-
-  //  Functions
-  const getData = async () => {
-    try {
-      setLoading("loading");
-      const res = await axiosBase.get("investigador/dashboard/metricas");
-      if (res.status == 401 || res.status == 500) {
-        localStorage.removeItem("Auth");
-        setLoading(false);
-      } else {
-        const data = await res.data;
-        setData(data);
-        setLoading(false);
-      }
-    } catch (error) {
-      setLoading(false);
-      console.log(error);
-    }
-  };
-
-  //  Effects
-  useEffect(() => {
-    getData();
-  }, []);
-
+export default function ({ data, loading }) {
   return (
     <Container
       header={
