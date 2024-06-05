@@ -5,22 +5,31 @@ import {
   SpaceBetween,
   Form,
   Button,
-  Autosuggest,
   Input,
   ColumnLayout,
   Select,
 } from "@cloudscape-design/components";
 import { useContext, useState } from "react";
-import { useAutosuggest } from "../../../../../../hooks/useAutosuggest";
 import axiosBase from "../../../../../../api/axios";
 import NotificationContext from "../../../../../../providers/notificationProvider";
 import { useFormValidation } from "../../../../../../hooks/useFormValidation";
 
-const initialForm = {
-  autor: "",
-  filiacion: null,
-  categoria: null,
-};
+const optFiliacion = [
+  {
+    value: "1",
+    label: "Sí",
+  },
+  {
+    value: "0",
+    label: "No",
+  },
+];
+
+const optCategoria = [
+  {
+    value: "Autor",
+  },
+];
 
 const formRules = {
   autor: { required: true },
@@ -28,7 +37,7 @@ const formRules = {
   categoria: { required: true },
 };
 
-export default ({ id, visible, setVisible, reload }) => {
+export default ({ item, visible, setVisible, reload }) => {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
 
@@ -37,25 +46,26 @@ export default ({ id, visible, setVisible, reload }) => {
 
   //  Hooks
   const { formValues, formErrors, handleChange, validateForm } =
-    useFormValidation(initialForm, formRules);
+    useFormValidation(
+      {
+        autor: item.autor,
+        filiacion: optFiliacion.find((opt) => opt.value == item.filiacion),
+        categoria: optCategoria.find((opt) => opt.value == item.categoria),
+      },
+      formRules
+    );
 
   //  Functions
-  const getData = async () => {
-    const res = await axiosBase.get("investigador/publicaciones/getAutor", {
-      params: {
-        id,
-      },
-    });
-  };
-  const agregarAutor = async () => {
+  const actualizarAutor = async () => {
     if (validateForm()) {
       setLoadingCreate(true);
       const res = await axiosBase.put(
         "investigador/publicaciones/editarAutor",
         {
+          id: item.id,
+          autor: formValues.autor,
           filiacion: formValues.filiacion.value,
           categoria: formValues.categoria.value,
-          tipo: "interno",
         }
       );
       const data = res.data;
@@ -78,9 +88,8 @@ export default ({ id, visible, setVisible, reload }) => {
               Cancelar
             </Button>
             <Button
-              disabled={!enableCreate}
               variant="primary"
-              onClick={agregarAutor}
+              onClick={actualizarAutor}
               loading={loadingCreate}
             >
               Agregar autor
@@ -98,7 +107,6 @@ export default ({ id, visible, setVisible, reload }) => {
             errorText={formErrors.autor}
           >
             <Input
-              disabled={!enableCreate}
               placeholder="Escriba el nombre del autor con el que aparece en la publicación"
               value={formValues.autor}
               onChange={({ detail }) => handleChange("autor", detail.value)}
@@ -112,21 +120,11 @@ export default ({ id, visible, setVisible, reload }) => {
             >
               <Select
                 placeholder="Escoja una opción"
-                disabled={!enableCreate}
                 selectedOption={formValues.filiacion}
                 onChange={({ detail }) => {
                   handleChange("filiacion", detail.selectedOption);
                 }}
-                options={[
-                  {
-                    value: "1",
-                    label: "Sí",
-                  },
-                  {
-                    value: "0",
-                    label: "No",
-                  },
-                ]}
+                options={optFiliacion}
               ></Select>
             </FormField>
             <FormField
@@ -136,12 +134,11 @@ export default ({ id, visible, setVisible, reload }) => {
             >
               <Select
                 placeholder="Escoja una opción"
-                disabled={!enableCreate}
                 selectedOption={formValues.categoria}
                 onChange={({ detail }) => {
                   handleChange("categoria", detail.selectedOption);
                 }}
-                options={[{ value: "Autor" }]}
+                options={optCategoria}
               ></Select>
             </FormField>
           </ColumnLayout>

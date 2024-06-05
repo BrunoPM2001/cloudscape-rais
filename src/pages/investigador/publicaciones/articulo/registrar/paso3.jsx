@@ -16,6 +16,7 @@ import ModalAutorDocente from "./components/modalAutorDocente";
 import ModalAutorEstudiante from "./components/modalAutorEstudiante";
 import ModalAutorExterno from "./components/modalAutorExterno";
 import ModalEliminarAutor from "./components/modalEliminarAutor";
+import ModalEditarAutor from "./components/modalEditarAutor";
 
 const columnDefinitions = [
   {
@@ -127,7 +128,7 @@ export default function () {
                   variant="normal"
                   onItemClick={({ detail }) => {
                     if (detail.id == "action_1_1") {
-                      setTypeModal("registrado");
+                      setTypeModal("edit");
                       setVisible(true);
                     } else if (detail.id == "action_1_2") {
                       setTypeModal("delete");
@@ -213,6 +214,14 @@ export default function () {
       {visible && typeModal == "add_externo" && (
         <ModalAutorExterno
           id={publicacion_id}
+          reload={getData}
+          setVisible={setVisible}
+          visible={visible}
+        />
+      )}
+      {visible && typeModal == "edit" && (
+        <ModalEditarAutor
+          item={collectionProps.selectedItems[0]}
           reload={getData}
           setVisible={setVisible}
           visible={visible}
