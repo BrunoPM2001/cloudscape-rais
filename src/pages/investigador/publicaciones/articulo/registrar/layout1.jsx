@@ -67,7 +67,12 @@ export default function Registrar_articulo_1() {
           {
             title: "Descripción de la publicación",
             description: "Metadata de la publicación",
-            content: <Paso1 ref={(el) => (pasoRefs.current[0] = el)} />,
+            content: (
+              <Paso1
+                ref={(el) => (pasoRefs.current[0] = el)}
+                publicacion_id={publicacion_id}
+              />
+            ),
           },
           {
             title: "Resultado de proyecto financiado",

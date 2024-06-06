@@ -1,5 +1,5 @@
 import { Wizard } from "@cloudscape-design/components";
-import Paso2 from "./paso2.jsx";
+import Paso4 from "./paso4.jsx";
 import BaseLayout from "../../../components/baseLayout";
 import { useLocation } from "react-router-dom";
 import queryString from "query-string";
@@ -20,7 +20,7 @@ const breadcrumbs = [
   },
 ];
 
-export default function Registrar_articulo_2() {
+export default function Registrar_articulo_4() {
   //  Url
   const location = useLocation();
   const { publicacion_id } = queryString.parse(location.search);
@@ -31,16 +31,22 @@ export default function Registrar_articulo_2() {
 
   //  Functions
   const handleNavigate = async (detail) => {
-    if (detail.requestedStepIndex > 0) {
-      const query = queryString.stringify({
-        publicacion_id,
-      });
-      window.location.href = "paso3?" + query;
-    } else {
-      const query = queryString.stringify({
-        publicacion_id,
-      });
-      window.location.href = "paso1?" + query;
+    const query = queryString.stringify({
+      publicacion_id,
+    });
+    switch (detail.requestedStepIndex) {
+      case 0:
+        window.location.href = "paso1?" + query;
+        break;
+      case 1:
+        window.location.href = "paso2?" + query;
+        break;
+      case 2:
+        window.location.href = "paso3?" + query;
+        break;
+      default:
+        console.error("Index error");
+        break;
     }
   };
 
@@ -54,24 +60,25 @@ export default function Registrar_articulo_2() {
     >
       <Wizard
         onNavigate={({ detail }) => handleNavigate(detail)}
-        activeStepIndex={1}
+        activeStepIndex={3}
         onCancel={() => {
           window.location.href = "../../articulos";
         }}
+        submitButtonText="Enviar"
         steps={[
           {
             title: "Descripción de la publicación",
           },
           {
             title: "Resultado de proyecto financiado",
-            description: "Proyectos asociados a la publicación",
-            content: <Paso2 publicacion_id={publicacion_id} />,
           },
           {
             title: "Autores de la publicación",
           },
           {
             title: "Envío de publicación",
+            description: "Opciones finales",
+            content: <Paso4 />,
           },
         ]}
       />

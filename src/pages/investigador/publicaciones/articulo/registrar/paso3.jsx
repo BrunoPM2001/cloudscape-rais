@@ -60,7 +60,7 @@ const columnDisplay = [
   { id: "filiacion", visible: true },
 ];
 
-export default function () {
+export default function ({ publicacion_id }) {
   //  State
   const [loading, setLoading] = useState(true);
   const [distributions, setDistribution] = useState([]);
@@ -76,10 +76,6 @@ export default function () {
       selection: {},
     }
   );
-
-  //  Url
-  const location = useLocation();
-  const { publicacion_id } = queryString.parse(location.search);
 
   //  Function
   const getData = async () => {

@@ -73,6 +73,9 @@ const Registrar_articulo_paso2 = lazy(() =>
 const Registrar_articulo_paso3 = lazy(() =>
   import("../pages/investigador/publicaciones/articulo/registrar/layout3.jsx")
 );
+const Registrar_articulo_paso4 = lazy(() =>
+  import("../pages/investigador/publicaciones/articulo/registrar/layout4.jsx")
+);
 const Investigador_main = lazy(() =>
   import("../pages/investigador/dashboard/index.jsx")
 );
@@ -160,6 +163,10 @@ const routes = createBrowserRouter(
                 {
                   path: "paso3",
                   element: <Registrar_articulo_paso3 />,
+                },
+                {
+                  path: "paso4",
+                  element: <Registrar_articulo_paso4 />,
                 },
               ],
             },

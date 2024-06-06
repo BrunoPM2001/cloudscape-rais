@@ -66,6 +66,9 @@ const Agregar_investigador = lazy(() =>
 const Licencias_investigador = lazy(() =>
   import("../pages/admin/estudios/gestion_investigadores/licencias/index.jsx")
 );
+const Gestion_comprobantes = lazy(() =>
+  import("../pages/admin/economia/gestion_comprobantes/index.jsx")
+);
 const Reporte_estudio = lazy(() =>
   import("../pages/admin/reportes/estudio/index.jsx")
 );
@@ -208,6 +211,15 @@ const routes = createBrowserRouter(
         {
           path: "gestion_sum",
           element: <Gestion_sum />,
+        },
+      ],
+    },
+    {
+      path: "economia",
+      children: [
+        {
+          path: "gestion_comprobantes",
+          element: <Gestion_comprobantes />,
         },
       ],
     },

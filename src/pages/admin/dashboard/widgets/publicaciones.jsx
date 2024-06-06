@@ -1,6 +1,21 @@
 import { BarChart, Container, Header } from "@cloudscape-design/components";
+import { useMemo } from "react";
 
 export default function ({ data, tipos, loading }) {
+  // Memoizing el valor de series
+  const series = useMemo(
+    () =>
+      tipos.map((tipo) => ({
+        title: tipo.tipo,
+        type: "bar",
+        data: data.map((item) => ({
+          x: parseInt(item.periodo),
+          y: item[tipo.tipo],
+        })),
+      })),
+    [tipos, data]
+  );
+
   return (
     <Container
       header={
@@ -17,14 +32,7 @@ export default function ({ data, tipos, loading }) {
         statusType={loading ? "loading" : "finished"}
         fitHeight
         height={150}
-        series={tipos.map((tipo) => ({
-          title: tipo.tipo,
-          type: "bar",
-          data: data.map((item) => ({
-            x: parseInt(item.periodo),
-            y: item[tipo.tipo],
-          })),
-        }))}
+        series={series}
         xScaleType="categorical"
         xDomain={data.map((item) => item.periodo)}
         yDomain={[0, 3000]}

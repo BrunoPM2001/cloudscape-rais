@@ -21,8 +21,6 @@ import {
 } from "react";
 import { useFormValidation } from "../../../../../hooks/useFormValidation";
 import axiosBase from "../../../../../api/axios";
-import { useLocation } from "react-router-dom";
-import queryString from "query-string";
 import NotificationContext from "../../../../../providers/notificationProvider";
 
 const initialForm = {
@@ -76,8 +74,8 @@ export default forwardRef(function (props, ref) {
     useFormValidation(initialForm, formRules);
 
   //  Url
-  const location = useLocation();
-  const { publicacion_id } = queryString.parse(location.search);
+  // const location = useLocation();
+  // const { publicacion_id } = queryString.parse(location.search);
 
   //  Function
   const listaRevistasIndexadas = async () => {
@@ -95,7 +93,7 @@ export default forwardRef(function (props, ref) {
       "investigador/publicaciones/articulos/datosPaso1",
       {
         params: {
-          publicacion_id,
+          publicacion_id: props.publicacion_id,
         },
       }
     );
@@ -114,10 +112,10 @@ export default forwardRef(function (props, ref) {
 
   const registrar = async () => {
     if (validateForm()) {
-      if (publicacion_id != null) {
+      if (props.publicacion_id != null) {
         await axiosBase.post(
           "investigador/publicaciones/articulos/registrarPaso1",
-          { ...formValues, publicacion_id }
+          { ...formValues, publicacion_id: props.publicacion_id }
         );
       } else {
         await axiosBase.post(
@@ -131,7 +129,7 @@ export default forwardRef(function (props, ref) {
 
   //  Effect
   useEffect(() => {
-    if (publicacion_id != null) {
+    if (props.publicacion_id != null) {
       getData();
     } else {
       listaRevistasIndexadas();

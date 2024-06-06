@@ -1,5 +1,4 @@
 import { Wizard } from "@cloudscape-design/components";
-import { useRef } from "react";
 import Paso3 from "./paso3.jsx";
 import BaseLayout from "../../../components/baseLayout";
 import { useLocation } from "react-router-dom";
@@ -30,9 +29,6 @@ export default function Registrar_articulo_3() {
     window.location.href = "paso1";
   }
 
-  //  Ref
-  const pasoRefs = useRef([]);
-
   //  Functions
   const handleNavigate = async (detail) => {
     const query = queryString.stringify({
@@ -44,6 +40,9 @@ export default function Registrar_articulo_3() {
         break;
       case 1:
         window.location.href = "paso2?" + query;
+        break;
+      case 3:
+        window.location.href = "paso4?" + query;
         break;
       default:
         console.error("Index error");
@@ -75,7 +74,7 @@ export default function Registrar_articulo_3() {
           {
             title: "Autores de la publicación",
             description: "Listado de autores de esta publicación",
-            content: <Paso3 />,
+            content: <Paso3 publicacion_id={publicacion_id} />,
           },
           {
             title: "Envío de publicación",

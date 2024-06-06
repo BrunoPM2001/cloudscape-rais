@@ -80,6 +80,23 @@ const navItems = [
   },
   {
     type: "section",
+    text: "Economia",
+    defaultExpanded: false,
+    items: [
+      {
+        type: "link",
+        text: "Gestión de comprobantes",
+        href: "/admin/economia/gestion_comprobantes",
+      },
+      {
+        type: "link",
+        text: "Gestión de transferencias",
+        href: "/admin/economia/gestion_transferencias",
+      },
+    ],
+  },
+  {
+    type: "section",
     text: "Reportes",
     defaultExpanded: false,
     items: [
