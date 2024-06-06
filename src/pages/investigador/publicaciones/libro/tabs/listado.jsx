@@ -256,7 +256,12 @@ export default () => {
                 disabled={!enableBtn}
                 onItemClick={({ detail }) => {
                   if (detail.id == "action_1") {
-                    // setEditVisible(true);
+                    const query = queryString.stringify({
+                      publicacion_id: selectedItems[0].id,
+                      tipo: "libro",
+                    });
+                    window.location.href =
+                      "registrar/paso" + selectedItems[0].step + "?" + query;
                   } else if (detail.id == "action_2") {
                     // setDeleteVisible(true);
                   }
@@ -276,7 +281,17 @@ export default () => {
               >
                 Acciones para libros
               </ButtonDropdown>
-              <Button variant="primary">Registrar</Button>
+              <Button
+                variant="primary"
+                onClick={() => {
+                  const query = queryString.stringify({
+                    tipo: "libro",
+                  });
+                  window.location.href = "registrar/paso1?" + query;
+                }}
+              >
+                Registrar
+              </Button>
             </SpaceBetween>
           }
         >

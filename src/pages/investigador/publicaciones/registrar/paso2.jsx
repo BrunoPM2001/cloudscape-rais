@@ -9,10 +9,8 @@ import {
   Table,
 } from "@cloudscape-design/components";
 import { useEffect, useState } from "react";
-import axiosBase from "../../../../../api/axios";
+import axiosBase from "../../../../api/axios";
 import { useCollection } from "@cloudscape-design/collection-hooks";
-import { useLocation } from "react-router-dom";
-import queryString from "query-string";
 import ModalRegistrado from "./components/modalRegistrado";
 import ModalNoRegistrado from "./components/modalNoRegistrado";
 import ModalEliminarProyecto from "./components/modalEliminarProyecto";

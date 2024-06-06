@@ -8,9 +8,9 @@ import {
   Input,
 } from "@cloudscape-design/components";
 import { useContext, useState } from "react";
-import axiosBase from "../../../../../../api/axios";
-import NotificationContext from "../../../../../../providers/notificationProvider";
-import { useFormValidation } from "../../../../../../hooks/useFormValidation";
+import axiosBase from "../../../../../api/axios";
+import NotificationContext from "../../../../../providers/notificationProvider";
+import { useFormValidation } from "../../../../../hooks/useFormValidation";
 
 const initialForm = {
   codigo_proyecto: "",

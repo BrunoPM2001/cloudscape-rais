@@ -1,5 +1,6 @@
 import { SpaceBetween, Tabs } from "@cloudscape-design/components";
 import Listado from "./tabs/listado";
+import BaseLayout from "../../components/baseLayout";
 
 const breadcrumbs = [
   {

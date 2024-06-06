@@ -245,10 +245,10 @@ export default () => {
               disabled={!enableBtn}
               variant="primary"
               onClick={() => {
-                // const query = queryString.stringify({
-                //   id: selectedItems[0]["id"],
-                // });
-                // window.location.href = "monitoreo/detalle?" + query;
+                const query = queryString.stringify({
+                  proyecto_id: selectedItems[0]["id"],
+                });
+                window.location.href = "proyectoDetalle?" + query;
               }}
             >
               Ver detalles

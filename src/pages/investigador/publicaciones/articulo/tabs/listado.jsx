@@ -258,8 +258,10 @@ export default () => {
                   if (detail.id == "action_1") {
                     const query = queryString.stringify({
                       publicacion_id: selectedItems[0].id,
+                      tipo: "articulo",
                     });
-                    window.location.href = "articulos/registrar/paso1?" + query;
+                    window.location.href =
+                      "registrar/paso" + selectedItems[0].step + "?" + query;
                   } else if (detail.id == "action_2") {
                     // setDeleteVisible(true);
                   }
@@ -281,10 +283,12 @@ export default () => {
               </ButtonDropdown>
               <Button
                 variant="primary"
-                onClick={() =>
-                  (window.location.href =
-                    "/investigador/publicaciones/articulos/registrar/paso1")
-                }
+                onClick={() => {
+                  const query = queryString.stringify({
+                    tipo: "articulo",
+                  });
+                  window.location.href = "registrar/paso1?" + query;
+                }}
               >
                 Registrar
               </Button>

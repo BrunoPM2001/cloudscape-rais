@@ -5,8 +5,8 @@ import {
   Button,
 } from "@cloudscape-design/components";
 import { useContext, useState } from "react";
-import axiosBase from "../../../../../../api/axios";
-import NotificationContext from "../../../../../../providers/notificationProvider";
+import axiosBase from "../../../../../api/axios";
+import NotificationContext from "../../../../../providers/notificationProvider";
 
 export default ({ id, visible, setVisible, reload }) => {
   //  Context
@@ -16,13 +16,13 @@ export default ({ id, visible, setVisible, reload }) => {
   const [loading, setLoading] = useState(false);
 
   //  Functions
-  const eliminarAutor = async () => {
+  const eliminarProyecto = async () => {
     setLoading(true);
     const res = await axiosBase.delete(
-      "investigador/publicaciones/eliminarAutor",
+      "investigador/publicaciones/eliminarProyecto",
       {
         params: {
-          id: id,
+          proyecto_id: id,
         },
       }
     );
@@ -44,16 +44,20 @@ export default ({ id, visible, setVisible, reload }) => {
             <Button variant="normal" onClick={() => setVisible(false)}>
               Cancelar
             </Button>
-            <Button variant="primary" onClick={eliminarAutor} loading={loading}>
-              Eliminar autor
+            <Button
+              variant="primary"
+              onClick={eliminarProyecto}
+              loading={loading}
+            >
+              Eliminar proyecto
             </Button>
           </SpaceBetween>
         </Box>
       }
-      header="Eliminar autor de la publicación"
+      header="Eliminar proyecto asociado a la publicación"
     >
-      ¿Estás seguro de eliminar a este autor de la publicación? La acción no se
-      puede deshacer
+      ¿Estás seguro de eliminar este proyecto de la lista de proyectos asociados
+      a la publicación? La acción no se puede deshacer
     </Modal>
   );
 };

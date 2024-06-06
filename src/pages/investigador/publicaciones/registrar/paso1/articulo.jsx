@@ -12,16 +12,9 @@ import {
   Spinner,
   TokenGroup,
 } from "@cloudscape-design/components";
-import {
-  forwardRef,
-  useContext,
-  useEffect,
-  useImperativeHandle,
-  useState,
-} from "react";
+import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { useFormValidation } from "../../../../../hooks/useFormValidation";
 import axiosBase from "../../../../../api/axios";
-import NotificationContext from "../../../../../providers/notificationProvider";
 
 const initialForm = {
   doi: "",
@@ -57,13 +50,10 @@ const formRules = {
   edicion: { required: true },
   indexada: { required: false },
   url: { required: false },
-  anexo: { required: true, isFile: true, maxSize: 6 * 1024 * 1024 },
+  anexo: { required: false, isFile: true, maxSize: 6 * 1024 * 1024 },
 };
 
 export default forwardRef(function (props, ref) {
-  //  Context
-  const { notifications, pushNotification } = useContext(NotificationContext);
-
   //  State
   const [loading, setLoading] = useState("loading");
   const [loadingData, setLoadingData] = useState(false);
@@ -72,10 +62,6 @@ export default forwardRef(function (props, ref) {
   //  Hooks
   const { formValues, formErrors, handleChange, validateForm, setFormValues } =
     useFormValidation(initialForm, formRules);
-
-  //  Url
-  // const location = useLocation();
-  // const { publicacion_id } = queryString.parse(location.search);
 
   //  Function
   const listaRevistasIndexadas = async () => {
@@ -193,7 +179,10 @@ export default forwardRef(function (props, ref) {
                   handleChange("palabras_clave_input", detail.value);
                 }}
                 onKeyDown={({ detail }) => {
-                  if (detail.key == "Enter") {
+                  if (
+                    detail.key == "Enter" &&
+                    formValues.palabras_clave_input != ""
+                  ) {
                     handleChange("palabras_clave", [
                       ...formValues.palabras_clave,
                       { label: formValues.palabras_clave_input },

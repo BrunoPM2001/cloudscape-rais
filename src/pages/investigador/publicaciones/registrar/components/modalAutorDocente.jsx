@@ -11,10 +11,10 @@ import {
   Select,
 } from "@cloudscape-design/components";
 import { useContext, useState } from "react";
-import { useAutosuggest } from "../../../../../../hooks/useAutosuggest";
-import axiosBase from "../../../../../../api/axios";
-import NotificationContext from "../../../../../../providers/notificationProvider";
-import { useFormValidation } from "../../../../../../hooks/useFormValidation";
+import { useAutosuggest } from "../../../../../hooks/useAutosuggest";
+import axiosBase from "../../../../../api/axios";
+import NotificationContext from "../../../../../providers/notificationProvider";
+import { useFormValidation } from "../../../../../hooks/useFormValidation";
 
 const initialForm = {
   autor: "",
@@ -39,7 +39,7 @@ export default ({ id, visible, setVisible, reload }) => {
 
   //  Hooks
   const { loading, options, setOptions, value, setValue, setAvoidSelect } =
-    useAutosuggest("investigador_estudiante_registrado");
+    useAutosuggest("investigador_docente_registrado");
   const { formValues, formErrors, handleChange, validateForm } =
     useFormValidation(initialForm, formRules);
 
@@ -92,7 +92,7 @@ export default ({ id, visible, setVisible, reload }) => {
     >
       <Form variant="embedded">
         <SpaceBetween direction="vertical" size="s">
-          <FormField label="Buscar estudiante investigador" stretch>
+          <FormField label="Buscar docente investigador" stretch>
             <Autosuggest
               onChange={({ detail }) => {
                 setOptions([]);

@@ -9,9 +9,9 @@ import {
   Input,
 } from "@cloudscape-design/components";
 import { useContext, useState } from "react";
-import { useAutosuggest } from "../../../../../../hooks/useAutosuggest";
-import axiosBase from "../../../../../../api/axios";
-import NotificationContext from "../../../../../../providers/notificationProvider";
+import { useAutosuggest } from "../../../../../hooks/useAutosuggest";
+import axiosBase from "../../../../../api/axios";
+import NotificationContext from "../../../../../providers/notificationProvider";
 
 export default ({ id, visible, setVisible, reload }) => {
   //  Context

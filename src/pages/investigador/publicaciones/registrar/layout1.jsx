@@ -1,8 +1,10 @@
 import { Wizard } from "@cloudscape-design/components";
-import Paso2 from "./paso2.jsx";
-import BaseLayout from "../../../components/baseLayout";
+import { useRef, useState } from "react";
+import BaseLayout from "../../components/baseLayout";
 import { useLocation } from "react-router-dom";
 import queryString from "query-string";
+import Articulo from "./paso1/articulo.jsx";
+import Libro from "./paso1/libro.jsx";
 
 const breadcrumbs = [
   {
@@ -13,34 +15,34 @@ const breadcrumbs = [
     text: "Publicaciones",
   },
   {
-    text: "Artículos en revistas de investigación",
-  },
-  {
     text: "Registrar",
   },
 ];
 
-export default function Registrar_articulo_2() {
+export default function Registrar_articulo_1() {
+  //  States
+  const [loading, setLoading] = useState(false);
+
   //  Url
   const location = useLocation();
-  const { publicacion_id } = queryString.parse(location.search);
+  const { publicacion_id, tipo } = queryString.parse(location.search);
 
-  if (publicacion_id == null) {
-    window.location.href = "paso1";
-  }
+  //  Ref
+  const pasoRefs = useRef([]);
 
   //  Functions
   const handleNavigate = async (detail) => {
     if (detail.requestedStepIndex > 0) {
+      setLoading(true);
+      const isValid = await pasoRefs.current[0]?.registrar();
+      setLoading(false);
+      if (!isValid) {
+        return;
+      }
       const query = queryString.stringify({
         publicacion_id,
       });
-      window.location.href = "paso3?" + query;
-    } else {
-      const query = queryString.stringify({
-        publicacion_id,
-      });
-      window.location.href = "paso1?" + query;
+      window.location.href = "paso2?" + query;
     }
   };
 
@@ -54,18 +56,35 @@ export default function Registrar_articulo_2() {
     >
       <Wizard
         onNavigate={({ detail }) => handleNavigate(detail)}
-        activeStepIndex={1}
+        activeStepIndex={0}
+        isLoadingNextStep={loading}
         onCancel={() => {
           window.location.href = "../../articulos";
         }}
         steps={[
           {
             title: "Descripción de la publicación",
+            description: "Metadata de la publicación",
+            content: (
+              <>
+                {tipo == "articulo" ? (
+                  <Articulo
+                    ref={(el) => (pasoRefs.current[0] = el)}
+                    publicacion_id={publicacion_id}
+                  />
+                ) : tipo == "libro" ? (
+                  <Libro
+                    ref={(el) => (pasoRefs.current[0] = el)}
+                    publicacion_id={publicacion_id}
+                  />
+                ) : (
+                  <div></div>
+                )}
+              </>
+            ),
           },
           {
             title: "Resultado de proyecto financiado",
-            description: "Proyectos asociados a la publicación",
-            content: <Paso2 publicacion_id={publicacion_id} />,
           },
           {
             title: "Autores de la publicación",

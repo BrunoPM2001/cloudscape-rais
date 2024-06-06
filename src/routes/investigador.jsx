@@ -42,6 +42,10 @@ const Comite_editorial = lazy(() =>
 const Grupos_estudio = lazy(() =>
   import("../pages/investigador/actividades/grupos_estudio/index.jsx")
 );
+const Proyecto_detalle = lazy(() =>
+  import("../pages/investigador/actividades/reporte/index.jsx")
+);
+
 const Articulos = lazy(() =>
   import("../pages/investigador/publicaciones/articulo/index.jsx")
 );
@@ -65,16 +69,16 @@ const Patentes = lazy(() =>
 );
 const Grupo = lazy(() => import("../pages/investigador/grupo/grupo/index.jsx"));
 const Registrar_articulo_paso1 = lazy(() =>
-  import("../pages/investigador/publicaciones/articulo/registrar/layout1.jsx")
+  import("../pages/investigador/publicaciones/registrar/layout1.jsx")
 );
 const Registrar_articulo_paso2 = lazy(() =>
-  import("../pages/investigador/publicaciones/articulo/registrar/layout2.jsx")
+  import("../pages/investigador/publicaciones/registrar/layout2.jsx")
 );
 const Registrar_articulo_paso3 = lazy(() =>
-  import("../pages/investigador/publicaciones/articulo/registrar/layout3.jsx")
+  import("../pages/investigador/publicaciones/registrar/layout3.jsx")
 );
 const Registrar_articulo_paso4 = lazy(() =>
-  import("../pages/investigador/publicaciones/articulo/registrar/layout4.jsx")
+  import("../pages/investigador/publicaciones/registrar/layout4.jsx")
 );
 const Investigador_main = lazy(() =>
   import("../pages/investigador/dashboard/index.jsx")
@@ -137,6 +141,10 @@ const routes = createBrowserRouter(
           path: "gruposEstudio",
           element: <Grupos_estudio />,
         },
+        {
+          path: "proyectoDetalle",
+          element: <Proyecto_detalle />,
+        },
       ],
     },
     {
@@ -144,31 +152,26 @@ const routes = createBrowserRouter(
       children: [
         {
           path: "articulos",
+          element: <Articulos />,
+        },
+        {
+          path: "registrar",
           children: [
             {
-              path: "",
-              element: <Articulos />,
+              path: "paso1",
+              element: <Registrar_articulo_paso1 />,
             },
             {
-              path: "registrar",
-              children: [
-                {
-                  path: "paso1",
-                  element: <Registrar_articulo_paso1 />,
-                },
-                {
-                  path: "paso2",
-                  element: <Registrar_articulo_paso2 />,
-                },
-                {
-                  path: "paso3",
-                  element: <Registrar_articulo_paso3 />,
-                },
-                {
-                  path: "paso4",
-                  element: <Registrar_articulo_paso4 />,
-                },
-              ],
+              path: "paso2",
+              element: <Registrar_articulo_paso2 />,
+            },
+            {
+              path: "paso3",
+              element: <Registrar_articulo_paso3 />,
+            },
+            {
+              path: "paso4",
+              element: <Registrar_articulo_paso4 />,
             },
           ],
         },

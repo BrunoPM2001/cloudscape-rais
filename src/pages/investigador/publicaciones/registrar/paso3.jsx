@@ -8,10 +8,8 @@ import {
   Table,
 } from "@cloudscape-design/components";
 import { useEffect, useState } from "react";
-import axiosBase from "../../../../../api/axios";
+import axiosBase from "../../../../api/axios";
 import { useCollection } from "@cloudscape-design/collection-hooks";
-import { useLocation } from "react-router-dom";
-import queryString from "query-string";
 import ModalAutorDocente from "./components/modalAutorDocente";
 import ModalAutorEstudiante from "./components/modalAutorEstudiante";
 import ModalAutorExterno from "./components/modalAutorExterno";

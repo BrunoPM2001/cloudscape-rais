@@ -1,7 +1,6 @@
 import { Wizard } from "@cloudscape-design/components";
-import { useRef, useState } from "react";
-import Paso1 from "./paso1.jsx";
-import BaseLayout from "../../../components/baseLayout";
+import Paso4 from "./paso4.jsx";
+import BaseLayout from "../../components/baseLayout";
 import { useLocation } from "react-router-dom";
 import queryString from "query-string";
 
@@ -14,37 +13,38 @@ const breadcrumbs = [
     text: "Publicaciones",
   },
   {
-    text: "Artículos en revistas de investigación",
-  },
-  {
     text: "Registrar",
   },
 ];
 
-export default function Registrar_articulo_1() {
-  //  States
-  const [loading, setLoading] = useState(false);
-
+export default function Registrar_articulo_4() {
   //  Url
   const location = useLocation();
-  const { publicacion_id } = queryString.parse(location.search);
+  const { publicacion_id, tipo } = queryString.parse(location.search);
 
-  //  Ref
-  const pasoRefs = useRef([]);
+  if (publicacion_id == null) {
+    window.location.href = "paso1";
+  }
 
   //  Functions
   const handleNavigate = async (detail) => {
-    if (detail.requestedStepIndex > 0) {
-      setLoading(true);
-      const isValid = await pasoRefs.current[0]?.registrar();
-      setLoading(false);
-      if (!isValid) {
-        return;
-      }
-      const query = queryString.stringify({
-        publicacion_id,
-      });
-      window.location.href = "paso2?" + query;
+    const query = queryString.stringify({
+      publicacion_id,
+      tipo,
+    });
+    switch (detail.requestedStepIndex) {
+      case 0:
+        window.location.href = "paso1?" + query;
+        break;
+      case 1:
+        window.location.href = "paso2?" + query;
+        break;
+      case 2:
+        window.location.href = "paso3?" + query;
+        break;
+      default:
+        console.error("Index error");
+        break;
     }
   };
 
@@ -58,21 +58,14 @@ export default function Registrar_articulo_1() {
     >
       <Wizard
         onNavigate={({ detail }) => handleNavigate(detail)}
-        activeStepIndex={0}
-        isLoadingNextStep={loading}
+        activeStepIndex={3}
         onCancel={() => {
           window.location.href = "../../articulos";
         }}
+        submitButtonText="Enviar"
         steps={[
           {
             title: "Descripción de la publicación",
-            description: "Metadata de la publicación",
-            content: (
-              <Paso1
-                ref={(el) => (pasoRefs.current[0] = el)}
-                publicacion_id={publicacion_id}
-              />
-            ),
           },
           {
             title: "Resultado de proyecto financiado",
@@ -82,6 +75,8 @@ export default function Registrar_articulo_1() {
           },
           {
             title: "Envío de publicación",
+            description: "Opciones finales",
+            content: <Paso4 />,
           },
         ]}
       />
