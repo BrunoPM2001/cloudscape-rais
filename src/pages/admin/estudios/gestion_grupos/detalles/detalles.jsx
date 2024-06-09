@@ -10,8 +10,16 @@ import {
   Spinner,
   StatusIndicator,
 } from "@cloudscape-design/components";
+import { useState } from "react";
+import ModalEditGrupo from "./components/modalEditGrupo";
+import ModalAprobarSolicitud from "./components/modalAprobarSolicitud";
+import ModalDisolverGrupo from "./components/modalDisolverGrupo";
 
-export default ({ data, loading }) => {
+export default ({ data, loading, grupo_id, reload }) => {
+  //  States
+  const [visible, setVisible] = useState(false);
+  const [typeModal, setTypeModal] = useState("");
+
   return (
     <Container
       header={
@@ -20,20 +28,52 @@ export default ({ data, loading }) => {
           actions={
             <SpaceBetween size="xs" direction="horizontal">
               <ButtonDropdown
-                items={[
-                  {
-                    id: "action_1_1",
-                    text: "Calificación",
-                  },
-                  {
-                    id: "action_1_2",
-                    text: "Detalles del grupo",
-                  },
-                ]}
+                disabled={loading || data.estado < 0}
+                items={
+                  data.tipo == "grupo"
+                    ? [
+                        {
+                          id: "action_1_1",
+                          text: "Calificación",
+                        },
+                        {
+                          id: "action_1_2",
+                          text: "Reporte del grupo",
+                        },
+                        {
+                          id: "action_1_3",
+                          text: "Disolver grupo",
+                        },
+                      ]
+                    : [
+                        {
+                          id: "action_2_1",
+                          text: "Aprobar solicitud",
+                        },
+                      ]
+                }
+                onItemClick={({ detail }) => {
+                  if (detail.id == "action_1_3") {
+                    setVisible(true);
+                    setTypeModal("disolver_grupo");
+                  } else if (detail.id == "action_2_1") {
+                    setVisible(true);
+                    setTypeModal("aprobar_soli");
+                  }
+                }}
               >
-                Reporte
+                Opciones
               </ButtonDropdown>
-              <Button variant="primary">Editar</Button>
+              <Button
+                variant="primary"
+                onClick={() => {
+                  setVisible(true);
+                  setTypeModal("edit");
+                }}
+                disabled={loading || data.estado < 0}
+              >
+                Editar
+              </Button>
             </SpaceBetween>
           }
         >
@@ -53,7 +93,7 @@ export default ({ data, loading }) => {
           </div>
           <div>
             <Box variant="awsui-key-label">Responsable</Box>
-            <div>{data.coordinador}</div>
+            {loading ? <Spinner /> : <div>{data.coordinador}</div>}
           </div>
           <div>
             <Box variant="awsui-key-label">Estado</Box>
@@ -62,7 +102,7 @@ export default ({ data, loading }) => {
             ) : (
               <StatusIndicator
                 type={
-                  data.estado == -1
+                  data.estado == -2
                     ? "error"
                     : data.estado == 1
                     ? "info"
@@ -74,10 +114,14 @@ export default ({ data, loading }) => {
                     ? "pending"
                     : data.estado == 6
                     ? "in-progress"
+                    : data.estado == 12
+                    ? "error"
                     : "error"
                 }
               >
-                {data.estado == -1
+                {data.estado == -2
+                  ? "Disuelto"
+                  : data.estado == -1
                   ? "Eliminado"
                   : data.estado == 1
                   ? "Reconocido"
@@ -89,6 +133,8 @@ export default ({ data, loading }) => {
                   ? "Enviado"
                   : data.estado == 6
                   ? "En proceso"
+                  : data.estado == 12
+                  ? "Reg. observado"
                   : "error"}
               </StatusIndicator>
             )}
@@ -173,6 +219,30 @@ export default ({ data, loading }) => {
           </div>
         </SpaceBetween>
       </ColumnLayout>
+      {visible &&
+        (typeModal == "edit" ? (
+          <ModalEditGrupo
+            visible={visible}
+            setVisible={setVisible}
+            item={data}
+            grupo_id={grupo_id}
+            reload={reload}
+          />
+        ) : typeModal == "aprobar_soli" ? (
+          <ModalAprobarSolicitud
+            visible={visible}
+            setVisible={setVisible}
+            grupo_id={grupo_id}
+          />
+        ) : typeModal == "disolver_grupo" ? (
+          <ModalDisolverGrupo
+            visible={visible}
+            setVisible={setVisible}
+            grupo_id={grupo_id}
+          />
+        ) : (
+          <></>
+        ))}
     </Container>
   );
 };

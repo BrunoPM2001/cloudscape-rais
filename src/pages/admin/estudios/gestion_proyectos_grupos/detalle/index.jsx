@@ -81,11 +81,15 @@ export default function Detalle_proyecto_grupo() {
     <BaseLayout
       breadcrumbs={breadcrumbs}
       header="Detalle del proyecto de grupo:"
-      helpInfo="Información sobre la páginal actual para poder mostrarla al público
-      en general."
+      helpInfo="Para registrar un proyecto al módulo de economía ingrese los datos de RR, fecha de RR y RD al editar un proyecto"
     >
       <SpaceBetween size="l">
-        <Detalles data={data} loading={loading} />
+        <Detalles
+          data={data}
+          loading={loading}
+          proyecto_id={id}
+          reload={getData}
+        />
         <Tabs tabs={tabs} ariaLabel="Opciones de proyecto de grupo" />
       </SpaceBetween>
     </BaseLayout>

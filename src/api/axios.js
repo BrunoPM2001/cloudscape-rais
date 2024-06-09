@@ -11,7 +11,6 @@ axiosBase.defaults.headers.common.Authorization =
 //  Handle some status code
 axiosBase.interceptors.response.use(
   (response) => {
-    console.log(response.status);
     return response;
   },
   (error) => {
@@ -27,7 +26,6 @@ axiosBase.interceptors.response.use(
     } else if (error.request) {
       console.error("No response of server: ", error.request);
     } else {
-      console.log(error);
       console.error("Error: ", error.message);
     }
     return Promise.reject(error);

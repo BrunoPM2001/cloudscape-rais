@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   ColumnLayout,
   Container,
   Header,
@@ -7,11 +8,31 @@ import {
   Spinner,
   StatusIndicator,
 } from "@cloudscape-design/components";
+import ModalEditarProyecto from "./components/modalEditarProyecto";
+import { useState } from "react";
 
-export default ({ data, loading }) => {
+export default ({ data, loading, proyecto_id, reload }) => {
+  //  States
+  const [visible, setVisible] = useState(false);
+
   return (
     <Container
-      header={<Header variant="h2">Detalles del proyecto de grupo</Header>}
+      header={
+        <Header
+          variant="h2"
+          actions={
+            <Button
+              variant="primary"
+              disabled={loading}
+              onClick={() => setVisible(true)}
+            >
+              Editar
+            </Button>
+          }
+        >
+          Datos generales
+        </Header>
+      }
     >
       <ColumnLayout columns={3} variant="text-grid">
         <SpaceBetween size="s">
@@ -139,6 +160,15 @@ export default ({ data, loading }) => {
           </div>
         </SpaceBetween>
       </ColumnLayout>
+      {visible && (
+        <ModalEditarProyecto
+          item={data}
+          proyecto_id={proyecto_id}
+          reload={reload}
+          setVisible={setVisible}
+          visible={visible}
+        />
+      )}
     </Container>
   );
 };

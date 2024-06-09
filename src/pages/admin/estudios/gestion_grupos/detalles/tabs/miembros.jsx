@@ -140,7 +140,7 @@ const columnDisplay = [
   { id: "fecha_exclusion", visible: true },
 ];
 
-export default () => {
+export default ({ grupo_estado }) => {
   //  Data state
   const [incluirVisible, setIncluirVisible] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -272,6 +272,7 @@ export default () => {
             actions={
               <SpaceBetween direction="horizontal" size="xs">
                 <ButtonDropdown
+                  disabled={loading || grupo_estado < 0}
                   expandableGroups
                   items={[
                     {
@@ -316,7 +317,7 @@ export default () => {
                   Acciones para el grupo
                 </ButtonDropdown>
                 <ButtonDropdown
-                  disabled={!enableBtn}
+                  disabled={!enableBtn || grupo_estado < 0}
                   variant="primary"
                   items={[
                     {

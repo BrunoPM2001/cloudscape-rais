@@ -38,9 +38,7 @@ export default function Grupo() {
       en general."
       disableOverlap
     >
-      <SpaceBetween size="l">
-        <Tabs tabs={tabs} />
-      </SpaceBetween>
+      <Tabs tabs={tabs} />
     </BaseLayout>
   );
 }

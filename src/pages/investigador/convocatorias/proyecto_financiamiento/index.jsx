@@ -1,15 +1,5 @@
-import {
-  AppLayout,
-  BreadcrumbGroup,
-  ContentLayout,
-  Header,
-  SpaceBetween,
-  Tabs,
-} from "@cloudscape-design/components";
-import Sidebar from "../../components/sidebar.jsx";
-import Navbar from "../../components/navbar.jsx";
-import Helpbar from "../../components/helpbar.jsx";
-import ProtectedRoute from "../../components/protectedRoute.jsx";
+import { SpaceBetween, Tabs } from "@cloudscape-design/components";
+import BaseLayout from "../../components/baseLayout.jsx";
 
 const breadcrumbs = [
   {
@@ -26,26 +16,15 @@ const breadcrumbs = [
 
 export default function Convocatoria_registro() {
   return (
-    <ProtectedRoute>
-      <Navbar />
-      <AppLayout
-        breadcrumbs={<BreadcrumbGroup items={breadcrumbs} />}
-        navigation={<Sidebar />}
-        tools={
-          <Helpbar>
-            Listado de los grupos de investigación a los que pertenece así como
-            las solicitudes de creación.
-          </Helpbar>
-        }
-        content={
-          <ContentLayout
-            disableOverlap
-            header={<Header variant="h1">Grupos de investigación:</Header>}
-          >
-            <SpaceBetween size="l">{/* <Tabs tabs={tabs} /> */}</SpaceBetween>
-          </ContentLayout>
-        }
-      />
-    </ProtectedRoute>
+    <BaseLayout
+      breadcrumbs={breadcrumbs}
+      header="Registro a la convocatoria vigente"
+      helpInfo="Información sobre la páginal actual para poder mostrarla al público
+      en general."
+      disableOverlap
+    >
+      Working on it!
+      {/* <Tabs tabs={tabs} /> */}
+    </BaseLayout>
   );
 }

@@ -42,7 +42,7 @@ export default function Detalle_grupo() {
     {
       id: "miembros",
       label: "Miembros",
-      content: <Miembros />,
+      content: <Miembros grupo_estado={data.estado} />,
     },
     {
       id: "documentos",
@@ -84,8 +84,8 @@ export default function Detalle_grupo() {
   const getData = async () => {
     setLoading(true);
     const res = await axiosBase.get("admin/estudios/grupos/detalle/" + id);
-    const data = await res.data;
-    setData(data.data[0]);
+    const data = res.data;
+    setData(data);
     setLoading(false);
   };
 
@@ -101,7 +101,12 @@ export default function Detalle_grupo() {
       en general."
     >
       <SpaceBetween size="l">
-        <Detalles data={data} loading={loading} />
+        <Detalles
+          data={data}
+          loading={loading}
+          grupo_id={id}
+          reload={getData}
+        />
         <Tabs tabs={tabs} ariaLabel="Opciones de grupo" />
       </SpaceBetween>
     </BaseLayout>

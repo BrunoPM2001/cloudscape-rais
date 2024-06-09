@@ -1,21 +1,14 @@
 import {
-  AppLayout,
   Autosuggest,
-  BreadcrumbGroup,
   Button,
   Container,
-  ContentLayout,
   Form,
   FormField,
   Header,
-  HelpPanel,
   Select,
   SpaceBetween,
 } from "@cloudscape-design/components";
-import Sidebar from "../../components/sidebar.jsx";
-import Navbar from "../../components/navbar.jsx";
 import { useEffect, useState } from "react";
-import ProtectedRoute from "../../components/protectedRoute.jsx";
 import axiosBase from "../../../../api/axios";
 import BaseLayout from "../../components/baseLayout.jsx";
 
@@ -113,85 +106,83 @@ export default function Reporte_constancias() {
       helpInfo="Información sobre la páginal actual para poder mostrarla al público
       en general."
     >
-      <SpaceBetween size="l">
-        <Container>
-          <Form
-            variant="embedded"
-            actions={
-              <SpaceBetween direction="horizontal" size="xs">
-                <Button variant="normal" onClick={() => clearForm()}>
-                  Limpiar campos
-                </Button>
-                <Button
-                  variant="primary"
-                  loading={loadingReporte}
-                  onClick={() => reporte()}
-                >
-                  Generar reporte
-                </Button>
-              </SpaceBetween>
-            }
-            header={<Header variant="h2">Opciones del reporte</Header>}
-          >
-            <SpaceBetween size="s">
-              <FormField label="Investigador" stretch>
-                <Autosuggest
-                  onChange={({ detail }) => {
-                    setValue(detail.value);
-                  }}
-                  onSelect={({ detail }) => {
-                    if (detail.selectedOption.detail != undefined) {
-                      setForm((prev) => ({
-                        ...prev,
-                        investigadorId: detail.selectedOption.detail,
-                      }));
-                    }
-                  }}
-                  value={value}
-                  options={options}
-                  loadingText="Cargando data"
-                  placeholder="DNI o nombre del investigador"
-                  ariaLabel="DNI o nombre del investigador"
-                  statusType={loading == true ? "loading" : "finished"}
-                  empty="No se encontraron resultados"
-                />
-              </FormField>
-              <FormField label="Tipo de constancia" stretch>
-                <Select
-                  controlId="tipo"
-                  placeholder="Escoga un tipo de constancia"
-                  selectedOption={selectedOptions.tipo}
-                  onChange={({ detail }) => {
-                    setSelectedOptions((prev) => ({
-                      ...prev,
-                      tipo: detail.selectedOption,
-                    }));
+      <Container>
+        <Form
+          variant="embedded"
+          actions={
+            <SpaceBetween direction="horizontal" size="xs">
+              <Button variant="normal" onClick={() => clearForm()}>
+                Limpiar campos
+              </Button>
+              <Button
+                variant="primary"
+                loading={loadingReporte}
+                onClick={() => reporte()}
+              >
+                Generar reporte
+              </Button>
+            </SpaceBetween>
+          }
+          header={<Header variant="h2">Opciones del reporte</Header>}
+        >
+          <SpaceBetween size="s">
+            <FormField label="Investigador" stretch>
+              <Autosuggest
+                onChange={({ detail }) => {
+                  setValue(detail.value);
+                }}
+                onSelect={({ detail }) => {
+                  if (detail.selectedOption.detail != undefined) {
                     setForm((prev) => ({
                       ...prev,
-                      tipo: detail.selectedOption.value,
+                      investigadorId: detail.selectedOption.detail,
                     }));
-                  }}
-                  options={[
-                    {
-                      label: "Constancia de puntaje de publicaciones",
-                      value: "1",
-                    },
-                    {
-                      label:
-                        "Constancia de registro de publicaciones científicas",
-                      value: "2",
-                    },
-                    {
-                      label: "Constancia de grupo de investigación",
-                      value: "3",
-                    },
-                  ]}
-                />
-              </FormField>
-            </SpaceBetween>
-          </Form>
-        </Container>
-      </SpaceBetween>
+                  }
+                }}
+                value={value}
+                options={options}
+                loadingText="Cargando data"
+                placeholder="DNI o nombre del investigador"
+                ariaLabel="DNI o nombre del investigador"
+                statusType={loading == true ? "loading" : "finished"}
+                empty="No se encontraron resultados"
+              />
+            </FormField>
+            <FormField label="Tipo de constancia" stretch>
+              <Select
+                controlId="tipo"
+                placeholder="Escoga un tipo de constancia"
+                selectedOption={selectedOptions.tipo}
+                onChange={({ detail }) => {
+                  setSelectedOptions((prev) => ({
+                    ...prev,
+                    tipo: detail.selectedOption,
+                  }));
+                  setForm((prev) => ({
+                    ...prev,
+                    tipo: detail.selectedOption.value,
+                  }));
+                }}
+                options={[
+                  {
+                    label: "Constancia de puntaje de publicaciones",
+                    value: "1",
+                  },
+                  {
+                    label:
+                      "Constancia de registro de publicaciones científicas",
+                    value: "2",
+                  },
+                  {
+                    label: "Constancia de grupo de investigación",
+                    value: "3",
+                  },
+                ]}
+              />
+            </FormField>
+          </SpaceBetween>
+        </Form>
+      </Container>
     </BaseLayout>
   );
 }
