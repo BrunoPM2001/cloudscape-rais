@@ -22,7 +22,7 @@ export default function Registrar_articulo_2() {
   const location = useLocation();
   const { publicacion_id, tipo } = queryString.parse(location.search);
 
-  if (publicacion_id == null) {
+  if (publicacion_id == null || tipo == null) {
     window.location.href = "paso1";
   }
 
@@ -37,6 +37,7 @@ export default function Registrar_articulo_2() {
     } else {
       const query = queryString.stringify({
         publicacion_id,
+        tipo,
       });
       window.location.href = "paso1?" + query;
     }
@@ -54,7 +55,7 @@ export default function Registrar_articulo_2() {
         onNavigate={({ detail }) => handleNavigate(detail)}
         activeStepIndex={1}
         onCancel={() => {
-          window.location.href = "../../articulos";
+          window.location.href = "../" + tipo;
         }}
         steps={[
           {

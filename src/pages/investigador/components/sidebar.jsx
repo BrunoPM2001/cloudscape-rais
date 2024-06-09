@@ -86,37 +86,37 @@ const navItems = [
       {
         type: "link",
         text: "Artículo en revistas de investigación",
-        href: "/investigador/publicaciones/articulos",
+        href: "/investigador/publicaciones/articulo",
       },
       {
         type: "link",
         text: "Libro",
-        href: "/investigador/publicaciones/libros",
+        href: "/investigador/publicaciones/libro",
       },
       {
         type: "link",
         text: "Capítulo de libro",
-        href: "/investigador/publicaciones/capitulos",
+        href: "/investigador/publicaciones/capitulo",
       },
       {
         type: "link",
         text: "Resumen de evento científico",
-        href: "/investigador/publicaciones/eventos",
+        href: "/investigador/publicaciones/evento",
       },
       {
         type: "link",
         text: "Tesis propias",
-        href: "/investigador/publicaciones/tesisPropias",
+        href: "/investigador/publicaciones/tesisPropia",
       },
       {
         type: "link",
         text: "Tesis asesoría",
-        href: "/investigador/publicaciones/tesisAsesorias",
+        href: "/investigador/publicaciones/tesisAsesoria",
       },
       {
         type: "link",
         text: "Propiedad intelectual",
-        href: "/investigador/publicaciones/patentes",
+        href: "/investigador/publicaciones/patente",
       },
       {
         type: "link",

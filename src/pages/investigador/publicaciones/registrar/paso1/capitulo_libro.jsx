@@ -15,33 +15,39 @@ import { useFormValidation } from "../../../../../hooks/useFormValidation";
 import axiosBase from "../../../../../api/axios";
 
 const initialForm = {
-  categoria_autor: null,
-  isbn: "",
   titulo: "",
-  editorial: "",
-  ciudad: "",
-  pais: null,
-  edicion: "",
-  volumen: "",
-  pagina_total: "",
+  doi: "",
+  pagina_inicial: "",
+  pagina_final: "",
   fecha_publicacion: "",
   palabras_clave_input: "",
   palabras_clave: [],
+  publicacion_nombre: "",
+  isbn: "",
+  editorial: "",
+  edicion: "",
+  volumen: "",
+  pagina_total: "",
+  ciudad: "",
+  pais: null,
   url: "",
 };
 
 const formRules = {
-  categoria_autor: { required: true },
-  isbn: { required: true },
   titulo: { required: true },
+  doi: { required: true },
+  pagina_inicial: { required: true },
+  pagina_final: { required: true },
+  fecha_publicacion: { required: true },
+  palabras_clave: { required: true, noEmpty: true },
+  publicacion_nombre: { required: true },
+  isbn: { required: true },
   editorial: { required: true },
-  ciudad: { required: true },
-  pais: { required: true },
   edicion: { required: true },
   volumen: { required: true },
   pagina_total: { required: true },
-  fecha_publicacion: { required: true },
-  palabras_clave: { required: true, noEmpty: true },
+  ciudad: { required: true },
+  pais: { required: true },
   url: { required: true },
 };
 
@@ -68,7 +74,7 @@ export default forwardRef(function (props, ref) {
   const getData = async () => {
     setLoadingData(true);
     const res = await axiosBase.get(
-      "investigador/publicaciones/libros/datosPaso1",
+      "investigador/publicaciones/capitulo_libro/datosPaso1",
       {
         params: {
           publicacion_id: props.publicacion_id,
@@ -76,14 +82,14 @@ export default forwardRef(function (props, ref) {
       }
     );
     const data = res.data;
-    setPaises(data.paises);
+    setRevistasIndexadas(data.revistas);
     setLoading("finished");
     setFormValues({
       ...initialForm,
       ...data.data,
-      categoria_autor: { value: data.data.categoria },
+      art_tipo: { value: data.data.art_tipo },
       palabras_clave: data.palabras_clave,
-      pais: { value: data.data.pais },
+      indexada: data.indexada,
     });
     setLoadingData(false);
   };
@@ -92,13 +98,13 @@ export default forwardRef(function (props, ref) {
     if (validateForm()) {
       if (props.publicacion_id != null) {
         await axiosBase.post(
-          "investigador/publicaciones/libros/registrarPaso1",
+          "investigador/publicaciones/capitulos/registrarPaso1",
           { ...formValues, publicacion_id: props.publicacion_id }
         );
         return { isValid: true, res_publicacion_id: null };
       } else {
         const res = await axiosBase.post(
-          "investigador/publicaciones/libros/registrarPaso1",
+          "investigador/publicaciones/capitulos/registrarPaso1",
           formValues
         );
         const data = res.data;
@@ -124,41 +130,76 @@ export default forwardRef(function (props, ref) {
 
   return (
     <Container>
-      <Form variant="embedded" header={<Header>Datos del libro</Header>}>
+      <Form
+        variant="embedded"
+        header={<Header>Datos del capítulo de libro</Header>}
+      >
         {loadingData ? (
           <Spinner />
         ) : (
           <SpaceBetween direction="vertical" size="s">
-            <ColumnLayout columns={2}>
-              <FormField
-                label="Categoría de autor"
-                stretch
-                errorText={formErrors.categoria_autor}
-              >
-                <Select
-                  placeholder="Escoja una opción"
-                  selectedOption={formValues.categoria_autor}
-                  onChange={({ detail }) => {
-                    handleChange("categoria_autor", detail.selectedOption);
-                  }}
-                  options={[{ value: "Autor" }, { value: "Editor" }]}
-                />
-              </FormField>
-              <FormField label="ISBN" stretch errorText={formErrors.isbn}>
-                <Input
-                  placeholder="Escriba el isbn"
-                  value={formValues.isbn}
-                  onChange={({ detail }) => handleChange("isbn", detail.value)}
-                />
-              </FormField>
-            </ColumnLayout>
-            <FormField label="Título" stretch errorText={formErrors.titulo}>
+            <FormField
+              label="Título del capítulo"
+              stretch
+              errorText={formErrors.titulo}
+            >
               <Input
-                placeholder="Escriba el título de la publicación"
+                placeholder="Escriba el título del capítulo"
                 value={formValues.titulo}
                 onChange={({ detail }) => handleChange("titulo", detail.value)}
               />
             </FormField>
+            <ColumnLayout columns={4}>
+              <FormField label="DOI" stretch errorText={formErrors.doi}>
+                <Input
+                  placeholder="Escriba el doi"
+                  value={formValues.doi}
+                  onChange={({ detail }) => handleChange("doi", detail.value)}
+                />
+              </FormField>
+              <FormField
+                label="Página inicial"
+                stretch
+                errorText={formErrors.pagina_inicial}
+              >
+                <Input
+                  type="number"
+                  placeholder="Escriba el n° de página inicial"
+                  value={formValues.pagina_inicial}
+                  onChange={({ detail }) =>
+                    handleChange("pagina_inicial", detail.value)
+                  }
+                />
+              </FormField>
+              <FormField
+                label="Página final"
+                stretch
+                errorText={formErrors.pagina_final}
+              >
+                <Input
+                  type="number"
+                  placeholder="Escriba el n° de página final"
+                  value={formValues.pagina_final}
+                  onChange={({ detail }) =>
+                    handleChange("pagina_final", detail.value)
+                  }
+                />
+              </FormField>
+              <FormField
+                label="Fecha de publicación"
+                stretch
+                errorText={formErrors.fecha_publicacion}
+              >
+                <Input
+                  placeholder="Escriba la fecha de publicación"
+                  value={formValues.fecha_publicacion}
+                  onChange={({ detail }) =>
+                    handleChange("fecha_publicacion", detail.value)
+                  }
+                />
+              </FormField>
+            </ColumnLayout>
+
             <FormField
               label="Palabras clave"
               stretch
@@ -193,19 +234,28 @@ export default forwardRef(function (props, ref) {
                 }}
               />
             </FormField>
+            <Header>Datos del libro</Header>
             <FormField
-              label="URL de la publicación"
+              label="Título del libro"
               stretch
-              errorText={formErrors.url}
+              errorText={formErrors.publicacion_nombre}
             >
               <Input
-                placeholder="Escriba la URL de su publicación"
-                value={formValues.url}
-                onChange={({ detail }) => handleChange("url", detail.value)}
+                placeholder="Escriba el título del libro"
+                value={formValues.publicacion_nombre}
+                onChange={({ detail }) =>
+                  handleChange("publicacion_nombre", detail.value)
+                }
               />
             </FormField>
-            <Header>Datos de edición</Header>
             <ColumnLayout columns={3}>
+              <FormField label="ISBN" stretch errorText={formErrors.isbn}>
+                <Input
+                  placeholder="Escriba el ISBN de la publicación"
+                  value={formValues.isbn}
+                  onChange={({ detail }) => handleChange("isbn", detail.value)}
+                />
+              </FormField>
               <FormField
                 label="Editorial"
                 stretch
@@ -216,6 +266,40 @@ export default forwardRef(function (props, ref) {
                   value={formValues.editorial}
                   onChange={({ detail }) =>
                     handleChange("editorial", detail.value)
+                  }
+                />
+              </FormField>
+              <FormField label="Edición" stretch errorText={formErrors.edicion}>
+                <Input
+                  placeholder="Escriba el n° de edicion"
+                  value={formValues.edicion}
+                  onChange={({ detail }) =>
+                    handleChange("edicion", detail.value)
+                  }
+                />
+              </FormField>
+            </ColumnLayout>
+            <ColumnLayout columns={4}>
+              <FormField label="Volumen" stretch errorText={formErrors.volumen}>
+                <Input
+                  placeholder="Escriba el volumen de su publicación"
+                  value={formValues.volumen}
+                  onChange={({ detail }) =>
+                    handleChange("volumen", detail.value)
+                  }
+                />
+              </FormField>
+              <FormField
+                label="Total de páginas"
+                stretch
+                errorText={formErrors.pagina_total}
+              >
+                <Input
+                  placeholder="Escriba el total de páginas"
+                  type="number"
+                  value={formValues.pagina_total}
+                  onChange={({ detail }) =>
+                    handleChange("pagina_total", detail.value)
                   }
                 />
               </FormField>
@@ -241,53 +325,17 @@ export default forwardRef(function (props, ref) {
                 />
               </FormField>
             </ColumnLayout>
-            <ColumnLayout columns={4}>
-              <FormField label="Edición" stretch errorText={formErrors.edicion}>
-                <Input
-                  placeholder="Escriba el n° de edicion"
-                  value={formValues.edicion}
-                  onChange={({ detail }) =>
-                    handleChange("edicion", detail.value)
-                  }
-                />
-              </FormField>
-              <FormField label="Volumen" stretch errorText={formErrors.volumen}>
-                <Input
-                  placeholder="Escriba el volumen de su publicación"
-                  value={formValues.volumen}
-                  onChange={({ detail }) =>
-                    handleChange("volumen", detail.value)
-                  }
-                />
-              </FormField>
-              <FormField
-                label="Total de páginas"
-                stretch
-                errorText={formErrors.pagina_total}
-              >
-                <Input
-                  placeholder="Escriba el total de páginas"
-                  type="number"
-                  value={formValues.pagina_total}
-                  onChange={({ detail }) =>
-                    handleChange("pagina_total", detail.value)
-                  }
-                />
-              </FormField>
-              <FormField
-                label="Fecha de publicación"
-                stretch
-                errorText={formErrors.fecha_publicacion}
-              >
-                <Input
-                  placeholder="Escriba la fecha de publicación"
-                  value={formValues.fecha_publicacion}
-                  onChange={({ detail }) =>
-                    handleChange("fecha_publicacion", detail.value)
-                  }
-                />
-              </FormField>
-            </ColumnLayout>
+            <FormField
+              label="URL de la publicación"
+              stretch
+              errorText={formErrors.url}
+            >
+              <Input
+                placeholder="Escriba la URL de su publicación"
+                value={formValues.url}
+                onChange={({ detail }) => handleChange("url", detail.value)}
+              />
+            </FormField>
           </SpaceBetween>
         )}
       </Form>

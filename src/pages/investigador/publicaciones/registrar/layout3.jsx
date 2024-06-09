@@ -22,7 +22,7 @@ export default function Registrar_articulo_3() {
   const location = useLocation();
   const { publicacion_id, tipo } = queryString.parse(location.search);
 
-  if (publicacion_id == null) {
+  if (publicacion_id == null || tipo == null) {
     window.location.href = "paso1";
   }
 
@@ -60,7 +60,7 @@ export default function Registrar_articulo_3() {
         onNavigate={({ detail }) => handleNavigate(detail)}
         activeStepIndex={2}
         onCancel={() => {
-          window.location.href = "../../articulos";
+          window.location.href = "../" + tipo;
         }}
         steps={[
           {
@@ -72,7 +72,7 @@ export default function Registrar_articulo_3() {
           {
             title: "Autores de la publicación",
             description: "Listado de autores de esta publicación",
-            content: <Paso3 publicacion_id={publicacion_id} />,
+            content: <Paso3 publicacion_id={publicacion_id} tipo={tipo} />,
           },
           {
             title: "Envío de publicación",

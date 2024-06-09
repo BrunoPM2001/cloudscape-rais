@@ -15,7 +15,13 @@ export default ({ data, loading }) => {
           <SpaceBetween size="s">
             <div>
               <Box variant="awsui-key-label">Presentación</Box>
-              {loading ? <Spinner /> : <div>{data.presentacion}</div>}
+              {loading ? (
+                <Spinner />
+              ) : (
+                <div
+                  dangerouslySetInnerHTML={{ __html: data.presentacion }}
+                ></div>
+              )}
             </div>
             <div>
               <Box variant="awsui-key-label">Ambientes físicos</Box>
@@ -31,11 +37,19 @@ export default ({ data, loading }) => {
           <SpaceBetween size="s">
             <div>
               <Box variant="awsui-key-label">Objetivos</Box>
-              {loading ? <Spinner /> : <div>{data.objetivos}</div>}
+              {loading ? (
+                <Spinner />
+              ) : (
+                <div dangerouslySetInnerHTML={{ __html: data.objetivos }}></div>
+              )}
             </div>
             <div>
               <Box variant="awsui-key-label">Servicios</Box>
-              {loading ? <Spinner /> : <div>{data.servicios}</div>}
+              {loading ? (
+                <Spinner />
+              ) : (
+                <div dangerouslySetInnerHTML={{ __html: data.servicios }}></div>
+              )}
             </div>
           </SpaceBetween>
         </div>

@@ -1,5 +1,7 @@
 import {
   Box,
+  Button,
+  ButtonDropdown,
   ColumnLayout,
   Container,
   Header,
@@ -11,7 +13,34 @@ import {
 
 export default ({ data, loading }) => {
   return (
-    <Container header={<Header variant="h2">Detalles del grupo</Header>}>
+    <Container
+      header={
+        <Header
+          variant="h2"
+          actions={
+            <SpaceBetween size="xs" direction="horizontal">
+              <ButtonDropdown
+                items={[
+                  {
+                    id: "action_1_1",
+                    text: "Calificación",
+                  },
+                  {
+                    id: "action_1_2",
+                    text: "Detalles del grupo",
+                  },
+                ]}
+              >
+                Reporte
+              </ButtonDropdown>
+              <Button variant="primary">Editar</Button>
+            </SpaceBetween>
+          }
+        >
+          Detalles del grupo
+        </Header>
+      }
+    >
       <ColumnLayout columns={3} variant="text-grid">
         <SpaceBetween size="s">
           <div>

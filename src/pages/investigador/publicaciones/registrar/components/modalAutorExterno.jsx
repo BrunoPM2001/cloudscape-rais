@@ -28,7 +28,7 @@ const formRules = {
   categoria: { required: true },
 };
 
-export default ({ id, visible, setVisible, reload }) => {
+export default ({ id, visible, setVisible, reload, optAutor }) => {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
 
@@ -185,7 +185,7 @@ export default ({ id, visible, setVisible, reload }) => {
                 onChange={({ detail }) => {
                   handleChange("categoria", detail.selectedOption);
                 }}
-                options={[{ value: "Autor" }]}
+                options={optAutor}
               ></Select>
             </FormField>
           </ColumnLayout>

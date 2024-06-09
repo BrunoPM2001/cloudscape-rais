@@ -151,8 +151,32 @@ const routes = createBrowserRouter(
       path: "publicaciones",
       children: [
         {
-          path: "articulos",
+          path: "articulo",
           element: <Articulos />,
+        },
+        {
+          path: "libro",
+          element: <Libros />,
+        },
+        {
+          path: "capitulo",
+          element: <Capitulos />,
+        },
+        {
+          path: "evento",
+          element: <Investigador_Evento />,
+        },
+        {
+          path: "tesisPropia",
+          element: <Tesis_propias />,
+        },
+        {
+          path: "tesisAsesoria",
+          element: <Tesis_asesorias />,
+        },
+        {
+          path: "patente",
+          element: <Patentes />,
         },
         {
           path: "registrar",
@@ -174,30 +198,6 @@ const routes = createBrowserRouter(
               element: <Registrar_articulo_paso4 />,
             },
           ],
-        },
-        {
-          path: "libros",
-          element: <Libros />,
-        },
-        {
-          path: "capitulos",
-          element: <Capitulos />,
-        },
-        {
-          path: "eventos",
-          element: <Investigador_Evento />,
-        },
-        {
-          path: "tesisPropias",
-          element: <Tesis_propias />,
-        },
-        {
-          path: "tesisAsesorias",
-          element: <Tesis_asesorias />,
-        },
-        {
-          path: "patentes",
-          element: <Patentes />,
         },
       ],
     },

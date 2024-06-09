@@ -1,7 +1,6 @@
 import {
   ColumnLayout,
   Container,
-  FileUpload,
   Form,
   FormField,
   Header,
@@ -32,7 +31,6 @@ const initialForm = {
   edicion: "",
   indexada: [],
   url: "",
-  anexo: [],
 };
 
 const formRules = {
@@ -50,7 +48,6 @@ const formRules = {
   edicion: { required: true },
   indexada: { required: false },
   url: { required: false },
-  anexo: { required: false, isFile: true, maxSize: 6 * 1024 * 1024 },
 };
 
 export default forwardRef(function (props, ref) {
@@ -103,13 +100,17 @@ export default forwardRef(function (props, ref) {
           "investigador/publicaciones/articulos/registrarPaso1",
           { ...formValues, publicacion_id: props.publicacion_id }
         );
+        return { isValid: true, res_publicacion_id: null };
       } else {
-        await axiosBase.post(
+        const res = await axiosBase.post(
           "investigador/publicaciones/articulos/registrarPaso1",
           formValues
         );
+        const data = res.data;
+        return { isValid: true, res_publicacion_id: data.publicacion_id };
       }
-      return true;
+    } else {
+      return { isValid: false };
     }
   };
 
@@ -325,27 +326,6 @@ export default forwardRef(function (props, ref) {
                 placeholder="Escriba la URL de su publicación"
                 value={formValues.url}
                 onChange={({ detail }) => handleChange("url", detail.value)}
-              />
-            </FormField>
-            <FormField label="Anexo" stretch errorText={formErrors.anexo}>
-              <FileUpload
-                value={formValues.anexo}
-                onChange={({ detail }) => handleChange("anexo", detail.value)}
-                showFileLastModified
-                showFileSize
-                showFileThumbnail
-                constraintText="El archivo cargado no debe superar los 6 MB"
-                i18nStrings={{
-                  uploadButtonText: (e) =>
-                    e ? "Cargar archivos" : "Cargar archivo",
-                  dropzoneText: (e) =>
-                    e
-                      ? "Arrastre los archivos para cargarlos"
-                      : "Arrastre el archivo para cargarlo",
-                  removeFileAriaLabel: (e) => `Eliminar archivo ${e + 1}`,
-                  errorIconAriaLabel: "Error",
-                }}
-                accept=".jpeg, .jpg, .png,  .pdf"
               />
             </FormField>
           </SpaceBetween>

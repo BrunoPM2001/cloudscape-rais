@@ -193,31 +193,11 @@ export default () => {
 
   //  Functions
   const getData = async () => {
-    try {
-      setLoading(true);
-      const res = await fetch(
-        "http://localhost:8000/api/investigador/grupo/listadoGrupos",
-        {
-          headers: {
-            Authorization: localStorage.getItem("Auth"),
-          },
-        }
-      );
-      if (!res.ok) {
-        localStorage.clear();
-        setDistribution([]);
-        setLoading(false);
-        throw new Error("Error in fetch");
-      } else {
-        const data = await res.json();
-        setDistribution(data.data);
-        setLoading(false);
-      }
-    } catch (error) {
-      setDistribution([]);
-      setLoading(false);
-      console.log(error);
-    }
+    setLoading(true);
+    const res = await axiosBase.get("investigador/grupo/listadoGrupos");
+    const data = res.data;
+    setDistribution(data.data);
+    setLoading(false);
   };
 
   //  Effects

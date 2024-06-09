@@ -5,6 +5,7 @@ import { useLocation } from "react-router-dom";
 import queryString from "query-string";
 import Articulo from "./paso1/articulo.jsx";
 import Libro from "./paso1/libro.jsx";
+import Capitulo_libro from "./paso1/capitulo_libro.jsx";
 
 const breadcrumbs = [
   {
@@ -34,13 +35,16 @@ export default function Registrar_articulo_1() {
   const handleNavigate = async (detail) => {
     if (detail.requestedStepIndex > 0) {
       setLoading(true);
-      const isValid = await pasoRefs.current[0]?.registrar();
+      const { isValid, res_publicacion_id } =
+        await pasoRefs.current[0]?.registrar();
       setLoading(false);
       if (!isValid) {
         return;
       }
       const query = queryString.stringify({
-        publicacion_id,
+        publicacion_id:
+          res_publicacion_id == null ? publicacion_id : res_publicacion_id,
+        tipo,
       });
       window.location.href = "paso2?" + query;
     }
@@ -59,7 +63,7 @@ export default function Registrar_articulo_1() {
         activeStepIndex={0}
         isLoadingNextStep={loading}
         onCancel={() => {
-          window.location.href = "../../articulos";
+          window.location.href = "../" + tipo;
         }}
         steps={[
           {
@@ -74,6 +78,11 @@ export default function Registrar_articulo_1() {
                   />
                 ) : tipo == "libro" ? (
                   <Libro
+                    ref={(el) => (pasoRefs.current[0] = el)}
+                    publicacion_id={publicacion_id}
+                  />
+                ) : tipo == "capitulo_libro" ? (
+                  <Capitulo_libro
                     ref={(el) => (pasoRefs.current[0] = el)}
                     publicacion_id={publicacion_id}
                   />

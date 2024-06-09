@@ -3,6 +3,7 @@ import Paso4 from "./paso4.jsx";
 import BaseLayout from "../../components/baseLayout";
 import { useLocation } from "react-router-dom";
 import queryString from "query-string";
+import { useRef, useState } from "react";
 
 const breadcrumbs = [
   {
@@ -18,11 +19,17 @@ const breadcrumbs = [
 ];
 
 export default function Registrar_articulo_4() {
+  //  States
+  const [loading, setLoading] = useState(false);
+
   //  Url
   const location = useLocation();
   const { publicacion_id, tipo } = queryString.parse(location.search);
 
-  if (publicacion_id == null) {
+  //  Ref
+  const pasoRefs = useRef([]);
+
+  if (publicacion_id == null || tipo == null) {
     window.location.href = "paso1";
   }
 
@@ -60,8 +67,14 @@ export default function Registrar_articulo_4() {
         onNavigate={({ detail }) => handleNavigate(detail)}
         activeStepIndex={3}
         onCancel={() => {
-          window.location.href = "../../articulos";
+          window.location.href = "../" + tipo;
         }}
+        onSubmit={async () => {
+          setLoading(true);
+          await pasoRefs.current[0]?.registrar();
+          setLoading(false);
+        }}
+        isLoadingNextStep={loading}
         submitButtonText="Enviar"
         steps={[
           {
@@ -76,7 +89,13 @@ export default function Registrar_articulo_4() {
           {
             title: "Envío de publicación",
             description: "Opciones finales",
-            content: <Paso4 />,
+            content: (
+              <Paso4
+                ref={(el) => (pasoRefs.current[0] = el)}
+                publicacion_id={publicacion_id}
+                tipo={tipo}
+              />
+            ),
           },
         ]}
       />

@@ -58,12 +58,13 @@ const columnDisplay = [
   { id: "filiacion", visible: true },
 ];
 
-export default function ({ publicacion_id }) {
+export default function ({ publicacion_id, tipo }) {
   //  State
   const [loading, setLoading] = useState(true);
   const [distributions, setDistribution] = useState([]);
   const [visible, setVisible] = useState(false);
   const [typeModal, setTypeModal] = useState(null);
+  const [optAutor, setOptAutor] = useState([]);
 
   //  Hooks
   const { items, collectionProps, paginationProps } = useCollection(
@@ -93,6 +94,10 @@ export default function ({ publicacion_id }) {
 
   //  Effect
   useEffect(() => {
+    if (tipo == "articulo") {
+      setOptAutor([{ value: "Autor" }, { value: "Autor de correspondencia" }]);
+    } else {
+    }
     getData();
   }, []);
 
@@ -195,6 +200,7 @@ export default function ({ publicacion_id }) {
           reload={getData}
           setVisible={setVisible}
           visible={visible}
+          optAutor={optAutor}
         />
       )}
       {visible && typeModal == "add_estudiante" && (
@@ -203,6 +209,7 @@ export default function ({ publicacion_id }) {
           reload={getData}
           setVisible={setVisible}
           visible={visible}
+          optAutor={optAutor}
         />
       )}
       {visible && typeModal == "add_externo" && (
@@ -211,6 +218,7 @@ export default function ({ publicacion_id }) {
           reload={getData}
           setVisible={setVisible}
           visible={visible}
+          optAutor={optAutor}
         />
       )}
       {visible && typeModal == "edit" && (
@@ -219,6 +227,7 @@ export default function ({ publicacion_id }) {
           reload={getData}
           setVisible={setVisible}
           visible={visible}
+          optAutor={optAutor}
         />
       )}
       {visible && typeModal == "delete" && (

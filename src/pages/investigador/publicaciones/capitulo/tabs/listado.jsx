@@ -12,6 +12,7 @@ import {
 import { useState, useEffect } from "react";
 import { useCollection } from "@cloudscape-design/collection-hooks";
 import queryString from "query-string";
+import axiosBase from "../../../../../api/axios";
 
 const stringOperators = [":", "!:", "=", "!=", "^", "!^"];
 
@@ -194,31 +195,13 @@ export default () => {
 
   //  Functions
   const getData = async () => {
-    try {
-      setLoading(true);
-      const res = await fetch(
-        "http://localhost:8000/api/investigador/publicaciones/capitulos/listado",
-        {
-          headers: {
-            Authorization: localStorage.getItem("Auth"),
-          },
-        }
-      );
-      if (!res.ok) {
-        localStorage.clear();
-        setDistribution([]);
-        setLoading(false);
-        throw new Error("Error in fetch");
-      } else {
-        const data = await res.json();
-        setDistribution(data.data);
-        setLoading(false);
-      }
-    } catch (error) {
-      setDistribution([]);
-      setLoading(false);
-      console.log(error);
-    }
+    setLoading(true);
+    const res = await axiosBase.get(
+      "investigador/publicaciones/capitulos/listado"
+    );
+    const data = res.data;
+    setDistribution(data.data);
+    setLoading(false);
   };
 
   //  Effects
@@ -256,7 +239,12 @@ export default () => {
                 disabled={!enableBtn}
                 onItemClick={({ detail }) => {
                   if (detail.id == "action_1") {
-                    // setEditVisible(true);
+                    const query = queryString.stringify({
+                      publicacion_id: selectedItems[0].id,
+                      tipo: "capitulo_libro",
+                    });
+                    window.location.href =
+                      "registrar/paso" + selectedItems[0].step + "?" + query;
                   } else if (detail.id == "action_2") {
                     // setDeleteVisible(true);
                   }
@@ -265,18 +253,28 @@ export default () => {
                   {
                     text: "Ver detalle",
                     id: "action_1",
-                    disabled: false,
+                    disabled: selectedItems[0]?.estado == 5 ? true : false,
                   },
                   {
                     text: "Reporte",
                     id: "action_2",
-                    disabled: false,
+                    disabled: selectedItems[0]?.estado == 5 ? true : false,
                   },
                 ]}
               >
                 Acciones para capítulos
               </ButtonDropdown>
-              <Button variant="primary">Registrar</Button>
+              <Button
+                variant="primary"
+                onClick={() => {
+                  const query = queryString.stringify({
+                    tipo: "capitulo_libro",
+                  });
+                  window.location.href = "registrar/paso1?" + query;
+                }}
+              >
+                Registrar
+              </Button>
             </SpaceBetween>
           }
         >

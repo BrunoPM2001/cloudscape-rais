@@ -71,7 +71,7 @@ export default ({ id, visible, setVisible, reload }) => {
     >
       <Form variant="embedded">
         <SpaceBetween direction="vertical" size="s">
-          <FormField label="Buscar egresado" stretch>
+          <FormField label="Buscar proyecto" stretch>
             <Autosuggest
               onChange={({ detail }) => {
                 setOptions([]);

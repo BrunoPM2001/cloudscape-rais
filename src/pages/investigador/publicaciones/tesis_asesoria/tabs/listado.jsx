@@ -12,6 +12,7 @@ import {
 import { useState, useEffect } from "react";
 import { useCollection } from "@cloudscape-design/collection-hooks";
 import queryString from "query-string";
+import axiosBase from "../../../../../api/axios";
 
 const stringOperators = [":", "!:", "=", "!=", "^", "!^"];
 
@@ -181,31 +182,13 @@ export default () => {
 
   //  Functions
   const getData = async () => {
-    try {
-      setLoading(true);
-      const res = await fetch(
-        "http://localhost:8000/api/investigador/publicaciones/tesisAsesoria/listado",
-        {
-          headers: {
-            Authorization: localStorage.getItem("Auth"),
-          },
-        }
-      );
-      if (!res.ok) {
-        localStorage.clear();
-        setDistribution([]);
-        setLoading(false);
-        throw new Error("Error in fetch");
-      } else {
-        const data = await res.json();
-        setDistribution(data.data);
-        setLoading(false);
-      }
-    } catch (error) {
-      setDistribution([]);
-      setLoading(false);
-      console.log(error);
-    }
+    setLoading(true);
+    const res = await axiosBase.get(
+      "investigador/publicaciones/tesisAsesoria/listado"
+    );
+    const data = res.data;
+    setDistribution(data.data);
+    setLoading(false);
   };
 
   //  Effects
@@ -252,12 +235,12 @@ export default () => {
                   {
                     text: "Ver detalle",
                     id: "action_1",
-                    disabled: false,
+                    disabled: selectedItems[0]?.estado == 5 ? true : false,
                   },
                   {
                     text: "Reporte",
                     id: "action_2",
-                    disabled: false,
+                    disabled: selectedItems[0]?.estado == 5 ? true : false,
                   },
                 ]}
               >

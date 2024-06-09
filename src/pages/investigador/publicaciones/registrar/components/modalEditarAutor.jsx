@@ -25,19 +25,13 @@ const optFiliacion = [
   },
 ];
 
-const optCategoria = [
-  {
-    value: "Autor",
-  },
-];
-
 const formRules = {
   autor: { required: true },
   filiacion: { required: true },
   categoria: { required: true },
 };
 
-export default ({ item, visible, setVisible, reload }) => {
+export default ({ item, visible, setVisible, reload, optAutor }) => {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
 
@@ -50,7 +44,7 @@ export default ({ item, visible, setVisible, reload }) => {
       {
         autor: item.autor,
         filiacion: optFiliacion.find((opt) => opt.value == item.filiacion),
-        categoria: optCategoria.find((opt) => opt.value == item.categoria),
+        categoria: { value: item.categoria },
       },
       formRules
     );
@@ -138,7 +132,7 @@ export default ({ item, visible, setVisible, reload }) => {
                 onChange={({ detail }) => {
                   handleChange("categoria", detail.selectedOption);
                 }}
-                options={optCategoria}
+                options={optAutor}
               ></Select>
             </FormField>
           </ColumnLayout>
