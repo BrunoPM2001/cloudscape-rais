@@ -69,6 +69,10 @@ const Licencias_investigador = lazy(() =>
 const Gestion_comprobantes = lazy(() =>
   import("../pages/admin/economia/gestion_comprobantes/index.jsx")
 );
+const Geco_detalle_proyecto = lazy(() =>
+  import("../pages/admin/economia/gestion_comprobantes/detalles/index.jsx")
+);
+
 const Reporte_estudio = lazy(() =>
   import("../pages/admin/reportes/estudio/index.jsx")
 );
@@ -219,7 +223,16 @@ const routes = createBrowserRouter(
       children: [
         {
           path: "gestion_comprobantes",
-          element: <Gestion_comprobantes />,
+          children: [
+            {
+              path: "",
+              element: <Gestion_comprobantes />,
+            },
+            {
+              path: "detalle",
+              element: <Geco_detalle_proyecto />,
+            },
+          ],
         },
       ],
     },

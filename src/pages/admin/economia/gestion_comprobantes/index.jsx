@@ -1,6 +1,6 @@
 import { Tabs } from "@cloudscape-design/components";
 import BaseLayout from "../../components/baseLayout";
-import Inicio from "./tabs/inicio";
+import Proyectos from "./tabs/proyectos";
 
 const breadcrumbs = [
   {
@@ -11,20 +11,19 @@ const breadcrumbs = [
     text: "Economía",
   },
   {
-    text: "Gestión de grupos",
+    text: "Gestión de comprobantes",
   },
 ];
 
 const tabs = [
   {
-    id: "inicio",
-    label: "Inicio",
-    content: <Inicio />,
+    id: "proyectos",
+    label: "Proyectos",
+    content: <Proyectos />,
   },
   {
     id: "solicitudes",
     label: "Solicitudes",
-    // content: <Solicitudes />,
   },
 ];
 
@@ -32,12 +31,12 @@ export default function Gestion_comprobantes() {
   return (
     <BaseLayout
       breadcrumbs={breadcrumbs}
-      header="Gestión de comprobantes:"
+      header="Gestión de comprobantes"
       helpInfo="Información sobre la páginal actual para poder mostrarla al público
       en general."
       disableOverlap
     >
-      <Tabs tabs={tabs} ariaLabel="Opciones de grupos de investigación" />
+      <Tabs tabs={tabs} ariaLabel="Opciones de comprobantes de proyectos" />
     </BaseLayout>
   );
 }
