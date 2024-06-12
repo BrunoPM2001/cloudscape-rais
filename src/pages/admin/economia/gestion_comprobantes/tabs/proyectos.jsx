@@ -178,7 +178,9 @@ export default () => {
   //  Functions
   const getData = async () => {
     setLoading(true);
-    const res = await axiosBase.get("admin/economia/listadoProyectos");
+    const res = await axiosBase.get(
+      "admin/economia/comprobantes/listadoProyectos"
+    );
     const data = res.data;
     setDistribution(data);
     setLoading(false);

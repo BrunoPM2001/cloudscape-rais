@@ -17,11 +17,14 @@ export default ({ id }) => {
 
   //  Functions
   const getData = async () => {
-    const res = await axiosBase.get("admin/economia/detalleProyecto", {
-      params: {
-        geco_id: id,
-      },
-    });
+    const res = await axiosBase.get(
+      "admin/economia/comprobantes/detalleProyecto",
+      {
+        params: {
+          geco_id: id,
+        },
+      }
+    );
     const data = res.data;
     setData(data);
     setLoading(false);

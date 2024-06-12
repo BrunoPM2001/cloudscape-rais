@@ -1,23 +1,13 @@
+import { useCollection } from "@cloudscape-design/collection-hooks";
 import {
   Box,
   ColumnLayout,
+  FormField,
   Header,
+  Select,
   SpaceBetween,
   Table,
 } from "@cloudscape-design/components";
-import { useContext, useEffect, useState } from "react";
-import { useFormValidation } from "../../../../../../hooks/useFormValidation";
-import { useCollection } from "@cloudscape-design/collection-hooks";
-import NotificationContext from "../../../../../../providers/notificationProvider";
-import axiosBase from "../../../../../../api/axios";
-
-const initialForm = {
-  estado: null,
-};
-
-const formRules = {
-  estado: { required: true },
-};
 
 const columnDefinitions = [
   {
@@ -26,21 +16,18 @@ const columnDefinitions = [
     cell: (item) => item.codigo,
     sortingField: "codigo",
     isRowHeader: true,
-    width: "25%",
   },
   {
     id: "partida",
     header: "Partida",
     cell: (item) => item.partida,
     sortingField: "partida",
-    width: "55%",
   },
   {
     id: "total",
     header: "Monto",
     cell: (item) => item.total,
     sortingField: "total",
-    width: "20%",
   },
 ];
 
@@ -50,67 +37,19 @@ const columnDisplay = [
   { id: "total", visible: true },
 ];
 
-const optsEstado = [
-  {
-    value: 1,
-    label: "Aprobado",
-  },
-  {
-    value: 2,
-    label: "Rechazado",
-  },
-  {
-    value: 3,
-    label: "Observado",
-  },
-  {
-    value: 5,
-    label: "Anulado",
-  },
-];
-
-export default ({ item, reload }) => {
-  //  Context
-  const { notifications, pushNotification } = useContext(NotificationContext);
-
-  //  States
-  const [loading, setLoading] = useState(false);
-  const [distributions, setDistribution] = useState([]);
-
+export default ({
+  item,
+  loading,
+  distributions,
+  formValues,
+  formErrors,
+  handleChange,
+  optsEstado,
+}) => {
   //  Hooks
   const { items, collectionProps } = useCollection(distributions, {
     sorting: { defaultState: { sortingColumn: columnDefinitions[0] } },
   });
-  const { formValues, formErrors, handleChange, validateForm } =
-    useFormValidation(initialForm, formRules);
-
-  //  Functions
-  const getData = async () => {
-    setLoading(true);
-    const res = await axiosBase.get(
-      "admin/economia/listadoPartidasComprobante",
-      {
-        params: {
-          geco_documento_id: item.id,
-        },
-      }
-    );
-    const data = res.data;
-    setDistribution(data);
-    setLoading(false);
-  };
-
-  //  Effects
-  useEffect(() => {
-    handleChange("estado", () => {
-      if (item.estado == 4) {
-        return null;
-      } else {
-        return optsEstado.find((opt) => opt.value == item.estado);
-      }
-    });
-    getData();
-  }, []);
 
   return (
     <SpaceBetween size="m">
@@ -136,9 +75,22 @@ export default ({ item, reload }) => {
           </div>
         </SpaceBetween>
       </ColumnLayout>
+      <FormField
+        label="Cumple con los requisitos"
+        stretch
+        errorText={formErrors.estado}
+      >
+        <Select
+          placeholder="Escoja una opción"
+          selectedOption={formValues.estado}
+          onChange={({ detail }) =>
+            handleChange("estado", detail.selectedOption)
+          }
+          options={optsEstado}
+        />
+      </FormField>
       <Table
         {...collectionProps}
-        // variant="embedded"
         trackBy="id"
         items={items}
         columnDefinitions={columnDefinitions}

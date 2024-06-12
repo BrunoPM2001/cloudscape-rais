@@ -197,11 +197,14 @@ export default ({ id }) => {
   //  Functions
   const getData = async () => {
     setLoading(true);
-    const res = await axiosBase.get("admin/economia/listadoComprobantes", {
-      params: {
-        geco_id: id,
-      },
-    });
+    const res = await axiosBase.get(
+      "admin/economia/comprobantes/listadoComprobantes",
+      {
+        params: {
+          geco_id: id,
+        },
+      }
+    );
     const data = res.data;
     setDistribution(data);
     setLoading(false);

@@ -7,10 +7,96 @@ import {
   Modal,
   SpaceBetween,
 } from "@cloudscape-design/components";
+import { useContext, useEffect, useState } from "react";
+import { useFormValidation } from "../../../../../../hooks/useFormValidation";
+import NotificationContext from "../../../../../../providers/notificationProvider";
+import axiosBase from "../../../../../../api/axios";
 import PdfViewer from "./pdfViewer";
 import DatosComprobante from "./datosComprobante";
 
+const initialForm = {
+  estado: null,
+};
+
+const formRules = {
+  estado: { required: true },
+};
+
+const optsEstado = [
+  {
+    value: 1,
+    label: "Aprobado",
+  },
+  {
+    value: 2,
+    label: "Rechazado",
+  },
+  {
+    value: 3,
+    label: "Observado",
+  },
+  {
+    value: 5,
+    label: "Anulado",
+  },
+];
+
 export default ({ visible, setVisible, item, reload }) => {
+  //  Context
+  const { notifications, pushNotification } = useContext(NotificationContext);
+
+  //  States
+  const [loading, setLoading] = useState(false);
+  const [distributions, setDistribution] = useState([]);
+
+  const { formValues, formErrors, handleChange, validateForm } =
+    useFormValidation(initialForm, formRules);
+
+  //  Functions
+  const getData = async () => {
+    setLoading(true);
+    const res = await axiosBase.get(
+      "admin/economia/comprobantes/listadoPartidasComprobante",
+      {
+        params: {
+          geco_documento_id: item.id,
+        },
+      }
+    );
+    const data = res.data;
+    setDistribution(data);
+    setLoading(false);
+  };
+
+  const updateComprobante = async () => {
+    if (validateForm()) {
+      setLoading(true);
+      const res = await axiosBase.put(
+        "admin/economia/comprobantes/updateEstadoComprobante",
+        {
+          ...formValues,
+          geco_documento_id: item.id,
+        }
+      );
+      const data = res.data;
+      pushNotification(data.detail, data.message, notifications.length + 1);
+      setLoading(false);
+      setVisible(false);
+      reload();
+    }
+  };
+
+  //  Effects
+  useEffect(() => {
+    handleChange(
+      "estado",
+      item.estado == 4
+        ? null
+        : optsEstado.find((opt) => opt.value == item.estado)
+    );
+    getData();
+  }, []);
+
   return (
     <Modal
       onDismiss={() => setVisible(false)}
@@ -22,7 +108,11 @@ export default ({ visible, setVisible, item, reload }) => {
             <Button variant="normal" onClick={() => setVisible(false)}>
               Cancelar
             </Button>
-            <Button variant="primary" loading={false}>
+            <Button
+              variant="primary"
+              loading={loading}
+              onClick={updateComprobante}
+            >
               Guardar
             </Button>
           </SpaceBetween>
@@ -88,7 +178,15 @@ export default ({ visible, setVisible, item, reload }) => {
           },
         ]}
       >
-        <DatosComprobante item={item} reload={reload} />
+        <DatosComprobante
+          item={item}
+          loading={loading}
+          distributions={distributions}
+          formValues={formValues}
+          formErrors={formErrors}
+          handleChange={handleChange}
+          optsEstado={optsEstado}
+        />
         <PdfViewer />
       </Grid>
     </Modal>
