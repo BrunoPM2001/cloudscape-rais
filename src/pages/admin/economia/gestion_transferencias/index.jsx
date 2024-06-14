@@ -11,7 +11,7 @@ const breadcrumbs = [
     text: "Economía",
   },
   {
-    text: "Gestión de comprobantes",
+    text: "Gestión de transferencias",
   },
 ];
 
@@ -23,11 +23,11 @@ const tabs = [
   },
 ];
 
-export default function Gestion_comprobantes() {
+export default function Gestion_transferencias() {
   return (
     <BaseLayout
       breadcrumbs={breadcrumbs}
-      header="Gestión de comprobantes"
+      header="Gestión de transferencias"
       helpInfo="Información sobre la páginal actual para poder mostrarla al público
       en general."
       disableOverlap

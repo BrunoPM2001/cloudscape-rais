@@ -10,7 +10,6 @@ import {
 } from "@cloudscape-design/components";
 import { useState, useEffect } from "react";
 import { useCollection } from "@cloudscape-design/collection-hooks";
-import queryString from "query-string";
 import axiosBase from "../../../../../../api/axios";
 import ModalComprobante from "../components/modalComprobante";
 

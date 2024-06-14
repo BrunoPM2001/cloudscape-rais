@@ -72,7 +72,9 @@ const Gestion_comprobantes = lazy(() =>
 const Geco_detalle_proyecto = lazy(() =>
   import("../pages/admin/economia/gestion_comprobantes/detalles/index.jsx")
 );
-
+const Gestion_transferencias = lazy(() =>
+  import("../pages/admin/economia/gestion_transferencias/index.jsx")
+);
 const Reporte_estudio = lazy(() =>
   import("../pages/admin/reportes/estudio/index.jsx")
 );
@@ -231,6 +233,15 @@ const routes = createBrowserRouter(
             {
               path: "detalle",
               element: <Geco_detalle_proyecto />,
+            },
+          ],
+        },
+        {
+          path: "gestion_transferencias",
+          children: [
+            {
+              path: "",
+              element: <Gestion_transferencias />,
             },
           ],
         },

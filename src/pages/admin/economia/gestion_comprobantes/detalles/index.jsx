@@ -4,6 +4,7 @@ import Detalles from "./detalles";
 import { useLocation } from "react-router-dom";
 import queryString from "query-string";
 import Comprobantes from "./tabs/comprobantes";
+import Partidas from "./tabs/partidas";
 
 const breadcrumbs = [
   {
@@ -37,6 +38,7 @@ export default function Geco_detalle_proyecto() {
     {
       id: "partidas",
       label: "Partidas",
+      content: <Partidas id={id} />,
     },
   ];
 
