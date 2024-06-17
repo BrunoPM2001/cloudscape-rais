@@ -55,9 +55,14 @@ export default function Reporte_constancias() {
   const getData = async () => {
     setLoading(true);
     const res = await axiosBase.get(
-      "admin/admin/usuarios/searchInvestigadorBy/" + value
+      "admin/admin/usuarios/searchInvestigadorBy",
+      {
+        params: {
+          query: value,
+        },
+      }
     );
-    const data = await res.data;
+    const data = res.data;
     const opt = data.map((item) => {
       return {
         detail: item.id,

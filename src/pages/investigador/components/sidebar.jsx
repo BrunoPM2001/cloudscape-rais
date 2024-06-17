@@ -145,7 +145,7 @@ const navItems = [
       {
         type: "link",
         text: "Proyecto con financiamiento innova",
-        href: "#",
+        href: "/investigador/convocatoria/proctie/paso1",
       },
     ],
   },

@@ -75,6 +75,9 @@ const Geco_detalle_proyecto = lazy(() =>
 const Gestion_transferencias = lazy(() =>
   import("../pages/admin/economia/gestion_transferencias/index.jsx")
 );
+const Geco_detalle_transferencia = lazy(() =>
+  import("../pages/admin/economia/gestion_transferencias/detalles/index.jsx")
+);
 const Reporte_estudio = lazy(() =>
   import("../pages/admin/reportes/estudio/index.jsx")
 );
@@ -242,6 +245,10 @@ const routes = createBrowserRouter(
             {
               path: "",
               element: <Gestion_transferencias />,
+            },
+            {
+              path: "detalle",
+              element: <Geco_detalle_transferencia />,
             },
           ],
         },

@@ -1,17 +1,11 @@
 import {
-  Badge,
   Box,
-  Button,
   Header,
-  Pagination,
-  PropertyFilter,
   SpaceBetween,
   Table,
 } from "@cloudscape-design/components";
 import { useState, useEffect } from "react";
-import { useCollection } from "@cloudscape-design/collection-hooks";
 import axiosBase from "../../../../../../api/axios";
-import ModalComprobante from "../components/modalComprobante";
 
 const columnDefinitions = [
   {

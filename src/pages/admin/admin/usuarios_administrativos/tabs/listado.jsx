@@ -202,6 +202,7 @@ export default () => {
           visible={deleteVisible}
           setVisible={setDeleteVisible}
           item={selectedItems}
+          reload={getData}
         />
       )}
       {passwordVisible && (

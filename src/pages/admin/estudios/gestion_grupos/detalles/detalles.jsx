@@ -210,6 +210,7 @@ export default ({ data, loading, grupo_id, reload }) => {
                     ? "#"
                     : data.infraestructura_sgestion
                 }
+                target="_blank"
               >
                 {data.infraestructura_sgestion == null
                   ? "No hay archivos adjuntos"

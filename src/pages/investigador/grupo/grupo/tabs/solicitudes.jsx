@@ -12,6 +12,7 @@ import {
 import { useState, useEffect } from "react";
 import { useCollection } from "@cloudscape-design/collection-hooks";
 import queryString from "query-string";
+import axiosBase from "../../../../../api/axios";
 
 const stringOperators = [":", "!:", "=", "!=", "^", "!^"];
 

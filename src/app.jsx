@@ -10,7 +10,7 @@ const Login = lazy(() => import("./pages/login/index"));
 const router1 = createBrowserRouter(
   [
     {
-      path: "",
+      path: "/",
       element: <Login />,
     },
     {

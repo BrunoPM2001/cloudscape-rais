@@ -1,7 +1,16 @@
 import { Suspense, lazy } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { NotificationProvider } from "../providers/notificationProvider.jsx";
-
+const Registrar_proyecto_paso1 = lazy(() =>
+  import(
+    "../pages/investigador/convocatorias/proyecto_financiamiento/layout1.jsx"
+  )
+);
+const Registrar_proyecto_paso2 = lazy(() =>
+  import(
+    "../pages/investigador/convocatorias/proyecto_financiamiento/layout2.jsx"
+  )
+);
 const Proyectos_con_financiamiento = lazy(() =>
   import(
     "../pages/investigador/actividades/proyectos_con_financiamiento/index.jsx"
@@ -207,6 +216,32 @@ const routes = createBrowserRouter(
         {
           path: "",
           element: <Grupo />,
+        },
+      ],
+    },
+    {
+      path: "convocatoria",
+      children: [
+        {
+          path: "proctie",
+          children: [
+            {
+              path: "paso1",
+              element: <Registrar_proyecto_paso1 />,
+            },
+            {
+              path: "paso2",
+              element: <Registrar_proyecto_paso2 />,
+            },
+            {
+              path: "paso3",
+              // element: <Registrar_proyecto_paso3 />,
+            },
+            {
+              path: "paso4",
+              // element: <Registrar_proyecto_paso4 />,
+            },
+          ],
         },
       ],
     },

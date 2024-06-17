@@ -69,10 +69,10 @@ const columnDefinitions = [
     isRowHeader: true,
   },
   {
-    id: "fecha_ultima_solicitud",
+    id: "codigo_proyecto",
     header: "Código de proyecto",
-    cell: (item) => item.fecha_ultima_solicitud,
-    sortingField: "fecha_ultima_solicitud",
+    cell: (item) => item.codigo_proyecto,
+    sortingField: "codigo_proyecto",
   },
   {
     id: "fecha_ultima_solicitud",
@@ -103,10 +103,20 @@ const columnDefinitions = [
     header: "Estado",
     cell: (item) => (
       <Badge
-        color={item.estado == 0 ? "blue" : item.estado == 1 ? "green" : "red"}
+        color={
+          item.estado == 30
+            ? "blue"
+            : item.estado == 20
+            ? "red"
+            : item.estado == 1
+            ? "green"
+            : "red"
+        }
       >
-        {item.estado == 0
-          ? "Pendiente"
+        {item.estado == 30
+          ? "Nueva transferencia"
+          : item.estado == 20
+          ? "Rechazado"
           : item.estado == 1
           ? "Completado"
           : "Error"}
@@ -155,8 +165,8 @@ export default () => {
         </Box>
       ),
     },
+    sorting: {},
     pagination: { pageSize: 10 },
-    sorting: { defaultState: { sortingColumn: columnDefinitions[0] } },
     selection: {},
   });
   const [enableBtn, setEnableBtn] = useState(false);
