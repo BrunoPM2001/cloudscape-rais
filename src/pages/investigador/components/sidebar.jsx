@@ -144,8 +144,10 @@ const navItems = [
     items: [
       {
         type: "link",
-        text: "Proyecto con financiamiento innova",
+        text: "Proyecto de Ciencia, Tecnología, Innovación y Emprendimiento",
+        info: <Badge color="grey">En desarrollo</Badge>,
         href: "/investigador/convocatoria/proctie/paso1",
+        // href: "#",
       },
     ],
   },
@@ -157,26 +159,31 @@ const navItems = [
       {
         type: "link",
         text: "Informe académico",
+        info: <Badge color="grey">En desarrollo</Badge>,
         href: "#",
       },
       {
         type: "link",
         text: "Informe técnico 2016 y anteriores",
+        info: <Badge color="grey">En desarrollo</Badge>,
         href: "#",
       },
       {
         type: "link",
         text: "Informe económico",
+        info: <Badge color="grey">En desarrollo</Badge>,
         href: "#",
       },
       {
         type: "link",
         text: "Monitoreo",
+        info: <Badge color="grey">En desarrollo</Badge>,
         href: "#",
       },
       {
         type: "link",
         text: "Informe económico 2016 y anteriores",
+        info: <Badge color="grey">En desarrollo</Badge>,
         href: "#",
       },
     ],

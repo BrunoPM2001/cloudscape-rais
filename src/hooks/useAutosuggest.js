@@ -163,6 +163,20 @@ const useAutosuggest = (type) => {
           setOptions(data);
         }
         break;
+      case "estudiante_convocatoria":
+        {
+          const res = await axiosBase.get(
+            "investigador/convocatorias/searchEstudiante",
+            {
+              params: {
+                query: value,
+              },
+            }
+          );
+          const data = res.data;
+          setOptions(data);
+        }
+        break;
       default:
         break;
     }

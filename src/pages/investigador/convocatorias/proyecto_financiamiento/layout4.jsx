@@ -1,9 +1,10 @@
 import { Wizard } from "@cloudscape-design/components";
-import { useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import queryString from "query-string";
-import BaseLayout from "../../components/baseLayout.jsx";
-import Paso1 from "./paso1.jsx";
+import BaseLayout from "../../components/baseLayout";
+import Paso4 from "./paso4";
+import { useContext, useRef, useState } from "react";
+import NotificationContext from "../../../../providers/notificationProvider";
 
 const breadcrumbs = [
   {
@@ -18,13 +19,20 @@ const breadcrumbs = [
   },
 ];
 
-export default function Registrar_proyecto_paso1() {
+export default function Registrar_proyecto_paso4() {
+  //  Context
+  const { notifications, pushNotification } = useContext(NotificationContext);
+
   //  States
   const [loading, setLoading] = useState(false);
 
   //  Url
   const location = useLocation();
-  const { proyecto_id, tipo } = queryString.parse(location.search);
+  const { proyecto_id } = queryString.parse(location.search);
+
+  if (proyecto_id == null) {
+    window.location.href = "paso1";
+  }
 
   //  Ref
   const pasoRefs = useRef([]);
@@ -33,16 +41,25 @@ export default function Registrar_proyecto_paso1() {
   const handleNavigate = async (detail) => {
     if (detail.requestedStepIndex > 0) {
       setLoading(true);
-      const { isValid, res_proyecto_id } =
-        await pasoRefs.current[0]?.registrar();
+      const isValid = await pasoRefs.current[0]?.registrar();
       setLoading(false);
       if (!isValid) {
+        pushNotification(
+          "Complete la información solicitada en todas las ventanas",
+          "warning",
+          notifications.length + 1
+        );
         return;
       }
       const query = queryString.stringify({
-        proyecto_id: res_proyecto_id == null ? proyecto_id : res_proyecto_id,
+        proyecto_id: proyecto_id,
       });
-      window.location.href = "paso2?" + query;
+      window.location.href = "paso5?" + query;
+    } else {
+      const query = queryString.stringify({
+        proyecto_id,
+      });
+      window.location.href = "paso3?" + query;
     }
   };
 
@@ -56,7 +73,7 @@ export default function Registrar_proyecto_paso1() {
     >
       <Wizard
         onNavigate={({ detail }) => handleNavigate(detail)}
-        activeStepIndex={0}
+        activeStepIndex={3}
         isLoadingNextStep={loading}
         onCancel={() => {
           window.location.href = "../" + tipo;
@@ -64,13 +81,6 @@ export default function Registrar_proyecto_paso1() {
         steps={[
           {
             title: "Información general",
-            description: "Detalles básicos e iniciales del proyecto",
-            content: (
-              <Paso1
-                ref={(el) => (pasoRefs.current[0] = el)}
-                proyecto_id={proyecto_id}
-              />
-            ),
           },
           {
             title: "Asesor",
@@ -80,6 +90,13 @@ export default function Registrar_proyecto_paso1() {
           },
           {
             title: "Descripción del proyecto",
+            description: "Información específica del proyecto",
+            content: (
+              <Paso4
+                ref={(el) => (pasoRefs.current[0] = el)}
+                proyecto_id={proyecto_id}
+              />
+            ),
           },
           {
             title: "Calendario de actividades",

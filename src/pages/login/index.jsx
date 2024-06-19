@@ -11,7 +11,6 @@ import {
 } from "@cloudscape-design/components";
 import { useState } from "react";
 import styles from "./index.module.css";
-import axios from "axios";
 import axiosBase from "../../api/axios";
 
 export default function Login() {

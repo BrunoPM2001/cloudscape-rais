@@ -11,6 +11,31 @@ const Registrar_proyecto_paso2 = lazy(() =>
     "../pages/investigador/convocatorias/proyecto_financiamiento/layout2.jsx"
   )
 );
+const Registrar_proyecto_paso3 = lazy(() =>
+  import(
+    "../pages/investigador/convocatorias/proyecto_financiamiento/layout3.jsx"
+  )
+);
+const Registrar_proyecto_paso4 = lazy(() =>
+  import(
+    "../pages/investigador/convocatorias/proyecto_financiamiento/layout4.jsx"
+  )
+);
+const Registrar_proyecto_paso5 = lazy(() =>
+  import(
+    "../pages/investigador/convocatorias/proyecto_financiamiento/layout5.jsx"
+  )
+);
+const Registrar_proyecto_paso6 = lazy(() =>
+  import(
+    "../pages/investigador/convocatorias/proyecto_financiamiento/layout6.jsx"
+  )
+);
+const Registrar_proyecto_paso7 = lazy(() =>
+  import(
+    "../pages/investigador/convocatorias/proyecto_financiamiento/layout7.jsx"
+  )
+);
 const Proyectos_con_financiamiento = lazy(() =>
   import(
     "../pages/investigador/actividades/proyectos_con_financiamiento/index.jsx"
@@ -235,11 +260,23 @@ const routes = createBrowserRouter(
             },
             {
               path: "paso3",
-              // element: <Registrar_proyecto_paso3 />,
+              element: <Registrar_proyecto_paso3 />,
             },
             {
               path: "paso4",
-              // element: <Registrar_proyecto_paso4 />,
+              element: <Registrar_proyecto_paso4 />,
+            },
+            {
+              path: "paso5",
+              element: <Registrar_proyecto_paso5 />,
+            },
+            {
+              path: "paso6",
+              element: <Registrar_proyecto_paso6 />,
+            },
+            {
+              path: "paso7",
+              element: <Registrar_proyecto_paso7 />,
             },
           ],
         },

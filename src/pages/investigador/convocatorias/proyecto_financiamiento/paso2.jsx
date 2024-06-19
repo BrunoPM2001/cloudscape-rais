@@ -53,7 +53,7 @@ export default forwardRef(function ({ proyecto_id }, ref) {
       if (proyecto_id != null) {
         let form = new FormData();
         form.append("proyecto_id", proyecto_id);
-        form.append("file", formValues.carta);
+        form.append("file", formValues.carta[0]);
         const res = await axiosBase.postForm(
           "investigador/convocatorias/registrarPaso2",
           form
@@ -151,7 +151,10 @@ export default forwardRef(function ({ proyecto_id }, ref) {
         >
           <FileUpload
             value={formValues.carta}
-            onChange={({ detail }) => handleChange("carta", detail.value)}
+            onChange={({ detail }) => {
+              handleChange("carta", detail.value);
+              console.log(detail.value);
+            }}
             showFileLastModified
             showFileSize
             showFileThumbnail

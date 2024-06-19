@@ -33,6 +33,9 @@ const useFormValidation = (initialState, validationRules) => {
           return "Valor inválido";
         }
       }
+      if (rule.lessThan && value > rule.lessThan) {
+        return "Límite superado";
+      }
     }
 
     return true;

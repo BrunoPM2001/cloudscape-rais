@@ -1,9 +1,8 @@
 import { Wizard } from "@cloudscape-design/components";
-import { useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import queryString from "query-string";
-import BaseLayout from "../../components/baseLayout.jsx";
-import Paso1 from "./paso1.jsx";
+import BaseLayout from "../../components/baseLayout";
+import Paso3 from "./paso3";
 
 const breadcrumbs = [
   {
@@ -18,29 +17,25 @@ const breadcrumbs = [
   },
 ];
 
-export default function Registrar_proyecto_paso1() {
-  //  States
-  const [loading, setLoading] = useState(false);
-
+export default function Registrar_proyecto_paso3() {
   //  Url
   const location = useLocation();
-  const { proyecto_id, tipo } = queryString.parse(location.search);
+  const { proyecto_id } = queryString.parse(location.search);
 
-  //  Ref
-  const pasoRefs = useRef([]);
+  if (proyecto_id == null) {
+    window.location.href = "paso1";
+  }
 
   //  Functions
   const handleNavigate = async (detail) => {
     if (detail.requestedStepIndex > 0) {
-      setLoading(true);
-      const { isValid, res_proyecto_id } =
-        await pasoRefs.current[0]?.registrar();
-      setLoading(false);
-      if (!isValid) {
-        return;
-      }
       const query = queryString.stringify({
-        proyecto_id: res_proyecto_id == null ? proyecto_id : res_proyecto_id,
+        proyecto_id: proyecto_id,
+      });
+      window.location.href = "paso4?" + query;
+    } else {
+      const query = queryString.stringify({
+        proyecto_id,
       });
       window.location.href = "paso2?" + query;
     }
@@ -56,27 +51,21 @@ export default function Registrar_proyecto_paso1() {
     >
       <Wizard
         onNavigate={({ detail }) => handleNavigate(detail)}
-        activeStepIndex={0}
-        isLoadingNextStep={loading}
+        activeStepIndex={2}
         onCancel={() => {
           window.location.href = "../" + tipo;
         }}
         steps={[
           {
             title: "Información general",
-            description: "Detalles básicos e iniciales del proyecto",
-            content: (
-              <Paso1
-                ref={(el) => (pasoRefs.current[0] = el)}
-                proyecto_id={proyecto_id}
-              />
-            ),
           },
           {
             title: "Asesor",
           },
           {
             title: "Integrantes del proyecto",
+            description: "Listado de miembros",
+            content: <Paso3 proyecto_id={proyecto_id} />,
           },
           {
             title: "Descripción del proyecto",

@@ -67,9 +67,15 @@ const navItems = [
       {
         type: "link",
         text: "Docente investigador",
+        info: <Badge color="grey">En desarrollo</Badge>,
         href: "#",
       },
-      { type: "link", text: "Gestión de RRHH", href: "#" },
+      {
+        type: "link",
+        text: "Gestión de RRHH",
+        info: <Badge color="grey">En desarrollo</Badge>,
+        href: "#",
+      },
       {
         type: "link",
         text: "Gestión de SUM",

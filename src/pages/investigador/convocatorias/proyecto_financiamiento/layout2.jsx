@@ -35,7 +35,6 @@ export default function Registrar_proyecto_paso2() {
 
   //  Functions
   const handleNavigate = async (detail) => {
-    console.log("sample");
     if (detail.requestedStepIndex > 0) {
       setLoading(true);
       const isValid = await pasoRefs.current[0]?.registrar();
@@ -46,7 +45,7 @@ export default function Registrar_proyecto_paso2() {
       const query = queryString.stringify({
         proyecto_id: proyecto_id,
       });
-      // window.location.href = "paso3?" + query;
+      window.location.href = "paso3?" + query;
     } else {
       const query = queryString.stringify({
         proyecto_id,
@@ -85,10 +84,19 @@ export default function Registrar_proyecto_paso2() {
             ),
           },
           {
-            title: "Autores de la publicación",
+            title: "Integrantes del proyecto",
           },
           {
-            title: "Envío de publicación",
+            title: "Descripción del proyecto",
+          },
+          {
+            title: "Calendario de actividades",
+          },
+          {
+            title: "Financiamiento del proyecto",
+          },
+          {
+            title: "Instrucciones finales",
           },
         ]}
       />
