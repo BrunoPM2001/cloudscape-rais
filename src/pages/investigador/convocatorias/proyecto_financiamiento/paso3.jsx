@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import axiosBase from "../../../../api/axios";
 import { useCollection } from "@cloudscape-design/collection-hooks";
 import ModalAddEstudiante from "./components/modals/modalAddEstudiante";
+import ModalDeleteEstudiante from "./components/modals/modalDeleteEstudiante";
 
 const columnDefinitions = [
   {
@@ -111,23 +112,18 @@ export default function ({ proyecto_id }) {
                   }
                   variant="normal"
                   onItemClick={({ detail }) => {
-                    if (detail.id == "action_1_1") {
-                      setTypeModal("edit");
-                      setVisible(true);
-                    } else if (detail.id == "action_1_2") {
+                    if (detail.id == "action_1_2") {
                       setTypeModal("delete");
                       setVisible(true);
                     }
                   }}
                   items={[
                     {
-                      text: "Editar",
-                      id: "action_1_1",
-                    },
-                    {
                       text: "Eliminar",
                       id: "action_1_2",
-                      disabled: collectionProps.selectedItems[0]?.presentado,
+                      disabled:
+                        collectionProps.selectedItems[0]?.tipo_integrante ==
+                        "Asesor",
                     },
                   ]}
                 >
@@ -168,19 +164,19 @@ export default function ({ proyecto_id }) {
       {visible && typeModal == "add_estudiante" && (
         <ModalAddEstudiante
           id={proyecto_id}
-          reload={getData}
-          setVisible={setVisible}
           visible={visible}
+          setVisible={setVisible}
+          reload={getData}
         />
       )}
-      {/* {visible && typeModal == "delete" && (
-        <ModalEliminarAutor
+      {visible && typeModal == "delete" && (
+        <ModalDeleteEstudiante
           id={collectionProps.selectedItems[0].id}
-          reload={getData}
-          setVisible={setVisible}
           visible={visible}
+          setVisible={setVisible}
+          reload={getData}
         />
-      )} */}
+      )}
     </Container>
   );
 }

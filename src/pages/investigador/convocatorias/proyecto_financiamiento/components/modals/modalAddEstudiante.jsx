@@ -18,11 +18,11 @@ import axiosBase from "../../../../../../api/axios";
 import NotificationContext from "../../../../../../providers/notificationProvider";
 
 const initialForm = {
-  file: [],
+  carta: [],
 };
 
 const formRules = {
-  file: { required: true, isFile: true, maxSize: 2 * 1024 * 1024 },
+  carta: { required: true, isFile: true, maxSize: 2 * 1024 * 1024 },
 };
 
 export default ({ id, visible, setVisible, reload }) => {
@@ -51,7 +51,7 @@ export default ({ id, visible, setVisible, reload }) => {
   const getData = async () => {
     setLoadingData(true);
     const res = await axiosBase.get(
-      "investigador/convocatorias/agregarIntegranteData",
+      "investigador/convocatorias/verificarEstudiante",
       {
         params: {
           codigo: form.codigo_alumno,
@@ -68,15 +68,16 @@ export default ({ id, visible, setVisible, reload }) => {
 
   const agregarIntegrante = async () => {
     if (validateForm()) {
-      setLoadingCreate(true);
+      // setLoadingCreate(true);
       let formData = new FormData();
       formData.append("proyecto_id", id);
-      formData.append("investigador_id", formValues.investigador_id);
+      formData.append("sum_id", form.id);
+      formData.append("investigador_id", form.investigador_id);
       formData.append("file", formValues.carta[0]);
-      // const res = await axiosBase.postForm(
-      //   "investigador/convocatorias/agregarIntegrante",
-      //   form
-      // );
+      const res = await axiosBase.postForm(
+        "investigador/convocatorias/agregarIntegrante",
+        formData
+      );
       const data = res.data;
       setLoadingCreate(false);
       setVisible(false);
@@ -87,6 +88,7 @@ export default ({ id, visible, setVisible, reload }) => {
 
   //  Effects
   useEffect(() => {
+    console.log(form);
     if (Object.keys(form).length != 0) {
       getData();
     }
@@ -174,7 +176,7 @@ export default ({ id, visible, setVisible, reload }) => {
                     </div>
                     <div>
                       <Box variant="awsui-key-label">Correo:</Box>
-                      <>{form.email3}</>
+                      <>{form.correo_electronico}</>
                     </div>
                   </SpaceBetween>
                 </ColumnLayout>
@@ -200,14 +202,14 @@ export default ({ id, visible, setVisible, reload }) => {
                     <Form variant="embedded">
                       <FormField
                         label="Formato de adhesión"
-                        errorText={formErrors.file}
+                        errorText={formErrors.carta}
                       >
                         <FileUpload
-                          value={formValues.file}
+                          value={formValues.carta}
                           onChange={({ detail }) =>
-                            handleChange("file", detail.value)
+                            handleChange("carta", detail.value)
                           }
-                          ref={(ref) => registerFileInput("file", ref)}
+                          ref={(ref) => registerFileInput("carta", ref)}
                           showFileLastModified
                           showFileSize
                           showFileThumbnail

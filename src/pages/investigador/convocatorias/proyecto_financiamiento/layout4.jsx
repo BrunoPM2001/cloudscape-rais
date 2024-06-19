@@ -39,7 +39,7 @@ export default function Registrar_proyecto_paso4() {
 
   //  Functions
   const handleNavigate = async (detail) => {
-    if (detail.requestedStepIndex > 0) {
+    if (detail.requestedStepIndex > 3) {
       setLoading(true);
       const isValid = await pasoRefs.current[0]?.registrar();
       setLoading(false);

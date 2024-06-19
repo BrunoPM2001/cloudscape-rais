@@ -35,7 +35,7 @@ export default function Registrar_proyecto_paso2() {
 
   //  Functions
   const handleNavigate = async (detail) => {
-    if (detail.requestedStepIndex > 0) {
+    if (detail.requestedStepIndex > 1) {
       setLoading(true);
       const isValid = await pasoRefs.current[0]?.registrar();
       setLoading(false);

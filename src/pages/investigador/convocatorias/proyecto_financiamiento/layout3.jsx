@@ -28,7 +28,7 @@ export default function Registrar_proyecto_paso3() {
 
   //  Functions
   const handleNavigate = async (detail) => {
-    if (detail.requestedStepIndex > 0) {
+    if (detail.requestedStepIndex > 2) {
       const query = queryString.stringify({
         proyecto_id: proyecto_id,
       });
