@@ -76,7 +76,7 @@ export default function Registrar_proyecto_paso4() {
         activeStepIndex={3}
         isLoadingNextStep={loading}
         onCancel={() => {
-          window.location.href = "../" + tipo;
+          window.location.href = "../../";
         }}
         steps={[
           {

@@ -16,23 +16,24 @@ import NotificationContext from "../../../../../../providers/notificationProvide
 import axiosBase from "../../../../../../api/axios";
 import { useFormValidation } from "../../../../../../hooks/useFormValidation";
 
-const initialForm = {
-  licencia_tipo_id: null,
-  fecha_inicio: "",
-  fecha_fin: "",
-  documento: "",
-  comentario: "",
-};
+export default ({ visible, setVisible, item, reload }) => {
+  //  Constantes
+  const initialForm = {
+    licencia_tipo_id: { label: item.tipo },
+    fecha_inicio: item.fecha_inicio,
+    fecha_fin: item.fecha_fin,
+    documento: item.documento,
+    comentario: item.comentario,
+  };
 
-const formRules = {
-  licencia_tipo_id: { required: true },
-  fecha_inicio: { required: true },
-  fecha_fin: { required: true },
-  documento: { required: false },
-  comentario: { required: false },
-};
+  const formRules = {
+    licencia_tipo_id: { required: true },
+    fecha_inicio: { required: true },
+    fecha_fin: { required: true },
+    documento: { required: false },
+    comentario: { required: false },
+  };
 
-export default ({ visible, setVisible, id, reload }) => {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
 
@@ -45,15 +46,14 @@ export default ({ visible, setVisible, id, reload }) => {
     useFormValidation(initialForm, formRules);
 
   //  Functions
-  const addLicencia = async () => {
+  const updateLicencia = async () => {
     if (validateForm()) {
       setLoading(true);
-      const response = await axiosBase.post(
-        "admin/estudios/investigadores/addLicencia",
+      const response = await axiosBase.put(
+        "admin/estudios/investigadores/updateLicencia",
         {
           ...formValues,
-          investigador_id: id,
-          licencia_tipo_id: formValues.licencia_tipo_id.value,
+          id: item.id,
         }
       );
       const data = response.data;
@@ -70,6 +70,10 @@ export default ({ visible, setVisible, id, reload }) => {
     );
     const data = res.data;
     setTipos(data);
+    handleChange(
+      "licencia_tipo_id",
+      data.find((opt) => opt.label == item.tipo)
+    );
   };
 
   useEffect(() => {
@@ -90,14 +94,14 @@ export default ({ visible, setVisible, id, reload }) => {
             <Button
               variant="primary"
               loading={loading}
-              onClick={() => addLicencia()}
+              onClick={updateLicencia}
             >
-              Añadir licencia
+              Guardar licencia
             </Button>
           </SpaceBetween>
         </Box>
       }
-      header="Añadir licencia a investigador"
+      header="Editar licencia a investigador"
     >
       <Form variant="embedded">
         <ColumnLayout columns={4}>

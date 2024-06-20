@@ -25,8 +25,8 @@ const usePaginatedData = (initialPageSize, initialSearch = "") => {
           "admin/estudios/sum/listadoLocal",
           {
             params: {
-              page: page,
               search: search,
+              page: page,
             },
           }
         );

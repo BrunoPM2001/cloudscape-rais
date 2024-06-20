@@ -6,6 +6,7 @@ import {
   Pagination,
   PropertyFilter,
   SpaceBetween,
+  StatusIndicator,
   Table,
 } from "@cloudscape-design/components";
 import { useState, useEffect } from "react";
@@ -16,12 +17,12 @@ import axiosBase from "../../../../../api/axios";
 const stringOperators = [":", "!:", "=", "!=", "^", "!^"];
 
 const FILTER_PROPS = [
-  {
-    propertyLabel: "ID",
-    key: "id",
-    groupValuesLabel: "IDS",
-    operators: stringOperators,
-  },
+  // {
+  //   propertyLabel: "ID",
+  //   key: "id",
+  //   groupValuesLabel: "IDS",
+  //   operators: stringOperators,
+  // },
   {
     propertyLabel: "Código de proyecto",
     key: "codigo_proyecto",
@@ -29,9 +30,9 @@ const FILTER_PROPS = [
     operators: stringOperators,
   },
   {
-    propertyLabel: "Fecha de actualización",
-    key: "fecha_actualizacion",
-    groupValuesLabel: "Fechas de actualización",
+    propertyLabel: "Fecha de comprobante",
+    key: "fecha_ultimo_comprobante",
+    groupValuesLabel: "Fechas de comprobante",
     operators: stringOperators,
   },
   {
@@ -81,10 +82,10 @@ const columnDefinitions = [
     sortingField: "codigo_proyecto",
   },
   {
-    id: "fecha_actualizacion",
-    header: "Fecha de actualización",
-    cell: (item) => item.fecha_actualizacion,
-    sortingField: "fecha_actualizacion",
+    id: "fecha_ultimo_comprobante",
+    header: "Fecha de último comprobante",
+    cell: (item) => item.fecha_ultimo_comprobante,
+    sortingField: "fecha_ultimo_comprobante",
   },
   {
     id: "responsable",
@@ -111,16 +112,43 @@ const columnDefinitions = [
     sortingField: "periodo",
   },
   {
+    id: "cuenta",
+    header: "Pendientes",
+    cell: (item) => (
+      <StatusIndicator type={item.cuenta > 0 ? "warning" : "success"}>
+        {item.cuenta > 0 ? item.cuenta : "Ok"}
+      </StatusIndicator>
+    ),
+  },
+  {
     id: "estado",
     header: "Estado",
     cell: (item) => (
       <Badge
-        color={item.estado == 0 ? "blue" : item.estado == 1 ? "green" : "red"}
+        color={
+          item.estado == 5
+            ? "grey"
+            : item.estado == 4
+            ? "blue"
+            : item.estado == 3
+            ? "grey"
+            : item.estado == 2
+            ? "red"
+            : item.estado == 1
+            ? "green"
+            : "red"
+        }
       >
-        {item.estado == 0
+        {item.estado == 5
+          ? "Anulado"
+          : item.estado == 4
           ? "Pendiente"
+          : item.estado == 3
+          ? "Observado"
+          : item.estado == 2
+          ? "Rechazado"
           : item.estado == 1
-          ? "Completado"
+          ? "Aprobado"
           : "Error"}
       </Badge>
     ),
@@ -129,13 +157,14 @@ const columnDefinitions = [
 ];
 
 const columnDisplay = [
-  { id: "id", visible: true },
+  { id: "id", visible: false },
   { id: "codigo_proyecto", visible: true },
-  { id: "fecha_actualizacion", visible: true },
+  { id: "fecha_ultimo_comprobante", visible: true },
   { id: "responsable", visible: true },
   { id: "facultad", visible: true },
   { id: "tipo_proyecto", visible: true },
   { id: "periodo", visible: true },
+  { id: "cuenta", visible: true },
   { id: "estado", visible: true },
 ];
 
@@ -146,7 +175,6 @@ export default () => {
   const [distributions, setDistribution] = useState([]);
   const {
     items,
-    actions,
     filteredItemsCount,
     collectionProps,
     paginationProps,
@@ -170,7 +198,7 @@ export default () => {
       ),
     },
     pagination: { pageSize: 10 },
-    sorting: { defaultState: { sortingColumn: columnDefinitions[0] } },
+    sorting: {},
     selection: {},
   });
   const [enableBtn, setEnableBtn] = useState(false);

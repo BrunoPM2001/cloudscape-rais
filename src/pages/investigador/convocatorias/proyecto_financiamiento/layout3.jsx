@@ -3,6 +3,8 @@ import { useLocation } from "react-router-dom";
 import queryString from "query-string";
 import BaseLayout from "../../components/baseLayout";
 import Paso3 from "./paso3";
+import { useContext, useState } from "react";
+import NotificationContext from "../../../../providers/notificationProvider";
 
 const breadcrumbs = [
   {
@@ -18,6 +20,13 @@ const breadcrumbs = [
 ];
 
 export default function Registrar_proyecto_paso3() {
+  //  Context
+  const { notifications, pushNotification } = useContext(NotificationContext);
+
+  //  States
+  const [requisitos, setRequisitos] = useState(false);
+  const [loading, setLoading] = useState(true);
+
   //  Url
   const location = useLocation();
   const { proyecto_id } = queryString.parse(location.search);
@@ -29,6 +38,14 @@ export default function Registrar_proyecto_paso3() {
   //  Functions
   const handleNavigate = async (detail) => {
     if (detail.requestedStepIndex > 2) {
+      if (!requisitos) {
+        pushNotification(
+          "Necesita tener 2 integrantes de tipo estudiante al menos",
+          "warning",
+          notifications.length + 1
+        );
+        return;
+      }
       const query = queryString.stringify({
         proyecto_id: proyecto_id,
       });
@@ -53,8 +70,9 @@ export default function Registrar_proyecto_paso3() {
         onNavigate={({ detail }) => handleNavigate(detail)}
         activeStepIndex={2}
         onCancel={() => {
-          window.location.href = "../" + tipo;
+          window.location.href = "../../";
         }}
+        isLoadingNextStep={loading}
         steps={[
           {
             title: "Información general",
@@ -65,7 +83,14 @@ export default function Registrar_proyecto_paso3() {
           {
             title: "Integrantes del proyecto",
             description: "Listado de miembros",
-            content: <Paso3 proyecto_id={proyecto_id} />,
+            content: (
+              <Paso3
+                proyecto_id={proyecto_id}
+                setRequisitos={setRequisitos}
+                loading={loading}
+                setLoading={setLoading}
+              />
+            ),
           },
           {
             title: "Descripción del proyecto",

@@ -19,6 +19,9 @@ import ModalIncluirExterno from "../components/modalIncluirExterno";
 import ModalIncluirEstudiante from "../components/modalIncluirEstudiante";
 import ModalIncluirEgresado from "../components/modalIncluirEgresado";
 import ModalExcluirMiembro from "../components/modalExcluirMiembro";
+import ModalInformacionMiembro from "../components/modalInformacionMiembro";
+import ModalCambiarCargo from "../components/modalCambiarCargo";
+import ModalCambiarCondicion from "../components/modalCambiarCondicion";
 
 const stringOperators = [":", "!:", "=", "!=", "^", "!^"];
 
@@ -56,6 +59,12 @@ const columnDefinitions = [
     cell: (item) => item.condicion,
     sortingField: "condicion",
     isRowHeader: true,
+  },
+  {
+    id: "cargo",
+    header: "Cargo",
+    cell: (item) => item.cargo,
+    sortingField: "cargo",
   },
   {
     id: "doc_numero",
@@ -127,6 +136,7 @@ const columnDefinitions = [
 
 const columnDisplay = [
   { id: "condicion", visible: true },
+  { id: "cargo", visible: true },
   { id: "doc_numero", visible: true },
   { id: "nombres", visible: true },
   { id: "codigo_orcid", visible: true },
@@ -325,11 +335,36 @@ export default ({ grupo_estado }) => {
                       id: "action_2_1",
                       disabled: false,
                     },
+                    {
+                      text: "Visualizar",
+                      id: "action_2_2",
+                      disabled: false,
+                    },
+                    {
+                      text: "Cambiar condición",
+                      id: "action_2_3",
+                      disabled: false,
+                    },
+                    {
+                      text: "Cambiar cargo",
+                      id: "action_2_4",
+                      disabled:
+                        selectedItems[0]?.condicion != "Titular" ? true : false,
+                    },
                   ]}
                   onItemClick={({ detail }) => {
                     if (detail.id == "action_2_1") {
                       setIncluirVisible(true);
                       setTypeModal("Excluir");
+                    } else if (detail.id == "action_2_2") {
+                      setIncluirVisible(true);
+                      setTypeModal("Visualizar");
+                    } else if (detail.id == "action_2_3") {
+                      setIncluirVisible(true);
+                      setTypeModal("Condicion");
+                    } else if (detail.id == "action_2_4") {
+                      setIncluirVisible(true);
+                      setTypeModal("Cargo");
                     }
                   }}
                 >
@@ -368,12 +403,30 @@ export default ({ grupo_estado }) => {
             setVisible={setIncluirVisible}
             reload={getData}
           />
-        ) : (
+        ) : typeModal == "Excluir" ? (
           <ModalExcluirMiembro
             visible={incluirVisible}
             setVisible={setIncluirVisible}
             reload={getData}
             item={selectedItems}
+          />
+        ) : typeModal == "Condicion" ? (
+          <ModalCambiarCondicion
+            visible={incluirVisible}
+            setVisible={setIncluirVisible}
+            reload={getData}
+            id={selectedItems[0].id}
+            current={selectedItems[0].condicion}
+            nombres={selectedItems[0].nombres}
+          />
+        ) : (
+          <ModalCambiarCargo
+            visible={incluirVisible}
+            setVisible={setIncluirVisible}
+            reload={getData}
+            id={selectedItems[0].id}
+            current={selectedItems[0].cargo}
+            nombres={selectedItems[0].nombres}
           />
         ))}
     </>

@@ -37,7 +37,7 @@ export default function Registrar_proyecto_paso5() {
 
   //  Functions
   const handleNavigate = async (detail) => {
-    if (detail.requestedStepIndex > 0) {
+    if (detail.requestedStepIndex > 4) {
       if (!requisitos) {
         pushNotification(
           "Necesita tener 3 actividades registradas como mínimo",
@@ -70,7 +70,7 @@ export default function Registrar_proyecto_paso5() {
         onNavigate={({ detail }) => handleNavigate(detail)}
         activeStepIndex={4}
         onCancel={() => {
-          window.location.href = "../" + tipo;
+          window.location.href = "../../";
         }}
         isLoadingNextStep={loading}
         steps={[

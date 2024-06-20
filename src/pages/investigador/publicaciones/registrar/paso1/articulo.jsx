@@ -1,4 +1,5 @@
 import {
+  Box,
   ColumnLayout,
   Container,
   Form,
@@ -9,6 +10,7 @@ import {
   Select,
   SpaceBetween,
   Spinner,
+  StatusIndicator,
   TokenGroup,
 } from "@cloudscape-design/components";
 import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
@@ -170,6 +172,17 @@ export default forwardRef(function (props, ref) {
             </FormField>
             <FormField
               label="Palabras clave"
+              description={
+                <StatusIndicator type="warning">
+                  <Box
+                    variant="strong"
+                    color="text-status-warning"
+                    fontSize="body-s"
+                  >
+                    Presionar la tecla de enter para añadir una palabra
+                  </Box>
+                </StatusIndicator>
+              }
               stretch
               errorText={formErrors.palabras_clave}
             >

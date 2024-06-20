@@ -51,7 +51,7 @@ export default function Registrar_proyecto_paso7() {
         onNavigate={({ detail }) => handleNavigate(detail)}
         activeStepIndex={6}
         onCancel={() => {
-          window.location.href = "../" + tipo;
+          window.location.href = "../../";
         }}
         onSubmit={async () => {
           setLoading(true);

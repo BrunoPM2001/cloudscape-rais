@@ -145,9 +145,7 @@ const navItems = [
       {
         type: "link",
         text: "Proyecto de Ciencia, Tecnología, Innovación y Emprendimiento",
-        info: <Badge color="grey">En desarrollo</Badge>,
-        href: "/investigador/convocatoria/proctie/paso1",
-        // href: "#",
+        href: "/investigador/convocatoria/proctie/verificar",
       },
     ],
   },

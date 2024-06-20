@@ -22,12 +22,9 @@ const breadcrumbs = [
 export default function Registrar_proyecto_paso1() {
   //  States
   const [loading, setLoading] = useState(false);
-  const [verifyLoading, setVerifyLoading] = useState(true);
-  const [verifyRes, setVerifyRes] = useState({});
-
   //  Url
   const location = useLocation();
-  const { proyecto_id, tipo } = queryString.parse(location.search);
+  const { proyecto_id } = queryString.parse(location.search);
 
   //  Ref
   const pasoRefs = useRef([]);
@@ -49,16 +46,7 @@ export default function Registrar_proyecto_paso1() {
     }
   };
 
-  const verifyUser = async () => {
-    const res = await axiosBase.get("investigador/convocatorias/verificar");
-    const data = res.data;
-    setVerifyLoading(false);
-    setVerifyRes(data);
-  };
-
-  useEffect(() => {
-    verifyUser();
-  }, []);
+  useEffect(() => {}, []);
 
   return (
     <BaseLayout
@@ -68,63 +56,44 @@ export default function Registrar_proyecto_paso1() {
       disableOverlap
       withoutContentLayout
     >
-      {verifyLoading ? (
-        <Box margin="m">
-          <Alert header="Verificando intento de registro en la convocatoria">
-            <Spinner />
-          </Alert>
-        </Box>
-      ) : !verifyRes.estado ? (
-        <Box margin="m">
-          <Alert
-            header="Solicitud de registro a esta convocatoria no procede"
-            type="error"
-          >
-            {verifyRes.message.map((item) => {
-              return <li>{item}</li>;
-            })}
-          </Alert>
-        </Box>
-      ) : (
-        <Wizard
-          onNavigate={({ detail }) => handleNavigate(detail)}
-          activeStepIndex={0}
-          isLoadingNextStep={loading}
-          onCancel={() => {
-            window.location.href = "../" + tipo;
-          }}
-          steps={[
-            {
-              title: "Información general",
-              description: "Detalles básicos e iniciales del proyecto",
-              content: (
-                <Paso1
-                  ref={(el) => (pasoRefs.current[0] = el)}
-                  proyecto_id={proyecto_id}
-                />
-              ),
-            },
-            {
-              title: "Asesor",
-            },
-            {
-              title: "Integrantes del proyecto",
-            },
-            {
-              title: "Descripción del proyecto",
-            },
-            {
-              title: "Calendario de actividades",
-            },
-            {
-              title: "Financiamiento del proyecto",
-            },
-            {
-              title: "Instrucciones finales",
-            },
-          ]}
-        />
-      )}
+      <Wizard
+        onNavigate={({ detail }) => handleNavigate(detail)}
+        activeStepIndex={0}
+        isLoadingNextStep={loading}
+        onCancel={() => {
+          window.location.href = "../../";
+        }}
+        steps={[
+          {
+            title: "Información general",
+            description: "Detalles básicos e iniciales del proyecto",
+            content: (
+              <Paso1
+                ref={(el) => (pasoRefs.current[0] = el)}
+                proyecto_id={proyecto_id}
+              />
+            ),
+          },
+          {
+            title: "Asesor",
+          },
+          {
+            title: "Integrantes del proyecto",
+          },
+          {
+            title: "Descripción del proyecto",
+          },
+          {
+            title: "Calendario de actividades",
+          },
+          {
+            title: "Financiamiento del proyecto",
+          },
+          {
+            title: "Instrucciones finales",
+          },
+        ]}
+      />
     </BaseLayout>
   );
 }

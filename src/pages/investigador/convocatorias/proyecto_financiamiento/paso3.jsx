@@ -13,6 +13,8 @@ import { useCollection } from "@cloudscape-design/collection-hooks";
 import ModalAddEstudiante from "./components/modals/modalAddEstudiante";
 import ModalDeleteEstudiante from "./components/modals/modalDeleteEstudiante";
 
+const CANTIDAD_MINIMA = 3;
+
 const columnDefinitions = [
   {
     id: "tipo_integrante",
@@ -49,9 +51,8 @@ const columnDisplay = [
   { id: "carta", visible: true },
 ];
 
-export default function ({ proyecto_id }) {
+export default function ({ proyecto_id, setRequisitos, loading, setLoading }) {
   //  State
-  const [loading, setLoading] = useState(true);
   const [distributions, setDistribution] = useState([]);
   const [visible, setVisible] = useState(false);
   const [typeModal, setTypeModal] = useState(null);
@@ -78,6 +79,7 @@ export default function ({ proyecto_id }) {
       }
     );
     const data = res.data;
+    setRequisitos(CANTIDAD_MINIMA <= data.length ? true : false);
     setDistribution(data);
     setLoading(false);
   };

@@ -315,7 +315,7 @@ export default () => {
                     disabled: false,
                   },
                   {
-                    text: "Agregar licencia",
+                    text: "Gestionar licencias",
                     id: "action_1_2",
                     disabled: false,
                   },

@@ -37,7 +37,7 @@ export default function Registrar_proyecto_paso6() {
 
   //  Functions
   const handleNavigate = async (detail) => {
-    if (detail.requestedStepIndex > 0) {
+    if (detail.requestedStepIndex > 5) {
       if (!requisitos) {
         pushNotification(
           "Necesita tener al menos 1 partida registrada",
@@ -129,7 +129,7 @@ export default function Registrar_proyecto_paso6() {
         onNavigate={({ detail }) => handleNavigate(detail)}
         activeStepIndex={5}
         onCancel={() => {
-          window.location.href = "../" + tipo;
+          window.location.href = "../../";
         }}
         isLoadingNextStep={loading}
         steps={[

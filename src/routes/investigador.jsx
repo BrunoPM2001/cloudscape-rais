@@ -1,6 +1,12 @@
 import { Suspense, lazy } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { NotificationProvider } from "../providers/notificationProvider.jsx";
+
+const Verificar_requisitos = lazy(() =>
+  import(
+    "../pages/investigador/convocatorias/proyecto_financiamiento/verificar.jsx"
+  )
+);
 const Registrar_proyecto_paso1 = lazy(() =>
   import(
     "../pages/investigador/convocatorias/proyecto_financiamiento/layout1.jsx"
@@ -250,6 +256,10 @@ const routes = createBrowserRouter(
         {
           path: "proctie",
           children: [
+            {
+              path: "verificar",
+              element: <Verificar_requisitos />,
+            },
             {
               path: "paso1",
               element: <Registrar_proyecto_paso1 />,

@@ -37,6 +37,7 @@ const CreateUserModal = ({ visible, setVisible, reload }) => {
     telefono_movil: null,
     direccion1: null,
     username: null,
+    password: null,
     tipo: "Usuario_admin",
   });
 
@@ -242,19 +243,34 @@ const CreateUserModal = ({ visible, setVisible, reload }) => {
           </div>
           <div>
             <Header variant="h3">Datos de acceso</Header>
-            <FormField label="Usuario" stretch>
-              <Input
-                controlId="username"
-                placeholder="Nombre de usuario"
-                value={form.username}
-                onChange={({ detail }) =>
-                  setForm((prev) => ({
-                    ...prev,
-                    username: detail.value,
-                  }))
-                }
-              />
-            </FormField>
+            <ColumnLayout columns={2}>
+              <FormField label="Usuario" stretch>
+                <Input
+                  controlId="username"
+                  placeholder="Nombre de usuario"
+                  value={form.username}
+                  onChange={({ detail }) =>
+                    setForm((prev) => ({
+                      ...prev,
+                      username: detail.value,
+                    }))
+                  }
+                />
+              </FormField>
+              <FormField label="Contraseña" stretch>
+                <Input
+                  controlId="password"
+                  placeholder="Contraseña"
+                  value={form.password}
+                  onChange={({ detail }) =>
+                    setForm((prev) => ({
+                      ...prev,
+                      password: detail.value,
+                    }))
+                  }
+                />
+              </FormField>
+            </ColumnLayout>
           </div>
         </SpaceBetween>
       </Form>

@@ -14,13 +14,15 @@ import styles from "./index.module.css";
 import axiosBase from "../../api/axios";
 
 export default function Login() {
+  //  States
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [viewAlerts, setViewAlerts] = useState([false, true]);
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
+  //  Functions
+  const handleLogin = async (event) => {
+    event.preventDefault();
     setLoading(true);
     const res = await axiosBase.post("login", {
       username_mail: username,

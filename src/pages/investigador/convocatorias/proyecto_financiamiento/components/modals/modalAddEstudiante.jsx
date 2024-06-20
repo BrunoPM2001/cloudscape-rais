@@ -22,7 +22,7 @@ const initialForm = {
 };
 
 const formRules = {
-  carta: { required: true, isFile: true, maxSize: 2 * 1024 * 1024 },
+  carta: { required: true, isFile: true, maxSize: 6 * 1024 * 1024 },
 };
 
 export default ({ id, visible, setVisible, reload }) => {
@@ -68,7 +68,7 @@ export default ({ id, visible, setVisible, reload }) => {
 
   const agregarIntegrante = async () => {
     if (validateForm()) {
-      // setLoadingCreate(true);
+      setLoadingCreate(true);
       let formData = new FormData();
       formData.append("proyecto_id", id);
       formData.append("sum_id", form.id);
@@ -201,7 +201,7 @@ export default ({ id, visible, setVisible, reload }) => {
                   {enableCreate == false && (
                     <Form variant="embedded">
                       <FormField
-                        label="Formato de adhesión"
+                        label="Carta de compromiso"
                         errorText={formErrors.carta}
                       >
                         <FileUpload
@@ -213,7 +213,7 @@ export default ({ id, visible, setVisible, reload }) => {
                           showFileLastModified
                           showFileSize
                           showFileThumbnail
-                          constraintText="El archivo cargado no debe superar los 2 MB"
+                          constraintText="El archivo cargado no debe superar los 6 MB"
                           i18nStrings={{
                             uploadButtonText: (e) =>
                               e ? "Cargar archivos" : "Cargar archivo",

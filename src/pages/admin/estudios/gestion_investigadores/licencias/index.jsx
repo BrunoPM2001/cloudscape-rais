@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  ButtonDropdown,
   Container,
   Header,
   Pagination,
@@ -14,6 +15,8 @@ import { useEffect, useState } from "react";
 import axiosBase from "../../../../../api/axios";
 import { useCollection } from "@cloudscape-design/collection-hooks";
 import ModalAdd from "./components/modalAdd";
+import ModalUpdate from "./components/modalUpdate";
+import ModalDelete from "./components/modalDelete";
 
 const breadcrumbs = [
   {
@@ -63,18 +66,6 @@ const columnDefinitions = [
     cell: (item) => item.documento,
     sortingField: "documento",
   },
-  // {
-  //   id: "user_create",
-  //   header: "Creada por",
-  //   cell: (item) => item.user_create,
-  //   sortingField: "user_create",
-  // },
-  // {
-  //   id: "user_edit",
-  //   header: "Editada por",
-  //   cell: (item) => item.user_edit,
-  //   sortingField: "user_edit",
-  // },
 ];
 
 const columnDisplay = [
@@ -83,13 +74,13 @@ const columnDisplay = [
   { id: "fecha_fin", visible: true },
   { id: "comentario", visible: true },
   { id: "documento", visible: true },
-  // { id: "user_create", visible: true },
-  // { id: "user_edit", visible: true },
 ];
 
 export default function Licencias_investigador() {
   //  Data states
   const [loading, setLoading] = useState(true);
+  const [visible, setVisible] = useState(false);
+  const [typeModal, setTypeModal] = useState("");
   const [distributions, setDistribution] = useState([]);
   const { items, collectionProps, paginationProps } = useCollection(
     distributions,
@@ -99,7 +90,6 @@ export default function Licencias_investigador() {
       selection: {},
     }
   );
-  const [addVisible, setAddVisible] = useState(false);
 
   //  Url
   const location = useLocation();
@@ -151,8 +141,41 @@ export default function Licencias_investigador() {
               counter={"(" + distributions.length + ")"}
               actions={
                 <SpaceBetween direction="horizontal" size="xs">
-                  {/* <Button variant="normal">Editar</Button> */}
-                  <Button variant="primary" onClick={() => setAddVisible(true)}>
+                  <ButtonDropdown
+                    disabled={
+                      collectionProps.selectedItems.length == 0 ? true : false
+                    }
+                    onItemClick={({ detail }) => {
+                      if (detail.id == "action_1") {
+                        setVisible(true);
+                        setTypeModal("update");
+                      } else if (detail.id == "action_2") {
+                        setVisible(true);
+                        setTypeModal("delete");
+                      }
+                    }}
+                    items={[
+                      {
+                        text: "Editar",
+                        id: "action_1",
+                        disabled: false,
+                      },
+                      {
+                        text: "Eliminar",
+                        id: "action_2",
+                        disabled: false,
+                      },
+                    ]}
+                  >
+                    Acciones para licencia
+                  </ButtonDropdown>
+                  <Button
+                    variant="primary"
+                    onClick={() => {
+                      setVisible(true);
+                      setTypeModal("add");
+                    }}
+                  >
                     Agregar
                   </Button>
                 </SpaceBetween>
@@ -171,14 +194,29 @@ export default function Licencias_investigador() {
           }
         />
       </Container>
-      {addVisible && (
-        <ModalAdd
-          visible={addVisible}
-          setVisible={setAddVisible}
-          id={investigador_id}
-          reload={getData}
-        />
-      )}
+      {visible &&
+        (typeModal == "add" ? (
+          <ModalAdd
+            visible={visible}
+            setVisible={setVisible}
+            id={investigador_id}
+            reload={getData}
+          />
+        ) : typeModal == "update" ? (
+          <ModalUpdate
+            visible={visible}
+            setVisible={setVisible}
+            item={collectionProps.selectedItems[0]}
+            reload={getData}
+          />
+        ) : (
+          <ModalDelete
+            visible={visible}
+            setVisible={setVisible}
+            id={collectionProps.selectedItems[0].id}
+            reload={getData}
+          />
+        ))}
     </BaseLayout>
   );
 }

@@ -128,34 +128,26 @@ const columnDefinitions = [
     cell: (item) => (
       <Badge
         color={
-          item.estado == -1
-            ? "red"
-            : item.estado == 1
+          item.estado == -2
             ? "grey"
             : item.estado == 2
             ? "grey"
             : item.estado == 4
             ? "green"
-            : item.estado == 5
-            ? "blue"
-            : item.estado == 6
-            ? "grey"
+            : item.estado == 12
+            ? "red"
             : "red"
         }
       >
-        {item.estado == -1
-          ? "Eliminado"
-          : item.estado == 1
-          ? "Reconocido"
+        {item.estado == -2
+          ? "Disuelto"
           : item.estado == 2
           ? "Observado"
           : item.estado == 4
           ? "Registrado"
-          : item.estado == 5
-          ? "Enviado"
-          : item.estado == 6
-          ? "En proceso"
-          : "Error"}
+          : item.estado == 12
+          ? "Reg. observado"
+          : "Estado desconocido"}
       </Badge>
     ),
     sortingField: "estado",
@@ -181,7 +173,6 @@ export default () => {
   const [distributions, setDistribution] = useState([]);
   const {
     items,
-    actions,
     filteredItemsCount,
     collectionProps,
     paginationProps,
