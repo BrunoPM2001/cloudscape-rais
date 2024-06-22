@@ -28,13 +28,10 @@ export default function Informes_tecnicos() {
     <BaseLayout
       breadcrumbs={breadcrumbs}
       header="Informes técnicos:"
-      helpInfo="Información sobre la páginal actual para poder mostrarla al público
-      en general."
+      helpInfo="Solo se listan los proyectos que tengan como mínimo un informe técnico."
       disableOverlap
     >
-      <SpaceBetween size="l">
-        <Tabs tabs={tabs} ariaLabel="Opciones de informes técnicos" />
-      </SpaceBetween>
+      <Tabs tabs={tabs} ariaLabel="Opciones de informes técnicos" />
     </BaseLayout>
   );
 }

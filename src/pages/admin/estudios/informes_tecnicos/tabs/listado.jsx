@@ -9,10 +9,12 @@ import {
   Select,
   SpaceBetween,
   Table,
+  Button,
 } from "@cloudscape-design/components";
 import { useState, useEffect } from "react";
 import { useCollection } from "@cloudscape-design/collection-hooks";
 import axiosBase from "../../../../../api/axios";
+import queryString from "query-string";
 
 const stringOperators = [":", "!:", "=", "!=", "^", "!^"];
 
@@ -36,21 +38,15 @@ const FILTER_PROPS = [
     operators: stringOperators,
   },
   {
-    propertyLabel: "Deuda",
-    key: "deuda",
-    groupValuesLabel: "Deudas",
-    operators: stringOperators,
-  },
-  {
-    propertyLabel: "Tipo de deuda",
-    key: "tipo_deuda",
-    groupValuesLabel: "Tipos de deuda",
-    operators: stringOperators,
-  },
-  {
     propertyLabel: "Título",
     key: "titulo",
     groupValuesLabel: "Títulos",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "N° de informes",
+    key: "cantidad_informes",
+    groupValuesLabel: "N° de informes",
     operators: stringOperators,
   },
   {
@@ -63,6 +59,12 @@ const FILTER_PROPS = [
     propertyLabel: "Facultad",
     key: "facultad",
     groupValuesLabel: "Facultades",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "Periodo",
+    key: "periodo",
+    groupValuesLabel: "Periodos",
     operators: stringOperators,
   },
   {
@@ -94,23 +96,16 @@ const columnDefinitions = [
     sortingField: "codigo_proyecto",
   },
   {
-    id: "deuda",
-    header: "Deuda",
-    cell: (item) => item.deuda,
-    sortingField: "deuda",
-  },
-  {
-    id: "tipo_deuda",
-    header: "Tipo de deuda",
-    cell: (item) => item.tipo_deuda,
-    sortingField: "tipo_deuda",
-  },
-
-  {
     id: "titulo",
     header: "Título",
     cell: (item) => item.titulo,
     sortingField: "titulo",
+  },
+  {
+    id: "cantidad_informes",
+    header: "N° informes",
+    cell: (item) => item.cantidad_informes,
+    sortingField: "cantidad_informes",
   },
   {
     id: "responsable",
@@ -123,6 +118,12 @@ const columnDefinitions = [
     header: "Facultad",
     cell: (item) => item.facultad,
     sortingField: "facultad",
+  },
+  {
+    id: "periodo",
+    header: "Periodo",
+    cell: (item) => item.periodo,
+    sortingField: "periodo",
   },
   {
     id: "estado",
@@ -168,11 +169,11 @@ const columnDisplay = [
   { id: "id", visible: true },
   { id: "tipo_proyecto", visible: true },
   { id: "codigo_proyecto", visible: true },
-  { id: "deuda", visible: true },
-  { id: "tipo_deuda", visible: true },
   { id: "titulo", visible: true },
+  { id: "cantidad_informes", visible: true },
   { id: "responsable", visible: true },
   { id: "facultad", visible: true },
+  { id: "periodo", visible: true },
   { id: "estado", visible: true },
 ];
 
@@ -182,14 +183,9 @@ export default () => {
   const [loadingInformes, setLoadingInformes] = useState(true);
   const [informes, setInformes] = useState([]);
   const [distributions, setDistribution] = useState([]);
-  const [selectedItems, setSelectedItems] = useState([
-    {
-      id: null,
-    },
-  ]);
+  const [selectedItems, setSelectedItems] = useState([]);
   const {
     items,
-    actions,
     filteredItemsCount,
     collectionProps,
     paginationProps,
@@ -213,31 +209,35 @@ export default () => {
       ),
     },
     pagination: { pageSize: 10 },
-    sorting: { defaultState: { sortingColumn: columnDefinitions[0] } },
+    sorting: {
+      defaultState: { sortingColumn: columnDefinitions[0], isDescending: true },
+    },
     selection: {},
   });
   const [selectedOption, setSelectedOption] = useState({
-    value: "2024",
+    value: "nuevos",
+    label: "Nuevos (2017 en adelante)",
   });
 
   //  Functions
   const getData = async () => {
     setLoading(true);
     const res = await axiosBase.get(
-      "admin/estudios/informesTecnicos/proyectosListado/" + selectedOption.value
+      "admin/estudios/informesTecnicos/proyectosListado"
     );
-    const data = await res.data;
-    setDistribution(data.data);
+    const data = res.data;
+    setDistribution(data);
     setLoading(false);
   };
 
   const getInformes = async () => {
     setLoadingInformes(true);
     const res = await axiosBase.get(
-      "admin/estudios/informesTecnicos/informes/" + selectedItems[0]?.id
+      "admin/estudios/informesTecnicos/informes/" +
+        collectionProps.selectedItems[0]?.id
     );
-    const data = await res.data;
-    setInformes(data.data);
+    const data = res.data;
+    setInformes(data);
     setLoadingInformes(false);
   };
 
@@ -249,7 +249,7 @@ export default () => {
 
   useEffect(() => {
     getInformes();
-  }, [selectedItems]);
+  }, [collectionProps.selectedItems]);
 
   return (
     <SpaceBetween size="l">
@@ -263,22 +263,12 @@ export default () => {
         loadingText="Cargando datos"
         resizableColumns
         enableKeyboardNavigation
-        header={<Header>Listado de proyectos</Header>}
         selectionType="single"
-        selectedItems={selectedItems}
-        onSelectionChange={({ detail }) =>
-          setSelectedItems(detail.selectedItems)
-        }
         onRowClick={({ detail }) => setSelectedItems([detail.item])}
-        filter={
-          <PropertyFilter
-            {...propertyFilterProps}
-            filteringPlaceholder="Buscar grupo"
-            countText={`${filteredItemsCount} coincidencias`}
-            expandToViewport
-            virtualScroll
-            customControl={
-              <FormField label="Año:">
+        header={
+          <Header
+            actions={
+              <FormField label="Proyectos:" stretch>
                 <Select
                   disabled={loading}
                   expandToViewport
@@ -287,18 +277,26 @@ export default () => {
                     setSelectedOption(detail.selectedOption)
                   }
                   options={[
-                    { value: "2024" },
-                    { value: "2023" },
-                    { value: "2022" },
-                    { value: "2021" },
-                    { value: "2020" },
-                    { value: "2019" },
-                    { value: "2018" },
-                    { value: "2017" },
+                    { value: "nuevos", label: "Nuevos (2017 en adelante)" },
+                    {
+                      value: "antiguos",
+                      label: "Antiguos (2016 y anteriores)",
+                    },
                   ]}
                 />
               </FormField>
             }
+          >
+            Listado de proyectos
+          </Header>
+        }
+        filter={
+          <PropertyFilter
+            {...propertyFilterProps}
+            filteringPlaceholder="Buscar grupo"
+            countText={`${filteredItemsCount} coincidencias`}
+            expandToViewport
+            virtualScroll
           />
         }
         pagination={<Pagination {...paginationProps} />}
@@ -315,7 +313,7 @@ export default () => {
           {
             id: "informe",
             header: "Informe",
-            cell: (item) => <Link href="#">{item.informe}</Link>,
+            cell: (item) => item.informe,
           },
           {
             id: "fecha_envio",
@@ -325,19 +323,56 @@ export default () => {
           {
             id: "estado",
             header: "Estado",
-            cell: (item) => item.estado,
+            cell: (item) => (
+              <Badge
+                color={
+                  item.estado == 1
+                    ? "green"
+                    : item.estado == 2
+                    ? "blue"
+                    : item.estado == 3
+                    ? "red"
+                    : "grey"
+                }
+              >
+                {item.estado == 1
+                  ? "Aprobado"
+                  : item.estado == 2
+                  ? "Presentado"
+                  : item.estado == 3
+                  ? "Observado"
+                  : "En proceso"}
+              </Badge>
+            ),
+          },
+          {
+            id: "created_at",
+            header: "Fecha de creación",
+            cell: (item) => item.created_at,
+          },
+          {
+            id: "updated_at",
+            header: "Fecha de actualización",
+            cell: (item) => item.updated_at,
           },
         ]}
         columnDisplay={[
           { id: "informe", visible: true },
           { id: "fecha_envio", visible: true },
           { id: "estado", visible: true },
+          { id: "created_at", visible: true },
+          { id: "updated_at", visible: true },
         ]}
         enableKeyboardNavigation
         items={informes}
         loadingText="Cargando datos"
         loading={loadingInformes}
         resizableColumns
+        selectionType="single"
+        selectedItems={selectedItems}
+        onSelectionChange={({ detail }) =>
+          setSelectedItems(detail.selectedItems)
+        }
         trackBy="id"
         empty={
           <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
@@ -346,7 +381,28 @@ export default () => {
             </SpaceBetween>
           </Box>
         }
-        header={<Header>Informes</Header>}
+        header={
+          <Header
+            actions={
+              <SpaceBetween size="s">
+                <Button
+                  variant="primary"
+                  disabled={selectedItems.length == 0}
+                  onClick={() => {
+                    const query = queryString.stringify({
+                      id: selectedItems[0]["id"],
+                    });
+                    window.location.href = "informes_tecnicos/detalle?" + query;
+                  }}
+                >
+                  Editar informe
+                </Button>
+              </SpaceBetween>
+            }
+          >
+            Informes
+          </Header>
+        }
       />
     </SpaceBetween>
   );

@@ -2,6 +2,9 @@ import { Suspense, lazy } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { NotificationProvider } from "../providers/notificationProvider";
 
+const Detalle_informe_tecnico = lazy(() =>
+  import("../pages/admin/estudios/informes_tecnicos/detalles/index.jsx")
+);
 const Admin_main = lazy(() => import("../pages/admin/dashboard/index.jsx"));
 const Gestion_convocatorias = lazy(() =>
   import("../pages/admin/estudios/gestion_convocatorias/index.jsx")
@@ -165,7 +168,16 @@ const routes = createBrowserRouter(
         },
         {
           path: "informes_tecnicos",
-          element: <Informes_tecnicos />,
+          children: [
+            {
+              path: "",
+              element: <Informes_tecnicos />,
+            },
+            {
+              path: "detalle",
+              element: <Detalle_informe_tecnico />,
+            },
+          ],
         },
         {
           path: "monitoreo",
