@@ -10,6 +10,7 @@ import {
   Spinner,
   Alert,
   FileUpload,
+  Link,
 } from "@cloudscape-design/components";
 import { useContext, useEffect, useState } from "react";
 import { useFormValidation } from "../../../../../../hooks/useFormValidation";
@@ -76,12 +77,17 @@ export default ({ visible, setVisible, reload }) => {
   const agregarMiembro = async () => {
     if (validateForm()) {
       setLoadingCreate(true);
-      const res = await axiosBase.post("admin/estudios/grupos/agregarMiembro", {
-        tipo_registro: "egresado",
-        investigador_id: form.investigador_id,
-        grupo_id: id,
-        condicion: "Adherente",
-      });
+      let formData = new FormData();
+      formData.append("tipo_registro", "egresado");
+      formData.append("sum_id", form.id);
+      formData.append("investigador_id", form.investigador_id);
+      formData.append("grupo_id", id);
+      formData.append("condicion", "Adherente");
+      formData.append("file", formValues.file[0]);
+      const res = await axiosBase.post(
+        "admin/estudios/grupos/agregarMiembro",
+        formData
+      );
       const data = res.data;
       setLoadingCreate(false);
       setVisible(false);
@@ -207,6 +213,21 @@ export default ({ visible, setVisible, reload }) => {
                     <Form variant="embedded">
                       <FormField
                         label="Formato de adhesión"
+                        description={
+                          <>
+                            Puede descargar la plantilla de formato de adhesión
+                            en{" "}
+                            <Link
+                              href="/minio/templates/formato-adhesion-gi-estudiante.docx"
+                              external="true"
+                              variant="primary"
+                              fontSize="body-s"
+                              target="_blank"
+                            >
+                              este enlace.
+                            </Link>
+                          </>
+                        }
                         errorText={formErrors.file}
                       >
                         <FileUpload

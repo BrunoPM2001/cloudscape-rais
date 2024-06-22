@@ -258,6 +258,7 @@ export default () => {
           filteringPlaceholder="Buscar proyecto"
           countText={`${filteredItemsCount} coincidencias`}
           expandToViewport
+          virtualScroll
           customControl={
             <SpaceBetween direction="horizontal" size="m">
               <FormField label="Año:">

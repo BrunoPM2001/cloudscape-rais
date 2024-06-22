@@ -182,7 +182,11 @@ export default () => {
   const [loadingInformes, setLoadingInformes] = useState(true);
   const [informes, setInformes] = useState([]);
   const [distributions, setDistribution] = useState([]);
-  const [selectedItems, setSelectedItems] = useState([]);
+  const [selectedItems, setSelectedItems] = useState([
+    {
+      id: null,
+    },
+  ]);
   const {
     items,
     actions,
@@ -230,7 +234,7 @@ export default () => {
   const getInformes = async () => {
     setLoadingInformes(true);
     const res = await axiosBase.get(
-      "admin/estudios/informesTecnicos/informes/" + selectedItems[0].id
+      "admin/estudios/informesTecnicos/informes/" + selectedItems[0]?.id
     );
     const data = await res.data;
     setInformes(data.data);
@@ -272,9 +276,11 @@ export default () => {
             filteringPlaceholder="Buscar grupo"
             countText={`${filteredItemsCount} coincidencias`}
             expandToViewport
+            virtualScroll
             customControl={
               <FormField label="Año:">
                 <Select
+                  disabled={loading}
                   expandToViewport
                   selectedOption={selectedOption}
                   onChange={({ detail }) =>
@@ -288,6 +294,7 @@ export default () => {
                     { value: "2020" },
                     { value: "2019" },
                     { value: "2018" },
+                    { value: "2017" },
                   ]}
                 />
               </FormField>

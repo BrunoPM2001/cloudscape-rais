@@ -107,40 +107,24 @@ const columnDefinitions = [
         color={
           item.estado == -1
             ? "red"
-            : item.estado == 1
-            ? "green"
+            : item.estado == 0
+            ? "grey"
             : item.estado == 2
-            ? "grey"
-            : item.estado == 5
-            ? "blue"
+            ? "red"
             : item.estado == 6
-            ? "grey"
-            : item.estado == 7
-            ? "red"
-            : item.estado == 8
-            ? "grey"
-            : item.estado == 9
-            ? "red"
+            ? "blue"
             : "red"
         }
       >
         {item.estado == -1
           ? "Eliminado"
-          : item.estado == 1
-          ? "Registrado"
+          : item.estado == 0
+          ? "No aprobado"
           : item.estado == 2
           ? "Observado"
-          : item.estado == 5
-          ? "Enviado"
           : item.estado == 6
           ? "En proceso"
-          : item.estado == 7
-          ? "Anulado"
-          : item.estado == 8
-          ? "No registrado"
-          : item.estado == 9
-          ? "Duplicado"
-          : "Error"}
+          : "Estado desconocido"}
       </Badge>
     ),
     sortingField: "estado",

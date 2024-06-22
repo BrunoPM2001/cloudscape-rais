@@ -104,42 +104,26 @@ const columnDefinitions = [
     cell: (item) => (
       <Badge
         color={
-          item.estado == -1
-            ? "red"
-            : item.estado == 1
-            ? "green"
+          item.estado == -2
+            ? "grey"
             : item.estado == 2
             ? "grey"
-            : item.estado == 5
-            ? "blue"
-            : item.estado == 6
-            ? "grey"
-            : item.estado == 7
-            ? "red"
-            : item.estado == 8
-            ? "grey"
-            : item.estado == 9
+            : item.estado == 4
+            ? "green"
+            : item.estado == 12
             ? "red"
             : "red"
         }
       >
-        {item.estado == -1
-          ? "Eliminado"
-          : item.estado == 1
-          ? "Registrado"
+        {item.estado == -2
+          ? "Disuelto"
           : item.estado == 2
           ? "Observado"
-          : item.estado == 5
-          ? "Enviado"
-          : item.estado == 6
-          ? "En proceso"
-          : item.estado == 7
-          ? "Anulado"
-          : item.estado == 8
-          ? "No registrado"
-          : item.estado == 9
-          ? "Duplicado"
-          : "Error"}
+          : item.estado == 4
+          ? "Registrado"
+          : item.estado == 12
+          ? "Reg. observado"
+          : "Estado desconocido"}
       </Badge>
     ),
     sortingField: "estado",
@@ -235,7 +219,10 @@ export default () => {
               disabled={!enableBtn}
               onItemClick={({ detail }) => {
                 if (detail.id == "action_1") {
-                  // setEditVisible(true);
+                  const query = queryString.stringify({
+                    id: selectedItems[0]["id"],
+                  });
+                  window.location.href = "grupo/detalles?" + query;
                 } else if (detail.id == "action_2") {
                   // setDeleteVisible(true);
                 }

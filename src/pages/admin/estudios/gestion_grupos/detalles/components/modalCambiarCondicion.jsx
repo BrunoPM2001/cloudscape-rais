@@ -72,25 +72,27 @@ export default ({ visible, setVisible, reload, id, current, nombres }) => {
       }
       header="Actualizar condición del miembro"
     >
-      <Container>
-        <Box variant="awsui-key-label">Nombres:</Box>
-        <div>{nombres}</div>
-      </Container>
-      <FormField label="Condición" stretch errorText={formErrors.condicion}>
-        <Select
-          placeholder="Escoja una opción"
-          options={[
-            { value: "Titular" },
-            { value: "Colaborador" },
-            { value: "Colaborador Externo" },
-            { value: "Adherente" },
-          ]}
-          selectedOption={formValues.condicion}
-          onChange={({ detail }) =>
-            handleChange("condicion", detail.selectedOption)
-          }
-        />
-      </FormField>
+      <SpaceBetween size="m">
+        <Container>
+          <Box variant="awsui-key-label">Nombres:</Box>
+          <div>{nombres}</div>
+        </Container>
+        <FormField label="Condición" stretch errorText={formErrors.condicion}>
+          <Select
+            placeholder="Escoja una opción"
+            options={[
+              { value: "Titular" },
+              { value: "Colaborador" },
+              { value: "Colaborador Externo" },
+              { value: "Adherente" },
+            ]}
+            selectedOption={formValues.condicion}
+            onChange={({ detail }) =>
+              handleChange("condicion", detail.selectedOption)
+            }
+          />
+        </FormField>
+      </SpaceBetween>
     </Modal>
   );
 };

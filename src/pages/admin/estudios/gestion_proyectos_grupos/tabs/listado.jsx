@@ -328,6 +328,7 @@ export default () => {
           filteringPlaceholder="Buscar proyecto de grupo"
           countText={`${filteredItemsCount} coincidencias`}
           expandToViewport
+          virtualScroll
           customControl={
             <FormField label="Año:">
               <Select
@@ -345,6 +346,7 @@ export default () => {
                   { value: "2020" },
                   { value: "2019" },
                   { value: "2018" },
+                  { value: "2017" },
                 ]}
               />
             </FormField>

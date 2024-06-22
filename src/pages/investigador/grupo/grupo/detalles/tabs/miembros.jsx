@@ -13,15 +13,12 @@ import { useCollection } from "@cloudscape-design/collection-hooks";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import queryString from "query-string";
-import axiosBase from "../../../../../../api/axios";
-import ModalIncluirTitular from "../components/modalIncluirTitular";
 import ModalIncluirExterno from "../components/modalIncluirExterno";
 import ModalIncluirEstudiante from "../components/modalIncluirEstudiante";
 import ModalIncluirEgresado from "../components/modalIncluirEgresado";
 import ModalExcluirMiembro from "../components/modalExcluirMiembro";
 import ModalInformacionMiembro from "../components/modalInformacionMiembro";
-import ModalCambiarCargo from "../components/modalCambiarCargo";
-import ModalCambiarCondicion from "../components/modalCambiarCondicion";
+import axiosBase from "../../../../../../api/axios";
 
 const stringOperators = [":", "!:", "=", "!=", "^", "!^"];
 
@@ -199,9 +196,12 @@ export default ({ grupo_estado }) => {
   //  Functions
   const getData = async () => {
     setLoading(true);
-    const res = await axiosBase(
-      "admin/estudios/grupos/miembros/" + id + "/" + tipoMiembros.value
-    );
+    const res = await axiosBase.get("investigador/grupo/listarMiembros", {
+      params: {
+        grupo_id: id,
+        estado: tipoMiembros.value,
+      },
+    });
     const data = await res.data;
     setDistribution(data.data);
     setLoading(false);
@@ -286,10 +286,6 @@ export default ({ grupo_estado }) => {
                   expandableGroups
                   items={[
                     {
-                      id: "action_1_1",
-                      text: "Incluir titular UNMSM",
-                    },
-                    {
                       id: "action_1_2",
                       text: "Incluir adherente",
                       items: [
@@ -309,10 +305,7 @@ export default ({ grupo_estado }) => {
                     },
                   ]}
                   onItemClick={({ detail }) => {
-                    if (detail.id == "action_1_1") {
-                      setIncluirVisible(true);
-                      setTypeModal("Titular");
-                    } else if (detail.id == "action_1_2_1") {
+                    if (detail.id == "action_1_2_1") {
                       setIncluirVisible(true);
                       setTypeModal("Externo");
                     } else if (detail.id == "action_1_2_2") {
@@ -340,17 +333,6 @@ export default ({ grupo_estado }) => {
                       id: "action_2_2",
                       disabled: false,
                     },
-                    {
-                      text: "Cambiar condición",
-                      id: "action_2_3",
-                      disabled: false,
-                    },
-                    {
-                      text: "Cambiar cargo",
-                      id: "action_2_4",
-                      disabled:
-                        selectedItems[0]?.condicion != "Titular" ? true : false,
-                    },
                   ]}
                   onItemClick={({ detail }) => {
                     if (detail.id == "action_2_1") {
@@ -359,12 +341,6 @@ export default ({ grupo_estado }) => {
                     } else if (detail.id == "action_2_2") {
                       setIncluirVisible(true);
                       setTypeModal("Visualizar");
-                    } else if (detail.id == "action_2_3") {
-                      setIncluirVisible(true);
-                      setTypeModal("Condicion");
-                    } else if (detail.id == "action_2_4") {
-                      setIncluirVisible(true);
-                      setTypeModal("Cargo");
                     }
                   }}
                 >
@@ -379,13 +355,7 @@ export default ({ grupo_estado }) => {
         pagination={<Pagination {...paginationProps} />}
       />
       {incluirVisible &&
-        (typeModal == "Titular" ? (
-          <ModalIncluirTitular
-            visible={incluirVisible}
-            setVisible={setIncluirVisible}
-            reload={getData}
-          />
-        ) : typeModal == "Externo" ? (
+        (typeModal == "Externo" ? (
           <ModalIncluirExterno
             visible={incluirVisible}
             setVisible={setIncluirVisible}
@@ -410,29 +380,11 @@ export default ({ grupo_estado }) => {
             reload={getData}
             item={selectedItems}
           />
-        ) : typeModal == "Visualizar" ? (
+        ) : (
           <ModalInformacionMiembro
             visible={incluirVisible}
             setVisible={setIncluirVisible}
             id={selectedItems[0].id}
-          />
-        ) : typeModal == "Condicion" ? (
-          <ModalCambiarCondicion
-            visible={incluirVisible}
-            setVisible={setIncluirVisible}
-            reload={getData}
-            id={selectedItems[0].id}
-            current={selectedItems[0].condicion}
-            nombres={selectedItems[0].nombres}
-          />
-        ) : (
-          <ModalCambiarCargo
-            visible={incluirVisible}
-            setVisible={setIncluirVisible}
-            reload={getData}
-            id={selectedItems[0].id}
-            current={selectedItems[0].cargo}
-            nombres={selectedItems[0].nombres}
           />
         ))}
     </>

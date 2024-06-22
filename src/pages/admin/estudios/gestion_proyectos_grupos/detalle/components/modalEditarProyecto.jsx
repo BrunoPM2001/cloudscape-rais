@@ -50,6 +50,10 @@ const optsEstado = [
     label: "Anulado",
   },
   {
+    value: 8,
+    label: "Sustentado",
+  },
+  {
     value: 9,
     label: "En ejecución",
   },

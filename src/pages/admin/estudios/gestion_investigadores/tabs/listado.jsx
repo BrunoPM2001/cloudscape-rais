@@ -19,7 +19,7 @@ const estadoConfig = {
   1: { color: "green", text: "Activo" },
 };
 
-const defaultConfig = { color: "red", text: "Sin estado" };
+const defaultConfig = { color: "grey", text: "Sin estado" };
 
 const stringOperators = [":", "!:", "=", "!=", "^", "!^"];
 
@@ -377,6 +377,7 @@ export default () => {
           filteringPlaceholder="Buscar investigador"
           countText={`${filteredItemsCount} coincidencias`}
           expandToViewport
+          virtualScroll
         />
       }
       pagination={<Pagination {...paginationProps} />}

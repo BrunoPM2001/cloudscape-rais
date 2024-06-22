@@ -261,6 +261,7 @@ export default ({ id }) => {
             filteringPlaceholder="Buscar comprobante"
             countText={`${filteredItemsCount} coincidencias`}
             expandToViewport
+            virtualScroll
           />
         }
         pagination={<Pagination {...paginationProps} />}

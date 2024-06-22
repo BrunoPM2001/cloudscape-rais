@@ -1,5 +1,4 @@
 import {
-  Autosuggest,
   Box,
   Button,
   ColumnLayout,
@@ -15,15 +14,15 @@ import {
   Textarea,
 } from "@cloudscape-design/components";
 import { useContext, useState } from "react";
-import { useFormValidation } from "../../../../../../hooks/useFormValidation";
 import { useLocation } from "react-router-dom";
 import queryString from "query-string";
-import axiosBase from "../../../../../../api/axios";
 import NotificationContext from "../../../../../../providers/notificationProvider";
+import { useFormValidation } from "../../../../../../hooks/useFormValidation";
+import axiosBase from "../../../../../../api/axios";
 
 const initialForm = {
-  codigo_orcid: "",
   apellido1: "",
+  codigo_orcid: "",
   apellido2: "",
   nombres: "",
   sexo: null,
@@ -93,16 +92,36 @@ export default ({ visible, setVisible, reload }) => {
   const agregarMiembro = async () => {
     if (validateForm()) {
       setLoadingCreate(true);
-      const res = await axiosBase.post("admin/estudios/grupos/agregarMiembro", {
-        ...formValues,
-        sexo: formValues.sexo.value,
-        pais: formValues.pais.value,
-        doc_tipo: formValues.doc_tipo.value,
-        tipo_registro: "externo",
-        grupo_id: id,
-        condicion: "Adherente",
-        tipo: "Externo",
-      });
+      let formData = new FormData();
+      formData.append("apellido1", formValues.apellido1);
+      formData.append("codigo_orcid", formValues.codigo_orcid);
+      formData.append("apellido2", formValues.apellido2);
+      formData.append("nombres", formValues.nombres);
+      formData.append("sexo", formValues.sexo.value);
+      formData.append("institucion", formValues.institucion);
+      formData.append("pais", formValues.pais.value);
+      formData.append("direccion1", formValues.direccion1);
+      formData.append("doc_tipo", formValues.doc_tipo.value);
+      formData.append("doc_numero", formValues.doc_numero);
+      formData.append("telefono_movil", formValues.telefono_movil);
+      formData.append("titulo_profesional", formValues.titulo_profesional);
+      formData.append("grado", formValues.grado);
+      formData.append("especialidad", formValues.especialidad);
+      formData.append("researcher_id", formValues.researcher_id);
+      formData.append("scopus_id", formValues.scopus_id);
+      formData.append("link", formValues.link);
+      formData.append("posicion_unmsm", formValues.posicion_unmsm);
+      formData.append("biografia", formValues.biografia);
+      formData.append("observacion", formValues.observacion);
+      formData.append("tipo_registro", "externo");
+      formData.append("grupo_id", id);
+      formData.append("condicion", "Adherente");
+      formData.append("tipo", "Externo");
+      formData.append("file", formValues.file[0]);
+      const res = await axiosBase.post(
+        "investigador/grupo/agregarMiembro",
+        formData
+      );
       const data = res.data;
       setLoadingCreate(false);
       setVisible(false);
@@ -410,7 +429,7 @@ export default ({ visible, setVisible, reload }) => {
                   target="_blank"
                 >
                   este enlace.
-                </Link>
+                </Link>{" "}
               </>
             }
             errorText={formErrors.file}

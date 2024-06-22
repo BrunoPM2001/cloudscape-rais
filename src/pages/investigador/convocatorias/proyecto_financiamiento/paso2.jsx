@@ -133,17 +133,16 @@ export default forwardRef(function ({ proyecto_id }, ref) {
           label="Carta de compromiso"
           description={
             <>
-              Puede descargar la{" "}
+              Puede descargar la plantilla de carta de compromiso en{" "}
               <Link
-                href="http://172.16.156.106:9090/api/v1/buckets/templates/objects/download?prefix=compromiso-confidencialidad.docx&version_id=null"
+                href="/minio/templates/compromiso-confidencialidad.docx"
                 external="true"
                 variant="primary"
                 fontSize="body-s"
                 target="_blank"
               >
-                plantilla de carta de compromiso
-              </Link>{" "}
-              en este enlace.
+                este enlace.
+              </Link>
             </>
           }
           stretch

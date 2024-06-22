@@ -161,6 +161,7 @@ export default () => {
           filteringPlaceholder="Buscar bd"
           countText={`${filteredItemsCount} coincidencias`}
           expandToViewport
+          virtualScroll
         />
       }
       pagination={<Pagination {...paginationProps} />}

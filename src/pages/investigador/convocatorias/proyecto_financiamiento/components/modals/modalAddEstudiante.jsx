@@ -10,6 +10,7 @@ import {
   Spinner,
   Alert,
   FileUpload,
+  Link,
 } from "@cloudscape-design/components";
 import { useContext, useEffect, useState } from "react";
 import { useAutosuggest } from "../../../../../../hooks/useAutosuggest";
@@ -202,6 +203,21 @@ export default ({ id, visible, setVisible, reload }) => {
                     <Form variant="embedded">
                       <FormField
                         label="Carta de compromiso"
+                        description={
+                          <>
+                            Puede descargar la plantilla de carta de compromiso
+                            en{" "}
+                            <Link
+                              href="/minio/templates/compromiso-confidencialidad.docx"
+                              external="true"
+                              variant="primary"
+                              fontSize="body-s"
+                              target="_blank"
+                            >
+                              este enlace.
+                            </Link>
+                          </>
+                        }
                         errorText={formErrors.carta}
                       >
                         <FileUpload

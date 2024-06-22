@@ -237,6 +237,7 @@ export default () => {
           filteringPlaceholder="Buscar proyecto"
           countText={`${filteredItemsCount} coincidencias`}
           expandToViewport
+          virtualScroll
         />
       }
       pagination={<Pagination {...paginationProps} />}

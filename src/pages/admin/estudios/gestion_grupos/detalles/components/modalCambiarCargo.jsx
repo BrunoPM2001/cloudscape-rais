@@ -68,23 +68,25 @@ export default ({ visible, setVisible, reload, id, current, nombres }) => {
       }
       header="Actualizar cargo del miembro"
     >
-      <Container>
-        <Box variant="awsui-key-label">Nombres:</Box>
-        <div>{nombres}</div>
-      </Container>
-      <FormField label="Cargo" stretch errorText={formErrors.cargo}>
-        <Select
-          placeholder="Escoja una opción"
-          options={[
-            { value: "Coordinador", label: "Coordinador" },
-            { value: "", label: "Sin cargo" },
-          ]}
-          selectedOption={formValues.cargo}
-          onChange={({ detail }) =>
-            handleChange("cargo", detail.selectedOption)
-          }
-        />
-      </FormField>
+      <SpaceBetween size="m">
+        <Container>
+          <Box variant="awsui-key-label">Nombres:</Box>
+          <div>{nombres}</div>
+        </Container>
+        <FormField label="Cargo" stretch errorText={formErrors.cargo}>
+          <Select
+            placeholder="Escoja una opción"
+            options={[
+              { value: "Coordinador", label: "Coordinador" },
+              { value: "", label: "Sin cargo" },
+            ]}
+            selectedOption={formValues.cargo}
+            onChange={({ detail }) =>
+              handleChange("cargo", detail.selectedOption)
+            }
+          />
+        </FormField>
+      </SpaceBetween>
     </Modal>
   );
 };

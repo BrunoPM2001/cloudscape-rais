@@ -13,12 +13,12 @@ import {
   Link,
 } from "@cloudscape-design/components";
 import { useContext, useEffect, useState } from "react";
-import { useFormValidation } from "../../../../../../hooks/useFormValidation";
-import { useAutosuggest } from "../../../../../../hooks/useAutosuggest";
 import { useLocation } from "react-router-dom";
 import queryString from "query-string";
-import axiosBase from "../../../../../../api/axios";
+import { useAutosuggest } from "../../../../../../hooks/useAutosuggest";
 import NotificationContext from "../../../../../../providers/notificationProvider";
+import { useFormValidation } from "../../../../../../hooks/useFormValidation";
+import axiosBase from "../../../../../../api/axios";
 
 const initialForm = {
   file: [],
@@ -41,7 +41,7 @@ export default ({ visible, setVisible, reload }) => {
 
   //  Hooks
   const { loading, options, setOptions, value, setValue, setAvoidSelect } =
-    useAutosuggest("estudiante");
+    useAutosuggest("egresado_invest");
   const {
     formValues,
     formErrors,
@@ -57,15 +57,12 @@ export default ({ visible, setVisible, reload }) => {
   //  Functions
   const getData = async () => {
     setLoadingData(true);
-    const res = await axiosBase.get(
-      "admin/estudios/grupos/incluirMiembroData",
-      {
-        params: {
-          tipo: "estudiante",
-          codigo: form.codigo_alumno,
-        },
-      }
-    );
+    const res = await axiosBase.get("investigador/grupo/incluirMiembroData", {
+      params: {
+        tipo: "egresado",
+        codigo: form.codigo_alumno,
+      },
+    });
     const data = await res.data;
     setIncluirMiembroData(data);
     setLoadingData(false);
@@ -78,14 +75,14 @@ export default ({ visible, setVisible, reload }) => {
     if (validateForm()) {
       setLoadingCreate(true);
       let formData = new FormData();
-      formData.append("tipo_registro", "estudiante");
+      formData.append("tipo_registro", "egresado");
       formData.append("sum_id", form.id);
       formData.append("investigador_id", form.investigador_id);
       formData.append("grupo_id", id);
       formData.append("condicion", "Adherente");
       formData.append("file", formValues.file[0]);
       const res = await axiosBase.post(
-        "admin/estudios/grupos/agregarMiembro",
+        "investigador/grupo/agregarMiembro",
         formData
       );
       const data = res.data;
@@ -129,7 +126,7 @@ export default ({ visible, setVisible, reload }) => {
     >
       <Form variant="embedded">
         <SpaceBetween direction="vertical" size="s">
-          <FormField label="Buscar estudiante" stretch>
+          <FormField label="Buscar egresado" stretch>
             <Autosuggest
               onChange={({ detail }) => {
                 setOptions([]);
@@ -149,7 +146,7 @@ export default ({ visible, setVisible, reload }) => {
               value={value}
               options={options}
               loadingText="Cargando data"
-              placeholder="Código, dni o nombre del estudiante"
+              placeholder="Código, dni o nombre del egresado"
               statusType={loading ? "loading" : "finished"}
               empty="No se encontraron resultados"
             />

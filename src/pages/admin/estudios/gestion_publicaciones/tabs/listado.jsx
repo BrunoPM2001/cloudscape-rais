@@ -158,31 +158,39 @@ const columnDefinitions = [
           item.estado == -1
             ? "red"
             : item.estado == 1
-            ? "grey"
+            ? "green"
             : item.estado == 2
             ? "grey"
-            : item.estado == 4
-            ? "green"
             : item.estado == 5
             ? "blue"
             : item.estado == 6
+            ? "blue"
+            : item.estado == 7
+            ? "red"
+            : item.estado == 8
             ? "grey"
+            : item.estado == 9
+            ? "red"
             : "red"
         }
       >
         {item.estado == -1
           ? "Eliminado"
           : item.estado == 1
-          ? "Reconocido"
+          ? "Registrado"
           : item.estado == 2
           ? "Observado"
-          : item.estado == 4
-          ? "Registrado"
           : item.estado == 5
           ? "Enviado"
           : item.estado == 6
           ? "En proceso"
-          : "Error"}
+          : item.estado == 7
+          ? "Anulado"
+          : item.estado == 8
+          ? "No registrado"
+          : item.estado == 9
+          ? "Duplicado"
+          : "Sin estado"}
       </Badge>
     ),
     sortingField: "estado",
@@ -217,7 +225,6 @@ export default () => {
   const [distributions, setDistribution] = useState([]);
   const {
     items,
-    actions,
     filteredItemsCount,
     collectionProps,
     paginationProps,
@@ -364,9 +371,10 @@ export default () => {
       filter={
         <PropertyFilter
           {...propertyFilterProps}
-          filteringPlaceholder="Buscar proyecto de grupo"
+          filteringPlaceholder="Buscar publicación"
           countText={`${filteredItemsCount} coincidencias`}
           expandToViewport
+          virtualScroll
           customControl={
             <FormField label="Buscar por investigador" stretch>
               <Autosuggest

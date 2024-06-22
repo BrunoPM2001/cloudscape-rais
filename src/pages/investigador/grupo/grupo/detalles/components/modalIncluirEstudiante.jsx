@@ -12,13 +12,13 @@ import {
   FileUpload,
   Link,
 } from "@cloudscape-design/components";
-import { useContext, useEffect, useState } from "react";
-import { useFormValidation } from "../../../../../../hooks/useFormValidation";
-import { useAutosuggest } from "../../../../../../hooks/useAutosuggest";
 import { useLocation } from "react-router-dom";
 import queryString from "query-string";
-import axiosBase from "../../../../../../api/axios";
+import { useContext, useEffect, useState } from "react";
 import NotificationContext from "../../../../../../providers/notificationProvider";
+import { useAutosuggest } from "../../../../../../hooks/useAutosuggest";
+import { useFormValidation } from "../../../../../../hooks/useFormValidation";
+import axiosBase from "../../../../../../api/axios";
 
 const initialForm = {
   file: [],
@@ -41,7 +41,7 @@ export default ({ visible, setVisible, reload }) => {
 
   //  Hooks
   const { loading, options, setOptions, value, setValue, setAvoidSelect } =
-    useAutosuggest("estudiante");
+    useAutosuggest("estudiante_invest");
   const {
     formValues,
     formErrors,
@@ -57,15 +57,12 @@ export default ({ visible, setVisible, reload }) => {
   //  Functions
   const getData = async () => {
     setLoadingData(true);
-    const res = await axiosBase.get(
-      "admin/estudios/grupos/incluirMiembroData",
-      {
-        params: {
-          tipo: "estudiante",
-          codigo: form.codigo_alumno,
-        },
-      }
-    );
+    const res = await axiosBase.get("investigador/grupo/incluirMiembroData", {
+      params: {
+        tipo: "estudiante",
+        codigo: form.codigo_alumno,
+      },
+    });
     const data = await res.data;
     setIncluirMiembroData(data);
     setLoadingData(false);
@@ -85,7 +82,7 @@ export default ({ visible, setVisible, reload }) => {
       formData.append("condicion", "Adherente");
       formData.append("file", formValues.file[0]);
       const res = await axiosBase.post(
-        "admin/estudios/grupos/agregarMiembro",
+        "investigador/grupo/agregarMiembro",
         formData
       );
       const data = res.data;
@@ -143,6 +140,7 @@ export default ({ visible, setVisible, reload }) => {
                 if (detail.selectedOption.id != undefined) {
                   const { value, ...rest } = detail.selectedOption;
                   setForm(rest);
+                  console.log(rest);
                   setAvoidSelect(false);
                 }
               }}

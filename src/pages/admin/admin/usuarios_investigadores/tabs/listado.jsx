@@ -297,6 +297,7 @@ export default () => {
             filteringPlaceholder="Buscar investigador"
             countText={`${filteredItemsCount} coincidencias`}
             expandToViewport
+            virtualScroll
           />
         }
         pagination={<Pagination {...paginationProps} />}
