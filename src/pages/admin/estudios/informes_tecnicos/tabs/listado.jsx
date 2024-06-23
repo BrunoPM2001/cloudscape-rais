@@ -393,6 +393,7 @@ export default () => {
                       id: selectedItems[0]["id"],
                       tipo_proyecto:
                         collectionProps.selectedItems[0].tipo_proyecto,
+                      tipo_informe: selectedItems[0]["informe"],
                     });
                     window.location.href = "informes_tecnicos/detalle?" + query;
                   }}

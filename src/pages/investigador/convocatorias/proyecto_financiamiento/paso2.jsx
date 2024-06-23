@@ -152,7 +152,6 @@ export default forwardRef(function ({ proyecto_id }, ref) {
             value={formValues.carta}
             onChange={({ detail }) => {
               handleChange("carta", detail.value);
-              console.log(detail.value);
             }}
             showFileLastModified
             showFileSize

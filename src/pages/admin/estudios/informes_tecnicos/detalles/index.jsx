@@ -2,7 +2,6 @@ import {
   Container,
   SpaceBetween,
   Spinner,
-  Tabs,
 } from "@cloudscape-design/components";
 import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -11,7 +10,7 @@ import BaseLayout from "../../../components/baseLayout";
 import axiosBase from "../../../../../api/axios";
 import Detalles from "./detalles";
 import { useFormValidation } from "../../../../../hooks/useFormValidation";
-import Pinvpos from "./tabs/tabs";
+import Tabs_custom from "./tabs/tabs";
 
 const breadcrumbs = [
   {
@@ -62,6 +61,12 @@ const initialForm = {
   infinal10: null,
   infinal11: null,
   estado_trabajo: null,
+  file1: [],
+  file2: [],
+  file3: [],
+  file4: [],
+  file5: [],
+  file6: [],
 };
 
 const formRules = {};
@@ -77,7 +82,9 @@ export default function Detalle_informe_tecnico() {
 
   //  Url
   const location = useLocation();
-  const { id, tipo_proyecto } = queryString.parse(location.search);
+  const { id, tipo_proyecto, tipo_informe } = queryString.parse(
+    location.search
+  );
 
   //  Functions
   const getData = async () => {
@@ -133,10 +140,11 @@ export default function Detalle_informe_tecnico() {
               handleChange={handleChange}
               loading={loading}
             />
-            <Pinvpos
+            <Tabs_custom
               formValues={formValues}
               handleChange={handleChange}
-              tipo_proyecto={data.tipo_proyecto}
+              tipo_proyecto={tipo_proyecto}
+              tipo_informe={tipo_informe}
               loading={loading}
             />
           </>
