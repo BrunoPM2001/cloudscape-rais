@@ -1,16 +1,19 @@
-import { Container, FormField, Textarea } from "@cloudscape-design/components";
+import { Container, FormField, Spinner } from "@cloudscape-design/components";
+import Tiptap from "../../../../../components/tiptap";
 
-export default ({ value, handleChange }) => {
+export default ({ value, handleChange, loading }) => {
   return (
     <Container>
       <FormField label="Recomendaciones" stretch>
-        <Textarea
-          value={value}
-          onChange={({ detail }) =>
-            handleChange("recomendacion_taller", detail.value)
-          }
-          rows={10}
-        />
+        {loading ? (
+          <Spinner />
+        ) : (
+          <Tiptap
+            value={value}
+            handleChange={handleChange}
+            name="recomendacion_taller"
+          />
+        )}
       </FormField>
     </Container>
   );

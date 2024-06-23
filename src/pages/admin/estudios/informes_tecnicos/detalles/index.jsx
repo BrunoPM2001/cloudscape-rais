@@ -1,4 +1,9 @@
-import { SpaceBetween, Tabs } from "@cloudscape-design/components";
+import {
+  Container,
+  SpaceBetween,
+  Spinner,
+  Tabs,
+} from "@cloudscape-design/components";
 import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import queryString from "query-string";
@@ -6,7 +11,7 @@ import BaseLayout from "../../../components/baseLayout";
 import axiosBase from "../../../../../api/axios";
 import Detalles from "./detalles";
 import { useFormValidation } from "../../../../../hooks/useFormValidation";
-import Pinvpos from "./tabs/pinvpos";
+import Pinvpos from "./tabs/tabs";
 
 const breadcrumbs = [
   {
@@ -28,12 +33,12 @@ const breadcrumbs = [
 ];
 
 const initialForm = {
+  estado: null,
   fecha_presentacion: null,
   registro_nro_vrip: null,
   fecha_registro_csi: null,
   observaciones: null,
   observaciones_admin: null,
-  estado: null,
   fecha_envio: null,
   resumen_ejecutivo: null,
   palabras_clave: null,
@@ -88,14 +93,13 @@ export default function Detalle_informe_tecnico() {
     const data = res.data;
     const stateKeys = Object.keys(formValues);
 
-    // Crear un nuevo objeto solo con las propiedades de X que están en el estado
+    // Crear un nuevo objeto solo con las propiedades de DATA que están en el estado
     const updatedState = stateKeys.reduce((acc, key) => {
       if (data.hasOwnProperty(key)) {
         acc[key] = data[key];
       }
       return acc;
     }, {});
-    console.log(updatedState);
 
     setFormValues((prev) => ({
       ...prev,
@@ -117,13 +121,26 @@ export default function Detalle_informe_tecnico() {
       en general."
     >
       <SpaceBetween size="l">
-        <Detalles data={data} loading={loading} />
-        <Pinvpos
-          formValues={formValues}
-          handleChange={handleChange}
-          tipo_proyecto={data.tipo_proyecto}
-          loading={loading}
-        />
+        {loading ? (
+          <Container>
+            <Spinner /> Cargando
+          </Container>
+        ) : (
+          <>
+            <Detalles
+              data={data}
+              formValues={formValues}
+              handleChange={handleChange}
+              loading={loading}
+            />
+            <Pinvpos
+              formValues={formValues}
+              handleChange={handleChange}
+              tipo_proyecto={data.tipo_proyecto}
+              loading={loading}
+            />
+          </>
+        )}
       </SpaceBetween>
     </BaseLayout>
   );

@@ -391,6 +391,8 @@ export default () => {
                   onClick={() => {
                     const query = queryString.stringify({
                       id: selectedItems[0]["id"],
+                      tipo_proyecto:
+                        collectionProps.selectedItems[0].tipo_proyecto,
                     });
                     window.location.href = "informes_tecnicos/detalle?" + query;
                   }}

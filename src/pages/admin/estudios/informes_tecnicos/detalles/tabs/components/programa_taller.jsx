@@ -3,10 +3,11 @@ import {
   DatePicker,
   FormField,
   SpaceBetween,
-  Textarea,
+  Spinner,
 } from "@cloudscape-design/components";
+import Tiptap from "../../../../../components/tiptap";
 
-export default ({ value1, value2, handleChange }) => {
+export default ({ value1, value2, handleChange, loading }) => {
   return (
     <Container>
       <SpaceBetween size="m">
@@ -24,13 +25,15 @@ export default ({ value1, value2, handleChange }) => {
           description="Indicar al detalle las actividades programadas/realizadas"
           stretch
         >
-          <Textarea
-            value={value2}
-            onChange={({ detail }) =>
-              handleChange("propuestas_taller", detail.value)
-            }
-            rows={10}
-          />
+          {loading ? (
+            <Spinner />
+          ) : (
+            <Tiptap
+              value={value2}
+              handleChange={handleChange}
+              name="propuestas_taller"
+            />
+          )}
         </FormField>
       </SpaceBetween>
     </Container>

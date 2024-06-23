@@ -15,6 +15,7 @@ export default ({ tipo_proyecto, formValues, handleChange, loading }) => {
         <Objetivos
           value={formValues?.objetivos_taller}
           handleChange={handleChange}
+          loading={loading}
         />
       ),
     },
@@ -26,6 +27,7 @@ export default ({ tipo_proyecto, formValues, handleChange, loading }) => {
           value1={formValues?.fecha_evento}
           value2={formValues?.propuestas_taller}
           handleChange={handleChange}
+          loading={loading}
         />
       ),
     },
@@ -36,6 +38,7 @@ export default ({ tipo_proyecto, formValues, handleChange, loading }) => {
         <Conclusiones
           value={formValues?.conclusion_taller}
           handleChange={handleChange}
+          loading={loading}
         />
       ),
     },
@@ -46,6 +49,7 @@ export default ({ tipo_proyecto, formValues, handleChange, loading }) => {
         <Recomendaciones
           value={formValues?.recomendacion_taller}
           handleChange={handleChange}
+          loading={loading}
         />
       ),
     },
@@ -56,6 +60,7 @@ export default ({ tipo_proyecto, formValues, handleChange, loading }) => {
         <Asistencia
           value={formValues?.asistencia_taller}
           handleChange={handleChange}
+          loading={loading}
         />
       ),
     },
