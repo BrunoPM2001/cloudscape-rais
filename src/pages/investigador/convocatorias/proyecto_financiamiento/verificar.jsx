@@ -50,7 +50,6 @@ export default function Verificar_requisitos() {
       helpInfo="Información sobre la páginal actual para poder mostrarla al público
       en general."
       disableOverlap
-      withoutContentLayout
     >
       {verifyLoading ? (
         <Box margin="m">

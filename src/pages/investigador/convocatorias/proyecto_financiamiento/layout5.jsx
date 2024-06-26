@@ -64,7 +64,6 @@ export default function Registrar_proyecto_paso5() {
       helpInfo="Información sobre la páginal actual para poder mostrarla al público
       en general."
       disableOverlap
-      withoutContentLayout
     >
       <Wizard
         onNavigate={({ detail }) => handleNavigate(detail)}

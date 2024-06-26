@@ -9,6 +9,7 @@ import {
   Table,
 } from "@cloudscape-design/components";
 import { useState } from "react";
+import ModalBoleta from "../components/modalBoleta";
 
 const columnDefinitions = [
   {
@@ -90,7 +91,7 @@ const columnDisplay = [
 export default ({ data, loading }) => {
   //  States
   const [visible, setVisible] = useState(false);
-  const [type, setType] = useState(0);
+  const [type, setType] = useState("");
 
   //  Hooks
   const { items, collectionProps } = useCollection(data, {
@@ -115,7 +116,7 @@ export default ({ data, loading }) => {
           <Header
             counter={"(" + data.length + ")"}
             actions={
-              <SpaceBetween size="xxs" direction="horizontal">
+              <SpaceBetween size="xs" direction="horizontal">
                 <Button
                   disabled={
                     collectionProps.selectedItems.length == 0 ? true : false
@@ -193,6 +194,12 @@ export default ({ data, loading }) => {
           </Box>
         }
       />
+      {visible &&
+        (type == "action_1" ? (
+          <ModalBoleta visible={visible} setVisible={setVisible} />
+        ) : (
+          <></>
+        ))}
     </>
   );
 };

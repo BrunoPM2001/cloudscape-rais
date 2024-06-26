@@ -123,7 +123,6 @@ export default function Registrar_proyecto_paso6() {
         </div>
       }
       disableOverlap
-      withoutContentLayout
     >
       <Wizard
         onNavigate={({ detail }) => handleNavigate(detail)}

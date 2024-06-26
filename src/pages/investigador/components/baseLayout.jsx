@@ -26,7 +26,7 @@ export default function BaseLayout({
     <>
       <Navbar />
       <AppLayout
-        breadcrumbs={<BreadcrumbGroup items={breadcrumbs} />}
+        headerVariant="high-contrast"
         navigation={<Sidebar />}
         notifications={<Flashbar items={notifications} stackItems />}
         tools={<Helpbar>{helpInfo}</Helpbar>}
@@ -35,6 +35,8 @@ export default function BaseLayout({
             <>{children}</>
           ) : (
             <ContentLayout
+              headerVariant="high-contrast"
+              breadcrumbs={<BreadcrumbGroup items={breadcrumbs} />}
               disableOverlap={disableOverlap}
               header={<Header variant="h1">{header}</Header>}
             >
