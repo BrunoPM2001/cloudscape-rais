@@ -195,6 +195,7 @@ export default ({ id }) => {
 
   //  Functions
   const getData = async () => {
+    setSelectedItems([]);
     setLoading(true);
     const res = await axiosBase.get(
       "admin/economia/comprobantes/listadoComprobantes",

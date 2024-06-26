@@ -16,10 +16,9 @@ pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pd
 
 const maxWidth = 700;
 
-export default () => {
+export default ({ url }) => {
   //  States
   const [numPages, setNumPages] = useState();
-  const [url, setUrl] = useState("https://pdfobject.com/pdf/sample.pdf");
 
   const file = useMemo(() => ({ url }), [url]);
 
@@ -48,31 +47,35 @@ export default () => {
         </Header>
       }
     >
-      <div
-        style={{
-          overflow: "auto",
-          maxHeight: "70vh",
-        }}
-      >
-        <Document
-          file={file}
-          onLoadSuccess={onDocumentLoadSuccess}
-          loading={
-            <Box textAlign="center">
-              <Spinner size="large" />
-            </Box>
-          }
-          error="Error al cargar pdf"
+      {url == "" ? (
+        <></>
+      ) : (
+        <div
+          style={{
+            overflow: "auto",
+            maxHeight: "70vh",
+          }}
         >
-          {Array.from(new Array(numPages), (el, index) => (
-            <Page
-              key={`page_${index + 1}`}
-              pageNumber={index + 1}
-              width={maxWidth}
-            />
-          ))}
-        </Document>
-      </div>
+          <Document
+            file={file}
+            onLoadSuccess={onDocumentLoadSuccess}
+            loading={
+              <Box textAlign="center">
+                <Spinner size="large" />
+              </Box>
+            }
+            error="Error al cargar pdf"
+          >
+            {Array.from(new Array(numPages), (el, index) => (
+              <Page
+                key={`page_${index + 1}`}
+                pageNumber={index + 1}
+                width={maxWidth}
+              />
+            ))}
+          </Document>
+        </div>
+      )}
     </Container>
   );
 };

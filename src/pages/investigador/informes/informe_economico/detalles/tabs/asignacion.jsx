@@ -1,11 +1,10 @@
 import {
   Box,
+  Button,
   Header,
   SpaceBetween,
   Table,
 } from "@cloudscape-design/components";
-import { useState, useEffect } from "react";
-import axiosBase from "../../../../../../api/axios";
 
 const columnDefinitions = [
   {
@@ -62,45 +61,26 @@ const columnDisplay = [
   { id: "monto_excedido", visible: true },
 ];
 
-export default ({ id }) => {
-  //  Data states
-  const [loading, setLoading] = useState(true);
-  const [distributions, setDistribution] = useState([]);
-  //  Functions
-  const getData = async () => {
-    setLoading(true);
-    const res = await axiosBase.get(
-      "admin/economia/comprobantes/listadoPartidasProyecto",
-      {
-        params: {
-          geco_proyecto_id: id,
-        },
-      }
-    );
-    const data = res.data;
-    console.log(data);
-    setDistribution(data);
-    setLoading(false);
-  };
-
-  //  Effects
-  useEffect(() => {
-    getData();
-  }, []);
-
+export default ({ data, loading }) => {
   return (
     <>
       <Table
         trackBy="codigo"
-        items={distributions}
+        items={data}
         columnDefinitions={columnDefinitions}
         columnDisplay={columnDisplay}
         loading={loading}
         loadingText="Cargando datos"
         resizableColumns
-        wrapLines
         header={
-          <Header counter={"(" + distributions.length + ")"}>
+          <Header
+            counter={"(" + data.length + ")"}
+            actions={
+              <Button variant="primary" iconName="download">
+                Hoja de resumen
+              </Button>
+            }
+          >
             Listado de partidas
           </Header>
         }

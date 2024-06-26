@@ -260,7 +260,6 @@ export default ({ visible, setVisible, item, grupo_id, reload }) => {
             />
           </FormField>
           <FormField
-            rows={3}
             label="Observaciones al investigador"
             stretch
             errorText={formErrors.observaciones_admin}

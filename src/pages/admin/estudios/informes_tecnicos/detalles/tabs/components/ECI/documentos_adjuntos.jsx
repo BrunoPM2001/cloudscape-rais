@@ -3,6 +3,7 @@ import {
   Container,
   FileUpload,
   FormField,
+  Link,
 } from "@cloudscape-design/components";
 
 export default ({
@@ -13,12 +14,32 @@ export default ({
   value5,
   value6,
   handleChange,
+  files,
 }) => {
   return (
     <Container>
       <ColumnLayout columns={2}>
         <FormField
           label="Documento de conformidad firmada por el coordinador del GI"
+          description={
+            files.find((opt) => opt.categoria == "anexo1") ? (
+              <>
+                Cargado el{" "}
+                {files.find((opt) => opt.categoria == "anexo1").comentario},{" "}
+                <Link
+                  href={files.find((opt) => opt.categoria == "anexo1").url}
+                  external="true"
+                  variant="primary"
+                  fontSize="body-s"
+                  target="_blank"
+                >
+                  descargar archivo.
+                </Link>
+              </>
+            ) : (
+              <></>
+            )
+          }
           stretch
         >
           <FileUpload
@@ -43,7 +64,29 @@ export default ({
             accept=".jpeg, .jpg, .png,  .pdf"
           />
         </FormField>
-        <FormField label="Imágenes del equipo/gabinete instalado" stretch>
+        <FormField
+          label="Imágenes del equipo/gabinete instalado"
+          description={
+            files.find((opt) => opt.categoria == "anexo2") ? (
+              <>
+                Cargado el{" "}
+                {files.find((opt) => opt.categoria == "anexo2").comentario},{" "}
+                <Link
+                  href={files.find((opt) => opt.categoria == "anexo2").url}
+                  external="true"
+                  variant="primary"
+                  fontSize="body-s"
+                  target="_blank"
+                >
+                  descargar archivo.
+                </Link>
+              </>
+            ) : (
+              <></>
+            )
+          }
+          stretch
+        >
           <FileUpload
             value={value2}
             onChange={({ detail }) => {
@@ -68,6 +111,25 @@ export default ({
         </FormField>
         <FormField
           label="Imágenes de equipos complementarios al equipo/gabinete instalado"
+          description={
+            files.find((opt) => opt.categoria == "anexo3") ? (
+              <>
+                Cargado el{" "}
+                {files.find((opt) => opt.categoria == "anexo3").comentario},{" "}
+                <Link
+                  href={files.find((opt) => opt.categoria == "anexo3").url}
+                  external="true"
+                  variant="primary"
+                  fontSize="body-s"
+                  target="_blank"
+                >
+                  descargar archivo.
+                </Link>
+              </>
+            ) : (
+              <></>
+            )
+          }
           stretch
         >
           <FileUpload
@@ -94,6 +156,25 @@ export default ({
         </FormField>
         <FormField
           label="Formato de control del uso del equipo, incluir uso compartido"
+          description={
+            files.find((opt) => opt.categoria == "anexo4") ? (
+              <>
+                Cargado el{" "}
+                {files.find((opt) => opt.categoria == "anexo4").comentario},{" "}
+                <Link
+                  href={files.find((opt) => opt.categoria == "anexo4").url}
+                  external="true"
+                  variant="primary"
+                  fontSize="body-s"
+                  target="_blank"
+                >
+                  descargar archivo.
+                </Link>
+              </>
+            ) : (
+              <></>
+            )
+          }
           stretch
         >
           <FileUpload
@@ -120,7 +201,25 @@ export default ({
         </FormField>
         <FormField
           label="Plan de manejo de residuos, efluentes y/o emisiones"
-          description="Si corresponde"
+          description={
+            files.find((opt) => opt.categoria == "anexo5") ? (
+              <>
+                Cargado el{" "}
+                {files.find((opt) => opt.categoria == "anexo5").comentario},{" "}
+                <Link
+                  href={files.find((opt) => opt.categoria == "anexo5").url}
+                  external="true"
+                  variant="primary"
+                  fontSize="body-s"
+                  target="_blank"
+                >
+                  descargar archivo.
+                </Link>
+              </>
+            ) : (
+              <>Solo si es que corresponde</>
+            )
+          }
           stretch
         >
           <FileUpload
@@ -147,7 +246,25 @@ export default ({
         </FormField>
         <FormField
           label="Otros documentos"
-          description="Si fueran necesarios"
+          description={
+            files.find((opt) => opt.categoria == "anexo6") ? (
+              <>
+                Cargado el{" "}
+                {files.find((opt) => opt.categoria == "anexo6").comentario},{" "}
+                <Link
+                  href={files.find((opt) => opt.categoria == "anexo6").url}
+                  external="true"
+                  variant="primary"
+                  fontSize="body-s"
+                  target="_blank"
+                >
+                  descargar archivo.
+                </Link>
+              </>
+            ) : (
+              <>Si fueran necesarios</>
+            )
+          }
           stretch
         >
           <FileUpload

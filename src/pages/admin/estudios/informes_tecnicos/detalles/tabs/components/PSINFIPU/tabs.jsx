@@ -26,7 +26,10 @@ export default function Psinfipu_tabs({ formValues, handleChange }) {
       id: "anexo",
       label: "Anexo",
       content: (
-        <Anexos value1={formValues?.file1} handleChange={handleChange} />
+        <Anexos
+          value1={formValues?.file1} //  CATEGORIA = informe-PSINFIPU-RESULTADOS
+          handleChange={handleChange}
+        />
       ),
     },
   ];

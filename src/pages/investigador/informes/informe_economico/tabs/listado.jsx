@@ -2,6 +2,7 @@ import {
   Badge,
   Box,
   Button,
+  ButtonDropdown,
   Header,
   Pagination,
   PropertyFilter,
@@ -19,37 +20,31 @@ const FILTER_PROPS = [
   {
     propertyLabel: "ID",
     key: "id",
-    groupValuesLabel: "IDS",
-    operators: stringOperators,
-  },
-  {
-    propertyLabel: "Código de proyecto",
-    key: "codigo_proyecto",
-    groupValuesLabel: "Códigos",
-    operators: stringOperators,
-  },
-  {
-    propertyLabel: "Fecha de última solicitud",
-    key: "fecha_ultima_solicitud",
-    groupValuesLabel: "Fechas",
-    operators: stringOperators,
-  },
-  {
-    propertyLabel: "Responsable",
-    key: "responsable",
-    groupValuesLabel: "Responsables",
-    operators: stringOperators,
-  },
-  {
-    propertyLabel: "Tipo de proyecto",
-    key: "tipo_proyecto",
-    groupValuesLabel: "Tipos de proyecto",
+    groupValuesLabel: "IDs",
     operators: stringOperators,
   },
   {
     propertyLabel: "Periodo",
     key: "periodo",
     groupValuesLabel: "Periodos",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "Código",
+    key: "codigo_proyecto",
+    groupValuesLabel: "Códigos",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "Tipo",
+    key: "tipo_proyecto",
+    groupValuesLabel: "Tipos",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "Título",
+    key: "titulo",
+    groupValuesLabel: "Títulos",
     operators: stringOperators,
   },
   {
@@ -69,34 +64,28 @@ const columnDefinitions = [
     isRowHeader: true,
   },
   {
-    id: "codigo_proyecto",
-    header: "Código de proyecto",
-    cell: (item) => item.codigo_proyecto,
-    sortingField: "codigo_proyecto",
-  },
-  {
-    id: "fecha_ultima_solicitud",
-    header: "Fecha de actualización",
-    cell: (item) => item.fecha_ultima_solicitud,
-    sortingField: "fecha_ultima_solicitud",
-  },
-  {
-    id: "responsable",
-    header: "Responsable",
-    cell: (item) => item.responsable,
-    sortingField: "responsable",
-  },
-  {
-    id: "tipo_proyecto",
-    header: "Tipo de proyecto",
-    cell: (item) => item.tipo_proyecto,
-    sortingField: "tipo_proyecto",
-  },
-  {
     id: "periodo",
     header: "Periodo",
     cell: (item) => item.periodo,
     sortingField: "periodo",
+  },
+  {
+    id: "codigo_proyecto",
+    header: "Código",
+    cell: (item) => item.codigo_proyecto,
+    sortingField: "codigo_proyecto",
+  },
+  {
+    id: "tipo_proyecto",
+    header: "Tipo",
+    cell: (item) => item.tipo_proyecto,
+    sortingField: "tipo_proyecto",
+  },
+  {
+    id: "titulo",
+    header: "Título",
+    cell: (item) => item.titulo,
+    sortingField: "titulo",
   },
   {
     id: "estado",
@@ -104,22 +93,14 @@ const columnDefinitions = [
     cell: (item) => (
       <Badge
         color={
-          item.estado == 3
-            ? "blue"
-            : item.estado == 2
-            ? "red"
-            : item.estado == 1
+          item.estado == "Completado"
             ? "green"
+            : item.estado == "Pendiente"
+            ? "blue"
             : "grey"
         }
       >
-        {item.estado == 3
-          ? "Nueva transferencia"
-          : item.estado == 2
-          ? "Rechazado"
-          : item.estado == 1
-          ? "Aprobado"
-          : "Temporal"}
+        {item.estado}
       </Badge>
     ),
     sortingField: "estado",
@@ -129,17 +110,15 @@ const columnDefinitions = [
 const columnDisplay = [
   { id: "id", visible: true },
   { id: "codigo_proyecto", visible: true },
-  { id: "fecha_ultima_solicitud", visible: true },
-  { id: "responsable", visible: true },
-  { id: "tipo_proyecto", visible: true },
   { id: "periodo", visible: true },
+  { id: "tipo_proyecto", visible: true },
+  { id: "titulo", visible: true },
   { id: "estado", visible: true },
 ];
 
 export default () => {
   //  Data states
   const [loading, setLoading] = useState(true);
-  const [selectedItems, setSelectedItems] = useState([]);
   const [distributions, setDistribution] = useState([]);
   const {
     items,
@@ -165,17 +144,17 @@ export default () => {
         </Box>
       ),
     },
-    sorting: {},
     pagination: { pageSize: 10 },
+    sorting: {},
     selection: {},
   });
-  const [enableBtn, setEnableBtn] = useState(false);
+  const [enableBtn, setEnableBtn] = useState(true);
 
   //  Functions
   const getData = async () => {
     setLoading(true);
     const res = await axiosBase.get(
-      "admin/economia/transferencias/listadoProyectos"
+      "investigador/informes/informe_economico/listadoProyectos"
     );
     const data = res.data;
     setDistribution(data);
@@ -188,12 +167,12 @@ export default () => {
   }, []);
 
   useEffect(() => {
-    if (selectedItems.length > 0) {
+    if (collectionProps.selectedItems.length > 0) {
       setEnableBtn(true);
     } else {
       setEnableBtn(false);
     }
-  }, [selectedItems]);
+  }, [collectionProps.selectedItems]);
 
   return (
     <Table
@@ -207,28 +186,24 @@ export default () => {
       resizableColumns
       enableKeyboardNavigation
       selectionType="single"
-      selectedItems={selectedItems}
-      onSelectionChange={({ detail }) => setSelectedItems(detail.selectedItems)}
       header={
         <Header
-          counter={"(" + distributions.length + ")"}
           actions={
             <Button
-              disabled={!enableBtn}
               variant="primary"
+              disabled={!enableBtn}
               onClick={() => {
                 const query = queryString.stringify({
-                  id: selectedItems[0]["id"],
+                  id: collectionProps.selectedItems[0]?.id,
                 });
-                window.location.href =
-                  "gestion_transferencias/detalle?" + query;
+                window.location.href = "informeEconomico/detalle?" + query;
               }}
             >
               Ver detalle
             </Button>
           }
         >
-          Listado de proyectos
+          Proyectos ({distributions.length})
         </Header>
       }
       filter={
@@ -237,7 +212,6 @@ export default () => {
           filteringPlaceholder="Buscar proyecto"
           countText={`${filteredItemsCount} coincidencias`}
           expandToViewport
-          virtualScroll
         />
       }
       pagination={<Pagination {...paginationProps} />}

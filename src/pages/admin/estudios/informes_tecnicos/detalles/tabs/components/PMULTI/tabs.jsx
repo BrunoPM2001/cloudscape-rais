@@ -99,7 +99,10 @@ export default function Pmulti_tabs({ formValues, handleChange }) {
       id: "anexos",
       label: "Anexos",
       content: (
-        <Anexos value1={formValues?.file1} handleChange={handleChange} />
+        <Anexos
+          value1={formValues?.file1} //  CATEGORIA = informe-PMULTI-INFORME
+          handleChange={handleChange}
+        />
       ),
     },
     {

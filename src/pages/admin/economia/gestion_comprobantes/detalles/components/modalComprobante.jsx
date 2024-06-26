@@ -16,6 +16,7 @@ import DatosComprobante from "./datosComprobante";
 
 const initialForm = {
   estado: null,
+  observacion: "",
 };
 
 const formRules = {
@@ -48,6 +49,7 @@ export default ({ visible, setVisible, item, reload }) => {
   //  States
   const [loading, setLoading] = useState(false);
   const [distributions, setDistribution] = useState([]);
+  const [url, setUrl] = useState("");
 
   const { formValues, formErrors, handleChange, validateForm } =
     useFormValidation(initialForm, formRules);
@@ -64,17 +66,31 @@ export default ({ visible, setVisible, item, reload }) => {
       }
     );
     const data = res.data;
-    setDistribution(data);
+    setDistribution(data.partidas);
+    setUrl(data.comprobante);
     setLoading(false);
   };
 
   const updateComprobante = async () => {
     if (validateForm()) {
       setLoading(true);
+      let date = new Date();
+
+      let obs = JSON.parse(item.observacion);
+      obs.unshift({
+        fecha:
+          date.getFullYear() +
+          "-" +
+          String(date.getMonth() + 1) +
+          "-" +
+          String(date.getDate()),
+        observacion: formValues.observacion,
+      });
       const res = await axiosBase.put(
         "admin/economia/comprobantes/updateEstadoComprobante",
         {
           ...formValues,
+          observacion: JSON.stringify(obs),
           geco_documento_id: item.id,
         }
       );
@@ -187,7 +203,7 @@ export default ({ visible, setVisible, item, reload }) => {
           handleChange={handleChange}
           optsEstado={optsEstado}
         />
-        <PdfViewer />
+        <PdfViewer url={url} />
       </Grid>
     </Modal>
   );

@@ -99,7 +99,10 @@ export default function Pconfigi_inv_tabs({ formValues, handleChange }) {
       id: "anexos",
       label: "Anexos",
       content: (
-        <Anexos value1={formValues?.file1} handleChange={handleChange} />
+        <Anexos
+          value1={formValues?.file1} //  CATEGORIA = informe-PCONFIGI-INV-INFORME
+          handleChange={handleChange}
+        />
       ),
     },
     {

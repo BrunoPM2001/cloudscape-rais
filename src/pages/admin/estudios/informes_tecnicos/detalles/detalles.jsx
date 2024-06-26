@@ -21,7 +21,13 @@ const opts = [
   { value: 3, label: "Observado" },
 ];
 
-export default ({ data, formValues, handleChange }) => {
+export default ({
+  data,
+  formValues,
+  handleChange,
+  updating,
+  updateInforme,
+}) => {
   useEffect(() => {
     handleChange(
       "estado",
@@ -32,7 +38,17 @@ export default ({ data, formValues, handleChange }) => {
   return (
     <Container
       header={
-        <Header actions={<Button variant="primary">Guardar informe</Button>}>
+        <Header
+          actions={
+            <Button
+              variant="primary"
+              loading={updating}
+              onClick={updateInforme}
+            >
+              Guardar informe
+            </Button>
+          }
+        >
           <SpaceBetween size="xxs" alignItems="center" direction="horizontal">
             <Box variant="h1">Informe técnico</Box>
             <Badge color="grey">{data.id}</Badge>

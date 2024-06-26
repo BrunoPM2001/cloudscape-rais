@@ -55,7 +55,7 @@ const Ptpgrado_tabs = ({ formValues, handleChange }) => {
       label: "Medios probatorios",
       content: (
         <Medios_probatorios
-          value1={formValues?.file1}
+          value1={formValues?.file1} //  CATEGORIA = informe-PTPGRADO-INFORME-AVANCE
           handleChange={handleChange}
         />
       ),
@@ -96,7 +96,7 @@ const Ptpgrado_final_tabs = ({ formValues, handleChange }) => {
       label: "Medios probatorios",
       content: (
         <Medios_probatorios
-          value1={formValues?.file1}
+          value1={formValues?.file1} //  CATEGORIA = informe-PTPGRADO-INFORME-FINAL
           handleChange={handleChange}
         />
       ),

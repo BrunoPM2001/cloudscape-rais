@@ -24,7 +24,7 @@ const initialForm = {
 };
 
 const formRules = {
-  carta: { required: true, isFile: true, maxSize: 6 * 1024 * 1024 },
+  carta: { required: false, isFile: true, maxSize: 6 * 1024 * 1024 },
 };
 
 export default forwardRef(function ({ proyecto_id }, ref) {
@@ -42,7 +42,11 @@ export default forwardRef(function ({ proyecto_id }, ref) {
   //  Function
   const getData = async () => {
     setLoading(true);
-    const res = await axiosBase.get("investigador/convocatorias/getDataPaso2");
+    const res = await axiosBase.get("investigador/convocatorias/getDataPaso2", {
+      params: {
+        proyecto_id,
+      },
+    });
     const data = res.data;
     setData(data);
     setLoading(false);
@@ -60,7 +64,11 @@ export default forwardRef(function ({ proyecto_id }, ref) {
         );
         const data = res.data;
         pushNotification(data.detail, data.message, notifications.length + 1);
-        return true;
+        if (data.message == "success") {
+          return true;
+        } else {
+          return false;
+        }
       }
     } else {
       return false;
@@ -133,16 +141,30 @@ export default forwardRef(function ({ proyecto_id }, ref) {
           label="Carta de compromiso"
           description={
             <>
-              Puede descargar la plantilla de carta de compromiso en{" "}
+              Puede descargar la plantilla de la carta de compromiso en{" "}
               <Link
                 href="/minio/templates/compromiso-confidencialidad.docx"
-                external="true"
+                // external="true"
                 variant="primary"
                 fontSize="body-s"
                 target="_blank"
               >
                 este enlace.
-              </Link>
+              </Link>{" "}
+              {data.url && (
+                <>
+                  Ya ha cargado un archivo el {data.comentario},{" "}
+                  <Link
+                    href={data.url}
+                    external="true"
+                    variant="primary"
+                    fontSize="body-s"
+                    target="_blank"
+                  >
+                    descargar archivo.
+                  </Link>
+                </>
+              )}
             </>
           }
           stretch
@@ -167,7 +189,7 @@ export default forwardRef(function ({ proyecto_id }, ref) {
               removeFileAriaLabel: (e) => `Eliminar archivo ${e + 1}`,
               errorIconAriaLabel: "Error",
             }}
-            accept=".jpeg, .jpg, .png,  .pdf"
+            accept=".jpeg, .jpg, .png, .pdf"
           />
         </FormField>
       </Container>

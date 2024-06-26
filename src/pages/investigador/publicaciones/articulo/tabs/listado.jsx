@@ -83,7 +83,7 @@ const columnDefinitions = [
   },
   {
     id: "observaciones",
-    header: "observaciones_usuario",
+    header: "Observaciones del usuario",
     cell: (item) => item.observaciones_usuario,
     sortingField: "observaciones_usuario",
   },
@@ -164,7 +164,6 @@ export default () => {
   const [distributions, setDistribution] = useState([]);
   const {
     items,
-    actions,
     filteredItemsCount,
     collectionProps,
     paginationProps,
@@ -243,7 +242,6 @@ export default () => {
                       publicacion_id: selectedItems[0].id,
                       tipo: "articulo",
                     });
-                    console.log(selectedItems[0]);
                     window.location.href =
                       "registrar/paso" + selectedItems[0].step + "?" + query;
                   } else if (detail.id == "action_2") {
@@ -254,17 +252,16 @@ export default () => {
                   {
                     text: "Editar",
                     id: "action_1",
-                    disabled: selectedItems[0]?.estado == 5 ? true : false,
+                    disabled:
+                      selectedItems[0]?.estado != 6 &&
+                      selectedItems[0]?.estado != 2
+                        ? true
+                        : false,
                   },
                   {
                     text: "Eliminar",
                     id: "action_2",
-                    disabled: selectedItems[0]?.estado == 5 ? true : false,
-                  },
-                  {
-                    text: "Eliminar",
-                    id: "action_2",
-                    disabled: selectedItems[0]?.estado == 5 ? false : true,
+                    disabled: selectedItems[0]?.estado != 6 ? true : false,
                   },
                 ]}
               >

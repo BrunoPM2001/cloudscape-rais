@@ -7,6 +7,8 @@ import {
   Select,
   SpaceBetween,
   Table,
+  Tabs,
+  Textarea,
 } from "@cloudscape-design/components";
 
 const columnDefinitions = [
@@ -37,6 +39,14 @@ const columnDisplay = [
   { id: "total", visible: true },
 ];
 
+const ObsTab = ({ obs }) => {
+  return (
+    <FormField label="Observación" stretch>
+      <Textarea disabled value={obs} />
+    </FormField>
+  );
+};
+
 export default ({
   item,
   loading,
@@ -46,6 +56,37 @@ export default ({
   handleChange,
   optsEstado,
 }) => {
+  const obs = JSON.parse(item.observacion);
+
+  const tabs = [
+    {
+      id: "obs",
+      label: "Observación 1",
+      content: (
+        <FormField
+          label="Observación"
+          stretch
+          errorText={formErrors.observacion}
+        >
+          <Textarea
+            placeholder="Escriba algo"
+            value={formValues.observacion}
+            onChange={({ detail }) => handleChange("observacion", detail.value)}
+          />
+        </FormField>
+      ),
+    },
+  ];
+
+  //  Tabs de observación
+  obs.map((item, index) => {
+    tabs.push({
+      id: "obs_" + index,
+      label: "Observación " + (index + 2),
+      content: <ObsTab obs={item.observacion} />,
+    });
+  });
+
   //  Hooks
   const { items, collectionProps } = useCollection(distributions, {
     sorting: { defaultState: { sortingColumn: columnDefinitions[0] } },
@@ -89,6 +130,7 @@ export default ({
           options={optsEstado}
         />
       </FormField>
+      {formValues.estado?.value == 3 && <Tabs tabs={tabs} />}
       <Table
         {...collectionProps}
         trackBy="id"

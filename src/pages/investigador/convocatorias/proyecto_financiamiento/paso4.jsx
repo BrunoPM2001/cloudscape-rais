@@ -1,5 +1,16 @@
-import { Tabs } from "@cloudscape-design/components";
-import { forwardRef, useContext, useEffect, useImperativeHandle } from "react";
+import {
+  Container,
+  SpaceBetween,
+  Spinner,
+  Tabs,
+} from "@cloudscape-design/components";
+import {
+  forwardRef,
+  useContext,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from "react";
 import axiosBase from "../../../../api/axios";
 import { useFormValidation } from "../../../../hooks/useFormValidation";
 import NotificationContext from "../../../../providers/notificationProvider";
@@ -39,11 +50,14 @@ const formRules = {
 };
 
 export default forwardRef(function ({ proyecto_id }, ref) {
+  //  States
+  const [loading, setLoading] = useState(true);
+
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
 
   //  Hooks
-  const { formValues, formErrors, handleChange, validateForm } =
+  const { formValues, formErrors, handleChange, validateForm, setFormValues } =
     useFormValidation(initialForm, formRules);
 
   //  Tabs
@@ -149,14 +163,44 @@ export default forwardRef(function ({ proyecto_id }, ref) {
       ),
     },
   ];
+
   //  Function
-  // const getData = async () => {
-  //   setLoading(true);
-  //   const res = await axiosBase.get("investigador/convocatorias/getDataPaso4");
-  //   const data = res.data;
-  //   setData(data);
-  //   setLoading(false);
-  // };
+  const getData = async () => {
+    setLoading(true);
+    const res = await axiosBase.get("investigador/convocatorias/getDataPaso4", {
+      params: {
+        proyecto_id,
+      },
+    });
+    const data = res.data;
+    const detalles = data.detalles;
+    if (data.palabras_claves != null) {
+      let palabras = data.palabras_claves.split(",");
+      setFormValues({
+        palabras_clave: palabras.map((element) => ({ label: element })),
+        resumen: detalles.find((opt) => opt.codigo == "resumen_ejecutivo")
+          .detalle,
+        antecedentes: detalles.find((opt) => opt.codigo == "antecedentes")
+          .detalle,
+        justificacion: data.detalles.find(
+          (opt) => opt.codigo == "justificacion"
+        ).detalle,
+        contribucion: data.detalles.find((opt) => opt.codigo == "contribucion")
+          .detalle,
+        hipotesis: data.detalles.find((opt) => opt.codigo == "hipotesis")
+          .detalle,
+        objetivos: data.detalles.find((opt) => opt.codigo == "objetivos")
+          .detalle,
+        metodologia: data.detalles.find(
+          (opt) => opt.codigo == "metodologia_trabajo"
+        ).detalle,
+        referencias: data.detalles.find(
+          (opt) => opt.codigo == "referencias_bibliograficas"
+        ).detalle,
+      });
+    }
+    setLoading(false);
+  };
 
   const registrar = async () => {
     if (validateForm()) {
@@ -176,12 +220,22 @@ export default forwardRef(function ({ proyecto_id }, ref) {
 
   //  Effect
   useEffect(() => {
-    // getData();
+    getData();
   }, []);
 
   useImperativeHandle(ref, () => ({
     registrar,
   }));
 
-  return <Tabs tabs={tabs} ariaLabel="Descripción de proyecto" />;
+  return (
+    <>
+      {loading ? (
+        <Container>
+          <Spinner /> Cargando datos
+        </Container>
+      ) : (
+        <Tabs tabs={tabs} ariaLabel="Descripción de proyecto" />
+      )}
+    </>
+  );
 });

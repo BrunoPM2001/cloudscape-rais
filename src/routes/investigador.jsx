@@ -2,6 +2,12 @@ import { Suspense, lazy } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { NotificationProvider } from "../providers/notificationProvider.jsx";
 
+const Informe_economico_detalles = lazy(() =>
+  import("../pages/investigador/informes/informe_economico/detalles/index.jsx")
+);
+const Informe_economico = lazy(() =>
+  import("../pages/investigador/informes/informe_economico/index.jsx")
+);
 const Detalle_grupo_invest = lazy(() =>
   import("../pages/investigador/grupo/grupo/detalles/index.jsx")
 );
@@ -294,6 +300,24 @@ const routes = createBrowserRouter(
             {
               path: "paso7",
               element: <Registrar_proyecto_paso7 />,
+            },
+          ],
+        },
+      ],
+    },
+    {
+      path: "informes",
+      children: [
+        {
+          path: "informeEconomico",
+          children: [
+            {
+              path: "",
+              element: <Informe_economico />,
+            },
+            {
+              path: "detalle",
+              element: <Informe_economico_detalles />,
             },
           ],
         },

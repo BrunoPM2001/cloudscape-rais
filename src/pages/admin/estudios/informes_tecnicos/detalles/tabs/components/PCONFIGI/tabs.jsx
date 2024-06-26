@@ -100,8 +100,8 @@ export default function Pconfigi_tabs({ formValues, handleChange }) {
       label: "Anexos",
       content: (
         <Anexos
-          value1={formValues?.file1}
-          value2={formValues?.file2}
+          value1={formValues?.file1} //   CATEGORIA = informe-PCONFIGI-INFORME
+          value2={formValues?.file2} //   CATEGORIA = viabilidad
           handleChange={handleChange}
         />
       ),

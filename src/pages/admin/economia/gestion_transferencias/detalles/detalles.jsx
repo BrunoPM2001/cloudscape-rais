@@ -8,8 +8,13 @@ import {
   SpaceBetween,
   Spinner,
 } from "@cloudscape-design/components";
+import ModalCalificarTransferencia from "./components/modalCalificarTransferencia";
+import { useState } from "react";
 
 export default ({ proyecto, solicitud, loading }) => {
+  //  States
+  const [visible, setVisible] = useState(false);
+
   return (
     <Grid
       gridDefinition={[
@@ -61,7 +66,13 @@ export default ({ proyecto, solicitud, loading }) => {
             actions={
               <SpaceBetween direction="horizontal" size="s">
                 <Button>Reporte</Button>
-                <Button variant="primary">Calificar</Button>
+                <Button
+                  variant="primary"
+                  disabled={solicitud?.estado != 3}
+                  onClick={() => setVisible(true)}
+                >
+                  Calificar
+                </Button>
               </SpaceBetween>
             }
           >
@@ -84,20 +95,20 @@ export default ({ proyecto, solicitud, loading }) => {
                 color={
                   solicitud.estado == 1
                     ? "green"
-                    : solicitud.estado == 20
+                    : solicitud.estado == 2
                     ? "red"
-                    : solicitud.estado == 30
+                    : solicitud.estado == 3
                     ? "blue"
-                    : "red"
+                    : "grey"
                 }
               >
                 {solicitud.estado == 1
                   ? "Aprobado"
-                  : solicitud.estado == 20
+                  : solicitud.estado == 2
                   ? "Rechazado"
-                  : solicitud.estado == 30
+                  : solicitud.estado == 3
                   ? "Nueva transferencia"
-                  : solicitud.estado}
+                  : "Temporal"}
               </Badge>
             )}
           </div>
@@ -107,6 +118,12 @@ export default ({ proyecto, solicitud, loading }) => {
           </div>
         </SpaceBetween>
       </Container>
+      {visible && (
+        <ModalCalificarTransferencia
+          visible={visible}
+          setVisible={setVisible}
+        />
+      )}
     </Grid>
   );
 };

@@ -4,13 +4,14 @@ import {
   Spinner,
 } from "@cloudscape-design/components";
 import { useLocation } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import queryString from "query-string";
 import BaseLayout from "../../../components/baseLayout";
 import axiosBase from "../../../../../api/axios";
 import Detalles from "./detalles";
 import { useFormValidation } from "../../../../../hooks/useFormValidation";
 import Tabs_custom from "./tabs/tabs";
+import NotificationContext from "../../../../../providers/notificationProvider";
 
 const breadcrumbs = [
   {
@@ -38,7 +39,6 @@ const initialForm = {
   fecha_registro_csi: null,
   observaciones: null,
   observaciones_admin: null,
-  fecha_envio: null,
   resumen_ejecutivo: null,
   palabras_clave: null,
   fecha_evento: null,
@@ -72,9 +72,14 @@ const initialForm = {
 const formRules = {};
 
 export default function Detalle_informe_tecnico() {
+  //  Context
+  const { notifications, pushNotification } = useContext(NotificationContext);
+
   //  State
   const [data, setData] = useState({});
+  const [urls, setUrls] = useState();
   const [loading, setLoading] = useState(true);
+  const [updating, setUpdating] = useState(false);
 
   //  Hooks
   const { formValues, formErrors, handleChange, validateForm, setFormValues } =
@@ -97,7 +102,8 @@ export default function Detalle_informe_tecnico() {
         },
       }
     );
-    const data = res.data;
+    const data = res.data.detalles;
+    setUrls(res.data.archivos);
     const stateKeys = Object.keys(formValues);
 
     // Crear un nuevo objeto solo con las propiedades de DATA que están en el estado
@@ -116,6 +122,47 @@ export default function Detalle_informe_tecnico() {
     setLoading(false);
   };
 
+  const updateInforme = async () => {
+    setUpdating(true);
+    let formData = new FormData();
+    formData.append("informe_tecnico_id", id);
+    formData.append("estado", formValues.estado.value);
+    formData.append("fecha_presentacion", formValues.fecha_presentacion);
+    formData.append("registro_nro_vrip", formValues.registro_nro_vrip);
+    formData.append("fecha_registro_csi", formValues.fecha_registro_csi);
+    formData.append("observaciones", formValues.observaciones);
+    formData.append("observaciones_admin", formValues.observaciones_admin);
+    formData.append("resumen_ejecutivo", formValues.resumen_ejecutivo);
+    formData.append("palabras_clave", formValues.palabras_clave);
+    formData.append("fecha_evento", formValues.fecha_evento);
+    formData.append("fecha_informe_tecnico", formValues.fecha_informe_tecnico);
+    formData.append("objetivos_taller", formValues.objetivos_taller);
+    formData.append("resultados_taller", formValues.resultados_taller);
+    formData.append("propuestas_taller", formValues.propuestas_taller);
+    formData.append("conclusion_taller", formValues.conclusion_taller);
+    formData.append("recomendacion_taller", formValues.recomendacion_taller);
+    formData.append("asistencia_taller", formValues.asistencia_taller);
+    formData.append("infinal1", formValues.infinal1);
+    formData.append("infinal2", formValues.infinal2);
+    formData.append("infinal3", formValues.infinal3);
+    formData.append("infinal4", formValues.infinal4);
+    formData.append("infinal5", formValues.infinal5);
+    formData.append("infinal6", formValues.infinal6);
+    formData.append("infinal7", formValues.infinal7);
+    formData.append("infinal8", formValues.infinal8);
+    formData.append("infinal9", formValues.infinal9);
+    formData.append("infinal10", formValues.infinal10);
+    formData.append("infinal11", formValues.infinal11);
+    formData.append("estado_trabajo", formValues.estado_trabajo?.value ?? null);
+    const res = await axiosBase.post(
+      "admin/estudios/informesTecnicos/updateInforme",
+      formData
+    );
+    const data = res.data;
+    setUpdating(false);
+    pushNotification(data.detail, data.message, notifications.length + 1);
+  };
+
   useEffect(() => {
     getData();
   }, []);
@@ -123,7 +170,7 @@ export default function Detalle_informe_tecnico() {
   return (
     <BaseLayout
       breadcrumbs={breadcrumbs}
-      header="Detalle del grupo de investigación:"
+      header="Detalle del informe:"
       helpInfo="Información sobre la páginal actual para poder mostrarla al público
       en general."
     >
@@ -139,6 +186,8 @@ export default function Detalle_informe_tecnico() {
               formValues={formValues}
               handleChange={handleChange}
               loading={loading}
+              updating={updating}
+              updateInforme={updateInforme}
             />
             <Tabs_custom
               formValues={formValues}
@@ -146,6 +195,7 @@ export default function Detalle_informe_tecnico() {
               tipo_proyecto={tipo_proyecto}
               tipo_informe={tipo_informe}
               loading={loading}
+              files={urls}
             />
           </>
         )}

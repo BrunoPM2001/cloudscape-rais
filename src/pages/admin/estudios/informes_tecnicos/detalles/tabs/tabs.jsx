@@ -12,7 +12,13 @@ import { Ptpdocto_tabs, Ptpdocto_final_tabs } from "./components/PTPDOCTO/tabs";
 import { Ptpgrado_tabs, Ptpgrado_final_tabs } from "./components/PTPGRADO/tabs";
 import { Ptpmaest_final_tabs, Ptpmaest_tabs } from "./components/PTPMAEST/tabs";
 
-export default ({ tipo_proyecto, tipo_informe, formValues, handleChange }) => {
+export default ({
+  tipo_proyecto,
+  tipo_informe,
+  formValues,
+  handleChange,
+  files,
+}) => {
   return (
     <>
       {tipo_proyecto == "PINVPOST" ? (
@@ -45,7 +51,11 @@ export default ({ tipo_proyecto, tipo_informe, formValues, handleChange }) => {
           handleChange={handleChange}
         />
       ) : tipo_proyecto == "ECI" ? (
-        <Eci_tabs formValues={formValues} handleChange={handleChange} />
+        <Eci_tabs
+          formValues={formValues}
+          handleChange={handleChange}
+          files={files}
+        />
       ) : tipo_proyecto == "PCONFIGI" ? (
         <Pconfigi_tabs formValues={formValues} handleChange={handleChange} />
       ) : tipo_proyecto == "PCONFIGI-INV" ? (

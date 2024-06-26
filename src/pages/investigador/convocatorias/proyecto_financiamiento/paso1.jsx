@@ -93,6 +93,42 @@ export default forwardRef(function (props, ref) {
     useFormValidation(initialForm, formRules);
 
   //  Function
+  const getData1 = async () => {
+    const res = await axiosBase.get("investigador/convocatorias/datosPaso1", {
+      params: {
+        proyecto_id: props.proyecto_id,
+      },
+    });
+    const res1 = res.data;
+    setData(res1.data.data);
+    setLineas(res1.data.lineas);
+    setOcde_1(res1.data.ocde1);
+    setOcde_2(res1.ocde_2);
+    setOcde_3(res1.ocde_3);
+    setOds(res1.listOds);
+    setOdsStatus("finished");
+    setFormValues({
+      ...initialForm,
+      ...res1.proyecto,
+      linea_investigacion_id: res1.data.lineas.find(
+        (opt) => opt.value == res1.proyecto.linea_investigacion_id
+      ),
+      ods: res1.listOds.find((opt) => opt.value == res1.ods.detalle),
+      localizacion: localizaciones.find(
+        (opt) => opt.value == res1.proyecto.localizacion
+      ),
+      tipo_investigacion: tipo_investigaciones.find(
+        (opt) => opt.value == res1.tipo_investigacion.detalle
+      ),
+      ocde_1: res1.data.ocde1.find(
+        (opt) => opt.value == res1.ocde_2[0].parent_id
+      ),
+      ocde_2: res1.ocde_2.find((opt) => opt.value == res1.ocde_3[0].parent_id),
+      ocde_3: res1.ocde_3.find((opt) => opt.value == res1.proyecto.ocde_id),
+    });
+    setLoadingData(false);
+  };
+
   const getData = async () => {
     const res = await axiosBase.get(
       "investigador/convocatorias/getDataToPaso1"
@@ -166,8 +202,10 @@ export default forwardRef(function (props, ref) {
 
   //  Effect
   useEffect(() => {
-    getData();
     if (props.proyecto_id != null) {
+      getData1();
+    } else {
+      getData();
     }
   }, []);
 

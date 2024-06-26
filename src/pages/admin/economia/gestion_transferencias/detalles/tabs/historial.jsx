@@ -35,22 +35,22 @@ const columnDefinitions = [
     cell: (item) => (
       <Badge
         color={
-          item.estado == 30
+          item.estado == 3
             ? "blue"
-            : item.estado == 20
+            : item.estado == 2
             ? "red"
             : item.estado == 1
             ? "green"
-            : "red"
+            : "grey"
         }
       >
-        {item.estado == 30
+        {item.estado == 3
           ? "Nueva transferencia"
-          : item.estado == 20
+          : item.estado == 2
           ? "Rechazado"
           : item.estado == 1
           ? "Completado"
-          : "Error"}
+          : "Temporal"}
       </Badge>
     ),
     sortingField: "estado",

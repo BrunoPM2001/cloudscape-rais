@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   ButtonDropdown,
   Container,
   Header,
@@ -39,7 +40,14 @@ const columnDefinitions = [
   {
     id: "url",
     header: "Carta de compromiso",
-    cell: (item) => item.url,
+    cell: (item) => (
+      <Button
+        variant="inline-icon"
+        href={item.url}
+        target="_blank"
+        iconName="file"
+      />
+    ),
   },
 ];
 
@@ -48,7 +56,7 @@ const columnDisplay = [
   { id: "nombre", visible: true },
   { id: "tipo", visible: true },
   { id: "facultad", visible: true },
-  { id: "carta", visible: true },
+  { id: "url", visible: true },
 ];
 
 export default function ({ proyecto_id, setRequisitos, loading, setLoading }) {

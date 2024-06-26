@@ -17,8 +17,8 @@ const breadcrumbs = [
     text: "Economía",
   },
   {
-    text: "Gestión de comprobantes",
-    href: "../gestion_comprobantes",
+    text: "Gestión de transferencias",
+    href: "../gestion_transferencias",
   },
   {
     text: "Detalles de proyecto",
@@ -42,7 +42,13 @@ export default function Geco_detalle_transferencia() {
     {
       id: "solicitud",
       label: "Solicitud de transferencia",
-      content: <Transferencias data={data.presupuesto} loading={loading} />,
+      content: (
+        <Transferencias
+          data={data.presupuesto}
+          loading={loading}
+          estado={data.solicitud?.estado}
+        />
+      ),
     },
     {
       id: "historial",

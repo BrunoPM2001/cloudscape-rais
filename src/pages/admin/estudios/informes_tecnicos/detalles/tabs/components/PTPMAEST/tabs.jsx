@@ -60,8 +60,8 @@ const Ptpmaest_final_tabs = ({ formValues, handleChange }) => {
       label: "Entregables",
       content: (
         <Anexos
-          value1={formValues?.file1}
-          value2={formValues?.file2}
+          value1={formValues?.file1} //  CATEGORIA = informe-PTPMAEST-INFORME-FINAL-tesis
+          value2={formValues?.file2} //  CATEGORIA = informe-PTPMAEST-INFORME-FINAL-acta
           handleChange={handleChange}
         />
       ),

@@ -8,7 +8,7 @@ import Impacto_uso from "./impacto_uso";
 import Proceso_instalacion from "./proceso_instalacion";
 import Resumen_ejecutivo from "./resumen_ejecutivo";
 
-export default function Eci_tabs({ formValues, handleChange }) {
+export default function Eci_tabs({ formValues, handleChange, files }) {
   const tabs = [
     {
       id: "resumen",
@@ -76,7 +76,9 @@ export default function Eci_tabs({ formValues, handleChange }) {
           value5={formValues?.file5}
           value6={formValues?.file6}
           handleChange={handleChange}
+          files={files}
         />
+        //  CATEGORIA - Hasta 6 anexos anexo1 ... anexo6
       ),
     },
     {
