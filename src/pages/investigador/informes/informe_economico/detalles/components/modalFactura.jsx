@@ -24,6 +24,7 @@ const initialForm = {
   ruc: "",
   numero: "",
   fecha: "",
+  retencion: null,
   partidas: [{}],
   file: [],
 };
@@ -33,6 +34,7 @@ const formRules = {
   ruc: { required: true, regex: /^(10|15|17|20)\d{9}$/ },
   numero: { required: true },
   fecha: { required: true },
+  retencion: { required: true },
   partidas: { required: true, noEmpty: true },
   file: { required: true, isFile: true, maxSize: 4 * 1024 * 1024 },
 };
@@ -127,6 +129,7 @@ export default ({ visible, setVisible, item, edit, geco_proyecto_id }) => {
       formData.append("ruc", formValues.ruc);
       formData.append("numero", formValues.numero);
       formData.append("fecha", formValues.fecha);
+      formData.append("retencion", formValues.retencion.value);
       formData.append("partidas", JSON.stringify(formValues.partidas));
       formData.append("file", formValues.file[0]);
       const res = await axiosBase.post(
@@ -173,7 +176,7 @@ export default ({ visible, setVisible, item, edit, geco_proyecto_id }) => {
           </Box>
         </>
       }
-      header="Boleta de venta"
+      header="Factura"
     >
       {opts.length == 0 ? (
         <SpaceBetween size="xs" direction="horizontal">
@@ -234,6 +237,29 @@ export default ({ visible, setVisible, item, edit, geco_proyecto_id }) => {
                 </FormField>
               </SpaceBetween>
             </ColumnLayout>
+            <FormField
+              label="Comprobante sujeto a"
+              stretch
+              errorText={formErrors.retencion}
+            >
+              <Select
+                placeholder="Escoja una opción"
+                selectedOption={formValues.retencion}
+                onChange={({ detail }) =>
+                  handleChange("retencion", detail.selectedOption)
+                }
+                options={[
+                  {
+                    value: 0,
+                    label: "No afecta",
+                  },
+                  {
+                    value: 1,
+                    label: "Retención",
+                  },
+                ]}
+              />
+            </FormField>
             <FormField
               label="Archivo"
               description={

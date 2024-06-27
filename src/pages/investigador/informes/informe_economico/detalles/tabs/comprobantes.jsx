@@ -10,6 +10,9 @@ import {
 } from "@cloudscape-design/components";
 import { useState } from "react";
 import ModalBoleta from "../components/modalBoleta";
+import { useLocation } from "react-router-dom";
+import queryString from "query-string";
+import ModalFactura from "../components/modalFactura";
 
 const columnDefinitions = [
   {
@@ -92,6 +95,11 @@ export default ({ data, loading }) => {
   //  States
   const [visible, setVisible] = useState(false);
   const [type, setType] = useState("");
+  const [edit, setEdit] = useState(false);
+
+  //  Url
+  const location = useLocation();
+  const { id } = queryString.parse(location.search);
 
   //  Hooks
   const { items, collectionProps } = useCollection(data, {
@@ -121,6 +129,11 @@ export default ({ data, loading }) => {
                   disabled={
                     collectionProps.selectedItems.length == 0 ? true : false
                   }
+                  onClick={() => {
+                    setVisible(true);
+                    setEdit(true);
+                    setType(collectionProps.selectedItems[0].tipo);
+                  }}
                   iconName="edit"
                 >
                   Ver detalle
@@ -129,11 +142,11 @@ export default ({ data, loading }) => {
                   variant="primary"
                   items={[
                     {
-                      id: "action_1",
+                      id: "BOLETA",
                       text: "Boleta de venta",
                     },
                     {
-                      id: "action_2",
+                      id: "FACTURA",
                       text: "Factura",
                     },
                     {
@@ -176,6 +189,7 @@ export default ({ data, loading }) => {
                   onItemClick={({ detail }) => {
                     setVisible(true);
                     setType(detail.id);
+                    setEdit(false);
                   }}
                 >
                   Agregar comprobante
@@ -195,8 +209,22 @@ export default ({ data, loading }) => {
         }
       />
       {visible &&
-        (type == "action_1" ? (
-          <ModalBoleta visible={visible} setVisible={setVisible} />
+        (type == "BOLETA" ? (
+          <ModalBoleta
+            visible={visible}
+            setVisible={setVisible}
+            item={collectionProps.selectedItems[0] ?? null}
+            edit={edit}
+            geco_proyecto_id={id}
+          />
+        ) : type == "FACTURA" ? (
+          <ModalFactura
+            visible={visible}
+            setVisible={setVisible}
+            item={collectionProps.selectedItems[0] ?? null}
+            edit={edit}
+            geco_proyecto_id={id}
+          />
         ) : (
           <></>
         ))}
