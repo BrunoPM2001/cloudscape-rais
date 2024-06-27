@@ -136,7 +136,7 @@ const columnDefinitions = [
             ? "red"
             : item.estado == 1
             ? "green"
-            : "red"
+            : "grey"
         }
       >
         {item.estado == 5
@@ -149,7 +149,7 @@ const columnDefinitions = [
           ? "Rechazado"
           : item.estado == 1
           ? "Aprobado"
-          : "Error"}
+          : "Sin comprobantes"}
       </Badge>
     ),
     sortingField: "estado",

@@ -39,7 +39,14 @@ const formRules = {
   file: { required: true, isFile: true, maxSize: 4 * 1024 * 1024 },
 };
 
-export default ({ visible, setVisible, item, edit, geco_proyecto_id }) => {
+export default ({
+  visible,
+  setVisible,
+  item,
+  edit,
+  geco_proyecto_id,
+  type,
+}) => {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
 
@@ -79,6 +86,7 @@ export default ({ visible, setVisible, item, edit, geco_proyecto_id }) => {
           params: {
             geco_proyecto_id,
             id: item.id,
+            tipo: item.tipo,
           },
         }
       );
@@ -95,6 +103,7 @@ export default ({ visible, setVisible, item, edit, geco_proyecto_id }) => {
         {
           params: {
             geco_proyecto_id,
+            tipo: type,
           },
         }
       );

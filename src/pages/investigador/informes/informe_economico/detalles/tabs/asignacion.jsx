@@ -40,7 +40,10 @@ const columnDefinitions = [
   {
     id: "saldo_rendicion",
     header: "Saldo rendición (S/)",
-    cell: (item) => parseFloat(item.monto - item.monto_rendido).toFixed(3),
+    cell: (item) =>
+      parseFloat(
+        item.monto - item.monto_rendido - item.monto_rendido_enviado
+      ).toFixed(3),
     sortingField: "saldo_rendicion",
   },
   {

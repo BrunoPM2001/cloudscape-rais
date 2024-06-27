@@ -37,13 +37,21 @@ const formRules = {
   file: { required: true, isFile: true, maxSize: 4 * 1024 * 1024 },
 };
 
-export default ({ visible, setVisible, item, edit, geco_proyecto_id }) => {
+export default ({
+  visible,
+  setVisible,
+  item,
+  edit,
+  geco_proyecto_id,
+  type,
+}) => {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
 
   //  States
   const [loading, setLoading] = useState(false);
   const [opts, setOpts] = useState([]);
+  const [errorCount, setErrorCount] = useState(0);
 
   //  Hooks
   const { formValues, formErrors, handleChange, validateForm, setFormValues } =
@@ -67,6 +75,22 @@ export default ({ visible, setVisible, item, edit, geco_proyecto_id }) => {
       ...formValues,
       partidas: newPartidas,
     });
+    updateErrorCount(newPartidas);
+  };
+
+  const updateErrorCount = (items) => {
+    let count = 0;
+
+    items.forEach((item) => {
+      if (
+        parseFloat(item.monto) <= 0 ||
+        parseFloat(item.partida?.max).toFixed(3) < parseFloat(item.monto)
+      ) {
+        count++;
+      }
+    });
+
+    setErrorCount(count);
   };
 
   const getPartidas = async () => {
@@ -77,6 +101,7 @@ export default ({ visible, setVisible, item, edit, geco_proyecto_id }) => {
           params: {
             geco_proyecto_id,
             id: item.id,
+            tipo: item.tipo,
           },
         }
       );
@@ -86,6 +111,13 @@ export default ({ visible, setVisible, item, edit, geco_proyecto_id }) => {
         ...data.documento,
         partidas: data.partidas,
       });
+      data.lista.forEach((valueObj) => {
+        data.partidas.forEach((partidaObj) => {
+          if (valueObj.value === partidaObj.partida.value) {
+            valueObj.max -= partidaObj.monto;
+          }
+        });
+      });
       setOpts(data.lista);
     } else {
       const res = await axiosBase(
@@ -93,6 +125,7 @@ export default ({ visible, setVisible, item, edit, geco_proyecto_id }) => {
         {
           params: {
             geco_proyecto_id,
+            tipo: type,
           },
         }
       );
@@ -119,24 +152,25 @@ export default ({ visible, setVisible, item, edit, geco_proyecto_id }) => {
         (obj) => obj.hasOwnProperty("partida") && obj.hasOwnProperty("monto")
       )
     ) {
-      setLoading(true);
-      let formData = new FormData();
-      formData.append("geco_proyecto_id", geco_proyecto_id);
-      formData.append("geco_documento_id", item?.id);
-      formData.append("razon_social", formValues.razon_social);
-      formData.append("ruc", formValues.ruc);
-      formData.append("numero", formValues.numero);
-      formData.append("fecha", formValues.fecha);
-      formData.append("partidas", JSON.stringify(formValues.partidas));
-      formData.append("file", formValues.file[0]);
-      const res = await axiosBase.post(
-        "investigador/informes/informe_economico/subirComprobante",
-        formData
-      );
-      const data = res.data;
-      setLoading(false);
-      setVisible(false);
-      pushNotification(data.detail, data.message, notifications.length);
+      console.log(errorCount);
+      // setLoading(true);
+      // let formData = new FormData();
+      // formData.append("geco_proyecto_id", geco_proyecto_id);
+      // formData.append("geco_documento_id", item?.id ?? "");
+      // formData.append("razon_social", formValues.razon_social);
+      // formData.append("ruc", formValues.ruc);
+      // formData.append("numero", formValues.numero);
+      // formData.append("fecha", formValues.fecha);
+      // formData.append("partidas", JSON.stringify(formValues.partidas));
+      // formData.append("file", formValues.file[0]);
+      // const res = await axiosBase.post(
+      //   "investigador/informes/informe_economico/subirComprobante",
+      //   formData
+      // );
+      // const data = res.data;
+      // setLoading(false);
+      // setVisible(false);
+      // pushNotification(data.detail, data.message, notifications.length);
     }
   };
 
@@ -159,7 +193,7 @@ export default ({ visible, setVisible, item, edit, geco_proyecto_id }) => {
               <Button
                 variant="primary"
                 iconName="check"
-                loading={loading}
+                // loading={loading}
                 onClick={subirComprobante}
               >
                 Enviar
@@ -248,7 +282,7 @@ export default ({ visible, setVisible, item, edit, geco_proyecto_id }) => {
                 showFileSize
                 showFileThumbnail
                 constraintText={
-                  item != null ? (
+                  item != null && edit ? (
                     <Link
                       href={item.url}
                       external="true"
@@ -332,8 +366,17 @@ export default ({ visible, setVisible, item, edit, geco_proyecto_id }) => {
                       />
                     ),
                     errorText: (item) => {
-                      if (item.monto <= 0)
+                      if (parseFloat(item.monto) <= 0) {
                         return "El monto tiene que ser mayor a 0";
+                      } else if (
+                        parseFloat(item.partida?.max).toFixed(3) <
+                        parseFloat(item.monto)
+                      ) {
+                        return (
+                          "Para esta partida el saldo disponible es de S/. " +
+                          item.partida.max
+                        );
+                      }
                     },
                   },
                 ]}

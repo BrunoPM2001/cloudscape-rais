@@ -59,7 +59,7 @@ const columnDefinitions = [
   },
   {
     id: "estado",
-    header: "Excedido (S/)",
+    header: "Estado",
     cell: (item) => (
       <Badge
         color={
@@ -127,7 +127,10 @@ export default ({ data, loading }) => {
               <SpaceBetween size="xs" direction="horizontal">
                 <Button
                   disabled={
-                    collectionProps.selectedItems.length == 0 ? true : false
+                    (collectionProps.selectedItems.length == 0
+                      ? true
+                      : false) ||
+                    collectionProps.selectedItems[0]?.estado != "Enviado"
                   }
                   onClick={() => {
                     setVisible(true);
@@ -216,6 +219,7 @@ export default ({ data, loading }) => {
             item={collectionProps.selectedItems[0] ?? null}
             edit={edit}
             geco_proyecto_id={id}
+            type={type}
           />
         ) : type == "FACTURA" ? (
           <ModalFactura
@@ -224,6 +228,7 @@ export default ({ data, loading }) => {
             item={collectionProps.selectedItems[0] ?? null}
             edit={edit}
             geco_proyecto_id={id}
+            type={type}
           />
         ) : (
           <></>
