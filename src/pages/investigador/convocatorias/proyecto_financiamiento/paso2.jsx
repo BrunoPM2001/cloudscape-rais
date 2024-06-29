@@ -144,7 +144,6 @@ export default forwardRef(function ({ proyecto_id }, ref) {
               Puede descargar la plantilla de la carta de compromiso en{" "}
               <Link
                 href="/minio/templates/compromiso-confidencialidad.docx"
-                // external="true"
                 variant="primary"
                 fontSize="body-s"
                 target="_blank"

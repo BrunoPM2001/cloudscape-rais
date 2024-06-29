@@ -13,6 +13,7 @@ import axiosBase from "../../../../api/axios";
 import { useCollection } from "@cloudscape-design/collection-hooks";
 import ModalAddEstudiante from "./components/modals/modalAddEstudiante";
 import ModalDeleteEstudiante from "./components/modals/modalDeleteEstudiante";
+import ModalAddEstudiante_externo from "./components/modals/modalAddEstudiante_externo";
 
 const CANTIDAD_MINIMA = 3;
 
@@ -145,12 +146,19 @@ export default function ({ proyecto_id, setRequisitos, loading, setLoading }) {
                     if (detail.id == "action_2_1") {
                       setTypeModal("add_estudiante");
                       setVisible(true);
+                    } else if (detail.id == "action_2_2") {
+                      setTypeModal("add_estudiante_externo");
+                      setVisible(true);
                     }
                   }}
                   items={[
                     {
                       text: "Estudiante",
                       id: "action_2_1",
+                    },
+                    {
+                      text: "Estudiante externo",
+                      id: "action_2_2",
                     },
                   ]}
                 >
@@ -173,6 +181,14 @@ export default function ({ proyecto_id, setRequisitos, loading, setLoading }) {
       />
       {visible && typeModal == "add_estudiante" && (
         <ModalAddEstudiante
+          id={proyecto_id}
+          visible={visible}
+          setVisible={setVisible}
+          reload={getData}
+        />
+      )}
+      {visible && typeModal == "add_estudiante_externo" && (
+        <ModalAddEstudiante_externo
           id={proyecto_id}
           visible={visible}
           setVisible={setVisible}

@@ -119,7 +119,7 @@ export default ({ id, visible, setVisible, reload }) => {
       }
       header="Incluir integrante al proyecto"
     >
-      <Form variant="embedded">
+      <Form>
         <SpaceBetween direction="vertical" size="s">
           <FormField label="Buscar estudiante" stretch>
             <Autosuggest

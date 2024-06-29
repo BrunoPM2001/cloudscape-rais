@@ -61,7 +61,7 @@ export default function Verificar_requisitos() {
         <Box margin="m">
           <Alert
             header="Solicitud de registro a esta convocatoria no procede"
-            type="error"
+            type="warning"
           >
             {verifyRes.message.map((item) => {
               return <li>{item}</li>;

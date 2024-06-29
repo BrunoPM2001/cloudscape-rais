@@ -1,5 +1,4 @@
 import {
-  AttributeEditor,
   Box,
   Button,
   ColumnLayout,
@@ -18,6 +17,7 @@ import { useContext, useEffect, useState } from "react";
 import NotificationContext from "../../../../../../providers/notificationProvider";
 import { useFormValidation } from "../../../../../../hooks/useFormValidation";
 import axiosBase from "../../../../../../api/axios";
+import PartidasEditor from "./partidasEditor";
 
 const initialForm = {
   razon_social: "",
@@ -46,6 +46,7 @@ export default ({
   edit,
   geco_proyecto_id,
   type,
+  reload,
 }) => {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
@@ -61,7 +62,7 @@ export default ({
       file: {
         required: item == null ? true : false,
         isFile: true,
-        maxSize: 2 * 1024 * 1024,
+        maxSize: 4 * 1024 * 1024,
       },
     });
 
@@ -112,17 +113,6 @@ export default ({
     }
   };
 
-  const getAvailableOptions = (index) => {
-    const selectedOptions = formValues.partidas.map(
-      (partida) => partida.partida?.value
-    );
-    return opts.filter(
-      (option) =>
-        !selectedOptions.includes(option.value) ||
-        formValues.partidas[index].partida?.value === option.value
-    );
-  };
-
   const subirComprobante = async () => {
     if (
       validateForm() &&
@@ -132,8 +122,9 @@ export default ({
     ) {
       setLoading(true);
       let formData = new FormData();
+      formData.append("tipo", type);
       formData.append("geco_proyecto_id", geco_proyecto_id);
-      formData.append("geco_documento_id", item?.id);
+      formData.append("geco_documento_id", item?.id ?? "");
       formData.append("razon_social", formValues.razon_social);
       formData.append("ruc", formValues.ruc);
       formData.append("numero", formValues.numero);
@@ -149,7 +140,24 @@ export default ({
       setLoading(false);
       setVisible(false);
       pushNotification(data.detail, data.message, notifications.length);
+      reload();
     }
+  };
+
+  const anularComprobante = async () => {
+    setLoading(true);
+    const res = await axiosBase.put(
+      "investigador/informes/informe_economico/anularComprobante",
+      {
+        geco_documento_id: item?.id,
+        geco_proyecto_id,
+      }
+    );
+    setLoading(false);
+    setVisible(false);
+    const data = res.data;
+    pushNotification(data.detail, data.message, notifications.length);
+    reload();
   };
 
   useEffect(() => {
@@ -163,25 +171,34 @@ export default ({
       size="large"
       footer={
         <>
+          <Box float="left">
+            <Button
+              variant="normal"
+              disabled={loading || !edit}
+              iconName="delete-marker"
+              onClick={anularComprobante}
+            >
+              Anular
+            </Button>
+          </Box>
           <Box float="right">
             <SpaceBetween direction="horizontal" size="xs">
-              <Button variant="normal" onClick={() => setVisible(false)}>
+              <Button
+                variant="normal"
+                disabled={loading}
+                onClick={() => setVisible(false)}
+              >
                 Cancelar
               </Button>
               <Button
                 variant="primary"
                 iconName="check"
-                loading={loading}
+                disabled={loading}
                 onClick={subirComprobante}
               >
                 Enviar
               </Button>
             </SpaceBetween>
-          </Box>
-          <Box float="left">
-            <Button variant="normal" iconName="delete-marker">
-              Anular
-            </Button>
           </Box>
         </>
       }
@@ -316,62 +333,11 @@ export default ({
               stretch
               errorText={formErrors.partidas}
             >
-              <AttributeEditor
-                key="sample"
-                disableAddButton={opts.length == formValues.partidas.length}
-                onAddButtonClick={() =>
-                  handleChange("partidas", [...formValues.partidas, {}])
-                }
-                onRemoveButtonClick={({ detail: { itemIndex } }) => {
-                  if (formValues.partidas.length != 1) {
-                    const tmpItems = [...formValues.partidas];
-                    tmpItems.splice(itemIndex, 1);
-                    handleChange("partidas", tmpItems);
-                  }
-                }}
-                items={formValues.partidas}
-                addButtonText="Agregar partida"
-                definition={[
-                  {
-                    label: "Partida",
-                    control: (item, index) => (
-                      <Select
-                        placeholder="Escoja una partida"
-                        selectedOption={item.partida}
-                        onChange={({ detail }) =>
-                          handlePartidaChange(
-                            index,
-                            "partida",
-                            detail.selectedOption
-                          )
-                        }
-                        options={getAvailableOptions(index)}
-                      />
-                    ),
-                    warningText: (item) => {
-                      if (item.partida == null)
-                        return "Tiene que escoger una partida";
-                    },
-                  },
-                  {
-                    label: "Monto",
-                    control: (item, index) => (
-                      <Input
-                        type="number"
-                        inputMode="decimal"
-                        value={item.monto}
-                        placeholder="Ingresa un monto"
-                        onChange={({ detail }) =>
-                          handlePartidaChange(index, "monto", detail.value)
-                        }
-                      />
-                    ),
-                    errorText: (item) => {
-                      if (item.monto <= 0)
-                        return "El monto tiene que ser mayor a 0";
-                    },
-                  },
-                ]}
+              <PartidasEditor
+                handleChange={handleChange}
+                opts={opts}
+                partidas={formValues.partidas}
+                handlePartidaChange={handlePartidaChange}
               />
             </FormField>
           </SpaceBetween>

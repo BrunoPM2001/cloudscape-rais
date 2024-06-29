@@ -81,7 +81,11 @@ export default function Informe_economico_detalles() {
       id: "comprobantes",
       label: "Registro de comprobantes",
       content: (
-        <Comprobantes data={data.comprobantes ?? []} loading={loading} />
+        <Comprobantes
+          data={data.comprobantes ?? []}
+          loading={loading}
+          reload={getData}
+        />
       ),
     },
   ];

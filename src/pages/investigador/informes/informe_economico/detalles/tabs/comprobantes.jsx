@@ -1,4 +1,3 @@
-import { useCollection } from "@cloudscape-design/collection-hooks";
 import {
   Badge,
   Box,
@@ -8,6 +7,7 @@ import {
   SpaceBetween,
   Table,
 } from "@cloudscape-design/components";
+import { useCollection } from "@cloudscape-design/collection-hooks";
 import { useState } from "react";
 import ModalBoleta from "../components/modalBoleta";
 import { useLocation } from "react-router-dom";
@@ -91,7 +91,7 @@ const columnDisplay = [
   { id: "estado", visible: true },
 ];
 
-export default ({ data, loading }) => {
+export default ({ data, loading, reload }) => {
   //  States
   const [visible, setVisible] = useState(false);
   const [type, setType] = useState("");
@@ -220,6 +220,7 @@ export default ({ data, loading }) => {
             edit={edit}
             geco_proyecto_id={id}
             type={type}
+            reload={reload}
           />
         ) : type == "FACTURA" ? (
           <ModalFactura
@@ -229,6 +230,7 @@ export default ({ data, loading }) => {
             edit={edit}
             geco_proyecto_id={id}
             type={type}
+            reload={reload}
           />
         ) : (
           <></>

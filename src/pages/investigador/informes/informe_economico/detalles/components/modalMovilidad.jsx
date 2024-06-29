@@ -1,5 +1,4 @@
 import {
-  Alert,
   Box,
   Button,
   ColumnLayout,
@@ -10,6 +9,7 @@ import {
   Input,
   Link,
   Modal,
+  Select,
   SpaceBetween,
   Spinner,
 } from "@cloudscape-design/components";
@@ -20,20 +20,14 @@ import axiosBase from "../../../../../../api/axios";
 import PartidasEditor from "./partidasEditor";
 
 const initialForm = {
-  razon_social: "",
-  ruc: "",
-  numero: "",
   fecha: "",
-  partidas: [{}],
+  integrante: null,
   file: [],
 };
 
 const formRules = {
-  razon_social: { required: true },
-  ruc: { required: true, regex: /^(10|15|17|20)\d{9}$/ },
-  numero: { required: true },
   fecha: { required: true },
-  partidas: { required: true, noEmpty: true },
+  integrante: { required: true },
   file: { required: true, isFile: true, maxSize: 4 * 1024 * 1024 },
 };
 
@@ -52,7 +46,7 @@ export default ({
   //  States
   const [loading, setLoading] = useState(false);
   const [opts, setOpts] = useState([]);
-  const [errorCount, setErrorCount] = useState(0);
+  const [integrantes, setIntegrantes] = useState([]);
 
   //  Hooks
   const { formValues, formErrors, handleChange, validateForm, setFormValues } =
@@ -76,22 +70,6 @@ export default ({
       ...formValues,
       partidas: newPartidas,
     });
-    updateErrorCount(newPartidas);
-  };
-
-  const updateErrorCount = (items) => {
-    let count = 0;
-
-    items.forEach((item) => {
-      if (
-        parseFloat(item.monto) <= 0 ||
-        parseFloat(item.partida?.max).toFixed(3) < parseFloat(item.monto)
-      ) {
-        count++;
-      }
-    });
-
-    setErrorCount(count);
   };
 
   const getPartidas = async () => {
@@ -112,14 +90,8 @@ export default ({
         ...data.documento,
         partidas: data.partidas,
       });
-      data.lista.forEach((valueObj) => {
-        data.partidas.forEach((partidaObj) => {
-          if (valueObj.value === partidaObj.partida.value) {
-            valueObj.max -= partidaObj.monto;
-          }
-        });
-      });
       setOpts(data.lista);
+      setIntegrantes(data.lista_integrantes);
     } else {
       const res = await axiosBase(
         "investigador/informes/informe_economico/listarPartidas",
@@ -132,6 +104,7 @@ export default ({
       );
       const data = res.data;
       setOpts(data);
+      setIntegrantes(data.lista_integrantes);
     }
   };
 
@@ -147,10 +120,8 @@ export default ({
       formData.append("tipo", type);
       formData.append("geco_proyecto_id", geco_proyecto_id);
       formData.append("geco_documento_id", item?.id ?? "");
-      formData.append("razon_social", formValues.razon_social);
-      formData.append("ruc", formValues.ruc);
-      formData.append("numero", formValues.numero);
       formData.append("fecha", formValues.fecha);
+      formData.append("integrante", formValues.integrante.value);
       formData.append("partidas", JSON.stringify(formValues.partidas));
       formData.append("file", formValues.file[0]);
       const res = await axiosBase.post(
@@ -223,7 +194,7 @@ export default ({
           </Box>
         </>
       }
-      header="Boleta de venta"
+      header="Factura"
     >
       {opts.length == 0 ? (
         <SpaceBetween size="xs" direction="horizontal">
@@ -233,56 +204,27 @@ export default ({
         <Form>
           <SpaceBetween size="m">
             <ColumnLayout columns={2}>
-              <SpaceBetween size="m">
-                <FormField
-                  label="Razón social"
-                  stretch
-                  errorText={formErrors.razon_social}
-                >
-                  <Input
-                    placeholder="Ingrese la razón social"
-                    value={formValues.razon_social}
-                    onChange={({ detail }) =>
-                      handleChange("razon_social", detail.value)
-                    }
-                  />
-                </FormField>
-                <FormField
-                  label="Serie + N° comprobante"
-                  stretch
-                  errorText={formErrors.numero}
-                >
-                  <Input
-                    placeholder="N° de comprobante"
-                    value={formValues.numero}
-                    onChange={({ detail }) =>
-                      handleChange("numero", detail.value)
-                    }
-                  />
-                </FormField>
-              </SpaceBetween>
-              <SpaceBetween size="m">
-                <FormField
-                  label="RUC del emisor"
-                  stretch
-                  errorText={formErrors.ruc}
-                >
-                  <Input
-                    placeholder="N° de ruc"
-                    value={formValues.ruc}
-                    onChange={({ detail }) => handleChange("ruc", detail.value)}
-                  />
-                </FormField>
-                <FormField label="Fecha" stretch errorText={formErrors.fecha}>
-                  <DatePicker
-                    placeholder="YYYY-MM-DD"
-                    value={formValues.fecha}
-                    onChange={({ detail }) =>
-                      handleChange("fecha", detail.value)
-                    }
-                  />
-                </FormField>
-              </SpaceBetween>
+              <FormField
+                label="Integrante"
+                stretch
+                errorText={formErrors.integrante}
+              >
+                <Select
+                  placeholder="Escoja una opción"
+                  selectedOption={formValues.integrante}
+                  onChange={({ detail }) =>
+                    handleChange("integrante", detail.selectedOption)
+                  }
+                  options={integrantes}
+                />
+              </FormField>
+              <FormField label="Fecha" stretch errorText={formErrors.fecha}>
+                <DatePicker
+                  placeholder="YYYY-MM-DD"
+                  value={formValues.fecha}
+                  onChange={({ detail }) => handleChange("fecha", detail.value)}
+                />
+              </FormField>
             </ColumnLayout>
             <FormField
               label="Archivo"
@@ -298,7 +240,7 @@ export default ({
                 showFileSize
                 showFileThumbnail
                 constraintText={
-                  item != null && edit ? (
+                  item != null ? (
                     <Link
                       href={item.url}
                       external="true"
@@ -325,12 +267,6 @@ export default ({
                 accept=".jpg, .jpeg,  .pdf"
               />
             </FormField>
-            {errorCount > 0 && (
-              <Alert type="warning" header="Monto por partida excedido">
-                Si sobrepasa el monto establecido por partida usted tendrá que
-                asumir el exceso o solicitar una trasnferencia.
-              </Alert>
-            )}
             <FormField
               label="Partidas del comprobante"
               description={`Incluir al menos 1 partida (puede incluír como máximo ${opts.length} partidas)`}
