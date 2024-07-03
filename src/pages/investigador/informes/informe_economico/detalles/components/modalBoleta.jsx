@@ -18,6 +18,7 @@ import NotificationContext from "../../../../../../providers/notificationProvide
 import { useFormValidation } from "../../../../../../hooks/useFormValidation";
 import axiosBase from "../../../../../../api/axios";
 import PartidasEditor from "./partidasEditor";
+import TablePartidas from "./tablePartidas";
 
 const initialForm = {
   razon_social: "",
@@ -51,8 +52,9 @@ export default ({
 
   //  States
   const [loading, setLoading] = useState(false);
-  const [opts, setOpts] = useState([]);
+  const [opts, setOpts] = useState(null);
   const [errorCount, setErrorCount] = useState(0);
+  const [justview, setJustview] = useState(false);
 
   //  Hooks
   const { formValues, formErrors, handleChange, validateForm, setFormValues } =
@@ -96,6 +98,9 @@ export default ({
 
   const getPartidas = async () => {
     if (edit) {
+      if (["Aprobado", "Rechazado", "Anulado"].includes(item.estado)) {
+        setJustview(true);
+      }
       const res = await axiosBase(
         "investigador/informes/informe_economico/dataComprobante",
         {
@@ -111,13 +116,6 @@ export default ({
         ...formValues,
         ...data.documento,
         partidas: data.partidas,
-      });
-      data.lista.forEach((valueObj) => {
-        data.partidas.forEach((partidaObj) => {
-          if (valueObj.value === partidaObj.partida.value) {
-            valueObj.max -= partidaObj.monto;
-          }
-        });
       });
       setOpts(data.lista);
     } else {
@@ -193,20 +191,31 @@ export default ({
       footer={
         <>
           <Box float="left">
-            <Button
-              variant="normal"
-              disabled={loading || !edit}
-              iconName="delete-marker"
-              onClick={anularComprobante}
-            >
-              Anular
-            </Button>
+            {justview ? (
+              <Button
+                variant="normal"
+                iconName="external"
+                href={item.url}
+                target="_blank"
+              >
+                Ver comprobante
+              </Button>
+            ) : (
+              <Button
+                variant="normal"
+                disabled={loading || !edit}
+                iconName="delete-marker"
+                onClick={anularComprobante}
+              >
+                Anular
+              </Button>
+            )}
           </Box>
           <Box float="right">
             <SpaceBetween direction="horizontal" size="xs">
               <Button
                 variant="normal"
-                disabled={loading}
+                disabled={loading || justview}
                 onClick={() => setVisible(false)}
               >
                 Cancelar
@@ -214,7 +223,7 @@ export default ({
               <Button
                 variant="primary"
                 iconName="check"
-                disabled={loading}
+                disabled={loading || justview}
                 onClick={subirComprobante}
               >
                 Enviar
@@ -225,10 +234,15 @@ export default ({
       }
       header="Boleta de venta"
     >
-      {opts.length == 0 ? (
+      {opts == null ? (
         <SpaceBetween size="xs" direction="horizontal">
           <Spinner /> Cargando data
         </SpaceBetween>
+      ) : opts.length == 0 ? (
+        <Alert
+          header="No hay partidas disponibles para este tipo de comprobante"
+          type="warning"
+        />
       ) : (
         <Form>
           <SpaceBetween size="m">
@@ -240,6 +254,7 @@ export default ({
                   errorText={formErrors.razon_social}
                 >
                   <Input
+                    disabled={justview}
                     placeholder="Ingrese la razón social"
                     value={formValues.razon_social}
                     onChange={({ detail }) =>
@@ -253,6 +268,7 @@ export default ({
                   errorText={formErrors.numero}
                 >
                   <Input
+                    disabled={justview}
                     placeholder="N° de comprobante"
                     value={formValues.numero}
                     onChange={({ detail }) =>
@@ -268,6 +284,7 @@ export default ({
                   errorText={formErrors.ruc}
                 >
                   <Input
+                    disabled={justview}
                     placeholder="N° de ruc"
                     value={formValues.ruc}
                     onChange={({ detail }) => handleChange("ruc", detail.value)}
@@ -275,6 +292,7 @@ export default ({
                 </FormField>
                 <FormField label="Fecha" stretch errorText={formErrors.fecha}>
                   <DatePicker
+                    disabled={justview}
                     placeholder="YYYY-MM-DD"
                     value={formValues.fecha}
                     onChange={({ detail }) =>
@@ -284,66 +302,73 @@ export default ({
                 </FormField>
               </SpaceBetween>
             </ColumnLayout>
-            <FormField
-              label="Archivo"
-              description={
-                "El archivo cargado no debe superar los 4 MB (solo se aceptan los formatos jpg, jpeg y pdf)"
-              }
-              errorText={formErrors.file}
-            >
-              <FileUpload
-                value={formValues.file}
-                onChange={({ detail }) => handleChange("file", detail.value)}
-                showFileLastModified
-                showFileSize
-                showFileThumbnail
-                constraintText={
-                  item != null && edit ? (
-                    <Link
-                      href={item.url}
-                      external="true"
-                      variant="primary"
-                      fontSize="body-s"
-                      target="_blank"
-                    >
-                      Ya ha cargado un comprobante con anterioridad.
-                    </Link>
-                  ) : (
-                    <></>
-                  )
+            {!justview && (
+              <FormField
+                label="Archivo"
+                description={
+                  "El archivo cargado no debe superar los 4 MB (solo se aceptan los formatos jpg, jpeg y pdf)"
                 }
-                i18nStrings={{
-                  uploadButtonText: (e) =>
-                    e ? "Cargar archivos" : "Cargar archivo",
-                  dropzoneText: (e) =>
-                    e
-                      ? "Arrastre los archivos para cargarlos"
-                      : "Arrastre el archivo para cargarlo",
-                  removeFileAriaLabel: (e) => `Eliminar archivo ${e + 1}`,
-                  errorIconAriaLabel: "Error",
-                }}
-                accept=".jpg, .jpeg,  .pdf"
-              />
-            </FormField>
+                errorText={formErrors.file}
+              >
+                <FileUpload
+                  value={formValues.file}
+                  onChange={({ detail }) => handleChange("file", detail.value)}
+                  showFileLastModified
+                  showFileSize
+                  showFileThumbnail
+                  constraintText={
+                    item != null && edit ? (
+                      <Link
+                        href={item.url}
+                        external="true"
+                        variant="primary"
+                        fontSize="body-s"
+                        target="_blank"
+                      >
+                        Ya ha cargado un comprobante con anterioridad.
+                      </Link>
+                    ) : (
+                      <></>
+                    )
+                  }
+                  i18nStrings={{
+                    uploadButtonText: (e) =>
+                      e ? "Cargar archivos" : "Cargar archivo",
+                    dropzoneText: (e) =>
+                      e
+                        ? "Arrastre los archivos para cargarlos"
+                        : "Arrastre el archivo para cargarlo",
+                    removeFileAriaLabel: (e) => `Eliminar archivo ${e + 1}`,
+                    errorIconAriaLabel: "Error",
+                  }}
+                  accept=".jpg, .jpeg,  .pdf"
+                />
+              </FormField>
+            )}
             {errorCount > 0 && (
               <Alert type="warning" header="Monto por partida excedido">
                 Si sobrepasa el monto establecido por partida usted tendrá que
                 asumir el exceso o solicitar una trasnferencia.
               </Alert>
             )}
-            <FormField
-              label="Partidas del comprobante"
-              description={`Incluir al menos 1 partida (puede incluír como máximo ${opts.length} partidas)`}
-              stretch
-              errorText={formErrors.partidas}
-            >
-              <PartidasEditor
-                handleChange={handleChange}
-                opts={opts}
-                partidas={formValues.partidas}
-                handlePartidaChange={handlePartidaChange}
-              />
-            </FormField>
+            {justview ? (
+              <TablePartidas distributions={formValues.partidas} item={item} />
+            ) : (
+              <FormField
+                label="Partidas del comprobante"
+                description={`Incluir al menos 1 partida (puede incluír como máximo ${opts.length} partidas)`}
+                stretch
+                errorText={formErrors.partidas}
+              >
+                <PartidasEditor
+                  handleChange={handleChange}
+                  opts={opts}
+                  partidas={formValues.partidas}
+                  handlePartidaChange={handlePartidaChange}
+                  item={item}
+                />
+              </FormField>
+            )}
           </SpaceBetween>
         </Form>
       )}

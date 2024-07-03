@@ -19,7 +19,7 @@ export default ({ id, visible, setVisible, reload }) => {
   const eliminarAutor = async () => {
     setLoading(true);
     const res = await axiosBase.delete(
-      "investigador/publicaciones/eliminarAutor",
+      "investigador/publicaciones/utils/eliminarAutor",
       {
         params: {
           id: id,

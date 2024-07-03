@@ -11,18 +11,23 @@ import {
   Select,
 } from "@cloudscape-design/components";
 import { useContext, useState } from "react";
-import { useAutosuggest } from "../../../../../hooks/useAutosuggest";
 import axiosBase from "../../../../../api/axios";
 import NotificationContext from "../../../../../providers/notificationProvider";
 import { useFormValidation } from "../../../../../hooks/useFormValidation";
 
 const initialForm = {
+  nombres: "",
+  apellido1: "",
+  apellido2: "",
   autor: "",
   filiacion: null,
   categoria: null,
 };
 
 const formRules = {
+  nombres: { required: true },
+  apellido1: { required: true },
+  apellido2: { required: true },
   autor: { required: true },
   filiacion: { required: true },
   categoria: { required: true },
@@ -34,12 +39,8 @@ export default ({ id, visible, setVisible, reload, optAutor }) => {
 
   //  States
   const [loadingCreate, setLoadingCreate] = useState(false);
-  const [enableCreate, setEnableCreate] = useState(false);
-  const [form, setForm] = useState({});
 
   //  Hooks
-  const { loading, options, setOptions, value, setValue, setAvoidSelect } =
-    useAutosuggest("investigador_externo_registrado");
   const { formValues, formErrors, handleChange, validateForm } =
     useFormValidation(initialForm, formRules);
 
@@ -48,13 +49,12 @@ export default ({ id, visible, setVisible, reload, optAutor }) => {
     if (validateForm()) {
       setLoadingCreate(true);
       const res = await axiosBase.post(
-        "investigador/publicaciones/agregarAutor",
+        "investigador/publicaciones/utils/agregarAutor",
         {
           ...formValues,
           filiacion: formValues.filiacion.value,
           categoria: formValues.categoria.value,
           publicacion_id: id,
-          investigador_id: form.id,
           tipo: "externo",
         }
       );
@@ -78,7 +78,6 @@ export default ({ id, visible, setVisible, reload, optAutor }) => {
               Cancelar
             </Button>
             <Button
-              disabled={!enableCreate}
               variant="primary"
               onClick={agregarAutor}
               loading={loadingCreate}
@@ -90,50 +89,41 @@ export default ({ id, visible, setVisible, reload, optAutor }) => {
       }
       header="Agregar autor"
     >
-      <Form variant="embedded">
+      <Form>
         <SpaceBetween direction="vertical" size="s">
-          <FormField
-            label="Buscar externo investigador"
-            description="(*) El autor tiene que estar registrado como investigador en el rais"
-            stretch
-          >
-            <Autosuggest
-              onChange={({ detail }) => {
-                setOptions([]);
-                setValue(detail.value);
-                if (detail.value == "") {
-                  setForm({});
-                  setEnableCreate(false);
+          <ColumnLayout columns={3}>
+            <FormField label="Nombres" stretch errorText={formErrors.nombres}>
+              <Input
+                placeholder="Escriba el nombre del autor"
+                value={formValues.nombres}
+                onChange={({ detail }) => handleChange("nombres", detail.value)}
+              />
+            </FormField>
+            <FormField
+              label="Apellido paterno"
+              stretch
+              errorText={formErrors.apellido1}
+            >
+              <Input
+                placeholder="Escriba el ap. paterno del autor"
+                value={formValues.apellido1}
+                onChange={({ detail }) =>
+                  handleChange("apellido1", detail.value)
                 }
-              }}
-              onSelect={({ detail }) => {
-                if (detail.selectedOption.id != undefined) {
-                  const { value, ...rest } = detail.selectedOption;
-                  setForm(rest);
-                  setEnableCreate(true);
-                  setAvoidSelect(false);
+              />
+            </FormField>
+            <FormField
+              label="Apellido materno"
+              stretch
+              errorText={formErrors.apellido2}
+            >
+              <Input
+                placeholder="Escriba el ap. materno del autor"
+                value={formValues.apellido2}
+                onChange={({ detail }) =>
+                  handleChange("apellido2", detail.value)
                 }
-              }}
-              value={value}
-              options={options}
-              loadingText="Cargando data"
-              placeholder="Dni, código o nombres de docente"
-              statusType={loading ? "loading" : "finished"}
-              empty="No se encontraron resultados"
-            />
-          </FormField>
-          <ColumnLayout columns={4}>
-            <FormField label="Nombres" stretch>
-              <Input readOnly value={form.nombres} />
-            </FormField>
-            <FormField label="Apellido paterno" stretch>
-              <Input readOnly value={form.apellido1} />
-            </FormField>
-            <FormField label="Apellido materno" stretch>
-              <Input readOnly value={form.apellido2} />
-            </FormField>
-            <FormField label="Tipo" stretch>
-              <Input readOnly value={form.tipo} />
+              />
             </FormField>
           </ColumnLayout>
           <FormField
@@ -142,7 +132,6 @@ export default ({ id, visible, setVisible, reload, optAutor }) => {
             errorText={formErrors.autor}
           >
             <Input
-              disabled={!enableCreate}
               placeholder="Escriba el nombre del autor con el que aparece en la publicación"
               value={formValues.autor}
               onChange={({ detail }) => handleChange("autor", detail.value)}
@@ -156,7 +145,6 @@ export default ({ id, visible, setVisible, reload, optAutor }) => {
             >
               <Select
                 placeholder="Escoja una opción"
-                disabled={!enableCreate}
                 selectedOption={formValues.filiacion}
                 onChange={({ detail }) => {
                   handleChange("filiacion", detail.selectedOption);
@@ -180,7 +168,6 @@ export default ({ id, visible, setVisible, reload, optAutor }) => {
             >
               <Select
                 placeholder="Escoja una opción"
-                disabled={!enableCreate}
                 selectedOption={formValues.categoria}
                 onChange={({ detail }) => {
                   handleChange("categoria", detail.selectedOption);

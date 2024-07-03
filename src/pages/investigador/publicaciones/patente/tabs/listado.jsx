@@ -97,7 +97,7 @@ const columnDefinitions = [
             ? "grey"
             : item.estado == 9
             ? "red"
-            : "red"
+            : "grey"
         }
       >
         {item.estado == -1
@@ -116,7 +116,7 @@ const columnDefinitions = [
           ? "No registrado"
           : item.estado == 9
           ? "Duplicado"
-          : "Error"}
+          : "Sin estado"}
       </Badge>
     ),
     sortingField: "estado",

@@ -54,7 +54,7 @@ export default ({ item, visible, setVisible, reload, optAutor }) => {
     if (validateForm()) {
       setLoadingCreate(true);
       const res = await axiosBase.put(
-        "investigador/publicaciones/editarAutor",
+        "investigador/publicaciones/utils/editarAutor",
         {
           id: item.id,
           autor: formValues.autor,

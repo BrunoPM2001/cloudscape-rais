@@ -37,15 +37,10 @@ export default forwardRef(function ({ publicacion_id, tipo }, ref) {
     if (validateForm()) {
       let form = new FormData();
       form.append("publicacion_id", publicacion_id);
-      form.append("file", formValues.anexo);
+      form.append("file", formValues.anexo[0]);
       const res = await axiosBase.post(
-        "investigador/publicaciones/enviarPublicacion",
-        form,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
+        "investigador/publicaciones/utils/enviarPublicacion",
+        form
       );
       const data = res.data;
       pushNotification(data.detail, data.message, notifications.length + 1);

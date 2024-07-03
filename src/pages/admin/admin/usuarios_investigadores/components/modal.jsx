@@ -34,12 +34,17 @@ const CreateUserModal = ({ visible, setVisible, reload }) => {
   const getData = async () => {
     setLoading(true);
     const res = await axiosBase.get(
-      "admin/admin/usuarios/searchInvestigadorBy/" + value
+      "admin/admin/usuarios/searchInvestigadorBy",
+      {
+        params: {
+          query: value,
+        },
+      }
     );
     const data = await res.data;
     const opt = data.map((item) => {
       return {
-        detail: item.id,
+        detail: item.investigador_id,
         value: `${item.codigo} | ${item.doc_numero} | ${item.apellido1} ${item.apellido2}, ${item.nombres}`,
       };
     });
@@ -88,7 +93,7 @@ const CreateUserModal = ({ visible, setVisible, reload }) => {
       }
       header="Crear usuario investigador"
     >
-      <Form variant="embedded">
+      <Form>
         <SpaceBetween direction="vertical" size="s">
           <div>
             <Header variant="h3">Datos del investigador</Header>

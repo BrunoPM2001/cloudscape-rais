@@ -109,7 +109,7 @@ const columnDefinitions = [
             ? "grey"
             : item.estado == 9
             ? "red"
-            : "red"
+            : "grey"
         }
       >
         {item.estado == -1
@@ -128,7 +128,7 @@ const columnDefinitions = [
           ? "No registrado"
           : item.estado == 9
           ? "Duplicado"
-          : "Error"}
+          : "Sin estado"}
       </Badge>
     ),
     sortingField: "estado",
@@ -182,7 +182,6 @@ export default () => {
 
   //  Functions
   const getData = async () => {
-    tesisPropias;
     setLoading(true);
     const res = await axiosBase.get(
       "investigador/publicaciones/tesisPropias/listado"
@@ -227,27 +226,46 @@ export default () => {
                 disabled={!enableBtn}
                 onItemClick={({ detail }) => {
                   if (detail.id == "action_1") {
-                    // setEditVisible(true);
+                    const query = queryString.stringify({
+                      publicacion_id: selectedItems[0].id,
+                      tipo: "tesis_propia",
+                    });
+                    window.location.href =
+                      "registrar/paso" + selectedItems[0].step + "?" + query;
                   } else if (detail.id == "action_2") {
                     // setDeleteVisible(true);
                   }
                 }}
                 items={[
                   {
-                    text: "Ver detalle",
+                    text: "Editar",
                     id: "action_1",
-                    disabled: selectedItems[0]?.estado == 5 ? true : false,
+                    disabled:
+                      selectedItems[0]?.estado != 6 &&
+                      selectedItems[0]?.estado != 2
+                        ? true
+                        : false,
                   },
                   {
-                    text: "Reporte",
+                    text: "Eliminar",
                     id: "action_2",
-                    disabled: selectedItems[0]?.estado == 5 ? true : false,
+                    disabled: selectedItems[0]?.estado != 6 ? true : false,
                   },
                 ]}
               >
-                Acciones para tesis
+                Acciones para publicaciones
               </ButtonDropdown>
-              <Button variant="primary">Registrar</Button>
+              <Button
+                variant="primary"
+                onClick={() => {
+                  const query = queryString.stringify({
+                    tipo: "tesis_propia",
+                  });
+                  window.location.href = "registrar/paso1?" + query;
+                }}
+              >
+                Registrar
+              </Button>
             </SpaceBetween>
           }
         >

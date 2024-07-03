@@ -8,8 +8,8 @@ import {
   Table,
 } from "@cloudscape-design/components";
 import { useEffect, useState } from "react";
-import axiosBase from "../../../../api/axios";
 import { useCollection } from "@cloudscape-design/collection-hooks";
+import axiosBase from "../../../../api/axios";
 import ModalAutorDocente from "./components/modalAutorDocente";
 import ModalAutorEstudiante from "./components/modalAutorEstudiante";
 import ModalAutorExterno from "./components/modalAutorExterno";
@@ -20,7 +20,7 @@ const columnDefinitions = [
   {
     id: "presentado",
     header: "Presentado",
-    cell: (item) => item.presentado,
+    cell: (item) => (item.presentado ? "Sí" : "No"),
   },
   {
     id: "categoria",
@@ -65,6 +65,7 @@ export default function ({ publicacion_id, tipo }) {
   const [visible, setVisible] = useState(false);
   const [typeModal, setTypeModal] = useState(null);
   const [optAutor, setOptAutor] = useState([]);
+  const [tipoAutor, setTipoAutor] = useState([]);
 
   //  Hooks
   const { items, collectionProps, paginationProps } = useCollection(
@@ -80,7 +81,7 @@ export default function ({ publicacion_id, tipo }) {
   const getData = async () => {
     setLoading(true);
     const res = await axiosBase.get(
-      "investigador/publicaciones/listarAutores",
+      "investigador/publicaciones/utils/listarAutores",
       {
         params: {
           publicacion_id: publicacion_id,
@@ -96,7 +97,17 @@ export default function ({ publicacion_id, tipo }) {
   useEffect(() => {
     if (tipo == "articulo") {
       setOptAutor([{ value: "Autor" }, { value: "Autor de correspondencia" }]);
-    } else {
+      setTipoAutor([
+        { text: "Docente", id: "action_2_1" },
+        { text: "Estudiante", id: "action_2_2" },
+        { text: "Externo", id: "action_2_3" },
+      ]);
+    } else if (tipo == "tesis_propia") {
+      setOptAutor([{ value: "Asesor" }, { value: "Co-Asesor" }]);
+      setTipoAutor([
+        { text: "Asesor / co-asesor interno", id: "action_2_1" },
+        { text: "Asesor / co-asesor externo", id: "action_2_3" },
+      ]);
     }
     getData();
   }, []);
@@ -162,20 +173,7 @@ export default function ({ publicacion_id, tipo }) {
                       setVisible(true);
                     }
                   }}
-                  items={[
-                    {
-                      text: "Docente",
-                      id: "action_2_1",
-                    },
-                    {
-                      text: "Estudiante",
-                      id: "action_2_2",
-                    },
-                    {
-                      text: "Externo",
-                      id: "action_2_3",
-                    },
-                  ]}
+                  items={tipoAutor}
                 >
                   Agregar autor
                 </ButtonDropdown>

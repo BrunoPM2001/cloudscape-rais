@@ -48,7 +48,7 @@ export default ({ id, visible, setVisible, reload, optAutor }) => {
     if (validateForm()) {
       setLoadingCreate(true);
       const res = await axiosBase.post(
-        "investigador/publicaciones/agregarAutor",
+        "investigador/publicaciones/utils/agregarAutor",
         {
           ...formValues,
           filiacion: formValues.filiacion.value,
@@ -90,7 +90,7 @@ export default ({ id, visible, setVisible, reload, optAutor }) => {
       }
       header="Agregar autor"
     >
-      <Form variant="embedded">
+      <Form>
         <SpaceBetween direction="vertical" size="s">
           <FormField label="Buscar docente investigador" stretch>
             <Autosuggest

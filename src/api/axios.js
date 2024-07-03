@@ -19,8 +19,9 @@ axiosBase.interceptors.response.use(
         localStorage.clear();
         window.location.href = "/";
         console.error("Unauthorized");
-      } else if (error.response.status === 500) {
+      } else if (error.response.status === 404) {
         // localStorage.clear();
+        // window.location.href = "/";
         console.error("Server error");
       }
     } else if (error.request) {

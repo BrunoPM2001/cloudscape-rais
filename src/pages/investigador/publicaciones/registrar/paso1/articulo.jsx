@@ -13,9 +13,16 @@ import {
   StatusIndicator,
   TokenGroup,
 } from "@cloudscape-design/components";
-import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
+import {
+  forwardRef,
+  useContext,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from "react";
 import { useFormValidation } from "../../../../../hooks/useFormValidation";
 import axiosBase from "../../../../../api/axios";
+import NotificationContext from "../../../../../providers/notificationProvider";
 
 const initialForm = {
   doi: "",
@@ -53,8 +60,10 @@ const formRules = {
 };
 
 export default forwardRef(function (props, ref) {
+  //  Context
+  const { notifications, pushNotification } = useContext(NotificationContext);
+
   //  State
-  const [loading, setLoading] = useState("loading");
   const [loadingData, setLoadingData] = useState(false);
   const [revistasIndexadas, setRevistasIndexadas] = useState([]);
 
@@ -65,11 +74,10 @@ export default forwardRef(function (props, ref) {
   //  Function
   const listaRevistasIndexadas = async () => {
     const res = await axiosBase.get(
-      "investigador/publicaciones/listadoRevistasIndexadas"
+      "investigador/publicaciones/utils/listadoRevistasIndexadas"
     );
     const data = res.data;
     setRevistasIndexadas(data);
-    setLoading("finished");
   };
 
   const getData = async () => {
@@ -84,7 +92,6 @@ export default forwardRef(function (props, ref) {
     );
     const data = res.data;
     setRevistasIndexadas(data.revistas);
-    setLoading("finished");
     setFormValues({
       ...initialForm,
       ...data.data,
@@ -98,11 +105,19 @@ export default forwardRef(function (props, ref) {
   const registrar = async () => {
     if (validateForm()) {
       if (props.publicacion_id != null) {
-        await axiosBase.post(
+        const res = await axiosBase.post(
           "investigador/publicaciones/articulos/registrarPaso1",
           { ...formValues, publicacion_id: props.publicacion_id }
         );
-        return { isValid: true, res_publicacion_id: null };
+        const data = res.data;
+        if (data.message == "error") {
+          pushNotification(data.detail, data.message, notifications.length + 1);
+          setTimeout(() => {
+            window.location.href = "/investigador";
+          }, 3000);
+        } else {
+          return { isValid: true, res_publicacion_id: null };
+        }
       } else {
         const res = await axiosBase.post(
           "investigador/publicaciones/articulos/registrarPaso1",
@@ -131,7 +146,7 @@ export default forwardRef(function (props, ref) {
 
   return (
     <Container>
-      <Form variant="embedded" header={<Header>Datos del artículo</Header>}>
+      <Form header={<Header>Datos del artículo</Header>}>
         {loadingData ? (
           <Spinner />
         ) : (
@@ -315,7 +330,10 @@ export default forwardRef(function (props, ref) {
               errorText={formErrors.indexada}
             >
               <Multiselect
-                statusType={loading}
+                statusType={
+                  revistasIndexadas.length == 0 ? "loading" : "finished"
+                }
+                virtualScroll
                 filteringType="auto"
                 placeholder="Escoga las revistas"
                 selectedOptions={formValues.indexada}

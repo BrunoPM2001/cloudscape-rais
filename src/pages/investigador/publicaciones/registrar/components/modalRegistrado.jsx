@@ -29,7 +29,7 @@ export default ({ id, visible, setVisible, reload }) => {
   const agregarProyecto = async () => {
     setLoadingCreate(true);
     const res = await axiosBase.post(
-      "investigador/publicaciones/agregarProyecto",
+      "investigador/publicaciones/utils/agregarProyecto",
       {
         publicacion_id: id,
         proyecto_id: form.proyecto_id,

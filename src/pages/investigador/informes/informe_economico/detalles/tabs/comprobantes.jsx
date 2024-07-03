@@ -13,6 +13,14 @@ import ModalBoleta from "../components/modalBoleta";
 import { useLocation } from "react-router-dom";
 import queryString from "query-string";
 import ModalFactura from "../components/modalFactura";
+import ModalMovilidad from "../components/modalMovilidad";
+import ModalRxH from "../components/modalRxH";
+import ModalBoletaViaje from "../components/modalBoletaViaje";
+import ModalLiquidacion from "../components/modalLiquidacion";
+import ModalOtros from "../components/modalOtros";
+import ModalReciboIngreso from "../components/modalReciboIngreso";
+import ModalTicket from "../components/modalTicket";
+import ModalReciboBanco from "../components/modalReciboBanco";
 
 const columnDefinitions = [
   {
@@ -127,10 +135,7 @@ export default ({ data, loading, reload }) => {
               <SpaceBetween size="xs" direction="horizontal">
                 <Button
                   disabled={
-                    (collectionProps.selectedItems.length == 0
-                      ? true
-                      : false) ||
-                    collectionProps.selectedItems[0]?.estado != "Enviado"
+                    collectionProps.selectedItems.length == 0 ? true : false
                   }
                   onClick={() => {
                     setVisible(true);
@@ -153,39 +158,35 @@ export default ({ data, loading, reload }) => {
                       text: "Factura",
                     },
                     {
-                      id: "action_3",
+                      id: "RMOVILIDAD",
                       text: "Recibo de movilidad",
                     },
                     {
-                      id: "action_4",
+                      id: "RHONORARIOS",
                       text: "Recibo por honorarios",
                     },
                     {
-                      id: "action_5",
+                      id: "BVIAJE",
                       text: "Boleto de viaje",
                     },
                     {
-                      id: "action_6",
-                      text: "Declaración jurada",
-                    },
-                    {
-                      id: "action_7",
+                      id: "LCOMPRA",
                       text: "Liquidación de compra",
                     },
                     {
-                      id: "action_8",
+                      id: "OTROS",
                       text: "Otros",
                     },
                     {
-                      id: "action_9",
+                      id: "RINGRESO",
                       text: "Recibo de ingreso - UNMSM",
                     },
                     {
-                      id: "action_10",
+                      id: "TICKET",
                       text: "Ticket",
                     },
                     {
-                      id: "action_11",
+                      id: "RBANCO",
                       text: "Recibo de banco",
                     },
                   ]}
@@ -200,7 +201,7 @@ export default ({ data, loading, reload }) => {
               </SpaceBetween>
             }
           >
-            Listado de partidas
+            Listado de comprobantes
           </Header>
         }
         empty={
@@ -224,6 +225,86 @@ export default ({ data, loading, reload }) => {
           />
         ) : type == "FACTURA" ? (
           <ModalFactura
+            visible={visible}
+            setVisible={setVisible}
+            item={collectionProps.selectedItems[0] ?? null}
+            edit={edit}
+            geco_proyecto_id={id}
+            type={type}
+            reload={reload}
+          />
+        ) : type == "RMOVILIDAD" ? (
+          <ModalMovilidad
+            visible={visible}
+            setVisible={setVisible}
+            item={collectionProps.selectedItems[0] ?? null}
+            edit={edit}
+            geco_proyecto_id={id}
+            type={type}
+            reload={reload}
+          />
+        ) : type == "RHONORARIOS" ? (
+          <ModalRxH
+            visible={visible}
+            setVisible={setVisible}
+            item={collectionProps.selectedItems[0] ?? null}
+            edit={edit}
+            geco_proyecto_id={id}
+            type={type}
+            reload={reload}
+          />
+        ) : type == "BVIAJE" ? (
+          <ModalBoletaViaje
+            visible={visible}
+            setVisible={setVisible}
+            item={collectionProps.selectedItems[0] ?? null}
+            edit={edit}
+            geco_proyecto_id={id}
+            type={type}
+            reload={reload}
+          />
+        ) : type == "LCOMPRA" ? (
+          <ModalLiquidacion
+            visible={visible}
+            setVisible={setVisible}
+            item={collectionProps.selectedItems[0] ?? null}
+            edit={edit}
+            geco_proyecto_id={id}
+            type={type}
+            reload={reload}
+          />
+        ) : type == "OTROS" ? (
+          <ModalOtros
+            visible={visible}
+            setVisible={setVisible}
+            item={collectionProps.selectedItems[0] ?? null}
+            edit={edit}
+            geco_proyecto_id={id}
+            type={type}
+            reload={reload}
+          />
+        ) : type == "RINGRESO" ? (
+          <ModalReciboIngreso
+            visible={visible}
+            setVisible={setVisible}
+            item={collectionProps.selectedItems[0] ?? null}
+            edit={edit}
+            geco_proyecto_id={id}
+            type={type}
+            reload={reload}
+          />
+        ) : type == "TICKET" ? (
+          <ModalTicket
+            visible={visible}
+            setVisible={setVisible}
+            item={collectionProps.selectedItems[0] ?? null}
+            edit={edit}
+            geco_proyecto_id={id}
+            type={type}
+            reload={reload}
+          />
+        ) : type == "RBANCO" ? (
+          <ModalReciboBanco
             visible={visible}
             setVisible={setVisible}
             item={collectionProps.selectedItems[0] ?? null}

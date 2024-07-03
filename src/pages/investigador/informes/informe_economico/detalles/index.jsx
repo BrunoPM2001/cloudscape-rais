@@ -1,13 +1,14 @@
 import { Grid, SpaceBetween, Tabs } from "@cloudscape-design/components";
-import Cifras from "./cifras";
-import BaseLayout from "../../../components/baseLayout";
+import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
+import BaseLayout from "../../../components/baseLayout";
 import axiosBase from "../../../../../api/axios";
 import queryString from "query-string";
-import { useLocation } from "react-router-dom";
 import Detalle from "./detalle";
+import Cifras from "./cifras";
 import Asignacion from "./tabs/asignacion";
 import Comprobantes from "./tabs/comprobantes";
+import Transferencias from "./tabs/transferencias";
 
 const breadcrumbs = [
   {
@@ -83,6 +84,17 @@ export default function Informe_economico_detalles() {
       content: (
         <Comprobantes
           data={data.comprobantes ?? []}
+          loading={loading}
+          reload={getData}
+        />
+      ),
+    },
+    {
+      id: "transferencias",
+      label: "Transferencias",
+      content: (
+        <Transferencias
+          data={data.transferencias ?? {}}
           loading={loading}
           reload={getData}
         />

@@ -25,7 +25,7 @@ export default ({ value, error, handleChange }) => {
         </Alert>
         <FormField
           label=""
-          description="(Máximo 200 palabras)"
+          description="(Máximo 1000 palabras)"
           errorText={error}
           stretch
         >

@@ -40,6 +40,11 @@ export default function Login() {
       localStorage.setItem("User", result.data.usuario);
       localStorage.setItem("Type", result.data.tabla);
       window.location.href = "/investigador";
+    } else if (result.data.tabla == "Usuario_evaluador") {
+      localStorage.setItem("Auth", result.data.token);
+      localStorage.setItem("User", result.data.usuario);
+      localStorage.setItem("Type", result.data.tabla);
+      window.location.href = "/evaluador";
     } else {
       setViewAlerts((prev) => [true, prev[1]]);
     }

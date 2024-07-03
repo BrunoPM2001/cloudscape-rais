@@ -60,7 +60,7 @@ export default function ({ publicacion_id }) {
   const getData = async () => {
     setLoading(true);
     const res = await axiosBase.get(
-      "investigador/publicaciones/proyectos_asociados",
+      "investigador/publicaciones/utils/proyectos_asociados",
       {
         params: {
           publicacion_id: publicacion_id,

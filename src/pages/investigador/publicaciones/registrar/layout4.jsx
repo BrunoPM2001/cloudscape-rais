@@ -72,6 +72,9 @@ export default function Registrar_articulo_4() {
           setLoading(true);
           await pasoRefs.current[0]?.registrar();
           setLoading(false);
+          setTimeout(() => {
+            window.location.href = "/investigador";
+          }, 3000);
         }}
         isLoadingNextStep={loading}
         submitButtonText="Enviar"

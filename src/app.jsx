@@ -3,6 +3,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "@cloudscape-design/global-styles/index.css";
 import AdminRoutes from "./routes/admin";
 import InvestigadorRoutes from "./routes/investigador";
+import EvaluadorRoutes from "./routes/evaluador";
 
 //  Login page
 const Login = lazy(() => import("./pages/login/index"));
@@ -29,6 +30,7 @@ export default function App() {
       <RouterProvider router={router1} />
       <AdminRoutes />
       <InvestigadorRoutes />
+      <EvaluadorRoutes />
     </>
   );
 }

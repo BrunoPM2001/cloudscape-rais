@@ -81,7 +81,6 @@ export default ({ id }) => {
       }
     );
     const data = res.data;
-    console.log(data);
     setDistribution(data);
     setLoading(false);
   };

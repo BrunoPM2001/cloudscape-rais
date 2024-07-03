@@ -40,7 +40,7 @@ export default ({ id, visible, setVisible, reload }) => {
     if (validateForm()) {
       setLoadingCreate(true);
       const res = await axiosBase.post(
-        "investigador/publicaciones/agregarProyecto",
+        "investigador/publicaciones/utils/agregarProyecto",
         {
           publicacion_id: id,
           codigo_proyecto: formValues.codigo_proyecto,

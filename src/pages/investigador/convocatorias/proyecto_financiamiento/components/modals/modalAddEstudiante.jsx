@@ -89,7 +89,6 @@ export default ({ id, visible, setVisible, reload }) => {
 
   //  Effects
   useEffect(() => {
-    console.log(form);
     if (Object.keys(form).length != 0) {
       getData();
     }

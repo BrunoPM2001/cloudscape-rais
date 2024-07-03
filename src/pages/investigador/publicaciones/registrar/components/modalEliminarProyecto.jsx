@@ -19,7 +19,7 @@ export default ({ id, visible, setVisible, reload }) => {
   const eliminarProyecto = async () => {
     setLoading(true);
     const res = await axiosBase.delete(
-      "investigador/publicaciones/eliminarProyecto",
+      "investigador/publicaciones/utils/eliminarProyecto",
       {
         params: {
           proyecto_id: id,

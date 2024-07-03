@@ -140,7 +140,6 @@ export default ({ visible, setVisible, reload }) => {
                 if (detail.selectedOption.id != undefined) {
                   const { value, ...rest } = detail.selectedOption;
                   setForm(rest);
-                  console.log(rest);
                   setAvoidSelect(false);
                 }
               }}

@@ -6,6 +6,7 @@ import queryString from "query-string";
 import Articulo from "./paso1/articulo.jsx";
 import Libro from "./paso1/libro.jsx";
 import Capitulo_libro from "./paso1/capitulo_libro.jsx";
+import Tesis_propia from "./paso1/tesis_propia.jsx";
 
 const breadcrumbs = [
   {
@@ -82,6 +83,11 @@ export default function Registrar_articulo_1() {
                   />
                 ) : tipo == "capitulo_libro" ? (
                   <Capitulo_libro
+                    ref={(el) => (pasoRefs.current[0] = el)}
+                    publicacion_id={publicacion_id}
+                  />
+                ) : tipo == "tesis_propia" ? (
+                  <Tesis_propia
                     ref={(el) => (pasoRefs.current[0] = el)}
                     publicacion_id={publicacion_id}
                   />

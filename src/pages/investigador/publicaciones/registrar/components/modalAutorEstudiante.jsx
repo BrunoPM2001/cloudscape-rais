@@ -48,7 +48,7 @@ export default ({ id, visible, setVisible, reload, optAutor }) => {
     if (validateForm()) {
       setLoadingCreate(true);
       const res = await axiosBase.post(
-        "investigador/publicaciones/agregarAutor",
+        "investigador/publicaciones/utils/agregarAutor",
         {
           ...formValues,
           filiacion: formValues.filiacion.value,

@@ -55,7 +55,6 @@ const formRules = {
 
 export default forwardRef(function (props, ref) {
   //  State
-  const [loading, setLoading] = useState("loading");
   const [loadingData, setLoadingData] = useState(false);
   const [paises, setPaises] = useState([]);
 
@@ -66,11 +65,10 @@ export default forwardRef(function (props, ref) {
   //  Function
   const listaPaises = async () => {
     const res = await axiosBase.get(
-      "investigador/publicaciones/libros/getPaises"
+      "investigador/publicaciones/utils/getPaises"
     );
     const data = res.data;
     setPaises(data);
-    setLoading("finished");
   };
 
   const getData = async () => {
@@ -84,8 +82,7 @@ export default forwardRef(function (props, ref) {
       }
     );
     const data = res.data;
-    setRevistasIndexadas(data.revistas);
-    setLoading("finished");
+    setPaises(data.paises);
     setFormValues({
       ...initialForm,
       ...data.data,
@@ -132,10 +129,7 @@ export default forwardRef(function (props, ref) {
 
   return (
     <Container>
-      <Form
-        variant="embedded"
-        header={<Header>Datos del capítulo de libro</Header>}
-      >
+      <Form>
         {loadingData ? (
           <Spinner />
         ) : (
@@ -326,7 +320,7 @@ export default forwardRef(function (props, ref) {
               </FormField>
               <FormField label="Pais" stretch errorText={formErrors.pais}>
                 <Select
-                  statusType={loading}
+                  statusType={paises.length == 0 ? "loading" : "finished"}
                   loadingText="Cargando"
                   placeholder="Escoja una opción"
                   selectedOption={formValues.pais}

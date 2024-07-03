@@ -135,7 +135,7 @@ const useAutosuggest = (type) => {
       case "proyectos_registrados":
         {
           const res = await axiosBase.get(
-            "investigador/publicaciones/proyectos_registrados",
+            "investigador/publicaciones/utils/proyectos_registrados",
             {
               params: {
                 query: value,
@@ -149,7 +149,7 @@ const useAutosuggest = (type) => {
       case "investigador_docente_registrado":
         {
           const res = await axiosBase.get(
-            "investigador/publicaciones/searchDocenteRegistrado",
+            "investigador/publicaciones/utils/searchDocenteRegistrado",
             {
               params: {
                 query: value,
@@ -163,7 +163,7 @@ const useAutosuggest = (type) => {
       case "investigador_estudiante_registrado":
         {
           const res = await axiosBase.get(
-            "investigador/publicaciones/searchEstudianteRegistrado",
+            "investigador/publicaciones/utils/searchEstudianteRegistrado",
             {
               params: {
                 query: value,
@@ -177,7 +177,7 @@ const useAutosuggest = (type) => {
       case "investigador_externo_registrado":
         {
           const res = await axiosBase.get(
-            "investigador/publicaciones/searchExternoRegistrado",
+            "investigador/publicaciones/utils/searchExternoRegistrado",
             {
               params: {
                 query: value,

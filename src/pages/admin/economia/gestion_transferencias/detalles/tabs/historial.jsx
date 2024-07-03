@@ -1,4 +1,3 @@
-import { useCollection } from "@cloudscape-design/collection-hooks";
 import {
   Badge,
   Box,
@@ -7,6 +6,7 @@ import {
   SpaceBetween,
   Table,
 } from "@cloudscape-design/components";
+import { useCollection } from "@cloudscape-design/collection-hooks";
 import { useState } from "react";
 import ModalDetalleHistorial from "../components/modalDetalleHistorial";
 
