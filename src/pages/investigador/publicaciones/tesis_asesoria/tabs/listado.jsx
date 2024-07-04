@@ -147,11 +147,9 @@ const columnDisplay = [
 export default () => {
   //  Data states
   const [loading, setLoading] = useState(true);
-  const [selectedItems, setSelectedItems] = useState([]);
   const [distributions, setDistribution] = useState([]);
   const {
     items,
-    actions,
     filteredItemsCount,
     collectionProps,
     paginationProps,
@@ -178,7 +176,6 @@ export default () => {
     sorting: {},
     selection: {},
   });
-  const [enableBtn, setEnableBtn] = useState(true);
 
   //  Functions
   const getData = async () => {
@@ -196,14 +193,6 @@ export default () => {
     getData();
   }, []);
 
-  useEffect(() => {
-    if (selectedItems.length > 0) {
-      setEnableBtn(true);
-    } else {
-      setEnableBtn(false);
-    }
-  }, [selectedItems]);
-
   return (
     <Table
       {...collectionProps}
@@ -216,35 +205,57 @@ export default () => {
       resizableColumns
       enableKeyboardNavigation
       selectionType="single"
-      selectedItems={selectedItems}
-      onSelectionChange={({ detail }) => setSelectedItems(detail.selectedItems)}
       header={
         <Header
           actions={
             <SpaceBetween direction="horizontal" size="s">
               <ButtonDropdown
-                disabled={!enableBtn}
-                onItemClick={({ detail }) => {
+                disabled={collectionProps.selectedItems.length == 0}
+                onItemClick={async ({ detail }) => {
                   if (detail.id == "action_1") {
-                    // setEditVisible(true);
+                    const query = queryString.stringify({
+                      publicacion_id: collectionProps.selectedItems[0].id,
+                      tipo: "tesis_asesoria",
+                    });
+                    window.location.href =
+                      "registrar/paso" +
+                      collectionProps.selectedItems[0].step +
+                      "?" +
+                      query;
                   } else if (detail.id == "action_2") {
                     // setDeleteVisible(true);
+                  } else if (detail.id == "action_3") {
+                    reporte();
                   }
                 }}
                 items={[
                   {
-                    text: "Ver detalle",
+                    text: "Editar",
                     id: "action_1",
-                    disabled: selectedItems[0]?.estado == 5 ? true : false,
+                    disabled:
+                      collectionProps.selectedItems[0]?.estado != 6 &&
+                      collectionProps.selectedItems[0]?.estado != 2
+                        ? true
+                        : false,
+                  },
+                  {
+                    text: "Eliminar",
+                    id: "action_2",
+                    disabled:
+                      collectionProps.selectedItems[0]?.estado != 6
+                        ? true
+                        : false,
                   },
                   {
                     text: "Reporte",
-                    id: "action_2",
-                    disabled: selectedItems[0]?.estado == 5 ? true : false,
+                    id: "action_3",
+                    disabled:
+                      collectionProps.selectedItems[0]?.estado == 6 ||
+                      collectionProps.selectedItems[0]?.estado == 2,
                   },
                 ]}
               >
-                Acciones para tesis
+                Acciones para publicaciones
               </ButtonDropdown>
               <Button variant="primary">Registrar</Button>
             </SpaceBetween>

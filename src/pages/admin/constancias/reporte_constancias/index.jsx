@@ -65,7 +65,7 @@ export default function Reporte_constancias() {
     const data = res.data;
     const opt = data.map((item) => {
       return {
-        detail: item.id,
+        detail: item.investigador_id,
         value: `${item.codigo} | ${item.doc_numero} | ${item.apellido1} ${item.apellido2}, ${item.nombres}`,
       };
     });

@@ -2,6 +2,7 @@ import {
   Box,
   ColumnLayout,
   Container,
+  DateInput,
   Form,
   FormField,
   Header,
@@ -238,7 +239,7 @@ export default forwardRef(function (props, ref) {
               >
                 <Input
                   placeholder="N° de la pág. inicial"
-                  inputMode="numeric"
+                  type="number"
                   value={formValues.pagina_inicial}
                   onChange={({ detail }) =>
                     handleChange("pagina_inicial", detail.value)
@@ -252,7 +253,7 @@ export default forwardRef(function (props, ref) {
               >
                 <Input
                   placeholder="N° de la pág. final"
-                  inputMode="numeric"
+                  type="number"
                   value={formValues.pagina_final}
                   onChange={({ detail }) =>
                     handleChange("pagina_final", detail.value)
@@ -264,9 +265,8 @@ export default forwardRef(function (props, ref) {
                 stretch
                 errorText={formErrors.fecha_publicacion}
               >
-                <Input
-                  placeholder="Escriba el año de su publicación"
-                  inputMode="numeric"
+                <DateInput
+                  placeholder="YYYY/MM/DD"
                   value={formValues.fecha_publicacion}
                   onChange={({ detail }) =>
                     handleChange("fecha_publicacion", detail.value)

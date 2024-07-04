@@ -102,6 +102,20 @@ export default function ({ publicacion_id, tipo }) {
         { text: "Estudiante", id: "action_2_2" },
         { text: "Externo", id: "action_2_3" },
       ]);
+    } else if (tipo == "libro") {
+      setOptAutor([{ value: "Autor" }]);
+      setTipoAutor([
+        { text: "Docente", id: "action_2_1" },
+        { text: "Estudiante", id: "action_2_2" },
+        { text: "Externo", id: "action_2_3" },
+      ]);
+    } else if (tipo == "capitulo_libro") {
+      setOptAutor([{ value: "Autor" }]);
+      setTipoAutor([
+        { text: "Docente", id: "action_2_1" },
+        { text: "Estudiante", id: "action_2_2" },
+        { text: "Externo", id: "action_2_3" },
+      ]);
     } else if (tipo == "tesis_propia") {
       setOptAutor([{ value: "Asesor" }, { value: "Co-Asesor" }]);
       setTipoAutor([
@@ -221,6 +235,7 @@ export default function ({ publicacion_id, tipo }) {
       )}
       {visible && typeModal == "edit" && (
         <ModalEditarAutor
+          id={publicacion_id}
           item={collectionProps.selectedItems[0]}
           reload={getData}
           setVisible={setVisible}
@@ -231,6 +246,7 @@ export default function ({ publicacion_id, tipo }) {
       {visible && typeModal == "delete" && (
         <ModalEliminarAutor
           id={collectionProps.selectedItems[0].id}
+          publicacion_id={publicacion_id}
           reload={getData}
           setVisible={setVisible}
           visible={visible}

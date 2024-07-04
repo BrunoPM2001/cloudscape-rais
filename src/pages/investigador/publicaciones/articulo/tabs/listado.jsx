@@ -160,7 +160,6 @@ const columnDisplay = [
 export default () => {
   //  Data states
   const [loading, setLoading] = useState(true);
-  const [selectedItems, setSelectedItems] = useState([]);
   const [distributions, setDistribution] = useState([]);
   const {
     items,
@@ -190,7 +189,6 @@ export default () => {
     sorting: {},
     selection: {},
   });
-  const [enableBtn, setEnableBtn] = useState(true);
 
   //  Functions
   const getData = async () => {
@@ -203,18 +201,26 @@ export default () => {
     setLoading(false);
   };
 
+  const reporte = async () => {
+    const res = await axiosBase.get(
+      "investigador/publicaciones/utils/reporte",
+      {
+        params: {
+          publicacion_id: collectionProps.selectedItems[0].id,
+          tipo: "articulo",
+        },
+        responseType: "blob",
+      }
+    );
+    const blob = res.data;
+    const url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
+  };
+
   //  Effects
   useEffect(() => {
     getData();
   }, []);
-
-  useEffect(() => {
-    if (selectedItems.length > 0) {
-      setEnableBtn(true);
-    } else {
-      setEnableBtn(false);
-    }
-  }, [selectedItems]);
 
   return (
     <Table
@@ -228,24 +234,27 @@ export default () => {
       resizableColumns
       enableKeyboardNavigation
       selectionType="single"
-      selectedItems={selectedItems}
-      onSelectionChange={({ detail }) => setSelectedItems(detail.selectedItems)}
       header={
         <Header
           actions={
             <SpaceBetween direction="horizontal" size="s">
               <ButtonDropdown
-                disabled={!enableBtn}
-                onItemClick={({ detail }) => {
+                disabled={collectionProps.selectedItems.length == 0}
+                onItemClick={async ({ detail }) => {
                   if (detail.id == "action_1") {
                     const query = queryString.stringify({
-                      publicacion_id: selectedItems[0].id,
+                      publicacion_id: collectionProps.selectedItems[0].id,
                       tipo: "articulo",
                     });
                     window.location.href =
-                      "registrar/paso" + selectedItems[0].step + "?" + query;
+                      "registrar/paso" +
+                      collectionProps.selectedItems[0].step +
+                      "?" +
+                      query;
                   } else if (detail.id == "action_2") {
                     // setDeleteVisible(true);
+                  } else if (detail.id == "action_3") {
+                    reporte();
                   }
                 }}
                 items={[
@@ -253,15 +262,25 @@ export default () => {
                     text: "Editar",
                     id: "action_1",
                     disabled:
-                      selectedItems[0]?.estado != 6 &&
-                      selectedItems[0]?.estado != 2
+                      collectionProps.selectedItems[0]?.estado != 6 &&
+                      collectionProps.selectedItems[0]?.estado != 2
                         ? true
                         : false,
                   },
                   {
                     text: "Eliminar",
                     id: "action_2",
-                    disabled: selectedItems[0]?.estado != 6 ? true : false,
+                    disabled:
+                      collectionProps.selectedItems[0]?.estado != 6
+                        ? true
+                        : false,
+                  },
+                  {
+                    text: "Reporte",
+                    id: "action_3",
+                    disabled:
+                      collectionProps.selectedItems[0]?.estado == 6 ||
+                      collectionProps.selectedItems[0]?.estado == 2,
                   },
                 ]}
               >

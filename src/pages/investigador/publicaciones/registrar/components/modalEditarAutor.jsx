@@ -31,7 +31,7 @@ const formRules = {
   categoria: { required: true },
 };
 
-export default ({ item, visible, setVisible, reload, optAutor }) => {
+export default ({ id, item, visible, setVisible, reload, optAutor }) => {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
 
@@ -56,6 +56,7 @@ export default ({ item, visible, setVisible, reload, optAutor }) => {
       const res = await axiosBase.put(
         "investigador/publicaciones/utils/editarAutor",
         {
+          publicacion_id: id,
           id: item.id,
           autor: formValues.autor,
           filiacion: formValues.filiacion.value,
@@ -86,14 +87,14 @@ export default ({ item, visible, setVisible, reload, optAutor }) => {
               onClick={actualizarAutor}
               loading={loadingCreate}
             >
-              Agregar autor
+              Guardar cambios
             </Button>
           </SpaceBetween>
         </Box>
       }
-      header="Agregar autor"
+      header="Editar autor"
     >
-      <Form variant="embedded">
+      <Form>
         <SpaceBetween direction="vertical" size="s">
           <FormField
             label="Nombre con el que aparece en la publicación"

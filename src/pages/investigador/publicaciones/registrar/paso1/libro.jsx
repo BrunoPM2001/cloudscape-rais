@@ -238,7 +238,7 @@ export default forwardRef(function (props, ref) {
                   }
                 />
               </FormField>
-              <FormField label="Pais" stretch errorText={formErrors.pais}>
+              <FormField label="País" stretch errorText={formErrors.pais}>
                 <Select
                   statusType={paises.length == 0 ? "loading" : "finished"}
                   loadingText="Cargando"

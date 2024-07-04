@@ -7,6 +7,7 @@ import {
   SpaceBetween,
   StatusIndicator,
   Link,
+  Popover,
 } from "@cloudscape-design/components";
 
 export default function () {
@@ -22,8 +23,19 @@ export default function () {
       <SpaceBetween size="s">
         <ColumnLayout columns={2} minColumnWidth={140}>
           <div>
-            <Box variant="awsui-key-label">Deudas</Box>
-            <StatusIndicator type="success">Ninguna pendiente</StatusIndicator>
+            <Box variant="awsui-key-label">Convocatoria</Box>
+            <Popover
+              header="Convocatoria en curso"
+              content={
+                <>
+                  Actualmente hay una convocatoria vigente (PRO-CTIE), para
+                  participar ve a la opción de convocatoria
+                </>
+              }
+              position="top"
+            >
+              <StatusIndicator type="success">En curso</StatusIndicator>
+            </Popover>
           </div>
           <div>
             <Box variant="awsui-key-label">Publicaciones</Box>

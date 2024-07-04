@@ -68,7 +68,7 @@ export default forwardRef(function (props, ref) {
   const getData = async () => {
     setLoadingData(true);
     const res = await axiosBase.get(
-      "investigador/publicaciones/articulos/datosPaso1",
+      "investigador/publicaciones/tesisPropias/datosPaso1",
       {
         params: {
           publicacion_id: props.publicacion_id,
@@ -76,13 +76,12 @@ export default forwardRef(function (props, ref) {
       }
     );
     const data = res.data;
-    setRevistasIndexadas(data.revistas);
     setFormValues({
       ...initialForm,
       ...data.data,
-      art_tipo: { value: data.data.art_tipo },
+      tipo_tesis: { value: data.data.tipo_tesis },
+      pais: { value: data.data.pais },
       palabras_clave: data.palabras_clave,
-      indexada: data.indexada,
     });
     setLoadingData(false);
   };
@@ -214,7 +213,7 @@ export default forwardRef(function (props, ref) {
                   }
                 />
               </FormField>
-              <FormField label="Pais" stretch errorText={formErrors.pais}>
+              <FormField label="País" stretch errorText={formErrors.pais}>
                 <Select
                   statusType={paises.length == 0 ? "loading" : "finished"}
                   loadingText="Cargando listado de países"

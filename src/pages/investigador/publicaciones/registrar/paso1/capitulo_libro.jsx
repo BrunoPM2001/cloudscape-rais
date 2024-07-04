@@ -2,6 +2,7 @@ import {
   Box,
   ColumnLayout,
   Container,
+  DateInput,
   Form,
   FormField,
   Header,
@@ -186,8 +187,8 @@ export default forwardRef(function (props, ref) {
                 stretch
                 errorText={formErrors.fecha_publicacion}
               >
-                <Input
-                  placeholder="Escriba la fecha de publicación"
+                <DateInput
+                  placeholder="YYYY/MM/DD"
                   value={formValues.fecha_publicacion}
                   onChange={({ detail }) =>
                     handleChange("fecha_publicacion", detail.value)
@@ -318,7 +319,7 @@ export default forwardRef(function (props, ref) {
                   }
                 />
               </FormField>
-              <FormField label="Pais" stretch errorText={formErrors.pais}>
+              <FormField label="País" stretch errorText={formErrors.pais}>
                 <Select
                   statusType={paises.length == 0 ? "loading" : "finished"}
                   loadingText="Cargando"

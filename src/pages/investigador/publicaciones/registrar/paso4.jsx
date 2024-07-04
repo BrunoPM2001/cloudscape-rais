@@ -7,7 +7,7 @@ import {
   SpaceBetween,
 } from "@cloudscape-design/components";
 import { useFormValidation } from "../../../../hooks/useFormValidation";
-import { forwardRef, useContext, useImperativeHandle } from "react";
+import { forwardRef, useContext, useImperativeHandle, useState } from "react";
 import axiosBase from "../../../../api/axios";
 import NotificationContext from "../../../../providers/notificationProvider";
 
@@ -22,6 +22,9 @@ const formRules = {
 export default forwardRef(function ({ publicacion_id, tipo }, ref) {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
+
+  //  States
+  const [loadingReport, setLoadingReport] = useState(false);
 
   //  Hooks
   const { formValues, formErrors, handleChange, validateForm } =
@@ -50,6 +53,24 @@ export default forwardRef(function ({ publicacion_id, tipo }, ref) {
     }
   };
 
+  const reporte = async () => {
+    setLoadingReport(true);
+    const res = await axiosBase.get(
+      "investigador/publicaciones/utils/reporte",
+      {
+        params: {
+          publicacion_id,
+          tipo,
+        },
+        responseType: "blob",
+      }
+    );
+    setLoadingReport(false);
+    const blob = res.data;
+    const url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
+  };
+
   useImperativeHandle(ref, () => ({
     registrar,
   }));
@@ -59,7 +80,11 @@ export default forwardRef(function ({ publicacion_id, tipo }, ref) {
       <SpaceBetween size="m">
         <Alert
           header="Resumen de publicación"
-          action={<Button variant="primary">Previsualizar</Button>}
+          action={
+            <Button variant="primary" loading={loadingReport} onClick={reporte}>
+              Previsualizar
+            </Button>
+          }
         >
           Si desea puede previsualizar el informe de resumen de su publicación.
         </Alert>
