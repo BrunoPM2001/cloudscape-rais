@@ -11,7 +11,7 @@ import {
 import ModalCalificarTransferencia from "./components/modalCalificarTransferencia";
 import { useState } from "react";
 
-export default ({ proyecto, solicitud, loading }) => {
+export default ({ proyecto, solicitud, loading, reload }) => {
   //  States
   const [visible, setVisible] = useState(false);
 
@@ -122,6 +122,7 @@ export default ({ proyecto, solicitud, loading }) => {
         <ModalCalificarTransferencia
           visible={visible}
           setVisible={setVisible}
+          reload={reload}
         />
       )}
     </Grid>

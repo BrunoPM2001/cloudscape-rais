@@ -59,6 +59,7 @@ export default function Geco_detalle_transferencia() {
 
   //  Functions
   const getData = async () => {
+    setLoading(true);
     const res = await axiosBase.get(
       "admin/economia/transferencias/getSolicitudData",
       {
@@ -89,6 +90,7 @@ export default function Geco_detalle_transferencia() {
           proyecto={data.proyecto}
           solicitud={data.solicitud}
           loading={loading}
+          reload={getData}
         />
         <Tabs tabs={tabs} ariaLabel="Opciones de transferencia" />
       </SpaceBetween>

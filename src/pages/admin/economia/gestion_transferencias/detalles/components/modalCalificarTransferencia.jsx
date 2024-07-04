@@ -7,9 +7,12 @@ import {
   SpaceBetween,
   Textarea,
 } from "@cloudscape-design/components";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import axiosBase from "../../../../../../api/axios";
 import { useFormValidation } from "../../../../../../hooks/useFormValidation";
+import { useLocation } from "react-router-dom";
+import queryString from "query-string";
+import NotificationContext from "../../../../../../providers/notificationProvider";
 
 const optEstado = [
   {
@@ -40,28 +43,40 @@ const formRules = {
   autoridad: { required: true },
 };
 
-export default ({ visible, setVisible, id }) => {
+export default ({ visible, setVisible, reload }) => {
+  //  Context
+  const { notifications, pushNotification } = useContext(NotificationContext);
+
   //  States
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState([]);
+
+  //  Url
+  const location = useLocation();
+  const { id } = queryString.parse(location.search);
 
   //  Hooks
   const { formValues, formErrors, handleChange, validateForm } =
     useFormValidation(initialForm, formRules);
 
   //  Functions
-  const getData = async () => {
-    const res = await axiosBase.get(
-      "admin/economia/transferencias/movimientosTransferencia",
-      {
-        params: {
-          geco_operacion_id: id,
-        },
-      }
-    );
-    const data = res.data;
-    setData(data);
-    setLoading(false);
+  const calificar = async () => {
+    if (validateForm()) {
+      setLoading(true);
+      const res = await axiosBase.post(
+        "admin/economia/transferencias/calificar",
+        {
+          geco_proyecto_id: id,
+          autoridad: formValues.autoridad.value,
+          observacion: formValues.observacion,
+          estado: formValues.estado.value,
+        }
+      );
+      setLoading(false);
+      setVisible(false);
+      const data = res.data;
+      pushNotification(data.detail, data.message, notifications.length + 1);
+      reload();
+    }
   };
 
   return (
@@ -75,12 +90,8 @@ export default ({ visible, setVisible, id }) => {
             <Button variant="normal" onClick={() => setVisible(false)}>
               Cancelar
             </Button>
-            <Button
-              variant="primary"
-              loading={loading}
-              onClick={() => editUser()}
-            >
-              Enviar resolución
+            <Button variant="primary" loading={loading} onClick={calificar}>
+              Calificar
             </Button>
           </SpaceBetween>
         </Box>
