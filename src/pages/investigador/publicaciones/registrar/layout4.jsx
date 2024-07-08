@@ -70,11 +70,13 @@ export default function Registrar_articulo_4() {
         }}
         onSubmit={async () => {
           setLoading(true);
-          await pasoRefs.current[0]?.registrar();
+          const res = await pasoRefs.current[0]?.registrar();
           setLoading(false);
-          setTimeout(() => {
-            window.location.href = "/investigador";
-          }, 3000);
+          if (res) {
+            setTimeout(() => {
+              window.location.href = "/investigador";
+            }, 3000);
+          }
         }}
         isLoadingNextStep={loading}
         submitButtonText="Enviar"

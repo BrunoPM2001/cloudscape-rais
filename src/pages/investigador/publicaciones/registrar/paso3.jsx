@@ -102,14 +102,7 @@ export default function ({ publicacion_id, tipo }) {
         { text: "Estudiante", id: "action_2_2" },
         { text: "Externo", id: "action_2_3" },
       ]);
-    } else if (tipo == "libro") {
-      setOptAutor([{ value: "Autor" }]);
-      setTipoAutor([
-        { text: "Docente", id: "action_2_1" },
-        { text: "Estudiante", id: "action_2_2" },
-        { text: "Externo", id: "action_2_3" },
-      ]);
-    } else if (tipo == "capitulo_libro") {
+    } else if (["libro", "capitulo_libro", "evento"].includes(tipo)) {
       setOptAutor([{ value: "Autor" }]);
       setTipoAutor([
         { text: "Docente", id: "action_2_1" },
@@ -121,6 +114,11 @@ export default function ({ publicacion_id, tipo }) {
       setTipoAutor([
         { text: "Asesor / co-asesor interno", id: "action_2_1" },
         { text: "Asesor / co-asesor externo", id: "action_2_3" },
+      ]);
+    } else if (tipo == "tesis_asesoria") {
+      setOptAutor([{ value: "Tesista" }]);
+      setTipoAutor([
+        { text: "Agregar autor estudiante UNMSM", id: "action_2_2" },
       ]);
     }
     getData();

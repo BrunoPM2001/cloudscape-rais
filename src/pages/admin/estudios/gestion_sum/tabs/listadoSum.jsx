@@ -20,7 +20,7 @@ export default () => {
 
   //  Hooks
   const { loading, options, setOptions, value, setValue, setAvoidSelect } =
-    useAutosuggest("sum");
+    useAutosuggest("admin/estudios/sum/listadoSum");
 
   return (
     <Container>

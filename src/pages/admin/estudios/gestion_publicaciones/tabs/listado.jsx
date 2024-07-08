@@ -255,7 +255,7 @@ export default () => {
 
   //  Hooks
   const { loading, options, setOptions, value, setValue, setAvoidSelect } =
-    useAutosuggest("investigador");
+    useAutosuggest("admin/admin/usuarios/searchInvestigadorBy");
 
   //  Functions
   const getData = async () => {

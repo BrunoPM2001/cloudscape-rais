@@ -215,7 +215,7 @@ export default forwardRef(function (props, ref) {
 
   return (
     <Container>
-      <Form variant="embedded">
+      <Form>
         {loadingData ? (
           <Spinner />
         ) : (

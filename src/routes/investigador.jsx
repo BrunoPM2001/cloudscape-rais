@@ -2,6 +2,28 @@ import { Suspense, lazy } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { NotificationProvider } from "../providers/notificationProvider.jsx";
 
+const Solicitar_grupo7 = lazy(() =>
+  import("../pages/investigador/grupo/grupo/solicitar/layout7.jsx")
+);
+const Solicitar_grupo6 = lazy(() =>
+  import("../pages/investigador/grupo/grupo/solicitar/layout6.jsx")
+);
+const Solicitar_grupo5 = lazy(() =>
+  import("../pages/investigador/grupo/grupo/solicitar/layout5.jsx")
+);
+const Solicitar_grupo4 = lazy(() =>
+  import("../pages/investigador/grupo/grupo/solicitar/layout4.jsx")
+);
+const Solicitar_grupo3 = lazy(() =>
+  import("../pages/investigador/grupo/grupo/solicitar/layout3.jsx")
+);
+const Solicitar_grupo2 = lazy(() =>
+  import("../pages/investigador/grupo/grupo/solicitar/layout2.jsx")
+);
+const Solicitar_grupo1 = lazy(() =>
+  import("../pages/investigador/grupo/grupo/solicitar/layout1.jsx")
+);
+const Perfil = lazy(() => import("../pages/investigador/perfil/index.jsx"));
 const Informe_economico_detalles = lazy(() =>
   import("../pages/investigador/informes/informe_economico/detalles/index.jsx")
 );
@@ -140,6 +162,10 @@ const routes = createBrowserRouter(
       element: <Investigador_main />,
     },
     {
+      path: "perfil",
+      element: <Perfil />,
+    },
+    {
       path: "actividades",
       children: [
         {
@@ -260,6 +286,39 @@ const routes = createBrowserRouter(
         {
           path: "detalles",
           element: <Detalle_grupo_invest />,
+        },
+        {
+          path: "solicitar",
+          children: [
+            {
+              path: "paso1",
+              element: <Solicitar_grupo1 />,
+            },
+            {
+              path: "paso2",
+              element: <Solicitar_grupo2 />,
+            },
+            {
+              path: "paso3",
+              element: <Solicitar_grupo3 />,
+            },
+            {
+              path: "paso4",
+              element: <Solicitar_grupo4 />,
+            },
+            {
+              path: "paso5",
+              element: <Solicitar_grupo5 />,
+            },
+            {
+              path: "paso6",
+              element: <Solicitar_grupo6 />,
+            },
+            {
+              path: "paso7",
+              element: <Solicitar_grupo7 />,
+            },
+          ],
         },
       ],
     },

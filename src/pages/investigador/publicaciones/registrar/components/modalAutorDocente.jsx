@@ -39,7 +39,7 @@ export default ({ id, visible, setVisible, reload, optAutor }) => {
 
   //  Hooks
   const { loading, options, setOptions, value, setValue, setAvoidSelect } =
-    useAutosuggest("investigador_docente_registrado");
+    useAutosuggest("investigador/publicaciones/utils/searchDocenteRegistrado");
   const { formValues, formErrors, handleChange, validateForm } =
     useFormValidation(initialForm, formRules);
 

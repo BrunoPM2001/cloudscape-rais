@@ -19,6 +19,7 @@ import axiosBase from "../../../../../api/axios";
 const initialForm = {
   titulo: "",
   url: "",
+  uri: "",
   tipo_tesis: null,
   fecha_publicacion: "",
   pagina_total: "",
@@ -32,6 +33,7 @@ const initialForm = {
 const formRules = {
   titulo: { required: true },
   url: { required: true },
+  uri: { required: true },
   tipo_tesis: { required: true },
   fecha_publicacion: { required: true },
   pagina_total: { required: true },
@@ -42,9 +44,11 @@ const formRules = {
 };
 
 const tipo_tesis = [
-  { value: "Licenciatura" },
+  { value: "Bachiller" },
+  { value: "Título Profesional" },
   { value: "Maestría" },
   { value: "Doctorado" },
+  { value: "Segunda Especialidad" },
 ];
 
 export default forwardRef(function (props, ref) {
@@ -68,7 +72,7 @@ export default forwardRef(function (props, ref) {
   const getData = async () => {
     setLoadingData(true);
     const res = await axiosBase.get(
-      "investigador/publicaciones/tesisPropias/datosPaso1",
+      "investigador/publicaciones/tesisAsesoria/datosPaso1",
       {
         params: {
           publicacion_id: props.publicacion_id,
@@ -91,13 +95,13 @@ export default forwardRef(function (props, ref) {
     if (validateForm()) {
       if (props.publicacion_id != null) {
         await axiosBase.post(
-          "investigador/publicaciones/tesisPropias/registrarPaso1",
+          "investigador/publicaciones/tesisAsesoria/registrarPaso1",
           { ...formValues, publicacion_id: props.publicacion_id }
         );
         return { isValid: true, res_publicacion_id: null };
       } else {
         const res = await axiosBase.post(
-          "investigador/publicaciones/tesisPropias/registrarPaso1",
+          "investigador/publicaciones/tesisAsesoria/registrarPaso1",
           formValues
         );
         const data = res.data;
@@ -144,6 +148,13 @@ export default forwardRef(function (props, ref) {
                 placeholder="Escriba la URL de su tesis"
                 value={formValues.url}
                 onChange={({ detail }) => handleChange("url", detail.value)}
+              />
+            </FormField>
+            <FormField label="Uri" stretch errorText={formErrors.uri}>
+              <Input
+                placeholder="Escriba la URI de su tesis"
+                value={formValues.uri}
+                onChange={({ detail }) => handleChange("uri", detail.value)}
               />
             </FormField>
             <ColumnLayout columns={3}>

@@ -21,7 +21,7 @@ export default function ({ data, loading }) {
             <Spinner size="large" />
           ) : (
             <Link variant="awsui-value-large" href="#">
-              100%
+              {data.rendido}%
             </Link>
           )}
         </div>

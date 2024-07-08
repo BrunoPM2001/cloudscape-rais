@@ -228,7 +228,7 @@ export default () => {
                   if (detail.id == "action_1") {
                     const query = queryString.stringify({
                       publicacion_id: collectionProps.selectedItems[0].id,
-                      tipo: "tesis_propia",
+                      tipo: "evento",
                     });
                     window.location.href =
                       "registrar/paso" +
@@ -270,7 +270,17 @@ export default () => {
               >
                 Acciones para publicaciones
               </ButtonDropdown>
-              <Button variant="primary">Registrar</Button>
+              <Button
+                variant="primary"
+                onClick={() => {
+                  const query = queryString.stringify({
+                    tipo: "evento",
+                  });
+                  window.location.href = "registrar/paso1?" + query;
+                }}
+              >
+                Registrar
+              </Button>
             </SpaceBetween>
           }
         >

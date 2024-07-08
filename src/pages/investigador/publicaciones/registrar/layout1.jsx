@@ -7,6 +7,8 @@ import Articulo from "./paso1/articulo.jsx";
 import Libro from "./paso1/libro.jsx";
 import Capitulo_libro from "./paso1/capitulo_libro.jsx";
 import Tesis_propia from "./paso1/tesis_propia.jsx";
+import Evento from "./paso1/evento.jsx";
+import Tesis_asesoria from "./paso1/tesis_asesoria.jsx";
 
 const breadcrumbs = [
   {
@@ -88,6 +90,16 @@ export default function Registrar_articulo_1() {
                   />
                 ) : tipo == "tesis_propia" ? (
                   <Tesis_propia
+                    ref={(el) => (pasoRefs.current[0] = el)}
+                    publicacion_id={publicacion_id}
+                  />
+                ) : tipo == "tesis_asesoria" ? (
+                  <Tesis_asesoria
+                    ref={(el) => (pasoRefs.current[0] = el)}
+                    publicacion_id={publicacion_id}
+                  />
+                ) : tipo == "evento" ? (
+                  <Evento
                     ref={(el) => (pasoRefs.current[0] = el)}
                     publicacion_id={publicacion_id}
                   />

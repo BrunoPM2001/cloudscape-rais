@@ -241,7 +241,12 @@ export default () => {
               >
                 Acciones para solicitudes
               </ButtonDropdown>
-              <Button variant="primary">Registrar</Button>
+              <Button
+                variant="primary"
+                onClick={() => (window.location.href = "grupo/solicitar/paso1")}
+              >
+                Registrar
+              </Button>
             </SpaceBetween>
           }
         >

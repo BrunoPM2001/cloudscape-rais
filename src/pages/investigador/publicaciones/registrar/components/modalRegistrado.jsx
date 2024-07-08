@@ -23,7 +23,7 @@ export default ({ id, visible, setVisible, reload }) => {
   const [form, setForm] = useState({});
   //  Hooks
   const { loading, options, setOptions, value, setValue, setAvoidSelect } =
-    useAutosuggest("proyectos_registrados");
+    useAutosuggest("investigador/publicaciones/utils/proyectos_registrados");
 
   //  Functions
   const agregarProyecto = async () => {

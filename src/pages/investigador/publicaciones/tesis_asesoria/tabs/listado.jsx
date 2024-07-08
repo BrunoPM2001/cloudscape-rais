@@ -257,7 +257,17 @@ export default () => {
               >
                 Acciones para publicaciones
               </ButtonDropdown>
-              <Button variant="primary">Registrar</Button>
+              <Button
+                variant="primary"
+                onClick={() => {
+                  const query = queryString.stringify({
+                    tipo: "tesis_asesoria",
+                  });
+                  window.location.href = "registrar/paso1?" + query;
+                }}
+              >
+                Registrar
+              </Button>
             </SpaceBetween>
           }
         >

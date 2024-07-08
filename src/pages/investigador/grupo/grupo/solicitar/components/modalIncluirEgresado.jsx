@@ -13,12 +13,10 @@ import {
   Link,
 } from "@cloudscape-design/components";
 import { useContext, useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
-import queryString from "query-string";
-import { useAutosuggest } from "../../../../../../hooks/useAutosuggest";
-import NotificationContext from "../../../../../../providers/notificationProvider";
 import { useFormValidation } from "../../../../../../hooks/useFormValidation";
+import { useAutosuggest } from "../../../../../../hooks/useAutosuggest";
 import axiosBase from "../../../../../../api/axios";
+import NotificationContext from "../../../../../../providers/notificationProvider";
 
 const initialForm = {
   file: [],
@@ -28,7 +26,7 @@ const formRules = {
   file: { required: true, isFile: true, maxSize: 2 * 1024 * 1024 },
 };
 
-export default ({ visible, setVisible, reload }) => {
+export default ({ close, reload, grupo_id }) => {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
 
@@ -41,7 +39,7 @@ export default ({ visible, setVisible, reload }) => {
 
   //  Hooks
   const { loading, options, setOptions, value, setValue, setAvoidSelect } =
-    useAutosuggest("investigador/grupo/searchEgresado");
+    useAutosuggest("admin/estudios/grupos/searchEgresado");
   const {
     formValues,
     formErrors,
@@ -50,19 +48,18 @@ export default ({ visible, setVisible, reload }) => {
     registerFileInput,
   } = useFormValidation(initialForm, formRules);
 
-  //  Url
-  const location = useLocation();
-  const { id } = queryString.parse(location.search);
-
   //  Functions
   const getData = async () => {
     setLoadingData(true);
-    const res = await axiosBase.get("investigador/grupo/incluirMiembroData", {
-      params: {
-        tipo: "egresado",
-        codigo: form.codigo_alumno,
-      },
-    });
+    const res = await axiosBase.get(
+      "admin/estudios/grupos/incluirMiembroData",
+      {
+        params: {
+          tipo: "egresado",
+          codigo: form.codigo_alumno,
+        },
+      }
+    );
     const data = await res.data;
     setIncluirMiembroData(data);
     setLoadingData(false);
@@ -78,16 +75,16 @@ export default ({ visible, setVisible, reload }) => {
       formData.append("tipo_registro", "egresado");
       formData.append("sum_id", form.id);
       formData.append("investigador_id", form.investigador_id);
-      formData.append("grupo_id", id);
+      formData.append("grupo_id", grupo_id);
       formData.append("condicion", "Adherente");
       formData.append("file", formValues.file[0]);
       const res = await axiosBase.post(
-        "investigador/grupo/agregarMiembro",
+        "admin/estudios/grupos/agregarMiembro",
         formData
       );
       const data = res.data;
       setLoadingCreate(false);
-      setVisible(false);
+      close();
       reload();
       pushNotification(data.detail, data.message, notifications.length + 1);
     }
@@ -102,19 +99,19 @@ export default ({ visible, setVisible, reload }) => {
 
   return (
     <Modal
-      onDismiss={() => setVisible(false)}
-      visible={visible}
+      onDismiss={close}
+      visible
       size="large"
       footer={
         <Box float="right">
           <SpaceBetween direction="horizontal" size="xs">
-            <Button variant="normal" onClick={() => setVisible(false)}>
+            <Button variant="normal" onClick={close}>
               Cancelar
             </Button>
             <Button
               disabled={enableCreate}
               variant="primary"
-              onClick={() => agregarMiembro()}
+              onClick={agregarMiembro}
               loading={loadingCreate}
             >
               Incluir miembro
@@ -124,7 +121,7 @@ export default ({ visible, setVisible, reload }) => {
       }
       header="Incluir miembro al grupo"
     >
-      <Form variant="embedded">
+      <Form>
         <SpaceBetween direction="vertical" size="s">
           <FormField label="Buscar egresado" stretch>
             <Autosuggest

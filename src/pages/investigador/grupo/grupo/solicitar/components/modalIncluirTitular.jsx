@@ -8,33 +8,15 @@ import {
   Autosuggest,
   ColumnLayout,
   Spinner,
-  DatePicker,
   Alert,
   Input,
 } from "@cloudscape-design/components";
 import { useContext, useEffect, useState } from "react";
-import { useFormValidation } from "../../../../../../hooks/useFormValidation";
 import { useAutosuggest } from "../../../../../../hooks/useAutosuggest";
-import { useLocation } from "react-router-dom";
-import queryString from "query-string";
 import axiosBase from "../../../../../../api/axios";
 import NotificationContext from "../../../../../../providers/notificationProvider";
 
-const initialForm = {
-  fecha_inclusion: "",
-  resolucion_oficina: "",
-  resolucion: "",
-  resolucion_fecha: "",
-};
-
-const formRules = {
-  fecha_inclusion: { required: true },
-  resolucion_oficina: { required: false },
-  resolucion: { required: false },
-  resolucion_fecha: { required: false },
-};
-
-export default ({ visible, setVisible, reload }) => {
+export default ({ close, reload, grupo_id }) => {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
 
@@ -48,26 +30,17 @@ export default ({ visible, setVisible, reload }) => {
 
   //  Hooks
   const { loading, options, setOptions, value, setValue, setAvoidSelect } =
-    useAutosuggest("admin/estudios/grupos/searchDocenteRrhh");
-  const { formValues, formErrors, handleChange, validateForm } =
-    useFormValidation(initialForm, formRules);
-
-  //  Url
-  const location = useLocation();
-  const { id } = queryString.parse(location.search);
+    useAutosuggest("investigador/grupo/solicitar/searchDocenteRrhh");
 
   //  Functions
   const getData = async () => {
     setLoadingData(true);
-    const res = await axiosBase.get(
-      "admin/estudios/grupos/incluirMiembroData",
-      {
-        params: {
-          tipo: "titular",
-          investigador_id: form.investigador_id,
-        },
-      }
-    );
+    const res = await axiosBase.get("investigador/grupo/incluirMiembroData", {
+      params: {
+        tipo: "titular",
+        investigador_id: form.investigador_id,
+      },
+    });
     const data = await res.data;
     setIncluirMiembroData(data);
     setLoadingData(false);
@@ -83,22 +56,19 @@ export default ({ visible, setVisible, reload }) => {
   };
 
   const agregarMiembro = async () => {
-    if (validateForm()) {
-      setLoadingCreate(true);
-      const res = await axiosBase.post("admin/estudios/grupos/agregarMiembro", {
-        ...formValues,
-        tipo_registro: "titular",
-        grupo_id: id,
-        investigador_id: form.investigador_id,
-        condicion: "Titular",
-        tipo: "DOCENTE PERMANENTE",
-      });
-      const data = res.data;
-      setLoadingCreate(false);
-      setVisible(false);
-      reload();
-      pushNotification(data.detail, data.message, notifications.length + 1);
-    }
+    setLoadingCreate(true);
+    const res = await axiosBase.post("investigador/grupo/agregarMiembro", {
+      tipo_registro: "titular",
+      grupo_id: grupo_id,
+      investigador_id: form.investigador_id,
+      condicion: "Titular",
+      tipo: "DOCENTE PERMANENTE",
+    });
+    const data = res.data;
+    setLoadingCreate(false);
+    close();
+    reload();
+    pushNotification(data.detail, data.message, notifications.length + 1);
   };
 
   //  Effects
@@ -110,13 +80,13 @@ export default ({ visible, setVisible, reload }) => {
 
   return (
     <Modal
-      onDismiss={() => setVisible(false)}
-      visible={visible}
+      onDismiss={close}
+      visible
       size="large"
       footer={
         <Box float="right">
           <SpaceBetween direction="horizontal" size="xs">
-            <Button variant="normal" onClick={() => setVisible(false)}>
+            <Button variant="normal" onClick={close}>
               Cancelar
             </Button>
             <Button
@@ -132,7 +102,7 @@ export default ({ visible, setVisible, reload }) => {
       }
       header="Incluir miembro al grupo"
     >
-      <Form variant="embedded">
+      <Form>
         <SpaceBetween direction="vertical" size="s">
           <FormField label="Buscar docente ordinario" stretch>
             <Autosuggest
@@ -145,7 +115,7 @@ export default ({ visible, setVisible, reload }) => {
                 setEnableCreate(true);
               }}
               onSelect={({ detail }) => {
-                if (detail.selectedOption.id != undefined) {
+                if (detail.selectedOption?.id != undefined) {
                   const { value, ...rest } = detail.selectedOption;
                   setForm(rest);
                   setAvoidSelect(false);
@@ -214,7 +184,7 @@ export default ({ visible, setVisible, reload }) => {
                     header={incluirMiembroData.detail}
                   />
                   {enableCreate == false && (
-                    <Form variant="embedded">
+                    <Form>
                       <ColumnLayout columns={2} variant="text-grid">
                         <SpaceBetween direction="vertical" size="xs">
                           <FormField label="Código ORCID" stretch>
@@ -248,64 +218,6 @@ export default ({ visible, setVisible, reload }) => {
                             />
                           </FormField>
                         </SpaceBetween>
-                      </ColumnLayout>
-                      <ColumnLayout columns={4}>
-                        <FormField
-                          label="Fecha de inclusión"
-                          stretch
-                          errorText={formErrors.fecha_inclusion}
-                        >
-                          <DatePicker
-                            controlId="fecha_inclusion"
-                            placeholder="YYYY/MM/DD"
-                            value={formValues.fecha_inclusion}
-                            onChange={({ detail }) =>
-                              handleChange("fecha_inclusion", detail.value)
-                            }
-                          />
-                        </FormField>
-                        <FormField
-                          label="R.OF."
-                          stretch
-                          errorText={formErrors.resolucion_oficina}
-                        >
-                          <Input
-                            controlId="resolucion_oficina"
-                            placeholder="Resolución de oficina"
-                            value={formValues.resolucion_oficina}
-                            onChange={({ detail }) =>
-                              handleChange("resolucion_oficina", detail.value)
-                            }
-                          />
-                        </FormField>
-                        <FormField
-                          label="R.R."
-                          stretch
-                          errorText={formErrors.resolucion}
-                        >
-                          <Input
-                            controlId="resolucion"
-                            placeholder="Resolución rectoral"
-                            value={formValues.resolucion}
-                            onChange={({ detail }) =>
-                              handleChange("resolucion", detail.value)
-                            }
-                          />
-                        </FormField>
-                        <FormField
-                          label="R.R. Fecha"
-                          stretch
-                          errorText={formErrors.resolucion_fecha}
-                        >
-                          <DatePicker
-                            controlId="resolucion_fecha"
-                            placeholder="YYYY/MM/DD"
-                            value={formValues.resolucion_fecha}
-                            onChange={({ detail }) =>
-                              handleChange("resolucion_fecha", detail.value)
-                            }
-                          />
-                        </FormField>
                       </ColumnLayout>
                     </Form>
                   )}

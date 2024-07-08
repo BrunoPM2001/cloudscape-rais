@@ -218,7 +218,13 @@ export default function Agregar_investigador() {
 
   //  Hooks
   const { loading, options, setOptions, value, setValue, setAvoidSelect } =
-    useAutosuggest("investigador_" + tipo);
+    useAutosuggest(
+      tipo == "Docente permanente"
+        ? "admin/estudios/investigadores/searchDocenteRrhh"
+        : tipo == "Estudiante"
+        ? "admin/estudios/investigadores/searchEstudiante"
+        : ""
+    );
   const { formValues, formErrors, handleChange, validateForm, setFormValues } =
     useFormValidation(initialForm, formRules);
 
@@ -286,10 +292,7 @@ export default function Agregar_investigador() {
         {tipo != "Externo" ? (
           <>
             <Container>
-              <Form
-                variant="embedded"
-                header={<Header variant="h2">Buscar investigador</Header>}
-              >
+              <Form header={<Header variant="h2">Buscar investigador</Header>}>
                 <FormField label={tipo} stretch>
                   <Autosuggest
                     onChange={({ detail }) => {
@@ -351,7 +354,6 @@ export default function Agregar_investigador() {
                 Guardar
               </Button>
             }
-            variant="embedded"
           >
             <Container>
               <Formulario

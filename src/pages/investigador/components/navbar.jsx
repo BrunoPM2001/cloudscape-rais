@@ -8,7 +8,7 @@ const profileActions = [
       {
         id: "perfil",
         text: "Mi perfil",
-        href: "#",
+        href: "/investigador/perfil",
       },
       {
         id: "updatePassword",

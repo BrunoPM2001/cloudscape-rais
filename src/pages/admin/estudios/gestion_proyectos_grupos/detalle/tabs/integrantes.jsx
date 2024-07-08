@@ -24,7 +24,7 @@ export default () => {
       const res = await axiosBase.get(
         "admin/estudios/proyectosGrupo/miembros/" + id
       );
-      const data = await res.data;
+      const data = res.data;
       setItems(data.data);
       setLoading(!loading);
     };
@@ -34,6 +34,11 @@ export default () => {
   return (
     <Table
       columnDefinitions={[
+        {
+          id: "id",
+          header: "Id",
+          cell: (item) => item.id,
+        },
         {
           id: "tipo_integrante",
           header: "Tipo de integrante",
@@ -51,6 +56,7 @@ export default () => {
         },
       ]}
       columnDisplay={[
+        { id: "id", visible: true },
         { id: "tipo_integrante", visible: true },
         { id: "nombre", visible: true },
         { id: "tipo_investigador", visible: true },

@@ -39,7 +39,7 @@ export default ({ id, visible, setVisible, reload }) => {
 
   //  Hooks
   const { loading, options, setOptions, value, setValue, setAvoidSelect } =
-    useAutosuggest("estudiante_convocatoria");
+    useAutosuggest("investigador/convocatorias/searchEstudiante");
   const {
     formValues,
     formErrors,

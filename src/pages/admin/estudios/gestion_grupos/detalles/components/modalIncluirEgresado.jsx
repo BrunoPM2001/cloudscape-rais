@@ -41,7 +41,7 @@ export default ({ visible, setVisible, reload }) => {
 
   //  Hooks
   const { loading, options, setOptions, value, setValue, setAvoidSelect } =
-    useAutosuggest("egresado");
+    useAutosuggest("admin/estudios/grupos/searchEgresado");
   const {
     formValues,
     formErrors,

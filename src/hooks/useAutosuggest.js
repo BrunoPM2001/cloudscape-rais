@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axiosBase from "../api/axios";
 
-const useAutosuggest = (type) => {
+const useAutosuggest = (url) => {
   //  States
   const [loading, setLoading] = useState(false);
   const [options, setOptions] = useState([]);
@@ -11,200 +11,13 @@ const useAutosuggest = (type) => {
   //  Functions
   const getData = async () => {
     setLoading(true);
-    switch (type) {
-      case "investigador":
-        {
-          const res = await axiosBase.get(
-            "admin/admin/usuarios/searchInvestigadorBy",
-            {
-              params: {
-                query: value,
-              },
-            }
-          );
-          const data = await res.data;
-          setOptions(data);
-        }
-        break;
-      case "rrhh":
-        {
-          const res = await axiosBase.get(
-            "admin/estudios/grupos/searchDocenteRrhh",
-            {
-              params: {
-                query: value,
-              },
-            }
-          );
-          const data = await res.data;
-          setOptions(data);
-        }
-        break;
-      case "estudiante":
-        {
-          const res = await axiosBase.get(
-            "admin/estudios/grupos/searchEstudiante",
-            {
-              params: {
-                query: value,
-              },
-            }
-          );
-          const data = res.data;
-          setOptions(data);
-        }
-        break;
-      case "estudiante_invest":
-        {
-          const res = await axiosBase.get(
-            "investigador/grupo/searchEstudiante",
-            {
-              params: {
-                query: value,
-              },
-            }
-          );
-          const data = res.data;
-          setOptions(data);
-        }
-        break;
-      case "egresado":
-        {
-          const res = await axiosBase.get(
-            "admin/estudios/grupos/searchEgresado",
-            {
-              params: {
-                query: value,
-              },
-            }
-          );
-          const data = res.data;
-          setOptions(data);
-        }
-        break;
-      case "egresado_invest":
-        {
-          const res = await axiosBase.get("investigador/grupo/searchEgresado", {
-            params: {
-              query: value,
-            },
-          });
-          const data = res.data;
-          setOptions(data);
-        }
-        break;
-      case "sum":
-        {
-          const res = await axiosBase.get("admin/estudios/sum/listadoSum", {
-            params: {
-              query: value,
-            },
-          });
-          const data = res.data;
-          setOptions(data);
-        }
-        break;
-      case "investigador_Docente permanente":
-        {
-          const res = await axiosBase.get(
-            "admin/estudios/investigadores/searchDocenteRrhh",
-            {
-              params: {
-                query: value,
-              },
-            }
-          );
-          const data = res.data;
-          setOptions(data);
-        }
-        break;
-      case "investigador_Estudiante":
-        {
-          const res = await axiosBase.get(
-            "admin/estudios/investigadores/searchEstudiante",
-            {
-              params: {
-                query: value,
-              },
-            }
-          );
-          const data = res.data;
-          setOptions(data);
-        }
-        break;
-      case "proyectos_registrados":
-        {
-          const res = await axiosBase.get(
-            "investigador/publicaciones/utils/proyectos_registrados",
-            {
-              params: {
-                query: value,
-              },
-            }
-          );
-          const data = res.data;
-          setOptions(data);
-        }
-        break;
-      case "investigador_docente_registrado":
-        {
-          const res = await axiosBase.get(
-            "investigador/publicaciones/utils/searchDocenteRegistrado",
-            {
-              params: {
-                query: value,
-              },
-            }
-          );
-          const data = res.data;
-          setOptions(data);
-        }
-        break;
-      case "investigador_estudiante_registrado":
-        {
-          const res = await axiosBase.get(
-            "investigador/publicaciones/utils/searchEstudianteRegistrado",
-            {
-              params: {
-                query: value,
-              },
-            }
-          );
-          const data = res.data;
-          setOptions(data);
-        }
-        break;
-      case "investigador_externo_registrado":
-        {
-          const res = await axiosBase.get(
-            "investigador/publicaciones/utils/searchExternoRegistrado",
-            {
-              params: {
-                query: value,
-              },
-            }
-          );
-          const data = res.data;
-          setOptions(data);
-        }
-        break;
-      case "estudiante_convocatoria":
-        {
-          const res = await axiosBase.get(
-            "investigador/convocatorias/searchEstudiante",
-            {
-              params: {
-                query: value,
-              },
-            }
-          );
-          const data = res.data;
-          setOptions(data);
-        }
-        break;
-      default:
-        break;
-    }
+    const res = await axiosBase.get(url, {
+      params: {
+        query: value,
+      },
+    });
+    const data = res.data;
+    setOptions(data);
     setLoading(false);
   };
 

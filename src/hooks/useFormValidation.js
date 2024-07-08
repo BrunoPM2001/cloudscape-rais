@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 
-const useFormValidation = (initialState, validationRules) => {
+const useFormValidation = (initialState, validationRules, groupRules = []) => {
   //  States
   const [formValues, setFormValues] = useState(initialState);
   const [formErrors, setFormErrors] = useState({});
@@ -41,6 +41,38 @@ const useFormValidation = (initialState, validationRules) => {
     return true;
   };
 
+  /**
+   * rule : [{
+   *  mode: "oneOfAllRequired",
+   *  inputs: ['isbn', 'issn', 'issn_e']
+   * }, ...]
+   */
+  const validateGroup = (rule) => {
+    switch (rule.mode) {
+      case "oneOfAllRequired":
+        let counter = 0;
+        rule.inputs.forEach((item) => {
+          if (formValues[item]) {
+            counter++;
+          }
+        });
+        if (counter >= 1) {
+          return true;
+        } else {
+          rule.inputs.forEach((item) => {
+            setFormErrors((prev) => ({
+              ...prev,
+              [item]:
+                "Necesita completar al menos uno de los siguiente campos: " +
+                rule.inputs.join(", "),
+            }));
+          });
+          return false;
+        }
+    }
+    return true;
+  };
+
   const registerFileInput = (name, ref) => {
     fileInputRefs.current[name] = ref;
   };
@@ -58,6 +90,7 @@ const useFormValidation = (initialState, validationRules) => {
     let valid = true;
     let newErrors = {};
 
+    //  Validación individual
     for (let name in formValues) {
       const value = formValues[name];
       const error = validateField(name, value);
@@ -68,6 +101,14 @@ const useFormValidation = (initialState, validationRules) => {
     }
 
     setFormErrors(newErrors);
+
+    //  Validación en grupo
+    for (let groupRule of groupRules) {
+      const error = validateGroup(groupRule);
+      if (error !== true) {
+        valid = false;
+      }
+    }
     return valid;
   };
 

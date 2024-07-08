@@ -39,7 +39,9 @@ export default ({ id, visible, setVisible, reload, optAutor }) => {
 
   //  Hooks
   const { loading, options, setOptions, value, setValue, setAvoidSelect } =
-    useAutosuggest("investigador_estudiante_registrado");
+    useAutosuggest(
+      "investigador/publicaciones/utils/searchEstudianteRegistrado"
+    );
   const { formValues, formErrors, handleChange, validateForm } =
     useFormValidation(initialForm, formRules);
 
@@ -54,8 +56,9 @@ export default ({ id, visible, setVisible, reload, optAutor }) => {
           filiacion: formValues.filiacion.value,
           categoria: formValues.categoria.value,
           publicacion_id: id,
-          investigador_id: form.id,
-          tipo: "interno",
+          investigador_id: form.investigador_id,
+          sum_id: form.id,
+          tipo: "estudiante",
         }
       );
       const data = res.data;
@@ -90,7 +93,7 @@ export default ({ id, visible, setVisible, reload, optAutor }) => {
       }
       header="Agregar autor"
     >
-      <Form variant="embedded">
+      <Form>
         <SpaceBetween direction="vertical" size="s">
           <FormField label="Buscar estudiante investigador" stretch>
             <Autosuggest
@@ -123,13 +126,13 @@ export default ({ id, visible, setVisible, reload, optAutor }) => {
               <Input readOnly value={form.nombres} />
             </FormField>
             <FormField label="Apellido paterno" stretch>
-              <Input readOnly value={form.apellido1} />
+              <Input readOnly value={form.apellido_paterno} />
             </FormField>
             <FormField label="Apellido materno" stretch>
-              <Input readOnly value={form.apellido2} />
+              <Input readOnly value={form.apellido_materno} />
             </FormField>
-            <FormField label="Tipo" stretch>
-              <Input readOnly value={form.tipo} />
+            <FormField label="Programa" stretch>
+              <Input readOnly value={form.programa} />
             </FormField>
           </ColumnLayout>
           <FormField

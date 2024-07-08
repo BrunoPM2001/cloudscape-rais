@@ -18,6 +18,7 @@ export default function BaseLayout({
   helpInfo,
   disableOverlap = false,
   withoutContentLayout,
+  actions,
 }) {
   //  Context
   const { notifications } = useContext(NotificationContext);
@@ -38,7 +39,11 @@ export default function BaseLayout({
               headerVariant="high-contrast"
               breadcrumbs={<BreadcrumbGroup items={breadcrumbs} />}
               disableOverlap={disableOverlap}
-              header={<Header variant="h1">{header}</Header>}
+              header={
+                <Header variant="h1" actions={actions}>
+                  {header}
+                </Header>
+              }
             >
               {children}
             </ContentLayout>

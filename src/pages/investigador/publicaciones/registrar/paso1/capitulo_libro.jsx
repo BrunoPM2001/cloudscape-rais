@@ -75,7 +75,7 @@ export default forwardRef(function (props, ref) {
   const getData = async () => {
     setLoadingData(true);
     const res = await axiosBase.get(
-      "investigador/publicaciones/capitulo_libro/datosPaso1",
+      "investigador/publicaciones/capitulos/datosPaso1",
       {
         params: {
           publicacion_id: props.publicacion_id,
@@ -89,7 +89,6 @@ export default forwardRef(function (props, ref) {
       ...data.data,
       art_tipo: { value: data.data.art_tipo },
       palabras_clave: data.palabras_clave,
-      indexada: data.indexada,
     });
     setLoadingData(false);
   };

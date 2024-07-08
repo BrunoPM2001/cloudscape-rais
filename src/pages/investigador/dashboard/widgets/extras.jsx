@@ -23,18 +23,13 @@ export default function () {
       <SpaceBetween size="s">
         <ColumnLayout columns={2} minColumnWidth={140}>
           <div>
-            <Box variant="awsui-key-label">Convocatoria</Box>
+            <Box variant="awsui-key-label">Convocatorias</Box>
             <Popover
               header="Convocatoria en curso"
-              content={
-                <>
-                  Actualmente hay una convocatoria vigente (PRO-CTIE), para
-                  participar ve a la opción de convocatoria
-                </>
-              }
-              position="top"
+              content={<>No hay convocatorias vigentes para inscribirse</>}
+              position="bottom"
             >
-              <StatusIndicator type="success">En curso</StatusIndicator>
+              <StatusIndicator type="pending">Cerradas</StatusIndicator>
             </Popover>
           </div>
           <div>

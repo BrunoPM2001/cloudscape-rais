@@ -31,7 +31,7 @@ export default forwardRef(function ({ publicacion_id, tipo }, ref) {
     useFormValidation(initialForm, {
       anexo: {
         ...formRules.anexo,
-        required: tipo == "articulo" ? true : false,
+        required: ["articulo", "tesis_asesoria"].includes(tipo),
       },
     });
 
@@ -47,9 +47,9 @@ export default forwardRef(function ({ publicacion_id, tipo }, ref) {
       );
       const data = res.data;
       pushNotification(data.detail, data.message, notifications.length + 1);
-      return { isValid: true, res_publicacion_id: null };
+      return true;
     } else {
-      return { isValid: false };
+      return false;
     }
   };
 
@@ -94,12 +94,16 @@ export default forwardRef(function ({ publicacion_id, tipo }, ref) {
         </Alert>
         <FormField label="Anexo" stretch errorText={formErrors.anexo}>
           <FileUpload
+            warningText={
+              tipo == "evento" &&
+              "En caso haya colocado una URL en el paso 1 no es obligatorio que cargue el anexo, de lo contrario cárguelo ahora."
+            }
             value={formValues.anexo}
             onChange={({ detail }) => handleChange("anexo", detail.value)}
             showFileLastModified
             showFileSize
             showFileThumbnail
-            constraintText="El archivo cargado no debe superar los 6 MB"
+            constraintText="Adjunte el acta de sustentación (el archivo cargado no debe superar los 6 MB)"
             i18nStrings={{
               uploadButtonText: (e) =>
                 e ? "Cargar archivos" : "Cargar archivo",
