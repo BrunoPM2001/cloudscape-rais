@@ -10,10 +10,27 @@ import {
 } from "@cloudscape-design/components";
 import ModalCalificarTransferencia from "./components/modalCalificarTransferencia";
 import { useState } from "react";
+import axiosBase from "../../../../../api/axios";
 
-export default ({ proyecto, solicitud, loading, reload }) => {
+export default ({ id, proyecto, solicitud, loading, reload }) => {
   //  States
   const [visible, setVisible] = useState(false);
+  const [loadingReporte, setLoadingReporte] = useState(false);
+
+  //  Functions
+  const reporte = async () => {
+    setLoadingReporte(true);
+    const res = await axiosBase.get("admin/economia/transferencias/reporte", {
+      params: {
+        geco_proyecto_id: id,
+      },
+      responseType: "blob",
+    });
+    setLoadingReporte(false);
+    const blob = await res.data;
+    const url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
+  };
 
   return (
     <Grid
@@ -65,7 +82,9 @@ export default ({ proyecto, solicitud, loading, reload }) => {
             variant="h2"
             actions={
               <SpaceBetween direction="horizontal" size="s">
-                <Button>Reporte</Button>
+                <Button onClick={reporte} loading={loadingReporte}>
+                  Reporte
+                </Button>
                 <Button
                   variant="primary"
                   disabled={solicitud?.estado != 3}

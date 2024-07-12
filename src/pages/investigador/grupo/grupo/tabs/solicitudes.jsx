@@ -243,6 +243,7 @@ export default () => {
               </ButtonDropdown>
               <Button
                 variant="primary"
+                disabled={loading || items.length > 0}
                 onClick={() => (window.location.href = "grupo/solicitar/paso1")}
               >
                 Registrar

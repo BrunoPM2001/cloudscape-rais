@@ -127,7 +127,7 @@ export default ({ visible, setVisible, reload }) => {
       }
       header="Incluir miembro al grupo"
     >
-      <Form variant="embedded">
+      <Form>
         <SpaceBetween direction="vertical" size="s">
           <FormField label="Buscar egresado" stretch>
             <Autosuggest

@@ -21,6 +21,7 @@ import ModalOtros from "../components/modalOtros";
 import ModalReciboIngreso from "../components/modalReciboIngreso";
 import ModalTicket from "../components/modalTicket";
 import ModalReciboBanco from "../components/modalReciboBanco";
+import ModalDeclaracionJurada from "../components/modalDeclaracionJurada";
 
 const columnDefinitions = [
   {
@@ -189,6 +190,10 @@ export default ({ data, loading, reload }) => {
                       id: "RBANCO",
                       text: "Recibo de banco",
                     },
+                    {
+                      id: "DJURADA",
+                      text: "Declaración jurada",
+                    },
                   ]}
                   onItemClick={({ detail }) => {
                     setVisible(true);
@@ -305,6 +310,16 @@ export default ({ data, loading, reload }) => {
           />
         ) : type == "RBANCO" ? (
           <ModalReciboBanco
+            visible={visible}
+            setVisible={setVisible}
+            item={collectionProps.selectedItems[0] ?? null}
+            edit={edit}
+            geco_proyecto_id={id}
+            type={type}
+            reload={reload}
+          />
+        ) : type == "DJURADA" ? (
+          <ModalDeclaracionJurada
             visible={visible}
             setVisible={setVisible}
             item={collectionProps.selectedItems[0] ?? null}

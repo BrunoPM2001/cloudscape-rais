@@ -87,6 +87,7 @@ export default function Geco_detalle_transferencia() {
     >
       <SpaceBetween size="l">
         <Detalles
+          id={id}
           proyecto={data.proyecto}
           solicitud={data.solicitud}
           loading={loading}

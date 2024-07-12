@@ -8,12 +8,32 @@ import {
   Spinner,
   StatusIndicator,
 } from "@cloudscape-design/components";
-import ModalEditarProyecto from "./components/modalEditarProyecto";
 import { useState } from "react";
+import ModalEditarProyecto from "../components/modalEditarProyecto";
+import axiosBase from "../../../../../../api/axios";
 
 export default ({ data, loading, proyecto_id, reload }) => {
   //  States
   const [visible, setVisible] = useState(false);
+  const [loadingReporte, setLoadingReporte] = useState(false);
+
+  //  Functions
+  const exportWord = async () => {
+    setLoadingReporte(true);
+    const res = await axiosBase.get(
+      "admin/estudios/proyectosGrupo/exportToWord",
+      {
+        params: {
+          proyecto_id,
+        },
+        responseType: "blob",
+      }
+    );
+    setLoadingReporte(false);
+    const blob = res.data;
+    const url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
+  };
 
   return (
     <Container
@@ -21,13 +41,22 @@ export default ({ data, loading, proyecto_id, reload }) => {
         <Header
           variant="h2"
           actions={
-            <Button
-              variant="primary"
-              disabled={loading}
-              onClick={() => setVisible(true)}
-            >
-              Editar
-            </Button>
+            <SpaceBetween size="s" direction="horizontal">
+              <Button
+                disabled={loading}
+                loading={loadingReporte}
+                onClick={exportWord}
+              >
+                Exportar descripción a word
+              </Button>
+              <Button
+                variant="primary"
+                disabled={loading}
+                onClick={() => setVisible(true)}
+              >
+                Editar
+              </Button>
+            </SpaceBetween>
           }
         >
           Datos generales
@@ -46,7 +75,7 @@ export default ({ data, loading, proyecto_id, reload }) => {
           </div>
           <div>
             <Box variant="awsui-key-label">Tipo de proyecto</Box>
-            <div>{data.tipo_proyecto}</div>
+            {loading ? <Spinner /> : <div>{data.tipo_proyecto}</div>}
           </div>
           <div>
             <Box variant="awsui-key-label">Estado</Box>
@@ -109,12 +138,12 @@ export default ({ data, loading, proyecto_id, reload }) => {
         </SpaceBetween>
         <SpaceBetween size="s">
           <div>
-            <Box variant="awsui-key-label">Fecha de inicio</Box>
-            {loading ? <Spinner /> : <div>{data.fecha_inicio}</div>}
+            <Box variant="awsui-key-label">Responsable</Box>
+            {loading ? <Spinner /> : <div>{data.responsable}</div>}
           </div>
           <div>
-            <Box variant="awsui-key-label">Fecha de fin</Box>
-            {loading ? <Spinner /> : <div>{data.fecha_fin}</div>}
+            <Box variant="awsui-key-label">Grupo de investigación</Box>
+            {loading ? <Spinner /> : <div>{data.grupo_nombre}</div>}
           </div>
           <div>
             <Box variant="awsui-key-label">Resolución rectoral</Box>
@@ -126,6 +155,12 @@ export default ({ data, loading, proyecto_id, reload }) => {
           </div>
         </SpaceBetween>
         <SpaceBetween size="s">
+          <div>
+            <Box variant="awsui-key-label">
+              Línea de investigación relacionada al equipo
+            </Box>
+            {loading ? <Spinner /> : <div>{data.linea}</div>}
+          </div>
           <div>
             <Box variant="awsui-key-label">Comentarios</Box>
             {loading ? (

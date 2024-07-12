@@ -81,12 +81,6 @@ const columnDefinitions = [
     sortingField: "facultad",
   },
   {
-    id: "linea",
-    header: "Linea",
-    cell: (item) => item.linea,
-    sortingField: "linea",
-  },
-  {
     id: "periodo",
     header: "Periodo",
     cell: (item) => item.periodo,
@@ -105,24 +99,10 @@ const columnDefinitions = [
     sortingField: "criterios_evaluados",
   },
   {
-    id: "puntaje",
-    header: "Puntaje",
-    cell: (item) => item.puntaje,
-    sortingField: "puntaje",
-  },
-  {
     id: "evaluado",
     header: "Evaluado",
     cell: (item) => (
-      <Badge
-        color={
-          item.evaluado == "NO"
-            ? "red"
-            : item.evaluado == "SÍ"
-            ? "green"
-            : "red"
-        }
-      >
+      <Badge color={item.evaluado == "Sí" ? "green" : "red"}>
         {item.evaluado}
       </Badge>
     ),
@@ -132,13 +112,7 @@ const columnDefinitions = [
     id: "ficha",
     header: "Ficha",
     cell: (item) => (
-      <Badge
-        color={
-          item.ficha == "NO" ? "red" : item.ficha == "SÍ" ? "green" : "red"
-        }
-      >
-        {item.ficha}
-      </Badge>
+      <Badge color={item.ficha == "Sí" ? "green" : "red"}>{item.ficha}</Badge>
     ),
     sortingField: "ficha",
   },
@@ -149,11 +123,9 @@ const columnDisplay = [
   { id: "tipo_proyecto", visible: true },
   { id: "titulo", visible: true },
   { id: "facultad", visible: true },
-  { id: "linea", visible: true },
   { id: "periodo", visible: true },
   { id: "criterios", visible: true },
   { id: "criterios_evaluados", visible: true },
-  { id: "puntaje", visible: true },
   { id: "evaluado", visible: true },
   { id: "ficha", visible: true },
 ];
@@ -194,9 +166,9 @@ export default () => {
   //  Functions
   const getData = async () => {
     setLoading(true);
-    const res = await axiosBase.get("evaluador/listarProyectos");
+    const res = await axiosBase.get("evaluador/evaluaciones/listado");
     const data = res.data;
-    setDistribution(data.data);
+    setDistribution(data);
     setLoading(false);
   };
 
@@ -225,9 +197,9 @@ export default () => {
               variant="primary"
               onClick={() => {
                 const query = queryString.stringify({
-                  proyecto_id: selectedItems[0]["id"],
+                  proyecto_id: collectionProps.selectedItems[0]["id"],
                 });
-                window.location.href = "proyectoDetalle?" + query;
+                window.location.href = "evaluador/detalle?" + query;
               }}
             >
               Evaluar

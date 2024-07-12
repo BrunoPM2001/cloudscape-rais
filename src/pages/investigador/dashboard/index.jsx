@@ -56,6 +56,7 @@ const gridDefinition = [
 export default function Investigador_main() {
   //  States
   const [data, setData] = useState({
+    detalles: null,
     metricas: null,
     tipos_publicaciones: [],
     tipos_proyectos: [],
@@ -84,7 +85,7 @@ export default function Investigador_main() {
     >
       <Grid gridDefinition={gridDefinition}>
         <Cifras data={data.metricas} loading={loading} />
-        <Extras loading={loading} />
+        <Extras data={data.detalles} loading={loading} />
         <Publicaciones data={data.tipos_publicaciones} loading={loading} />
         <Proyectos data={data.tipos_proyectos} loading={loading} />
       </Grid>

@@ -6,35 +6,8 @@ import {
   ColumnLayout,
   Spinner,
 } from "@cloudscape-design/components";
-import queryString from "query-string";
-import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
-import axiosBase from "../../../../../../api/axios";
 
-export default () => {
-  //  State
-  const [loading, setLoading] = useState(true);
-  const [items, setItems] = useState([]);
-  const [info, setInfo] = useState([]);
-
-  //  Url
-  const location = useLocation();
-  const { id } = queryString.parse(location.search);
-
-  //  Data
-  useEffect(() => {
-    const getData = async () => {
-      const res = await axiosBase.get(
-        "admin/estudios/proyectosGrupo/presupuesto/" + id
-      );
-      const data = await res.data;
-      setItems(data.data);
-      setInfo(data.info);
-      setLoading(!loading);
-    };
-    getData();
-  }, []);
-
+export default ({ data, loading }) => {
   return (
     <Table
       columnDefinitions={[
@@ -66,11 +39,11 @@ export default () => {
         { id: "monto", visible: true },
       ]}
       enableKeyboardNavigation
-      items={items}
+      items={data.data}
       loadingText="Cargando datos"
       loading={loading}
       resizableColumns
-      trackBy="id"
+      trackBy="tipo"
       empty={
         <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
           <SpaceBetween size="m">
@@ -86,15 +59,15 @@ export default () => {
               <SpaceBetween direction="horizontal" size="m">
                 <SpaceBetween direction="horizontal" size="xxs">
                   <Box variant="div">Cantidad:</Box>
-                  {loading ? <Spinner /> : info.bienes_cantidad}
+                  {loading ? <Spinner /> : data.info.bienes_cantidad}
                 </SpaceBetween>
                 <SpaceBetween direction="horizontal" size="xxs">
                   <Box variant="div">Monto:</Box>
-                  {loading ? <Spinner /> : info.bienes_monto}
+                  {loading ? <Spinner /> : data.info.bienes_monto}
                 </SpaceBetween>
                 <SpaceBetween direction="horizontal" size="xxs">
                   <Box variant="div">Porcentaje:</Box>
-                  {loading ? <Spinner /> : info.bienes_porcentaje + "%"}
+                  {loading ? <Spinner /> : data.info.bienes_porcentaje + "%"}
                 </SpaceBetween>
               </SpaceBetween>
             </div>
@@ -105,15 +78,15 @@ export default () => {
               <SpaceBetween direction="horizontal" size="m">
                 <SpaceBetween direction="horizontal" size="xxs">
                   <Box variant="div">Cantidad:</Box>
-                  {loading ? <Spinner /> : info.servicios_cantidad}
+                  {loading ? <Spinner /> : data.info.servicios_cantidad}
                 </SpaceBetween>
                 <SpaceBetween direction="horizontal" size="xxs">
                   <Box variant="div">Monto:</Box>
-                  {loading ? <Spinner /> : info.servicios_monto}
+                  {loading ? <Spinner /> : data.info.servicios_monto}
                 </SpaceBetween>
                 <SpaceBetween direction="horizontal" size="xxs">
                   <Box variant="div">Porcentaje:</Box>
-                  {loading ? <Spinner /> : info.servicios_porcentaje + "%"}
+                  {loading ? <Spinner /> : data.info.servicios_porcentaje + "%"}
                 </SpaceBetween>
               </SpaceBetween>
             </div>
@@ -124,15 +97,15 @@ export default () => {
               <SpaceBetween direction="horizontal" size="m">
                 <SpaceBetween direction="horizontal" size="xxs">
                   <Box variant="div">Cantidad:</Box>
-                  {loading ? <Spinner /> : info.otros_cantidad}
+                  {loading ? <Spinner /> : data.info.otros_cantidad}
                 </SpaceBetween>
                 <SpaceBetween direction="horizontal" size="xxs">
                   <Box variant="div">Monto:</Box>
-                  {loading ? <Spinner /> : info.otros_monto}
+                  {loading ? <Spinner /> : data.info.otros_monto}
                 </SpaceBetween>
                 <SpaceBetween direction="horizontal" size="xxs">
                   <Box variant="div">Porcentaje:</Box>
-                  {loading ? <Spinner /> : info.otros_porcentaje + "%"}
+                  {loading ? <Spinner /> : data.info.otros_porcentaje + "%"}
                 </SpaceBetween>
               </SpaceBetween>
             </div>

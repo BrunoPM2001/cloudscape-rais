@@ -4,33 +4,8 @@ import {
   SpaceBetween,
   Header,
 } from "@cloudscape-design/components";
-import queryString from "query-string";
-import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
-import axiosBase from "../../../../../../api/axios";
 
-export default () => {
-  //  State
-  const [loading, setLoading] = useState(true);
-  const [items, setItems] = useState([]);
-
-  //  Url
-  const location = useLocation();
-  const { id } = queryString.parse(location.search);
-
-  //  Data
-  useEffect(() => {
-    const getData = async () => {
-      const res = await axiosBase.get(
-        "admin/estudios/proyectosGrupo/actividades/" + id
-      );
-      const data = await res.data;
-      setItems(data.data);
-      setLoading(!loading);
-    };
-    getData();
-  }, []);
-
+export default ({ data, loading }) => {
   return (
     <Table
       columnDefinitions={[
@@ -56,7 +31,7 @@ export default () => {
         { id: "fecha_fin", visible: true },
       ]}
       enableKeyboardNavigation
-      items={items}
+      items={data}
       loadingText="Cargando datos"
       loading={loading}
       resizableColumns

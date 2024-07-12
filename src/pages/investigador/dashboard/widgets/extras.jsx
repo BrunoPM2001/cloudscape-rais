@@ -3,14 +3,14 @@ import {
   ColumnLayout,
   Container,
   Header,
-  Icon,
   SpaceBetween,
   StatusIndicator,
   Link,
   Popover,
+  Spinner,
 } from "@cloudscape-design/components";
 
-export default function () {
+export default function ({ data, loading }) {
   return (
     <Container
       header={
@@ -39,11 +39,28 @@ export default function () {
         </ColumnLayout>
         <div>
           <Box variant="awsui-key-label">Orcid</Box>
-          <Link href="#">
-            <StatusIndicator type="warning">
-              No vinculado <Icon variant="warning" name="external" />
-            </StatusIndicator>
-          </Link>
+          {loading ? (
+            <Spinner />
+          ) : (
+            <Popover
+              position="bottom"
+              content={
+                data.orcid.message == "warning" ? (
+                  <>
+                    <Link external href={data.orcid.link} target="_blank">
+                      {data.orcid.detail}
+                    </Link>
+                  </>
+                ) : (
+                  <>{data.orcid.detail}</>
+                )
+              }
+            >
+              <StatusIndicator type={data.orcid.message}>
+                {data.orcid.text}
+              </StatusIndicator>
+            </Popover>
+          )}
         </div>
       </SpaceBetween>
     </Container>

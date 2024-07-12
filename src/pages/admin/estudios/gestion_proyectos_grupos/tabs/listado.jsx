@@ -312,7 +312,16 @@ export default () => {
                 const query = queryString.stringify({
                   id: selectedItems[0]["id"],
                 });
-                window.location.href = "proyectos_grupos/detalle?" + query;
+                if (selectedItems[0]["tipo_proyecto"].toLowerCase() == "eci") {
+                  window.location.href =
+                    "proyectos_grupos/detalle/" +
+                    selectedItems[0]["tipo_proyecto"].toLowerCase() +
+                    "?" +
+                    query;
+                } else {
+                  window.location.href =
+                    "proyectos_grupos/detalle/pconfigi" + "?" + query;
+                }
               }}
             >
               Visualizar

@@ -1,75 +1,47 @@
 import {
-  Table,
-  Box,
-  SpaceBetween,
-  Header,
-  Link,
   ExpandableSection,
   Container,
   Spinner,
 } from "@cloudscape-design/components";
-import queryString from "query-string";
-import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
-import axiosBase from "../../../../../../api/axios";
 
-export default () => {
-  //  State
-  const [loading, setLoading] = useState(true);
-  const [items, setItems] = useState([]);
-
-  //  Url
-  const location = useLocation();
-  const { id } = queryString.parse(location.search);
-
-  //  Data
-  useEffect(() => {
-    const getData = async () => {
-      const res = await axiosBase.get(
-        "admin/estudios/proyectosGrupo/descripcion/" + id
-      );
-      const data = await res.data;
-      setItems(data.data);
-      setLoading(!loading);
-    };
-    getData();
-  }, []);
-
+export default ({ data, loading }) => {
   return (
     <Container>
       <ExpandableSection headerText="Resumen ejecutivo">
         {loading ? (
           <Spinner />
         ) : (
-          <div dangerouslySetInnerHTML={{ __html: items.resumen_ejecutivo }} />
+          <div
+            dangerouslySetInnerHTML={{ __html: data.resumen_ejecutivo ?? "" }}
+          />
         )}
       </ExpandableSection>
       <ExpandableSection headerText="Antecedentes">
         {loading ? (
           <Spinner />
         ) : (
-          <div dangerouslySetInnerHTML={{ __html: items.antecedentes }} />
+          <div dangerouslySetInnerHTML={{ __html: data.antecedentes ?? "" }} />
         )}
       </ExpandableSection>
       <ExpandableSection headerText="Objetivos">
         {loading ? (
           <Spinner />
         ) : (
-          <div dangerouslySetInnerHTML={{ __html: items.objetivos }} />
+          <div dangerouslySetInnerHTML={{ __html: data.objetivos ?? "" }} />
         )}
       </ExpandableSection>
       <ExpandableSection headerText="Justificacion">
         {loading ? (
           <Spinner />
         ) : (
-          <div dangerouslySetInnerHTML={{ __html: items.justificacion }} />
+          <div dangerouslySetInnerHTML={{ __html: data.justificacion ?? "" }} />
         )}
       </ExpandableSection>
       <ExpandableSection headerText="Hipótesis">
         {loading ? (
           <Spinner />
         ) : (
-          <div dangerouslySetInnerHTML={{ __html: items.hipotesis }} />
+          <div dangerouslySetInnerHTML={{ __html: data.hipotesis ?? "" }} />
         )}
       </ExpandableSection>
       <ExpandableSection headerText="Metodología de trabajo">
@@ -77,7 +49,7 @@ export default () => {
           <Spinner />
         ) : (
           <div
-            dangerouslySetInnerHTML={{ __html: items.metodologia_trabajo }}
+            dangerouslySetInnerHTML={{ __html: data.metodologia_trabajo ?? "" }}
           />
         )}
       </ExpandableSection>
@@ -87,7 +59,7 @@ export default () => {
         ) : (
           <div
             dangerouslySetInnerHTML={{
-              __html: items.referencias_bibliograficas,
+              __html: data.referencias_bibliograficas,
             }}
           />
         )}
@@ -97,7 +69,7 @@ export default () => {
           <Spinner />
         ) : (
           <div
-            dangerouslySetInnerHTML={{ __html: items.contribucion_impacto }}
+            dangerouslySetInnerHTML={{ __html: data.contribucion_impacto }}
           />
         )}
       </ExpandableSection>

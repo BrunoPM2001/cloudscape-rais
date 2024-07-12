@@ -2,6 +2,19 @@ import { Suspense, lazy } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { NotificationProvider } from "../providers/notificationProvider";
 
+const Asignar_evaluador = lazy(() =>
+  import("../pages/admin/facultad/evaluadores/index.jsx")
+);
+const Detalle_proyecto_pconfigi = lazy(() =>
+  import(
+    "../pages/admin/estudios/gestion_proyectos_grupos/detalle/pconfigi/index.jsx"
+  )
+);
+const Detalle_proyecto_eci = lazy(() =>
+  import(
+    "../pages/admin/estudios/gestion_proyectos_grupos/detalle/eci/index.jsx"
+  )
+);
 const Detalle_informe_tecnico = lazy(() =>
   import("../pages/admin/estudios/informes_tecnicos/detalles/index.jsx")
 );
@@ -35,9 +48,6 @@ const Detalle_grupo = lazy(() =>
 );
 const Gestion_proyectos_grupos = lazy(() =>
   import("../pages/admin/estudios/gestion_proyectos_grupos/index.jsx")
-);
-const Detalle_proyecto_grupo = lazy(() =>
-  import("../pages/admin/estudios/gestion_proyectos_grupos/detalle/index.jsx")
 );
 const Gestion_proyectos_fex = lazy(() =>
   import("../pages/admin/estudios/gestion_proyectos_fex/index.jsx")
@@ -158,7 +168,20 @@ const routes = createBrowserRouter(
             },
             {
               path: "detalle",
-              element: <Detalle_proyecto_grupo />,
+              children: [
+                {
+                  path: "",
+                  element: <div></div>,
+                },
+                {
+                  path: "eci",
+                  element: <Detalle_proyecto_eci />,
+                },
+                {
+                  path: "pconfigi",
+                  element: <Detalle_proyecto_pconfigi />,
+                },
+              ],
             },
           ],
         },
@@ -312,6 +335,15 @@ const routes = createBrowserRouter(
             {
               path: "detalle",
               element: <Detalle_convocatoria />,
+            },
+          ],
+        },
+        {
+          path: "evaluadores",
+          children: [
+            {
+              path: "",
+              element: <Asignar_evaluador />,
             },
           ],
         },
