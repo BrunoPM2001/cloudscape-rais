@@ -6,11 +6,10 @@ import {
   Textarea,
 } from "@cloudscape-design/components";
 import BaseLayout from "../../components/baseLayout";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axiosBase from "../../../../api/axios";
 import { useLocation } from "react-router-dom";
 import queryString from "query-string";
-import NotificationContext from "../../../../providers/notificationProvider";
 import { useFormValidation } from "../../../../hooks/useFormValidation";
 import Criterios from "./criterios";
 import VisorHtml from "./visorHtml";
@@ -33,12 +32,11 @@ const initialForm = {
 };
 
 export default function Evaluador_proyecto() {
-  //  Context
-  const { notifications, pushNotification } = useContext(NotificationContext);
-
   //  States
   const [data, setData] = useState([]);
+  const [extra, setExtra] = useState({});
   const [loading, setLoading] = useState(true);
+  const [loadingExtra, setLoadingExtra] = useState(true);
 
   //  Url
   const location = useLocation();
@@ -67,9 +65,25 @@ export default function Evaluador_proyecto() {
     handleChange("comentario", data.comentario.comentario);
   };
 
+  const getMoreData = async () => {
+    setLoadingExtra(true);
+    const res = await axiosBase.get(
+      "evaluador/evaluaciones/visualizarProyecto",
+      {
+        params: {
+          proyecto_id,
+        },
+      }
+    );
+    const data = res.data;
+    setExtra(data);
+    setLoadingExtra(false);
+  };
+
   //  Effects
   useEffect(() => {
     getData();
+    getMoreData();
   }, []);
 
   return (
@@ -83,6 +97,7 @@ export default function Evaluador_proyecto() {
         <Criterios
           cerrado={data.cerrado}
           data={data.criterios}
+          ficha={data.comentario?.ficha}
           loading={loading}
           proyecto_id={proyecto_id}
           reload={getData}
@@ -111,7 +126,7 @@ export default function Evaluador_proyecto() {
             </FormField>
           )}
         </Container>
-        <VisorHtml />
+        <VisorHtml loading={loadingExtra} data={extra} />
       </SpaceBetween>
     </BaseLayout>
   );

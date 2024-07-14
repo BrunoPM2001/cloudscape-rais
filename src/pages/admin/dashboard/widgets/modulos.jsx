@@ -39,7 +39,7 @@ export default function ({ loading }) {
           {loading ? (
             <Spinner />
           ) : (
-            <StatusIndicator type="stopped">Deshabilitado</StatusIndicator>
+            <StatusIndicator type="success">Ok</StatusIndicator>
           )}
         </div>
         <div>

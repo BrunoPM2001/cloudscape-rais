@@ -15,6 +15,7 @@ import ModalSubirFicha from "./components/modalSubirFicha";
 export default ({
   data,
   cerrado,
+  ficha,
   loading,
   proyecto_id,
   reload,
@@ -74,7 +75,9 @@ export default ({
           {
             id: "opcion",
             header: "Criterio de evaluación",
-            cell: (item) => item.opcion,
+            cell: (item) => (
+              <div dangerouslySetInnerHTML={{ __html: item.opcion }}></div>
+            ),
             isRowHeader: true,
             width: "50%",
           },
@@ -196,7 +199,9 @@ export default ({
                       {
                         text: "Ver ficha cargada",
                         id: "action_3",
-                        disabled: false,
+                        disabled: ficha == null,
+                        href: "/minio/proyecto-evaluacion/" + ficha,
+                        external: true,
                       },
                     ]}
                     onItemClick={({ detail }) => {
