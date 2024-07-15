@@ -2,6 +2,9 @@ import { Suspense, lazy } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { NotificationProvider } from "../providers/notificationProvider";
 
+const Docente_investigador = lazy(() =>
+  import("../pages/admin/estudios/docentes/index.jsx")
+);
 const Asignar_evaluador = lazy(() =>
   import("../pages/admin/facultad/evaluadores/index.jsx")
 );
@@ -249,6 +252,15 @@ const routes = createBrowserRouter(
             {
               path: "licencias",
               element: <Licencias_investigador />,
+            },
+          ],
+        },
+        {
+          path: "docente_investigador",
+          children: [
+            {
+              path: "",
+              element: <Docente_investigador />,
             },
           ],
         },

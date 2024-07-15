@@ -67,8 +67,7 @@ const navItems = [
       {
         type: "link",
         text: "Docente investigador",
-        info: <Badge color="grey">En desarrollo</Badge>,
-        href: "#",
+        href: "/admin/estudios/docente_investigador",
       },
       {
         type: "link",
