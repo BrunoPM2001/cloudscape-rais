@@ -17,22 +17,10 @@ import axiosBase from "../../../../../api/axios";
 const stringOperators = [":", "!:", "=", "!=", "^", "!^"];
 
 const FILTER_PROPS = [
-  // {
-  //   propertyLabel: "ID",
-  //   key: "id",
-  //   groupValuesLabel: "IDS",
-  //   operators: stringOperators,
-  // },
   {
     propertyLabel: "Código de proyecto",
     key: "codigo_proyecto",
     groupValuesLabel: "Códigos",
-    operators: stringOperators,
-  },
-  {
-    propertyLabel: "Fecha de comprobante",
-    key: "fecha_ultimo_comprobante",
-    groupValuesLabel: "Fechas de comprobante",
     operators: stringOperators,
   },
   {
@@ -59,12 +47,6 @@ const FILTER_PROPS = [
     groupValuesLabel: "Periodos",
     operators: stringOperators,
   },
-  {
-    propertyLabel: "Estado",
-    key: "estado",
-    groupValuesLabel: "Estados",
-    operators: stringOperators,
-  },
 ];
 
 const columnDefinitions = [
@@ -80,12 +62,6 @@ const columnDefinitions = [
     header: "Código de proyecto",
     cell: (item) => item.codigo_proyecto,
     sortingField: "codigo_proyecto",
-  },
-  {
-    id: "fecha_ultimo_comprobante",
-    header: "Fecha de último comprobante",
-    cell: (item) => item.fecha_ultimo_comprobante,
-    sortingField: "fecha_ultimo_comprobante",
   },
   {
     id: "responsable",
@@ -112,47 +88,28 @@ const columnDefinitions = [
     sortingField: "periodo",
   },
   {
-    id: "cuenta",
+    id: "pendientes",
     header: "Pendientes",
     cell: (item) => (
-      <StatusIndicator type={item.cuenta > 0 ? "warning" : "success"}>
-        {item.cuenta > 0 ? item.cuenta : "Ok"}
+      <StatusIndicator type={item.pendientes > 0 ? "warning" : "success"}>
+        {item.pendientes > 0 ? item.pendientes : "Ninguno"}
       </StatusIndicator>
     ),
+    sortingField: "pendientes",
   },
   {
-    id: "estado",
-    header: "Estado",
+    id: "revisados",
+    header: "Revisados",
     cell: (item) => (
-      <Badge
-        color={
-          item.estado == 5
-            ? "grey"
-            : item.estado == 4
-            ? "blue"
-            : item.estado == 3
-            ? "grey"
-            : item.estado == 2
-            ? "red"
-            : item.estado == 1
-            ? "green"
-            : "grey"
-        }
-      >
-        {item.estado == 5
-          ? "Anulado"
-          : item.estado == 4
-          ? "Pendiente"
-          : item.estado == 3
-          ? "Observado"
-          : item.estado == 2
-          ? "Rechazado"
-          : item.estado == 1
-          ? "Aprobado"
-          : "Sin comprobantes"}
-      </Badge>
+      <StatusIndicator type="info">{item.revisados}</StatusIndicator>
     ),
-    sortingField: "estado",
+    sortingField: "revisados",
+  },
+  {
+    id: "total",
+    header: "Total",
+    cell: (item) => item.total,
+    sortingField: "total",
   },
 ];
 
@@ -164,14 +121,14 @@ const columnDisplay = [
   { id: "facultad", visible: true },
   { id: "tipo_proyecto", visible: true },
   { id: "periodo", visible: true },
-  { id: "cuenta", visible: true },
-  { id: "estado", visible: true },
+  { id: "pendientes", visible: true },
+  { id: "revisados", visible: true },
+  { id: "total", visible: true },
 ];
 
 export default () => {
   //  Data states
   const [loading, setLoading] = useState(true);
-  const [selectedItems, setSelectedItems] = useState([]);
   const [distributions, setDistribution] = useState([]);
   const {
     items,
@@ -201,7 +158,6 @@ export default () => {
     sorting: {},
     selection: {},
   });
-  const [enableBtn, setEnableBtn] = useState(false);
 
   //  Functions
   const getData = async () => {
@@ -219,14 +175,6 @@ export default () => {
     getData();
   }, []);
 
-  useEffect(() => {
-    if (selectedItems.length > 0) {
-      setEnableBtn(true);
-    } else {
-      setEnableBtn(false);
-    }
-  }, [selectedItems]);
-
   return (
     <Table
       {...collectionProps}
@@ -239,18 +187,16 @@ export default () => {
       resizableColumns
       enableKeyboardNavigation
       selectionType="single"
-      selectedItems={selectedItems}
-      onSelectionChange={({ detail }) => setSelectedItems(detail.selectedItems)}
       header={
         <Header
           counter={"(" + distributions.length + ")"}
           actions={
             <Button
-              disabled={!enableBtn}
+              disabled={collectionProps.selectedItems.length == 0}
               variant="primary"
               onClick={() => {
                 const query = queryString.stringify({
-                  id: selectedItems[0]["id"],
+                  id: collectionProps.selectedItems[0]["id"],
                 });
                 window.location.href = "gestion_comprobantes/detalle?" + query;
               }}

@@ -12,6 +12,7 @@ import {
 import { useState, useEffect } from "react";
 import { useCollection } from "@cloudscape-design/collection-hooks";
 import axiosBase from "../../../../../api/axios";
+import queryString from "query-string";
 
 const stringOperators = [":", "!:", "=", "!=", "^", "!^"];
 
@@ -267,7 +268,13 @@ export default () => {
               <SpaceBetween size="s" direction="horizontal">
                 <Button
                   variant="primary"
-                  onClick={() => setVisible(true)}
+                  onClick={() => {
+                    const query = queryString.stringify({
+                      id: collectionProps.selectedItems[0]["id"],
+                    });
+                    window.location.href =
+                      "docente_investigador/evaluacion?" + query;
+                  }}
                   disabled={collectionProps.selectedItems.length == 0}
                 >
                   Evaluar

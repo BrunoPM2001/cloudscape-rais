@@ -1,7 +1,7 @@
 import {
-  Badge,
   Box,
   Button,
+  ButtonDropdown,
   Header,
   Pagination,
   PropertyFilter,
@@ -10,10 +10,8 @@ import {
 } from "@cloudscape-design/components";
 import { useState, useEffect } from "react";
 import { useCollection } from "@cloudscape-design/collection-hooks";
-import queryString from "query-string";
 import axiosBase from "../../../../../api/axios";
-import { AddCriterioModal } from "../components/modal";
-import ModalCreateEvaluacion from "../components/modalCreateEvaluacion";
+import ModalEvaluador from "../components/modalEvaluador";
 
 const stringOperators = [":", "!:", "=", "!=", "^", "!^"];
 
@@ -21,7 +19,25 @@ const FILTER_PROPS = [
   {
     propertyLabel: "ID",
     key: "id",
-    groupValuesLabel: "IDS",
+    groupValuesLabel: "IDs",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "Apellidos",
+    key: "apellidos",
+    groupValuesLabel: "Apellidos",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "Nombres",
+    key: "nombres",
+    groupValuesLabel: "Nombres",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "Institución",
+    key: "institucion",
+    groupValuesLabel: "Instituciones",
     operators: stringOperators,
   },
   {
@@ -31,15 +47,15 @@ const FILTER_PROPS = [
     operators: stringOperators,
   },
   {
-    propertyLabel: "Periodo",
-    key: "periodo",
-    groupValuesLabel: "Periodos",
+    propertyLabel: "Cargo",
+    key: "cargo",
+    groupValuesLabel: "Cargos",
     operators: stringOperators,
   },
   {
-    propertyLabel: "Estado",
-    key: "estado",
-    groupValuesLabel: "Estados",
+    propertyLabel: "Usuario",
+    key: "username",
+    groupValuesLabel: "Nombres de usuarios",
     operators: stringOperators,
   },
 ];
@@ -50,7 +66,24 @@ const columnDefinitions = [
     header: "ID",
     cell: (item) => item.id,
     sortingField: "id",
-    isRowHeader: true,
+  },
+  {
+    id: "apellidos",
+    header: "Apellidos",
+    cell: (item) => item.apellidos,
+    sortingField: "apellidos",
+  },
+  {
+    id: "nombres",
+    header: "Nombres",
+    cell: (item) => item.nombres,
+    sortingField: "nombres",
+  },
+  {
+    id: "institucion",
+    header: "Institución",
+    cell: (item) => item.institucion,
+    sortingField: "institucion",
   },
   {
     id: "tipo",
@@ -59,47 +92,36 @@ const columnDefinitions = [
     sortingField: "tipo",
   },
   {
-    id: "periodo",
-    header: "Periodo",
-    cell: (item) => item.periodo,
-    sortingField: "periodo",
+    id: "cargo",
+    header: "Cargo",
+    cell: (item) => item.cargo,
+    sortingField: "cargo",
   },
   {
-    id: "estado",
-    header: "Estado",
-    cell: (item) => (
-      <Badge
-        color={
-          item.estado == "APROBADO"
-            ? "green"
-            : item.estado == "EN PROCESO"
-            ? "blue"
-            : "red"
-        }
-      >
-        {item.estado}
-      </Badge>
-    ),
-    sortingField: "estado",
+    id: "username",
+    header: "Usuario",
+    cell: (item) => item.username,
+    sortingField: "username",
   },
 ];
 
 const columnDisplay = [
   { id: "id", visible: true },
+  { id: "apellidos", visible: true },
+  { id: "nombres", visible: true },
+  { id: "institucion", visible: true },
   { id: "tipo", visible: true },
-  { id: "periodo", visible: true },
-  { id: "estado", visible: true },
+  { id: "cargo", visible: true },
+  { id: "username", visible: true },
 ];
 
 export default () => {
   //  Data states
-  const [createVisible, setCreateVisible] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [selectedItems, setSelectedItems] = useState([]);
+  const [visible, setVisible] = useState(false);
   const [distributions, setDistribution] = useState([]);
   const {
     items,
-    actions,
     filteredItemsCount,
     collectionProps,
     paginationProps,
@@ -126,16 +148,15 @@ export default () => {
     sorting: { defaultState: { sortingColumn: columnDefinitions[0] } },
     selection: {},
   });
-  const [enableBtn, setEnableBtn] = useState(true);
 
   //  Functions
   const getData = async () => {
     setLoading(true);
     const res = await axiosBase.get(
-      "admin/estudios/convocatorias/listaEvaluaciones"
+      "admin/facultad/gestionEvaluadores/listado"
     );
-    const data = await res.data;
-    setDistribution(data.data);
+    const data = res.data;
+    setDistribution(data);
     setLoading(false);
   };
 
@@ -143,14 +164,6 @@ export default () => {
   useEffect(() => {
     getData();
   }, []);
-
-  useEffect(() => {
-    if (selectedItems.length > 0) {
-      setEnableBtn(true);
-    } else {
-      setEnableBtn(false);
-    }
-  }, [selectedItems]);
 
   return (
     <>
@@ -165,49 +178,43 @@ export default () => {
         resizableColumns
         enableKeyboardNavigation
         selectionType="single"
-        selectedItems={selectedItems}
-        onSelectionChange={({ detail }) =>
-          setSelectedItems(detail.selectedItems)
-        }
         header={
           <Header
             counter={
-              selectedItems.length
-                ? "(" + selectedItems.length + "/" + items.length + ")"
-                : "(" + items.length + ")"
+              collectionProps.selectedItems.length
+                ? "(" + distributions.length + "/" + items.length + ")"
+                : "(" + distributions.length + ")"
             }
             actions={
-              <SpaceBetween size="s" direction="horizontal">
-                <Button
-                  variant="normal"
-                  iconName="edit"
-                  disabled={!enableBtn}
-                  onClick={() => {
-                    const query = queryString.stringify({
-                      id: selectedItems[0]["id"],
-                    });
-                    window.location.href = "convocatorias/detalle?" + query;
-                  }}
+              <SpaceBetween size="xs" direction="horizontal">
+                <ButtonDropdown
+                  items={[
+                    {
+                      id: "action_1",
+                      text: "Editar",
+                    },
+                  ]}
                 >
-                  Ver detalle
-                </Button>
+                  Opciones de evaluador
+                </ButtonDropdown>
                 <Button
                   variant="primary"
-                  iconName="add-plus"
-                  onClick={() => setCreateVisible(true)}
+                  onClick={() => {
+                    setVisible(true);
+                  }}
                 >
-                  Añadir criterio
+                  Nuevo evaluador
                 </Button>
               </SpaceBetween>
             }
           >
-            Evaluaciones
+            Listado de usuarios evaluadores
           </Header>
         }
         filter={
           <PropertyFilter
             {...propertyFilterProps}
-            filteringPlaceholder="Buscar grupo"
+            filteringPlaceholder="Buscar proyecto"
             countText={`${filteredItemsCount} coincidencias`}
             expandToViewport
           />
@@ -221,12 +228,8 @@ export default () => {
           </Box>
         }
       />
-      {createVisible && (
-        <ModalCreateEvaluacion
-          visible={createVisible}
-          setVisible={setCreateVisible}
-          reload={getData}
-        />
+      {visible && (
+        <ModalEvaluador close={() => setVisible(false)} reload={getData} />
       )}
     </>
   );

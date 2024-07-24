@@ -13,6 +13,7 @@ import { useState, useEffect } from "react";
 import { useCollection } from "@cloudscape-design/collection-hooks";
 import axiosBase from "../../../../../api/axios";
 import { CreateModal, DeleteModal, EditModal } from "../components/modal";
+import ModalCreateConvocatoria from "../components/modalCreateConvocatoria";
 
 const stringOperators = [":", "!:", "=", "!=", "^", "!^"];
 
@@ -291,7 +292,7 @@ export default () => {
         }
       />
       {createVisible && (
-        <CreateModal
+        <ModalCreateConvocatoria
           visible={createVisible}
           setVisible={setCreateVisible}
           reload={getData}

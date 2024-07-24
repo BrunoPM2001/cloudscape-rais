@@ -15,6 +15,7 @@ import { useState, useEffect } from "react";
 import { useCollection } from "@cloudscape-design/collection-hooks";
 import axiosBase from "../../../../../api/axios";
 import { useAutosuggest } from "../../../../../hooks/useAutosuggest";
+import queryString from "query-string";
 
 const stringOperators = [":", "!:", "=", "!=", "^", "!^"];
 
@@ -221,7 +222,6 @@ export default () => {
   //  States
   const [loadingData, setLoadingData] = useState(true);
   const [form, setForm] = useState({});
-  const [selectedItems, setSelectedItems] = useState([]);
   const [distributions, setDistribution] = useState([]);
   const {
     items,
@@ -251,7 +251,6 @@ export default () => {
     sorting: { defaultState: { sortingColumn: columnDefinitions[0] } },
     selection: {},
   });
-  const [enableBtn, setEnableBtn] = useState(true);
 
   //  Hooks
   const { loading, options, setOptions, value, setValue, setAvoidSelect } =
@@ -276,14 +275,6 @@ export default () => {
   }, []);
 
   useEffect(() => {
-    if (selectedItems.length > 0) {
-      setEnableBtn(true);
-    } else {
-      setEnableBtn(false);
-    }
-  }, [selectedItems]);
-
-  useEffect(() => {
     if (Object.keys(form).length != 0) {
       getData();
     }
@@ -301,8 +292,6 @@ export default () => {
       resizableColumns
       enableKeyboardNavigation
       selectionType="single"
-      selectedItems={selectedItems}
-      onSelectionChange={({ detail }) => setSelectedItems(detail.selectedItems)}
       header={
         <Header
           counter={"(" + distributions.length + ")"}
@@ -356,10 +345,23 @@ export default () => {
               >
                 Nuevo
               </ButtonDropdown>
-              <Button variant="normal" disabled={!enableBtn}>
+              <Button
+                variant="normal"
+                disabled={!collectionProps.selectedItems.length}
+              >
                 Reporte
               </Button>
-              <Button variant="primary" disabled={!enableBtn}>
+              <Button
+                variant="primary"
+                disabled={!collectionProps.selectedItems.length}
+                onClick={() => {
+                  const query = queryString.stringify({
+                    id: collectionProps.selectedItems[0]["id"],
+                  });
+                  window.location.href =
+                    "gestion_publicaciones/detalle?" + query;
+                }}
+              >
                 Editar
               </Button>
             </SpaceBetween>

@@ -1,43 +1,37 @@
 import {
   Box,
+  Button,
   ColumnLayout,
   Container,
   Header,
   Spinner,
   StatusIndicator,
 } from "@cloudscape-design/components";
-import queryString from "query-string";
-import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
-import axiosBase from "../../../../../api/axios";
+import ModalAprobarCriterios from "../components/modalAprobarCriterios";
+import { useState } from "react";
 
-export default () => {
+export default ({ data, loading, reload }) => {
   //  State
-  const [data, setData] = useState({});
-  const [loading, setLoading] = useState(true);
-
-  //  Url
-  const location = useLocation();
-  const { id } = queryString.parse(location.search);
-
-  //  Functions
-  const getData = async () => {
-    setLoading(true);
-    const res = await axiosBase.get(
-      "admin/estudios/convocatorias/verCriteriosEvaluacion/" + id
-    );
-    const data = await res.data;
-    setData(data.evaluacion[0]);
-    setLoading(false);
-  };
-
-  //  Effects
-  useEffect(() => {
-    getData();
-  }, []);
+  const [visible, setVisible] = useState(false);
 
   return (
-    <Container header={<Header variant="h2">Detalles de la evaluación</Header>}>
+    <Container
+      header={
+        <Header
+          variant="h2"
+          actions={
+            !loading &&
+            data.estado != "APROBADO" && (
+              <Button onClick={() => setVisible(true)} variant="primary">
+                Aprobar criterios
+              </Button>
+            )
+          }
+        >
+          Detalles de la evaluación
+        </Header>
+      }
+    >
       <ColumnLayout columns={3} variant="text-grid">
         <div>
           <Box variant="awsui-key-label">Tipo de proyecto</Box>
@@ -53,13 +47,26 @@ export default () => {
             <Spinner />
           ) : (
             <StatusIndicator
-              type={data.estado == "APROBADO" ? "success" : "error"}
+              type={
+                data.estado == "APROBADO"
+                  ? "success"
+                  : data.estado == "EN PROCESO"
+                  ? "in-progress"
+                  : "error"
+              }
             >
               {data.estado}
             </StatusIndicator>
           )}
         </div>
       </ColumnLayout>
+      {visible && (
+        <ModalAprobarCriterios
+          close={() => setVisible(false)}
+          id={data.id}
+          reload={reload}
+        />
+      )}
     </Container>
   );
 };

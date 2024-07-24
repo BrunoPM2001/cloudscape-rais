@@ -322,48 +322,48 @@ const routes = createBrowserRouter(
         },
       ],
     },
-    {
-      path: "convocatoria",
-      children: [
-        {
-          path: "proctie",
-          children: [
-            {
-              path: "verificar",
-              element: <Verificar_requisitos />,
-            },
-            {
-              path: "paso1",
-              element: <Registrar_proyecto_paso1 />,
-            },
-            {
-              path: "paso2",
-              element: <Registrar_proyecto_paso2 />,
-            },
-            {
-              path: "paso3",
-              element: <Registrar_proyecto_paso3 />,
-            },
-            {
-              path: "paso4",
-              element: <Registrar_proyecto_paso4 />,
-            },
-            {
-              path: "paso5",
-              element: <Registrar_proyecto_paso5 />,
-            },
-            {
-              path: "paso6",
-              element: <Registrar_proyecto_paso6 />,
-            },
-            {
-              path: "paso7",
-              element: <Registrar_proyecto_paso7 />,
-            },
-          ],
-        },
-      ],
-    },
+    // {
+    //   path: "convocatoria",
+    //   children: [
+    //     {
+    //       path: "proctie",
+    //       children: [
+    //         {
+    //           path: "verificar",
+    //           element: <Verificar_requisitos />,
+    //         },
+    //         {
+    //           path: "paso1",
+    //           element: <Registrar_proyecto_paso1 />,
+    //         },
+    //         {
+    //           path: "paso2",
+    //           element: <Registrar_proyecto_paso2 />,
+    //         },
+    //         {
+    //           path: "paso3",
+    //           element: <Registrar_proyecto_paso3 />,
+    //         },
+    //         {
+    //           path: "paso4",
+    //           element: <Registrar_proyecto_paso4 />,
+    //         },
+    //         {
+    //           path: "paso5",
+    //           element: <Registrar_proyecto_paso5 />,
+    //         },
+    //         {
+    //           path: "paso6",
+    //           element: <Registrar_proyecto_paso6 />,
+    //         },
+    //         {
+    //           path: "paso7",
+    //           element: <Registrar_proyecto_paso7 />,
+    //         },
+    //       ],
+    //     },
+    //   ],
+    // },
     {
       path: "informes",
       children: [

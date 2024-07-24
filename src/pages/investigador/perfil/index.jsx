@@ -18,6 +18,7 @@ import axiosBase from "../../../api/axios";
 import { useFormValidation } from "../../../hooks/useFormValidation";
 import { useContext, useEffect, useState } from "react";
 import NotificationContext from "../../../providers/notificationProvider";
+import Cdi from "./cdi";
 
 const breadcrumbs = [
   {
@@ -382,41 +383,7 @@ export default function Perfil() {
             </Container>
           </SpaceBetween>
           <SpaceBetween size="l">
-            <Container>
-              <Form
-                header={
-                  <Header variant="h3">Requisitos para solicitar CDI</Header>
-                }
-                actions={<Button>Presentar declaración jurada</Button>}
-              >
-                <ColumnLayout
-                  columns={2}
-                  borders="vertical"
-                  minColumnWidth={120}
-                >
-                  <div>
-                    <Box variant="awsui-key-label">Renacyt</Box>
-                    <StatusIndicator type="success">Sí cumple</StatusIndicator>
-                  </div>
-                  <div>
-                    <Box variant="awsui-key-label">Grupo de investigación</Box>
-                    <StatusIndicator type="in-progress">
-                      No evaluado
-                    </StatusIndicator>
-                  </div>
-                  <div>
-                    <Box variant="awsui-key-label">
-                      Actividades de Investigación
-                    </Box>
-                    <StatusIndicator type="success">Sí cumple</StatusIndicator>
-                  </div>
-                  <div>
-                    <Box variant="awsui-key-label">Declaración Jurada(DJ)</Box>
-                    <StatusIndicator type="success">Sí cumple</StatusIndicator>
-                  </div>
-                </ColumnLayout>
-              </Form>
-            </Container>
+            <Cdi />
             <Container>
               <Form
                 header={<Header variant="h3">Información adicional</Header>}

@@ -145,8 +145,7 @@ const navItems = [
       {
         type: "link",
         text: "Proyecto de Ciencia, Tecnología, Innovación y Emprendimiento",
-        info: <Badge color="grey">Convocatoria cerrada</Badge>,
-        href: "#",
+        href: "/investigador/convocatoria/proctie/verificar",
       },
     ],
   },

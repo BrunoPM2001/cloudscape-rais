@@ -167,7 +167,11 @@ const navItems = [
       },
       { type: "divider" },
       { type: "link", text: "Usuarios facultad", href: "#" },
-      { type: "link", text: "Usuarios evaluadores", href: "#" },
+      {
+        type: "link",
+        text: "Usuarios evaluadores",
+        href: "/admin/facultad/gestion_evaluadores",
+      },
       {
         type: "link",
         text: "Asignación de evaluadores",

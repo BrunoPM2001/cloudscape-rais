@@ -2,6 +2,15 @@ import { Suspense, lazy } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { NotificationProvider } from "../providers/notificationProvider";
 
+const Detalle_publicacion = lazy(() =>
+  import("../pages/admin/estudios/gestion_publicaciones/detalles/index.jsx")
+);
+const Gestion_evaluadores = lazy(() =>
+  import("../pages/admin/facultad/gestion_evaluadores/index.jsx")
+);
+const Docente_investigador_evaluacion = lazy(() =>
+  import("../pages/admin/estudios/docentes/evaluacion/index.jsx")
+);
 const Docente_investigador = lazy(() =>
   import("../pages/admin/estudios/docentes/index.jsx")
 );
@@ -224,7 +233,16 @@ const routes = createBrowserRouter(
         },
         {
           path: "gestion_publicaciones",
-          element: <Gestion_publicacion />,
+          children: [
+            {
+              path: "",
+              element: <Gestion_publicacion />,
+            },
+            {
+              path: "detalle",
+              element: <Detalle_publicacion />,
+            },
+          ],
         },
         {
           path: "revistas",
@@ -261,6 +279,10 @@ const routes = createBrowserRouter(
             {
               path: "",
               element: <Docente_investigador />,
+            },
+            {
+              path: "evaluacion",
+              element: <Docente_investigador_evaluacion />,
             },
           ],
         },
@@ -347,6 +369,15 @@ const routes = createBrowserRouter(
             {
               path: "detalle",
               element: <Detalle_convocatoria />,
+            },
+          ],
+        },
+        {
+          path: "gestion_evaluadores",
+          children: [
+            {
+              path: "",
+              element: <Gestion_evaluadores />,
             },
           ],
         },

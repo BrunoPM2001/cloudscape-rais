@@ -1,0 +1,38 @@
+import { Tabs } from "@cloudscape-design/components";
+import Listado from "./tabs/listado.jsx";
+import BaseLayout from "../../components/baseLayout";
+
+const breadcrumbs = [
+  {
+    text: "Admin",
+    href: "/admin",
+  },
+  {
+    text: "Facultad",
+  },
+  {
+    text: "Gestión de evaluadores",
+  },
+];
+
+const tabs = [
+  {
+    id: "listado",
+    label: "Listado",
+    content: <Listado />,
+  },
+];
+
+export default function Gestion_evaluadores() {
+  return (
+    <BaseLayout
+      breadcrumbs={breadcrumbs}
+      header="Asignar evaluadores:"
+      helpInfo="Información sobre la páginal actual para poder mostrarla al público
+      en general."
+      disableOverlap
+    >
+      <Tabs tabs={tabs} />
+    </BaseLayout>
+  );
+}
