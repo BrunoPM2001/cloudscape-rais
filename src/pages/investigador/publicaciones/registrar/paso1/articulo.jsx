@@ -261,7 +261,7 @@ export default forwardRef(function (props, ref) {
                 />
               </FormField>
               <FormField
-                label="Año de publicación"
+                label="Fecha de publicación"
                 stretch
                 errorText={formErrors.fecha_publicacion}
               >

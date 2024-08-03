@@ -42,7 +42,7 @@ const optsEstado = [
   },
 ];
 
-export default ({ visible, setVisible, item, reload }) => {
+export default ({ close, item, reload }) => {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
 
@@ -97,8 +97,8 @@ export default ({ visible, setVisible, item, reload }) => {
       const data = res.data;
       pushNotification(data.detail, data.message, notifications.length + 1);
       setLoading(false);
-      setVisible(false);
       reload();
+      close();
     }
   };
 
@@ -115,13 +115,13 @@ export default ({ visible, setVisible, item, reload }) => {
 
   return (
     <Modal
-      onDismiss={() => setVisible(false)}
-      visible={visible}
+      visible
+      onDismiss={close}
       size="max"
       footer={
         <Box float="right">
           <SpaceBetween direction="horizontal" size="xs">
-            <Button variant="normal" onClick={() => setVisible(false)}>
+            <Button variant="normal" onClick={close}>
               Cancelar
             </Button>
             <Button

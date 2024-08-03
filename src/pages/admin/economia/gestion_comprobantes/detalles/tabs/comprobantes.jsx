@@ -12,6 +12,7 @@ import { useState, useEffect } from "react";
 import { useCollection } from "@cloudscape-design/collection-hooks";
 import axiosBase from "../../../../../../api/axios";
 import ModalComprobante from "../components/modalComprobante";
+import ModalAudit from "../components/modalAudit";
 
 const stringOperators = [":", "!:", "=", "!=", "^", "!^"];
 
@@ -159,9 +160,8 @@ const columnDisplay = [
 
 export default ({ id }) => {
   //  Data states
-  const [visible, setVisible] = useState(false);
+  const [type, setType] = useState("");
   const [loading, setLoading] = useState(true);
-  const [selectedItems, setSelectedItems] = useState([]);
   const [distributions, setDistribution] = useState([]);
   const {
     items,
@@ -191,11 +191,10 @@ export default ({ id }) => {
     sorting: { defaultState: { sortingColumn: columnDefinitions[0] } },
     selection: {},
   });
-  const [enableBtn, setEnableBtn] = useState(false);
 
   //  Functions
   const getData = async () => {
-    setSelectedItems([]);
+    setDistribution([]);
     setLoading(true);
     const res = await axiosBase.get(
       "admin/economia/comprobantes/listadoComprobantes",
@@ -215,14 +214,6 @@ export default ({ id }) => {
     getData();
   }, []);
 
-  useEffect(() => {
-    if (selectedItems.length > 0) {
-      setEnableBtn(true);
-    } else {
-      setEnableBtn(false);
-    }
-  }, [selectedItems]);
-
   return (
     <>
       <Table
@@ -236,21 +227,25 @@ export default ({ id }) => {
         resizableColumns
         enableKeyboardNavigation
         selectionType="single"
-        selectedItems={selectedItems}
-        onSelectionChange={({ detail }) =>
-          setSelectedItems(detail.selectedItems)
-        }
         header={
           <Header
             counter={"(" + distributions.length + ")"}
             actions={
-              <Button
-                disabled={!enableBtn}
-                variant="primary"
-                onClick={() => setVisible(true)}
-              >
-                Ver detalle
-              </Button>
+              <SpaceBetween size="xs" direction="horizontal">
+                <Button
+                  disabled={collectionProps.selectedItems.length == 0}
+                  onClick={() => setType("audit")}
+                >
+                  Ver historial
+                </Button>
+                <Button
+                  variant="primary"
+                  disabled={collectionProps.selectedItems.length == 0}
+                  onClick={() => setType("detalle")}
+                >
+                  Ver detalle
+                </Button>
+              </SpaceBetween>
             }
           >
             Listado de comprobantes
@@ -274,13 +269,19 @@ export default ({ id }) => {
           </Box>
         }
       />
-      {visible && (
+      {type == "detalle" ? (
         <ModalComprobante
-          visible={visible}
-          setVisible={setVisible}
-          item={selectedItems[0]}
+          close={() => setType("")}
+          item={collectionProps.selectedItems[0]}
           reload={getData}
         />
+      ) : type == "audit" ? (
+        <ModalAudit
+          close={() => setType("")}
+          item={collectionProps.selectedItems[0]}
+        />
+      ) : (
+        <></>
       )}
     </>
   );

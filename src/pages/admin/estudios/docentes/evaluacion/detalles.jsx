@@ -8,8 +8,13 @@ import {
   Spinner,
   StatusIndicator,
 } from "@cloudscape-design/components";
+import { useState } from "react";
+import ModalObservaciones from "./components/modalObservaciones";
 
-export default ({ data, loading }) => {
+export default ({ id, data, loading }) => {
+  //  States
+  const [type, setType] = useState("");
+
   return (
     <Container
       header={
@@ -17,7 +22,7 @@ export default ({ data, loading }) => {
           variant="h2"
           actions={
             <SpaceBetween size="xs" direction="horizontal">
-              <Button>Observaciones</Button>
+              <Button onClick={() => setType("obs")}>Observaciones</Button>
               <Button>Editar perfil</Button>
             </SpaceBetween>
           }
@@ -26,7 +31,7 @@ export default ({ data, loading }) => {
         </Header>
       }
     >
-      <ColumnLayout columns={3} variant="text-grid">
+      <ColumnLayout columns={4} variant="text-grid">
         <SpaceBetween size="s">
           <div>
             <Box variant="awsui-key-label">Apellidos y nombres</Box>
@@ -44,6 +49,8 @@ export default ({ data, loading }) => {
             <Box variant="awsui-key-label">Email</Box>
             {loading ? <Spinner /> : <div>{data.email3}</div>}
           </div>
+        </SpaceBetween>
+        <SpaceBetween size="s">
           <div>
             <Box variant="awsui-key-label">Estado</Box>
             {loading ? (
@@ -68,8 +75,6 @@ export default ({ data, loading }) => {
               </StatusIndicator>
             )}
           </div>
-        </SpaceBetween>
-        <SpaceBetween size="s">
           <div>
             <Box variant="awsui-key-label">CTI Vitae</Box>
             {loading ? <Spinner /> : <div>{data.cti_vitae}</div>}
@@ -82,6 +87,8 @@ export default ({ data, loading }) => {
             <Box variant="awsui-key-label">Renacyt nivel</Box>
             {loading ? <Spinner /> : <div>{data.renacyt_nivel}</div>}
           </div>
+        </SpaceBetween>
+        <SpaceBetween size="s">
           <div>
             <Box variant="awsui-key-label">Código orcid</Box>
             {loading ? <Spinner /> : <div>{data.orcid}</div>}
@@ -90,12 +97,13 @@ export default ({ data, loading }) => {
             <Box variant="awsui-key-label">Google scholar</Box>
             {loading ? <Spinner /> : <div>{data.google_scholar}</div>}
           </div>
-        </SpaceBetween>
-        <SpaceBetween size="s">
+
           <div>
             <Box variant="awsui-key-label">Fecha de envío de la solicitud</Box>
             {loading ? <Spinner /> : <div>{data.created_at}</div>}
           </div>
+        </SpaceBetween>
+        <SpaceBetween size="s">
           <div>
             <Box variant="awsui-key-label">Tipo de docente</Box>
             {loading ? <Spinner /> : <div>{data.tipo_docente}</div>}
@@ -114,6 +122,15 @@ export default ({ data, loading }) => {
           </div>
         </SpaceBetween>
       </ColumnLayout>
+      {type == "obs" ? (
+        <ModalObservaciones
+          id={id}
+          close={() => setType("")}
+          enabled={data?.estado}
+        />
+      ) : (
+        <></>
+      )}
     </Container>
   );
 };

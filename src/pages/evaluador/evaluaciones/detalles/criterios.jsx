@@ -1,4 +1,5 @@
 import {
+  Badge,
   Box,
   Button,
   ButtonDropdown,
@@ -6,11 +7,13 @@ import {
   Input,
   SpaceBetween,
   Table,
+  Textarea,
 } from "@cloudscape-design/components";
 import { useContext, useState } from "react";
 import axiosBase from "../../../../api/axios";
 import NotificationContext from "../../../../providers/notificationProvider";
 import ModalSubirFicha from "./components/modalSubirFicha";
+import ModalPreFinalizarEvaluacion from "./components/modalPreFinalizarEvaluacion";
 
 export default ({
   data,
@@ -20,13 +23,15 @@ export default ({
   proyecto_id,
   reload,
   comentario,
+  puntaje_total,
 }) => {
   //  Context
-  const { notifications, pushNotification } = useContext(NotificationContext);
+  const { notifications, pushNotification, clearNotification } =
+    useContext(NotificationContext);
 
   //  States
   const [loadingBtn, setLoadingBtn] = useState(false);
-  const [visible, setVisible] = useState(false);
+  const [type, setType] = useState(false);
 
   //  Functions
   const updateItem = async (item) => {
@@ -35,22 +40,13 @@ export default ({
       proyecto_id,
     });
     const data = res.data;
-    pushNotification(data.detail, data.message, notifications.length + 1);
-    reload();
-  };
-
-  const finalizarEvaluacion = async () => {
-    setLoadingBtn(true);
-    const res = await axiosBase.put(
-      "evaluador/evaluaciones/finalizarEvaluacion",
-      {
-        proyecto_id,
-        comentario,
-      }
+    clearNotification();
+    pushNotification(
+      data.detail,
+      data.message,
+      notifications.length + 1,
+      false
     );
-    setLoadingBtn(false);
-    const data = res.data;
-    pushNotification(data.detail, data.message, notifications.length + 1);
     reload();
   };
 
@@ -75,11 +71,16 @@ export default ({
           {
             id: "opcion",
             header: "Criterio de evaluación",
-            cell: (item) => (
-              <div dangerouslySetInnerHTML={{ __html: item.opcion }}></div>
-            ),
+            cell: (item) =>
+              item.nivel == 2 ? (
+                <Badge color="blue">
+                  <div dangerouslySetInnerHTML={{ __html: item.opcion }}></div>
+                </Badge>
+              ) : (
+                <div dangerouslySetInnerHTML={{ __html: item.opcion }}></div>
+              ),
             isRowHeader: true,
-            width: "50%",
+            width: "40%",
           },
           {
             id: "puntaje_max",
@@ -118,7 +119,10 @@ export default ({
                 return undefined;
               },
             },
-            cell: (item) => (item.nivel != 2 ? item.puntaje : null),
+            cell: (item) =>
+              item.nivel != 2 || item.opcion == "SUB TOTAL"
+                ? item.puntaje
+                : null,
           },
           {
             id: "comentario",
@@ -127,7 +131,7 @@ export default ({
             editConfig: {
               editingCell: (item, { currentValue, setValue }) => {
                 return (
-                  <Input
+                  <Textarea
                     autoFocus={true}
                     value={currentValue ?? item.comentario}
                     onChange={(event) => setValue(event.detail.value)}
@@ -208,7 +212,7 @@ export default ({
                       if (detail.id == "action_1") {
                         reporte();
                       } else if (detail.id == "action_2") {
-                        setVisible(true);
+                        setType("subir");
                       }
                     }}
                   >
@@ -216,22 +220,39 @@ export default ({
                   </ButtonDropdown>
                 </SpaceBetween>
               ) : (
-                <Button loading={loadingBtn} onClick={finalizarEvaluacion}>
+                <Button
+                  loading={loadingBtn}
+                  onClick={() => setType("finalizar")}
+                >
                   Finalizar evaluación
                 </Button>
               ))
             }
           >
-            Criterios de evaluación
+            <SpaceBetween size="xs" direction="horizontal">
+              <Box variant="h2">Criterios de evaluación</Box>
+              {!loading && (
+                <Badge color="green">Puntaje total: {puntaje_total}</Badge>
+              )}
+            </SpaceBetween>
           </Header>
         }
       />
-      {visible && (
+      {type == "subir" ? (
         <ModalSubirFicha
           proyecto_id={proyecto_id}
-          close={() => setVisible(false)}
+          close={() => setType("")}
           reload={reload}
         />
+      ) : type == "finalizar" ? (
+        <ModalPreFinalizarEvaluacion
+          proyecto_id={proyecto_id}
+          comentario={comentario}
+          close={() => setType("")}
+          reload={reload}
+        />
+      ) : (
+        <></>
       )}
     </>
   );

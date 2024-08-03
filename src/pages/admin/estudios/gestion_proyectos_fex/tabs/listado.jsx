@@ -1,6 +1,7 @@
 import {
   Badge,
   Box,
+  Button,
   Header,
   Pagination,
   PropertyFilter,
@@ -303,8 +304,8 @@ export default () => {
   const getData = async () => {
     setLoading(true);
     const res = await axiosBase.get("admin/estudios/proyectosFEX/listado");
-    const data = await res.data;
-    setDistribution(data.data);
+    const data = res.data;
+    setDistribution(data);
     setLoading(false);
   };
 
@@ -325,7 +326,10 @@ export default () => {
       resizableColumns
       enableKeyboardNavigation
       header={
-        <Header counter={"(" + distributions.length + ")"}>
+        <Header
+          counter={"(" + distributions.length + ")"}
+          actions={<Button variant="primary">Nuevo</Button>}
+        >
           Proyectos FEX
         </Header>
       }

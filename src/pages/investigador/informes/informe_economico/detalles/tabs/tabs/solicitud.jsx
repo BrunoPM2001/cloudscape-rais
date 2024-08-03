@@ -42,12 +42,16 @@ const columnDefinitions = [
     id: "operacion",
     header: "Transferencia (S/)",
     cell: (item) =>
-      item.operacion == null ? (
+      item.monto_nuevo == null ? (
         ""
-      ) : item.operacion == "+" ? (
-        <Badge color="blue">+{item.transferencia}</Badge>
-      ) : item.operacion == "-" ? (
-        <Badge color="red">-{item.transferencia}</Badge>
+      ) : item.monto_nuevo > item.monto ? (
+        <Badge color="blue">
+          +{parseFloat(item.monto_nuevo - item.monto).toFixed(3)}
+        </Badge>
+      ) : item.monto_nuevo < item.monto ? (
+        <Badge color="red">
+          -{parseFloat(item.monto - item.monto_nuevo).toFixed(3)}
+        </Badge>
       ) : (
         ""
       ),
@@ -57,7 +61,7 @@ const columnDefinitions = [
     id: "monto_nuevo",
     header: "Nuevo presupuesto (S/)",
     cell: (item) =>
-      item.operacion == null ? "" : parseFloat(item.monto_nuevo).toFixed(3),
+      item.monto_nuevo == null ? "" : parseFloat(item.monto_nuevo).toFixed(3),
     sortingField: "monto_nuevo",
   },
 ];
@@ -84,6 +88,7 @@ export default ({ data, loading, reload, disponible }) => {
 
   //  States
   const [visible, setVisible] = useState(false);
+  const [loadingBtn, setLoadingBtn] = useState(false);
 
   //  Hooks
   const { formValues, formErrors, handleChange, validateForm } =
@@ -96,6 +101,7 @@ export default ({ data, loading, reload, disponible }) => {
   //  Functions
   const solicitar = async () => {
     if (validateForm()) {
+      setLoadingBtn(true);
       const res = await axiosBase.post(
         "investigador/informes/informe_economico/solicitarTransferencia",
         {
@@ -104,6 +110,7 @@ export default ({ data, loading, reload, disponible }) => {
         }
       );
       const data = res.data;
+      setLoadingBtn(false);
       pushNotification(data.detail, data.message, notifications.length);
       reload();
     }
@@ -163,7 +170,11 @@ export default ({ data, loading, reload, disponible }) => {
       />
       <Form
         actions={
-          <Button onClick={solicitar} disabled={!disponible}>
+          <Button
+            onClick={solicitar}
+            disabled={!disponible}
+            loading={loadingBtn}
+          >
             Solicitar transferencia
           </Button>
         }

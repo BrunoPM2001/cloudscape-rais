@@ -1,11 +1,13 @@
 import {
   Box,
+  Button,
   Header,
   SpaceBetween,
   Table,
 } from "@cloudscape-design/components";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import axiosBase from "../../../../../../api/axios";
+import NotificationContext from "../../../../../../providers/notificationProvider";
 
 const columnDefinitions = [
   {
@@ -66,9 +68,14 @@ const columnDisplay = [
 ];
 
 export default ({ id }) => {
+  //  Context
+  const { notifications, pushNotification } = useContext(NotificationContext);
+
   //  Data states
   const [loading, setLoading] = useState(true);
+  const [loadingBtn, setLoadingBtn] = useState(false);
   const [distributions, setDistribution] = useState([]);
+
   //  Functions
   const getData = async () => {
     setLoading(true);
@@ -83,6 +90,22 @@ export default ({ id }) => {
     const data = res.data;
     setDistribution(data);
     setLoading(false);
+  };
+
+  const recalcular = async () => {
+    setLoadingBtn(true);
+    const res = await axiosBase.get(
+      "admin/economia/comprobantes/recalcularMontos",
+      {
+        params: {
+          geco_proyecto_id: id,
+        },
+      }
+    );
+    const data = res.data;
+    pushNotification(data.detail, data.message, notifications.length + 1);
+    setLoadingBtn(false);
+    getData();
   };
 
   //  Effects
@@ -102,7 +125,14 @@ export default ({ id }) => {
         resizableColumns
         wrapLines
         header={
-          <Header counter={"(" + distributions.length + ")"}>
+          <Header
+            counter={"(" + distributions.length + ")"}
+            actions={
+              <Button onClick={recalcular} loading={loadingBtn}>
+                Recalcular montos
+              </Button>
+            }
+          >
             Listado de partidas
           </Header>
         }

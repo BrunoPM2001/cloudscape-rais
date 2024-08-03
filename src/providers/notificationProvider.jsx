@@ -6,7 +6,7 @@ export const NotificationProvider = ({ children }) => {
   //  State
   const [notifications, setNotifications] = useState([]);
 
-  const pushNotification = (message, type, id) => {
+  const pushNotification = (message, type, id, scroll = true) => {
     setNotifications((prev) => [
       ...prev,
       {
@@ -18,11 +18,19 @@ export const NotificationProvider = ({ children }) => {
           setNotifications((items) => items.filter((item) => item.id !== id)),
       },
     ]);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    if (scroll) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
+  const clearNotification = () => {
+    setNotifications([]);
   };
 
   return (
-    <NotificationContext.Provider value={{ notifications, pushNotification }}>
+    <NotificationContext.Provider
+      value={{ notifications, pushNotification, clearNotification }}
+    >
       {children}
     </NotificationContext.Provider>
   );

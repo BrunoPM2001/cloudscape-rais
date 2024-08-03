@@ -4,23 +4,18 @@ import {
   Input,
   Box,
   SpaceBetween,
-  Form,
-  Header,
   ColumnLayout,
   Button,
-  DatePicker,
-  Container,
-  Spinner,
-  Select,
   Autosuggest,
 } from "@cloudscape-design/components";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import axiosBase from "../../../../../api/axios";
 import NotificationContext from "../../../../../providers/notificationProvider";
 import { useFormValidation } from "../../../../../hooks/useFormValidation";
 import { useAutosuggest } from "../../../../../hooks/useAutosuggest";
 
 const initialForm = {
+  investigador_id: null,
   apellidos: "",
   nombres: "",
   institucion: "",
@@ -94,11 +89,12 @@ export default ({ close, reload }) => {
             }}
             onSelect={({ detail }) => {
               if (detail.selectedOption.id != undefined) {
-                const { apellidos, nombres, institucion } =
+                const { apellidos, nombres, institucion, id } =
                   detail.selectedOption;
                 handleChange("apellidos", apellidos);
                 handleChange("nombres", nombres);
                 handleChange("institucion", institucion);
+                handleChange("investigador_id", id);
                 setAvoidSelect(false);
               }
             }}

@@ -61,7 +61,7 @@ export default ({
   const tabs = [
     {
       id: "obs",
-      label: "Observación 1",
+      label: "Nueva observación",
       content: (
         <FormField
           label="Observación"
@@ -82,7 +82,7 @@ export default ({
   obs.map((item, index) => {
     tabs.push({
       id: "obs_" + index,
-      label: "Observación " + (index + 2),
+      label: "Observación " + (index + 1),
       content: <ObsTab obs={item.observacion} />,
     });
   });

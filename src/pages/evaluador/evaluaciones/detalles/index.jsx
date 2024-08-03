@@ -1,4 +1,6 @@
 import {
+  Alert,
+  Button,
   Container,
   FormField,
   SpaceBetween,
@@ -50,7 +52,6 @@ export default function Evaluador_proyecto() {
 
   //  Functions
   const getData = async () => {
-    setLoading(true);
     const res = await axiosBase.get(
       "evaluador/evaluaciones/criteriosEvaluacion",
       {
@@ -97,11 +98,13 @@ export default function Evaluador_proyecto() {
         <Criterios
           cerrado={data.cerrado}
           data={data.criterios}
+          setData={setData}
           ficha={data.comentario?.ficha}
           loading={loading}
           proyecto_id={proyecto_id}
           reload={getData}
           comentario={formValues.comentario}
+          puntaje_total={data.total}
         />
         <Container>
           {loading ? (

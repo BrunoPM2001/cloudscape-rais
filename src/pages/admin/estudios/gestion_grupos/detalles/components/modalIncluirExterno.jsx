@@ -93,16 +93,36 @@ export default ({ visible, setVisible, reload }) => {
   const agregarMiembro = async () => {
     if (validateForm()) {
       setLoadingCreate(true);
-      const res = await axiosBase.post("admin/estudios/grupos/agregarMiembro", {
-        ...formValues,
-        sexo: formValues.sexo.value,
-        pais: formValues.pais.value,
-        doc_tipo: formValues.doc_tipo.value,
-        tipo_registro: "externo",
-        grupo_id: id,
-        condicion: "Adherente",
-        tipo: "Externo",
-      });
+      const form = new FormData();
+      form.append("codigo_orcid", formValues.codigo_orcid);
+      form.append("apellido1", formValues.apellido1);
+      form.append("apellido2", formValues.apellido2);
+      form.append("nombres", formValues.nombres);
+      form.append("sexo", formValues.sexo.value);
+      form.append("institucion", formValues.institucion);
+      form.append("pais", formValues.pais.value);
+      form.append("direccion1", formValues.direccion1);
+      form.append("doc_tipo", formValues.doc_tipo.value);
+      form.append("doc_numero", formValues.doc_numero);
+      form.append("telefono_movil", formValues.telefono_movil);
+      form.append("titulo_profesional", formValues.titulo_profesional);
+      form.append("grado", formValues.grado);
+      form.append("especialidad", formValues.especialidad);
+      form.append("researcher_id", formValues.researcher_id);
+      form.append("scopus_id", formValues.scopus_id);
+      form.append("link", formValues.link);
+      form.append("posicion_unmsm", formValues.posicion_unmsm);
+      form.append("biografia", formValues.biografia);
+      form.append("observacion", formValues.observacion);
+      form.append("file", formValues.file[0]);
+      form.append("grupo_id", id);
+      form.append("tipo_registro", "externo");
+      form.append("condicion", "Adherente");
+      form.append("tipo", "Externo");
+      const res = await axiosBase.post(
+        "admin/estudios/grupos/agregarMiembro",
+        form
+      );
       const data = res.data;
       setLoadingCreate(false);
       setVisible(false);

@@ -9,7 +9,6 @@ import {
   Modal,
   Select,
   SpaceBetween,
-  Textarea,
 } from "@cloudscape-design/components";
 import { useFormValidation } from "../../../../../../../hooks/useFormValidation";
 import { useContext, useEffect, useState } from "react";
@@ -79,6 +78,7 @@ export default ({ setVisible, id, reload }) => {
   //  States
   const [optsA, setOptsA] = useState([]);
   const [optsB, setOptsB] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   //  Hooks
   const { formValues, formErrors, handleChange, validateForm } =
@@ -105,6 +105,7 @@ export default ({ setVisible, id, reload }) => {
         parseFloat(formValues.monto) <= parseFloat(formValues.partidaA?.max) &&
         formValues.partidaA.max > 0
       ) {
+        setLoading(true);
         const res = await axiosBase.post(
           "investigador/informes/informe_economico/addTransferenciaTemporal",
           {
@@ -115,6 +116,7 @@ export default ({ setVisible, id, reload }) => {
           }
         );
         const data = res.data;
+        setLoading(false);
         setVisible(false);
         pushNotification(data.detail, data.message, notifications.length);
         reload();
@@ -137,7 +139,12 @@ export default ({ setVisible, id, reload }) => {
             <Button variant="normal" onClick={() => setVisible(false)}>
               Cancelar
             </Button>
-            <Button variant="primary" iconName="add-plus" onClick={agregar}>
+            <Button
+              variant="primary"
+              iconName="add-plus"
+              onClick={agregar}
+              loading={loading}
+            >
               Añadir
             </Button>
           </SpaceBetween>

@@ -2,6 +2,7 @@ import {
   Box,
   ColumnLayout,
   Container,
+  DateInput,
   Form,
   FormField,
   Header,
@@ -289,7 +290,7 @@ export default forwardRef(function (props, ref) {
                 stretch
                 errorText={formErrors.fecha_publicacion}
               >
-                <Input
+                <DateInput
                   placeholder="Escriba la fecha de publicación"
                   value={formValues.fecha_publicacion}
                   onChange={({ detail }) =>

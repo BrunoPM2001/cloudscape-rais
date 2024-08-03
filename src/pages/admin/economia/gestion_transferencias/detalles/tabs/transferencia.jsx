@@ -31,12 +31,16 @@ const columnDefinitions = [
     id: "operacion",
     header: "Transferencia (S/)",
     cell: (item) =>
-      item.operacion == null ? (
+      item.monto_nuevo == null ? (
         ""
-      ) : item.operacion == "+" ? (
-        <Badge color="blue">+{item.transferencia}</Badge>
-      ) : item.operacion == "-" ? (
-        <Badge color="red">-{item.transferencia}</Badge>
+      ) : item.monto_nuevo > item.monto ? (
+        <Badge color="blue">
+          +{parseFloat(item.monto_nuevo - item.monto).toFixed(3)}
+        </Badge>
+      ) : item.monto_nuevo < item.monto ? (
+        <Badge color="red">
+          -{parseFloat(item.monto - item.monto_nuevo).toFixed(3)}
+        </Badge>
       ) : (
         ""
       ),
@@ -46,7 +50,7 @@ const columnDefinitions = [
     id: "monto_nuevo",
     header: "Nuevo presupuesto (S/)",
     cell: (item) =>
-      item.operacion == null ? "" : parseFloat(item.monto_nuevo).toFixed(3),
+      item.monto_nuevo == null ? "" : parseFloat(item.monto_nuevo).toFixed(3),
     sortingField: "monto_nuevo",
   },
 ];
