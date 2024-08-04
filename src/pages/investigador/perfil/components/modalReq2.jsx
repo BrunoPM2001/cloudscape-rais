@@ -26,16 +26,24 @@ export default ({ data, close }) => {
           Ser miembro titular de un grupo de investigación activo y reconocido
           por el VRIP
         </div>
-        <ColumnLayout columns={2} variant="text-grid">
-          <div>
-            <Box variant="awsui-key-label">Grupo</Box>
-            <div>{data.grupo_nombre}</div>
-          </div>
-          <div>
-            <Box variant="awsui-key-label">Tipo de integrante</Box>
-            <div>{data.condicion}</div>
-          </div>
-        </ColumnLayout>
+        {data == null ? (
+          <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
+            <SpaceBetween size="m">
+              <b>No tiene registro de grupo de investicación</b>
+            </SpaceBetween>
+          </Box>
+        ) : (
+          <ColumnLayout columns={2} variant="text-grid">
+            <div>
+              <Box variant="awsui-key-label">Grupo</Box>
+              <div>{data.grupo_nombre}</div>
+            </div>
+            <div>
+              <Box variant="awsui-key-label">Tipo de integrante</Box>
+              <div>{data.condicion}</div>
+            </div>
+          </ColumnLayout>
+        )}
       </SpaceBetween>
     </Modal>
   );

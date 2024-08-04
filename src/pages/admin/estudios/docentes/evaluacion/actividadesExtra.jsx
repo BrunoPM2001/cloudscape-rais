@@ -11,10 +11,9 @@ import { useState } from "react";
 import ModalAprobarActividad from "./components/modalAprobarActividad";
 import { useCollection } from "@cloudscape-design/collection-hooks";
 
-export default ({ data }) => {
+export default ({ data, reload }) => {
   //  States
   const [type, setType] = useState("");
-  const [selected, setSelected] = useState({});
 
   //  Hooks
   const { items, collectionProps } = useCollection(data, {
@@ -93,6 +92,7 @@ export default ({ data }) => {
         <ModalAprobarActividad
           data={collectionProps.selectedItems[0]}
           close={() => setType("")}
+          reload={reload}
         />
       )}
     </Container>

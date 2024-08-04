@@ -36,7 +36,7 @@ const formRules = {
   periodo: { required: true },
 };
 
-export default ({ data, close }) => {
+export default ({ data, close, reload }) => {
   //  States
   const [opt_categoria, setOpt_categoria] = useState([]);
   const [loadingCreate, setLoadingCreate] = useState(false);
@@ -67,6 +67,7 @@ export default ({ data, close }) => {
       );
       const info = res.data;
       setLoadingCreate(false);
+      reload();
       close();
     }
   };

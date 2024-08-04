@@ -23,12 +23,6 @@ const FILTER_PROPS = [
     operators: stringOperators,
   },
   {
-    propertyLabel: "Tipo de evaluación",
-    key: "tipo_eval",
-    groupValuesLabel: "Tipos de evaluación",
-    operators: stringOperators,
-  },
-  {
     propertyLabel: "Tipo",
     key: "tipo",
     groupValuesLabel: "Tipos",
@@ -86,11 +80,9 @@ const columnDefinitions = [
       <Box textAlign="center">
         <Badge
           color={
-            item.estado == "En trámite"
-              ? "blue"
-              : item.estado == "Enviado"
+            item.estado == "Vigente"
               ? "green"
-              : item.estado == "No aprobado"
+              : item.estado == "No vigente"
               ? "red"
               : "grey"
           }
@@ -107,19 +99,6 @@ const columnDefinitions = [
     header: "Tipo de evaluación",
     cell: (item) => item.tipo_eval,
     sortingField: "tipo_eval",
-  },
-  {
-    id: "dj",
-    header: "DJ",
-    cell: (item) => (
-      <Button
-        variant="inline-icon"
-        href={item.url}
-        target="_blank"
-        iconName="file"
-      />
-    ),
-    sortingField: "id",
   },
   {
     id: "tipo",
@@ -185,8 +164,6 @@ const columnDefinitions = [
 
 const columnDisplay = [
   { id: "estado", visible: true },
-  { id: "tipo_eval", visible: true },
-  { id: "dj", visible: true },
   { id: "tipo", visible: true },
   { id: "facultad", visible: true },
   { id: "codigo_orcid", visible: true },
@@ -202,7 +179,6 @@ const columnDisplay = [
 export default () => {
   //  Data states
   const [loading, setLoading] = useState(true);
-  const [visible, setVisible] = useState(false);
   const [distributions, setDistribution] = useState([]);
   const {
     items,
@@ -229,14 +205,14 @@ export default () => {
       ),
     },
     pagination: { pageSize: 10 },
-    sorting: { defaultState: { sortingColumn: columnDefinitions[0] } },
+    sorting: {},
     selection: {},
   });
 
   //  Functions
   const getData = async () => {
     setLoading(true);
-    const res = await axiosBase.get("admin/estudios/docentes/listado");
+    const res = await axiosBase.get("admin/estudios/docentes/constancias");
     const data = res.data;
     setDistribution(data);
     setLoading(false);
@@ -267,6 +243,7 @@ export default () => {
               <SpaceBetween size="s" direction="horizontal">
                 <Button
                   variant="primary"
+                  disabled={collectionProps.selectedItems.length == 0}
                   onClick={() => {
                     const query = queryString.stringify({
                       id: collectionProps.selectedItems[0]["id"],
@@ -274,9 +251,8 @@ export default () => {
                     window.location.href =
                       "docente_investigador/evaluacion?" + query;
                   }}
-                  disabled={collectionProps.selectedItems.length == 0}
                 >
-                  Evaluar
+                  Ver detalles
                 </Button>
               </SpaceBetween>
             }

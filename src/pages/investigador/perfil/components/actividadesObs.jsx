@@ -12,7 +12,7 @@ import {
   Table,
 } from "@cloudscape-design/components";
 import { useFormValidation } from "../../../../hooks/useFormValidation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axiosBase from "../../../../api/axios";
 
 const initialForm = {
@@ -25,12 +25,11 @@ const formRules = {
   file: { required: true, isFile: true, maxSize: 6 * 1024 * 1024 },
 };
 
-export default ({ data, antiguo }) => {
+export default ({ id, antiguo }) => {
   //  States
   const [loading, setLoading] = useState(false);
   const [loadingData, setLoadingData] = useState(false);
-  const [newData, setNewData] = useState([]);
-  const [useData, setUseData] = useState(true);
+  const [items, setItems] = useState([]);
   const [alert, setAlert] = useState("");
 
   //  Hooks
@@ -45,10 +44,13 @@ export default ({ data, antiguo }) => {
   //  Functions
   const getData = async () => {
     setLoadingData(true);
-    const res = await axiosBase.get("investigador/perfil/actividadesExtra");
+    const res = await axiosBase.get("investigador/perfil/actividadesExtraObs", {
+      params: {
+        id,
+      },
+    });
     const data = res.data;
-    setUseData(false);
-    setNewData(data);
+    setItems(data);
     setLoadingData(false);
   };
 
@@ -57,10 +59,11 @@ export default ({ data, antiguo }) => {
       setLoading(true);
       setAlert("");
       let formulario = new FormData();
+      formulario.append("id", id);
       formulario.append("tipo", formValues.opcion.label);
       formulario.append("categoria_id", formValues.opcion.value);
       formulario.append("file", formValues.file[0]);
-      await axiosBase.post("investigador/perfil/addActividad", formulario);
+      await axiosBase.post("investigador/perfil/addActividadObs", formulario);
       setLoading(false);
       handleChange("opcion", null);
       handleChange("file", []);
@@ -80,6 +83,10 @@ export default ({ data, antiguo }) => {
     getData();
     setAlert("Actividad eliminada");
   };
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   return (
     <Container
@@ -227,7 +234,7 @@ export default ({ data, antiguo }) => {
           ]}
           loading={loadingData}
           loadingText="Cargando datos"
-          items={useData ? data : newData}
+          items={items}
           empty={
             <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
               <SpaceBetween size="m">

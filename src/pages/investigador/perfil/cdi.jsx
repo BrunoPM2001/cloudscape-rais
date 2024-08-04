@@ -20,6 +20,7 @@ import ModalReq3 from "./components/modalReq3";
 import ModalReq5 from "./components/modalReq5";
 import ModalReq6 from "./components/modalReq6";
 import ModalSolicitud from "./components/modalSolicitud";
+import ModalObservado from "./components/modalObservado";
 
 export default () => {
   //  States
@@ -36,6 +37,10 @@ export default () => {
     setData(data);
   };
 
+  const close = () => {
+    setTypeModal("");
+  };
+
   useEffect(() => {
     getData();
   }, []);
@@ -44,7 +49,7 @@ export default () => {
     <Container>
       {loading ? (
         <>
-          <Spinner /> Cargando información
+          <Spinner /> Cargando información de CDI
         </>
       ) : (
         <Form
@@ -53,7 +58,21 @@ export default () => {
               variant="h3"
               actions={
                 data.estado == 3 && (
-                  <Badge color="blue">{data.solicitud.estado}</Badge>
+                  <Badge
+                    color={
+                      data.solicitud.estado == "Enviado"
+                        ? "blue"
+                        : data.solicitud.estado == "Observado"
+                        ? "grey"
+                        : data.solicitud.estado == "En trámite"
+                        ? "blue"
+                        : data.solicitud.estado == "Pendiente"
+                        ? "blue"
+                        : "red"
+                    }
+                  >
+                    {data.solicitud.estado}
+                  </Badge>
                 )
               }
               description={
@@ -68,11 +87,18 @@ export default () => {
             </Header>
           }
           actions={
-            data.estado == 2 && (
+            data.estado != 4 &&
+            (data.estado == 2 ? (
               <Button onClick={() => setTypeModal("solicitud")}>
                 Solicitar CDI
               </Button>
-            )
+            ) : data.solicitud.estado == "Observado" ? (
+              <Button onClick={() => setTypeModal("observado")}>
+                Actualizar solicitud
+              </Button>
+            ) : (
+              <></>
+            ))
           }
         >
           {data.estado == 0 ? (
@@ -144,22 +170,22 @@ export default () => {
                 </div>
               </SpaceBetween>
               {typeModal == "req1" ? (
-                <ModalReq1 data={data.req1} close={() => setTypeModal("")} />
+                <ModalReq1 data={data.req1} close={close} />
               ) : typeModal == "req2" ? (
-                <ModalReq2 data={data.req2} close={() => setTypeModal("")} />
+                <ModalReq2 data={data.req2} close={close} />
               ) : typeModal == "req3" ? (
-                <ModalReq3 data={data.req3} close={() => setTypeModal("")} />
+                <ModalReq3 data={data.req3} close={close} />
               ) : typeModal == "req4" ? (
-                <ModalReq4 data={data.req4} close={() => setTypeModal("")} />
+                <ModalReq4 data={data.req4} close={close} />
               ) : typeModal == "req5" ? (
-                <ModalReq5 data={data.req5} close={() => setTypeModal("")} />
+                <ModalReq5 data={data.req5} close={close} />
               ) : typeModal == "req6" ? (
-                <ModalReq6 data={data.req6} close={() => setTypeModal("")} />
+                <ModalReq6 data={data.req6} close={close} />
               ) : typeModal == "solicitud" ? (
                 <ModalSolicitud
                   data={data.rrhh}
                   actividades={data.actividades_extra}
-                  close={() => setTypeModal("")}
+                  close={close}
                   reload={getData}
                 />
               ) : (
@@ -177,9 +203,9 @@ export default () => {
                     </Link>
                   </Box>
                   <StatusIndicator
-                    type={data.solicitud.d1 != "" ? "success" : "error"}
+                    type={data.solicitud.d1.cumple ? "success" : "error"}
                   >
-                    {data.solicitud.d1 != "" ? "Sí cumple" : "No cumple"}
+                    {data.solicitud.d1.cumple ? "Sí cumple" : "No cumple"}
                   </StatusIndicator>
                 </div>
                 <div>
@@ -190,9 +216,9 @@ export default () => {
                     </Link>
                   </Box>
                   <StatusIndicator
-                    type={data.solicitud.d2.id != "" ? "success" : "error"}
+                    type={data.solicitud.d2.cumple ? "success" : "error"}
                   >
-                    {data.solicitud.d2.id != "" ? "Sí cumple" : "No cumple"}
+                    {data.solicitud.d2.cumple ? "Sí cumple" : "No cumple"}
                   </StatusIndicator>
                 </div>
                 <div>
@@ -249,35 +275,23 @@ export default () => {
                 </div>
               </SpaceBetween>
               {typeModal == "req1" ? (
-                <ModalReq1
-                  data={data.solicitud.d1}
-                  soli
-                  close={() => setTypeModal("")}
-                />
+                <ModalReq1 data={data.solicitud.d1.valor} soli close={close} />
               ) : typeModal == "req2" ? (
-                <ModalReq2
-                  data={data.solicitud.d2}
-                  close={() => setTypeModal("")}
-                />
+                <ModalReq2 data={data.solicitud.d2.valor} close={close} />
               ) : typeModal == "req3" ? (
-                <ModalReq3
-                  data={data.solicitud.d3.lista}
-                  close={() => setTypeModal("")}
-                />
+                <ModalReq3 data={data.solicitud.d3.lista} close={close} />
               ) : typeModal == "req4" ? (
-                <ModalReq4
-                  data={data.solicitud.d4.lista}
-                  close={() => setTypeModal("")}
-                />
+                <ModalReq4 data={data.solicitud.d4.lista} close={close} />
               ) : typeModal == "req5" ? (
-                <ModalReq5
-                  data={data.solicitud.d5.lista}
-                  close={() => setTypeModal("")}
-                />
+                <ModalReq5 data={data.solicitud.d5.lista} close={close} />
               ) : typeModal == "req6" ? (
-                <ModalReq6
-                  data={data.solicitud.d6.lista}
-                  close={() => setTypeModal("")}
+                <ModalReq6 data={data.solicitud.d6.lista} close={close} />
+              ) : typeModal == "observado" ? (
+                <ModalObservado
+                  id={data.solicitud.id}
+                  antiguo={data.solicitud.antiguo}
+                  close={close}
+                  reload={getData}
                 />
               ) : (
                 <></>

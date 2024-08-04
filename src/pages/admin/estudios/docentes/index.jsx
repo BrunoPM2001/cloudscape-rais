@@ -1,6 +1,7 @@
 import { Tabs } from "@cloudscape-design/components";
 import BaseLayout from "../../components/baseLayout";
 import Solicitudes from "./tabs/solicitudes.jsx";
+import Constancias from "./tabs/constancias.jsx";
 
 const breadcrumbs = [
   {
@@ -24,7 +25,7 @@ const tabs = [
   {
     id: "constancias",
     label: "Constancias",
-    // content: <Constancias />,
+    content: <Constancias />,
   },
 ];
 

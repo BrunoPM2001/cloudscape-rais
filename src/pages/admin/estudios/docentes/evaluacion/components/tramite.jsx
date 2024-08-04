@@ -5,7 +5,6 @@ import {
   Container,
   FormField,
   Header,
-  Input,
   Select,
   SpaceBetween,
   Textarea,
@@ -40,7 +39,7 @@ export default ({ id, data, reload }) => {
   const evaluar = async () => {
     if (validateForm()) {
       setLoading(true);
-      const res = await axiosBase.put("admin/estudios/docentes/evaluar", {
+      const res = await axiosBase.put("admin/estudios/docentes/tramite", {
         ...formValues,
         id,
       });
@@ -85,13 +84,15 @@ export default ({ id, data, reload }) => {
           variant="h3"
           actions={
             <SpaceBetween size="xs" direction="horizontal">
-              <Button
-                onClick={constanciaNoFirmada}
-                loading={loading}
-                iconName="file"
-              >
-                Constancia no firmada
-              </Button>
+              {data.confirmar != null && (
+                <Button
+                  onClick={constanciaNoFirmada}
+                  loading={loading}
+                  iconName="file"
+                >
+                  Constancia no firmada
+                </Button>
+              )}
               <Button onClick={ficha} loading={loading} iconName="file-open">
                 Ficha de evaluación
               </Button>
@@ -121,7 +122,7 @@ export default ({ id, data, reload }) => {
           </div>
           <div>
             <Box variant="awsui-key-label">Confirmar constancia</Box>
-            <div>No</div>
+            <div>{data.confirmar == 1 ? "Sí" : "No"}</div>
           </div>
         </ColumnLayout>
         <SpaceBetween size="s">

@@ -7,25 +7,19 @@ import {
   FileUpload,
   FormField,
   Header,
-  Input,
   Link,
-  Select,
   SpaceBetween,
-  Textarea,
 } from "@cloudscape-design/components";
 import { useState } from "react";
 import { useFormValidation } from "../../../../../../hooks/useFormValidation";
 import axiosBase from "../../../../../../api/axios";
 
-const opt_confirmar = [{ value: "Sí" }, { value: "No" }];
-
 const initialForm = {
-  confirmar: null,
-  descripcion: "",
+  file: [],
 };
 
 const formRules = {
-  confirmar: { required: true },
+  file: { required: true, isFile: true, maxSize: 6 * 1024 * 1024 },
 };
 
 export default ({ id, data, reload }) => {
@@ -33,8 +27,13 @@ export default ({ id, data, reload }) => {
   const [loading, setLoading] = useState(false);
 
   //  Hooks
-  const { formValues, formErrors, handleChange, validateForm } =
-    useFormValidation(initialForm, formRules);
+  const {
+    formValues,
+    formErrors,
+    handleChange,
+    validateForm,
+    registerFileInput,
+  } = useFormValidation(initialForm, formRules);
 
   //  Functions
   const ficha = async () => {
@@ -74,6 +73,18 @@ export default ({ id, data, reload }) => {
     setLoading(false);
   };
 
+  const subir = async () => {
+    if (validateForm()) {
+      setLoading(true);
+      let formulario = new FormData();
+      formulario.append("id", id);
+      formulario.append("file", formValues.file[0]);
+      await axiosBase.post("admin/estudios/docentes/subirCDI", formulario);
+      setLoading(false);
+      reload();
+    }
+  };
+
   return (
     <Container
       header={
@@ -111,7 +122,9 @@ export default ({ id, data, reload }) => {
               >
                 Documentos
               </ButtonDropdown>
-              <Button variant="primary">Guardar</Button>
+              <Button variant="primary" onClick={subir} loading={loading}>
+                Guardar
+              </Button>
             </SpaceBetween>
           }
         >
@@ -142,25 +155,27 @@ export default ({ id, data, reload }) => {
           <FormField
             label="Constancia firmada"
             description={
-              <>
-                Puede descargar el documento cargado en{" "}
-                <Link
-                  href="#"
-                  external="true"
-                  variant="primary"
-                  fontSize="body-s"
-                  target="_blank"
-                >
-                  este enlace.
-                </Link>
-              </>
+              data.url != null && (
+                <>
+                  Puede descargar el documento cargado en{" "}
+                  <Link
+                    href="#"
+                    external="true"
+                    variant="primary"
+                    fontSize="body-s"
+                    target="_blank"
+                  >
+                    este enlace.
+                  </Link>
+                </>
+              )
             }
-            // errorText={formErrors.file}
+            errorText={formErrors.file}
           >
             <FileUpload
-              value={[]}
-              // onChange={({ detail }) => handleChange("file", detail.value)}
-              // ref={(ref) => registerFileInput("file", ref)}
+              value={formValues.file}
+              onChange={({ detail }) => handleChange("file", detail.value)}
+              ref={(ref) => registerFileInput("file", ref)}
               showFileLastModified
               showFileSize
               showFileThumbnail

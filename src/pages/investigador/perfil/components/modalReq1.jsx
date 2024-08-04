@@ -5,6 +5,7 @@ import {
   Link,
   ColumnLayout,
   SpaceBetween,
+  Alert,
 } from "@cloudscape-design/components";
 
 export default ({ data, soli, close }) => {
@@ -28,30 +29,57 @@ export default ({ data, soli, close }) => {
           RENACYT - CONCYTEC.
         </div>
         {soli ? (
-          <div>
-            <Box variant="awsui-key-label">Código renacyt</Box>
-            <div>{data}</div>
-          </div>
+          <>
+            <ColumnLayout columns={2} variant="text-grid">
+              <div>
+                <Box variant="awsui-key-label">Código renacyt</Box>
+                <div>{data == "" ? "No figura" : data}</div>
+              </div>
+              <div>
+                <Box variant="awsui-key-label">Constancia</Box>
+                <Link
+                  href={
+                    "https://ctivitae.concytec.gob.pe/renacyt-backend/actoRegistral/obtenerConstanciaRegistro/" +
+                    data
+                  }
+                  external
+                  target="_blank"
+                >
+                  Decargar
+                </Link>
+              </div>
+            </ColumnLayout>
+            <Alert>
+              Si no puede descargar la constancia es porque el código Renacyt
+              registrado en el RAIS es incorrecto
+            </Alert>
+          </>
         ) : (
-          <ColumnLayout columns={2} variant="text-grid">
-            <div>
-              <Box variant="awsui-key-label">Código renacyt</Box>
-              <div>{data.renacyt}</div>
-            </div>
-            <div>
-              <Box variant="awsui-key-label">Constancia</Box>
-              <Link
-                href={
-                  "https://ctivitae.concytec.gob.pe/renacyt-backend/actoRegistral/obtenerConstanciaRegistro/" +
-                  data.renacyt
-                }
-                external
-                target="_blank"
-              >
-                Decargar
-              </Link>
-            </div>
-          </ColumnLayout>
+          <>
+            <ColumnLayout columns={2} variant="text-grid">
+              <div>
+                <Box variant="awsui-key-label">Código renacyt</Box>
+                <div>{data.renacyt}</div>
+              </div>
+              <div>
+                <Box variant="awsui-key-label">Constancia</Box>
+                <Link
+                  href={
+                    "https://ctivitae.concytec.gob.pe/renacyt-backend/actoRegistral/obtenerConstanciaRegistro/" +
+                    data.renacyt
+                  }
+                  external
+                  target="_blank"
+                >
+                  Decargar
+                </Link>
+              </div>
+            </ColumnLayout>
+            <Alert>
+              Si no puede descargar la constancia es porque el código Renacyt
+              registrado en el RAIS es incorrecto
+            </Alert>
+          </>
         )}
       </SpaceBetween>
     </Modal>

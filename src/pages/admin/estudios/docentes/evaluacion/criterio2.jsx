@@ -17,6 +17,7 @@ export default ({ data }) => {
           </Badge>
         </SpaceBetween>
       }
+      fitHeight
     >
       <ColumnLayout columns={2} variant="text-grid">
         <div>

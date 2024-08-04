@@ -20,6 +20,7 @@ import ActividadesExtra from "./actividadesExtra";
 import Calificar from "./components/calificar";
 import Tramite from "./components/tramite";
 import Constancia from "./components/constancia";
+import Aprobado from "./components/aprobado";
 
 const breadcrumbs = [
   {
@@ -31,6 +32,7 @@ const breadcrumbs = [
   },
   {
     text: "Docente investigador",
+    href: "../docente_investigador",
   },
   {
     text: "Evaluación",
@@ -105,13 +107,17 @@ export default function Docente_investigador_evaluacion() {
             <Criterio4 data={data.d4} />
             <Criterio5 data={data.d5} />
             <Criterio6 data={data.d6} />
-            <ActividadesExtra data={data.actividades} />
-            {data.detalles.estado == "ENVIADO" ? (
+            <ActividadesExtra data={data.actividades} reload={getData} />
+            {data.detalles.estado == "Enviado" ? (
               <Calificar id={id} reload={getData} />
-            ) : data.detalles.estado == "TRAMITE" ? (
+            ) : data.detalles.estado == "En trámite" ? (
               <Tramite id={id} data={data.detalles} reload={getData} />
-            ) : (
+            ) : data.detalles.estado == "Pendiente" ? (
               <Constancia id={id} data={data.detalles} reload={getData} />
+            ) : data.detalles.estado == "Aprobado" ? (
+              <Aprobado id={id} data={data.detalles} />
+            ) : (
+              <></>
             )}
           </SpaceBetween>
         )}

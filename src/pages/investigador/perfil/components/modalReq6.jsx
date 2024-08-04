@@ -59,6 +59,13 @@ export default ({ data, close }) => {
             { id: "url", visible: true },
           ]}
           items={data}
+          empty={
+            <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
+              <SpaceBetween size="m">
+                <b>No hay registros...</b>
+              </SpaceBetween>
+            </Box>
+          }
         />
       </SpaceBetween>
     </Modal>

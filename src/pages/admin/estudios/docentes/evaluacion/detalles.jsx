@@ -68,6 +68,8 @@ export default ({ id, data, loading }) => {
                     ? "info"
                     : data.estado == "Aprobado"
                     ? "success"
+                    : data.estado == "Pendiente"
+                    ? "pending"
                     : "error"
                 }
               >
