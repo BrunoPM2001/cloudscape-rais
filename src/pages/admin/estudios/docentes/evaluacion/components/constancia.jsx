@@ -92,14 +92,14 @@ export default ({ id, data, reload }) => {
           variant="h3"
           actions={
             <SpaceBetween size="xs" direction="horizontal">
-              <Button
+              {/* <Button
                 loading={loading}
                 iconName="send"
                 iconAlign="right"
                 onClick={enviarCorreo}
               >
                 Enviar correo con la CDI al VRIP
-              </Button>
+              </Button> */}
               <ButtonDropdown
                 loading={loading}
                 items={[
@@ -148,7 +148,7 @@ export default ({ id, data, reload }) => {
           </div>
           <div>
             <Box variant="awsui-key-label">Confirmar constancia</Box>
-            <div>No</div>
+            <div>{data.confirmar == 1 ? "Sí" : "No"}</div>
           </div>
         </ColumnLayout>
         <SpaceBetween size="s">

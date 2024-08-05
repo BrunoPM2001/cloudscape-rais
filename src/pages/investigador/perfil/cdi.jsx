@@ -21,6 +21,7 @@ import ModalReq5 from "./components/modalReq5";
 import ModalReq6 from "./components/modalReq6";
 import ModalSolicitud from "./components/modalSolicitud";
 import ModalObservado from "./components/modalObservado";
+import ModalObservaciones from "./components/modalObservaciones";
 
 export default () => {
   //  States
@@ -93,11 +94,14 @@ export default () => {
                 Solicitar CDI
               </Button>
             ) : data.solicitud.estado == "Observado" ? (
-              <Button onClick={() => setTypeModal("observado")}>
-                Actualizar solicitud
-              </Button>
+              <SpaceBetween size="xs" direction="horizontal">
+                <Button onClick={() => setTypeModal("obs")}>Ver obs.</Button>
+                <Button onClick={() => setTypeModal("observado")}>
+                  Actualizar solicitud
+                </Button>
+              </SpaceBetween>
             ) : (
-              <></>
+              <Button onClick={() => setTypeModal("obs")}>Ver obs.</Button>
             ))
           }
         >
@@ -286,6 +290,8 @@ export default () => {
                 <ModalReq5 data={data.solicitud.d5.lista} close={close} />
               ) : typeModal == "req6" ? (
                 <ModalReq6 data={data.solicitud.d6.lista} close={close} />
+              ) : typeModal == "obs" ? (
+                <ModalObservaciones data={data.solicitud.obs} close={close} />
               ) : typeModal == "observado" ? (
                 <ModalObservado
                   id={data.solicitud.id}

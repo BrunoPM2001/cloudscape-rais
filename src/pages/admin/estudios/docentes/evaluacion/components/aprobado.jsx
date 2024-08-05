@@ -114,7 +114,7 @@ export default ({ id, data }) => {
         </div>
         <div>
           <Box variant="awsui-key-label">Confirmar constancia</Box>
-          <div>No</div>
+          <div>{data.confirmar == 1 ? "Sí" : "No"}</div>
         </div>
       </ColumnLayout>
     </Container>

@@ -56,6 +56,7 @@ export default ({ id, close, reload, enabled }) => {
       setCreating(false);
       const data = res.data;
       pushNotification(data.detail, data.message, notifications.length + 1);
+      reload();
       close();
     }
   };

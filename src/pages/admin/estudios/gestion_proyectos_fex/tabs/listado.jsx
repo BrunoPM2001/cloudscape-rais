@@ -328,7 +328,14 @@ export default () => {
       header={
         <Header
           counter={"(" + distributions.length + ")"}
-          actions={<Button variant="primary">Nuevo</Button>}
+          actions={
+            <Button
+              variant="primary"
+              onClick={() => (window.location.href = "proyectos_fex/paso_1")}
+            >
+              Nuevo
+            </Button>
+          }
         >
           Proyectos FEX
         </Header>

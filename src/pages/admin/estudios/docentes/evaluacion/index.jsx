@@ -73,7 +73,12 @@ export default function Docente_investigador_evaluacion() {
       en general."
     >
       <SpaceBetween size="l">
-        <Detalles id={id} data={data.detalles} loading={loading} />
+        <Detalles
+          id={id}
+          data={data.detalles}
+          loading={loading}
+          reload={getData}
+        />
         {loading ? (
           <Box>
             <Spinner /> Cargando datos

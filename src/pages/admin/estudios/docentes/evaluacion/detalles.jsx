@@ -11,7 +11,7 @@ import {
 import { useState } from "react";
 import ModalObservaciones from "./components/modalObservaciones";
 
-export default ({ id, data, loading }) => {
+export default ({ id, data, loading, reload }) => {
   //  States
   const [type, setType] = useState("");
 
@@ -129,6 +129,7 @@ export default ({ id, data, loading }) => {
           id={id}
           close={() => setType("")}
           enabled={data?.estado}
+          reload={reload}
         />
       ) : (
         <></>
