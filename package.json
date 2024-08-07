@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@cloudscape-design/collection-hooks": "^1.0.44",
-    "@cloudscape-design/components": "^3.0.669",
+    "@cloudscape-design/components": "^3.0.706",
     "@cloudscape-design/global-styles": "^1.0.27",
     "@tiptap/extension-blockquote": "^2.4.0",
     "@tiptap/extension-bullet-list": "^2.4.0",

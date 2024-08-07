@@ -8,6 +8,7 @@ import {
   Input,
   Select,
   SpaceBetween,
+  Tabs,
   Wizard,
 } from "@cloudscape-design/components";
 import { useEffect, useState } from "react";
@@ -16,6 +17,9 @@ import queryString from "query-string";
 import BaseLayout from "../../../components/baseLayout";
 import axiosBase from "../../../../../api/axios";
 import { useFormValidation } from "../../../../../hooks/useFormValidation";
+import Objetivos from "./tabs/objetivos";
+import Palabras_clave from "./tabs/palabras_clave";
+import Resumen from "./tabs/resumen";
 
 const breadcrumbs = [
   {
@@ -35,65 +39,27 @@ const breadcrumbs = [
 ];
 
 const initialForm = {
-  titulo: "",
-  linea_investigacion_id: null,
-  ocde_1: null,
-  ocde_2: null,
-  ocde_3: null,
-  moneda: null,
-  aporte_unmsm: "0.0",
-  aporte_no_unmsm: "0.0",
-  financiamiento_fuente_externa: "0.0",
-  entidad_asociada: "0.0",
-  fuente: null,
-  fuente_input: "",
-  pais: null,
-  sitio: "",
-  participacion: null,
-  resolucion_rectoral: "",
+  fecha_inicio: "",
+  fecha_fin: "",
+  años: "",
+  meses: "",
+  dias: "",
+  resumen: "",
+  objetivos: "",
+  palabras_clave: "",
 };
 
 const formRules = {
-  titulo: { required: true },
-  moneda: { required: true },
-  aporte_unmsm: { required: true, regex: /^(0|[1-9]\d*)(\.\d+)?$/ },
-  aporte_no_unmsm: { required: true, regex: /^(0|[1-9]\d*)(\.\d+)?$/ },
-  financiamiento_fuente_externa: {
-    required: true,
-    regex: /^(0|[1-9]\d*)(\.\d+)?$/,
-  },
-  entidad_asociada: { required: true, regex: /^(0|[1-9]\d*)(\.\d+)?$/ },
+  años: { regex: /^[1-9]\d*$/ },
+  meses: { regex: /^([1-9]|1[0-2])$/ },
+  dias: { regex: /^([1-9]|[1-2][0-9]|3[0-1])$/ },
+  resumen: { required: true },
+  objetivos: { required: true },
 };
-
-const monedas = [
-  { value: "DOLARES", label: "$ Dólares" },
-  { value: "EUROS", label: "€ Euros" },
-  { value: "LIBRA", label: "£ Libra Esterlina" },
-  { value: "SOLES", label: "S/ Soles" },
-];
-
-const entidades = [
-  { value: "CONCYTEC" },
-  { value: "CONCYTEC - FONDECYT" },
-  { value: "FINCYT" },
-  { value: "FONDECYT" },
-  { value: "FONDECYT - Banco Mundial" },
-  { value: "FONDECYT - CONCYTEC" },
-  { value: "OTROS" },
-];
-
-const participaciones = [
-  { value: "Entidad principal", label: "1. Entidad principal / ejecutora" },
-  { value: "Entidad asociada", label: "2. Entidad asociada" },
-  { value: "Entidad colaboradora", label: "3. Entidad colaboradora" },
-];
 
 export default function Registrar_proyecto_fex_2() {
   //  States
   const [loading, setLoading] = useState(false);
-  const [lineas, setLineas] = useState([]);
-  const [ocde, setOcde] = useState([]);
-  const [paises, setPaises] = useState([]);
 
   //  Url
   const location = useLocation();
@@ -104,35 +70,74 @@ export default function Registrar_proyecto_fex_2() {
     useFormValidation(initialForm, formRules);
 
   //  Functions
-  const lineasUnmsm = async () => {
-    const res = await axiosBase.get("admin/estudios/proyectosFEX/lineasUnmsm");
-    const data = res.data;
-    setLineas(data.lineas);
-    setOcde(data.ocde);
-    setPaises(data.paises);
-  };
 
   const handleNavigate = async (detail) => {
-    if (detail.requestedStepIndex > 0) {
+    const query = queryString.stringify({
+      id: data.id,
+    });
+    if (detail.requestedStepIndex > 1) {
       if (validateForm()) {
-        setLoading(true);
-        const res = await axiosBase.post(
-          "admin/estudios/proyectosFEX/registrarPaso1",
-          formValues
-        );
-        setLoading(false);
-        const data = res.data;
-        const query = queryString.stringify({
-          id: data.id,
-        });
-        window.location.href = "paso_2?" + query;
+        //  Validar que se hayan llenado o las fechas
+        if (
+          (formValues.fecha_inicio != "" && formValues.fecha_fin != "") ||
+          (formValues.años != "" &&
+            formValues.meses != "" &&
+            formValues.dias != "")
+        ) {
+          setLoading(true);
+          await axiosBase.post("admin/estudios/proyectosFEX/registrarPaso2", {
+            ...formValues,
+            id,
+          });
+          setLoading(false);
+          window.location.href = "paso_3?" + query;
+        } else {
+          console.log(
+            "Necesita completar la fecha de inicio y fin, o el tiempo en años, meses y días."
+          );
+        }
       }
+    } else {
+      window.location.href = "paso_1?" + query;
     }
   };
 
-  useEffect(() => {
-    lineasUnmsm();
-  }, []);
+  //  Tabs
+  const tabs = [
+    {
+      id: "resumen_ejecutivo",
+      label: "Resumen ejecutivo",
+      content: (
+        <Resumen
+          value={formValues.resumen}
+          error={formErrors.resumen}
+          handleChange={handleChange}
+        />
+      ),
+    },
+    {
+      id: "objetivos",
+      label: "Objetivos",
+      content: (
+        <Objetivos
+          value={formValues.objetivos}
+          error={formErrors.objetivos}
+          handleChange={handleChange}
+        />
+      ),
+    },
+    {
+      id: "palabras_clave",
+      label: "Palabras clave",
+      content: (
+        <Palabras_clave
+          value={formValues.palabras_clave}
+          error={formErrors.palabras_clave}
+          handleChange={handleChange}
+        />
+      ),
+    },
+  ];
 
   return (
     <BaseLayout
@@ -176,6 +181,17 @@ export default function Registrar_proyecto_fex_2() {
                       >
                         <DatePicker
                           placeholder="YYYY/MM/DD"
+                          isDateEnabled={(date) => {
+                            if (formValues.fecha_fin != "") {
+                              const newDate = new Date(formValues.fecha_fin);
+                              return date < newDate;
+                            } else {
+                              return true;
+                            }
+                          }}
+                          dateDisabledReason={(date) => {
+                            return "La fecha inicial no puede ser mayor a la fecha final";
+                          }}
                           value={formValues.fecha_inicio}
                           onChange={({ detail }) =>
                             handleChange("fecha_inicio", detail.value)
@@ -189,6 +205,17 @@ export default function Registrar_proyecto_fex_2() {
                       >
                         <DatePicker
                           placeholder="YYYY/MM/DD"
+                          isDateEnabled={(date) => {
+                            if (formValues.fecha_inicio != "") {
+                              const newDate = new Date(formValues.fecha_inicio);
+                              return date > newDate;
+                            } else {
+                              return true;
+                            }
+                          }}
+                          dateDisabledReason={(date) => {
+                            return "La fecha final no puede ser menor a la fecha inicial";
+                          }}
                           value={formValues.fecha_fin}
                           onChange={({ detail }) =>
                             handleChange("fecha_fin", detail.value)
@@ -200,7 +227,14 @@ export default function Registrar_proyecto_fex_2() {
                 </Container>
                 <Container>
                   <Form
-                    header={<Header variant="h3">Duración del proyecto</Header>}
+                    header={
+                      <Header
+                        variant="h3"
+                        description="En caso no complete las fechas de inicio o de fin colocar el tiempo de duración del proyecto"
+                      >
+                        Duración del proyecto
+                      </Header>
+                    }
                   >
                     <ColumnLayout columns={3}>
                       <FormField
@@ -210,6 +244,7 @@ export default function Registrar_proyecto_fex_2() {
                       >
                         <Input
                           placeholder="Escriba la cantidad de años"
+                          type="number"
                           value={formValues.años}
                           onChange={({ detail }) =>
                             handleChange("años", detail.value)
@@ -223,6 +258,7 @@ export default function Registrar_proyecto_fex_2() {
                       >
                         <Input
                           placeholder="Escriba la cantidad de meses"
+                          type="number"
                           value={formValues.meses}
                           onChange={({ detail }) =>
                             handleChange("meses", detail.value)
@@ -236,6 +272,7 @@ export default function Registrar_proyecto_fex_2() {
                       >
                         <Input
                           placeholder="Escriba la cantidad de dias"
+                          type="number"
                           value={formValues.dias}
                           onChange={({ detail }) =>
                             handleChange("dias", detail.value)
@@ -245,70 +282,17 @@ export default function Registrar_proyecto_fex_2() {
                     </ColumnLayout>
                   </Form>
                 </Container>
-                <Container>
-                  <ColumnLayout columns={3}>
-                    <FormField label="Fuente financiadora" stretch>
-                      <Select
-                        placeholder="Escoja una opción"
-                        options={entidades}
-                        selectedOption={formValues.fuente}
-                        onChange={({ detail }) =>
-                          handleChange("fuente", detail.selectedOption)
-                        }
-                      />
-                    </FormField>
-                    <FormField label="Otro" stretch>
-                      <Input
-                        disabled={
-                          formValues.fuente == null ||
-                          formValues.fuente?.value != "OTROS"
-                        }
-                        value={formValues.fuente_input}
-                        onChange={({ detail }) =>
-                          handleChange("fuente_input", detail.value)
-                        }
-                      />
-                    </FormField>
-                    <FormField label="País" stretch>
-                      <Select
-                        placeholder="Escoja una opción"
-                        statusType={paises.length == 0 ? "loading" : "finished"}
-                        loadingText="Cargando datos"
-                        options={paises}
-                        selectedOption={formValues.pais}
-                        onChange={({ detail }) =>
-                          handleChange("pais", detail.selectedOption)
-                        }
-                        virtualScroll
-                      />
-                    </FormField>
-                    <FormField label="Sitio web fuente financiadora" stretch>
-                      <Input
-                        value={formValues.sitio}
-                        onChange={({ detail }) =>
-                          handleChange("sitio", detail.value)
-                        }
-                      />
-                    </FormField>
-                    <FormField label="La UNMSM participa como" stretch>
-                      <Select
-                        placeholder="Escoja una opción"
-                        options={participaciones}
-                        selectedOption={formValues.participacion}
-                        onChange={({ detail }) =>
-                          handleChange("participacion", detail.selectedOption)
-                        }
-                      />
-                    </FormField>
-                    <FormField label="Nro RR" stretch>
-                      <Input
-                        value={formValues.resolucion_rectoral}
-                        onChange={({ detail }) =>
-                          handleChange("resolucion_rectoral", detail.value)
-                        }
-                      />
-                    </FormField>
-                  </ColumnLayout>
+                <Container
+                  header={
+                    <Header
+                      variant="h3"
+                      description="Completar las secciones de Resumen ejecutivo y Objetivos es obligatorio"
+                    >
+                      Descripción
+                    </Header>
+                  }
+                >
+                  <Tabs tabs={tabs} />
                 </Container>
               </SpaceBetween>
             ),
