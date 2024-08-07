@@ -1,4 +1,5 @@
 import {
+  Alert,
   ColumnLayout,
   Container,
   DatePicker,
@@ -6,8 +7,8 @@ import {
   FormField,
   Header,
   Input,
-  Select,
   SpaceBetween,
+  Spinner,
   Tabs,
   Wizard,
 } from "@cloudscape-design/components";
@@ -59,7 +60,9 @@ const formRules = {
 
 export default function Registrar_proyecto_fex_2() {
   //  States
+  const [loadingData, setLoadingData] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [alert, setAlert] = useState(false);
 
   //  Url
   const location = useLocation();
@@ -73,7 +76,7 @@ export default function Registrar_proyecto_fex_2() {
 
   const handleNavigate = async (detail) => {
     const query = queryString.stringify({
-      id: data.id,
+      id,
     });
     if (detail.requestedStepIndex > 1) {
       if (validateForm()) {
@@ -92,15 +95,37 @@ export default function Registrar_proyecto_fex_2() {
           setLoading(false);
           window.location.href = "paso_3?" + query;
         } else {
-          console.log(
-            "Necesita completar la fecha de inicio y fin, o el tiempo en años, meses y días."
-          );
+          setAlert(true);
         }
       }
     } else {
       window.location.href = "paso_1?" + query;
     }
   };
+
+  const getData = async () => {
+    const res = await axiosBase.get("admin/estudios/proyectosFEX/datosPaso2", {
+      params: {
+        id,
+      },
+    });
+    const data = res.data;
+    handleChange("fecha_inicio", data.proyecto.fecha_inicio);
+    handleChange("fecha_fin", data.proyecto.fecha_fin);
+    handleChange("palabras_clave", data.proyecto.palabras_clave);
+    if (data.extras) {
+      handleChange("resumen", data.extras.resumen);
+      handleChange("objetivos", data.extras.objetivos);
+      handleChange("años", data.extras.duracion_annio);
+      handleChange("meses", data.extras.duracion_mes);
+      handleChange("dias", data.extras.duracion_dia);
+    }
+    setLoadingData(false);
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   //  Tabs
   const tabs = [
@@ -161,140 +186,163 @@ export default function Registrar_proyecto_fex_2() {
             title: "Descripción del proyecto",
             description: "Detalles del proyecto",
             content: (
-              <SpaceBetween size="m">
-                <Container>
-                  <Form
-                    header={
-                      <Header
-                        variant="h3"
-                        description="Colocar el tiempo estipulado en el convenio, contrato u otro"
+              <>
+                {loadingData ? (
+                  <Container>
+                    <Spinner /> Cargando datos
+                  </Container>
+                ) : (
+                  <SpaceBetween size="m">
+                    {alert && (
+                      <Alert
+                        type="error"
+                        header="Campo requerido"
+                        dismissible
+                        onDismiss={() => setAlert(false)}
                       >
-                        Plazo del proyecto
-                      </Header>
-                    }
-                  >
-                    <ColumnLayout columns={2}>
-                      <FormField
-                        label="Fecha de inicio"
-                        errorText={formErrors.fecha_inicio}
-                        stretch
+                        Necesita completar la fecha de inicio y fin, o el tiempo
+                        en años, meses y días.
+                      </Alert>
+                    )}
+                    <Container>
+                      <Form
+                        header={
+                          <Header
+                            variant="h3"
+                            description="Colocar el tiempo estipulado en el convenio, contrato u otro"
+                          >
+                            Plazo del proyecto
+                          </Header>
+                        }
                       >
-                        <DatePicker
-                          placeholder="YYYY/MM/DD"
-                          isDateEnabled={(date) => {
-                            if (formValues.fecha_fin != "") {
-                              const newDate = new Date(formValues.fecha_fin);
-                              return date < newDate;
-                            } else {
-                              return true;
-                            }
-                          }}
-                          dateDisabledReason={(date) => {
-                            return "La fecha inicial no puede ser mayor a la fecha final";
-                          }}
-                          value={formValues.fecha_inicio}
-                          onChange={({ detail }) =>
-                            handleChange("fecha_inicio", detail.value)
-                          }
-                        />
-                      </FormField>
-                      <FormField
-                        label="Fecha de fin"
-                        errorText={formErrors.fecha_fin}
-                        stretch
+                        <ColumnLayout columns={2}>
+                          <FormField
+                            label="Fecha de inicio"
+                            errorText={formErrors.fecha_inicio}
+                            stretch
+                          >
+                            <DatePicker
+                              placeholder="YYYY/MM/DD"
+                              isDateEnabled={(date) => {
+                                if (formValues.fecha_fin != "") {
+                                  const newDate = new Date(
+                                    formValues.fecha_fin
+                                  );
+                                  return date < newDate;
+                                } else {
+                                  return true;
+                                }
+                              }}
+                              dateDisabledReason={() => {
+                                return "La fecha inicial no puede ser mayor a la fecha final";
+                              }}
+                              value={formValues.fecha_inicio}
+                              onChange={({ detail }) =>
+                                handleChange("fecha_inicio", detail.value)
+                              }
+                            />
+                          </FormField>
+                          <FormField
+                            label="Fecha de fin"
+                            errorText={formErrors.fecha_fin}
+                            stretch
+                          >
+                            <DatePicker
+                              placeholder="YYYY/MM/DD"
+                              isDateEnabled={(date) => {
+                                if (formValues.fecha_inicio != "") {
+                                  const newDate = new Date(
+                                    formValues.fecha_inicio
+                                  );
+                                  return date > newDate;
+                                } else {
+                                  return true;
+                                }
+                              }}
+                              dateDisabledReason={() => {
+                                return "La fecha final no puede ser menor a la fecha inicial";
+                              }}
+                              value={formValues.fecha_fin}
+                              onChange={({ detail }) =>
+                                handleChange("fecha_fin", detail.value)
+                              }
+                            />
+                          </FormField>
+                        </ColumnLayout>
+                      </Form>
+                    </Container>
+                    <Container>
+                      <Form
+                        header={
+                          <Header
+                            variant="h3"
+                            description="En caso no complete las fechas de inicio o de fin colocar el tiempo de duración del proyecto"
+                          >
+                            Duración del proyecto
+                          </Header>
+                        }
                       >
-                        <DatePicker
-                          placeholder="YYYY/MM/DD"
-                          isDateEnabled={(date) => {
-                            if (formValues.fecha_inicio != "") {
-                              const newDate = new Date(formValues.fecha_inicio);
-                              return date > newDate;
-                            } else {
-                              return true;
-                            }
-                          }}
-                          dateDisabledReason={(date) => {
-                            return "La fecha final no puede ser menor a la fecha inicial";
-                          }}
-                          value={formValues.fecha_fin}
-                          onChange={({ detail }) =>
-                            handleChange("fecha_fin", detail.value)
-                          }
-                        />
-                      </FormField>
-                    </ColumnLayout>
-                  </Form>
-                </Container>
-                <Container>
-                  <Form
-                    header={
-                      <Header
-                        variant="h3"
-                        description="En caso no complete las fechas de inicio o de fin colocar el tiempo de duración del proyecto"
-                      >
-                        Duración del proyecto
-                      </Header>
-                    }
-                  >
-                    <ColumnLayout columns={3}>
-                      <FormField
-                        label="Años"
-                        errorText={formErrors.años}
-                        stretch
-                      >
-                        <Input
-                          placeholder="Escriba la cantidad de años"
-                          type="number"
-                          value={formValues.años}
-                          onChange={({ detail }) =>
-                            handleChange("años", detail.value)
-                          }
-                        />
-                      </FormField>
-                      <FormField
-                        label="Meses"
-                        errorText={formErrors.meses}
-                        stretch
-                      >
-                        <Input
-                          placeholder="Escriba la cantidad de meses"
-                          type="number"
-                          value={formValues.meses}
-                          onChange={({ detail }) =>
-                            handleChange("meses", detail.value)
-                          }
-                        />
-                      </FormField>
-                      <FormField
-                        label="Días"
-                        errorText={formErrors.dias}
-                        stretch
-                      >
-                        <Input
-                          placeholder="Escriba la cantidad de dias"
-                          type="number"
-                          value={formValues.dias}
-                          onChange={({ detail }) =>
-                            handleChange("dias", detail.value)
-                          }
-                        />
-                      </FormField>
-                    </ColumnLayout>
-                  </Form>
-                </Container>
-                <Container
-                  header={
-                    <Header
-                      variant="h3"
-                      description="Completar las secciones de Resumen ejecutivo y Objetivos es obligatorio"
+                        <ColumnLayout columns={3}>
+                          <FormField
+                            label="Años"
+                            errorText={formErrors.años}
+                            stretch
+                          >
+                            <Input
+                              placeholder="Escriba la cantidad de años"
+                              type="number"
+                              value={formValues.años}
+                              onChange={({ detail }) =>
+                                handleChange("años", detail.value)
+                              }
+                            />
+                          </FormField>
+                          <FormField
+                            label="Meses"
+                            errorText={formErrors.meses}
+                            stretch
+                          >
+                            <Input
+                              placeholder="Escriba la cantidad de meses"
+                              type="number"
+                              value={formValues.meses}
+                              onChange={({ detail }) =>
+                                handleChange("meses", detail.value)
+                              }
+                            />
+                          </FormField>
+                          <FormField
+                            label="Días"
+                            errorText={formErrors.dias}
+                            stretch
+                          >
+                            <Input
+                              placeholder="Escriba la cantidad de dias"
+                              type="number"
+                              value={formValues.dias}
+                              onChange={({ detail }) =>
+                                handleChange("dias", detail.value)
+                              }
+                            />
+                          </FormField>
+                        </ColumnLayout>
+                      </Form>
+                    </Container>
+                    <Container
+                      header={
+                        <Header
+                          variant="h3"
+                          description="Completar las secciones de Resumen ejecutivo y Objetivos es obligatorio"
+                        >
+                          Descripción
+                        </Header>
+                      }
                     >
-                      Descripción
-                    </Header>
-                  }
-                >
-                  <Tabs tabs={tabs} />
-                </Container>
-              </SpaceBetween>
+                      <Tabs tabs={tabs} />
+                    </Container>
+                  </SpaceBetween>
+                )}
+              </>
             ),
           },
           {
