@@ -34,7 +34,7 @@ const breadcrumbs = [
     text: "Gestión de proyectos FEX",
   },
   {
-    text: "Nuevo",
+    text: "Registrar",
     href: "../proyectos_fex",
   },
 ];
@@ -180,7 +180,6 @@ export default function Registrar_proyecto_fex_2() {
         steps={[
           {
             title: "Datos básicos",
-            description: "Información general del proyecto",
           },
           {
             title: "Descripción del proyecto",
@@ -346,13 +345,10 @@ export default function Registrar_proyecto_fex_2() {
             ),
           },
           {
-            title: "Resultado de proyecto financiado",
+            title: "Documentos",
           },
           {
-            title: "Autores de la publicación",
-          },
-          {
-            title: "Envío de publicación",
+            title: "Integrantes",
           },
         ]}
       />

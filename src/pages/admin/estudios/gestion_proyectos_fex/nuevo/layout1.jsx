@@ -517,13 +517,13 @@ export default function Registrar_proyecto_fex_1() {
             ),
           },
           {
-            title: "Resultado de proyecto financiado",
+            title: "Descripción del proyecto",
           },
           {
-            title: "Autores de la publicación",
+            title: "Documentos",
           },
           {
-            title: "Envío de publicación",
+            title: "Integrantes",
           },
         ]}
       />

@@ -2,6 +2,9 @@ import { Suspense, lazy } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { NotificationProvider } from "../providers/notificationProvider";
 
+const Registrar_proyecto_fex_3 = lazy(() =>
+  import("../pages/admin/estudios/gestion_proyectos_fex/nuevo/layout3.jsx")
+);
 const Registrar_proyecto_fex_2 = lazy(() =>
   import("../pages/admin/estudios/gestion_proyectos_fex/nuevo/layout2.jsx")
 );
@@ -217,6 +220,10 @@ const routes = createBrowserRouter(
             {
               path: "paso_2",
               element: <Registrar_proyecto_fex_2 />,
+            },
+            {
+              path: "paso_3",
+              element: <Registrar_proyecto_fex_3 />,
             },
           ],
         },
