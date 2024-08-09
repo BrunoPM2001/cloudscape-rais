@@ -1,4 +1,5 @@
 import {
+  Autosuggest,
   Box,
   ColumnLayout,
   Container,
@@ -24,6 +25,7 @@ import {
 import { useFormValidation } from "../../../../../hooks/useFormValidation";
 import axiosBase from "../../../../../api/axios";
 import NotificationContext from "../../../../../providers/notificationProvider";
+import { useAutosuggest } from "../../../../../hooks/useAutosuggest";
 
 const initialForm = {
   doi: "",
@@ -67,10 +69,13 @@ export default forwardRef(function (props, ref) {
   //  State
   const [loadingData, setLoadingData] = useState(false);
   const [revistasIndexadas, setRevistasIndexadas] = useState([]);
+  const [publicacion, setPublicacion] = useState({});
 
   //  Hooks
   const { formValues, formErrors, handleChange, validateForm, setFormValues } =
     useFormValidation(initialForm, formRules);
+  const { loading, options, setOptions, value, setValue, setAvoidSelect } =
+    useAutosuggest("investigador/publicaciones/utils/listadoTitulos");
 
   //  Function
   const listaRevistasIndexadas = async () => {
@@ -180,10 +185,27 @@ export default forwardRef(function (props, ref) {
               </FormField>
             </ColumnLayout>
             <FormField label="Título" stretch errorText={formErrors.titulo}>
-              <Input
-                placeholder="Escriba el título de la publicación"
-                value={formValues.titulo}
-                onChange={({ detail }) => handleChange("titulo", detail.value)}
+              <Autosuggest
+                onChange={({ detail }) => {
+                  setOptions([]);
+                  setValue(detail.value);
+                  if (detail.value == "") {
+                    setPublicacion({});
+                  }
+                }}
+                onSelect={({ detail }) => {
+                  if (detail.selectedOption.id != undefined) {
+                    const { value, ...rest } = detail.selectedOption;
+                    setPublicacion(rest);
+                    setAvoidSelect(false);
+                  }
+                }}
+                value={value}
+                options={options}
+                loadingText="Cargando data"
+                placeholder="Código, dni o nombre del estudiante"
+                statusType={loading ? "loading" : "finished"}
+                empty="No se encontraron resultados"
               />
             </FormField>
             <FormField
