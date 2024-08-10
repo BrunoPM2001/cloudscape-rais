@@ -76,7 +76,7 @@ export default ({ id, visible, setVisible, reload }) => {
       }
       header="Incluir actividad al proyecto"
     >
-      <Form variant="embedded">
+      <Form>
         <SpaceBetween direction="vertical" size="s">
           <FormField label="Actividad" stretch errorText={formErrors.actividad}>
             <Input

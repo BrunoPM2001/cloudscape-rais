@@ -77,7 +77,7 @@ export default ({ visible, setVisible, grupo_id }) => {
         </Header>
       }
     >
-      <Form variant="embedded">
+      <Form>
         <FormField
           label="Categoría del grupo"
           stretch

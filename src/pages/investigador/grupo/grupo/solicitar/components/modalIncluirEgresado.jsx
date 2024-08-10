@@ -204,7 +204,7 @@ export default ({ close, reload, grupo_id }) => {
                     header={incluirMiembroData.detail}
                   />
                   {enableCreate == false && (
-                    <Form variant="embedded">
+                    <Form>
                       <FormField
                         label="Formato de adhesión"
                         description={

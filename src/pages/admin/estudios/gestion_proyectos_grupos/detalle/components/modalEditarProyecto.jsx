@@ -158,7 +158,7 @@ export default ({ visible, setVisible, item, proyecto_id, reload }) => {
       }
       header="Editar datos del proyecto"
     >
-      <Form variant="embedded">
+      <Form>
         <SpaceBetween size="m">
           <FormField label="Título" stretch errorText={formErrors.titulo}>
             <Input

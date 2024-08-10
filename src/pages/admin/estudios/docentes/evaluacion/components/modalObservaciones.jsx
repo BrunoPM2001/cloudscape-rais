@@ -70,7 +70,7 @@ export default ({ id, close, reload, enabled }) => {
       visible
       size="large"
       onDismiss={close}
-      header={<Header variant="h3">Observaciones</Header>}
+      header="Observaciones"
       footer={
         <Box float="right">
           <SpaceBetween direction="horizontal" size="xs">

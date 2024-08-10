@@ -167,7 +167,7 @@ export default ({ visible, setVisible, item, grupo_id, reload }) => {
       }
       header="Editar datos del grupo"
     >
-      <Form variant="embedded">
+      <Form>
         <SpaceBetween size="m">
           <FormField
             label="Nombre del grupo"

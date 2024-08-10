@@ -99,7 +99,7 @@ export default ({ visible, setVisible, id, reload }) => {
       }
       header="Añadir licencia a investigador"
     >
-      <Form variant="embedded">
+      <Form>
         <ColumnLayout columns={4}>
           <FormField
             label="Tipo de licencia"

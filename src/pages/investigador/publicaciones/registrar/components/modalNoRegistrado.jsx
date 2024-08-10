@@ -79,7 +79,7 @@ export default ({ id, visible, setVisible, reload }) => {
       }
       header="Agregar proyecto registrado en la UNMSM"
     >
-      <Form variant="embedded">
+      <Form>
         <SpaceBetween direction="vertical" size="s">
           <FormField
             label="Título del proyecto"

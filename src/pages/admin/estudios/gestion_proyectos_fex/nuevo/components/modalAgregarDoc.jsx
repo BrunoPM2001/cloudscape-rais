@@ -62,7 +62,7 @@ export default ({ id, doc_tipo, close, reload }) => {
       visible
       onDismiss={close}
       size="medium"
-      header={<Header>Agregar documento</Header>}
+      header="Agregar documento"
       footer={
         <Box float="right">
           <SpaceBetween direction="horizontal" size="xs">

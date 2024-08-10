@@ -46,7 +46,7 @@ export default ({ id, reload, close }) => {
       visible
       onDismiss={close}
       size="medium"
-      header={<Header>Eliminar documento</Header>}
+      header="Eliminar documento"
       footer={
         <Box float="right">
           <SpaceBetween direction="horizontal" size="xs">

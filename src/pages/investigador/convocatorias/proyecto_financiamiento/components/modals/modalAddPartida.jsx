@@ -96,7 +96,7 @@ export default ({ id, visible, setVisible, reload, limit }) => {
       }
       header="Agregar partida al proyecto"
     >
-      <Form variant="embedded">
+      <Form>
         <SpaceBetween size="s">
           <Alert header={`Saldo disponible: S/. ${limit}`} />
           <FormField

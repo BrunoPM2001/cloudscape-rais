@@ -210,7 +210,7 @@ export default ({ visible, setVisible, reload }) => {
                     header={incluirMiembroData.detail}
                   />
                   {enableCreate == false && (
-                    <Form variant="embedded">
+                    <Form>
                       <FormField
                         label="Formato de adhesión"
                         description={

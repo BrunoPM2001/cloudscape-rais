@@ -38,7 +38,7 @@ export default ({ close, item }) => {
       visible
       onDismiss={close}
       size="medium"
-      header={<Header>Auditoría</Header>}
+      header="Auditoría"
       footer={
         <Box float="right">
           <Button onClick={close}>Cerrar</Button>

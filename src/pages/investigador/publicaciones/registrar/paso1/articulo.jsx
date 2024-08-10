@@ -26,6 +26,7 @@ import { useFormValidation } from "../../../../../hooks/useFormValidation";
 import axiosBase from "../../../../../api/axios";
 import NotificationContext from "../../../../../providers/notificationProvider";
 import { useAutosuggest } from "../../../../../hooks/useAutosuggest";
+import ModalIncluirmeAutor from "../components/modalIncluirmeAutor";
 
 const initialForm = {
   doi: "",
@@ -203,7 +204,7 @@ export default forwardRef(function (props, ref) {
                 value={value}
                 options={options}
                 loadingText="Cargando data"
-                placeholder="Código, dni o nombre del estudiante"
+                placeholder="Título de la publicación"
                 statusType={loading ? "loading" : "finished"}
                 empty="No se encontraron resultados"
               />
@@ -384,6 +385,14 @@ export default forwardRef(function (props, ref) {
           </SpaceBetween>
         )}
       </Form>
+      {publicacion?.id && (
+        <ModalIncluirmeAutor
+          close={() => {
+            setPublicacion({});
+            setValue("");
+          }}
+        />
+      )}
     </Container>
   );
 });

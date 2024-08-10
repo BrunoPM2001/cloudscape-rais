@@ -48,7 +48,7 @@ export default ({ item, reload, close }) => {
       visible
       onDismiss={close}
       size="medium"
-      header={<Header>Editar documento</Header>}
+      header="Editar documento"
       footer={
         <Box float="right">
           <SpaceBetween direction="horizontal" size="xs">

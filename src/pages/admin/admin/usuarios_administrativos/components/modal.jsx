@@ -75,7 +75,7 @@ const CreateUserModal = ({ visible, setVisible, reload }) => {
       }
       header="Crear usuario administrativo"
     >
-      <Form variant="embedded">
+      <Form>
         <SpaceBetween direction="vertical" size="s">
           <div>
             <Header variant="h3">Datos institucionales</Header>
@@ -363,7 +363,7 @@ const EditUserModal = ({ visible, setVisible, id, reload }) => {
       {loading ? (
         <StatusIndicator type="loading" />
       ) : (
-        <Form variant="embedded">
+        <Form>
           <SpaceBetween direction="vertical" size="s">
             <div>
               <Header variant="h3">Datos institucionales</Header>

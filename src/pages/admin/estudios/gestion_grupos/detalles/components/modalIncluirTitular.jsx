@@ -132,7 +132,7 @@ export default ({ visible, setVisible, reload }) => {
       }
       header="Incluir miembro al grupo"
     >
-      <Form variant="embedded">
+      <Form>
         <SpaceBetween direction="vertical" size="s">
           <FormField label="Buscar docente ordinario" stretch>
             <Autosuggest
@@ -214,7 +214,7 @@ export default ({ visible, setVisible, reload }) => {
                     header={incluirMiembroData.detail}
                   />
                   {enableCreate == false && (
-                    <Form variant="embedded">
+                    <Form>
                       <ColumnLayout columns={2} variant="text-grid">
                         <SpaceBetween direction="vertical" size="xs">
                           <FormField label="Código ORCID" stretch>

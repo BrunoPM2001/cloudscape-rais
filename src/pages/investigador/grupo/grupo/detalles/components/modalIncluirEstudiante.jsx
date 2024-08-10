@@ -124,7 +124,7 @@ export default ({ visible, setVisible, reload }) => {
       }
       header="Incluir miembro al grupo"
     >
-      <Form variant="embedded">
+      <Form>
         <SpaceBetween direction="vertical" size="s">
           <FormField label="Buscar estudiante" stretch>
             <Autosuggest
@@ -207,7 +207,7 @@ export default ({ visible, setVisible, reload }) => {
                     header={incluirMiembroData.detail}
                   />
                   {enableCreate == false && (
-                    <Form variant="embedded">
+                    <Form>
                       <FormField
                         label="Formato de adhesión"
                         description={

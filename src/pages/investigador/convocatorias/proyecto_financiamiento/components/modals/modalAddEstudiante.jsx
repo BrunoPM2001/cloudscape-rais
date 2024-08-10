@@ -199,7 +199,7 @@ export default ({ id, visible, setVisible, reload }) => {
                     header={incluirMiembroData.detail}
                   />
                   {enableCreate == false && (
-                    <Form variant="embedded">
+                    <Form>
                       <FormField
                         label="Carta de compromiso"
                         description={

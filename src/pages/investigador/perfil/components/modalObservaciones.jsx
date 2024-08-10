@@ -21,7 +21,7 @@ export default ({ data, close }) => {
       visible
       size="large"
       onDismiss={close}
-      header={<Header variant="h3">Observaciones</Header>}
+      header="Observaciones"
       footer={
         <Box float="right">
           <Button onClick={close}>Cerrar</Button>

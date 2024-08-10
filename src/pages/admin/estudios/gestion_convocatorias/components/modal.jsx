@@ -62,7 +62,7 @@ const CreateModal = ({ visible, setVisible, reload }) => {
       }
       header="Crear convocatoria"
     >
-      <Form variant="embedded">
+      <Form>
         <SpaceBetween direction="vertical" size="s">
           <Container header={<Header variant="h3">Datos del Registro</Header>}>
             <ColumnLayout columns={2}>
@@ -274,7 +274,7 @@ const EditModal = ({ visible, setVisible, item, reload }) => {
       }
       header="Editar convocatoria"
     >
-      <Form variant="embedded">
+      <Form>
         <SpaceBetween direction="vertical" size="s">
           <Container header={<Header variant="h3">Datos del Registro</Header>}>
             <ColumnLayout columns={2}>
@@ -559,7 +559,7 @@ const AddCriterioModal = ({ visible, setVisible, reload }) => {
       }
       header="Añadir criterio"
     >
-      <Form variant="embedded">
+      <Form>
         <SpaceBetween direction="vertical" size="s">
           <div>
             <Header variant="h3">Datos del template</Header>

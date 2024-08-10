@@ -70,7 +70,7 @@ export default ({ visible, setVisible, grupo_id }) => {
         </Header>
       }
     >
-      <Form variant="embedded">
+      <Form>
         <FormField
           label="Motivo"
           stretch
