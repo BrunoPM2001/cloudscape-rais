@@ -110,7 +110,7 @@ export default ({ id, reload, close, optAutor }) => {
                 placeholder="Escriba el ap. materno del autor"
                 value={formValues.apellido2}
                 onChange={({ detail }) =>
-                  handleChange("apellido2", detail.value)
+                  handleChange("apellido2", detail.aqhora)
                 }
               />
             </FormField>
