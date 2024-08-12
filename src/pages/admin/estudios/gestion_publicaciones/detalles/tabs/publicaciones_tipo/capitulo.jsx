@@ -340,6 +340,14 @@ export default function ({ data }) {
         <FormField
           label="URL de la publicación"
           stretch
+          info={
+            <Button
+              iconName="external"
+              variant="inline-icon"
+              target="_blank"
+              href={formValues.url ?? ""}
+            />
+          }
           errorText={formErrors.url}
         >
           <Input

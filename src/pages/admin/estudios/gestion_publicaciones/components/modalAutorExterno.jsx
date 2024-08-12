@@ -25,9 +25,6 @@ const initialForm = {
 };
 
 const formRules = {
-  nombres: { required: true },
-  apellido1: { required: true },
-  apellido2: { required: true },
   autor: { required: true },
   filiacion: { required: true },
   categoria: { required: true },
@@ -92,18 +89,14 @@ export default ({ id, reload, close, optAutor }) => {
       <Form>
         <SpaceBetween direction="vertical" size="s">
           <ColumnLayout columns={3}>
-            <FormField label="Nombres" stretch errorText={formErrors.nombres}>
+            <FormField label="Nombres" stretch>
               <Input
                 placeholder="Escriba el nombre del autor"
                 value={formValues.nombres}
                 onChange={({ detail }) => handleChange("nombres", detail.value)}
               />
             </FormField>
-            <FormField
-              label="Apellido paterno"
-              stretch
-              errorText={formErrors.apellido1}
-            >
+            <FormField label="Apellido paterno" stretch>
               <Input
                 placeholder="Escriba el ap. paterno del autor"
                 value={formValues.apellido1}
@@ -112,11 +105,7 @@ export default ({ id, reload, close, optAutor }) => {
                 }
               />
             </FormField>
-            <FormField
-              label="Apellido materno"
-              stretch
-              errorText={formErrors.apellido2}
-            >
+            <FormField label="Apellido materno" stretch>
               <Input
                 placeholder="Escriba el ap. materno del autor"
                 value={formValues.apellido2}

@@ -51,6 +51,21 @@ const columnDefinitions = [
     header: "Filiación",
     cell: (item) => item.filiacion,
   },
+  {
+    id: "puntaje",
+    header: "Puntaje",
+    cell: (item) => item.puntaje,
+  },
+  {
+    id: "created_at",
+    header: "Fecha creación",
+    cell: (item) => item.created_at,
+  },
+  {
+    id: "updated_at",
+    header: "Fecha actualización",
+    cell: (item) => item.updated_at,
+  },
 ];
 
 const columnDisplay = [
@@ -60,6 +75,9 @@ const columnDisplay = [
   { id: "tipo", visible: true },
   { id: "nombres", visible: true },
   { id: "filiacion", visible: true },
+  { id: "puntaje", visible: true },
+  { id: "created_at", visible: true },
+  { id: "updated_at", visible: true },
 ];
 
 export default function ({ data, loading, tipo, reload }) {
@@ -92,6 +110,7 @@ export default function ({ data, loading, tipo, reload }) {
     );
     const data = res.data;
     pushNotification(data.detail, data.message, notifications.length + 1);
+    reload();
   };
 
   const convertirPrincipal = async () => {
@@ -104,6 +123,7 @@ export default function ({ data, loading, tipo, reload }) {
     );
     const data = res.data;
     pushNotification(data.detail, data.message, notifications.length + 1);
+    reload();
   };
 
   //  Effect

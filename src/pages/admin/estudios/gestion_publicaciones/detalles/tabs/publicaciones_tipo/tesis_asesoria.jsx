@@ -125,6 +125,14 @@ export default function ({ data }) {
         <FormField
           label="Repositorio de la tesis (link)"
           stretch
+          info={
+            <Button
+              iconName="external"
+              variant="inline-icon"
+              target="_blank"
+              href={formValues.url ?? ""}
+            />
+          }
           errorText={formErrors.url}
         >
           <Input
