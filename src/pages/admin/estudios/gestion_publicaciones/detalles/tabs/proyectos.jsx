@@ -10,6 +10,11 @@ import {
 } from "@cloudscape-design/components";
 import { useState } from "react";
 import { useCollection } from "@cloudscape-design/collection-hooks";
+import { useLocation } from "react-router-dom";
+import queryString from "query-string";
+import ModalRegistrado from "../../components/modalRegistrado";
+import ModalNoRegistrado from "../../components/modalNoRegistrado";
+import ModalEliminarProyecto from "../../components/modalEliminarProyecto";
 
 const columnDefinitions = [
   {
@@ -36,9 +41,12 @@ const columnDisplay = [
 ];
 
 export default function ({ loading, data, reload }) {
+  //  Url
+  const location = useLocation();
+  const { id } = queryString.parse(location.search);
+
   //  State
-  const [visible, setVisible] = useState(false);
-  const [typeModal, setTypeModal] = useState(null);
+  const [type, setType] = useState("");
 
   //  Hooks
   const { items, collectionProps, paginationProps } = useCollection(data, {
@@ -72,8 +80,7 @@ export default function ({ loading, data, reload }) {
                     collectionProps.selectedItems.length > 0 ? false : true
                   }
                   onClick={() => {
-                    setTypeModal("eliminar");
-                    setVisible(true);
+                    setType("eliminar");
                   }}
                 >
                   Eliminar
@@ -82,11 +89,9 @@ export default function ({ loading, data, reload }) {
                   variant="primary"
                   onItemClick={({ detail }) => {
                     if (detail.id == "action_1") {
-                      setTypeModal("registrado");
-                      setVisible(true);
+                      setType("registrado");
                     } else if (detail.id == "action_2") {
-                      setTypeModal("no_registrado");
-                      setVisible(true);
+                      setType("no_registrado");
                     }
                   }}
                   items={[
@@ -117,6 +122,19 @@ export default function ({ loading, data, reload }) {
           </Box>
         }
       />
+      {type == "registrado" ? (
+        <ModalRegistrado id={id} reload={reload} close={() => setType("")} />
+      ) : type == "no_registrado" ? (
+        <ModalNoRegistrado id={id} reload={reload} close={() => setType("")} />
+      ) : type == "eliminar" ? (
+        <ModalEliminarProyecto
+          id={collectionProps.selectedItems[0].id}
+          reload={reload}
+          close={() => setType("")}
+        />
+      ) : (
+        <></>
+      )}
     </Container>
   );
 }

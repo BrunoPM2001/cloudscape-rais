@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   ButtonDropdown,
   Container,
   Header,
@@ -7,8 +8,17 @@ import {
   SpaceBetween,
   Table,
 } from "@cloudscape-design/components";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useCollection } from "@cloudscape-design/collection-hooks";
+import ModalAutorEstudiante from "../../components/modalAutorEstudiante";
+import ModalAutorDocente from "../../components/modalAutorDocente";
+import ModalAutorExterno from "../../components/modalAutorExterno";
+import ModalEditarAutor from "../../components/modalEditarAutor";
+import ModalEliminarAutor from "../../components/modalEliminarAutor";
+import axiosBase from "../../../../../../api/axios";
+import { useLocation } from "react-router-dom";
+import queryString from "query-string";
+import NotificationContext from "../../../../../../providers/notificationProvider";
 
 const columnDefinitions = [
   {
@@ -53,11 +63,18 @@ const columnDisplay = [
 ];
 
 export default function ({ data, loading, tipo, reload }) {
+  //  Context
+  const { notifications, pushNotification } = useContext(NotificationContext);
+
+  //  Url
+  const location = useLocation();
+  const { id } = queryString.parse(location.search);
+
   //  State
-  const [visible, setVisible] = useState(false);
-  const [typeModal, setTypeModal] = useState(null);
+  const [type, setType] = useState("");
   const [optAutor, setOptAutor] = useState([]);
   const [tipoAutor, setTipoAutor] = useState([]);
+  const [loadingBtn, setLoadingBtn] = useState(false);
 
   //  Hooks
   const { items, collectionProps, paginationProps } = useCollection(data, {
@@ -65,6 +82,29 @@ export default function ({ data, loading, tipo, reload }) {
     sorting: { defaultState: { sortingColumn: columnDefinitions[0] } },
     selection: {},
   });
+
+  const recalcular = async () => {
+    const res = await axiosBase.put(
+      "admin/estudios/publicaciones/recalcularPuntaje",
+      {
+        id,
+      }
+    );
+    const data = res.data;
+    pushNotification(data.detail, data.message, notifications.length + 1);
+  };
+
+  const convertirPrincipal = async () => {
+    const res = await axiosBase.put(
+      "admin/estudios/publicaciones/convertirPrincipal",
+      {
+        id: collectionProps.selectedItems[0].id,
+        publicacion_id: id,
+      }
+    );
+    const data = res.data;
+    pushNotification(data.detail, data.message, notifications.length + 1);
+  };
 
   //  Effect
   useEffect(() => {
@@ -115,6 +155,9 @@ export default function ({ data, loading, tipo, reload }) {
             counter={"(" + data.length + ")"}
             actions={
               <SpaceBetween direction="horizontal" size="xs">
+                <Button onClick={recalcular} loading={loadingBtn}>
+                  Recalcular puntajes
+                </Button>
                 <ButtonDropdown
                   disabled={
                     collectionProps.selectedItems.length > 0 ? false : true
@@ -122,22 +165,26 @@ export default function ({ data, loading, tipo, reload }) {
                   variant="normal"
                   onItemClick={({ detail }) => {
                     if (detail.id == "action_1_1") {
-                      setTypeModal("edit");
-                      setVisible(true);
+                      setType("edit");
                     } else if (detail.id == "action_1_2") {
-                      setTypeModal("delete");
-                      setVisible(true);
+                      setType("delete");
+                    } else if (detail.id == "action_1_3") {
+                      convertirPrincipal();
                     }
                   }}
                   items={[
                     {
-                      text: "Editar",
                       id: "action_1_1",
+                      text: "Editar",
                     },
                     {
-                      text: "Eliminar",
                       id: "action_1_2",
+                      text: "Eliminar",
                       disabled: collectionProps.selectedItems[0]?.presentado,
+                    },
+                    {
+                      id: "action_1_3",
+                      text: "Convertir en autor principal",
                     },
                   ]}
                 >
@@ -147,14 +194,11 @@ export default function ({ data, loading, tipo, reload }) {
                   variant="primary"
                   onItemClick={({ detail }) => {
                     if (detail.id == "action_2_1") {
-                      setTypeModal("add_docente");
-                      setVisible(true);
+                      setType("add_docente");
                     } else if (detail.id == "action_2_2") {
-                      setTypeModal("add_estudiante");
-                      setVisible(true);
+                      setType("add_estudiante");
                     } else if (detail.id == "action_2_3") {
-                      setTypeModal("add_externo");
-                      setVisible(true);
+                      setType("add_externo");
                     }
                   }}
                   items={tipoAutor}
@@ -176,6 +220,43 @@ export default function ({ data, loading, tipo, reload }) {
           </Box>
         }
       />
+      {type == "add_docente" ? (
+        <ModalAutorDocente
+          id={id}
+          reload={reload}
+          close={() => setType("")}
+          optAutor={optAutor}
+        />
+      ) : type == "add_estudiante" ? (
+        <ModalAutorEstudiante
+          id={id}
+          reload={reload}
+          close={() => setType("")}
+          optAutor={optAutor}
+        />
+      ) : type == "add_externo" ? (
+        <ModalAutorExterno
+          id={id}
+          reload={reload}
+          close={() => setType("")}
+          optAutor={optAutor}
+        />
+      ) : type == "edit" ? (
+        <ModalEditarAutor
+          item={collectionProps.selectedItems[0]}
+          reload={reload}
+          close={() => setType("")}
+          optAutor={optAutor}
+        />
+      ) : type == "delete" ? (
+        <ModalEliminarAutor
+          id={collectionProps.selectedItems[0].id}
+          reload={reload}
+          close={() => setType("")}
+        />
+      ) : (
+        <></>
+      )}
     </Container>
   );
 }
