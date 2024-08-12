@@ -45,7 +45,7 @@ const CreateUserModal = ({ visible, setVisible, reload }) => {
   const createUser = async () => {
     setCreating(true);
     const response = await axiosBase.post("admin/admin/usuarios/create", form);
-    const data = await response.data;
+    const data = response.data;
     setCreating(false);
     setVisible(false);
     pushNotification(data.detail, data.message, notifications.length + 1);
@@ -309,7 +309,7 @@ const EditUserModal = ({ visible, setVisible, id, reload }) => {
     const res = await axiosBase.get(
       "admin/admin/usuarios/getOneAdmin/" + id[0].id
     );
-    const data = await res.data;
+    const data = res.data;
     setForm(data);
     setSelectedOption(
       data.sexo == "M"
@@ -552,7 +552,7 @@ const ResetPasswordModal = ({ visible, setVisible, item }) => {
     const response = await axiosBase.put("admin/admin/usuarios/resetPass", {
       id: item[0].id,
     });
-    const data = await response.data;
+    const data = response.data;
     setLoading(false);
     setVisible(false);
     pushNotification(data.detail, data.message, notifications.length + 1);

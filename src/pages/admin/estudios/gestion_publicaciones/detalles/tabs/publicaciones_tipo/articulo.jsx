@@ -5,6 +5,7 @@ import {
   Container,
   DateInput,
   FormField,
+  Grid,
   Header,
   Input,
   Multiselect,
@@ -16,6 +17,9 @@ import {
 import { useContext, useEffect, useState } from "react";
 import NotificationContext from "../../../../../../../providers/notificationProvider";
 import { useFormValidation } from "../../../../../../../hooks/useFormValidation";
+import axiosBase from "../../../../../../../api/axios";
+import { useLocation } from "react-router-dom";
+import queryString from "query-string";
 
 const initialForm = {
   doi: "",
@@ -32,6 +36,7 @@ const initialForm = {
   volumen: "",
   edicion: "",
   indexada: [],
+  wos: [],
   url: "",
 };
 
@@ -52,12 +57,22 @@ const formRules = {
   url: { required: false },
 };
 
-export default function ({ data }) {
+export default function ({ data, reload }) {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
 
+  //  Url
+  const location = useLocation();
+  const { id } = queryString.parse(location.search);
+
   //  State
   const [revistasIndexadas, setRevistasIndexadas] = useState([]);
+  const [wos, setWos] = useState([]);
+  const [inputRevista, setInputRevista] = useState("");
+  const [inputWos, setInputWos] = useState("");
+  const [loadingRevista, setLoadingRevista] = useState(false);
+  const [loadingWos, setLoadingWos] = useState(false);
+  const [loadingGuardar, setLoadingGuardar] = useState(false);
 
   //  Hooks
   const { formValues, formErrors, handleChange, validateForm, setFormValues } =
@@ -70,8 +85,53 @@ export default function ({ data }) {
       art_tipo: { value: data.data.art_tipo },
       palabras_clave: data.palabras_clave,
       indexada: data.indexada,
+      wos: data.indexada_wos,
     });
     setRevistasIndexadas(data.revistas);
+    setWos(data.wos);
+  };
+
+  const agregarRevista = async () => {
+    setLoadingRevista(true);
+    const res = await axiosBase.post(
+      "admin/estudios/publicaciones/agregarRevista",
+      {
+        nombre: inputRevista,
+      }
+    );
+    const data = res.data;
+    pushNotification(data.detail, data.message, notifications.length + 1);
+    setLoadingRevista(false);
+    if (data.message == "success") {
+      reload();
+    }
+  };
+
+  const agregarWos = async () => {
+    setLoadingWos(true);
+    const res = await axiosBase.post(
+      "admin/estudios/publicaciones/agregarWos",
+      {
+        nombre: inputWos,
+      }
+    );
+    const data = res.data;
+    pushNotification(data.detail, data.message, notifications.length + 1);
+    setLoadingWos(false);
+    if (data.message == "success") {
+      reload();
+    }
+  };
+
+  const guardarData = async () => {
+    setLoadingGuardar(true);
+    const res = await axiosBase.post("admin/estudios/publicaciones/paso1", {
+      ...formValues,
+      id,
+    });
+    const data = res.data;
+    pushNotification(data.detail, data.message, notifications.length + 1);
+    setLoadingGuardar(false);
   };
 
   useEffect(() => {
@@ -81,14 +141,32 @@ export default function ({ data }) {
   return (
     <Container
       header={
-        <Header actions={<Button>Actualizar datos</Button>}>
+        <Header
+          actions={
+            <Button loading={loadingGuardar} onClick={guardarData}>
+              Actualizar datos
+            </Button>
+          }
+        >
           Datos del artículo
         </Header>
       }
     >
       <SpaceBetween direction="vertical" size="s">
         <ColumnLayout columns={2}>
-          <FormField label="DOI" stretch errorText={formErrors.doi}>
+          <FormField
+            label="DOI"
+            stretch
+            info={
+              <Button
+                iconName="external"
+                variant="inline-icon"
+                target="_blank"
+                href={`https://doi.org/${formValues.doi ?? ""}`}
+              />
+            }
+            errorText={formErrors.doi}
+          >
             <Input
               placeholder="Escriba el doi"
               value={formValues.doi}
@@ -224,14 +302,42 @@ export default function ({ data }) {
           />
         </FormField>
         <ColumnLayout columns={4}>
-          <FormField label="ISSN" stretch errorText={formErrors.issn}>
+          <FormField
+            label="ISSN"
+            stretch
+            info={
+              <Button
+                iconName="external"
+                variant="inline-icon"
+                target="_blank"
+                href={`https://portal.issn.org/resource/ISSN/${
+                  formErrors.issn ?? ""
+                }`}
+              />
+            }
+            errorText={formErrors.issn}
+          >
             <Input
               placeholder="Escriba el ISSN"
               value={formValues.issn}
               onChange={({ detail }) => handleChange("issn", detail.value)}
             />
           </FormField>
-          <FormField label="ISSN-E" stretch errorText={formErrors.issn_e}>
+          <FormField
+            label="ISSN-E"
+            stretch
+            info={
+              <Button
+                iconName="external"
+                variant="inline-icon"
+                target="_blank"
+                href={`https://portal.issn.org/resource/ISSN/${
+                  formErrors.issn_e ?? ""
+                }`}
+              />
+            }
+            errorText={formErrors.issn_e}
+          >
             <Input
               placeholder="Escriba el ISSN-E"
               value={formValues.issn_e}
@@ -245,36 +351,125 @@ export default function ({ data }) {
               onChange={({ detail }) => handleChange("volumen", detail.value)}
             />
           </FormField>
-          <FormField label="Edición" stretch errorText={formErrors.edicion}>
+          <FormField label="Número" stretch errorText={formErrors.edicion}>
             <Input
-              placeholder="Escriba las edición de su publicación"
+              placeholder="Escriba el nro de su publicación"
               value={formValues.edicion}
               onChange={({ detail }) => handleChange("edicion", detail.value)}
             />
           </FormField>
         </ColumnLayout>
-        <FormField
-          label="Publicación indexada en"
-          stretch
-          errorText={formErrors.indexada}
-        >
-          <Multiselect
-            statusType={revistasIndexadas.length == 0 ? "loading" : "finished"}
-            virtualScroll
-            filteringType="auto"
-            placeholder="Escoga las revistas"
-            selectedOptions={formValues.indexada}
-            onChange={({ detail }) =>
-              handleChange("indexada", detail.selectedOptions)
-            }
-            options={[
-              {
-                label: "Grupo de revistas",
-                options: revistasIndexadas,
-              },
-            ]}
-          ></Multiselect>
-        </FormField>
+        <Container>
+          <FormField
+            label="Publicación indexada en"
+            stretch
+            errorText={formErrors.indexada}
+          >
+            <SpaceBetween size="m">
+              <Multiselect
+                statusType="finished"
+                virtualScroll
+                filteringType="auto"
+                placeholder="Escoga las revistas"
+                empty="No hay revistas"
+                selectedOptions={formValues.indexada}
+                onChange={({ detail }) =>
+                  handleChange("indexada", detail.selectedOptions)
+                }
+                options={[
+                  {
+                    label: "Grupo de revistas",
+                    options: revistasIndexadas,
+                  },
+                ]}
+              />
+              <Grid
+                gridDefinition={[
+                  {
+                    colspan: {
+                      default: 8,
+                    },
+                  },
+                  {
+                    colspan: {
+                      default: 4,
+                    },
+                  },
+                ]}
+              >
+                <FormField stretch>
+                  <Input
+                    placeholder="Agregar otra base de datos de indexación"
+                    disabled={loadingRevista}
+                    value={inputRevista}
+                    onChange={({ detail }) => setInputRevista(detail.value)}
+                  />
+                </FormField>
+                <Button
+                  fullWidth
+                  variant="primary"
+                  iconName="add-plus"
+                  onClick={agregarRevista}
+                  loading={loadingRevista}
+                >
+                  Agregar
+                </Button>
+              </Grid>
+            </SpaceBetween>
+          </FormField>
+        </Container>
+        <Container>
+          <FormField
+            label="Base de datos de la colección principal WOS"
+            stretch
+          >
+            <SpaceBetween size="m">
+              <Multiselect
+                statusType="finished"
+                virtualScroll
+                filteringType="auto"
+                placeholder="Escoga las revistas"
+                selectedOptions={formValues.wos}
+                onChange={({ detail }) =>
+                  handleChange("wos", detail.selectedOptions)
+                }
+                options={wos}
+              />
+              <Grid
+                gridDefinition={[
+                  {
+                    colspan: {
+                      default: 8,
+                    },
+                  },
+                  {
+                    colspan: {
+                      default: 4,
+                    },
+                  },
+                ]}
+              >
+                <FormField stretch>
+                  <Input
+                    placeholder="Agregar otra base de datos de indexación"
+                    disabled={loadingWos}
+                    value={inputWos}
+                    onChange={({ detail }) => setInputWos(detail.value)}
+                  />
+                </FormField>
+                <Button
+                  fullWidth
+                  variant="primary"
+                  iconName="add-plus"
+                  onClick={agregarWos}
+                  loading={loadingWos}
+                >
+                  Agregar
+                </Button>
+              </Grid>
+            </SpaceBetween>
+          </FormField>
+        </Container>
         <FormField
           label="URL de la publicación"
           stretch

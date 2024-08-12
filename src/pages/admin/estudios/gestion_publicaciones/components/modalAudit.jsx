@@ -1,5 +1,4 @@
 import {
-  Badge,
   Box,
   Button,
   Modal,
@@ -7,7 +6,7 @@ import {
   Table,
 } from "@cloudscape-design/components";
 import { useEffect, useState } from "react";
-import axiosBase from "../../../../../../api/axios";
+import axiosBase from "../../../../../api/axios";
 
 export default ({ close, item }) => {
   //  States
@@ -17,7 +16,7 @@ export default ({ close, item }) => {
   //  Functions
   const getData = async () => {
     const res = await axiosBase.get(
-      "admin/economia/comprobantes/verAuditoria",
+      "admin/estudios/publicaciones/verAuditoria",
       {
         params: {
           id: item.id,
@@ -32,6 +31,7 @@ export default ({ close, item }) => {
   useEffect(() => {
     getData();
   }, []);
+
   return (
     <Modal
       visible
@@ -59,48 +59,20 @@ export default ({ close, item }) => {
             isRowHeader: true,
           },
           {
-            id: "nombre",
+            id: "nombres",
             header: "Nombre",
-            cell: (item) => item.nombre,
+            cell: (item) => item.nombres,
           },
           {
-            id: "estado",
-            header: "Estado",
-            cell: (item) => (
-              <Badge
-                color={
-                  item.estado == 1
-                    ? "green"
-                    : item.estado == 2
-                    ? "red"
-                    : item.estado == 3
-                    ? "grey"
-                    : item.estado == 4
-                    ? "blue"
-                    : item.estado == 5
-                    ? "red"
-                    : "red"
-                }
-              >
-                {item.estado == 1
-                  ? "Aprobado"
-                  : item.estado == 2
-                  ? "Rechazado"
-                  : item.estado == 3
-                  ? "Observado"
-                  : item.estado == 4
-                  ? "Enviado"
-                  : item.estado == 5
-                  ? "Anulado"
-                  : "Error"}
-              </Badge>
-            ),
+            id: "apellidos",
+            header: "Apellidos",
+            cell: (item) => item.apellidos,
           },
         ]}
         columnDisplay={[
           { id: "fecha", visible: true },
-          { id: "nombre", visible: true },
-          { id: "estado", visible: true },
+          { id: "nombres", visible: true },
+          { id: "apellidos", visible: true },
         ]}
         empty={
           <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">

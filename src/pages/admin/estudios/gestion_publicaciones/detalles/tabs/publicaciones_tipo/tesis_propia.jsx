@@ -1,17 +1,23 @@
 import {
   Box,
+  Button,
   ColumnLayout,
   Container,
   DateInput,
   FormField,
+  Header,
   Input,
   Select,
   SpaceBetween,
   StatusIndicator,
   TokenGroup,
 } from "@cloudscape-design/components";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useFormValidation } from "../../../../../../../hooks/useFormValidation";
+import axiosBase from "../../../../../../../api/axios";
+import { useLocation } from "react-router-dom";
+import queryString from "query-string";
+import NotificationContext from "../../../../../../../providers/notificationProvider";
 
 const initialForm = {
   titulo: "",
@@ -45,8 +51,16 @@ const tipo_tesis = [
 ];
 
 export default function ({ data }) {
+  //  Context
+  const { notifications, pushNotification } = useContext(NotificationContext);
+
+  //  Url
+  const location = useLocation();
+  const { id } = queryString.parse(location.search);
+
   //  State
   const [paises, setPaises] = useState([]);
+  const [loadingGuardar, setLoadingGuardar] = useState(false);
 
   //  Hooks
   const { formValues, formErrors, handleChange, validateForm, setFormValues } =
@@ -64,13 +78,36 @@ export default function ({ data }) {
     });
   };
 
+  const guardarData = async () => {
+    setLoadingGuardar(true);
+    const res = await axiosBase.post("admin/estudios/publicaciones/paso1", {
+      ...formValues,
+      id,
+    });
+    const data = res.data;
+    pushNotification(data.detail, data.message, notifications.length + 1);
+    setLoadingGuardar(false);
+  };
+
   //  Effect
   useEffect(() => {
     getData();
   }, []);
 
   return (
-    <Container>
+    <Container
+      header={
+        <Header
+          actions={
+            <Button loading={loadingGuardar} onClick={guardarData}>
+              Actualizar datos
+            </Button>
+          }
+        >
+          Datos de la tesis
+        </Header>
+      }
+    >
       <SpaceBetween direction="vertical" size="s">
         <FormField label="Título" stretch errorText={formErrors.titulo}>
           <Input

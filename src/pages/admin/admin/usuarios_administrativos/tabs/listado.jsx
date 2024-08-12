@@ -92,7 +92,7 @@ export default () => {
   const getData = async () => {
     setLoading(true);
     const res = await axiosBase.get("admin/admin/usuarios/getUsuariosAdmin");
-    const data = await res.data;
+    const data = res.data;
     setItems(data.data);
     setLoading(false);
   };

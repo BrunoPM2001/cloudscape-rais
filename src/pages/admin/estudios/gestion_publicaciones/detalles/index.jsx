@@ -40,27 +40,6 @@ export default function Detalle_publicacion() {
   const location = useLocation();
   const { id } = queryString.parse(location.search);
 
-  //  Tabs
-  const tabs = [
-    {
-      id: "detalles",
-      label: "Detalles",
-      content: <Info data={info.detalle} loading={loading} tipo={info?.tipo} />,
-    },
-    {
-      id: "proyectos",
-      label: "Proyectos",
-      content: <Proyectos data={info.proyectos} loading={loading} />,
-    },
-    {
-      id: "autores",
-      label: "Autores",
-      content: (
-        <Autores data={info.autores} loading={loading} tipo={info?.tipo} />
-      ),
-    },
-  ];
-
   //  Functions
   const getData = async () => {
     setLoading(true);
@@ -77,6 +56,41 @@ export default function Detalle_publicacion() {
   useEffect(() => {
     getData();
   }, []);
+
+  //  Tabs
+  const tabs = [
+    {
+      id: "detalles",
+      label: "Detalles",
+      content: (
+        <Info
+          data={info.detalle}
+          loading={loading}
+          tipo={info?.tipo}
+          reload={getData}
+        />
+      ),
+    },
+    {
+      id: "proyectos",
+      label: "Proyectos",
+      content: (
+        <Proyectos data={info.proyectos} loading={loading} reload={getData} />
+      ),
+    },
+    {
+      id: "autores",
+      label: "Autores",
+      content: (
+        <Autores
+          data={info.autores}
+          loading={loading}
+          tipo={info?.tipo}
+          reload={getData}
+        />
+      ),
+    },
+  ];
 
   return (
     <BaseLayout

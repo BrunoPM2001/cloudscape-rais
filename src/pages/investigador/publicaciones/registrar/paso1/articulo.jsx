@@ -131,7 +131,14 @@ export default forwardRef(function (props, ref) {
           formValues
         );
         const data = res.data;
-        return { isValid: true, res_publicacion_id: data.publicacion_id };
+        if (data.message == "error") {
+          pushNotification(data.detail, data.message, notifications.length + 1);
+          setTimeout(() => {
+            window.location.href = "/investigador";
+          }, 5000);
+        } else {
+          return { isValid: true, res_publicacion_id: data.publicacion_id };
+        }
       }
     } else {
       return { isValid: false };
@@ -188,6 +195,7 @@ export default forwardRef(function (props, ref) {
             <FormField label="Título" stretch errorText={formErrors.titulo}>
               <Autosuggest
                 onChange={({ detail }) => {
+                  handleChange("titulo", detail.value);
                   setOptions([]);
                   setValue(detail.value);
                   if (detail.value == "") {
@@ -195,6 +203,7 @@ export default forwardRef(function (props, ref) {
                   }
                 }}
                 onSelect={({ detail }) => {
+                  handleChange("titulo", detail.value);
                   if (detail.selectedOption.id != undefined) {
                     const { value, ...rest } = detail.selectedOption;
                     setPublicacion(rest);
@@ -337,9 +346,9 @@ export default forwardRef(function (props, ref) {
                   }
                 />
               </FormField>
-              <FormField label="Edición" stretch errorText={formErrors.edicion}>
+              <FormField label="Número" stretch errorText={formErrors.edicion}>
                 <Input
-                  placeholder="Escriba las edición de su publicación"
+                  placeholder="Escriba el n° de su publicación"
                   value={formValues.edicion}
                   onChange={({ detail }) =>
                     handleChange("edicion", detail.value)
@@ -387,6 +396,7 @@ export default forwardRef(function (props, ref) {
       </Form>
       {publicacion?.id && (
         <ModalIncluirmeAutor
+          id={publicacion.id}
           close={() => {
             setPublicacion({});
             setValue("");

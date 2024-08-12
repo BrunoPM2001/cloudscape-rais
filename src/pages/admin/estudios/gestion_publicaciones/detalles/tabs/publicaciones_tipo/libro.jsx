@@ -1,19 +1,25 @@
 import {
   Box,
+  Button,
   ColumnLayout,
   Container,
   Form,
   FormField,
   Header,
   Input,
+  Link,
   Select,
   SpaceBetween,
   Spinner,
   StatusIndicator,
   TokenGroup,
 } from "@cloudscape-design/components";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useFormValidation } from "../../../../../../../hooks/useFormValidation";
+import axiosBase from "../../../../../../../api/axios";
+import NotificationContext from "../../../../../../../providers/notificationProvider";
+import { useLocation } from "react-router-dom";
+import queryString from "query-string";
 
 const initialForm = {
   categoria_autor: null,
@@ -47,8 +53,16 @@ const formRules = {
 };
 
 export default function ({ data }) {
+  //  Context
+  const { notifications, pushNotification } = useContext(NotificationContext);
+
+  //  Url
+  const location = useLocation();
+  const { id } = queryString.parse(location.search);
+
   //  State
   const [paises, setPaises] = useState([]);
+  const [loadingGuardar, setLoadingGuardar] = useState(false);
 
   //  Hooks
   const { formValues, formErrors, handleChange, validateForm, setFormValues } =
@@ -66,13 +80,36 @@ export default function ({ data }) {
     });
   };
 
+  const guardarData = async () => {
+    setLoadingGuardar(true);
+    const res = await axiosBase.post("admin/estudios/publicaciones/paso1", {
+      ...formValues,
+      id,
+    });
+    const data = res.data;
+    pushNotification(data.detail, data.message, notifications.length + 1);
+    setLoadingGuardar(false);
+  };
+
   //  Effect
   useEffect(() => {
     getData();
   }, []);
 
   return (
-    <Container>
+    <Container
+      header={
+        <Header
+          actions={
+            <Button loading={loadingGuardar} onClick={guardarData}>
+              Actualizar datos
+            </Button>
+          }
+        >
+          Datos del libro
+        </Header>
+      }
+    >
       <SpaceBetween direction="vertical" size="s">
         <ColumnLayout columns={2}>
           <FormField
@@ -89,7 +126,33 @@ export default function ({ data }) {
               options={[{ value: "Autor" }, { value: "Editor" }]}
             />
           </FormField>
-          <FormField label="ISBN" stretch errorText={formErrors.isbn}>
+          <FormField
+            label="ISBN"
+            stretch
+            info={
+              <SpaceBetween size="xs" direction="horizontal">
+                <Link
+                  external
+                  target="_blank"
+                  href={`http://isbn.bnp.gob.pe/catalogo.php?mode=resultados_rapidos&palabra=${
+                    formValues.isbn ?? ""
+                  }`}
+                >
+                  BNP
+                </Link>
+                <Link
+                  external
+                  target="_blank"
+                  href={`https://www.bookfinder.com/?isbn=${
+                    formValues.isbn ?? ""
+                  }`}
+                >
+                  BF
+                </Link>
+              </SpaceBetween>
+            }
+            errorText={formErrors.isbn}
+          >
             <Input
               placeholder="Escriba el isbn"
               value={formValues.isbn}

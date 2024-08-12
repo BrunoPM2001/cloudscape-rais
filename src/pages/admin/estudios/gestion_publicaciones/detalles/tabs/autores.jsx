@@ -52,7 +52,7 @@ const columnDisplay = [
   { id: "filiacion", visible: true },
 ];
 
-export default function ({ data, loading, tipo }) {
+export default function ({ data, loading, tipo, reload }) {
   //  State
   const [visible, setVisible] = useState(false);
   const [typeModal, setTypeModal] = useState(null);

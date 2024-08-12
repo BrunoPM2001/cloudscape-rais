@@ -2,7 +2,6 @@ import {
   Autosuggest,
   Badge,
   Box,
-  Button,
   ButtonDropdown,
   FormField,
   Header,
@@ -16,6 +15,7 @@ import { useCollection } from "@cloudscape-design/collection-hooks";
 import axiosBase from "../../../../../api/axios";
 import { useAutosuggest } from "../../../../../hooks/useAutosuggest";
 import queryString from "query-string";
+import ModalAudit from "../components/modalAudit";
 
 const stringOperators = [":", "!:", "=", "!=", "^", "!^"];
 
@@ -71,6 +71,18 @@ const FILTER_PROPS = [
   {
     propertyLabel: "Fecha de publicación",
     key: "fecha_publicacion",
+    groupValuesLabel: "Fechas",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "Fecha de creación",
+    key: "created_at",
+    groupValuesLabel: "Fechas",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "Fecha de actualización",
+    key: "updated_at",
     groupValuesLabel: "Fechas",
     operators: stringOperators,
   },
@@ -151,47 +163,43 @@ const columnDefinitions = [
     sortingField: "fecha_publicacion",
   },
   {
+    id: "created_at",
+    header: "Fecha de creación",
+    cell: (item) => item.created_at,
+    sortingField: "created_at",
+  },
+  {
+    id: "updated_at",
+    header: "Fecha de actualización",
+    cell: (item) => item.updated_at,
+    sortingField: "updated_at",
+  },
+  {
     id: "estado",
     header: "Estado",
     cell: (item) => (
       <Badge
         color={
-          item.estado == -1
+          item.estado == "Eliminado"
             ? "red"
-            : item.estado == 1
+            : item.estado == "Registrado"
             ? "green"
-            : item.estado == 2
+            : item.estado == "Observado"
             ? "grey"
-            : item.estado == 5
+            : item.estado == "Enviado"
             ? "blue"
-            : item.estado == 6
+            : item.estado == "En proceso"
             ? "blue"
-            : item.estado == 7
+            : item.estado == "Anulado"
             ? "red"
-            : item.estado == 8
+            : item.estado == "No registrado"
             ? "grey"
-            : item.estado == 9
+            : item.estado == "Duplicado"
             ? "red"
             : "red"
         }
       >
-        {item.estado == -1
-          ? "Eliminado"
-          : item.estado == 1
-          ? "Registrado"
-          : item.estado == 2
-          ? "Observado"
-          : item.estado == 5
-          ? "Enviado"
-          : item.estado == 6
-          ? "En proceso"
-          : item.estado == 7
-          ? "Anulado"
-          : item.estado == 8
-          ? "No registrado"
-          : item.estado == 9
-          ? "Duplicado"
-          : "Sin estado"}
+        {item.estado}
       </Badge>
     ),
     sortingField: "estado",
@@ -214,15 +222,21 @@ const columnDisplay = [
   { id: "evento_nombre", visible: true },
   { id: "titulo", visible: true },
   { id: "fecha_publicacion", visible: true },
+  { id: "created_at", visible: true },
+  { id: "updated_at", visible: true },
   { id: "estado", visible: true },
   { id: "procedencia", visible: true },
 ];
 
 export default () => {
   //  States
+  const [loadingBtn, setLoadingBtn] = useState(false);
   const [loadingData, setLoadingData] = useState(true);
   const [form, setForm] = useState({});
   const [distributions, setDistribution] = useState([]);
+  const [type, setType] = useState("");
+
+  //  Hooks
   const {
     items,
     filteredItemsCount,
@@ -248,11 +262,9 @@ export default () => {
       ),
     },
     pagination: { pageSize: 10 },
-    sorting: { defaultState: { sortingColumn: columnDefinitions[0] } },
+    sorting: {},
     selection: {},
   });
-
-  //  Hooks
   const { loading, options, setOptions, value, setValue, setAvoidSelect } =
     useAutosuggest("admin/admin/usuarios/searchInvestigadorBy");
 
@@ -269,6 +281,21 @@ export default () => {
     setLoadingData(false);
   };
 
+  const reporte = async () => {
+    setLoadingBtn(true);
+    const res = await axiosBase.get("admin/estudios/publicaciones/reporte", {
+      params: {
+        id: collectionProps.selectedItems[0].id,
+        tipo: collectionProps.selectedItems[0].tipo_publicacion,
+      },
+      responseType: "blob",
+    });
+    setLoadingBtn(false);
+    const blob = await res.data;
+    const url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
+  };
+
   //  Effects
   useEffect(() => {
     getData();
@@ -281,138 +308,164 @@ export default () => {
   }, [form]);
 
   return (
-    <Table
-      {...collectionProps}
-      trackBy="id"
-      items={items}
-      columnDefinitions={columnDefinitions}
-      columnDisplay={columnDisplay}
-      loading={loadingData}
-      loadingText="Cargando datos"
-      resizableColumns
-      enableKeyboardNavigation
-      selectionType="single"
-      header={
-        <Header
-          counter={"(" + distributions.length + ")"}
-          actions={
-            <SpaceBetween direction="horizontal" size="xs">
-              <ButtonDropdown
-                onItemClick={({ detail }) => {
-                  if (detail.id == "action_1") {
-                    setEditVisible(true);
-                  } else if (detail.id == "action_2") {
-                    setDeleteVisible(true);
-                  }
-                }}
-                items={[
-                  {
-                    text: "Artículo de revista",
-                    id: "action_1",
-                    disabled: false,
-                  },
-                  {
-                    text: "Capítulo de libro",
-                    id: "action_2",
-                    disabled: false,
-                  },
-                  {
-                    text: "Libro",
-                    id: "action_3",
-                    disabled: false,
-                  },
-                  {
-                    text: "Evento científico",
-                    id: "action_4",
-                    disabled: false,
-                  },
-                  {
-                    text: "Tesis propia",
-                    id: "action_5",
-                    disabled: false,
-                  },
-                  {
-                    text: "Tesis asesoría",
-                    id: "action_6",
-                    disabled: false,
-                  },
-                  {
-                    text: "Patente",
-                    id: "action_7",
-                    disabled: false,
-                  },
-                ]}
-              >
-                Nuevo
-              </ButtonDropdown>
-              <Button
-                variant="normal"
-                disabled={!collectionProps.selectedItems.length}
-              >
-                Reporte
-              </Button>
-              <Button
-                variant="primary"
-                disabled={!collectionProps.selectedItems.length}
-                onClick={() => {
-                  const query = queryString.stringify({
-                    id: collectionProps.selectedItems[0]["id"],
-                  });
-                  window.location.href =
-                    "gestion_publicaciones/detalle?" + query;
-                }}
-              >
-                Editar
-              </Button>
+    <>
+      <Table
+        {...collectionProps}
+        trackBy="id"
+        items={items}
+        columnDefinitions={columnDefinitions}
+        columnDisplay={columnDisplay}
+        loading={loadingData}
+        loadingText="Cargando datos"
+        resizableColumns
+        enableKeyboardNavigation
+        selectionType="single"
+        header={
+          <Header
+            counter={"(" + distributions.length + ")"}
+            actions={
+              <SpaceBetween direction="horizontal" size="xs">
+                <ButtonDropdown
+                  onItemClick={({ detail }) => {
+                    if (detail.id == "action_1") {
+                      setEditVisible(true);
+                    } else if (detail.id == "action_2") {
+                      setDeleteVisible(true);
+                    }
+                  }}
+                  items={[
+                    {
+                      text: "Artículo de revista",
+                      id: "action_1",
+                      disabled: false,
+                    },
+                    {
+                      text: "Capítulo de libro",
+                      id: "action_2",
+                      disabled: false,
+                    },
+                    {
+                      text: "Libro",
+                      id: "action_3",
+                      disabled: false,
+                    },
+                    {
+                      text: "Evento científico",
+                      id: "action_4",
+                      disabled: false,
+                    },
+                    {
+                      text: "Tesis propia",
+                      id: "action_5",
+                      disabled: false,
+                    },
+                    {
+                      text: "Tesis asesoría",
+                      id: "action_6",
+                      disabled: false,
+                    },
+                    {
+                      text: "Patente",
+                      id: "action_7",
+                      disabled: false,
+                    },
+                  ]}
+                >
+                  Nuevo
+                </ButtonDropdown>
+                <ButtonDropdown
+                  variant="primary"
+                  disabled={!collectionProps.selectedItems.length}
+                  items={[
+                    {
+                      id: "action_1_1",
+                      text: "Editar",
+                      iconName: "edit",
+                    },
+                    {
+                      id: "action_1_2",
+                      text: "Reporte",
+                      iconName: "file",
+                    },
+                    {
+                      id: "action_1_3",
+                      text: "Auditoría",
+                      iconName: "check",
+                    },
+                  ]}
+                  onItemClick={({ detail }) => {
+                    if (detail.id == "action_1_1") {
+                      const query = queryString.stringify({
+                        id: collectionProps.selectedItems[0]["id"],
+                      });
+                      window.location.href =
+                        "gestion_publicaciones/detalle?" + query;
+                    } else if (detail.id == "action_1_2") {
+                      reporte();
+                    } else if (detail.id == "action_1_3") {
+                      setType("audit");
+                    }
+                  }}
+                  loading={loadingBtn}
+                >
+                  Acciones
+                </ButtonDropdown>
+              </SpaceBetween>
+            }
+          >
+            Publicaciones
+          </Header>
+        }
+        filter={
+          <PropertyFilter
+            {...propertyFilterProps}
+            filteringPlaceholder="Buscar publicación"
+            countText={`${filteredItemsCount} coincidencias`}
+            expandToViewport
+            virtualScroll
+            customControl={
+              <FormField label="Buscar por investigador" stretch>
+                <Autosuggest
+                  onChange={({ detail }) => {
+                    setOptions([]);
+                    setValue(detail.value);
+                    if (detail.value == "") {
+                      setForm({});
+                    }
+                  }}
+                  onSelect={({ detail }) => {
+                    if (detail.selectedOption.investigador_id != undefined) {
+                      setAvoidSelect(false);
+                      const { value, ...rest } = detail.selectedOption;
+                      setForm(rest);
+                    }
+                  }}
+                  value={value}
+                  options={options}
+                  loadingText="Cargando data"
+                  placeholder="Código, dni o nombre del investigador"
+                  statusType={loading ? "loading" : "finished"}
+                  empty="No se encontraron resultados"
+                />
+              </FormField>
+            }
+          />
+        }
+        pagination={<Pagination {...paginationProps} />}
+        empty={
+          <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
+            <SpaceBetween size="m">
+              <b>No hay registros...</b>
             </SpaceBetween>
-          }
-        >
-          Publicaciones
-        </Header>
-      }
-      filter={
-        <PropertyFilter
-          {...propertyFilterProps}
-          filteringPlaceholder="Buscar publicación"
-          countText={`${filteredItemsCount} coincidencias`}
-          expandToViewport
-          virtualScroll
-          customControl={
-            <FormField label="Buscar por investigador" stretch>
-              <Autosuggest
-                onChange={({ detail }) => {
-                  setOptions([]);
-                  setValue(detail.value);
-                  if (detail.value == "") {
-                    setForm({});
-                  }
-                }}
-                onSelect={({ detail }) => {
-                  if (detail.selectedOption.investigador_id != undefined) {
-                    setAvoidSelect(false);
-                    const { value, ...rest } = detail.selectedOption;
-                    setForm(rest);
-                  }
-                }}
-                value={value}
-                options={options}
-                loadingText="Cargando data"
-                placeholder="Código, dni o nombre del investigador"
-                statusType={loading ? "loading" : "finished"}
-                empty="No se encontraron resultados"
-              />
-            </FormField>
-          }
+          </Box>
+        }
+      />
+      {type == "audit" && (
+        <ModalAudit
+          close={() => setType("")}
+          item={collectionProps.selectedItems[0]}
         />
-      }
-      pagination={<Pagination {...paginationProps} />}
-      empty={
-        <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
-          <SpaceBetween size="m">
-            <b>No hay registros...</b>
-          </SpaceBetween>
-        </Box>
-      }
-    />
+      )}
+    </>
   );
 };

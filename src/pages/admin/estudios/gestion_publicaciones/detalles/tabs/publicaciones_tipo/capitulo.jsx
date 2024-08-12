@@ -1,18 +1,24 @@
 import {
   Box,
+  Button,
   ColumnLayout,
   Container,
   DateInput,
   FormField,
   Header,
   Input,
+  Link,
   Select,
   SpaceBetween,
   StatusIndicator,
   TokenGroup,
 } from "@cloudscape-design/components";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useFormValidation } from "../../../../../../../hooks/useFormValidation";
+import { useLocation } from "react-router-dom";
+import queryString from "query-string";
+import NotificationContext from "../../../../../../../providers/notificationProvider";
+import axiosBase from "../../../../../../../api/axios";
 
 const initialForm = {
   titulo: "",
@@ -52,8 +58,16 @@ const formRules = {
 };
 
 export default function ({ data }) {
+  //  Context
+  const { notifications, pushNotification } = useContext(NotificationContext);
+
+  //  Url
+  const location = useLocation();
+  const { id } = queryString.parse(location.search);
+
   //  State
   const [paises, setPaises] = useState([]);
+  const [loadingGuardar, setLoadingGuardar] = useState(false);
 
   //  Hooks
   const { formValues, formErrors, handleChange, validateForm, setFormValues } =
@@ -69,13 +83,36 @@ export default function ({ data }) {
     });
   };
 
+  const guardarData = async () => {
+    setLoadingGuardar(true);
+    const res = await axiosBase.post("admin/estudios/publicaciones/paso1", {
+      ...formValues,
+      id,
+    });
+    const data = res.data;
+    pushNotification(data.detail, data.message, notifications.length + 1);
+    setLoadingGuardar(false);
+  };
+
   //  Effect
   useEffect(() => {
     getData();
   }, []);
 
   return (
-    <Container>
+    <Container
+      header={
+        <Header
+          actions={
+            <Button loading={loadingGuardar} onClick={guardarData}>
+              Actualizar datos
+            </Button>
+          }
+        >
+          Datos del capítulo
+        </Header>
+      }
+    >
       <SpaceBetween direction="vertical" size="s">
         <FormField
           label="Título del capítulo"
@@ -89,7 +126,19 @@ export default function ({ data }) {
           />
         </FormField>
         <ColumnLayout columns={4}>
-          <FormField label="DOI" stretch errorText={formErrors.doi}>
+          <FormField
+            label="DOI"
+            stretch
+            info={
+              <Button
+                iconName="external"
+                variant="inline-icon"
+                target="_blank"
+                href={`https://doi.org/${formValues.doi ?? ""}`}
+              />
+            }
+            errorText={formErrors.doi}
+          >
             <Input
               placeholder="Escriba el doi"
               value={formValues.doi}
@@ -198,7 +247,33 @@ export default function ({ data }) {
           />
         </FormField>
         <ColumnLayout columns={3}>
-          <FormField label="ISBN" stretch errorText={formErrors.isbn}>
+          <FormField
+            label="ISBN"
+            stretch
+            info={
+              <SpaceBetween size="xs" direction="horizontal">
+                <Link
+                  external
+                  target="_blank"
+                  href={`http://isbn.bnp.gob.pe/catalogo.php?mode=resultados_rapidos&palabra=${
+                    formValues.isbn ?? ""
+                  }`}
+                >
+                  BNP
+                </Link>
+                <Link
+                  external
+                  target="_blank"
+                  href={`https://www.bookfinder.com/?isbn=${
+                    formValues.isbn ?? ""
+                  }`}
+                >
+                  BF
+                </Link>
+              </SpaceBetween>
+            }
+            errorText={formErrors.isbn}
+          >
             <Input
               placeholder="Escriba el ISBN de la publicación"
               value={formValues.isbn}

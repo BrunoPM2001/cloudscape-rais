@@ -35,7 +35,7 @@ const columnDisplay = [
   { id: "entidad_financiadora", visible: true },
 ];
 
-export default function ({ loading, data }) {
+export default function ({ loading, data, reload }) {
   //  State
   const [visible, setVisible] = useState(false);
   const [typeModal, setTypeModal] = useState(null);

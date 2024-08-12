@@ -1,18 +1,25 @@
 import {
+  Button,
   ColumnLayout,
   Container,
   DateInput,
   DatePicker,
   Form,
   FormField,
+  Header,
   Input,
+  Link,
   Select,
   SpaceBetween,
   Spinner,
   TokenGroup,
 } from "@cloudscape-design/components";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useFormValidation } from "../../../../../../../hooks/useFormValidation";
+import axiosBase from "../../../../../../../api/axios";
+import { useLocation } from "react-router-dom";
+import queryString from "query-string";
+import NotificationContext from "../../../../../../../providers/notificationProvider";
 
 const initialForm = {
   titulo: "",
@@ -67,8 +74,16 @@ const optsPresentacion = [
 ];
 
 export default function ({ data }) {
+  //  Context
+  const { notifications, pushNotification } = useContext(NotificationContext);
+
+  //  Url
+  const location = useLocation();
+  const { id } = queryString.parse(location.search);
+
   //  State
   const [paises, setPaises] = useState([]);
+  const [loadingGuardar, setLoadingGuardar] = useState(false);
 
   //  Hooks
   const { formValues, formErrors, handleChange, validateForm, setFormValues } =
@@ -86,6 +101,17 @@ export default function ({ data }) {
     });
   };
 
+  const guardarData = async () => {
+    setLoadingGuardar(true);
+    const res = await axiosBase.post("admin/estudios/publicaciones/paso1", {
+      ...formValues,
+      id,
+    });
+    const data = res.data;
+    pushNotification(data.detail, data.message, notifications.length + 1);
+    setLoadingGuardar(false);
+  };
+
   //  Effect
   useEffect(() => {
     getData();
@@ -93,7 +119,19 @@ export default function ({ data }) {
 
   return (
     <SpaceBetween size="m">
-      <Container>
+      <Container
+        header={
+          <Header
+            actions={
+              <Button loading={loadingGuardar} onClick={guardarData}>
+                Actualizar datos
+              </Button>
+            }
+          >
+            Datos del evento
+          </Header>
+        }
+      >
         <SpaceBetween size="s">
           <FormField
             label="Título del evento"
@@ -173,7 +211,33 @@ export default function ({ data }) {
             />
           </FormField>
           <ColumnLayout columns={4}>
-            <FormField label="ISBN" stretch errorText={formErrors.isbn}>
+            <FormField
+              label="ISBN"
+              stretch
+              info={
+                <SpaceBetween size="xs" direction="horizontal">
+                  <Link
+                    external
+                    target="_blank"
+                    href={`http://isbn.bnp.gob.pe/catalogo.php?mode=resultados_rapidos&palabra=${
+                      formValues.isbn ?? ""
+                    }`}
+                  >
+                    BNP
+                  </Link>
+                  <Link
+                    external
+                    target="_blank"
+                    href={`https://www.bookfinder.com/?isbn=${
+                      formValues.isbn ?? ""
+                    }`}
+                  >
+                    BF
+                  </Link>
+                </SpaceBetween>
+              }
+              errorText={formErrors.isbn}
+            >
               <Input
                 placeholder="Escriba el isbn"
                 value={formValues.isbn}
@@ -217,14 +281,42 @@ export default function ({ data }) {
                 }
               />
             </FormField>
-            <FormField label="ISSN" stretch errorText={formErrors.issn}>
+            <FormField
+              label="ISSN"
+              stretch
+              info={
+                <Button
+                  iconName="external"
+                  variant="inline-icon"
+                  target="_blank"
+                  href={`https://portal.issn.org/resource/ISSN/${
+                    formErrors.issn ?? ""
+                  }`}
+                />
+              }
+              errorText={formErrors.issn}
+            >
               <Input
                 placeholder="Escriba el issn"
                 value={formValues.issn}
                 onChange={({ detail }) => handleChange("issn", detail.value)}
               />
             </FormField>
-            <FormField label="ISSN-E" stretch errorText={formErrors.issn_e}>
+            <FormField
+              label="ISSN-E"
+              stretch
+              info={
+                <Button
+                  iconName="external"
+                  variant="inline-icon"
+                  target="_blank"
+                  href={`https://portal.issn.org/resource/ISSN/${
+                    formErrors.issn_e ?? ""
+                  }`}
+                />
+              }
+              errorText={formErrors.issn_e}
+            >
               <Input
                 placeholder="Escriba el issn-e"
                 value={formValues.issn_e}

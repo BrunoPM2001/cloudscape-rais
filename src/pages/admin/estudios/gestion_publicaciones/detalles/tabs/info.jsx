@@ -6,7 +6,7 @@ import Libro from "./publicaciones_tipo/libro";
 import Tesis_asesoria from "./publicaciones_tipo/tesis_asesoria";
 import Tesis_propia from "./publicaciones_tipo/tesis_propia";
 
-export default ({ data, loading, tipo }) => {
+export default ({ data, loading, tipo, reload }) => {
   return (
     <>
       {loading ? (
@@ -14,17 +14,17 @@ export default ({ data, loading, tipo }) => {
           <Spinner /> Cargando datos
         </>
       ) : tipo == "articulo" ? (
-        <Articulo data={data} />
+        <Articulo data={data} reload={reload} />
       ) : tipo == "capitulo" ? (
-        <Capitulo data={data} />
+        <Capitulo data={data} reload={reload} />
       ) : tipo == "evento" ? (
-        <Evento data={data} />
+        <Evento data={data} reload={reload} />
       ) : tipo == "libro" ? (
-        <Libro data={data} />
+        <Libro data={data} reload={reload} />
       ) : tipo == "tesis-asesoria" ? (
-        <Tesis_asesoria data={data} />
+        <Tesis_asesoria data={data} reload={reload} />
       ) : tipo == "tesis" ? (
-        <Tesis_propia data={data} />
+        <Tesis_propia data={data} reload={reload} />
       ) : (
         <></>
       )}
