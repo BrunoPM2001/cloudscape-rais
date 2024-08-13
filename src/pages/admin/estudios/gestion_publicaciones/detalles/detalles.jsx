@@ -51,7 +51,8 @@ const initialForm = {
   validado: "",
   categoria_id: "",
   comentario: { value: 1, label: "Criterio" },
-  observaciones_usuario: "2024",
+  observaciones_usuario: "",
+  resolucion: "",
   fecha_inscripcion: { value: 1, label: "Sí" },
   estado: { value: null, label: "Ninguna" },
 };
@@ -199,9 +200,18 @@ export default ({ id }) => {
               }
             />
           </FormField>
-          <ColumnLayout columns={3}>
+          <ColumnLayout columns={4}>
             <FormField label="Fecha de envío de publicación">
               <Input value={formValues.fecha_inscripcion} disabled />
+            </FormField>
+            <FormField label="Resolución">
+              <Input
+                placeholder="N° de resolución"
+                value={formValues.resolucion}
+                onChange={({ detail }) =>
+                  handleChange("resolucion", detail.value)
+                }
+              />
             </FormField>
             <FormField label="Anexo">
               {formValues.file_id ? (

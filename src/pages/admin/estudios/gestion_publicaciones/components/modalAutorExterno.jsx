@@ -5,10 +5,11 @@ import {
   SpaceBetween,
   Form,
   Button,
-  Autosuggest,
   Input,
   ColumnLayout,
   Select,
+  Link,
+  Popover,
 } from "@cloudscape-design/components";
 import { useContext, useState } from "react";
 import NotificationContext from "../../../../../providers/notificationProvider";
@@ -21,12 +22,14 @@ const initialForm = {
   apellido2: "",
   autor: "",
   filiacion: null,
+  filiacion_unica: null,
   categoria: null,
 };
 
 const formRules = {
   autor: { required: true },
   filiacion: { required: true },
+  filiacion_unica: { required: true },
   categoria: { required: true },
 };
 
@@ -50,6 +53,7 @@ export default ({ id, reload, close, optAutor }) => {
         {
           ...formValues,
           filiacion: formValues.filiacion.value,
+          filiacion_unica: formValues.filiacion_unica.value,
           categoria: formValues.categoria.value,
           id: id,
           tipo: "externo",
@@ -110,7 +114,7 @@ export default ({ id, reload, close, optAutor }) => {
                 placeholder="Escriba el ap. materno del autor"
                 value={formValues.apellido2}
                 onChange={({ detail }) =>
-                  handleChange("apellido2", detail.aqhora)
+                  handleChange("apellido2", detail.value)
                 }
               />
             </FormField>
@@ -126,10 +130,18 @@ export default ({ id, reload, close, optAutor }) => {
               onChange={({ detail }) => handleChange("autor", detail.value)}
             />
           </FormField>
-          <ColumnLayout columns={2}>
+          <ColumnLayout columns={3}>
             <FormField
-              label="Filiación"
+              label="Filiación UNMSM"
               stretch
+              info={
+                <Popover
+                  header="Descripción"
+                  content="En caso la publicación presente filiación con San Marcos"
+                >
+                  <Link variant="info">Info</Link>
+                </Popover>
+              }
               errorText={formErrors.filiacion}
             >
               <Select
@@ -148,7 +160,38 @@ export default ({ id, reload, close, optAutor }) => {
                     label: "No",
                   },
                 ]}
-              ></Select>
+              />
+            </FormField>
+            <FormField
+              label="Filiación única"
+              info={
+                <Popover
+                  header="Descripción"
+                  content="En caso la publicación solo presente filiación con una institución"
+                >
+                  <Link variant="info">Info</Link>
+                </Popover>
+              }
+              stretch
+              errorText={formErrors.filiacion_unica}
+            >
+              <Select
+                placeholder="Escoja una opción"
+                selectedOption={formValues.filiacion_unica}
+                onChange={({ detail }) => {
+                  handleChange("filiacion_unica", detail.selectedOption);
+                }}
+                options={[
+                  {
+                    value: "1",
+                    label: "Sí",
+                  },
+                  {
+                    value: "0",
+                    label: "No",
+                  },
+                ]}
+              />
             </FormField>
             <FormField
               label="Condición"

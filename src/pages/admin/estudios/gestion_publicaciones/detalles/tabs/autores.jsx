@@ -48,8 +48,13 @@ const columnDefinitions = [
   },
   {
     id: "filiacion",
-    header: "Filiación",
+    header: "Filiación UNMSM",
     cell: (item) => item.filiacion,
+  },
+  {
+    id: "filiacion_unica",
+    header: "Filiación única",
+    cell: (item) => item.filiacion_unica,
   },
   {
     id: "puntaje",
@@ -75,6 +80,7 @@ const columnDisplay = [
   { id: "tipo", visible: true },
   { id: "nombres", visible: true },
   { id: "filiacion", visible: true },
+  { id: "filiacion_unica", visible: true },
   { id: "puntaje", visible: true },
   { id: "created_at", visible: true },
   { id: "updated_at", visible: true },
@@ -142,13 +148,13 @@ export default function ({ data, loading, tipo, reload }) {
         { text: "Estudiante", id: "action_2_2" },
         { text: "Externo", id: "action_2_3" },
       ]);
-    } else if (tipo == "tesis_propia") {
+    } else if (tipo == "tesis") {
       setOptAutor([{ value: "Asesor" }, { value: "Co-Asesor" }]);
       setTipoAutor([
         { text: "Asesor / co-asesor interno", id: "action_2_1" },
         { text: "Asesor / co-asesor externo", id: "action_2_3" },
       ]);
-    } else if (tipo == "tesis_asesoria") {
+    } else if (tipo == "tesis-asesoria") {
       setOptAutor([{ value: "Tesista" }]);
       setTipoAutor([
         { text: "Agregar autor estudiante UNMSM", id: "action_2_2" },
