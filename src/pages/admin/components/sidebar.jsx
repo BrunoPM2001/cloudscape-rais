@@ -177,7 +177,11 @@ const navItems = [
         text: "Asignación de evaluadores",
         href: "/admin/facultad/evaluadores",
       },
-      { type: "link", text: "Proyectos evaluados", href: "#" },
+      {
+        type: "link",
+        text: "Proyectos evaluados",
+        href: "/admin/facultad/evaluaciones",
+      },
     ],
   },
   {

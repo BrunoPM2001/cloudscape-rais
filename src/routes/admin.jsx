@@ -2,6 +2,9 @@ import { Suspense, lazy } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { NotificationProvider } from "../providers/notificationProvider";
 
+const Proyectos_evaluados = lazy(() =>
+  import("../pages/admin/facultad/proyectos_evaluados/index.jsx")
+);
 const Registrar_proyecto_fex_3 = lazy(() =>
   import("../pages/admin/estudios/gestion_proyectos_fex/nuevo/layout3.jsx")
 );
@@ -413,6 +416,15 @@ const routes = createBrowserRouter(
             {
               path: "",
               element: <Asignar_evaluador />,
+            },
+          ],
+        },
+        {
+          path: "evaluaciones",
+          children: [
+            {
+              path: "",
+              element: <Proyectos_evaluados />,
             },
           ],
         },
