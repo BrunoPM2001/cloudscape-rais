@@ -1,7 +1,6 @@
 import {
   Badge,
   Box,
-  Link,
   FormField,
   Header,
   Pagination,
@@ -223,7 +222,12 @@ export default () => {
   const getData = async () => {
     setLoading(true);
     const res = await axiosBase.get(
-      "admin/estudios/informesTecnicos/proyectosListado"
+      "admin/estudios/informesTecnicos/proyectosListado",
+      {
+        params: {
+          lista: selectedOption.value,
+        },
+      }
     );
     const data = res.data;
     setDistribution(data);
