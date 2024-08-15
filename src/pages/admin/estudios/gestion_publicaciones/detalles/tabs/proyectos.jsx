@@ -87,6 +87,7 @@ export default function ({ loading, data, reload }) {
                 </Button>
                 <ButtonDropdown
                   variant="primary"
+                  disabled={collectionProps.totalItemsCount > 0}
                   onItemClick={({ detail }) => {
                     if (detail.id == "action_1") {
                       setType("registrado");

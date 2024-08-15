@@ -2,6 +2,7 @@ import {
   Button,
   ColumnLayout,
   Container,
+  FileUpload,
   FormField,
   Grid,
   Header,
@@ -48,13 +49,15 @@ const gridDefinition = [
 ];
 
 const initialForm = {
-  validado: "",
-  categoria_id: "",
-  comentario: { value: 1, label: "Criterio" },
+  validado: null,
+  categoria_id: null,
+  comentario: "",
   observaciones_usuario: "",
   resolucion: "",
   fecha_inscripcion: { value: 1, label: "Sí" },
   estado: { value: null, label: "Ninguna" },
+  file: [],
+  file_comentario: [],
 };
 
 const formRules = {
@@ -109,22 +112,32 @@ export default ({ id }) => {
       categoria_id:
         data.categorias.find((opt) => opt.value == data.data.categoria_id) ||
         null,
+      file: [],
+      file_comentario: [],
     });
     setLoading(false);
   };
 
   const update = async () => {
-    setUpdating(true);
-    const res = await axiosBase.put(
-      "admin/estudios/publicaciones/updateDetalle",
-      {
-        ...formValues,
-        id,
-      }
-    );
-    const data = res.data;
-    pushNotification(data.detail, data.message, notifications.length + 1);
-    setUpdating(false);
+    if (validateForm()) {
+      setUpdating(true);
+      const form = new FormData();
+      form.append("id", id);
+      form.append("validado", formValues.validado?.value ?? null);
+      form.append("categoria_id", formValues.categoria_id?.value ?? null);
+      form.append("comentario", formValues.comentario);
+      form.append("observaciones_usuario", formValues.observaciones_usuario);
+      form.append("resolucion", formValues.resolucion);
+      form.append("estado", formValues.estado?.value);
+      form.append("file", formValues.file[0]);
+      const res = await axiosBase.post(
+        "admin/estudios/publicaciones/updateDetalle",
+        form
+      );
+      const data = res.data;
+      pushNotification(data.detail, data.message, notifications.length + 1);
+      setUpdating(false);
+    }
   };
 
   useEffect(() => {
@@ -182,15 +195,83 @@ export default ({ id }) => {
               />
             </FormField>
           </Grid>
-          <FormField label="Comentarios / Observaciones" stretch>
-            <Textarea
-              placeholder="Comentario para administradores"
-              value={formValues.comentario}
-              onChange={({ detail }) =>
-                handleChange("comentario", detail.value)
+          <Grid
+            gridDefinition={[
+              {
+                colspan: {
+                  default: 12,
+                  xl: 9,
+                  l: 9,
+                  m: 9,
+                  s: 9,
+                  xs: 9,
+                },
+              },
+              {
+                colspan: {
+                  default: 12,
+                  xl: 3,
+                  l: 3,
+                  m: 3,
+                  s: 3,
+                  xs: 3,
+                },
+              },
+            ]}
+          >
+            <FormField label="Comentarios / Observaciones" stretch>
+              <Textarea
+                placeholder="Comentario para administradores"
+                value={formValues.comentario}
+                onChange={({ detail }) =>
+                  handleChange("comentario", detail.value)
+                }
+              />
+            </FormField>
+            <FormField
+              label="Anexo comentario"
+              description={
+                formValues.file_id ? (
+                  <>
+                    Puede{" "}
+                    <Link
+                      href={formValues.url}
+                      variant="primary"
+                      fontSize="body-s"
+                      external
+                      target="_blank"
+                    >
+                      descargar el anexo
+                    </Link>
+                  </>
+                ) : (
+                  "No se ha cargado un anexo"
+                )
               }
-            />
-          </FormField>
+            >
+              <FileUpload
+                value={formValues.file}
+                onChange={({ detail }) => {
+                  handleChange("file_comentario", detail.value);
+                }}
+                showFileLastModified
+                showFileSize
+                showFileThumbnail
+                constraintText="El archivo cargado no debe superar los 6 MB"
+                i18nStrings={{
+                  uploadButtonText: (e) =>
+                    e ? "Cargar archivos" : "Cargar archivo",
+                  dropzoneText: (e) =>
+                    e
+                      ? "Arrastre los archivos para cargarlos"
+                      : "Arrastre el archivo para cargarlo",
+                  removeFileAriaLabel: (e) => `Eliminar archivo ${e + 1}`,
+                  errorIconAriaLabel: "Error",
+                }}
+                accept=".pdf"
+              />
+            </FormField>
+          </Grid>
           <FormField label="Observaciones al docente" stretch>
             <Textarea
               placeholder="Observaciones para el docente"
@@ -213,19 +294,48 @@ export default ({ id }) => {
                 }
               />
             </FormField>
-            <FormField label="Anexo">
-              {formValues.file_id ? (
-                <Link
-                  href={formValues.url}
-                  variant="primary"
-                  external
-                  target="_blank"
-                >
-                  Descargar anexo
-                </Link>
-              ) : (
-                "No se ha cargado un anexo"
-              )}
+            <FormField
+              label="Anexo"
+              description={
+                formValues.file_id ? (
+                  <>
+                    Puede{" "}
+                    <Link
+                      href={formValues.url}
+                      variant="primary"
+                      fontSize="body-s"
+                      external
+                      target="_blank"
+                    >
+                      descargar el anexo
+                    </Link>
+                  </>
+                ) : (
+                  "No se ha cargado un anexo"
+                )
+              }
+            >
+              <FileUpload
+                value={formValues.file}
+                onChange={({ detail }) => {
+                  handleChange("file", detail.value);
+                }}
+                showFileLastModified
+                showFileSize
+                showFileThumbnail
+                constraintText="El archivo cargado no debe superar los 6 MB"
+                i18nStrings={{
+                  uploadButtonText: (e) =>
+                    e ? "Cargar archivos" : "Cargar archivo",
+                  dropzoneText: (e) =>
+                    e
+                      ? "Arrastre los archivos para cargarlos"
+                      : "Arrastre el archivo para cargarlo",
+                  removeFileAriaLabel: (e) => `Eliminar archivo ${e + 1}`,
+                  errorIconAriaLabel: "Error",
+                }}
+                accept=".pdf"
+              />
             </FormField>
             <FormField label="Estado">
               <Select

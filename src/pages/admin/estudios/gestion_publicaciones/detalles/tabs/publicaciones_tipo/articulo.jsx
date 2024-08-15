@@ -24,6 +24,31 @@ import queryString from "query-string";
 import ModalRevistaAdd from "../../../components/modalRevistaAdd";
 import { useAutosuggest } from "../../../../../../../hooks/useAutosuggest";
 
+const gridDefinition = [
+  {
+    colspan: {
+      default: 12,
+      xl: 8,
+      l: 8,
+      m: 8,
+      s: 8,
+      xs: 8,
+      xxs: 8,
+    },
+  },
+  {
+    colspan: {
+      default: 12,
+      xl: 4,
+      l: 4,
+      m: 4,
+      s: 4,
+      xs: 4,
+      xxs: 4,
+    },
+  },
+];
+
 const initialForm = {
   doi: "",
   art_tipo: null,
@@ -141,6 +166,7 @@ export default function ({ data, reload }) {
       const data = res.data;
       pushNotification(data.detail, data.message, notifications.length + 1);
       setLoadingGuardar(false);
+      reload();
     }
   };
 
@@ -431,20 +457,7 @@ export default function ({ data, reload }) {
                     },
                   ]}
                 />
-                <Grid
-                  gridDefinition={[
-                    {
-                      colspan: {
-                        default: 8,
-                      },
-                    },
-                    {
-                      colspan: {
-                        default: 4,
-                      },
-                    },
-                  ]}
-                >
+                <Grid gridDefinition={gridDefinition}>
                   <FormField stretch>
                     <Input
                       placeholder="Agregar otra base de datos de indexación"
@@ -483,20 +496,7 @@ export default function ({ data, reload }) {
                   }
                   options={wos}
                 />
-                <Grid
-                  gridDefinition={[
-                    {
-                      colspan: {
-                        default: 8,
-                      },
-                    },
-                    {
-                      colspan: {
-                        default: 4,
-                      },
-                    },
-                  ]}
-                >
+                <Grid gridDefinition={gridDefinition}>
                   <FormField stretch>
                     <Input
                       placeholder="Agregar otra base de datos de indexación"

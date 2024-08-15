@@ -110,6 +110,7 @@ export default function ({ publicacion_id }) {
                 </Button>
                 <ButtonDropdown
                   variant="primary"
+                  disabled={collectionProps.totalItemsCount > 0}
                   onItemClick={({ detail }) => {
                     if (detail.id == "action_1") {
                       setTypeModal("registrado");

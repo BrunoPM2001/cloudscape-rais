@@ -185,8 +185,9 @@ export default forwardRef(function ({ proyecto_id }, ref) {
         justificacion: data.detalles.find(
           (opt) => opt.codigo == "justificacion"
         ).detalle,
-        contribucion: data.detalles.find((opt) => opt.codigo == "contribucion")
-          .detalle,
+        contribucion: data.detalles.find(
+          (opt) => opt.codigo == "contribucion_impacto"
+        ).detalle,
         hipotesis: data.detalles.find((opt) => opt.codigo == "hipotesis")
           .detalle,
         objetivos: data.detalles.find((opt) => opt.codigo == "objetivos")
