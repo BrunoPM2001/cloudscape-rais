@@ -1,4 +1,5 @@
 import {
+  Alert,
   Box,
   Button,
   ColumnLayout,
@@ -36,14 +37,6 @@ export default ({ id, close }) => {
     setLoadingData(false);
   };
 
-  const solicitar = async () => {
-    //  Código de solicitud
-    setTimeout(() => {}, 2000);
-
-    window.location.href = "/investigador";
-    close();
-  };
-
   useEffect(() => {
     getData();
   }, []);
@@ -53,26 +46,12 @@ export default ({ id, close }) => {
       visible
       size="large"
       onDismiss={close}
-      header={
-        <Header description="Se enviará un correo al personal del RAIS para verificar si puede ser incluído como autor">
-          Solicitar ser incluído como autor
-        </Header>
-      }
+      header={<Header>Solicitar ser incluído como autor</Header>}
       footer={
         <Box float="right">
-          <SpaceBetween direction="horizontal" size="xs">
-            <Button variant="normal" onClick={close}>
-              Cancelar
-            </Button>
-            <Button
-              variant="primary"
-              disabled={loadingData}
-              loading={loading}
-              onClick={solicitar}
-            >
-              Solicitar inclusión
-            </Button>
-          </SpaceBetween>
+          <Button variant="normal" onClick={close}>
+            Cerrar
+          </Button>
         </Box>
       }
     >
@@ -82,6 +61,10 @@ export default ({ id, close }) => {
         </>
       ) : (
         <SpaceBetween size="m">
+          <Alert header="Esta publicación ya está registrada">
+            En caso quiera ser incluído en la lista de autores de esta
+            publicación comuníquese con el personal del RAIS.
+          </Alert>
           <Container>
             <SpaceBetween size="s">
               <FormField label="Título" stretch>
@@ -145,7 +128,7 @@ export default ({ id, close }) => {
                       href={`https://portal.issn.org/resource/ISSN/${
                         data.issn ?? ""
                       }`}
-                    ></Button>
+                    />
                   }
                   stretch
                 >
@@ -161,7 +144,7 @@ export default ({ id, close }) => {
                       href={`https://portal.issn.org/resource/ISSN/${
                         data.issn_e ?? ""
                       }`}
-                    ></Button>
+                    />
                   }
                   stretch
                 >
@@ -227,9 +210,9 @@ export default ({ id, close }) => {
             header={<Box variant="strong">Autores</Box>}
             columnDefinitions={[
               {
-                id: "nombre",
+                id: "autor",
                 header: "Nombre",
-                cell: (item) => item.nombre,
+                cell: (item) => item.autor,
                 isRowHeader: true,
               },
               {
@@ -244,7 +227,7 @@ export default ({ id, close }) => {
               },
             ]}
             columnDisplay={[
-              { id: "nombre", visible: true },
+              { id: "autor", visible: true },
               { id: "categoria", visible: true },
               { id: "tipo", visible: true },
             ]}

@@ -47,6 +47,11 @@ const columnDefinitions = [
     header: "Filiación",
     cell: (item) => item.filiacion,
   },
+  {
+    id: "filiacion_unica",
+    header: "Filiación única",
+    cell: (item) => item.filiacion_unica,
+  },
 ];
 
 const columnDisplay = [
@@ -56,11 +61,17 @@ const columnDisplay = [
   { id: "tipo", visible: true },
   { id: "nombres", visible: true },
   { id: "filiacion", visible: true },
+  { id: "filiacion_unica", visible: true },
 ];
 
-export default function ({ publicacion_id, tipo }) {
+export default function ({
+  publicacion_id,
+  tipo,
+  loading,
+  setLoading,
+  setRequisitos,
+}) {
   //  State
-  const [loading, setLoading] = useState(true);
   const [distributions, setDistribution] = useState([]);
   const [visible, setVisible] = useState(false);
   const [typeModal, setTypeModal] = useState(null);
@@ -89,7 +100,8 @@ export default function ({ publicacion_id, tipo }) {
       }
     );
     const data = res.data;
-    setDistribution(data);
+    setDistribution(data.listado);
+    setRequisitos(data.cumple);
     setLoading(false);
   };
 

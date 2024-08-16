@@ -15,6 +15,8 @@ import ModalRegistrado from "./components/modalRegistrado";
 import ModalNoRegistrado from "./components/modalNoRegistrado";
 import ModalEliminarProyecto from "./components/modalEliminarProyecto";
 
+const CANTIDAD_MINIMA = 1;
+
 const columnDefinitions = [
   {
     id: "codigo_proyecto",
@@ -39,9 +41,13 @@ const columnDisplay = [
   { id: "entidad_financiadora", visible: true },
 ];
 
-export default function ({ publicacion_id }) {
+export default function ({
+  publicacion_id,
+  loading,
+  setLoading,
+  setRequisitos,
+}) {
   //  State
-  const [loading, setLoading] = useState(true);
   const [distributions, setDistribution] = useState([]);
   const [visible, setVisible] = useState(false);
   const [typeModal, setTypeModal] = useState(null);
@@ -68,6 +74,7 @@ export default function ({ publicacion_id }) {
       }
     );
     const data = res.data;
+    setRequisitos(CANTIDAD_MINIMA <= data.length ? true : false);
     setDistribution(data);
     setLoading(false);
   };
@@ -110,7 +117,7 @@ export default function ({ publicacion_id }) {
                 </Button>
                 <ButtonDropdown
                   variant="primary"
-                  disabled={collectionProps.totalItemsCount > 0}
+                  disabled={collectionProps.totalItemsCount > 0 || loading}
                   onItemClick={({ detail }) => {
                     if (detail.id == "action_1") {
                       setTypeModal("registrado");

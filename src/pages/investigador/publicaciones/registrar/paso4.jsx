@@ -16,7 +16,7 @@ const initialForm = {
 };
 
 const formRules = {
-  anexo: { required: false, isFile: true, maxSize: 6 * 1024 * 1024 },
+  anexo: { required: true, isFile: true, maxSize: 6 * 1024 * 1024 },
 };
 
 export default forwardRef(function ({ publicacion_id, tipo }, ref) {
@@ -28,12 +28,7 @@ export default forwardRef(function ({ publicacion_id, tipo }, ref) {
 
   //  Hooks
   const { formValues, formErrors, handleChange, validateForm } =
-    useFormValidation(initialForm, {
-      anexo: {
-        ...formRules.anexo,
-        required: ["articulo", "tesis_asesoria"].includes(tipo),
-      },
-    });
+    useFormValidation(initialForm, formRules);
 
   //  Functions
   const registrar = async () => {

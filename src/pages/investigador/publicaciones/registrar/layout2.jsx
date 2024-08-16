@@ -3,6 +3,8 @@ import Paso2 from "./paso2.jsx";
 import BaseLayout from "../../components/baseLayout";
 import { useLocation } from "react-router-dom";
 import queryString from "query-string";
+import { useContext, useState } from "react";
+import NotificationContext from "../../../../providers/notificationProvider.jsx";
 
 const breadcrumbs = [
   {
@@ -18,6 +20,13 @@ const breadcrumbs = [
 ];
 
 export default function Registrar_articulo_2() {
+  //  Context
+  const { notifications, pushNotification } = useContext(NotificationContext);
+
+  //  States
+  const [requisitos, setRequisitos] = useState(false);
+  const [loading, setLoading] = useState(true);
+
   //  Url
   const location = useLocation();
   const { publicacion_id, tipo } = queryString.parse(location.search);
@@ -28,7 +37,15 @@ export default function Registrar_articulo_2() {
 
   //  Functions
   const handleNavigate = async (detail) => {
-    if (detail.requestedStepIndex > 0) {
+    if (detail.requestedStepIndex > 1) {
+      if (!requisitos) {
+        pushNotification(
+          "Necesita tener 1 proyecto asociado como mínimo",
+          "warning",
+          notifications.length + 1
+        );
+        return;
+      }
       const query = queryString.stringify({
         publicacion_id,
         tipo,
@@ -56,6 +73,7 @@ export default function Registrar_articulo_2() {
         onCancel={() => {
           window.location.href = "../" + tipo;
         }}
+        isLoadingNextStep={loading}
         steps={[
           {
             title: "Descripción de la publicación",
@@ -63,7 +81,14 @@ export default function Registrar_articulo_2() {
           {
             title: "Resultado de proyecto financiado",
             description: "Proyectos asociados a la publicación",
-            content: <Paso2 publicacion_id={publicacion_id} />,
+            content: (
+              <Paso2
+                publicacion_id={publicacion_id}
+                loading={loading}
+                setLoading={setLoading}
+                setRequisitos={setRequisitos}
+              />
+            ),
           },
           {
             title: "Autores de la publicación",

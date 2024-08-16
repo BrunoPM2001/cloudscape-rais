@@ -1,4 +1,5 @@
 import {
+  Alert,
   Autosuggest,
   Box,
   ColumnLayout,
@@ -47,7 +48,6 @@ const initialForm = {
 };
 
 const formRules = {
-  doi: { required: false },
   art_tipo: { required: true },
   titulo: { required: true },
   palabras_clave: { required: true, noEmpty: true },
@@ -55,12 +55,8 @@ const formRules = {
   pagina_final: { required: true },
   fecha_publicacion: { required: true },
   publicacion_nombre: { required: true },
-  issn: { required: true },
-  issn_e: { required: false },
   volumen: { required: true },
   edicion: { required: true },
-  indexada: { required: false },
-  url: { required: false },
 };
 
 export default forwardRef(function (props, ref) {
@@ -71,14 +67,37 @@ export default forwardRef(function (props, ref) {
   const [loadingData, setLoadingData] = useState(false);
   const [revistasIndexadas, setRevistasIndexadas] = useState([]);
   const [publicacion, setPublicacion] = useState({});
+  const [alert, setAlert] = useState("");
 
   //  Hooks
-  const { formValues, formErrors, handleChange, validateForm, setFormValues } =
+  const { formValues, formErrors, handleChange, setFormValues, validateForm } =
     useFormValidation(initialForm, formRules);
-  const { loading, options, setOptions, value, setValue, setAvoidSelect } =
-    useAutosuggest("investigador/publicaciones/utils/listadoTitulos");
+  const {
+    loading: loading1,
+    options: options1,
+    setOptions: setOptions1,
+    value: value1,
+    setValue: setValue1,
+    setAvoidSelect: setAvoidSelect1,
+  } = useAutosuggest("investigador/publicaciones/utils/listadoTitulos");
+  const {
+    loading: loading2,
+    options: options2,
+    setOptions: setOptions2,
+    value: value2,
+    setValue: setValue2,
+    setAvoidSelect: setAvoidSelect2,
+  } = useAutosuggest("investigador/publicaciones/utils/listadoDois");
+  const {
+    loading: loading3,
+    options: options3,
+    setOptions: setOptions3,
+    value: value3,
+    setValue: setValue3,
+    setAvoidSelect: setAvoidSelect3,
+  } = useAutosuggest("investigador/publicaciones/utils/listadoRevistas");
 
-  //  Function
+  //  Functions
   const listaRevistasIndexadas = async () => {
     const res = await axiosBase.get(
       "investigador/publicaciones/utils/listadoRevistasIndexadas"
@@ -106,39 +125,55 @@ export default forwardRef(function (props, ref) {
       palabras_clave: data.palabras_clave,
       indexada: data.indexada,
     });
+    setValue1(data.data.titulo);
+    setValue2(data.data.doi);
+    setValue3(data.data.publicacion_nombre);
     setLoadingData(false);
   };
 
   const registrar = async () => {
     if (validateForm()) {
-      if (props.publicacion_id != null) {
-        const res = await axiosBase.post(
-          "investigador/publicaciones/articulos/registrarPaso1",
-          { ...formValues, publicacion_id: props.publicacion_id }
-        );
-        const data = res.data;
-        if (data.message == "error") {
-          pushNotification(data.detail, data.message, notifications.length + 1);
-          setTimeout(() => {
-            window.location.href = "/investigador";
-          }, 3000);
+      if (formValues.issn != "" || formValues.issn_e != "") {
+        if (props.publicacion_id != null) {
+          const res = await axiosBase.post(
+            "investigador/publicaciones/articulos/registrarPaso1",
+            { ...formValues, publicacion_id: props.publicacion_id }
+          );
+          const data = res.data;
+          if (data.message == "error") {
+            pushNotification(
+              data.detail,
+              data.message,
+              notifications.length + 1
+            );
+            setTimeout(() => {
+              window.location.href = "/investigador";
+            }, 3000);
+          } else {
+            return { isValid: true, res_publicacion_id: null };
+          }
         } else {
-          return { isValid: true, res_publicacion_id: null };
+          const res = await axiosBase.post(
+            "investigador/publicaciones/articulos/registrarPaso1",
+            formValues
+          );
+          const data = res.data;
+          if (data.message == "error") {
+            pushNotification(
+              data.detail,
+              data.message,
+              notifications.length + 1
+            );
+            setTimeout(() => {
+              window.location.href = "/investigador";
+            }, 5000);
+          } else {
+            return { isValid: true, res_publicacion_id: data.publicacion_id };
+          }
         }
       } else {
-        const res = await axiosBase.post(
-          "investigador/publicaciones/articulos/registrarPaso1",
-          formValues
-        );
-        const data = res.data;
-        if (data.message == "error") {
-          pushNotification(data.detail, data.message, notifications.length + 1);
-          setTimeout(() => {
-            window.location.href = "/investigador";
-          }, 5000);
-        } else {
-          return { isValid: true, res_publicacion_id: data.publicacion_id };
-        }
+        setAlert("Necesita completar el campo de ISSN o el de ISSN-E");
+        return { isValid: false };
       }
     } else {
       return { isValid: false };
@@ -166,11 +201,42 @@ export default forwardRef(function (props, ref) {
         ) : (
           <SpaceBetween direction="vertical" size="s">
             <ColumnLayout columns={2}>
-              <FormField label="DOI" stretch errorText={formErrors.doi}>
-                <Input
-                  placeholder="Escriba el doi"
-                  value={formValues.doi}
-                  onChange={({ detail }) => handleChange("doi", detail.value)}
+              <FormField
+                label="DOI"
+                constraintText={
+                  <>
+                    <Box variant="small">Colocar solo el código, ejemplo: </Box>{" "}
+                    <Box variant="small" color="text-status-info">
+                      10.47366/sabia.v5n1a3
+                    </Box>
+                  </>
+                }
+                stretch
+                errorText={formErrors.doi}
+              >
+                <Autosuggest
+                  onChange={({ detail }) => {
+                    handleChange("doi", detail.value);
+                    setOptions2([]);
+                    setValue2(detail.value);
+                    if (detail.value == "") {
+                      setPublicacion({});
+                    }
+                  }}
+                  onSelect={({ detail }) => {
+                    handleChange("doi", detail.value);
+                    if (detail.selectedOption.id != undefined) {
+                      const { value, ...rest } = detail.selectedOption;
+                      setPublicacion(rest);
+                      setAvoidSelect2(false);
+                    }
+                  }}
+                  value={value2}
+                  options={options2}
+                  loadingText="Cargando data"
+                  placeholder="Doi de la publicación"
+                  statusType={loading2 ? "loading" : "finished"}
+                  empty="No se encontraron resultados"
                 />
               </FormField>
               <FormField
@@ -196,8 +262,8 @@ export default forwardRef(function (props, ref) {
               <Autosuggest
                 onChange={({ detail }) => {
                   handleChange("titulo", detail.value);
-                  setOptions([]);
-                  setValue(detail.value);
+                  setOptions1([]);
+                  setValue1(detail.value);
                   if (detail.value == "") {
                     setPublicacion({});
                   }
@@ -207,14 +273,14 @@ export default forwardRef(function (props, ref) {
                   if (detail.selectedOption.id != undefined) {
                     const { value, ...rest } = detail.selectedOption;
                     setPublicacion(rest);
-                    setAvoidSelect(false);
+                    setAvoidSelect1(false);
                   }
                 }}
-                value={value}
-                options={options}
+                value={value1}
+                options={options1}
                 loadingText="Cargando data"
                 placeholder="Título de la publicación"
-                statusType={loading ? "loading" : "finished"}
+                statusType={loading1 ? "loading" : "finished"}
                 empty="No se encontraron resultados"
               />
             </FormField>
@@ -294,6 +360,7 @@ export default forwardRef(function (props, ref) {
               </FormField>
               <FormField
                 label="Fecha de publicación"
+                constraintText="En caso no tenga la fecha exacta coloque 1ero de enero del año de publicación"
                 stretch
                 errorText={formErrors.fecha_publicacion}
               >
@@ -312,12 +379,26 @@ export default forwardRef(function (props, ref) {
               stretch
               errorText={formErrors.publicacion_nombre}
             >
-              <Input
-                placeholder="Escriba la revista de su publicación"
-                value={formValues.publicacion_nombre}
-                onChange={({ detail }) =>
-                  handleChange("publicacion_nombre", detail.value)
-                }
+              <Autosuggest
+                onChange={({ detail }) => {
+                  setOptions3([]);
+                  setValue3(detail.value);
+                }}
+                onSelect={({ detail }) => {
+                  if (detail.selectedOption.value != undefined) {
+                    const { value, ...rest } = detail.selectedOption;
+                    handleChange("publicacion_nombre", rest.revista);
+                    handleChange("issn", rest.issn);
+                    handleChange("issn_e", rest.issne);
+                    setAvoidSelect3(false);
+                  }
+                }}
+                value={value3}
+                options={options3}
+                loadingText="Cargando data"
+                placeholder="Issn, issn-e o nombre de la revista"
+                statusType={loading3 ? "loading" : "finished"}
+                empty="No se encontraron resultados"
               />
             </FormField>
             <ColumnLayout columns={4}>
@@ -378,7 +459,7 @@ export default forwardRef(function (props, ref) {
                     options: revistasIndexadas,
                   },
                 ]}
-              ></Multiselect>
+              />
             </FormField>
             <FormField
               label="URL de la publicación"
@@ -391,6 +472,16 @@ export default forwardRef(function (props, ref) {
                 onChange={({ detail }) => handleChange("url", detail.value)}
               />
             </FormField>
+            {alert != "" && (
+              <Alert
+                header="Alerta"
+                type="warning"
+                dismissible
+                onDismiss={() => setAlert("")}
+              >
+                {alert}
+              </Alert>
+            )}
           </SpaceBetween>
         )}
       </Form>
@@ -399,7 +490,8 @@ export default forwardRef(function (props, ref) {
           id={publicacion.id}
           close={() => {
             setPublicacion({});
-            setValue("");
+            setValue1("");
+            setValue2("");
           }}
         />
       )}

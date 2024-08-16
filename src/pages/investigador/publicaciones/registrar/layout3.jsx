@@ -3,6 +3,8 @@ import Paso3 from "./paso3.jsx";
 import BaseLayout from "../../components/baseLayout";
 import { useLocation } from "react-router-dom";
 import queryString from "query-string";
+import { useContext, useState } from "react";
+import NotificationContext from "../../../../providers/notificationProvider.jsx";
 
 const breadcrumbs = [
   {
@@ -18,6 +20,13 @@ const breadcrumbs = [
 ];
 
 export default function Registrar_articulo_3() {
+  //  Context
+  const { notifications, pushNotification } = useContext(NotificationContext);
+
+  //  States
+  const [requisitos, setRequisitos] = useState(false);
+  const [loading, setLoading] = useState(true);
+
   //  Url
   const location = useLocation();
   const { publicacion_id, tipo } = queryString.parse(location.search);
@@ -40,7 +49,15 @@ export default function Registrar_articulo_3() {
         window.location.href = "paso2?" + query;
         break;
       case 3:
-        window.location.href = "paso4?" + query;
+        if (!requisitos) {
+          pushNotification(
+            "Necesita completar el nombre de autor suyo, filiación san marcos y filiación única",
+            "warning",
+            notifications.length + 1
+          );
+        } else {
+          window.location.href = "paso4?" + query;
+        }
         break;
       default:
         console.error("Index error");
@@ -61,6 +78,7 @@ export default function Registrar_articulo_3() {
         onCancel={() => {
           window.location.href = "../" + tipo;
         }}
+        isLoadingNextStep={loading}
         steps={[
           {
             title: "Descripción de la publicación",
@@ -71,7 +89,15 @@ export default function Registrar_articulo_3() {
           {
             title: "Autores de la publicación",
             description: "Listado de autores de esta publicación",
-            content: <Paso3 publicacion_id={publicacion_id} tipo={tipo} />,
+            content: (
+              <Paso3
+                publicacion_id={publicacion_id}
+                tipo={tipo}
+                loading={loading}
+                setLoading={setLoading}
+                setRequisitos={setRequisitos}
+              />
+            ),
           },
           {
             title: "Envío de publicación",

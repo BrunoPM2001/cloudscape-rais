@@ -180,7 +180,7 @@ export default ({ id, reload, close, optAutor }) => {
                     label: "No",
                   },
                 ]}
-              ></Select>
+              />
             </FormField>
             <FormField
               label="Filiación única"
