@@ -130,6 +130,7 @@ export default ({ id }) => {
       form.append("resolucion", formValues.resolucion);
       form.append("estado", formValues.estado?.value);
       form.append("file", formValues.file[0]);
+      form.append("file_comentario", formValues.file_comentario[0]);
       const res = await axiosBase.post(
         "admin/estudios/publicaciones/updateDetalle",
         form
@@ -231,11 +232,11 @@ export default ({ id }) => {
             <FormField
               label="Anexo comentario"
               description={
-                formValues.file_id ? (
+                formValues.file_id_2 ? (
                   <>
                     Puede{" "}
                     <Link
-                      href={formValues.url}
+                      href={formValues.url_2}
                       variant="primary"
                       fontSize="body-s"
                       external
@@ -250,7 +251,7 @@ export default ({ id }) => {
               }
             >
               <FileUpload
-                value={formValues.file}
+                value={formValues.file_comentario}
                 onChange={({ detail }) => {
                   handleChange("file_comentario", detail.value);
                 }}
@@ -297,11 +298,11 @@ export default ({ id }) => {
             <FormField
               label="Anexo"
               description={
-                formValues.file_id ? (
+                formValues.file_id_1 ? (
                   <>
                     Puede{" "}
                     <Link
-                      href={formValues.url}
+                      href={formValues.url_1}
                       variant="primary"
                       fontSize="body-s"
                       external
