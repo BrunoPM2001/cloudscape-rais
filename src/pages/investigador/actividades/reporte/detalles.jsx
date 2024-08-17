@@ -2,6 +2,7 @@ import {
   Badge,
   Box,
   Button,
+  ButtonDropdown,
   ColumnLayout,
   Container,
   Header,
@@ -9,16 +10,62 @@ import {
   Spinner,
   StatusIndicator,
 } from "@cloudscape-design/components";
+import axiosBase from "../../../../api/axios";
+import { useState } from "react";
 
-export default ({ data, loading }) => {
+export default ({ data, loading, id }) => {
+  //  States
+  const [loadingReporte, setLoadingReporte] = useState(false);
+
+  //  Functions
+  const presupuesto = async () => {
+    setLoadingReporte(true);
+    const res = await axiosBase.get(
+      "investigador/actividades/reportePresupuesto",
+      {
+        params: {
+          id,
+        },
+        responseType: "blob",
+      }
+    );
+    const blob = await res.data;
+    const url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
+    setLoadingReporte(false);
+  };
+
+  const reporte = async (tipo) => {
+    setLoadingReporte(true);
+    const res = await axiosBase.get("investigador/actividades/" + tipo, {
+      params: {
+        id,
+      },
+      responseType: "blob",
+    });
+    const blob = await res.data;
+    const url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
+    setLoadingReporte(false);
+  };
+
   return (
     <Container
       header={
         <Header
           actions={
             <SpaceBetween direction="horizontal" size="xs">
-              <Button>Imprimir presupuesto</Button>
-              <Button variant="primary">Imprimir reporte</Button>
+              <ButtonDropdown items={items}></ButtonDropdown>
+              <Button loading={loadingReporte} onClick={presupuesto}>
+                Imprimir presupuesto
+              </Button>
+              <Button
+                variant="primary"
+                loading={loadingReporte}
+                onClick={reporte}
+              >
+                Imprimir reporte
+              </Button>
             </SpaceBetween>
           }
         >

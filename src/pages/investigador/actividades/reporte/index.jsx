@@ -58,7 +58,7 @@ export default function Proyecto_detalle() {
       en general."
     >
       <SpaceBetween size="l">
-        <Detalles loading={loading} data={data.detalles} />
+        <Detalles loading={loading} data={data.detalles} id={proyecto_id} />
         <Participantes loading={loading} data={data.participantes} />
       </SpaceBetween>
     </BaseLayout>
