@@ -157,8 +157,7 @@ const navItems = [
       {
         type: "link",
         text: "Informe académico",
-        info: <Badge color="grey">En desarrollo</Badge>,
-        href: "#",
+        href: "/investigador/informes/informeAcademico",
       },
       {
         type: "link",

@@ -2,6 +2,9 @@ import { Suspense, lazy } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { NotificationProvider } from "../providers/notificationProvider.jsx";
 
+const Informe_academico = lazy(() =>
+  import("../pages/investigador/informes/informe_academico/index.jsx")
+);
 const Deudas = lazy(() =>
   import("../pages/investigador/actividades/deudas/index.jsx")
 );
@@ -384,6 +387,15 @@ const routes = createBrowserRouter(
             {
               path: "detalle",
               element: <Informe_economico_detalles />,
+            },
+          ],
+        },
+        {
+          path: "informeAcademico",
+          children: [
+            {
+              path: "",
+              element: <Informe_academico />,
             },
           ],
         },
