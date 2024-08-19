@@ -5,6 +5,10 @@ import {
   SpaceBetween,
   Table,
 } from "@cloudscape-design/components";
+import axiosBase from "../../../../../../api/axios";
+import { useState } from "react";
+import { useLocation } from "react-router-dom";
+import queryString from "query-string";
 
 const columnDefinitions = [
   {
@@ -67,6 +71,31 @@ const columnDisplay = [
 ];
 
 export default ({ data, loading }) => {
+  //  Url
+  const location = useLocation();
+  const { id } = queryString.parse(location.search);
+
+  //  States
+  const [loadingBtn, setLoadingBtn] = useState(false);
+
+  //  Functions
+  const reporte = async () => {
+    setLoadingBtn(true);
+    const res = await axiosBase.get(
+      "investigador/informes/informe_economico/reportePresupuesto",
+      {
+        params: {
+          id: id,
+        },
+        responseType: "blob",
+      }
+    );
+    const blob = await res.data;
+    const url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
+    setLoadingBtn(false);
+  };
+
   return (
     <>
       <Table
@@ -81,7 +110,13 @@ export default ({ data, loading }) => {
           <Header
             counter={"(" + data.length + ")"}
             actions={
-              <Button variant="primary" iconName="download">
+              <Button
+                variant="primary"
+                iconName="download"
+                onClick={reporte}
+                loading={loadingBtn}
+                disabled={loading}
+              >
                 Hoja de resumen
               </Button>
             }
