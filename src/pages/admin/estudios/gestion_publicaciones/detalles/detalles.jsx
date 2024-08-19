@@ -1,4 +1,6 @@
 import {
+  Badge,
+  Box,
   Button,
   ColumnLayout,
   Container,
@@ -87,6 +89,7 @@ export default ({ id }) => {
 
   //  States
   const [loading, setLoading] = useState(true);
+  const [loadingBtn, setLoadingBtn] = useState(false);
   const [updating, setUpdating] = useState(false);
   const [opt_categoria, setOpt_categoria] = useState(true);
 
@@ -116,6 +119,21 @@ export default ({ id }) => {
       file_comentario: [],
     });
     setLoading(false);
+  };
+
+  const reporte = async () => {
+    setLoadingBtn(true);
+    const res = await axiosBase.get("admin/estudios/publicaciones/reporte", {
+      params: {
+        id: id,
+        tipo: formValues.tipo_publicacion,
+      },
+      responseType: "blob",
+    });
+    setLoadingBtn(false);
+    const blob = res.data;
+    const url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
   };
 
   const update = async () => {
@@ -152,16 +170,22 @@ export default ({ id }) => {
           actions={
             !loading && (
               <SpaceBetween size="xs" direction="horizontal">
-                <Button>Reporte</Button>
+                <Button loading={loadingBtn} onClick={reporte}>
+                  Reporte
+                </Button>
                 <Button variant="primary" loading={updating} onClick={update}>
                   Guardar
                 </Button>
               </SpaceBetween>
             )
           }
-          variant="h3"
         >
-          Datos generales
+          <SpaceBetween size="xxs" alignItems="center" direction="horizontal">
+            <Box variant="h2">Datos generales</Box>
+            <Badge color="green">{formValues.tipo}</Badge>
+            <Badge color="blue">{formValues.id}</Badge>
+            <Badge color="grey">{formValues.estado_text}</Badge>
+          </SpaceBetween>
         </Header>
       }
     >

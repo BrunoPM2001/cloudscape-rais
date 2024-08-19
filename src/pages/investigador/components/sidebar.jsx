@@ -74,7 +74,7 @@ const navItems = [
       {
         type: "link",
         text: "Deudas",
-        info: <Badge color="grey">En desarrollo</Badge>,
+        href: "/investigador/actividades/deudas",
       },
     ],
   },
@@ -195,7 +195,7 @@ export default function Sidebar({ activeHref = "#" }) {
         text: "Investigador",
         href: "/investigador",
       }}
-      activeHref={location.pathname}
+      activeHref={"/investigador" + location.pathname}
       items={navItems}
     />
   );

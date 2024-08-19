@@ -1,35 +1,21 @@
 import {
   Badge,
   Box,
-  Link,
-  FormField,
+  Button,
   Header,
   Pagination,
   PropertyFilter,
-  Select,
   SpaceBetween,
   Table,
-  Button,
 } from "@cloudscape-design/components";
 import { useState, useEffect } from "react";
 import { useCollection } from "@cloudscape-design/collection-hooks";
+import queryString from "query-string";
 import axiosBase from "../../../../../api/axios";
 
 const stringOperators = [":", "!:", "=", "!=", "^", "!^"];
 
 const FILTER_PROPS = [
-  {
-    propertyLabel: "ID",
-    key: "id",
-    groupValuesLabel: "IDS",
-    operators: stringOperators,
-  },
-  {
-    propertyLabel: "Tipo de proyecto",
-    key: "tipo_proyecto",
-    groupValuesLabel: "Tipos de proyecto",
-    operators: stringOperators,
-  },
   {
     propertyLabel: "Código",
     key: "codigo_proyecto",
@@ -43,39 +29,26 @@ const FILTER_PROPS = [
     operators: stringOperators,
   },
   {
-    propertyLabel: "Facultad",
-    key: "facultad",
-    groupValuesLabel: "Facultades",
+    propertyLabel: "Tipo de proyecto",
+    key: "tipo_proyecto",
+    groupValuesLabel: "Tipos de proyecto",
     operators: stringOperators,
   },
   {
-    propertyLabel: "Responsable",
-    key: "responsable",
-    groupValuesLabel: "Responsables",
+    propertyLabel: "Condición",
+    key: "condicion",
+    groupValuesLabel: "Condiciones",
     operators: stringOperators,
   },
   {
-    propertyLabel: "Deuda",
-    key: "deuda",
-    groupValuesLabel: "Deudas",
+    propertyLabel: "Periodo",
+    key: "periodo",
+    groupValuesLabel: "Periodos",
     operators: stringOperators,
   },
 ];
 
 const columnDefinitions = [
-  {
-    id: "id",
-    header: "ID",
-    cell: (item) => item.id,
-    sortingField: "id",
-    isRowHeader: true,
-  },
-  {
-    id: "tipo_proyecto",
-    header: "Tipo de proyecto",
-    cell: (item) => item.tipo_proyecto,
-    sortingField: "tipo_proyecto",
-  },
   {
     id: "codigo_proyecto",
     header: "Código",
@@ -89,44 +62,39 @@ const columnDefinitions = [
     sortingField: "titulo",
   },
   {
-    id: "facultad",
-    header: "Facultad",
-    cell: (item) => item.facultad,
-    sortingField: "facultad",
+    id: "tipo_proyecto",
+    header: "Tipo de proyecto",
+    cell: (item) => item.tipo_proyecto,
+    sortingField: "tipo_proyecto",
   },
   {
-    id: "responsable",
-    header: "Responsable",
-    cell: (item) => item.responsable,
-    sortingField: "responsable",
+    id: "condicion",
+    header: "Condición",
+    cell: (item) => item.condicion,
+    sortingField: "condicion",
   },
   {
-    id: "deuda",
-    header: "Deuda",
-    cell: (item) => item.deuda,
-    sortingField: "deuda",
+    id: "periodo",
+    header: "Periodo",
+    cell: (item) => item.periodo,
+    sortingField: "periodo",
   },
 ];
 
 const columnDisplay = [
-  { id: "id", visible: true },
-  { id: "tipo_proyecto", visible: true },
   { id: "codigo_proyecto", visible: true },
   { id: "titulo", visible: true },
-  { id: "facultad", visible: true },
-  { id: "responsable", visible: true },
-  { id: "deuda", visible: true },
+  { id: "tipo_proyecto", visible: true },
+  { id: "condicion", visible: true },
+  { id: "periodo", visible: true },
 ];
 
 export default () => {
   //  Data states
   const [loading, setLoading] = useState(true);
   const [distributions, setDistribution] = useState([]);
-  const [selectedItems, setSelectedItems] = useState([]);
-  const [enableBtn, setEnableBtn] = useState(true);
   const {
     items,
-    actions,
     filteredItemsCount,
     collectionProps,
     paginationProps,
@@ -150,16 +118,14 @@ export default () => {
       ),
     },
     pagination: { pageSize: 10 },
-    sorting: { defaultState: { sortingColumn: columnDefinitions[0] } },
+    sorting: {},
     selection: {},
   });
 
   //  Functions
   const getData = async () => {
     setLoading(true);
-    const res = await axiosBase.get(
-      "admin/estudios/deudaProyecto/listadoProyectosNoDeuda"
-    );
+    const res = await axiosBase.get("investigador/actividades/deudas/listado");
     const data = res.data;
     setDistribution(data);
     setLoading(false);
@@ -169,14 +135,6 @@ export default () => {
   useEffect(() => {
     getData();
   }, []);
-
-  useEffect(() => {
-    if (selectedItems.length > 0) {
-      setEnableBtn(true);
-    } else {
-      setEnableBtn(false);
-    }
-  }, [selectedItems]);
 
   return (
     <Table
@@ -189,28 +147,13 @@ export default () => {
       loadingText="Cargando datos"
       resizableColumns
       enableKeyboardNavigation
-      header={
-        <Header
-          actions={
-            <Button variant="primary" disabled={!enableBtn}>
-              Generar deuda
-            </Button>
-          }
-        >
-          Listado de proyectos sin deuda
-        </Header>
-      }
-      selectionType="single"
-      selectedItems={selectedItems}
-      onSelectionChange={({ detail }) => setSelectedItems(detail.selectedItems)}
-      onRowClick={({ detail }) => setSelectedItems([detail.item])}
+      header={<Header>Deudas ({distributions.length})</Header>}
       filter={
         <PropertyFilter
           {...propertyFilterProps}
-          filteringPlaceholder="Buscar proyecto"
+          filteringPlaceholder="Buscar deuda"
           countText={`${filteredItemsCount} coincidencias`}
           expandToViewport
-          virtualScroll
         />
       }
       pagination={<Pagination {...paginationProps} />}

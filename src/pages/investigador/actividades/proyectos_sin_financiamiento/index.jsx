@@ -27,7 +27,7 @@ export default function Proyectos_sin_financiamiento() {
   return (
     <BaseLayout
       breadcrumbs={breadcrumbs}
-      header="Deudas de proyectos:"
+      header="Listado de proyectos"
       helpInfo="Información sobre la páginal actual para poder mostrarla al público
       en general."
       disableOverlap

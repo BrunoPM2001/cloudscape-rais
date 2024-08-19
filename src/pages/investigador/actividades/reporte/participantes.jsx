@@ -44,7 +44,7 @@ export default ({ data, loading }) => {
   return (
     <Table
       {...collectionProps}
-      trackBy="id"
+      trackBy="nombres"
       items={items}
       columnDefinitions={columnDefinitions}
       columnDisplay={columnDisplay}

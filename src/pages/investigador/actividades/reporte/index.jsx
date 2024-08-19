@@ -23,11 +23,12 @@ const breadcrumbs = [
 export default function Proyecto_detalle() {
   //  States
   const [data, setData] = useState({ participantes: [] });
+  const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
 
   //  Url
   const location = useLocation();
-  const { proyecto_id } = queryString.parse(location.search);
+  const { proyecto_id, antiguo } = queryString.parse(location.search);
 
   //  Functions
   const getData = async () => {
@@ -36,13 +37,39 @@ export default function Proyecto_detalle() {
       "investigador/actividades/detalleProyecto",
       {
         params: {
-          proyecto_id: proyecto_id,
+          proyecto_id,
+          antiguo,
         },
       }
     );
-    const data = await res.data;
+    const data = res.data;
     setData(data);
+    opciones(data.detalles.tipo_proyecto, data.detalles.estado);
     setLoading(false);
+  };
+
+  const opciones = (tipo, estado) => {
+    if (estado != -1 && estado != 0) {
+      if (tipo == "PCONFIGI") {
+        setItems([
+          {
+            id: "action_1",
+            text: "Presupuesto",
+          },
+          {
+            id: "action_2",
+            text: "Proyecto",
+          },
+        ]);
+      } else if (tipo == "PSINFINV" || tipo == "PSINFIPU") {
+        setItems([
+          {
+            id: "action_3",
+            text: "Proyecto",
+          },
+        ]);
+      }
+    }
   };
 
   //  Effects
@@ -58,7 +85,13 @@ export default function Proyecto_detalle() {
       en general."
     >
       <SpaceBetween size="l">
-        <Detalles loading={loading} data={data.detalles} id={proyecto_id} />
+        <Detalles
+          loading={loading}
+          data={data.detalles}
+          id={proyecto_id}
+          items={items}
+          antiguo={antiguo}
+        />
         <Participantes loading={loading} data={data.participantes} />
       </SpaceBetween>
     </BaseLayout>

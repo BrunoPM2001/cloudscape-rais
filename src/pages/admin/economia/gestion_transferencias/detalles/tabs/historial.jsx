@@ -69,7 +69,7 @@ export default ({ data, loading }) => {
   const [visible, setVisible] = useState(false);
 
   //  Hooks
-  const { items, collectionProps } = useCollection(data, {
+  const { items, collectionProps, actions } = useCollection(data, {
     sorting: {},
     selection: {},
   });
@@ -86,6 +86,7 @@ export default ({ data, loading }) => {
         loadingText="Cargando datos"
         resizableColumns
         selectionType="single"
+        onRowClick={({ detail }) => actions.setSelectedItems([detail.item])}
         header={
           <Header
             counter={"(" + items.length + ")"}

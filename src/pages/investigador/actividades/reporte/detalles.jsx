@@ -1,7 +1,6 @@
 import {
   Badge,
   Box,
-  Button,
   ButtonDropdown,
   ColumnLayout,
   Container,
@@ -13,7 +12,7 @@ import {
 import axiosBase from "../../../../api/axios";
 import { useState } from "react";
 
-export default ({ data, loading, id }) => {
+export default ({ data, loading, id, items, antiguo }) => {
   //  States
   const [loadingReporte, setLoadingReporte] = useState(false);
 
@@ -54,26 +53,132 @@ export default ({ data, loading, id }) => {
       header={
         <Header
           actions={
-            <SpaceBetween direction="horizontal" size="xs">
-              <ButtonDropdown items={items}></ButtonDropdown>
-              <Button loading={loadingReporte} onClick={presupuesto}>
-                Imprimir presupuesto
-              </Button>
-              <Button
-                variant="primary"
-                loading={loadingReporte}
-                onClick={reporte}
-              >
-                Imprimir reporte
-              </Button>
-            </SpaceBetween>
+            <ButtonDropdown
+              items={items}
+              disabled={loading || items.length == 0}
+              loading={loadingReporte}
+              onItemClick={({ detail }) => {
+                if (detail.id == "action_1") {
+                  presupuesto();
+                } else if (detail.id == "action_2") {
+                  reporte("reporteConFin");
+                } else if (detail.id == "action_3") {
+                  reporte("reporteSinFin");
+                }
+              }}
+            >
+              Reportes
+            </ButtonDropdown>
           }
         >
           Datos generales
         </Header>
       }
     >
-      <ColumnLayout columns={3} variant="text-grid">
+      {antiguo == "no" ? (
+        <ColumnLayout columns={3} variant="text-grid">
+          <SpaceBetween size="s">
+            <div>
+              <Box variant="awsui-key-label">Tipo</Box>
+              {loading ? <Spinner /> : <div>{data.tipo_proyecto}</div>}
+            </div>
+            <div>
+              <Box variant="awsui-key-label">Estado</Box>
+              {loading ? (
+                <Spinner />
+              ) : (
+                <Badge
+                  color={
+                    data.estado == -1
+                      ? "red"
+                      : data.estado == 0
+                      ? "grey"
+                      : data.estado == 1
+                      ? "green"
+                      : data.estado == 2
+                      ? "grey"
+                      : data.estado == 3
+                      ? "grey"
+                      : data.estado == 5
+                      ? "blue"
+                      : data.estado == 5
+                      ? "blue"
+                      : data.estado == 6
+                      ? "grey"
+                      : "red"
+                  }
+                >
+                  {data.estado == -1
+                    ? "Eliminado"
+                    : data.estado == 0
+                    ? "No aprobado"
+                    : data.estado == 1
+                    ? "Aprobado"
+                    : data.estado == 2
+                    ? "Observado"
+                    : data.estado == 3
+                    ? "En evaluación"
+                    : data.estado == 5
+                    ? "Enviado"
+                    : data.estado == 6
+                    ? "En proceso"
+                    : "Error"}
+                </Badge>
+              )}
+            </div>
+            <div>
+              <Box variant="awsui-key-label">Código</Box>
+              {loading ? <Spinner /> : <div>{data.codigo_proyecto}</div>}
+            </div>
+            <div>
+              <Box variant="awsui-key-label">Periodo</Box>
+              {loading ? <Spinner /> : <div>{data.periodo}</div>}
+            </div>
+            <div>
+              <Box variant="awsui-key-label">Tipo de investigación</Box>
+              {loading ? <Spinner /> : <div>{data.tipo_investigacion}</div>}
+            </div>
+          </SpaceBetween>
+          <SpaceBetween size="s">
+            <div>
+              <Box variant="awsui-key-label">Título</Box>
+              {loading ? <Spinner /> : <div>{data.titulo}</div>}
+            </div>
+            <div>
+              <Box variant="awsui-key-label">Monto</Box>
+              {loading ? <Spinner /> : <div>{data.monto}</div>}
+            </div>
+            <div>
+              <Box variant="awsui-key-label">Facultad</Box>
+              {loading ? <Spinner /> : <div>{data.facultad}</div>}
+            </div>
+          </SpaceBetween>
+          <SpaceBetween size="s">
+            <div>
+              <Box variant="awsui-key-label">Línea de investigación</Box>
+              {loading ? (
+                <Spinner />
+              ) : (
+                <StatusIndicator type="info">
+                  {data.linea_investigacion}
+                </StatusIndicator>
+              )}
+            </div>
+            <div>
+              <Box variant="awsui-key-label">Fecha de inscripción</Box>
+              {loading ? <Spinner /> : <div>{data.fecha_inscripcion}</div>}
+            </div>
+            <div>
+              <Box variant="awsui-key-label">Resolución</Box>
+              {loading ? <Spinner /> : <div>{data.resolucion_rectoral}</div>}
+            </div>
+            <div>
+              <Box variant="awsui-key-label">Grupo</Box>
+              {loading ? <Spinner /> : <div>{data.grupo_nombre}</div>}
+            </div>
+          </SpaceBetween>
+        </ColumnLayout>
+      ) : (
         <SpaceBetween size="s">
           <div>
             <Box variant="awsui-key-label">Tipo</Box>
@@ -132,49 +237,11 @@ export default ({ data, loading, id }) => {
             {loading ? <Spinner /> : <div>{data.periodo}</div>}
           </div>
           <div>
-            <Box variant="awsui-key-label">Tipo de investigación</Box>
-            {loading ? <Spinner /> : <div>{data.tipo_investigacion}</div>}
-          </div>
-        </SpaceBetween>
-        <SpaceBetween size="s">
-          <div>
             <Box variant="awsui-key-label">Título</Box>
             {loading ? <Spinner /> : <div>{data.titulo}</div>}
           </div>
-          <div>
-            <Box variant="awsui-key-label">Monto</Box>
-            {loading ? <Spinner /> : <div>{data.monto}</div>}
-          </div>
-          <div>
-            <Box variant="awsui-key-label">Facultad</Box>
-            {loading ? <Spinner /> : <div>{data.facultad}</div>}
-          </div>
         </SpaceBetween>
-        <SpaceBetween size="s">
-          <div>
-            <Box variant="awsui-key-label">Línea de investigación</Box>
-            {loading ? (
-              <Spinner />
-            ) : (
-              <StatusIndicator type="info">
-                {data.linea_investigacion}
-              </StatusIndicator>
-            )}
-          </div>
-          <div>
-            <Box variant="awsui-key-label">Fecha de inscripción</Box>
-            {loading ? <Spinner /> : <div>{data.fecha_inscripcion}</div>}
-          </div>
-          <div>
-            <Box variant="awsui-key-label">Resolución</Box>
-            {loading ? <Spinner /> : <div>{data.resolucion_rectoral}</div>}
-          </div>
-          <div>
-            <Box variant="awsui-key-label">Grupo</Box>
-            {loading ? <Spinner /> : <div>{data.grupo_nombre}</div>}
-          </div>
-        </SpaceBetween>
-      </ColumnLayout>
+      )}
     </Container>
   );
 };

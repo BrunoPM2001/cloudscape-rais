@@ -276,7 +276,7 @@ export default () => {
         investigador_id: form.investigador_id,
       },
     });
-    const data = await res.data;
+    const data = res.data;
     setDistribution(data.data);
     setLoadingData(false);
   };
@@ -291,7 +291,7 @@ export default () => {
       responseType: "blob",
     });
     setLoadingBtn(false);
-    const blob = await res.data;
+    const blob = res.data;
     const url = URL.createObjectURL(blob);
     window.open(url, "_blank");
   };

@@ -1,10 +1,13 @@
 import {
+  Alert,
   Badge,
   Box,
   Button,
+  FormField,
   Modal,
   SpaceBetween,
   Table,
+  Textarea,
 } from "@cloudscape-design/components";
 import { useState, useEffect } from "react";
 import axiosBase from "../../../../../../api/axios";
@@ -59,7 +62,7 @@ const columnDisplay = [
 export default ({ visible, setVisible, id }) => {
   //  States
   const [loading, setLoading] = useState(true);
-  const [data, setData] = useState([]);
+  const [data, setData] = useState({ movimientos: [], operacion: {} });
 
   //  Functions
   const getData = async () => {
@@ -95,23 +98,32 @@ export default ({ visible, setVisible, id }) => {
       }
       header="Detalle de la transferencia seleccionada"
     >
-      <Table
-        trackBy="codigo"
-        items={data}
-        columnDefinitions={columnDefinitions}
-        columnDisplay={columnDisplay}
-        loading={loading}
-        loadingText="Cargando datos"
-        resizableColumns
-        variant="embedded"
-        empty={
-          <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
-            <SpaceBetween size="m">
-              <b>No hay registros...</b>
-            </SpaceBetween>
-          </Box>
-        }
-      />
+      <SpaceBetween size="m">
+        <Table
+          trackBy="codigo"
+          items={data.movimientos}
+          columnDefinitions={columnDefinitions}
+          columnDisplay={columnDisplay}
+          loading={loading}
+          loadingText="Cargando datos"
+          resizableColumns
+          empty={
+            <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
+              <SpaceBetween size="m">
+                <b>No hay registros...</b>
+              </SpaceBetween>
+            </Box>
+          }
+        />
+        {data.operacion?.justificacion && (
+          <Alert header="Justificación">{data.operacion.justificacion}</Alert>
+        )}
+        {data.operacion?.observacion && (
+          <Alert header="Observación" type="error">
+            {data.operacion.observacion}
+          </Alert>
+        )}
+      </SpaceBetween>
     </Modal>
   );
 };

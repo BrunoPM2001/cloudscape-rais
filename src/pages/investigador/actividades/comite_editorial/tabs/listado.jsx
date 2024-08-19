@@ -150,11 +150,9 @@ const columnDisplay = [
 export default () => {
   //  Data states
   const [loading, setLoading] = useState(true);
-  const [selectedItems, setSelectedItems] = useState([]);
   const [distributions, setDistribution] = useState([]);
   const {
     items,
-    actions,
     filteredItemsCount,
     collectionProps,
     paginationProps,
@@ -181,7 +179,6 @@ export default () => {
     sorting: {},
     selection: {},
   });
-  const [enableBtn, setEnableBtn] = useState(true);
 
   //  Functions
   const getData = async () => {
@@ -190,7 +187,7 @@ export default () => {
       "investigador/actividades/comiteEdi/listado"
     );
     const data = res.data;
-    setDistribution(data.data);
+    setDistribution(data);
     setLoading(false);
   };
 
@@ -198,14 +195,6 @@ export default () => {
   useEffect(() => {
     getData();
   }, []);
-
-  useEffect(() => {
-    if (selectedItems.length > 0) {
-      setEnableBtn(true);
-    } else {
-      setEnableBtn(false);
-    }
-  }, [selectedItems]);
 
   return (
     <Table
@@ -219,17 +208,16 @@ export default () => {
       resizableColumns
       enableKeyboardNavigation
       selectionType="single"
-      selectedItems={selectedItems}
-      onSelectionChange={({ detail }) => setSelectedItems(detail.selectedItems)}
       header={
         <Header
           actions={
             <Button
-              disabled={!enableBtn}
+              disabled={collectionProps.selectedItems.length == 0}
               variant="primary"
               onClick={() => {
                 const query = queryString.stringify({
-                  proyecto_id: selectedItems[0]["id"],
+                  proyecto_id: collectionProps.selectedItems[0]["id"],
+                  antiguo: collectionProps.selectedItems[0]["antiguo"],
                 });
                 window.location.href = "proyectoDetalle?" + query;
               }}
