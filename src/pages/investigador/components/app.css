@@ -1,0 +1,202 @@
+:root {
+  --color-black: #242e39;
+  --color-gray-1: #3b424b;
+  --color-gray-2: #68707d;
+  --color-gray-3: #949fab;
+  --color-gray-4: #c7cdd4;
+  --color-gray-5: #edf1f6;
+  --color-gray-6: #f7f9fb;
+  --color-white: #fff;
+}
+
+.app {
+  width: 720px;
+  margin: 0 auto 48px;
+}
+
+.editor {
+  position: relative;
+  width: 100%;
+
+  height: 400px;
+}
+
+.menu {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  z-index: 1;
+
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  width: calc(100% - 20px);
+  height: 40px;
+  margin: 0;
+  padding: 0 8px;
+
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  border-bottom: 1px solid var(--color-gray-5);
+  background-color: var(--color-background-input-default-igdh5e, #ffffff);
+  color: var(--color-gray-2);
+}
+
+.bubble-menu-dark,
+.bubble-menu-light {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 8px;
+
+  border-radius: 4px;
+}
+
+.bubble-menu-dark {
+  background-color: var(--color-gray-1);
+  color: var(--color-white);
+}
+
+.bubble-menu-light {
+  border: 2px solid var(--color-gray-4);
+  background-color: var(--color-white);
+  color: var(--color-gray-2);
+}
+
+.link-menu {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  /* height: 40px; */
+  padding: 8px;
+
+  border: 2px solid var(--color-gray-5);
+  border-radius: 4px;
+  background-color: var(--color-white);
+}
+
+.button,
+.button-save,
+.button-remove,
+.menu-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 32px;
+
+  margin: 0;
+  padding: 0 8px;
+
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: currentColor;
+
+  font-family: inherit;
+  font-size: inherit;
+  line-height: 1;
+  font-weight: inherit;
+
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.menu-button {
+  width: 32px;
+  padding: 0;
+}
+
+.button:hover,
+.button.is-active,
+.menu-button:hover,
+.menu-button.is-active {
+  background-color: var(--color-gray-5);
+  color: var(--color-black);
+}
+
+.button:disabled,
+.menu-button:disabled {
+  color: var(--color-gray-4);
+}
+
+/* Basic editor styles */
+.ProseMirror {
+  margin-top: 4px;
+  padding: 48px 8px 8px;
+
+  border: 2px solid var(--color-gray-4);
+  border-radius: 4px;
+  height: 300px;
+  overflow-y: auto;
+}
+
+.editor-mini .ProseMirror {
+  padding-top: 8px;
+  margin-top: 30px;
+}
+
+.ProseMirror-focused {
+  border-color: var(--color-black);
+  outline: none;
+}
+
+.ProseMirror > * + * {
+  margin-top: 16px;
+}
+
+.modal-title {
+  margin: 0 0 24px;
+  font-size: 20px;
+  line-height: 1;
+}
+
+.modal-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 32px;
+  height: 32px;
+
+  border: 0;
+  border-radius: 4px;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.modal-close:hover {
+  background-color: var(--color-gray-5);
+  color: var(--color-black);
+}
+
+.modal-input {
+  width: 100%;
+  height: 40px;
+
+  margin-bottom: 16px;
+
+  border: 2px solid var(--color-gray-5);
+  border-radius: 4px;
+
+  font-size: inherit;
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+blockquote {
+  border-left: 3px solid var(--color-gray-3);
+  margin: 1.5rem 0;
+  padding-left: 1rem;
+}

@@ -15,8 +15,6 @@ import ModalRegistrado from "./components/modalRegistrado";
 import ModalNoRegistrado from "./components/modalNoRegistrado";
 import ModalEliminarProyecto from "./components/modalEliminarProyecto";
 
-const CANTIDAD_MINIMA = 1;
-
 const columnDefinitions = [
   {
     id: "codigo_proyecto",
@@ -41,12 +39,7 @@ const columnDisplay = [
   { id: "entidad_financiadora", visible: true },
 ];
 
-export default function ({
-  publicacion_id,
-  loading,
-  setLoading,
-  setRequisitos,
-}) {
+export default function ({ publicacion_id, loading, setLoading }) {
   //  State
   const [distributions, setDistribution] = useState([]);
   const [visible, setVisible] = useState(false);
@@ -74,7 +67,6 @@ export default function ({
       }
     );
     const data = res.data;
-    setRequisitos(CANTIDAD_MINIMA <= data.length ? true : false);
     setDistribution(data);
     setLoading(false);
   };

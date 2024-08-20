@@ -184,9 +184,10 @@ export default () => {
               disabled={collectionProps.selectedItems.length == 0}
               onClick={() => {
                 const query = queryString.stringify({
+                  proyecto_id: collectionProps.selectedItems[0]?.proyecto_id,
                   id: collectionProps.selectedItems[0]?.id,
                 });
-                window.location.href = "informeEconomico/detalle?" + query;
+                window.location.href = "informeAcademico/presentar?" + query;
               }}
             >
               Presentar
