@@ -181,9 +181,12 @@ export default () => {
         params: {
           id: collectionProps.selectedItems[0].id,
         },
+        responseType: "blob",
       }
     );
-    const data = res.data;
+    const blob = await res.data;
+    const url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
     setLoadingBtn(false);
   };
 

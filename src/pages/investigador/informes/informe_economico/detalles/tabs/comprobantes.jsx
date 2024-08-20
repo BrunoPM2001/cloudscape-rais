@@ -22,6 +22,7 @@ import ModalReciboIngreso from "../components/modalReciboIngreso";
 import ModalTicket from "../components/modalTicket";
 import ModalReciboBanco from "../components/modalReciboBanco";
 import ModalDeclaracionJurada from "../components/modalDeclaracionJurada";
+import axiosBase from "../../../../../../api/axios";
 
 const columnDefinitions = [
   {
@@ -105,6 +106,7 @@ export default ({ data, loading, reload }) => {
   const [visible, setVisible] = useState(false);
   const [type, setType] = useState("");
   const [edit, setEdit] = useState(false);
+  const [loadingBtn, setLoadingBtn] = useState(false);
 
   //  Url
   const location = useLocation();
@@ -115,6 +117,24 @@ export default ({ data, loading, reload }) => {
     sorting: { defaultState: { sortingColumn: columnDefinitions[0] } },
     selection: {},
   });
+
+  //  Function
+  const reporte = async () => {
+    setLoadingBtn(true);
+    const res = await axiosBase.get(
+      "investigador/informes/informe_economico/detalleGasto",
+      {
+        params: {
+          id: id,
+        },
+        responseType: "blob",
+      }
+    );
+    const blob = await res.data;
+    const url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
+    setLoadingBtn(false);
+  };
 
   return (
     <>
@@ -134,6 +154,14 @@ export default ({ data, loading, reload }) => {
             counter={"(" + data.length + ")"}
             actions={
               <SpaceBetween size="xs" direction="horizontal">
+                <Button
+                  disabled={loading}
+                  loading={loadingBtn}
+                  onClick={reporte}
+                  iconName="file"
+                >
+                  Detalle del gasto
+                </Button>
                 <Button
                   disabled={
                     collectionProps.selectedItems.length == 0 ? true : false
