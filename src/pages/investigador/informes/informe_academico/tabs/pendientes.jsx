@@ -181,16 +181,21 @@ export default () => {
           actions={
             <Button
               variant="primary"
-              disabled={collectionProps.selectedItems.length == 0}
+              disabled={
+                collectionProps.selectedItems.length == 0 ||
+                collectionProps.selectedItems[0].estado == "Presentado"
+              }
               onClick={() => {
                 const query = queryString.stringify({
                   proyecto_id: collectionProps.selectedItems[0]?.proyecto_id,
                   id: collectionProps.selectedItems[0]?.id,
+                  tipo_proyecto:
+                    collectionProps.selectedItems[0]?.tipo_proyecto,
                 });
                 window.location.href = "informeAcademico/presentar?" + query;
               }}
             >
-              Presentar
+              Editar
             </Button>
           }
         >

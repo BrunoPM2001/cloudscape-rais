@@ -88,6 +88,7 @@ export default forwardRef(function (props, ref) {
       ...initialForm,
       ...data.data,
       art_tipo: { value: data.data.art_tipo },
+      pais: { value: data.data.pais },
       palabras_clave: data.palabras_clave,
     });
     setLoadingData(false);

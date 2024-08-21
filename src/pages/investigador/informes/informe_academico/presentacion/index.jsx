@@ -1,5 +1,6 @@
 import BaseLayout from "../../../components/baseLayout";
 import Eci from "./components/eci";
+import Pconfigi from "./components/pconfigi";
 
 const breadcrumbs = [
   {
@@ -27,6 +28,7 @@ export default function Presentar_informe() {
       disableOverlap
     >
       <Eci />
+      {/* <Pconfigi /> */}
     </BaseLayout>
   );
 }

@@ -133,6 +133,13 @@ const columnDefinitions = [
     sortingField: "isbn",
   },
   {
+    id: "titulo",
+    header: "Título",
+    cell: (item) => item.titulo,
+    minWidth: 400,
+    sortingField: "titulo",
+  },
+  {
     id: "issn",
     header: "Issn",
     cell: (item) => item.issn,
@@ -149,12 +156,6 @@ const columnDefinitions = [
     header: "Nombre de evento",
     cell: (item) => item.evento_nombre,
     sortingField: "evento_nombre",
-  },
-  {
-    id: "titulo",
-    header: "Título",
-    cell: (item) => item.titulo,
-    sortingField: "titulo",
   },
   {
     id: "fecha_publicacion",
@@ -185,11 +186,11 @@ const columnDefinitions = [
             : item.estado == "Registrado"
             ? "green"
             : item.estado == "Observado"
-            ? "grey"
+            ? "red"
             : item.estado == "Enviado"
             ? "blue"
             : item.estado == "En proceso"
-            ? "blue"
+            ? "grey"
             : item.estado == "Anulado"
             ? "red"
             : item.estado == "No registrado"
@@ -216,11 +217,11 @@ const columnDisplay = [
   { id: "id", visible: true },
   { id: "codigo_registro", visible: true },
   { id: "tipo", visible: true },
+  { id: "titulo", visible: true },
   { id: "isbn", visible: true },
   { id: "issn", visible: true },
   { id: "editorial", visible: true },
   { id: "evento_nombre", visible: true },
-  { id: "titulo", visible: true },
   { id: "fecha_publicacion", visible: true },
   { id: "created_at", visible: true },
   { id: "updated_at", visible: true },
@@ -239,6 +240,7 @@ export default () => {
   //  Hooks
   const {
     items,
+    actions,
     filteredItemsCount,
     collectionProps,
     paginationProps,
@@ -320,6 +322,8 @@ export default () => {
         resizableColumns
         enableKeyboardNavigation
         selectionType="single"
+        onRowClick={({ detail }) => actions.setSelectedItems([detail.item])}
+        wrapLines
         header={
           <Header
             counter={"(" + distributions.length + ")"}

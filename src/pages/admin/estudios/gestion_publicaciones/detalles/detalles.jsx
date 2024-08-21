@@ -109,6 +109,9 @@ export default ({ id }) => {
     setOpt_categoria(data.categorias);
     setFormValues({
       ...data.data,
+      comentario: data.data.comentario ?? "",
+      observaciones_usuario: data.data.observaciones_usuario ?? "",
+      resolucion: data.data.resolucion ?? "",
       codigo_registro: data.data.codigo_registro ?? "No tiene código",
       validado: opt_validado.find((opt) => opt.value == data.data.validado),
       estado: opt_estado.find((opt) => opt.value == data.data.estado),

@@ -6,9 +6,11 @@ import {
   FileUpload,
   FormField,
   Header,
+  Input,
   Link,
   SpaceBetween,
   Spinner,
+  Table,
   Wizard,
 } from "@cloudscape-design/components";
 import { useContext, useEffect, useState } from "react";
@@ -23,34 +25,29 @@ const initialForm = {
   id: null,
   estado: 0,
   resumen_ejecutivo: "",
+  palabras_clave: "",
   infinal1: "",
   infinal2: "",
   infinal3: "",
   infinal4: "",
   infinal5: "",
   infinal6: "",
+  infinal7: "",
+  infinal9: "",
+  infinal10: "",
   file1: [],
   file2: [],
-  file3: [],
-  file4: [],
-  file5: [],
-  file6: [],
 };
 
 const formRules = {
   file1: { isFile: true, maxSize: 6 * 1024 * 1024 },
   file2: { isFile: true, maxSize: 6 * 1024 * 1024 },
-  file3: { isFile: true, maxSize: 6 * 1024 * 1024 },
-  file4: { isFile: true, maxSize: 6 * 1024 * 1024 },
-  file5: { isFile: true, maxSize: 6 * 1024 * 1024 },
-  file6: { isFile: true, maxSize: 6 * 1024 * 1024 },
 };
 
 const propsRepetidas = {
   showFileLastModified: true,
   showFileSize: true,
   showFileThumbnail: true,
-  constraintText: "El archivo cargado no debe superar los 6 MB",
   i18nStrings: {
     uploadButtonText: (e) => (e ? "Cargar archivos" : "Cargar archivo"),
     dropzoneText: (e) =>
@@ -85,6 +82,7 @@ export default () => {
   const [loadingSave, setLoadingSave] = useState(false);
   const [files, setFiles] = useState({});
   const [proyecto, setProyecto] = useState({});
+  const [miembros, setMiembros] = useState([]);
 
   //  Hooks
   const { formValues, formErrors, handleChange, validateForm, setFormValues } =
@@ -105,6 +103,7 @@ export default () => {
     );
     const data = res.data;
     setProyecto(data.proyecto);
+    setMiembros(data.miembros);
     setFiles(data.archivos);
     if (data.informe) {
       handleChange("resumen_ejecutivo", data.informe.resumen_ejecutivo ?? "");
@@ -202,11 +201,7 @@ export default () => {
             header={
               <Header
                 actions={
-                  <Button
-                    iconName="file"
-                    loading={loadingBtn}
-                    onClick={reporte}
-                  >
+                  <Button iconName="file" onClick={reporte}>
                     Reporte
                   </Button>
                 }
@@ -260,56 +255,101 @@ export default () => {
               description:
                 "Programa de equipamiento científico para investigación de la UNMSM",
               content: (
-                <Container>
-                  <SpaceBetween size="m">
-                    <div>
-                      <Box variant="awsui-key-label">Título</Box>
-                      {loading ? <Spinner /> : <Box>{proyecto.titulo}</Box>}
-                    </div>
-                    <div>
-                      <Box variant="awsui-key-label">Código</Box>
-                      {loading ? (
-                        <Spinner />
-                      ) : (
-                        <Box>{proyecto.codigo_proyecto}</Box>
-                      )}
-                    </div>
-                    <div>
-                      <Box variant="awsui-key-label">Resolución</Box>
-                      {loading ? <Spinner /> : <Box>{proyecto.resolucion}</Box>}
-                    </div>
-                    <div>
-                      <Box variant="awsui-key-label">Año</Box>
-                      {loading ? <Spinner /> : <Box>{proyecto.periodo}</Box>}
-                    </div>
-                    <div>
-                      <Box variant="awsui-key-label">Grupo </Box>
-                      {loading ? (
-                        <Spinner />
-                      ) : (
-                        <Box>{proyecto.grupo_nombre}</Box>
-                      )}
-                    </div>
-                    <div>
-                      <Box variant="awsui-key-label">Facultad</Box>
-                      {loading ? <Spinner /> : <Box>{proyecto.facultad}</Box>}
-                    </div>
-                    <div>
-                      <Box variant="awsui-key-label">Coordinador</Box>
-                      {loading ? (
-                        <Spinner />
-                      ) : (
-                        <Box>{proyecto.responsable}</Box>
-                      )}
-                    </div>
-                  </SpaceBetween>
-                </Container>
+                <SpaceBetween size="l">
+                  <Container>
+                    <SpaceBetween size="m">
+                      <div>
+                        <Box variant="awsui-key-label">Título</Box>
+                        {loading ? <Spinner /> : <Box>{proyecto.titulo}</Box>}
+                      </div>
+                      <div>
+                        <Box variant="awsui-key-label">Código</Box>
+                        {loading ? (
+                          <Spinner />
+                        ) : (
+                          <Box>{proyecto.codigo_proyecto}</Box>
+                        )}
+                      </div>
+                      <div>
+                        <Box variant="awsui-key-label">Resolución</Box>
+                        {loading ? (
+                          <Spinner />
+                        ) : (
+                          <Box>{proyecto.resolucion}</Box>
+                        )}
+                      </div>
+                      <div>
+                        <Box variant="awsui-key-label">Año</Box>
+                        {loading ? <Spinner /> : <Box>{proyecto.periodo}</Box>}
+                      </div>
+                      <div>
+                        <Box variant="awsui-key-label">Grupo</Box>
+                        {loading ? (
+                          <Spinner />
+                        ) : (
+                          <Box>{proyecto.grupo_nombre}</Box>
+                        )}
+                      </div>
+                      <div>
+                        <Box variant="awsui-key-label">Localización</Box>
+                        {loading ? (
+                          <Spinner />
+                        ) : (
+                          <Box>{proyecto.localizacion}</Box>
+                        )}
+                      </div>
+                      <div>
+                        <Box variant="awsui-key-label">Facultad</Box>
+                        {loading ? <Spinner /> : <Box>{proyecto.facultad}</Box>}
+                      </div>
+                      <div>
+                        <Box variant="awsui-key-label">
+                          Línea de investigación
+                        </Box>
+                        {loading ? <Spinner /> : <Box>{proyecto.linea}</Box>}
+                      </div>
+                      <div>
+                        <Box variant="awsui-key-label">
+                          Tipo de investigación
+                        </Box>
+                        {loading ? (
+                          <Spinner />
+                        ) : (
+                          <Box>{proyecto.tipo_investigacion}</Box>
+                        )}
+                      </div>
+                    </SpaceBetween>
+                  </Container>
+                  <Table
+                    trackBy="id"
+                    header={
+                      <Header>Miembros del equipo de investigación</Header>
+                    }
+                    columnDefinitions={[
+                      {
+                        id: "condicion",
+                        header: "Condición",
+                        cell: (item) => item.condicion,
+                      },
+                      {
+                        id: "nombres",
+                        header: "Integrante",
+                        cell: (item) => item.nombres,
+                      },
+                    ]}
+                    columnDisplay={[
+                      { id: "condicion", visible: true },
+                      { id: "nombres", visible: true },
+                    ]}
+                    items={miembros}
+                  />
+                </SpaceBetween>
               ),
             },
             {
               title: "Resumen",
               description:
-                "Breve descripción de los equipos/gabinete adquiridos",
+                "Breve descripción del estudio, en no más de 200 palabras",
               content: (
                 <Tiptap
                   value={formValues.resumen_ejecutivo}
@@ -320,9 +360,23 @@ export default () => {
               isOptional: true,
             },
             {
-              title: "Proceso de instalación",
-              description:
-                "Se expone todo el proceso de instalación del equipo/gabinete",
+              title: "Palabras clave",
+              description: "Sepárelas por comas",
+              content: (
+                <FormField label="Palabras clave" stretch>
+                  <Input
+                    value={formValues.palabras_clave}
+                    onChange={({ detail }) =>
+                      handleChange("palabras_clave", detail.value)
+                    }
+                  />
+                </FormField>
+              ),
+              isOptional: true,
+            },
+            {
+              title: "Introducción",
+              description: "Importancia de los resultados de la investigación",
               content: (
                 <Tiptap
                   value={formValues.infinal1}
@@ -333,8 +387,8 @@ export default () => {
               isOptional: true,
             },
             {
-              title: "Funcionamiento",
-              description: "Describir la situación actual del funcionamiento",
+              title: "Metodologías",
+              description: "Metodología y técnicas de investigación utilizadas",
               content: (
                 <Tiptap
                   value={formValues.infinal2}
@@ -345,8 +399,9 @@ export default () => {
               isOptional: true,
             },
             {
-              title: "Gestión de uso",
-              description: "Describir la situación actual del funcionamiento",
+              title: "Resultados",
+              description:
+                "Capítulos, títulos, subtítulos, tablas, gráficos según corresponda",
               content: (
                 <Tiptap
                   value={formValues.infinal3}
@@ -357,9 +412,7 @@ export default () => {
               isOptional: true,
             },
             {
-              title: "Aplicación práctica e impacto",
-              description:
-                "Señale las aplicaciones prácticas más importantes, el aporte o conclusión principal e impacto para la sociedad",
+              title: "Discusión",
               content: (
                 <Tiptap
                   value={formValues.infinal4}
@@ -370,9 +423,7 @@ export default () => {
               isOptional: true,
             },
             {
-              title: "Impacto - uso",
-              description:
-                "Indicar los resultados del uso del equipo/gabinete como: publicación, tesis o patente, incluir usos en colaboración y/o compartido",
+              title: "Conclusiones",
               content: (
                 <Tiptap
                   value={formValues.infinal5}
@@ -383,18 +434,43 @@ export default () => {
               isOptional: true,
             },
             {
-              title: "Documentos adjuntos",
-              description: "Archivos adjuntos",
+              title: "Recomendaciones",
+              content: (
+                <Tiptap
+                  value={formValues.infinal6}
+                  handleChange={handleChange}
+                  name="infinal6"
+                />
+              ),
+              isOptional: true,
+            },
+            {
+              title: "Referencias bibliográficas",
+              content: (
+                <Tiptap
+                  value={formValues.infinal7}
+                  handleChange={handleChange}
+                  name="infinal7"
+                />
+              ),
+              isOptional: true,
+            },
+            {
+              title: "Anexos",
+              description: "Archivos adjuntos (ninguno debe superar los 6 MB)",
               content: (
                 <Container>
                   <ColumnLayout columns={2}>
                     <FormField
-                      label="Documento de conformidad firmada por el coordinador del GI"
+                      label="Adjuntar archivo digital"
                       description={
-                        files.anexo1 && (
+                        files["informe-PCONFIGI-INFORME"] && (
                           <>
                             Ya ha cargado un{" "}
-                            <Link {...propsEnlaces} href={files.anexo1}>
+                            <Link
+                              {...propsEnlaces}
+                              href={files["informe-PCONFIGI-INFORME"]}
+                            >
                               archivo.
                             </Link>
                           </>
@@ -412,12 +488,18 @@ export default () => {
                       />
                     </FormField>
                     <FormField
-                      label="Imágenes del equipo/gabinete instalado"
+                      label="Reporte de Viabilidad"
+                      info={
+                        <Link variant="info" href="#">
+                          Descargar modelo
+                        </Link>
+                      }
+                      constraintText="Remitir el formulario con los campos completados (ver modelo) a la Dirección de Promoción DGITT-VRIP dp.vrip@unmsm.edu.pe"
                       description={
-                        files.anexo2 && (
+                        files.viabilidad && (
                           <>
                             Ya ha cargado un{" "}
-                            <Link {...propsEnlaces} href={files.anexo2}>
+                            <Link {...propsEnlaces} href={files.viabilidad}>
                               archivo.
                             </Link>
                           </>
@@ -434,111 +516,29 @@ export default () => {
                         }}
                       />
                     </FormField>
-                    <FormField
-                      label="Imágenes de equipos complementarios al equipo/gabinete instalado"
-                      description={
-                        files.anexo3 && (
-                          <>
-                            Ya ha cargado un{" "}
-                            <Link {...propsEnlaces} href={files.anexo3}>
-                              archivo.
-                            </Link>
-                          </>
-                        )
-                      }
-                      stretch
-                      errorText={formErrors.file3}
-                    >
-                      <FileUpload
-                        {...propsRepetidas}
-                        value={formValues.file3}
-                        onChange={({ detail }) => {
-                          handleChange("file3", detail.value);
-                        }}
-                      />
-                    </FormField>
-                    <FormField
-                      label="Formato de control del uso del equipo, incluir uso compartido"
-                      description={
-                        files.anexo4 && (
-                          <>
-                            Ya ha cargado un{" "}
-                            <Link {...propsEnlaces} href={files.anexo4}>
-                              archivo.
-                            </Link>
-                          </>
-                        )
-                      }
-                      stretch
-                      errorText={formErrors.file4}
-                    >
-                      <FileUpload
-                        {...propsRepetidas}
-                        value={formValues.file4}
-                        onChange={({ detail }) => {
-                          handleChange("file4", detail.value);
-                        }}
-                      />
-                    </FormField>
-                    <FormField
-                      label="Plan de manejo de residuos, efluentes y/o emisiones"
-                      description={
-                        files.anexo5 && (
-                          <>
-                            Ya ha cargado un{" "}
-                            <Link {...propsEnlaces} href={files.anexo5}>
-                              archivo.
-                            </Link>
-                          </>
-                        )
-                      }
-                      stretch
-                      errorText={formErrors.file5}
-                    >
-                      <FileUpload
-                        {...propsRepetidas}
-                        value={formValues.file5}
-                        onChange={({ detail }) => {
-                          handleChange("file5", detail.value);
-                        }}
-                      />
-                    </FormField>
-                    <FormField
-                      label="Otros documentos"
-                      description={
-                        files.anexo6 && (
-                          <>
-                            Ya ha cargado un{" "}
-                            <Link {...propsEnlaces} href={files.anexo6}>
-                              archivo.
-                            </Link>
-                          </>
-                        )
-                      }
-                      stretch
-                      errorText={formErrors.file6}
-                    >
-                      <FileUpload
-                        {...propsRepetidas}
-                        value={formValues.file6}
-                        onChange={({ detail }) => {
-                          handleChange("file6", detail.value);
-                        }}
-                      />
-                    </FormField>
                   </ColumnLayout>
                 </Container>
               ),
               isOptional: true,
             },
             {
-              title: "Dificultades",
-              description: "Dificultades encontradas",
+              title: "Aplicación práctica e impacto",
               content: (
                 <Tiptap
-                  value={formValues.infinal6}
+                  value={formValues.infinal9}
                   handleChange={handleChange}
-                  name="infinal6"
+                  name="infinal9"
+                />
+              ),
+              isOptional: true,
+            },
+            {
+              title: "Publicación",
+              content: (
+                <Tiptap
+                  value={formValues.infinal10}
+                  handleChange={handleChange}
+                  name="infinal10"
                 />
               ),
               isOptional: true,
