@@ -90,7 +90,9 @@ const columnDefinitions = [
   {
     id: "deuda",
     header: "Deuda",
-    cell: (item) => item.deuda,
+    cell: (item) => (
+      <Badge color={item.deuda == "Sí" ? "red" : "green"}>{item.deuda}</Badge>
+    ),
     sortingField: "deuda",
   },
 ];
@@ -147,8 +149,8 @@ export default () => {
     const res = await axiosBase.get(
       "admin/estudios/deudaProyecto/listadoProyectos/null/null/null"
     );
-    const data = await res.data;
-    setDistribution(data.data);
+    const data = res.data;
+    setDistribution(data);
     setLoading(false);
   };
 
@@ -157,7 +159,7 @@ export default () => {
     const res = await axiosBase.get(
       "admin/estudios/deudaProyecto/listadoIntegrantes/" + selectedItems[0].id
     );
-    const data = await res.data;
+    const data = res.data;
     setIntegrantes(data.data);
     setLoadingIntegrantes(false);
   };

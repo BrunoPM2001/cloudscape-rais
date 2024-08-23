@@ -300,6 +300,7 @@ export default () => {
       enableKeyboardNavigation
       selectionType="single"
       selectedItems={selectedItems}
+      wrapLines
       onSelectionChange={({ detail }) => setSelectedItems(detail.selectedItems)}
       header={
         <Header
