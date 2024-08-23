@@ -145,7 +145,8 @@ const navItems = [
       {
         type: "link",
         text: "Proyecto de Ciencia, Tecnología, Innovación y Emprendimiento",
-        href: "/investigador/convocatoria/proctie/verificar",
+        // href: "/investigador/convocatoria/proctie/verificar",
+        href: "#",
       },
     ],
   },
@@ -157,7 +158,8 @@ const navItems = [
       {
         type: "link",
         text: "Informe académico",
-        href: "/investigador/informes/informeAcademico",
+        // href: "/investigador/informes/informeAcademico",
+        href: "#",
       },
       {
         type: "link",

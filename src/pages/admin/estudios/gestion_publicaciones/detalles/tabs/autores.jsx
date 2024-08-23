@@ -95,19 +95,25 @@ export default function ({ data, loading, tipo, reload }) {
   const { id } = queryString.parse(location.search);
 
   //  State
+  const [autores, setAutores] = useState(data);
+  const [index, setIndex] = useState(null);
   const [type, setType] = useState("");
   const [optAutor, setOptAutor] = useState([]);
   const [tipoAutor, setTipoAutor] = useState([]);
   const [loadingBtn, setLoadingBtn] = useState(false);
 
   //  Hooks
-  const { items, collectionProps, paginationProps } = useCollection(data, {
-    pagination: { pageSize: 10 },
-    sorting: { defaultState: { sortingColumn: columnDefinitions[0] } },
-    selection: {},
-  });
+  const { items, actions, collectionProps, paginationProps } = useCollection(
+    autores,
+    {
+      pagination: { pageSize: 10 },
+      sorting: { defaultState: { sortingColumn: columnDefinitions[0] } },
+      selection: {},
+    }
+  );
 
   const recalcular = async () => {
+    setLoadingBtn(true);
     const res = await axiosBase.put(
       "admin/estudios/publicaciones/recalcularPuntaje",
       {
@@ -116,6 +122,7 @@ export default function ({ data, loading, tipo, reload }) {
     );
     const data = res.data;
     pushNotification(data.detail, data.message, notifications.length + 1);
+    setLoadingBtn(false);
     reload();
   };
 
@@ -130,6 +137,38 @@ export default function ({ data, loading, tipo, reload }) {
     const data = res.data;
     pushNotification(data.detail, data.message, notifications.length + 1);
     reload();
+  };
+
+  const reOrdenar = async () => {
+    const res = await axiosBase.put("admin/estudios/publicaciones/reOrdenar", {
+      autores,
+      publicacion_id: id,
+    });
+    const data = res.data;
+    pushNotification(data.detail, data.message, notifications.length + 1);
+    reload();
+  };
+
+  const swapAutores = (direction) => {
+    setAutores((prevItems) => {
+      const newItems = [...prevItems]; // Clonar el array
+      if (direction === "next" && index < newItems.length - 1) {
+        // Intercambiar con el siguiente elemento
+        [newItems[index], newItems[index + 1]] = [
+          newItems[index + 1],
+          newItems[index],
+        ];
+        setIndex(index + 1);
+      } else if (direction === "back" && index > 0) {
+        // Intercambiar con el elemento anterior
+        [newItems[index], newItems[index - 1]] = [
+          newItems[index - 1],
+          newItems[index],
+        ];
+        setIndex(index - 1);
+      }
+      return newItems; // Actualizar el estado
+    });
   };
 
   //  Effect
@@ -176,18 +215,54 @@ export default function ({ data, loading, tipo, reload }) {
         enableKeyboardNavigation
         selectionType="single"
         variant="embedded"
+        onRowClick={({ detail }) => {
+          actions.setSelectedItems([detail.item]);
+          setIndex(detail.rowIndex);
+        }}
         header={
           <Header
             counter={"(" + data.length + ")"}
             actions={
               <SpaceBetween direction="horizontal" size="xs">
-                <Button onClick={recalcular} loading={loadingBtn}>
-                  Recalcular puntajes
+                <Button
+                  iconName="angle-up"
+                  disabled={!collectionProps.selectedItems.length}
+                  onClick={() => swapAutores("back")}
+                >
+                  Subir
+                </Button>
+                <Button
+                  iconName="angle-down"
+                  disabled={!collectionProps.selectedItems.length}
+                  onClick={() => swapAutores("next")}
+                >
+                  Bajar
                 </Button>
                 <ButtonDropdown
-                  disabled={
-                    collectionProps.selectedItems.length > 0 ? false : true
-                  }
+                  variant="normal"
+                  loading={loadingBtn}
+                  onItemClick={({ detail }) => {
+                    if (detail.id == "action_2_1") {
+                      recalcular();
+                    } else if (detail.id == "action_2_2") {
+                      reOrdenar();
+                    }
+                  }}
+                  items={[
+                    {
+                      id: "action_2_1",
+                      text: "Recalcular puntajes",
+                    },
+                    {
+                      id: "action_2_2",
+                      text: "Re ordenar",
+                    },
+                  ]}
+                >
+                  Más acciones
+                </ButtonDropdown>
+                <ButtonDropdown
+                  disabled={!collectionProps.selectedItems.length}
                   variant="normal"
                   onItemClick={({ detail }) => {
                     if (detail.id == "action_1_1") {
@@ -229,12 +304,12 @@ export default function ({ data, loading, tipo, reload }) {
                   }}
                   items={tipoAutor}
                 >
-                  Agregar autor
+                  Agregar
                 </ButtonDropdown>
               </SpaceBetween>
             }
           >
-            Autores de la publicación
+            Autores
           </Header>
         }
         pagination={<Pagination {...paginationProps} />}

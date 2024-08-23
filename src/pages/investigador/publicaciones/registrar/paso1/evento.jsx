@@ -50,7 +50,6 @@ const formRules = {
   fecha_publicacion: { required: true },
   fecha_inicio: { required: true },
   fecha_fin: { required: true },
-  ciudad: { required: true },
   pais: { required: true },
 };
 

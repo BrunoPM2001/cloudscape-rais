@@ -38,7 +38,6 @@ const formRules = {
   fecha_publicacion: { required: true },
   pagina_total: { required: true },
   universidad: { required: true },
-  lugar_publicacion: { required: true },
   pais: { required: true },
   palabras_clave: { required: true, noEmpty: true },
 };

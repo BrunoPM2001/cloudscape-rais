@@ -9,10 +9,11 @@ import {
   SpaceBetween,
   Table,
 } from "@cloudscape-design/components";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useCollection } from "@cloudscape-design/collection-hooks";
 import queryString from "query-string";
 import axiosBase from "../../../../../api/axios";
+import NotificationContext from "../../../../../providers/notificationProvider";
 
 const stringOperators = [":", "!:", "=", "!=", "^", "!^"];
 
@@ -81,42 +82,26 @@ const columnDefinitions = [
     cell: (item) => (
       <Badge
         color={
-          item.estado == -1
+          item.estado == "Eliminado"
             ? "red"
-            : item.estado == 1
+            : item.estado == "Registrado"
             ? "green"
-            : item.estado == 2
+            : item.estado == "Observado"
             ? "grey"
-            : item.estado == 5
+            : item.estado == "Enviado"
             ? "blue"
-            : item.estado == 6
+            : item.estado == "En proceso"
             ? "grey"
-            : item.estado == 7
+            : item.estado == "Anulado"
             ? "red"
-            : item.estado == 8
+            : item.estado == "No registrado"
             ? "grey"
-            : item.estado == 9
+            : item.estado == "Duplicado"
             ? "red"
             : "grey"
         }
       >
-        {item.estado == -1
-          ? "Eliminado"
-          : item.estado == 1
-          ? "Registrado"
-          : item.estado == 2
-          ? "Observado"
-          : item.estado == 5
-          ? "Enviado"
-          : item.estado == 6
-          ? "En proceso"
-          : item.estado == 7
-          ? "Anulado"
-          : item.estado == 8
-          ? "No registrado"
-          : item.estado == 9
-          ? "Duplicado"
-          : "Sin estado"}
+        {item.estado}
       </Badge>
     ),
     sortingField: "estado",
@@ -132,11 +117,16 @@ const columnDisplay = [
 ];
 
 export default () => {
+  //  Context
+  const { notifications, pushNotification } = useContext(NotificationContext);
+
   //  Data states
   const [loading, setLoading] = useState(true);
+  const [loadingBtn, setLoadingBtn] = useState(false);
   const [distributions, setDistribution] = useState([]);
   const {
     items,
+    actions,
     filteredItemsCount,
     collectionProps,
     paginationProps,
@@ -192,6 +182,7 @@ export default () => {
       resizableColumns
       enableKeyboardNavigation
       selectionType="single"
+      onRowClick={({ detail }) => actions.setSelectedItems([detail.item])}
       header={
         <Header
           actions={

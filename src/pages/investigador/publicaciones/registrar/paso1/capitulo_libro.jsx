@@ -38,7 +38,6 @@ const initialForm = {
 
 const formRules = {
   titulo: { required: true },
-  doi: { required: true },
   pagina_inicial: { required: true },
   pagina_final: { required: true },
   fecha_publicacion: { required: true },
@@ -49,7 +48,7 @@ const formRules = {
   edicion: { required: true },
   volumen: { required: true },
   pagina_total: { required: true },
-  ciudad: { required: true },
+  ciudad: { required: false },
   pais: { required: true },
   url: { required: true },
 };

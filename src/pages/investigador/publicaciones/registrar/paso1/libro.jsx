@@ -38,7 +38,6 @@ const formRules = {
   isbn: { required: true },
   titulo: { required: true },
   editorial: { required: true },
-  ciudad: { required: true },
   pais: { required: true },
   edicion: { required: true },
   volumen: { required: true },

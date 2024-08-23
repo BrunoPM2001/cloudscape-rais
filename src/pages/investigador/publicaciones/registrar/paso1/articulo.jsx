@@ -48,6 +48,7 @@ const initialForm = {
 };
 
 const formRules = {
+  doi: { required: true },
   art_tipo: { required: true },
   titulo: { required: true },
   palabras_clave: { required: true, noEmpty: true },

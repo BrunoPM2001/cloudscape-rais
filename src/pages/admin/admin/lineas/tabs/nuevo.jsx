@@ -54,7 +54,7 @@ export default () => {
       resolucion: form.resolucion,
     });
     setCreating(false);
-    const data = await res.data;
+    const data = res.data;
     pushNotification(data.detail, data.message, notifications.length + 1);
   };
 
