@@ -2,6 +2,9 @@ import { Suspense, lazy } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { NotificationProvider } from "../providers/notificationProvider.jsx";
 
+const Convocatoria_registro_taller = lazy(() =>
+  import("../pages/investigador/convocatorias/taller/index.jsx")
+);
 const Presentar_informe = lazy(() =>
   import(
     "../pages/investigador/informes/informe_academico/presentacion/index.jsx"
@@ -374,6 +377,15 @@ const routes = createBrowserRouter(
             {
               path: "paso7",
               element: <Registrar_proyecto_paso7 />,
+            },
+          ],
+        },
+        {
+          path: "taller",
+          children: [
+            {
+              path: "",
+              element: <Convocatoria_registro_taller />,
             },
           ],
         },

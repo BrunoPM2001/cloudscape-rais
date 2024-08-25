@@ -148,6 +148,11 @@ const navItems = [
         // href: "/investigador/convocatoria/proctie/verificar",
         href: "#",
       },
+      {
+        type: "link",
+        text: "Talleres de Investigación y Posgrado",
+        href: "/investigador/convocatoria/taller",
+      },
     ],
   },
   {
