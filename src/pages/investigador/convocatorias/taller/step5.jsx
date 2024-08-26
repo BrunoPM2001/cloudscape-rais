@@ -1,9 +1,14 @@
 import {
   Alert,
+  Badge,
   Box,
   Button,
   Container,
+  FileUpload,
+  FormField,
+  Grid,
   Header,
+  Input,
   SpaceBetween,
   Spinner,
   Table,
@@ -32,46 +37,61 @@ const breadcrumbs = [
 
 const columnDefinitions = [
   {
-    id: "actividad",
-    header: "Actividad",
-    cell: (item) => item.actividad,
+    id: "codigo",
+    header: "Código",
+    cell: (item) => item.codigo,
   },
   {
-    id: "fecha_inicio",
-    header: "Fecha de inicio",
-    cell: (item) => item.fecha_inicio,
+    id: "partida",
+    header: "Partida",
+    cell: (item) => item.partida,
   },
   {
-    id: "fecha_fin",
-    header: "Fecha de fin",
-    cell: (item) => item.fecha_fin,
+    id: "tipo",
+    header: "Tipo",
+    cell: (item) => item.tipo,
   },
   {
-    id: "duracion",
-    header: "Duración",
-    cell: (item) => item.duracion,
+    id: "monto",
+    header: "Monto",
+    cell: (item) => item.monto,
   },
 ];
 
 const columnDisplay = [
-  { id: "actividad", visible: true },
-  { id: "fecha_inicio", visible: true },
-  { id: "fecha_fin", visible: true },
-  { id: "duracion", visible: true },
+  { id: "codigo", visible: true },
+  { id: "partida", visible: true },
+  { id: "tipo", visible: true },
+  { id: "monto", visible: true },
 ];
 
-const CANTIDAD_HORAS = 16;
-const CANTIDAD_ACTIVIDADES = 5;
+const propsRepetidas = {
+  showFileLastModified: true,
+  showFileSize: true,
+  showFileThumbnail: true,
+  constraintText:
+    "El documento debe estar firmado, en formato PDF y no debe superar los 6 MB",
+  i18nStrings: {
+    uploadButtonText: (e) => (e ? "Cargar archivos" : "Cargar archivo"),
+    dropzoneText: (e) =>
+      e
+        ? "Arrastre los archivos para cargarlos"
+        : "Arrastre el archivo para cargarlo",
+    removeFileAriaLabel: (e) => `Eliminar archivo ${e + 1}`,
+    errorIconAriaLabel: "Error",
+  },
+  accept: ".pdf",
+};
 
-export default function Convocatoria_registro_taller_4() {
+export default function Convocatoria_registro_taller_5() {
   //  States
   const [loading, setLoading] = useState(true);
-  const [data, setData] = useState({ actividades: [] });
+  const [data, setData] = useState({ partidas: [] });
   const [type, setType] = useState("");
   const [errors, setErrors] = useState([]);
 
   //  Hooks
-  const { items, collectionProps, actions } = useCollection(data.actividades, {
+  const { items, collectionProps, actions } = useCollection(data.partidas, {
     selection: {},
   });
 
@@ -79,7 +99,7 @@ export default function Convocatoria_registro_taller_4() {
   const getData = async () => {
     setLoading(true);
     const res = await axiosBase.get(
-      "investigador/convocatorias/pinvpos/verificar4"
+      "investigador/convocatorias/pinvpos/verificar5"
     );
     const data = res.data;
     setData(data);
@@ -88,26 +108,8 @@ export default function Convocatoria_registro_taller_4() {
   };
 
   const handleNavigate = (index) => {
-    if (index == 4) {
-      let tempErrors = [...errors];
-
-      if (items.length < CANTIDAD_ACTIVIDADES) {
-        tempErrors.push(
-          "Necesita tener al menos " + CANTIDAD_ACTIVIDADES + " actividades"
-        );
-      }
-
-      if (
-        items.reduce((acc, curr) => acc + curr.duracion, 0) < CANTIDAD_HORAS
-      ) {
-        tempErrors.push(
-          "Debe distribuir " + CANTIDAD_HORAS + " horas como mínimo"
-        );
-      }
-      setErrors(tempErrors);
-      if (tempErrors.length == 0) {
-        window.location.href = "paso" + (index + 1);
-      }
+    if (index == 5) {
+      window.location.href = "paso" + (index + 1);
     } else {
       window.location.href = "paso" + (index + 1);
     }
@@ -137,7 +139,7 @@ export default function Convocatoria_registro_taller_4() {
               onNavigate={({ detail }) =>
                 handleNavigate(detail.requestedStepIndex)
               }
-              activeStepIndex={3}
+              activeStepIndex={4}
               isLoadingNextStep={loading}
               onCancel={() => {
                 window.location.href = "../";
@@ -158,17 +160,13 @@ export default function Convocatoria_registro_taller_4() {
                 {
                   title: "Programa del taller",
                   description: "Listado de las actividades del taller",
+                },
+                {
+                  title: "Financiamiento",
+                  info: <Badge color="blue">Monto disponible: S/ 3700</Badge>,
+                  description: "Montos y partidas",
                   content: (
                     <SpaceBetween size="m">
-                      <Container>
-                        <div>
-                          <Box variant="awsui-key-label">Título</Box>
-                          <Box>
-                            Líneas de investigación de los GI en el marco de los
-                            Objetivos de Desarrollo Sostenible (ODS)
-                          </Box>
-                        </div>
-                      </Container>
                       {errors.length > 0 && (
                         <Alert
                           header="No cumple con los siguientes requisitos"
@@ -223,17 +221,8 @@ export default function Convocatoria_registro_taller_4() {
                               </SpaceBetween>
                             }
                           >
-                            Actividades
+                            Partidas
                           </Header>
-                        }
-                        footer={
-                          <Box textAlign="right">
-                            <b>Total de horas:</b>{" "}
-                            {items.reduce(
-                              (acc, curr) => acc + curr.duracion,
-                              0
-                            )}
-                          </Box>
                         }
                         empty={
                           <Box
@@ -247,6 +236,44 @@ export default function Convocatoria_registro_taller_4() {
                           </Box>
                         }
                       />
+                      <Grid
+                        gridDefinition={[
+                          {
+                            colspan: {
+                              default: 8,
+                            },
+                          },
+                          {
+                            colspan: {
+                              default: 4,
+                            },
+                          },
+                        ]}
+                      >
+                        <Container fitHeight>
+                          <FormField
+                            label="Indique el monto según el artículo 8, participación de facultad para cofinanciamiento"
+                            errorText=""
+                            stretch
+                          >
+                            <Input value="0" type="number" />
+                          </FormField>
+                        </Container>
+                        <Container fitHeight>
+                          <Box variant="awsui-key-label">
+                            Subvención económica VRIP
+                          </Box>
+                          <Box
+                            variant="awsui-value-large"
+                            color="text-status-info"
+                          >
+                            S/ 2700
+                          </Box>
+                        </Container>
+                      </Grid>
+                      <FormField label="Documento RD de cofinanciamiento">
+                        <FileUpload {...propsRepetidas} value={[]} />
+                      </FormField>
                       {type == "add" ? (
                         <ModalAddActividad
                           close={() => setType("")}
@@ -270,10 +297,6 @@ export default function Convocatoria_registro_taller_4() {
                       )}
                     </SpaceBetween>
                   ),
-                },
-                {
-                  title: "Financiamiento",
-                  description: "Montos y partidas",
                 },
                 {
                   title: "Instrucciones finales",

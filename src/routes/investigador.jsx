@@ -5,6 +5,9 @@ import { NotificationProvider } from "../providers/notificationProvider.jsx";
 const Convocatoria_registro_taller_6 = lazy(() =>
   import("../pages/investigador/convocatorias/taller/step6.jsx")
 );
+const Convocatoria_registro_taller_5 = lazy(() =>
+  import("../pages/investigador/convocatorias/taller/step5.jsx")
+);
 const Convocatoria_registro_taller_4 = lazy(() =>
   import("../pages/investigador/convocatorias/taller/step4.jsx")
 );
@@ -410,6 +413,10 @@ const routes = createBrowserRouter(
             {
               path: "paso4",
               element: <Convocatoria_registro_taller_4 />,
+            },
+            {
+              path: "paso5",
+              element: <Convocatoria_registro_taller_5 />,
             },
             {
               path: "paso6",
