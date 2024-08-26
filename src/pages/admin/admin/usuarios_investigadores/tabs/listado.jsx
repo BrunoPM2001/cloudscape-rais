@@ -150,7 +150,6 @@ const columnDisplay = [
 export default () => {
   //  States
   const [loading, setLoading] = useState(true);
-  const [selectedItems, setSelectedItems] = useState([]);
   const [distributions, setDistribution] = useState([]);
   const {
     items,
@@ -181,22 +180,10 @@ export default () => {
     sorting: { defaultState: { sortingColumn: columnDefinitions[0] } },
     selection: {},
   });
-  const [enableBtn, setEnableBtn] = useState(true);
   const [createVisible, setCreateVisible] = useState(false);
   const [passVisible, setPassVisible] = useState(false);
   const [deleteVisible, setDeleteVisible] = useState(false);
   const [temporalVisible, setTemporalVisible] = useState(false);
-  const [editForm, setEditForm] = useState({
-    facultad: null,
-    codigo: null,
-    paterno: null,
-    materno: null,
-    nombres: null,
-    sexo: null,
-    email: null,
-    doc_numero: null,
-    estado: null,
-  });
 
   //  Functions
   const getData = async () => {
@@ -214,14 +201,6 @@ export default () => {
     getData();
   }, []);
 
-  useEffect(() => {
-    if (selectedItems.length > 0) {
-      setEnableBtn(true);
-    } else {
-      setEnableBtn(false);
-    }
-  }, [selectedItems]);
-
   return (
     <>
       <Table
@@ -235,21 +214,14 @@ export default () => {
         resizableColumns
         enableKeyboardNavigation
         selectionType="single"
-        selectedItems={selectedItems}
-        onSelectionChange={({ detail }) =>
-          setSelectedItems(detail.selectedItems)
-        }
+        onRowClick={({ detail }) => actions.setSelectedItems([detail.item])}
         header={
           <Header
-            counter={
-              selectedItems.length
-                ? "(" + selectedItems.length + "/" + items.length + ")"
-                : "(" + items.length + ")"
-            }
+            counter={"(" + distributions.length + ")"}
             actions={
               <SpaceBetween direction="horizontal" size="xs">
                 <ButtonDropdown
-                  disabled={!enableBtn}
+                  disabled={!collectionProps.selectedItems.length}
                   onItemClick={({ detail }) => {
                     if (detail.id == "action_1") {
                       setPassVisible(true);
@@ -320,14 +292,14 @@ export default () => {
         <ResetPasswordModal
           visible={passVisible}
           setVisible={setPassVisible}
-          item={selectedItems}
+          item={collectionProps.selectedItems}
         />
       )}
       {deleteVisible && (
         <DeleteModal
           visible={deleteVisible}
           setVisible={setDeleteVisible}
-          item={selectedItems}
+          item={collectionProps.selectedItems}
           reload={getData}
         />
       )}
@@ -335,7 +307,7 @@ export default () => {
         <TemporalModal
           visible={temporalVisible}
           setVisible={setTemporalVisible}
-          item={selectedItems}
+          item={collectionProps.selectedItems}
         />
       )}
     </>

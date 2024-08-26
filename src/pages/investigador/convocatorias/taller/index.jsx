@@ -1,4 +1,5 @@
 import {
+  Alert,
   Box,
   ColumnLayout,
   Container,
@@ -9,9 +10,9 @@ import {
   Wizard,
 } from "@cloudscape-design/components";
 import BaseLayout from "../../components/baseLayout.jsx";
-import { useContext, useEffect, useState } from "react";
-import NotificationContext from "../../../../providers/notificationProvider.jsx";
+import { useEffect, useState } from "react";
 import { useFormValidation } from "../../../../hooks/useFormValidation.js";
+import axiosBase from "../../../../api/axios.js";
 
 const breadcrumbs = [
   {
@@ -49,15 +50,13 @@ const initialForm = {
 };
 
 const formRules = {
-  file: { required: true },
+  file: { required: true, isFile: true, maxSize: 6 * 1024 * 1024 },
 };
 
 export default function Convocatoria_registro_taller() {
-  //  Context
-  const { notifications, pushNotification } = useContext(NotificationContext);
-
   //  States
   const [loading, setLoading] = useState(true);
+  const [data, setData] = useState({});
 
   //  Hooks
   const { formValues, formErrors, handleChange, validateForm } =
@@ -66,9 +65,18 @@ export default function Convocatoria_registro_taller() {
   //  Functions
   const getData = async () => {
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-    }, 1000);
+    const res = await axiosBase.get(
+      "investigador/convocatorias/pinvpos/verificar"
+    );
+    const data = res.data;
+    setData(data);
+    setLoading(false);
+  };
+
+  const siguiente = async () => {
+    if (validateForm()) {
+      console.log("next");
+    }
   };
 
   useEffect(() => {
@@ -83,88 +91,121 @@ export default function Convocatoria_registro_taller() {
       en general."
       disableOverlap
     >
-      <Wizard
-        onNavigate={({ detail }) => handleNavigate(detail)}
-        activeStepIndex={0}
-        isLoadingNextStep={loading}
-        onCancel={() => {
-          window.location.href = "../" + tipo;
-        }}
-        steps={[
-          {
-            title: "Información general del taller",
-            description: "Información general",
-            content: (
-              <SpaceBetween size="m">
-                <Container>
-                  <div>
-                    <Box variant="awsui-key-label">Título</Box>
-                    {loading ? <Spinner /> : <Box>Título</Box>}
-                  </div>
-                </Container>
-                <Container>
-                  <ColumnLayout columns={2}>
-                    <SpaceBetween size="xs">
-                      <div>
-                        <Box variant="awsui-key-label">Responsable</Box>
-                        {loading ? (
-                          <Spinner />
-                        ) : (
-                          <Box>Aldo Javier Guzman Duxtan</Box>
-                        )}
-                      </div>
-                      <div>
-                        <Box variant="awsui-key-label">DNI</Box>
-                        {loading ? <Spinner /> : <Box>72458762</Box>}
-                      </div>
-                      <div>
-                        <Box variant="awsui-key-label">Correo electrónico</Box>
-                        {loading ? (
-                          <Spinner />
-                        ) : (
-                          <Box>alefran2020@gmail.com</Box>
-                        )}
-                      </div>
+      {loading ? (
+        <Box>
+          <br />
+          <Spinner /> Verificando información
+        </Box>
+      ) : (
+        <>
+          {data.estado ? (
+            <Wizard
+              onNavigate={siguiente}
+              activeStepIndex={0}
+              isLoadingNextStep={loading}
+              onCancel={() => {
+                window.location.href = "../" + tipo;
+              }}
+              steps={[
+                {
+                  title: "Información general del taller",
+                  description: "Información general",
+                  content: (
+                    <SpaceBetween size="m">
+                      <Container>
+                        <div>
+                          <Box variant="awsui-key-label">Título</Box>
+                          <Box>
+                            Líneas de investigación de los GI en el marco de los
+                            Objetivos de Desarrollo Sostenible (ODS)
+                          </Box>
+                        </div>
+                      </Container>
+                      <Container>
+                        <ColumnLayout columns={2}>
+                          <SpaceBetween size="xs">
+                            <div>
+                              <Box variant="awsui-key-label">Responsable</Box>
+
+                              <Box>{data.datos.responsable}</Box>
+                            </div>
+                            <div>
+                              <Box variant="awsui-key-label">DNI</Box>
+                              <Box>{data.datos.doc_numero}</Box>
+                            </div>
+                            <div>
+                              <Box variant="awsui-key-label">
+                                Correo electrónico
+                              </Box>
+                              <Box>alefran2020@gmail.com</Box>
+                            </div>
+                          </SpaceBetween>
+                          <SpaceBetween size="xs">
+                            <div>
+                              <Box variant="awsui-key-label">Facultad</Box>
+                              <Box>{data.datos.facultad}</Box>
+                            </div>
+                            <div>
+                              <Box variant="awsui-key-label">
+                                Código docente
+                              </Box>
+                              <Box>{data.datos.codigo}</Box>
+                            </div>
+                            <div>
+                              <Box variant="awsui-key-label">
+                                Categoría y clase
+                              </Box>
+                              <Box>{data.datos.tipo}</Box>
+                            </div>
+                          </SpaceBetween>
+                        </ColumnLayout>
+                      </Container>
+                      <Container>
+                        <FormField
+                          label="Resolución de designación oficial"
+                          errorText={formErrors.file}
+                          stretch
+                        >
+                          <FileUpload
+                            {...propsRepetidas}
+                            value={formValues.file}
+                            onChange={({ detail }) =>
+                              handleChange("file", detail.value)
+                            }
+                          />
+                        </FormField>
+                      </Container>
                     </SpaceBetween>
-                    <SpaceBetween size="xs">
-                      <div>
-                        <Box variant="awsui-key-label">Facultad</Box>
-                        {loading ? <Spinner /> : <Box></Box>}
-                      </div>
-                      <div>
-                        <Box variant="awsui-key-label">Código docente</Box>
-                        {loading ? <Spinner /> : <Box></Box>}
-                      </div>
-                      <div>
-                        <Box variant="awsui-key-label">Categoría y clase</Box>
-                        {loading ? <Spinner /> : <Box></Box>}
-                      </div>
-                    </SpaceBetween>
-                  </ColumnLayout>
-                </Container>
-                <Container>
-                  <FormField
-                    label="Resolución de designación oficial"
-                    errorText={formErrors.file}
-                    stretch
-                  >
-                    <FileUpload {...propsRepetidas} value={formValues.file} />
-                  </FormField>
-                </Container>
-              </SpaceBetween>
-            ),
-          },
-          {
-            title: "Resultado de proyecto financiado",
-          },
-          {
-            title: "Autores de la publicación",
-          },
-          {
-            title: "Envío de publicación",
-          },
-        ]}
-      />
+                  ),
+                },
+                {
+                  title: "Comité organizador del taller",
+                  description: "Listado de integrantes para el taller",
+                },
+                {
+                  title: "Plan de trabajo",
+                  description: "Justificación, objetivos y metas",
+                },
+                {
+                  title: "Envío de publicación",
+                },
+              ]}
+            />
+          ) : (
+            <>
+              <br />
+              <Alert
+                header="No puede registrarse en esta convocatoria"
+                type="warning"
+              >
+                {data.message.map((item) => {
+                  return <li>{item}</li>;
+                })}
+              </Alert>
+            </>
+          )}
+        </>
+      )}
     </BaseLayout>
   );
 }
