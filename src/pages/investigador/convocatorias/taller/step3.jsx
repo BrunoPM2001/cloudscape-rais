@@ -29,17 +29,20 @@ const breadcrumbs = [
 
 const initialForm = {
   justificacion: "",
-  objetivos: "",
+  objetivo: "",
   metas: "",
 };
 
 const formRules = {
-  file: { required: true },
+  justificacion: { required: true },
+  objetivo: { required: true },
+  metas: { required: true },
 };
 
 export default function Convocatoria_registro_taller_3() {
   //  States
   const [loading, setLoading] = useState(true);
+  const [loadingBtn, setLoadingBtn] = useState(false);
   const [data, setData] = useState({});
 
   //  Hooks
@@ -50,16 +53,32 @@ export default function Convocatoria_registro_taller_3() {
   const getData = async () => {
     setLoading(true);
     const res = await axiosBase.get(
-      "investigador/convocatorias/pinvpos/verificar2"
+      "investigador/convocatorias/pinvpos/verificar3"
     );
     const data = res.data;
+    if (data.detalles) {
+      handleChange("justificacion", data.detalles.justificacion);
+      handleChange("objetivo", data.detalles.objetivo);
+      handleChange("metas", data.detalles.metas);
+    }
     setData(data);
     setLoading(false);
   };
 
-  const siguiente = async () => {
-    if (validateForm()) {
-      console.log("next");
+  const handleNavigate = async (index) => {
+    if (index == 3) {
+      if (validateForm()) {
+        setLoadingBtn(true);
+        const res = await axiosBase.post(
+          "investigador/convocatorias/pinvpos/registrar3",
+          { ...formValues, id: data.datos.proyecto_id }
+        );
+        const info = res.data;
+        window.location.href = "paso4";
+        setLoadingBtn(false);
+      }
+    } else {
+      window.location.href = "paso" + (index + 1);
     }
   };
 
@@ -84,9 +103,11 @@ export default function Convocatoria_registro_taller_3() {
         <>
           {data.estado ? (
             <Wizard
-              onNavigate={siguiente}
-              activeStepIndex={1}
-              isLoadingNextStep={loading}
+              onNavigate={({ detail }) =>
+                handleNavigate(detail.requestedStepIndex)
+              }
+              activeStepIndex={2}
+              isLoadingNextStep={loadingBtn}
               onCancel={() => {
                 window.location.href = "../" + tipo;
               }}
@@ -119,6 +140,7 @@ export default function Convocatoria_registro_taller_3() {
                         stretch
                       >
                         <Textarea
+                          placeholder="Describa la justificación del taller"
                           value={formValues.justificacion}
                           onChange={({ detail }) =>
                             handleChange("justificacion", detail.value)
@@ -127,13 +149,14 @@ export default function Convocatoria_registro_taller_3() {
                       </FormField>
                       <FormField
                         label="Objetivos generales y específicos (según Anexo 1 - III B.)"
-                        errorText={formErrors.objetivos}
+                        errorText={formErrors.objetivo}
                         stretch
                       >
                         <Textarea
-                          value={formValues.objetivos}
+                          placeholder="Describa los objetivos del taller"
+                          value={formValues.objetivo}
                           onChange={({ detail }) =>
-                            handleChange("objetivos", detail.value)
+                            handleChange("objetivo", detail.value)
                           }
                         />
                       </FormField>
@@ -143,6 +166,7 @@ export default function Convocatoria_registro_taller_3() {
                         stretch
                       >
                         <Textarea
+                          placeholder="Describa las metas del taller"
                           value={formValues.metas}
                           onChange={({ detail }) =>
                             handleChange("metas", detail.value)
@@ -153,7 +177,16 @@ export default function Convocatoria_registro_taller_3() {
                   ),
                 },
                 {
-                  title: "Envío de publicación",
+                  title: "Programa del taller",
+                  description: "Listado de las actividades del taller",
+                },
+                {
+                  title: "Financiamiento",
+                  description: "Montos y partidas",
+                },
+                {
+                  title: "Instrucciones finales",
+                  description: "Reporte y envío de la propuesta",
                 },
               ]}
             />

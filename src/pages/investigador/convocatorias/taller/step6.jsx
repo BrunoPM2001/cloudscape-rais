@@ -1,6 +1,7 @@
 import {
   Alert,
   Box,
+  Button,
   Container,
   Header,
   SpaceBetween,
@@ -11,8 +12,10 @@ import {
 import BaseLayout from "../../components/baseLayout.jsx";
 import { useEffect, useState } from "react";
 import axiosBase from "../../../../api/axios.js";
-import { useLocation } from "react-router-dom";
-import queryString from "query-string";
+import ModalAddActividad from "./components/modalAddActividad.jsx";
+import { useCollection } from "@cloudscape-design/collection-hooks";
+import ModalEditActividad from "./components/modalEditActividad.jsx";
+import ModalDeleteActividad from "./components/modalDeleteActividad.jsx";
 
 const breadcrumbs = [
   {
@@ -29,80 +32,50 @@ const breadcrumbs = [
 
 const columnDefinitions = [
   {
-    id: "id",
-    header: "Id",
-    cell: (item) => item.id,
+    id: "actividad",
+    header: "Actividad",
+    cell: (item) => item.actividad,
   },
   {
-    id: "condicion",
-    header: "Condición",
-    cell: (item) => item.condicion,
+    id: "fecha_inicio",
+    header: "Fecha de inicio",
+    cell: (item) => item.fecha_inicio,
   },
   {
-    id: "cargo",
-    header: "Cargo",
-    cell: (item) => item.cargo,
+    id: "fecha_fin",
+    header: "Fecha de fin",
+    cell: (item) => item.fecha_fin,
   },
   {
-    id: "apellido1",
-    header: "Apellido paterno",
-    cell: (item) => item.apellido1,
-  },
-  {
-    id: "apellido2",
-    header: "Apellido materno",
-    cell: (item) => item.apellido2,
-  },
-  {
-    id: "nombres",
-    header: "Nombres",
-    cell: (item) => item.nombres,
-  },
-  {
-    id: "doc_numero",
-    header: "Dni",
-    cell: (item) => item.doc_numero,
-  },
-  {
-    id: "codigo",
-    header: "Código docente",
-    cell: (item) => item.codigo,
-  },
-  {
-    id: "email3",
-    header: "Correo institucional",
-    cell: (item) => item.email3,
-  },
-  {
-    id: "facultad",
-    header: "Facultad",
-    cell: (item) => item.facultad,
+    id: "duracion",
+    header: "Duración",
+    cell: (item) => item.duracion,
   },
 ];
 
 const columnDisplay = [
-  { id: "id", visible: true },
-  { id: "condicion", visible: true },
-  { id: "cargo", visible: true },
-  { id: "apellido1", visible: true },
-  { id: "apellido2", visible: true },
-  { id: "nombres", visible: true },
-  { id: "doc_numero", visible: true },
-  { id: "codigo", visible: true },
-  { id: "email3", visible: true },
-  { id: "facultad", visible: true },
+  { id: "actividad", visible: true },
+  { id: "fecha_inicio", visible: true },
+  { id: "fecha_fin", visible: true },
+  { id: "duracion", visible: true },
 ];
 
-export default function Convocatoria_registro_taller_2() {
+export default function Convocatoria_registro_taller_4() {
   //  States
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState({});
+  const [type, setType] = useState("");
+
+  //  Hooks
+  const { items, collectionProps, actions } = useCollection([], {
+    selection: {},
+  });
 
   //  Functions
   const getData = async () => {
     setLoading(true);
     const res = await axiosBase.get(
-      "investigador/convocatorias/pinvpos/verificar2"
+      "investigador/convocatorias/pinvpos/verificar4"
     );
     const data = res.data;
     setData(data);
@@ -137,11 +110,12 @@ export default function Convocatoria_registro_taller_2() {
               onNavigate={({ detail }) =>
                 handleNavigate(detail.requestedStepIndex)
               }
-              activeStepIndex={1}
+              activeStepIndex={5}
               isLoadingNextStep={loading}
               onCancel={() => {
-                window.location.href = "../" + tipo;
+                window.location.href = "../";
               }}
+              submitButtonText="Enviar propuesta"
               steps={[
                 {
                   title: "Información general del taller",
@@ -150,38 +124,6 @@ export default function Convocatoria_registro_taller_2() {
                 {
                   title: "Comité organizador del taller",
                   description: "Listado de integrantes para el taller",
-                  content: (
-                    <SpaceBetween size="m">
-                      <Container>
-                        <div>
-                          <Box variant="awsui-key-label">Título</Box>
-                          <Box>
-                            Líneas de investigación de los GI en el marco de los
-                            Objetivos de Desarrollo Sostenible (ODS)
-                          </Box>
-                        </div>
-                      </Container>
-                      <Table
-                        columnDefinitions={columnDefinitions}
-                        columnDisplay={columnDisplay}
-                        header={<Header variant="h3">Miembros</Header>}
-                        wrapLines
-                        resizableColumns
-                        items={[]}
-                        empty={
-                          <Box
-                            margin={{ vertical: "xs" }}
-                            textAlign="center"
-                            color="inherit"
-                          >
-                            <SpaceBetween size="m">
-                              <b>No hay registros...</b>
-                            </SpaceBetween>
-                          </Box>
-                        }
-                      />
-                    </SpaceBetween>
-                  ),
                 },
                 {
                   title: "Plan de trabajo",
@@ -198,6 +140,17 @@ export default function Convocatoria_registro_taller_2() {
                 {
                   title: "Instrucciones finales",
                   description: "Reporte y envío de la propuesta",
+                  content: (
+                    <SpaceBetween size="m">
+                      <Alert
+                        header="Declaración jurada"
+                        action={<Button variant="primary">Reporte</Button>}
+                      >
+                        Declaro bajo juramento que toda la información
+                        consignada en este formulario es verídica
+                      </Alert>
+                    </SpaceBetween>
+                  ),
                 },
               ]}
             />

@@ -2,8 +2,20 @@ import { Suspense, lazy } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { NotificationProvider } from "../providers/notificationProvider.jsx";
 
-const Convocatoria_registro_taller = lazy(() =>
-  import("../pages/investigador/convocatorias/taller/index.jsx")
+const Convocatoria_registro_taller_6 = lazy(() =>
+  import("../pages/investigador/convocatorias/taller/step6.jsx")
+);
+const Convocatoria_registro_taller_4 = lazy(() =>
+  import("../pages/investigador/convocatorias/taller/step4.jsx")
+);
+const Convocatoria_registro_taller_3 = lazy(() =>
+  import("../pages/investigador/convocatorias/taller/step3.jsx")
+);
+const Convocatoria_registro_taller_2 = lazy(() =>
+  import("../pages/investigador/convocatorias/taller/step2.jsx")
+);
+const Convocatoria_registro_taller_1 = lazy(() =>
+  import("../pages/investigador/convocatorias/taller/step1.jsx")
 );
 const Presentar_informe = lazy(() =>
   import(
@@ -384,8 +396,24 @@ const routes = createBrowserRouter(
           path: "taller",
           children: [
             {
-              path: "",
-              element: <Convocatoria_registro_taller />,
+              path: "paso1",
+              element: <Convocatoria_registro_taller_1 />,
+            },
+            {
+              path: "paso2",
+              element: <Convocatoria_registro_taller_2 />,
+            },
+            {
+              path: "paso3",
+              element: <Convocatoria_registro_taller_3 />,
+            },
+            {
+              path: "paso4",
+              element: <Convocatoria_registro_taller_4 />,
+            },
+            {
+              path: "paso6",
+              element: <Convocatoria_registro_taller_6 />,
             },
           ],
         },

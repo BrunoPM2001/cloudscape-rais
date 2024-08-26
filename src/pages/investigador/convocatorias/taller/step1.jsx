@@ -5,14 +5,17 @@ import {
   Container,
   FileUpload,
   FormField,
+  Link,
   SpaceBetween,
   Spinner,
   Wizard,
 } from "@cloudscape-design/components";
 import BaseLayout from "../../components/baseLayout.jsx";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useFormValidation } from "../../../../hooks/useFormValidation.js";
 import axiosBase from "../../../../api/axios.js";
+import queryString from "query-string";
+import NotificationContext from "../../../../providers/notificationProvider.jsx";
 
 const breadcrumbs = [
   {
@@ -50,12 +53,16 @@ const initialForm = {
 };
 
 const formRules = {
-  file: { required: true, isFile: true, maxSize: 6 * 1024 * 1024 },
+  file: { isFile: true, maxSize: 6 * 1024 * 1024 },
 };
 
-export default function Convocatoria_registro_taller() {
+export default function Convocatoria_registro_taller_1() {
+  //  Context
+  const { notifications, pushNotification } = useContext(NotificationContext);
+
   //  States
   const [loading, setLoading] = useState(true);
+  const [loadingBtn, setLoadingBtn] = useState(false);
   const [data, setData] = useState({});
 
   //  Hooks
@@ -75,7 +82,21 @@ export default function Convocatoria_registro_taller() {
 
   const siguiente = async () => {
     if (validateForm()) {
-      console.log("next");
+      setLoadingBtn(true);
+      const form = new FormData();
+      form.append("id", data.datos.proyecto_id);
+      form.append("file", formValues.file[0]);
+      const res = await axiosBase.post(
+        "investigador/convocatorias/pinvpos/registrar1",
+        form
+      );
+      const info = res.data;
+      if (info.message == "success") {
+        window.location.href = "paso2";
+      } else {
+        pushNotification(info.detail, info.message, notifications.length + 1);
+      }
+      setLoadingBtn(false);
     }
   };
 
@@ -102,7 +123,7 @@ export default function Convocatoria_registro_taller() {
             <Wizard
               onNavigate={siguiente}
               activeStepIndex={0}
-              isLoadingNextStep={loading}
+              isLoadingNextStep={loadingBtn}
               onCancel={() => {
                 window.location.href = "../" + tipo;
               }}
@@ -163,6 +184,20 @@ export default function Convocatoria_registro_taller() {
                       <Container>
                         <FormField
                           label="Resolución de designación oficial"
+                          description={
+                            data.datos.url && (
+                              <>
+                                Ya ha cargado un{" "}
+                                <Link
+                                  href={data.datos.url}
+                                  external
+                                  fontSize="body-s"
+                                >
+                                  archivo.
+                                </Link>
+                              </>
+                            )
+                          }
                           errorText={formErrors.file}
                           stretch
                         >
@@ -187,7 +222,16 @@ export default function Convocatoria_registro_taller() {
                   description: "Justificación, objetivos y metas",
                 },
                 {
-                  title: "Envío de publicación",
+                  title: "Programa del taller",
+                  description: "Listado de las actividades del taller",
+                },
+                {
+                  title: "Financiamiento",
+                  description: "Montos y partidas",
+                },
+                {
+                  title: "Instrucciones finales",
+                  description: "Reporte y envío de la propuesta",
                 },
               ]}
             />
