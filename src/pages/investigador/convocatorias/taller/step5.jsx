@@ -9,18 +9,21 @@ import {
   Grid,
   Header,
   Input,
+  Link,
   SpaceBetween,
   Spinner,
   Table,
   Wizard,
 } from "@cloudscape-design/components";
 import BaseLayout from "../../components/baseLayout.jsx";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axiosBase from "../../../../api/axios.js";
-import ModalAddActividad from "./components/modalAddActividad.jsx";
 import { useCollection } from "@cloudscape-design/collection-hooks";
-import ModalEditActividad from "./components/modalEditActividad.jsx";
-import ModalDeleteActividad from "./components/modalDeleteActividad.jsx";
+import ModalAddPartida from "./components/modalAddPartida.jsx";
+import { useFormValidation } from "../../../../hooks/useFormValidation.js";
+import ModalDeletePartida from "./components/modalDeletePartida.jsx";
+import NotificationContext from "../../../../providers/notificationProvider.jsx";
+import ModalEditPartida from "./components/modalEditPartida.jsx";
 
 const breadcrumbs = [
   {
@@ -83,17 +86,33 @@ const propsRepetidas = {
   accept: ".pdf",
 };
 
+const initialForm = {
+  monto: "0",
+  file: [],
+};
+
+const formRules = {
+  monto: { required: true, moreEqualThan: 3360 },
+  file: { isFile: true, maxSize: 6 * 1024 * 1024 },
+};
+
 export default function Convocatoria_registro_taller_5() {
+  //  Context
+  const { notifications, pushNotification } = useContext(NotificationContext);
+
   //  States
   const [loading, setLoading] = useState(true);
-  const [data, setData] = useState({ partidas: [] });
+  const [loadingBtn, setLoadingBtn] = useState(false);
+  const [data, setData] = useState({ presupuesto: [], partidas: [] });
   const [type, setType] = useState("");
   const [errors, setErrors] = useState([]);
 
   //  Hooks
-  const { items, collectionProps, actions } = useCollection(data.partidas, {
+  const { items, collectionProps, actions } = useCollection(data.presupuesto, {
     selection: {},
   });
+  const { formValues, formErrors, handleChange, validateForm } =
+    useFormValidation(initialForm, formRules);
 
   //  Functions
   const getData = async () => {
@@ -102,14 +121,32 @@ export default function Convocatoria_registro_taller_5() {
       "investigador/convocatorias/pinvpos/verificar5"
     );
     const data = res.data;
+    handleChange("monto", data.datos.monto);
     setData(data);
     setErrors([]);
     setLoading(false);
   };
 
-  const handleNavigate = (index) => {
+  const handleNavigate = async (index) => {
     if (index == 5) {
-      window.location.href = "paso" + (index + 1);
+      if (validateForm()) {
+        setLoadingBtn(true);
+        const form = new FormData();
+        form.append("id", data.datos.proyecto_id);
+        form.append("monto", formValues.monto);
+        form.append("file", formValues.file[0]);
+        const res = await axiosBase.post(
+          "investigador/convocatorias/pinvpos/registrar5",
+          form
+        );
+        const info = res.data;
+        if (info.message == "error") {
+          pushNotification(info.detail, info.message, notifications.length + 1);
+        } else {
+          window.location.href = "paso" + (index + 1);
+        }
+        setLoadingBtn(false);
+      }
     } else {
       window.location.href = "paso" + (index + 1);
     }
@@ -140,7 +177,7 @@ export default function Convocatoria_registro_taller_5() {
                 handleNavigate(detail.requestedStepIndex)
               }
               activeStepIndex={4}
-              isLoadingNextStep={loading}
+              isLoadingNextStep={loadingBtn}
               onCancel={() => {
                 window.location.href = "../";
               }}
@@ -163,7 +200,16 @@ export default function Convocatoria_registro_taller_5() {
                 },
                 {
                   title: "Financiamiento",
-                  info: <Badge color="blue">Monto disponible: S/ 3700</Badge>,
+                  info: (
+                    <Badge color="blue">
+                      Monto disponible: S/{" "}
+                      {3360 -
+                        items.reduce(
+                          (acc, curr) => acc + Number(curr.monto),
+                          0
+                        )}
+                    </Badge>
+                  ),
                   description: "Montos y partidas",
                   content: (
                     <SpaceBetween size="m">
@@ -213,6 +259,13 @@ export default function Convocatoria_registro_taller_5() {
                                   Editar
                                 </Button>
                                 <Button
+                                  disabled={
+                                    3360 ==
+                                    items.reduce(
+                                      (acc, curr) => acc + Number(curr.monto),
+                                      0
+                                    )
+                                  }
                                   variant="primary"
                                   onClick={() => setType("add")}
                                 >
@@ -253,10 +306,16 @@ export default function Convocatoria_registro_taller_5() {
                         <Container fitHeight>
                           <FormField
                             label="Indique el monto según el artículo 8, participación de facultad para cofinanciamiento"
-                            errorText=""
+                            errorText={formErrors.monto}
                             stretch
                           >
-                            <Input value="0" type="number" />
+                            <Input
+                              value={formValues.monto}
+                              type="number"
+                              onChange={({ detail }) =>
+                                handleChange("monto", detail.value)
+                              }
+                            />
                           </FormField>
                         </Container>
                         <Container fitHeight>
@@ -271,24 +330,65 @@ export default function Convocatoria_registro_taller_5() {
                           </Box>
                         </Container>
                       </Grid>
-                      <FormField label="Documento RD de cofinanciamiento">
-                        <FileUpload {...propsRepetidas} value={[]} />
+                      <FormField
+                        label="Documento RD de cofinanciamiento"
+                        errorText={formErrors.file}
+                        description={
+                          data.datos.url && (
+                            <>
+                              Ya ha cargado un{" "}
+                              <Link
+                                href={data.datos.url}
+                                external
+                                fontSize="body-s"
+                              >
+                                archivo.
+                              </Link>
+                            </>
+                          )
+                        }
+                        stretch
+                      >
+                        <FileUpload
+                          {...propsRepetidas}
+                          value={formValues.file}
+                          onChange={({ detail }) =>
+                            handleChange("file", detail.value)
+                          }
+                        />
                       </FormField>
                       {type == "add" ? (
-                        <ModalAddActividad
+                        <ModalAddPartida
                           close={() => setType("")}
                           reload={getData}
                           id={data.datos.proyecto_id}
+                          options={data.partidas}
+                          limit={
+                            3360 -
+                            items.reduce(
+                              (acc, curr) => acc + Number(curr.monto),
+                              0
+                            )
+                          }
                         />
                       ) : type == "update" ? (
-                        <ModalEditActividad
+                        <ModalEditPartida
                           close={() => setType("")}
                           reload={getData}
                           item={collectionProps.selectedItems[0]}
+                          options={data.partidas}
+                          limit={
+                            3360 -
+                            items.reduce(
+                              (acc, curr) => acc + Number(curr.monto),
+                              0
+                            ) +
+                            Number(collectionProps.selectedItems[0].monto)
+                          }
                         />
                       ) : (
                         type == "delete" && (
-                          <ModalDeleteActividad
+                          <ModalDeletePartida
                             close={() => setType("")}
                             reload={getData}
                             id={collectionProps.selectedItems[0].id}

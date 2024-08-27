@@ -36,6 +36,9 @@ const useFormValidation = (initialState, validationRules, groupRules = []) => {
       if (rule.lessThan && value > rule.lessThan) {
         return "Límite superado";
       }
+      if (rule.moreEqualThan && value < rule.moreEqualThan) {
+        return "El valor tiene que ser mayor o igual a " + rule.moreEqualThan;
+      }
     }
 
     return true;

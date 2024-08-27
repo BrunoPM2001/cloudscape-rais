@@ -151,7 +151,7 @@ const navItems = [
       {
         type: "link",
         text: "Talleres de Investigación y Posgrado",
-        href: "/investigador/convocatoria/taller",
+        href: "/investigador/convocatoria/taller/paso1",
       },
     ],
   },

@@ -11,8 +11,6 @@ import {
 import BaseLayout from "../../components/baseLayout.jsx";
 import { useEffect, useState } from "react";
 import axiosBase from "../../../../api/axios.js";
-import { useLocation } from "react-router-dom";
-import queryString from "query-string";
 
 const breadcrumbs = [
   {

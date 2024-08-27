@@ -5,7 +5,6 @@ import {
   FormField,
   SpaceBetween,
   Spinner,
-  Table,
   Textarea,
   Wizard,
 } from "@cloudscape-design/components";
@@ -69,11 +68,10 @@ export default function Convocatoria_registro_taller_3() {
     if (index == 3) {
       if (validateForm()) {
         setLoadingBtn(true);
-        const res = await axiosBase.post(
-          "investigador/convocatorias/pinvpos/registrar3",
-          { ...formValues, id: data.datos.proyecto_id }
-        );
-        const info = res.data;
+        await axiosBase.post("investigador/convocatorias/pinvpos/registrar3", {
+          ...formValues,
+          id: data.datos.proyecto_id,
+        });
         window.location.href = "paso4";
         setLoadingBtn(false);
       }

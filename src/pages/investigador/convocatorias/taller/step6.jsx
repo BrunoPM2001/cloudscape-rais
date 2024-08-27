@@ -2,20 +2,14 @@ import {
   Alert,
   Box,
   Button,
-  Container,
-  Header,
   SpaceBetween,
   Spinner,
-  Table,
   Wizard,
 } from "@cloudscape-design/components";
 import BaseLayout from "../../components/baseLayout.jsx";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axiosBase from "../../../../api/axios.js";
-import ModalAddActividad from "./components/modalAddActividad.jsx";
-import { useCollection } from "@cloudscape-design/collection-hooks";
-import ModalEditActividad from "./components/modalEditActividad.jsx";
-import ModalDeleteActividad from "./components/modalDeleteActividad.jsx";
+import NotificationContext from "../../../../providers/notificationProvider.jsx";
 
 const breadcrumbs = [
   {
@@ -30,56 +24,40 @@ const breadcrumbs = [
   },
 ];
 
-const columnDefinitions = [
-  {
-    id: "actividad",
-    header: "Actividad",
-    cell: (item) => item.actividad,
-  },
-  {
-    id: "fecha_inicio",
-    header: "Fecha de inicio",
-    cell: (item) => item.fecha_inicio,
-  },
-  {
-    id: "fecha_fin",
-    header: "Fecha de fin",
-    cell: (item) => item.fecha_fin,
-  },
-  {
-    id: "duracion",
-    header: "Duración",
-    cell: (item) => item.duracion,
-  },
-];
+export default function Convocatoria_registro_taller_6() {
+  //  Context
+  const { notifications, pushNotification } = useContext(NotificationContext);
 
-const columnDisplay = [
-  { id: "actividad", visible: true },
-  { id: "fecha_inicio", visible: true },
-  { id: "fecha_fin", visible: true },
-  { id: "duracion", visible: true },
-];
-
-export default function Convocatoria_registro_taller_4() {
   //  States
   const [loading, setLoading] = useState(true);
+  const [loadingBtn, setLoadingBtn] = useState(false);
   const [data, setData] = useState({});
-  const [type, setType] = useState("");
-
-  //  Hooks
-  const { items, collectionProps, actions } = useCollection([], {
-    selection: {},
-  });
 
   //  Functions
   const getData = async () => {
     setLoading(true);
     const res = await axiosBase.get(
-      "investigador/convocatorias/pinvpos/verificar4"
+      "investigador/convocatorias/pinvpos/verificar5"
     );
     const data = res.data;
     setData(data);
     setLoading(false);
+  };
+
+  const enviar = async () => {
+    setLoadingBtn(true);
+    const res = await axiosBase.post(
+      "investigador/convocatorias/pinvpos/enviar",
+      {
+        id: data.datos.proyecto_id,
+      }
+    );
+    const info = res.data;
+    pushNotification(info.detail, info.message, notifications.length + 1);
+    setLoadingBtn(false);
+    setTimeout(() => {
+      window.location.href = "/investigador";
+    }, 5000);
   };
 
   const handleNavigate = (index) => {
@@ -111,11 +89,12 @@ export default function Convocatoria_registro_taller_4() {
                 handleNavigate(detail.requestedStepIndex)
               }
               activeStepIndex={5}
-              isLoadingNextStep={loading}
+              isLoadingNextStep={loadingBtn}
               onCancel={() => {
                 window.location.href = "../";
               }}
               submitButtonText="Enviar propuesta"
+              onSubmit={enviar}
               steps={[
                 {
                   title: "Información general del taller",
