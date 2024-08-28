@@ -36,7 +36,7 @@ export default ({ id, close, reload }) => {
   return (
     <Modal
       visible
-      size="large"
+      size="medium"
       onDismiss={close}
       footer={
         <Box float="right">

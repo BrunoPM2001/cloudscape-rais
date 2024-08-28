@@ -1,12 +1,9 @@
 import {
   Badge,
   Box,
-  Link,
-  FormField,
   Header,
   Pagination,
   PropertyFilter,
-  Select,
   SpaceBetween,
   Table,
 } from "@cloudscape-design/components";
@@ -19,7 +16,7 @@ const stringOperators = [":", "!:", "=", "!=", "^", "!^"];
 const FILTER_PROPS = [
   {
     propertyLabel: "ID",
-    key: "id",
+    key: "proyecto_id",
     groupValuesLabel: "IDS",
     operators: stringOperators,
   },
@@ -59,9 +56,16 @@ const columnDefinitions = [
   {
     id: "id",
     header: "ID",
-    cell: (item) => item.id,
+    cell: (item) => item.proyecto_id,
     sortingField: "id",
     isRowHeader: true,
+    maxSize: 5,
+  },
+  {
+    id: "proyecto_origen",
+    header: "Tabla",
+    cell: (item) => item.proyecto_origen,
+    sortingField: "proyecto_origen",
   },
   {
     id: "tipo_proyecto",
@@ -91,7 +95,9 @@ const columnDefinitions = [
     id: "deuda",
     header: "Deuda",
     cell: (item) => (
-      <Badge color={item.deuda == "Sí" ? "red" : "green"}>{item.deuda}</Badge>
+      <Badge color={item.deuda == "Sí" || item.deuda == "SI" ? "red" : "green"}>
+        {item.deuda}
+      </Badge>
     ),
     sortingField: "deuda",
   },
@@ -99,6 +105,7 @@ const columnDefinitions = [
 
 const columnDisplay = [
   { id: "id", visible: true },
+  { id: "proyecto_origen", visible: true },
   { id: "tipo_proyecto", visible: true },
   { id: "codigo_proyecto", visible: true },
   { id: "titulo", visible: true },
@@ -112,7 +119,7 @@ export default () => {
   const [loadingIntegrantes, setLoadingIntegrantes] = useState(true);
   const [integrantes, setIntegrantes] = useState([]);
   const [distributions, setDistribution] = useState([]);
-  const [selectedItems, setSelectedItems] = useState([]);
+
   const {
     items,
     actions,
@@ -139,7 +146,7 @@ export default () => {
       ),
     },
     pagination: { pageSize: 10 },
-    sorting: { defaultState: { sortingColumn: columnDefinitions[0] } },
+    sorting: {},
     selection: {},
   });
 
@@ -147,7 +154,7 @@ export default () => {
   const getData = async () => {
     setLoading(true);
     const res = await axiosBase.get(
-      "admin/estudios/deudaProyecto/listadoProyectos/null/null/null"
+      "admin/estudios/deudaProyecto/listadoProyectos"
     );
     const data = res.data;
     setDistribution(data);
@@ -157,7 +164,8 @@ export default () => {
   const getIntegrantes = async () => {
     setLoadingIntegrantes(true);
     const res = await axiosBase.get(
-      "admin/estudios/deudaProyecto/listadoIntegrantes/" + selectedItems[0].id
+      "admin/estudios/deudaProyecto/listadoIntegrantes/" +
+        collectionProps.selectedItems[0]?.id
     );
     const data = res.data;
     setIntegrantes(data.data);
@@ -171,7 +179,7 @@ export default () => {
 
   useEffect(() => {
     getIntegrantes();
-  }, [selectedItems]);
+  }, [collectionProps.selectedItems]);
 
   return (
     <SpaceBetween size="l">
@@ -183,15 +191,11 @@ export default () => {
         columnDisplay={columnDisplay}
         loading={loading}
         loadingText="Cargando datos"
-        resizableColumns
         enableKeyboardNavigation
         header={<Header>Listado de proyectos</Header>}
         selectionType="single"
-        selectedItems={selectedItems}
-        onSelectionChange={({ detail }) =>
-          setSelectedItems(detail.selectedItems)
-        }
-        onRowClick={({ detail }) => setSelectedItems([detail.item])}
+        onRowClick={({ detail }) => actions.setSelectedItems([detail.item])}
+        wrapLines
         filter={
           <PropertyFilter
             {...propertyFilterProps}

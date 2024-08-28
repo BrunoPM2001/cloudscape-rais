@@ -126,6 +126,7 @@ export default () => {
         onSelectionChange={({ detail }) =>
           setSelectedItems(detail.selectedItems)
         }
+        onRowClick={({ detail }) => setSelectedItems([detail.item])}
         header={
           <Header
             counter={`(${items.length})`}

@@ -10,6 +10,7 @@ import {
   Select,
   Link,
   Popover,
+  DatePicker,
 } from "@cloudscape-design/components";
 import { useContext, useState } from "react";
 import NotificationContext from "../../../../../providers/notificationProvider";
@@ -51,6 +52,8 @@ export default ({ item, reload, close, optAutor }) => {
           (opt) => opt.label == item.filiacion_unica
         ),
         categoria: { value: item.categoria },
+        nro_registro: item.nro_registro,
+        fecha_registro: item.fecha_registro,
       },
       formRules
     );
@@ -80,7 +83,7 @@ export default ({ item, reload, close, optAutor }) => {
   return (
     <Modal
       visible
-      size="large"
+      size="medium"
       onDismiss={close}
       footer={
         <Box float="right">
@@ -113,7 +116,7 @@ export default ({ item, reload, close, optAutor }) => {
               onChange={({ detail }) => handleChange("autor", detail.value)}
             />
           </FormField>
-          <ColumnLayout columns={3}>
+          <ColumnLayout columns={3} minColumnWidth={180}>
             <FormField
               label="Filiación UNMSM"
               stretch
@@ -170,7 +173,34 @@ export default ({ item, reload, close, optAutor }) => {
                   handleChange("categoria", detail.selectedOption);
                 }}
                 options={optAutor}
-              ></Select>
+              />
+            </FormField>
+          </ColumnLayout>
+          <ColumnLayout columns={2}>
+            <FormField
+              label="N° de registro"
+              errorText={formErrors.nro_registro}
+              stretch
+            >
+              <Input
+                value={formValues.nro_registro}
+                onChange={({ detail }) =>
+                  handleChange("nro_registro", detail.value)
+                }
+              />
+            </FormField>
+            <FormField
+              label="Fecha de registro"
+              errorText={formErrors.fecha_registro}
+              stretch
+            >
+              <DatePicker
+                placeholder="YYYY/MM/DD"
+                value={formValues.fecha_registro}
+                onChange={({ detail }) =>
+                  handleChange("fecha_registro", detail.value)
+                }
+              />
             </FormField>
           </ColumnLayout>
         </SpaceBetween>

@@ -15,25 +15,20 @@ const columnDefinitions = [
     cell: (item) => item.codigo,
     sortingField: "codigo",
     isRowHeader: true,
+    width: "25%",
   },
   {
     id: "nombre",
     header: "Linea",
     cell: (item) => item.nombre,
     sortingField: "nombre",
-  },
-  {
-    id: "facultad",
-    header: "Facultad",
-    cell: (item) => item.facultad_id,
-    sortingField: "facultad",
+    width: "75%",
   },
 ];
 
 const columnDisplay = [
   { id: "codigo", visible: true },
   { id: "nombre", visible: true },
-  { id: "facultad", visible: true },
 ];
 
 export default () => {
@@ -72,6 +67,7 @@ export default () => {
       resizableColumns
       enableKeyboardNavigation
       expandedItems={expandedItems}
+      wrapLines
       expandableRows={{
         getItemChildren: (item) => item.hijos,
         isItemExpandable: (item) => Boolean(item.hijos),

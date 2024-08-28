@@ -177,7 +177,7 @@ export default () => {
       ),
     },
     pagination: { pageSize: 10 },
-    sorting: { defaultState: { sortingColumn: columnDefinitions[0] } },
+    sorting: {},
     selection: {},
   });
   const [createVisible, setCreateVisible] = useState(false);

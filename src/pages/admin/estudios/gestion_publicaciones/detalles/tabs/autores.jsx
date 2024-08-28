@@ -19,6 +19,7 @@ import axiosBase from "../../../../../../api/axios";
 import { useLocation } from "react-router-dom";
 import queryString from "query-string";
 import NotificationContext from "../../../../../../providers/notificationProvider";
+import ModalConvertirAutor from "../../components/modalConvertirAutor";
 
 const columnDefinitions = [
   {
@@ -199,7 +200,11 @@ export default function ({ data, loading, tipo, reload }) {
         { text: "Agregar autor estudiante UNMSM", id: "action_2_2" },
       ]);
     }
-  }, []);
+  }, [loading]);
+
+  useEffect(() => {
+    setAutores(data);
+  }, [data]);
 
   return (
     <Container>
@@ -270,7 +275,7 @@ export default function ({ data, loading, tipo, reload }) {
                     } else if (detail.id == "action_1_2") {
                       setType("delete");
                     } else if (detail.id == "action_1_3") {
-                      convertirPrincipal();
+                      setType("convertir");
                     }
                   }}
                   items={[
@@ -356,7 +361,14 @@ export default function ({ data, loading, tipo, reload }) {
           close={() => setType("")}
         />
       ) : (
-        <></>
+        type == "convertir" && (
+          <ModalConvertirAutor
+            id={collectionProps.selectedItems[0].id}
+            reload={reload}
+            close={() => setType("")}
+            optAutor={optAutor}
+          />
+        )
       )}
     </Container>
   );

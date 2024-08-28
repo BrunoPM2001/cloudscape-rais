@@ -357,6 +357,7 @@ export default function ({ data, reload }) {
               onChange={({ detail }) => {
                 setOptions([]);
                 setValue(detail.value);
+                handleChange("publicacion_nombre", detail.value);
               }}
               onSelect={({ detail }) => {
                 if (detail.selectedOption.value != undefined) {

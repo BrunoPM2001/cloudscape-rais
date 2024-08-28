@@ -159,6 +159,7 @@ export default ({ id }) => {
       const data = res.data;
       pushNotification(data.detail, data.message, notifications.length + 1);
       setUpdating(false);
+      getData();
     }
   };
 
@@ -183,12 +184,14 @@ export default ({ id }) => {
             )
           }
         >
-          <SpaceBetween size="xxs" alignItems="center" direction="horizontal">
-            <Box variant="h2">Datos generales</Box>
-            <Badge color="green">{formValues.tipo}</Badge>
-            <Badge color="blue">{formValues.id}</Badge>
-            <Badge color="grey">{formValues.estado_text}</Badge>
-          </SpaceBetween>
+          {!loading && (
+            <SpaceBetween size="xxs" alignItems="center" direction="horizontal">
+              <Box variant="h2">Datos generales</Box>
+              <Badge color="green">{formValues.tipo}</Badge>
+              <Badge color="blue">{formValues.id}</Badge>
+              <Badge color="grey">{formValues.estado_text}</Badge>
+            </SpaceBetween>
+          )}
         </Header>
       }
     >
@@ -232,7 +235,7 @@ export default ({ id }) => {
                   l: 9,
                   m: 9,
                   s: 9,
-                  xs: 9,
+                  xs: 7,
                 },
               },
               {
@@ -242,7 +245,7 @@ export default ({ id }) => {
                   l: 3,
                   m: 3,
                   s: 3,
-                  xs: 3,
+                  xs: 5,
                 },
               },
             ]}
@@ -276,6 +279,7 @@ export default ({ id }) => {
                   "No se ha cargado un anexo"
                 )
               }
+              stretch
             >
               <FileUpload
                 value={formValues.file_comentario}
