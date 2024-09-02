@@ -305,7 +305,7 @@ export default function Convocatoria_registro_taller_5() {
                       >
                         <Container fitHeight>
                           <FormField
-                            label="Indique el monto según el artículo 8, participación de facultad para cofinanciamiento"
+                            label="Indique el monto según el artículo 9, participación de facultad para cofinanciamiento"
                             errorText={formErrors.monto}
                             stretch
                           >

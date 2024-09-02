@@ -31,6 +31,7 @@ export default function Convocatoria_registro_taller_6() {
   //  States
   const [loading, setLoading] = useState(true);
   const [loadingBtn, setLoadingBtn] = useState(false);
+  const [loadingReporte, setLoadingReporte] = useState(false);
   const [data, setData] = useState({});
 
   //  Functions
@@ -42,6 +43,23 @@ export default function Convocatoria_registro_taller_6() {
     const data = res.data;
     setData(data);
     setLoading(false);
+  };
+
+  const reporte = async () => {
+    setLoadingReporte(true);
+    const res = await axiosBase.get(
+      "investigador/convocatorias/pinvpos/reporte",
+      {
+        params: {
+          id: data.datos.proyecto_id,
+        },
+        responseType: "blob",
+      }
+    );
+    const blob = await res.data;
+    const url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
+    setLoadingReporte(false);
   };
 
   const enviar = async () => {
@@ -123,7 +141,15 @@ export default function Convocatoria_registro_taller_6() {
                     <SpaceBetween size="m">
                       <Alert
                         header="Declaración jurada"
-                        action={<Button variant="primary">Reporte</Button>}
+                        action={
+                          <Button
+                            variant="primary"
+                            loading={loadingReporte}
+                            onClick={reporte}
+                          >
+                            Reporte
+                          </Button>
+                        }
                       >
                         Declaro bajo juramento que toda la información
                         consignada en este formulario es verídica

@@ -1,9 +1,15 @@
-import { Wizard } from "@cloudscape-design/components";
+import {
+  Alert,
+  Box,
+  SpaceBetween,
+  Wizard,
+} from "@cloudscape-design/components";
 import Paso4 from "./paso4.jsx";
 import BaseLayout from "../../components/baseLayout";
 import { useLocation } from "react-router-dom";
 import queryString from "query-string";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import axiosBase from "../../../../api/axios.js";
 
 const breadcrumbs = [
   {
@@ -21,6 +27,7 @@ const breadcrumbs = [
 export default function Registrar_articulo_4() {
   //  States
   const [loading, setLoading] = useState(false);
+  const [data, setData] = useState({});
 
   //  Url
   const location = useLocation();
@@ -55,6 +62,25 @@ export default function Registrar_articulo_4() {
     }
   };
 
+  const verificarObs = async () => {
+    const res = await axiosBase.get(
+      "investigador/publicaciones/utils/observacion",
+      {
+        params: {
+          id: publicacion_id,
+        },
+      }
+    );
+    const data = res.data;
+    setData(data);
+  };
+
+  useEffect(() => {
+    if (publicacion_id != null) {
+      verificarObs();
+    }
+  }, []);
+
   return (
     <BaseLayout
       breadcrumbs={breadcrumbs}
@@ -62,47 +88,60 @@ export default function Registrar_articulo_4() {
       en general."
       disableOverlap
     >
-      <Wizard
-        onNavigate={({ detail }) => handleNavigate(detail)}
-        activeStepIndex={3}
-        onCancel={() => {
-          window.location.href = "../" + tipo;
-        }}
-        onSubmit={async () => {
-          setLoading(true);
-          const res = await pasoRefs.current[0]?.registrar();
-          setLoading(false);
-          if (res) {
-            setTimeout(() => {
-              window.location.href = "/investigador";
-            }, 3000);
-          }
-        }}
-        isLoadingNextStep={loading}
-        submitButtonText="Enviar"
-        steps={[
-          {
-            title: "Descripción de la publicación",
-          },
-          {
-            title: "Resultado de proyecto financiado",
-          },
-          {
-            title: "Autores de la publicación",
-          },
-          {
-            title: "Envío de publicación",
-            description: "Opciones finales",
-            content: (
-              <Paso4
-                ref={(el) => (pasoRefs.current[0] = el)}
-                publicacion_id={publicacion_id}
-                tipo={tipo}
-              />
-            ),
-          },
-        ]}
-      />
+      <SpaceBetween size="l">
+        {data.estado == 2 && (
+          <Box
+            margin={{
+              top: "s",
+            }}
+          >
+            <Alert header="Observación" type="warning">
+              {data.observaciones_usuario}
+            </Alert>
+          </Box>
+        )}
+        <Wizard
+          onNavigate={({ detail }) => handleNavigate(detail)}
+          activeStepIndex={3}
+          onCancel={() => {
+            window.location.href = "../" + tipo;
+          }}
+          onSubmit={async () => {
+            setLoading(true);
+            const res = await pasoRefs.current[0]?.registrar();
+            setLoading(false);
+            if (res) {
+              setTimeout(() => {
+                window.location.href = "/investigador";
+              }, 3000);
+            }
+          }}
+          isLoadingNextStep={loading}
+          submitButtonText="Enviar"
+          steps={[
+            {
+              title: "Descripción de la publicación",
+            },
+            {
+              title: "Resultado de proyecto financiado",
+            },
+            {
+              title: "Autores de la publicación",
+            },
+            {
+              title: "Envío de publicación",
+              description: "Opciones finales",
+              content: (
+                <Paso4
+                  ref={(el) => (pasoRefs.current[0] = el)}
+                  publicacion_id={publicacion_id}
+                  tipo={tipo}
+                />
+              ),
+            },
+          ]}
+        />
+      </SpaceBetween>
     </BaseLayout>
   );
 }

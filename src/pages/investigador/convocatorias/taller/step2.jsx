@@ -37,11 +37,6 @@ const columnDefinitions = [
     cell: (item) => item.condicion,
   },
   {
-    id: "cargo",
-    header: "Cargo",
-    cell: (item) => item.cargo,
-  },
-  {
     id: "apellido1",
     header: "Apellido paterno",
     cell: (item) => item.apellido1,
@@ -81,7 +76,6 @@ const columnDefinitions = [
 const columnDisplay = [
   { id: "id", visible: true },
   { id: "condicion", visible: true },
-  { id: "cargo", visible: true },
   { id: "apellido1", visible: true },
   { id: "apellido2", visible: true },
   { id: "nombres", visible: true },
@@ -94,7 +88,7 @@ const columnDisplay = [
 export default function Convocatoria_registro_taller_2() {
   //  States
   const [loading, setLoading] = useState(true);
-  const [data, setData] = useState({});
+  const [data, setData] = useState({ miembros: [] });
 
   //  Functions
   const getData = async () => {
@@ -163,9 +157,7 @@ export default function Convocatoria_registro_taller_2() {
                         columnDefinitions={columnDefinitions}
                         columnDisplay={columnDisplay}
                         header={<Header variant="h3">Miembros</Header>}
-                        wrapLines
-                        resizableColumns
-                        items={[]}
+                        items={data.miembros}
                         empty={
                           <Box
                             margin={{ vertical: "xs" }}

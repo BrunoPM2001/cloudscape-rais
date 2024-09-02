@@ -61,6 +61,16 @@ export default function ({ data, loading }) {
             </Link>
           )}
         </div>
+        <div>
+          <Box variant="awsui-key-label">Puntaje anterior al 2017</Box>
+          {loading ? (
+            <Spinner size="large" />
+          ) : (
+            <Link variant="awsui-value-large" href="#">
+              {data.puntaje_pasado}
+            </Link>
+          )}
+        </div>
       </ColumnLayout>
     </Container>
   );
