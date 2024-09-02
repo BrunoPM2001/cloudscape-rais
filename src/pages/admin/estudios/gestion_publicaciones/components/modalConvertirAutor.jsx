@@ -3,7 +3,6 @@ import {
   FormField,
   Box,
   SpaceBetween,
-  Form,
   Button,
   Input,
   ColumnLayout,
@@ -11,13 +10,27 @@ import {
   Link,
   Popover,
   DatePicker,
+  Autosuggest,
 } from "@cloudscape-design/components";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import NotificationContext from "../../../../../providers/notificationProvider";
 import { useFormValidation } from "../../../../../hooks/useFormValidation";
 import axiosBase from "../../../../../api/axios";
+import { useAutosuggest } from "../../../../../hooks/useAutosuggest";
+
+const optFiliacion = [
+  {
+    value: "1",
+    label: "Sí",
+  },
+  {
+    value: "0",
+    label: "No",
+  },
+];
 
 const initialForm = {
+  investigador_id: null,
   nombres: "",
   apellido1: "",
   apellido2: "",
@@ -36,7 +49,7 @@ const formRules = {
   categoria: { required: true },
 };
 
-export default ({ id, reload, close, optAutor }) => {
+export default ({ item, reload, close, optAutor }) => {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
 
@@ -50,18 +63,14 @@ export default ({ id, reload, close, optAutor }) => {
     useAutosuggest("admin/estudios/publicaciones/searchDocentePermanente");
 
   //  Functions
-  const agregarAutor = async () => {
+  const asociarAutor = async () => {
     if (validateForm()) {
       setLoadingCreate(true);
-      const res = await axiosBase.post(
-        "admin/estudios/publicaciones/agregarAutor",
+      const res = await axiosBase.put(
+        "admin/estudios/publicaciones/asociarInvestigador",
         {
           ...formValues,
-          filiacion: formValues.filiacion.value,
-          filiacion_unica: formValues.filiacion_unica.value,
-          categoria: formValues.categoria.value,
-          id: id,
-          tipo: "externo",
+          id: item.id,
         }
       );
       const data = res.data;
@@ -71,6 +80,19 @@ export default ({ id, reload, close, optAutor }) => {
       pushNotification(data.detail, data.message, notifications.length + 1);
     }
   };
+
+  useEffect(() => {
+    handleChange("autor", item.autor);
+    handleChange(
+      "filiacion",
+      optFiliacion.find((opt) => opt.label == item.filiacion)
+    );
+    handleChange(
+      "filiacion_unica",
+      optFiliacion.find((opt) => opt.label == item.filiacion_unica)
+    );
+    handleChange("categoria", { value: item.categoria });
+  }, []);
 
   return (
     <Modal
@@ -85,15 +107,16 @@ export default ({ id, reload, close, optAutor }) => {
             </Button>
             <Button
               variant="primary"
-              onClick={agregarAutor}
+              disabled={!formValues.investigador_id}
+              onClick={asociarAutor}
               loading={loadingCreate}
             >
-              Agregar autor
+              Asociar docente
             </Button>
           </SpaceBetween>
         </Box>
       }
-      header="Agregar autor"
+      header="Asociar investigador"
     >
       <SpaceBetween direction="vertical" size="s">
         <FormField label="Buscar investigador registrado" stretch>
@@ -101,23 +124,21 @@ export default ({ id, reload, close, optAutor }) => {
             onChange={({ detail }) => {
               setOptions([]);
               setValue(detail.value);
-              if (detail.value == "") {
-                setForm({});
-                setEnableCreate(false);
-              }
             }}
             onSelect={({ detail }) => {
               if (detail.selectedOption.id != undefined) {
                 const { value, ...rest } = detail.selectedOption;
-                setForm(rest);
-                setEnableCreate(true);
+                handleChange("investigador_id", rest.id);
+                handleChange("nombres", rest.nombres);
+                handleChange("apellido1", rest.apellido1);
+                handleChange("apellido2", rest.apellido2);
                 setAvoidSelect(false);
               }
             }}
             value={value}
             options={options}
             loadingText="Cargando data"
-            placeholder="Dni, código o nombres del docente"
+            placeholder="Dni, código o nombres del docente permanente"
             statusType={loading ? "loading" : "finished"}
             empty="No se encontraron resultados"
           />
@@ -164,16 +185,7 @@ export default ({ id, reload, close, optAutor }) => {
               onChange={({ detail }) => {
                 handleChange("filiacion", detail.selectedOption);
               }}
-              options={[
-                {
-                  value: "1",
-                  label: "Sí",
-                },
-                {
-                  value: "0",
-                  label: "No",
-                },
-              ]}
+              options={optFiliacion}
             />
           </FormField>
           <FormField
@@ -195,16 +207,7 @@ export default ({ id, reload, close, optAutor }) => {
               onChange={({ detail }) => {
                 handleChange("filiacion_unica", detail.selectedOption);
               }}
-              options={[
-                {
-                  value: "1",
-                  label: "Sí",
-                },
-                {
-                  value: "0",
-                  label: "No",
-                },
-              ]}
+              options={optFiliacion}
             />
           </FormField>
           <FormField label="Condición" stretch errorText={formErrors.categoria}>

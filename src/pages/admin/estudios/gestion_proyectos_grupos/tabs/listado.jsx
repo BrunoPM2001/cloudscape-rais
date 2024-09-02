@@ -154,54 +154,32 @@ const columnDefinitions = [
     cell: (item) => (
       <Badge
         color={
-          item.estado == -1
+          item.estado == "Eliminado"
             ? "red"
-            : item.estado == 0
+            : item.estado == "No aprobado"
             ? "grey"
-            : item.estado == 1
+            : item.estado == "Aprobado"
             ? "green"
-            : item.estado == 3
+            : item.estado == "En evaluación"
             ? "blue"
-            : item.estado == 5
+            : item.estado == "Enviado"
             ? "blue"
-            : item.estado == 6
+            : item.estado == "En proceso"
             ? "grey"
-            : item.estado == 7
+            : item.estado == "Anulado"
             ? "red"
-            : item.estado == 8
+            : item.estado == "Sustentado"
             ? "blue"
-            : item.estado == 9
+            : item.estado == "En ejecución"
             ? "blue"
-            : item.estado == 10
+            : item.estado == "Ejecutado"
             ? "green"
-            : item.estado == 11
-            ? "blue"
+            : item.estado == "Concluido"
+            ? "green"
             : "red"
         }
       >
-        {item.estado == -1
-          ? "Eliminado"
-          : item.estado == 0
-          ? "No aprobado"
-          : item.estado == 1
-          ? "Aprobado"
-          : item.estado == 3
-          ? "En evaluación"
-          : item.estado == 5
-          ? "Enviado"
-          : item.estado == 6
-          ? "En proceso"
-          : item.estado == 7
-          ? "Anulado"
-          : item.estado == 8
-          ? "Sustentado"
-          : item.estado == 9
-          ? "En ejecución"
-          : item.estado == 10
-          ? "Ejecutado"
-          : item.estado == 11
-          ? "Concluido"
-          : "Error"}
+        {item.estado}
       </Badge>
     ),
     sortingField: "estado",
@@ -226,7 +204,6 @@ const columnDisplay = [
 export default () => {
   //  Data states
   const [loading, setLoading] = useState(true);
-  const [selectedItems, setSelectedItems] = useState([]);
   const [distributions, setDistribution] = useState([]);
   const {
     items,
@@ -260,32 +237,22 @@ export default () => {
   const [selectedOption, setSelectedOption] = useState({
     value: "2024",
   });
-  const [enableBtn, setEnableBtn] = useState(true);
 
   //  Functions
   const getData = async () => {
     setLoading(true);
     setDistribution([]);
-    setEnableBtn(false);
     const res = await axiosBase.get(
       "admin/estudios/proyectosGrupo/listado/" + selectedOption.value
     );
-    const data = await res.data;
-    setDistribution(data.data);
+    const data = res.data;
+    setDistribution(data);
     setLoading(false);
   };
 
   useEffect(() => {
     getData();
   }, [selectedOption]);
-
-  useEffect(() => {
-    if (selectedItems.length > 0) {
-      setEnableBtn(true);
-    } else {
-      setEnableBtn(false);
-    }
-  }, [selectedItems]);
 
   return (
     <Table
@@ -299,24 +266,29 @@ export default () => {
       resizableColumns
       enableKeyboardNavigation
       selectionType="single"
-      selectedItems={selectedItems}
       wrapLines
-      onSelectionChange={({ detail }) => setSelectedItems(detail.selectedItems)}
+      onRowClick={({ detail }) => actions.setSelectedItems([detail.item])}
       header={
         <Header
           counter={"(" + distributions.length + ")"}
           actions={
             <Button
-              disabled={!enableBtn}
+              disabled={!collectionProps.selectedItems.length}
               variant="primary"
               onClick={() => {
                 const query = queryString.stringify({
-                  id: selectedItems[0]["id"],
+                  id: collectionProps.selectedItems[0]["id"],
                 });
-                if (selectedItems[0]["tipo_proyecto"].toLowerCase() == "eci") {
+                if (
+                  collectionProps.selectedItems[0][
+                    "tipo_proyecto"
+                  ].toLowerCase() == "eci"
+                ) {
                   window.location.href =
                     "proyectos_grupos/detalle/" +
-                    selectedItems[0]["tipo_proyecto"].toLowerCase() +
+                    collectionProps.selectedItems[0][
+                      "tipo_proyecto"
+                    ].toLowerCase() +
                     "?" +
                     query;
                 } else {

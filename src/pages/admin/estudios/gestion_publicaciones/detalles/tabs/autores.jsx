@@ -290,7 +290,12 @@ export default function ({ data, loading, tipo, reload }) {
                     },
                     {
                       id: "action_1_3",
-                      text: "Convertir en autor principal",
+                      text: "Convertir en autor",
+                      disabled:
+                        collectionProps.selectedItems[0]?.tipo ==
+                        "DOCENTE PERMANENTE",
+                      disabledReason:
+                        "Solo puede convertir en autor a los miembros que no figuren como docente permanente",
                     },
                   ]}
                 >
@@ -363,7 +368,7 @@ export default function ({ data, loading, tipo, reload }) {
       ) : (
         type == "convertir" && (
           <ModalConvertirAutor
-            id={collectionProps.selectedItems[0].id}
+            item={collectionProps.selectedItems[0]}
             reload={reload}
             close={() => setType("")}
             optAutor={optAutor}
