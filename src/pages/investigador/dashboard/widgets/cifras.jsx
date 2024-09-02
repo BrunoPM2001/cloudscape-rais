@@ -62,7 +62,7 @@ export default function ({ data, loading }) {
           )}
         </div>
         <div>
-          <Box variant="awsui-key-label">Puntaje anterior al 2017</Box>
+          <Box variant="awsui-key-label">Puntaje de los últimos 7 años</Box>
           {loading ? (
             <Spinner size="large" />
           ) : (
