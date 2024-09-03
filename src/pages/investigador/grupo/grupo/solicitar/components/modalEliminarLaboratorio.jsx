@@ -8,7 +8,7 @@ import { useContext, useState } from "react";
 import axiosBase from "../../../../../../api/axios";
 import NotificationContext from "../../../../../../providers/notificationProvider";
 
-export default ({ close, reload, id }) => {
+export default ({ close, reload, id, grupo_id }) => {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
 
@@ -23,6 +23,7 @@ export default ({ close, reload, id }) => {
       {
         params: {
           id,
+          grupo_id,
         },
       }
     );

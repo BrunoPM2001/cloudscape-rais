@@ -92,7 +92,7 @@ const initialForm = {
 };
 
 const formRules = {
-  monto: { required: true, moreEqualThan: 3360 },
+  monto: { required: true, moreEqualThan: 3360, lessThan: 25750 },
   file: { isFile: true, maxSize: 6 * 1024 * 1024 },
 };
 

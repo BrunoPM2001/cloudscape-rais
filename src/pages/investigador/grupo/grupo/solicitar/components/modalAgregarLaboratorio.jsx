@@ -13,7 +13,7 @@ import axiosBase from "../../../../../../api/axios";
 import NotificationContext from "../../../../../../providers/notificationProvider";
 import { useAutosuggest } from "../../../../../../hooks/useAutosuggest";
 
-export default ({ close, reload }) => {
+export default ({ close, reload, grupo_id }) => {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
 
@@ -32,6 +32,7 @@ export default ({ close, reload }) => {
       "investigador/grupo/solicitar/agregarLaboratorio",
       {
         id: info.id,
+        grupo_id,
       }
     );
     const data = res.data;

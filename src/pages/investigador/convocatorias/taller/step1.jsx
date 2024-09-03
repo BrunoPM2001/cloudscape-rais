@@ -157,7 +157,7 @@ export default function Convocatoria_registro_taller_1() {
                               <Box variant="awsui-key-label">
                                 Correo electrónico
                               </Box>
-                              <Box>alefran2020@gmail.com</Box>
+                              <Box>{data.datos.email3}</Box>
                             </div>
                           </SpaceBetween>
                           <SpaceBetween size="xs">

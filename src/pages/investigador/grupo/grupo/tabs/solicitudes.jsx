@@ -144,38 +144,32 @@ const columnDisplay = [
 export default () => {
   //  Data states
   const [loading, setLoading] = useState(true);
-  const [selectedItems, setSelectedItems] = useState([]);
   const [distributions, setDistribution] = useState([]);
-  const {
-    items,
-    actions,
-    filteredItemsCount,
-    collectionProps,
-    paginationProps,
-    propertyFilterProps,
-  } = useCollection(distributions, {
-    propertyFiltering: {
-      filteringProperties: FILTER_PROPS,
-      empty: (
-        <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
-          <SpaceBetween size="m">
-            <b>No hay registros...</b>
-          </SpaceBetween>
-        </Box>
-      ),
-      noMatch: (
-        <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
-          <SpaceBetween size="m">
-            <b>No hay coincidencias</b>
-          </SpaceBetween>
-        </Box>
-      ),
-    },
-    pagination: { pageSize: 10 },
-    sorting: {},
-    selection: {},
-  });
-  const [enableBtn, setEnableBtn] = useState(true);
+  const { items, actions, collectionProps, paginationProps } = useCollection(
+    distributions,
+    {
+      propertyFiltering: {
+        filteringProperties: FILTER_PROPS,
+        empty: (
+          <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
+            <SpaceBetween size="m">
+              <b>No hay registros...</b>
+            </SpaceBetween>
+          </Box>
+        ),
+        noMatch: (
+          <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
+            <SpaceBetween size="m">
+              <b>No hay coincidencias</b>
+            </SpaceBetween>
+          </Box>
+        ),
+      },
+      pagination: { pageSize: 10 },
+      sorting: {},
+      selection: {},
+    }
+  );
 
   //  Functions
   const getData = async () => {
@@ -191,14 +185,6 @@ export default () => {
     getData();
   }, []);
 
-  useEffect(() => {
-    if (selectedItems.length > 0) {
-      setEnableBtn(true);
-    } else {
-      setEnableBtn(false);
-    }
-  }, [selectedItems]);
-
   return (
     <Table
       {...collectionProps}
@@ -211,17 +197,23 @@ export default () => {
       resizableColumns
       enableKeyboardNavigation
       selectionType="single"
-      selectedItems={selectedItems}
-      onSelectionChange={({ detail }) => setSelectedItems(detail.selectedItems)}
+      onRowClick={({ detail }) => actions.setSelectedItems([detail.item])}
       header={
         <Header
           actions={
             <SpaceBetween direction="horizontal" size="s">
               <ButtonDropdown
-                disabled={!enableBtn}
+                disabled={!collectionProps.selectedItems.length}
                 onItemClick={({ detail }) => {
                   if (detail.id == "action_1") {
-                    // setEditVisible(true);
+                    const query = queryString.stringify({
+                      id: collectionProps.selectedItems[0].id,
+                    });
+                    window.location.href =
+                      "grupo/solicitar/paso" +
+                      collectionProps.selectedItems[0].step +
+                      "?" +
+                      query;
                   } else if (detail.id == "action_2") {
                     // setDeleteVisible(true);
                   }
@@ -253,14 +245,6 @@ export default () => {
         >
           Solicitudes ({distributions.length})
         </Header>
-      }
-      filter={
-        <PropertyFilter
-          {...propertyFilterProps}
-          filteringPlaceholder="Buscar solicitud"
-          countText={`${filteredItemsCount} coincidencias`}
-          expandToViewport
-        />
       }
       pagination={<Pagination {...paginationProps} />}
       empty={

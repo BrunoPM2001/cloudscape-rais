@@ -2,6 +2,12 @@ import { Suspense, lazy } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { NotificationProvider } from "../providers/notificationProvider.jsx";
 
+const Solicitar_grupo9 = lazy(() =>
+  import("../pages/investigador/grupo/grupo/solicitar/step9.jsx")
+);
+const Solicitar_grupo8 = lazy(() =>
+  import("../pages/investigador/grupo/grupo/solicitar/step8.jsx")
+);
 const Convocatoria_registro_taller_6 = lazy(() =>
   import("../pages/investigador/convocatorias/taller/step6.jsx")
 );
@@ -32,25 +38,25 @@ const Deudas = lazy(() =>
   import("../pages/investigador/actividades/deudas/index.jsx")
 );
 const Solicitar_grupo7 = lazy(() =>
-  import("../pages/investigador/grupo/grupo/solicitar/layout7.jsx")
+  import("../pages/investigador/grupo/grupo/solicitar/step7.jsx")
 );
 const Solicitar_grupo6 = lazy(() =>
-  import("../pages/investigador/grupo/grupo/solicitar/layout6.jsx")
+  import("../pages/investigador/grupo/grupo/solicitar/step6.jsx")
 );
 const Solicitar_grupo5 = lazy(() =>
-  import("../pages/investigador/grupo/grupo/solicitar/layout5.jsx")
+  import("../pages/investigador/grupo/grupo/solicitar/step5.jsx")
 );
 const Solicitar_grupo4 = lazy(() =>
-  import("../pages/investigador/grupo/grupo/solicitar/layout4.jsx")
+  import("../pages/investigador/grupo/grupo/solicitar/step4.jsx")
 );
 const Solicitar_grupo3 = lazy(() =>
-  import("../pages/investigador/grupo/grupo/solicitar/layout3.jsx")
+  import("../pages/investigador/grupo/grupo/solicitar/step3.jsx")
 );
 const Solicitar_grupo2 = lazy(() =>
-  import("../pages/investigador/grupo/grupo/solicitar/layout2.jsx")
+  import("../pages/investigador/grupo/grupo/solicitar/step2.jsx")
 );
 const Solicitar_grupo1 = lazy(() =>
-  import("../pages/investigador/grupo/grupo/solicitar/layout1.jsx")
+  import("../pages/investigador/grupo/grupo/solicitar/step1.jsx")
 );
 const Perfil = lazy(() => import("../pages/investigador/perfil/index.jsx"));
 const Informe_economico_detalles = lazy(() =>
@@ -350,6 +356,14 @@ const routes = createBrowserRouter(
             {
               path: "paso7",
               element: <Solicitar_grupo7 />,
+            },
+            {
+              path: "paso8",
+              element: <Solicitar_grupo8 />,
+            },
+            {
+              path: "paso9",
+              element: <Solicitar_grupo9 />,
             },
           ],
         },

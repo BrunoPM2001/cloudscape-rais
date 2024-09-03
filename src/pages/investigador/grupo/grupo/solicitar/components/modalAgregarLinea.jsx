@@ -19,7 +19,7 @@ const formRules = {
   linea_investigacion_id: { required: true },
 };
 
-export default ({ close, reload, listado }) => {
+export default ({ close, reload, listado, grupo_id }) => {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
 
@@ -36,7 +36,7 @@ export default ({ close, reload, listado }) => {
       setLoadingCreate(true);
       const res = await axiosBase.post(
         "investigador/grupo/solicitar/agregarLinea",
-        formValues
+        { ...formValues, grupo_id }
       );
       const data = res.data;
       setLoadingCreate(false);

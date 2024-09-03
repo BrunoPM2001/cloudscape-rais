@@ -58,7 +58,7 @@ export default ({ close, reload, grupo_id }) => {
   const agregarMiembro = async () => {
     setLoadingCreate(true);
     const res = await axiosBase.post("investigador/grupo/agregarMiembro", {
-      tipo_registro: "Titular",
+      tipo_registro: "Colaborador",
       grupo_id: grupo_id,
       investigador_id: form.investigador_id,
     });

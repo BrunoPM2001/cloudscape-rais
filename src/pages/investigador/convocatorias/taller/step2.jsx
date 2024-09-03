@@ -71,6 +71,11 @@ const columnDefinitions = [
     header: "Facultad",
     cell: (item) => item.facultad,
   },
+  {
+    id: "cargo",
+    header: "Cargo",
+    cell: (item) => item.cargo,
+  },
 ];
 
 const columnDisplay = [
@@ -83,6 +88,7 @@ const columnDisplay = [
   { id: "codigo", visible: true },
   { id: "email3", visible: true },
   { id: "facultad", visible: true },
+  { id: "cargo", visible: true },
 ];
 
 export default function Convocatoria_registro_taller_2() {

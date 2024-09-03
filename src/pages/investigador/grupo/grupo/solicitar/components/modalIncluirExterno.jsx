@@ -14,7 +14,7 @@ import {
   SpaceBetween,
   Textarea,
 } from "@cloudscape-design/components";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useFormValidation } from "../../../../../../hooks/useFormValidation";
 import axiosBase from "../../../../../../api/axios";
 import NotificationContext from "../../../../../../providers/notificationProvider";
@@ -73,6 +73,7 @@ export default ({ close, reload, grupo_id }) => {
 
   //  States
   const [loadingCreate, setLoadingCreate] = useState(false);
+  const [paises, setPaises] = useState([]);
 
   //  Hooks
   const {
@@ -87,16 +88,36 @@ export default ({ close, reload, grupo_id }) => {
   const agregarMiembro = async () => {
     if (validateForm()) {
       setLoadingCreate(true);
-      const res = await axiosBase.post("admin/estudios/grupos/agregarMiembro", {
-        ...formValues,
-        sexo: formValues.sexo.value,
-        pais: formValues.pais.value,
-        doc_tipo: formValues.doc_tipo.value,
-        tipo_registro: "externo",
-        grupo_id: grupo_id,
-        condicion: "Adherente",
-        tipo: "Externo",
-      });
+      const form = new FormData();
+      form.append("codigo_orcid", formValues.codigo_orcid);
+      form.append("apellido1", formValues.apellido1);
+      form.append("apellido2", formValues.apellido2);
+      form.append("nombres", formValues.nombres);
+      form.append("sexo", formValues.sexo.value);
+      form.append("institucion", formValues.institucion);
+      form.append("pais", formValues.pais.value);
+      form.append("direccion1", formValues.direccion1);
+      form.append("doc_tipo", formValues.doc_tipo.value);
+      form.append("doc_numero", formValues.doc_numero);
+      form.append("telefono_movil", formValues.telefono_movil);
+      form.append("titulo_profesional", formValues.titulo_profesional);
+      form.append("grado", formValues.grado);
+      form.append("especialidad", formValues.especialidad);
+      form.append("researcher_id", formValues.researcher_id);
+      form.append("scopus_id", formValues.scopus_id);
+      form.append("link", formValues.link);
+      form.append("posicion_unmsm", formValues.posicion_unmsm);
+      form.append("biografia", formValues.biografia);
+      form.append("observacion", formValues.observacion);
+      form.append("file", formValues.file[0]);
+      form.append("grupo_id", grupo_id);
+      form.append("tipo_registro", "externo");
+      form.append("condicion", "Adherente");
+      form.append("tipo", "Externo");
+      const res = await axiosBase.post(
+        "investigador/grupo/solicitar/agregarMiembro",
+        form
+      );
       const data = res.data;
       setLoadingCreate(false);
       close();
@@ -104,6 +125,16 @@ export default ({ close, reload, grupo_id }) => {
       pushNotification(data.detail, data.message, notifications.length + 1);
     }
   };
+
+  const getPaises = async () => {
+    const res = await axiosBase.get("investigador/grupo/solicitar/getPaises");
+    const data = res.data;
+    setPaises(data);
+  };
+
+  useEffect(() => {
+    getPaises();
+  }, []);
 
   return (
     <Modal
@@ -132,10 +163,12 @@ export default ({ close, reload, grupo_id }) => {
         <SpaceBetween size="xs">
           <FormField
             label="Código ORCID"
+            constraintText="Ejemplo: 0123-0123-0123-0123"
             stretch
             errorText={formErrors.codigo_orcid}
           >
             <Input
+              placeholder="Escriba el código orcid del integrante"
               value={formValues.codigo_orcid}
               onChange={({ detail }) =>
                 handleChange("codigo_orcid", detail.value)
@@ -213,17 +246,9 @@ export default ({ close, reload, grupo_id }) => {
                 onChange={({ detail }) =>
                   handleChange("pais", detail.selectedOption)
                 }
-                options={[
-                  // TODO - LISTA DE PAISES ESTÁTICA O DESDE EL BACKEND
-                  {
-                    label: "Perú",
-                    value: "M",
-                  },
-                  {
-                    label: "Argentina",
-                    value: "F",
-                  },
-                ]}
+                statusType={paises.length == 0 ? "loading" : "finished"}
+                loadingText="Cargando datos"
+                options={paises}
               />
             </FormField>
             <FormField

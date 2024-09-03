@@ -39,7 +39,7 @@ export default ({ close, reload, grupo_id }) => {
 
   //  Hooks
   const { loading, options, setOptions, value, setValue, setAvoidSelect } =
-    useAutosuggest("admin/estudios/grupos/searchEstudiante");
+    useAutosuggest("investigador/grupo/solicitar/searchEstudiante");
   const {
     formValues,
     formErrors,
@@ -52,7 +52,7 @@ export default ({ close, reload, grupo_id }) => {
   const getData = async () => {
     setLoadingData(true);
     const res = await axiosBase.get(
-      "admin/estudios/grupos/incluirMiembroData",
+      "investigador/grupo/solicitar/incluirMiembroData",
       {
         params: {
           tipo: "estudiante",
@@ -79,7 +79,7 @@ export default ({ close, reload, grupo_id }) => {
       formData.append("condicion", "Adherente");
       formData.append("file", formValues.file[0]);
       const res = await axiosBase.post(
-        "admin/estudios/grupos/agregarMiembro",
+        "investigador/grupo/solicitar/agregarMiembro",
         formData
       );
       const data = res.data;

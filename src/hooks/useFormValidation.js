@@ -33,11 +33,23 @@ const useFormValidation = (initialState, validationRules, groupRules = []) => {
           return "Valor inválido";
         }
       }
+      //  Cantidades
       if (rule.lessThan && value > rule.lessThan) {
         return "Límite superado";
       }
       if (rule.moreEqualThan && value < rule.moreEqualThan) {
         return "El valor tiene que ser mayor o igual a " + rule.moreEqualThan;
+      }
+
+      //  Cantidad de palabras y letras
+      if (
+        rule.limitWords &&
+        value.trim().split(/\s+/).length > rule.limitWords
+      ) {
+        return "Límite de palabras superado";
+      }
+      if (rule.limitLetters && value.length > rule.limitLetters) {
+        return "Límite de letras superado";
       }
     }
 

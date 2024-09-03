@@ -176,8 +176,8 @@ export default function Convocatoria_registro_taller_4() {
                           dismissible
                           onDismiss={() => setErrors([])}
                         >
-                          {errors.map((item) => {
-                            return <li>{item}</li>;
+                          {errors.map((item, index) => {
+                            return <li key={index}>{item}</li>;
                           })}
                         </Alert>
                       )}
