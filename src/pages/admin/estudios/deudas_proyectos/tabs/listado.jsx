@@ -116,7 +116,7 @@ const columnDisplay = [
 export default () => {
   //  Data states
   const [loading, setLoading] = useState(true);
-  const [loadingIntegrantes, setLoadingIntegrantes] = useState(true);
+  const [loadingIntegrantes, setLoadingIntegrantes] = useState(false);
   const [integrantes, setIntegrantes] = useState([]);
   const [distributions, setDistribution] = useState([]);
 
@@ -164,11 +164,16 @@ export default () => {
   const getIntegrantes = async () => {
     setLoadingIntegrantes(true);
     const res = await axiosBase.get(
-      "admin/estudios/deudaProyecto/listadoIntegrantes/" +
-        collectionProps.selectedItems[0]?.id
+      "admin/estudios/deudaProyecto/listadoIntegrantes",
+      {
+        params: {
+          id: collectionProps.selectedItems[0].proyecto_id,
+          tabla: collectionProps.selectedItems[0].proyecto_origen,
+        },
+      }
     );
     const data = res.data;
-    setIntegrantes(data.data);
+    setIntegrantes(data);
     setLoadingIntegrantes(false);
   };
 
@@ -178,7 +183,9 @@ export default () => {
   }, []);
 
   useEffect(() => {
-    getIntegrantes();
+    if (collectionProps.selectedItems.length != 0) {
+      getIntegrantes();
+    }
   }, [collectionProps.selectedItems]);
 
   return (

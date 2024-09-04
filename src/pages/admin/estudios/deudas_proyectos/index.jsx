@@ -38,9 +38,7 @@ export default function Deudas_proyectos() {
       en general."
       disableOverlap
     >
-      <SpaceBetween size="l">
-        <Tabs tabs={tabs} ariaLabel="Opciones de deudas de proyectos" />
-      </SpaceBetween>
+      <Tabs tabs={tabs} ariaLabel="Opciones de deudas de proyectos" />
     </BaseLayout>
   );
 }
