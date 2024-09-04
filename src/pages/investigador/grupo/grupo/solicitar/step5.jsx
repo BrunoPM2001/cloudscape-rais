@@ -182,7 +182,21 @@ export default function Solicitar_grupo5() {
                   ),
                 },
                 {
-                  title: "Envío de publicación",
+                  title: "Resultados de investigación",
+                  description:
+                    "Publicaciones más relevantes de los integrantes",
+                },
+                {
+                  title: "Infraestructura",
+                  description: "Ambientes físicos y laboratorios",
+                },
+                {
+                  title: "Datos de contacto",
+                  description: "Deben corresponder al grupo",
+                },
+                {
+                  title: "Envío de solicitud",
+                  description: "Previsualización de solicitud",
                 },
               ]}
             />

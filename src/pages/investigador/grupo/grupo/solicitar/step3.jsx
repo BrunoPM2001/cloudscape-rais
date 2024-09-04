@@ -190,7 +190,10 @@ export default function Solicitar_grupo3() {
         window.location.href = "paso4?" + query;
       }
     } else {
-      window.location.href = "paso" + (index + 1);
+      const query = queryString.stringify({
+        id,
+      });
+      window.location.href = "paso" + (index + 1) + "?" + query;
     }
   };
 
@@ -377,7 +380,30 @@ export default function Solicitar_grupo3() {
                   ),
                 },
                 {
-                  title: "Envío de publicación",
+                  title: "Información del grupo de investigación",
+                  description: "Detalles y líneas de investigación",
+                },
+                {
+                  title: "Proyectos de investigación",
+                  description:
+                    "De los integrantes (proyectos de los últimos 7 años)",
+                },
+                {
+                  title: "Resultados de investigación",
+                  description:
+                    "Publicaciones más relevantes de los integrantes",
+                },
+                {
+                  title: "Infraestructura",
+                  description: "Ambientes físicos y laboratorios",
+                },
+                {
+                  title: "Datos de contacto",
+                  description: "Deben corresponder al grupo",
+                },
+                {
+                  title: "Envío de solicitud",
+                  description: "Previsualización de solicitud",
                 },
               ]}
             />

@@ -170,12 +170,37 @@ export default function Solicitar_grupo1() {
                 },
                 {
                   title: "Coordinador del grupo",
+                  description: "Datos del coordinador",
                 },
                 {
                   title: "Integrantes del grupo",
+                  description: "Miembros del grupo",
                 },
                 {
-                  title: "Envío de publicación",
+                  title: "Información del grupo de investigación",
+                  description: "Detalles y líneas de investigación",
+                },
+                {
+                  title: "Proyectos de investigación",
+                  description:
+                    "De los integrantes (proyectos de los últimos 7 años)",
+                },
+                {
+                  title: "Resultados de investigación",
+                  description:
+                    "Publicaciones más relevantes de los integrantes",
+                },
+                {
+                  title: "Infraestructura",
+                  description: "Ambientes físicos y laboratorios",
+                },
+                {
+                  title: "Datos de contacto",
+                  description: "Deben corresponder al grupo",
+                },
+                {
+                  title: "Envío de solicitud",
+                  description: "Previsualización de solicitud",
                 },
               ]}
             />

@@ -105,7 +105,10 @@ export default function Solicitar_grupo8() {
         setLoadingBtn(false);
       }
     } else {
-      window.location.href = "paso" + (index + 1);
+      const query = queryString.stringify({
+        id,
+      });
+      window.location.href = "paso" + (index + 1) + "?" + query;
     }
   };
 
@@ -244,7 +247,8 @@ export default function Solicitar_grupo8() {
                   ),
                 },
                 {
-                  title: "Envío de publicación",
+                  title: "Envío de solicitud",
+                  description: "Previsualización de solicitud",
                 },
               ]}
             />

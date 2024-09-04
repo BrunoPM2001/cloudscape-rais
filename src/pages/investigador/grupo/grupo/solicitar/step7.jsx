@@ -163,7 +163,10 @@ export default function Solicitar_grupo7() {
         setLoadingBtn(false);
       }
     } else {
-      window.location.href = "paso" + (index + 1);
+      const query = queryString.stringify({
+        id,
+      });
+      window.location.href = "paso" + (index + 1) + "?" + query;
     }
   };
 
@@ -357,9 +360,12 @@ export default function Solicitar_grupo7() {
                   ),
                 },
                 {
-                  title: "Proyectos de investigación",
-                  description:
-                    "De los integrantes (proyectos de los últimos 7 años)",
+                  title: "Datos de contacto",
+                  description: "Deben corresponder al grupo",
+                },
+                {
+                  title: "Envío de solicitud",
+                  description: "Previsualización de solicitud",
                 },
               ]}
             />

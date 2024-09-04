@@ -180,7 +180,16 @@ export default function Solicitar_grupo6() {
                   ),
                 },
                 {
-                  title: "Envío de publicación",
+                  title: "Infraestructura",
+                  description: "Ambientes físicos y laboratorios",
+                },
+                {
+                  title: "Datos de contacto",
+                  description: "Deben corresponder al grupo",
+                },
+                {
+                  title: "Envío de solicitud",
+                  description: "Previsualización de solicitud",
                 },
               ]}
             />
