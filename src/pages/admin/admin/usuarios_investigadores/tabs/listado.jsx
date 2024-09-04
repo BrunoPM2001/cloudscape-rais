@@ -191,8 +191,8 @@ export default () => {
     const res = await axiosBase.get(
       "admin/admin/usuarios/getUsuariosInvestigadores"
     );
-    const data = await res.data;
-    setDistribution(data.data);
+    const data = res.data;
+    setDistribution(data);
     setLoading(false);
   };
 

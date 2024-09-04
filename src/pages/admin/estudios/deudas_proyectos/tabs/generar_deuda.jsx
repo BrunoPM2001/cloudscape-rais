@@ -1,12 +1,8 @@
 import {
-  Badge,
   Box,
-  Link,
-  FormField,
   Header,
   Pagination,
   PropertyFilter,
-  Select,
   SpaceBetween,
   Table,
   Button,

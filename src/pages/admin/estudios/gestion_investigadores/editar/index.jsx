@@ -2,7 +2,9 @@ import {
   Button,
   Container,
   Form,
+  SpaceBetween,
   Spinner,
+  Tabs,
 } from "@cloudscape-design/components";
 import BaseLayout from "../../../components/baseLayout";
 import { useFormValidation } from "../../../../../hooks/useFormValidation";
@@ -12,6 +14,8 @@ import { useLocation } from "react-router-dom";
 import queryString from "query-string";
 import NotificationContext from "../../../../../providers/notificationProvider";
 import Formulario from "../components/form";
+import Grupos from "./tabs/grupos";
+import Proyectos from "./tabs/proyectos";
 
 const initialForm = {
   tipo_investigador: "",
@@ -39,6 +43,10 @@ const initialForm = {
   email3: "",
   facebook: "",
   twitter: "",
+  link: "",
+  grado: null,
+  titulo_profesional: "",
+  especialidad: "",
   codigo_orcid: "",
   researcher_id: "",
   scopus_id: "",
@@ -74,7 +82,6 @@ const formRules = {
   doc_tipo: { required: true },
   doc_numero: { required: true },
   fecha_nac: { required: true },
-  pais: { required: true },
   telefono_casa: { required: false },
   telefono_trabajo: { required: false },
   direccion1: { required: false },
@@ -97,7 +104,6 @@ const formRules = {
   },
   twitter: {
     required: false,
-    regex: /^https?:\/\/(www\.)?twitter\.com\/[a-zA-Z0-9_]+\/?$/,
   },
   link: {
     required: false,
@@ -207,6 +213,7 @@ export default function Editar_investigador() {
   const [dependencias, setDependencias] = useState([]);
   const [institutos, setInstitutos] = useState([]);
   const [docenteCategorias, setDocenteCategorias] = useState([]);
+  const [data, setData] = useState({ grupos: [], proyectos: [] });
 
   //  Hooks
   const { formValues, formErrors, handleChange, validateForm, setFormValues } =
@@ -224,6 +231,7 @@ export default function Editar_investigador() {
       },
     });
     const data = res.data.data;
+    setData(res.data);
     setPaises(res.data.paises);
     setFacultades(res.data.facultades);
     setDependencias(res.data.dependencias);
@@ -231,6 +239,7 @@ export default function Editar_investigador() {
     setDocenteCategorias(res.data.docente_categorias);
     const initialData = {
       ...data,
+      grado: { value: data.grado },
       tipo: tipo_opt.find((opt) => opt.value == data.tipo),
       estado: estado_opt.find((opt) => opt.value == data.estado),
       sexo: sexo_opt.find((opt) => opt.value == data.sexo),
@@ -265,7 +274,7 @@ export default function Editar_investigador() {
         estado: formValues.estado.value,
         sexo: formValues.sexo.value,
         doc_tipo: formValues.doc_tipo.value,
-        pais: formValues.pais.value,
+        pais: formValues.pais?.value,
         facultad_id: formValues.facultad_id?.value,
         dependencia_id: formValues.dependencia_id?.value,
         instituto_id: formValues.instituto_id?.value,
@@ -289,36 +298,53 @@ export default function Editar_investigador() {
       helpInfo="Información sobre la páginal actual para poder mostrarla al público
       en general."
     >
-      <Form
-        actions={
-          <Button
-            variant="primary"
-            disabled={loading}
-            loading={updating}
-            onClick={saveData}
-          >
-            Guardar
-          </Button>
-        }
-        variant="embedded"
-      >
-        <Container>
-          {loading ? (
-            <Spinner size="big" />
-          ) : (
-            <Formulario
-              formValues={formValues}
-              formErrors={formErrors}
-              handleChange={handleChange}
-              facultades={facultades}
-              paises={paises}
-              dependencias={dependencias}
-              institutos={institutos}
-              docente_categorias={docenteCategorias}
-            />
-          )}
-        </Container>
-      </Form>
+      <SpaceBetween size="l">
+        <Form
+          actions={
+            <Button
+              variant="primary"
+              disabled={loading}
+              loading={updating}
+              onClick={saveData}
+            >
+              Guardar
+            </Button>
+          }
+        >
+          <Container>
+            {loading ? (
+              <>
+                <Spinner /> Cargando datos
+              </>
+            ) : (
+              <Formulario
+                formValues={formValues}
+                formErrors={formErrors}
+                handleChange={handleChange}
+                facultades={facultades}
+                paises={paises}
+                dependencias={dependencias}
+                institutos={institutos}
+                docente_categorias={docenteCategorias}
+              />
+            )}
+          </Container>
+        </Form>
+        <Tabs
+          tabs={[
+            {
+              id: "grupos",
+              label: "Grupos",
+              content: <Grupos items={data.grupos} loading={loading} />,
+            },
+            {
+              id: "proyectos",
+              label: "Proyectos",
+              content: <Proyectos items={data.proyectos} loading={loading} />,
+            },
+          ]}
+        />
+      </SpaceBetween>
     </BaseLayout>
   );
 }

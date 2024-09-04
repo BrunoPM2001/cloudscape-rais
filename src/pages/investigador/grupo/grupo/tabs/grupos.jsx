@@ -104,26 +104,18 @@ const columnDefinitions = [
     cell: (item) => (
       <Badge
         color={
-          item.estado == -2
-            ? "grey"
-            : item.estado == 2
-            ? "grey"
-            : item.estado == 4
-            ? "green"
-            : item.estado == 12
+          item.estado == "Disuelto"
             ? "red"
+            : item.estado == "Registrado"
+            ? "green"
+            : item.estado == "Observado"
+            ? "red"
+            : item.estado == "Reg. observado"
+            ? "grey"
             : "red"
         }
       >
-        {item.estado == -2
-          ? "Disuelto"
-          : item.estado == 2
-          ? "Observado"
-          : item.estado == 4
-          ? "Registrado"
-          : item.estado == 12
-          ? "Reg. observado"
-          : "Estado desconocido"}
+        {item.estado}
       </Badge>
     ),
     sortingField: "estado",
@@ -181,7 +173,7 @@ export default () => {
     setLoading(true);
     const res = await axiosBase.get("investigador/grupo/listadoGrupos");
     const data = res.data;
-    setDistribution(data.data);
+    setDistribution(data);
     setLoading(false);
   };
 

@@ -224,6 +224,7 @@ export default () => {
   const [distributions, setDistribution] = useState([]);
   const {
     items,
+    actions,
     filteredItemsCount,
     collectionProps,
     paginationProps,
@@ -250,14 +251,13 @@ export default () => {
     sorting: { defaultState: { sortingColumn: columnDefinitions[0] } },
     selection: {},
   });
-  const [enableBtn, setEnableBtn] = useState(false);
 
   //  Functions
   const getData = async () => {
     setLoading(true);
     const res = await axiosBase.get("admin/estudios/investigadores/listado");
-    const data = await res.data;
-    setDistribution(data.data);
+    const data = res.data;
+    setDistribution(data);
     setLoading(false);
   };
 
@@ -265,14 +265,6 @@ export default () => {
   useEffect(() => {
     getData();
   }, []);
-
-  useEffect(() => {
-    if (collectionProps.selectedItems.length > 0) {
-      setEnableBtn(true);
-    } else {
-      setEnableBtn(false);
-    }
-  }, [collectionProps.selectedItems]);
 
   return (
     <Table
@@ -286,13 +278,14 @@ export default () => {
       resizableColumns
       enableKeyboardNavigation
       selectionType="single"
+      onRowClick={({ detail }) => actions.setSelectedItems([detail.item])}
       header={
         <Header
           counter={"(" + distributions.length + ")"}
           actions={
             <SpaceBetween direction="horizontal" size="xs">
               <ButtonDropdown
-                disabled={!enableBtn}
+                disabled={collectionProps.selectedItems.length == 0}
                 onItemClick={({ detail }) => {
                   if (detail.id == "action_1_1") {
                     const query = queryString.stringify({

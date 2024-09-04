@@ -128,26 +128,18 @@ const columnDefinitions = [
     cell: (item) => (
       <Badge
         color={
-          item.estado == -2
-            ? "grey"
-            : item.estado == 2
-            ? "grey"
-            : item.estado == 4
-            ? "green"
-            : item.estado == 12
+          item.estado == "Disuelto"
             ? "red"
+            : item.estado == "Registrado"
+            ? "green"
+            : item.estado == "Observado"
+            ? "red"
+            : item.estado == "Reg. observado"
+            ? "grey"
             : "red"
         }
       >
-        {item.estado == -2
-          ? "Disuelto"
-          : item.estado == 2
-          ? "Observado"
-          : item.estado == 4
-          ? "Registrado"
-          : item.estado == 12
-          ? "Reg. observado"
-          : "Estado desconocido"}
+        {item.estado}
       </Badge>
     ),
     sortingField: "estado",
@@ -169,10 +161,10 @@ const columnDisplay = [
 export default () => {
   //  Data states
   const [loading, setLoading] = useState(true);
-  const [selectedItems, setSelectedItems] = useState([]);
   const [distributions, setDistribution] = useState([]);
   const {
     items,
+    actions,
     filteredItemsCount,
     collectionProps,
     paginationProps,
@@ -196,17 +188,16 @@ export default () => {
       ),
     },
     pagination: { pageSize: 10 },
-    sorting: { defaultState: { sortingColumn: columnDefinitions[0] } },
+    sorting: {},
     selection: {},
   });
-  const [enableBtn, setEnableBtn] = useState(false);
 
   //  Functions
   const getData = async () => {
     setLoading(true);
     const res = await axiosBase.get("admin/estudios/grupos/listadoGrupos");
-    const data = await res.data;
-    setDistribution(data.data);
+    const data = res.data;
+    setDistribution(data);
     setLoading(false);
   };
 
@@ -214,14 +205,6 @@ export default () => {
   useEffect(() => {
     getData();
   }, []);
-
-  useEffect(() => {
-    if (selectedItems.length > 0) {
-      setEnableBtn(true);
-    } else {
-      setEnableBtn(false);
-    }
-  }, [selectedItems]);
 
   return (
     <Table
@@ -235,18 +218,17 @@ export default () => {
       resizableColumns
       enableKeyboardNavigation
       selectionType="single"
-      selectedItems={selectedItems}
-      onSelectionChange={({ detail }) => setSelectedItems(detail.selectedItems)}
+      onRowClick={({ detail }) => actions.setSelectedItems([detail.item])}
       header={
         <Header
           counter={"(" + distributions.length + ")"}
           actions={
             <Button
-              disabled={!enableBtn}
+              disabled={collectionProps.selectedItems.length == 0}
               variant="primary"
               onClick={() => {
                 const query = queryString.stringify({
-                  id: selectedItems[0]["id"],
+                  id: collectionProps.selectedItems[0]["id"],
                 });
                 window.location.href = "grupos/detalle?" + query;
               }}

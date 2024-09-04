@@ -2,6 +2,7 @@ import {
   ColumnLayout,
   DatePicker,
   FormField,
+  Grid,
   Header,
   Input,
   Link,
@@ -60,6 +61,14 @@ const sexo_opt = [
     label: "Femenino",
     value: "F",
   },
+];
+
+const opt_grados = [
+  { value: "Bachiller" },
+  { value: "Maestro" },
+  { value: "Doctor" },
+  { value: "Msci" },
+  { value: "Phd" },
 ];
 
 export default function Formulario({
@@ -399,6 +408,40 @@ export default function Formulario({
             </ColumnLayout>
           </SpaceBetween>
         </ColumnLayout>
+        <Grid
+          gridDefinition={[
+            { colspan: { default: 12, xs: 4, xxs: 12 } },
+            { colspan: { default: 12, xs: 4, xxs: 6 } },
+            { colspan: { default: 12, xs: 4, xxs: 6 } },
+          ]}
+        >
+          <FormField label="Grado" stretch>
+            <Select
+              placeholder="Escoja una opción"
+              selectedOption={formValues.grado}
+              onChange={({ detail }) =>
+                handleChange("grado", detail.selectedOption)
+              }
+              options={opt_grados}
+            />
+          </FormField>
+          <FormField label="Título profesional" stretch>
+            <Input
+              value={formValues.titulo_profesional}
+              onChange={({ detail }) =>
+                handleChange("titulo_profesional", detail.value)
+              }
+            />
+          </FormField>
+          <FormField label="Especialidad" stretch>
+            <Input
+              value={formValues.especialidad}
+              onChange={({ detail }) =>
+                handleChange("especialidad", detail.value)
+              }
+            />
+          </FormField>
+        </Grid>
       </SpaceBetween>
       <SpaceBetween size="l">
         <Header variant="h3">Datos de investigador</Header>

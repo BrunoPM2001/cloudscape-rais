@@ -5,7 +5,6 @@ import {
   ButtonDropdown,
   Header,
   Pagination,
-  PropertyFilter,
   SpaceBetween,
   Table,
 } from "@cloudscape-design/components";
@@ -105,26 +104,20 @@ const columnDefinitions = [
     cell: (item) => (
       <Badge
         color={
-          item.estado == -1
+          item.estado == "Eliminado"
             ? "red"
-            : item.estado == 0
+            : item.estado == "No aprobado"
             ? "grey"
-            : item.estado == 2
+            : item.estado == "Observado"
             ? "red"
-            : item.estado == 6
+            : item.estado == "Enviado"
+            ? "green"
+            : item.estado == "En proceso"
             ? "blue"
             : "red"
         }
       >
-        {item.estado == -1
-          ? "Eliminado"
-          : item.estado == 0
-          ? "No aprobado"
-          : item.estado == 2
-          ? "Observado"
-          : item.estado == 6
-          ? "En proceso"
-          : "Estado desconocido"}
+        {item.estado}
       </Badge>
     ),
     sortingField: "estado",
@@ -176,7 +169,7 @@ export default () => {
     setLoading(true);
     const res = await axiosBase.get("investigador/grupo/listadoSolicitudes");
     const data = res.data;
-    setDistribution(data.data);
+    setDistribution(data);
     setLoading(false);
   };
 
@@ -222,7 +215,9 @@ export default () => {
                   {
                     text: "Editar",
                     id: "action_1",
-                    disabled: false,
+                    disabled:
+                      collectionProps.selectedItems[0]?.estado != "Observado" &&
+                      collectionProps.selectedItems[0]?.estado != "En proceso",
                   },
                   {
                     text: "Eliminar",

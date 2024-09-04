@@ -41,6 +41,7 @@ export default function Solicitar_grupo9() {
   //  States
   const [loading, setLoading] = useState(true);
   const [loadingBtn, setLoadingBtn] = useState(false);
+  const [loadingSend, setLoadingSend] = useState(false);
   const [data, setData] = useState();
 
   //  Functions
@@ -57,14 +58,23 @@ export default function Solicitar_grupo9() {
   };
 
   const enviar = async () => {
-    setLoadingBtn(true);
+    setLoadingSend(true);
     const res = await axiosBase.post(
-      "investigador/grupo/solicitar/registrar8",
-      formValues
+      "investigador/grupo/solicitar/registrar9",
+      {
+        id,
+      }
     );
     const info = res.data;
-    pushNotification(info.detail, info.message, notifications.length + 1);
-    setLoadingBtn(false);
+    if (info.message == "success") {
+      pushNotification(info.detail, info.message, notifications.length + 1);
+    } else {
+      pushNotification(info.detail, info.message, notifications.length + 1);
+      setTimeout(() => {
+        window.location.href = "/investigador";
+      }, 5000);
+    }
+    setLoadingSend(false);
   };
 
   const reporte = async () => {
@@ -113,7 +123,7 @@ export default function Solicitar_grupo9() {
             <Wizard
               activeStepIndex={8}
               onNavigate={({ detail }) => siguiente(detail.requestedStepIndex)}
-              isLoadingNextStep={loadingBtn}
+              isLoadingNextStep={loadingSend}
               onCancel={() => {
                 window.location.href = "../";
               }}

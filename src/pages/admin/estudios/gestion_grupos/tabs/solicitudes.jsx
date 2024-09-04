@@ -116,26 +116,20 @@ const columnDefinitions = [
     cell: (item) => (
       <Badge
         color={
-          item.estado == -1
+          item.estado == "Eliminado"
             ? "red"
-            : item.estado == 0
+            : item.estado == "No aprobado"
             ? "grey"
-            : item.estado == 2
+            : item.estado == "Observado"
             ? "red"
-            : item.estado == 6
+            : item.estado == "Enviado"
+            ? "green"
+            : item.estado == "En proceso"
             ? "blue"
             : "red"
         }
       >
-        {item.estado == -1
-          ? "Eliminado"
-          : item.estado == 0
-          ? "No aprobado"
-          : item.estado == 2
-          ? "Observado"
-          : item.estado == 6
-          ? "En proceso"
-          : "Estado desconocido"}
+        {item.estado}
       </Badge>
     ),
     sortingField: "estado",
@@ -156,7 +150,6 @@ const columnDisplay = [
 export default () => {
   //  Data states
   const [loading, setLoading] = useState(true);
-  const [selectedItems, setSelectedItems] = useState([]);
   const [distributions, setDistribution] = useState([]);
   const {
     items,
@@ -184,17 +177,16 @@ export default () => {
       ),
     },
     pagination: { pageSize: 10 },
-    sorting: { defaultState: { sortingColumn: columnDefinitions[0] } },
+    sorting: {},
     selection: {},
   });
-  const [enableBtn, setEnableBtn] = useState(false);
 
   //  Functions
   const getData = async () => {
     setLoading(true);
     const res = await axiosBase.get("admin/estudios/grupos/listadoSolicitudes");
-    const data = await res.data;
-    setDistribution(data.data);
+    const data = res.data;
+    setDistribution(data);
     setLoading(false);
   };
 
@@ -202,14 +194,6 @@ export default () => {
   useEffect(() => {
     getData();
   }, []);
-
-  useEffect(() => {
-    if (selectedItems.length > 0) {
-      setEnableBtn(true);
-    } else {
-      setEnableBtn(false);
-    }
-  }, [selectedItems]);
 
   return (
     <Table
@@ -223,18 +207,17 @@ export default () => {
       resizableColumns
       enableKeyboardNavigation
       selectionType="single"
-      selectedItems={selectedItems}
-      onSelectionChange={({ detail }) => setSelectedItems(detail.selectedItems)}
+      onRowClick={({ detail }) => actions.setSelectedItems([detail.item])}
       header={
         <Header
           counter={"(" + distributions.length + ")"}
           actions={
             <Button
-              disabled={!enableBtn}
+              disabled={collectionProps.selectedItems.length == 0}
               variant="primary"
               onClick={() => {
                 const query = queryString.stringify({
-                  id: selectedItems[0]["id"],
+                  id: collectionProps.selectedItems[0]["id"],
                 });
                 window.location.href = "grupos/detalle?" + query;
               }}
