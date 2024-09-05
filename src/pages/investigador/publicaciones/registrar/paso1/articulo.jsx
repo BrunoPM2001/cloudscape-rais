@@ -338,7 +338,6 @@ export default forwardRef(function (props, ref) {
               >
                 <Input
                   placeholder="N° de la pág. inicial"
-                  type="number"
                   value={formValues.pagina_inicial}
                   onChange={({ detail }) =>
                     handleChange("pagina_inicial", detail.value)
@@ -352,7 +351,6 @@ export default forwardRef(function (props, ref) {
               >
                 <Input
                   placeholder="N° de la pág. final"
-                  type="number"
                   value={formValues.pagina_final}
                   onChange={({ detail }) =>
                     handleChange("pagina_final", detail.value)

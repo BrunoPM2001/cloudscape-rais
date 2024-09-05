@@ -31,10 +31,9 @@ export default function Gestion_publicacion() {
       helpInfo="Información sobre la páginal actual para poder mostrarla al público
       en general."
       disableOverlap
+      contentType="table"
     >
-      <SpaceBetween size="l">
-        <Tabs tabs={tabs} ariaLabel="Opciones de publicaciones" />
-      </SpaceBetween>
+      <Tabs tabs={tabs} ariaLabel="Opciones de publicaciones" />
     </BaseLayout>
   );
 }

@@ -130,34 +130,18 @@ const columnDefinitions = [
     cell: (item) => (
       <Badge
         color={
-          item.estado == -1
-            ? "red"
-            : item.estado == 1
+          item.estado == "No tiene informe"
             ? "grey"
-            : item.estado == 2
-            ? "grey"
-            : item.estado == 4
-            ? "green"
-            : item.estado == 5
+            : item.estado == "En proceso"
             ? "blue"
-            : item.estado == 6
-            ? "grey"
+            : item.estado == "Aprobado"
+            ? "green"
+            : item.estado == "Presentado"
+            ? "blue"
             : "red"
         }
       >
-        {item.estado == -1
-          ? "Eliminado"
-          : item.estado == 1
-          ? "Reconocido"
-          : item.estado == 2
-          ? "Observado"
-          : item.estado == 4
-          ? "Registrado"
-          : item.estado == 5
-          ? "Enviado"
-          : item.estado == 6
-          ? "En proceso"
-          : "Error"}
+        {item.estado}
       </Badge>
     ),
     sortingField: "estado",
@@ -179,12 +163,13 @@ const columnDisplay = [
 export default () => {
   //  Data states
   const [loading, setLoading] = useState(true);
-  const [loadingInformes, setLoadingInformes] = useState(true);
+  const [loadingInformes, setLoadingInformes] = useState(false);
   const [informes, setInformes] = useState([]);
   const [distributions, setDistribution] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
   const {
     items,
+    actions,
     filteredItemsCount,
     collectionProps,
     paginationProps,
@@ -252,7 +237,9 @@ export default () => {
   }, [selectedOption]);
 
   useEffect(() => {
-    getInformes();
+    if (collectionProps.selectedItems.length > 0) {
+      getInformes();
+    }
   }, [collectionProps.selectedItems]);
 
   return (
@@ -268,7 +255,7 @@ export default () => {
         resizableColumns
         enableKeyboardNavigation
         selectionType="single"
-        onRowClick={({ detail }) => setSelectedItems([detail.item])}
+        onRowClick={({ detail }) => actions.setSelectedItems([detail.item])}
         header={
           <Header
             actions={
@@ -377,6 +364,7 @@ export default () => {
         onSelectionChange={({ detail }) =>
           setSelectedItems(detail.selectedItems)
         }
+        onRowClick={({ detail }) => setSelectedItems([detail.item])}
         trackBy="id"
         empty={
           <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">

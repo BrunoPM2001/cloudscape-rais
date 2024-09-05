@@ -313,6 +313,7 @@ export default () => {
     <>
       <Table
         {...collectionProps}
+        stickyHeader
         trackBy="id"
         items={items}
         columnDefinitions={columnDefinitions}
