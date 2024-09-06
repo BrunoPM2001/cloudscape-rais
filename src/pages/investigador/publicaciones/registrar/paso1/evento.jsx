@@ -1,4 +1,5 @@
 import {
+  Autosuggest,
   ColumnLayout,
   Container,
   DateInput,
@@ -15,6 +16,8 @@ import {
 import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { useFormValidation } from "../../../../../hooks/useFormValidation";
 import axiosBase from "../../../../../api/axios";
+import { useAutosuggest } from "../../../../../hooks/useAutosuggest";
+import ModalIncluirmeAutor from "../components/modalIncluirmeAutor";
 
 const initialForm = {
   titulo: "",
@@ -71,10 +74,20 @@ export default forwardRef(function (props, ref) {
   //  State
   const [loadingData, setLoadingData] = useState(false);
   const [paises, setPaises] = useState([]);
+  const [publicacion, setPublicacion] = useState({});
 
   //  Hooks
   const { formValues, formErrors, handleChange, validateForm, setFormValues } =
     useFormValidation(initialForm, formRules, groupRules);
+
+  const {
+    loading: loading1,
+    options: options1,
+    setOptions: setOptions1,
+    value: value1,
+    setValue: setValue1,
+    setAvoidSelect: setAvoidSelect1,
+  } = useAutosuggest("investigador/publicaciones/eventos/searchTitulo");
 
   //  Function
   const listaPaises = async () => {
@@ -104,6 +117,7 @@ export default forwardRef(function (props, ref) {
       pais: { value: data.data.pais },
       palabras_clave: data.palabras_clave,
     });
+    setValue1(data.data.titulo);
     setLoadingData(false);
   };
 
@@ -156,12 +170,29 @@ export default forwardRef(function (props, ref) {
                 stretch
                 errorText={formErrors.titulo}
               >
-                <Input
-                  placeholder="Escriba el título del evento"
-                  value={formValues.titulo}
-                  onChange={({ detail }) =>
-                    handleChange("titulo", detail.value)
-                  }
+                <Autosuggest
+                  onChange={({ detail }) => {
+                    handleChange("titulo", detail.value);
+                    setOptions1([]);
+                    setValue1(detail.value);
+                    if (detail.value == "") {
+                      setPublicacion({});
+                    }
+                  }}
+                  onSelect={({ detail }) => {
+                    handleChange("titulo", detail.value);
+                    if (detail.selectedOption?.id != undefined) {
+                      const { value, ...rest } = detail.selectedOption;
+                      setPublicacion(rest);
+                      setAvoidSelect1(false);
+                    }
+                  }}
+                  value={value1}
+                  options={options1}
+                  loadingText="Cargando data"
+                  placeholder="Título de la publicación"
+                  statusType={loading1 ? "loading" : "finished"}
+                  empty="No se encontraron resultados"
                 />
               </FormField>
               <FormField
@@ -327,10 +358,11 @@ export default forwardRef(function (props, ref) {
                 </FormField>
                 <FormField
                   label="Fecha de publicación"
+                  constraintText="En caso no tenga la fecha exacta coloque 1ero de enero del año de publicación"
                   stretch
                   errorText={formErrors.fecha_publicacion}
                 >
-                  <DateInput
+                  <DatePicker
                     placeholder="YYYY/MM/DD"
                     value={formValues.fecha_publicacion}
                     onChange={({ detail }) =>
@@ -418,6 +450,15 @@ export default forwardRef(function (props, ref) {
               </FormField>
             </SpaceBetween>
           </Container>
+          {publicacion?.id && (
+            <ModalIncluirmeAutor
+              id={publicacion.id}
+              close={() => {
+                setPublicacion({});
+                setValue1("");
+              }}
+            />
+          )}
         </SpaceBetween>
       )}
     </Form>

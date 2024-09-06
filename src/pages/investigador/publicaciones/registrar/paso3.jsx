@@ -79,7 +79,7 @@ export default function ({
   const [tipoAutor, setTipoAutor] = useState([]);
 
   //  Hooks
-  const { items, collectionProps, paginationProps } = useCollection(
+  const { items, actions, collectionProps, paginationProps } = useCollection(
     distributions,
     {
       pagination: { pageSize: 10 },
@@ -150,6 +150,7 @@ export default function ({
         enableKeyboardNavigation
         selectionType="single"
         variant="embedded"
+        onRowClick={({ detail }) => actions.setSelectedItems([detail.item])}
         header={
           <Header
             counter={"(" + distributions.length + ")"}

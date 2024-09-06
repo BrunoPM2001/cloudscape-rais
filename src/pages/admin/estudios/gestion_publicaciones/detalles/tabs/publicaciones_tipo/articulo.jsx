@@ -13,6 +13,7 @@ import {
   Select,
   SpaceBetween,
   StatusIndicator,
+  Textarea,
   TokenGroup,
 } from "@cloudscape-design/components";
 import { useContext, useEffect, useState } from "react";
@@ -66,6 +67,7 @@ const initialForm = {
   indexada: [],
   wos: [],
   url: "",
+  resumen: "",
 };
 
 const formRules = {
@@ -240,6 +242,78 @@ export default function ({ data, reload }) {
               onChange={({ detail }) => handleChange("titulo", detail.value)}
             />
           </FormField>
+          <ColumnLayout columns={3}>
+            <FormField
+              label="Página inicio"
+              stretch
+              errorText={formErrors.pagina_inicial}
+            >
+              <Input
+                placeholder="N° de la pág. inicial"
+                value={formValues.pagina_inicial}
+                onChange={({ detail }) =>
+                  handleChange("pagina_inicial", detail.value)
+                }
+              />
+            </FormField>
+            <FormField
+              label="Página final"
+              stretch
+              errorText={formErrors.pagina_final}
+            >
+              <Input
+                placeholder="N° de la pág. final"
+                value={formValues.pagina_final}
+                onChange={({ detail }) =>
+                  handleChange("pagina_final", detail.value)
+                }
+              />
+            </FormField>
+            <FormField
+              label="Fecha de publicación"
+              constraintText="En caso no tenga la fecha exacta coloque 1ero de enero del año de publicación"
+              stretch
+              errorText={formErrors.fecha_publicacion}
+            >
+              <DateInput
+                placeholder="YYYY/MM/DD"
+                value={formValues.fecha_publicacion}
+                onChange={({ detail }) =>
+                  handleChange("fecha_publicacion", detail.value)
+                }
+              />
+            </FormField>
+          </ColumnLayout>
+          <FormField
+            label="URL de la publicación"
+            stretch
+            info={
+              <Button
+                iconName="external"
+                variant="inline-icon"
+                target="_blank"
+                href={formValues.url ?? ""}
+              />
+            }
+            errorText={formErrors.url}
+          >
+            <Input
+              placeholder="Escriba la URL de su publicación"
+              value={formValues.url}
+              onChange={({ detail }) => handleChange("url", detail.value)}
+            />
+          </FormField>
+          <FormField
+            label="Resumen / Abstract"
+            stretch
+            errorText={formErrors.resumen}
+          >
+            <Textarea
+              placeholder="Resumen del artículo"
+              value={formValues.resumen}
+              onChange={({ detail }) => handleChange("resumen", detail.value)}
+            />
+          </FormField>
           <FormField
             label="Palabras clave"
             description={
@@ -285,47 +359,6 @@ export default function ({ data, reload }) {
               }}
             />
           </FormField>
-          <ColumnLayout columns={3}>
-            <FormField
-              label="Página inicio"
-              stretch
-              errorText={formErrors.pagina_inicial}
-            >
-              <Input
-                placeholder="N° de la pág. inicial"
-                value={formValues.pagina_inicial}
-                onChange={({ detail }) =>
-                  handleChange("pagina_inicial", detail.value)
-                }
-              />
-            </FormField>
-            <FormField
-              label="Página final"
-              stretch
-              errorText={formErrors.pagina_final}
-            >
-              <Input
-                placeholder="N° de la pág. final"
-                value={formValues.pagina_final}
-                onChange={({ detail }) =>
-                  handleChange("pagina_final", detail.value)
-                }
-              />
-            </FormField>
-            <FormField
-              label="Año de publicación"
-              stretch
-              errorText={formErrors.fecha_publicacion}
-            >
-              <DateInput
-                placeholder="YYYY/MM/DD"
-                value={formValues.fecha_publicacion}
-                onChange={({ detail }) =>
-                  handleChange("fecha_publicacion", detail.value)
-                }
-              />
-            </FormField>
-          </ColumnLayout>
         </SpaceBetween>
       </Container>
       <Container
@@ -517,25 +550,6 @@ export default function ({ data, reload }) {
               </SpaceBetween>
             </FormField>
           </Container>
-          <FormField
-            label="URL de la publicación"
-            stretch
-            info={
-              <Button
-                iconName="external"
-                variant="inline-icon"
-                target="_blank"
-                href={formValues.url ?? ""}
-              />
-            }
-            errorText={formErrors.url}
-          >
-            <Input
-              placeholder="Escriba la URL de su publicación"
-              value={formValues.url}
-              onChange={({ detail }) => handleChange("url", detail.value)}
-            />
-          </FormField>
         </SpaceBetween>
       </Container>
       {type == "revista" && (

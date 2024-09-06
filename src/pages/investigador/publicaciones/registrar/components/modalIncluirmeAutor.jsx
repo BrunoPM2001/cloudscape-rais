@@ -19,7 +19,6 @@ import axiosBase from "../../../../../api/axios";
 export default ({ id, close }) => {
   //  States
   const [loadingData, setLoadingData] = useState(true);
-  const [loading, setLoading] = useState(false);
   const [data, setData] = useState({});
 
   //  Functions
@@ -75,98 +74,282 @@ export default ({ id, close }) => {
               </FormField>
             </SpaceBetween>
           </Container>
-          <Container>
-            <SpaceBetween size="s">
-              <ColumnLayout columns={2}>
-                <FormField
-                  label="Doi"
-                  info={
-                    <Button
-                      iconName="external"
-                      variant="inline-icon"
-                      target="_blank"
-                      href={`https://doi.org/${data.doi ?? ""}`}
-                    />
-                  }
-                  stretch
-                >
-                  <Input value={data.doi} readOnly />
-                </FormField>
-                <FormField label="Fecha de publicación" stretch>
-                  <Input value={data.fecha_publicacion} readOnly />
-                </FormField>
-              </ColumnLayout>
-              <FormField label="Palabras clave" stretch>
-                {data.palabras_clave.length > 0 ? (
-                  <TokenGroup items={data.palabras_clave} readOnly />
-                ) : (
-                  <>No tiene palabras clave</>
-                )}
-              </FormField>
+          {data.tipo_publicacion == "articulo" ? (
+            <SpaceBetween size="m">
+              <Container>
+                <SpaceBetween size="s">
+                  <ColumnLayout columns={2}>
+                    <FormField
+                      label="Doi"
+                      info={
+                        <Button
+                          iconName="external"
+                          variant="inline-icon"
+                          target="_blank"
+                          href={`https://doi.org/${data.doi ?? ""}`}
+                        />
+                      }
+                      stretch
+                    >
+                      <Input value={data.doi} readOnly />
+                    </FormField>
+                    <FormField label="Fecha de publicación" stretch>
+                      <Input value={data.fecha_publicacion} readOnly />
+                    </FormField>
+                  </ColumnLayout>
+                  <FormField label="Palabras clave" stretch>
+                    {data.palabras_clave.length > 0 ? (
+                      <TokenGroup items={data.palabras_clave} readOnly />
+                    ) : (
+                      <>No tiene palabras clave</>
+                    )}
+                  </FormField>
+                </SpaceBetween>
+              </Container>
+              <Container>
+                <SpaceBetween size="s">
+                  <FormField label="Revista" stretch>
+                    <Input value={data.publicacion_nombre} readOnly />
+                  </FormField>
+                  <FormField label="Indexada" stretch>
+                    {data.index.length > 0 ? (
+                      <TokenGroup items={data.index} readOnly />
+                    ) : (
+                      <>No está indexada a ninguna revista</>
+                    )}
+                  </FormField>
+                  <ColumnLayout columns={2}>
+                    <FormField
+                      label="ISSN"
+                      info={
+                        <Button
+                          iconName="external"
+                          variant="inline-icon"
+                          target="_blank"
+                          href={`https://portal.issn.org/resource/ISSN/${
+                            data.issn ?? ""
+                          }`}
+                        />
+                      }
+                      stretch
+                    >
+                      <Input value={data.issn} readOnly />
+                    </FormField>
+                    <FormField
+                      label="ISSN-E"
+                      info={
+                        <Button
+                          iconName="external"
+                          variant="inline-icon"
+                          target="_blank"
+                          href={`https://portal.issn.org/resource/ISSN/${
+                            data.issn_e ?? ""
+                          }`}
+                        />
+                      }
+                      stretch
+                    >
+                      <Input value={data.issn_e} readOnly />
+                    </FormField>
+                  </ColumnLayout>
+                  <ColumnLayout columns={4} minColumnWidth={120}>
+                    <FormField label="Volumen" stretch>
+                      <Input value={data.volumen} readOnly />
+                    </FormField>
+                    <FormField label="Número" stretch>
+                      <Input value={data.edicion} readOnly />
+                    </FormField>
+                    <FormField label="Pag. inicial" stretch>
+                      <Input value={data.pagina_inicial} readOnly />
+                    </FormField>
+                    <FormField label="Pag. final" stretch>
+                      <Input value={data.pagina_final} readOnly />
+                    </FormField>
+                  </ColumnLayout>
+                </SpaceBetween>
+              </Container>
             </SpaceBetween>
-          </Container>
-          <Container>
-            <SpaceBetween size="s">
-              <FormField label="Revista" stretch>
-                <Input value={data.publicacion_nombre} readOnly />
-              </FormField>
-              <FormField label="Indexada" stretch>
-                {data.index.length > 0 ? (
-                  <TokenGroup items={data.index} readOnly />
-                ) : (
-                  <>No está indexada a ninguna revista</>
-                )}
-              </FormField>
-              <ColumnLayout columns={2}>
-                <FormField
-                  label="ISSN"
-                  info={
-                    <Button
-                      iconName="external"
-                      variant="inline-icon"
-                      target="_blank"
-                      href={`https://portal.issn.org/resource/ISSN/${
-                        data.issn ?? ""
-                      }`}
-                    />
-                  }
-                  stretch
-                >
-                  <Input value={data.issn} readOnly />
-                </FormField>
-                <FormField
-                  label="ISSN-E"
-                  info={
-                    <Button
-                      iconName="external"
-                      variant="inline-icon"
-                      target="_blank"
-                      href={`https://portal.issn.org/resource/ISSN/${
-                        data.issn_e ?? ""
-                      }`}
-                    />
-                  }
-                  stretch
-                >
-                  <Input value={data.issn_e} readOnly />
-                </FormField>
-              </ColumnLayout>
-              <ColumnLayout columns={4} minColumnWidth={120}>
-                <FormField label="Volumen" stretch>
-                  <Input value={data.volumen} readOnly />
-                </FormField>
-                <FormField label="Número" stretch>
-                  <Input value={data.edicion} readOnly />
-                </FormField>
-                <FormField label="Pag. inicial" stretch>
-                  <Input value={data.pagina_inicial} readOnly />
-                </FormField>
-                <FormField label="Pag. final" stretch>
-                  <Input value={data.pagina_final} readOnly />
-                </FormField>
-              </ColumnLayout>
+          ) : data.tipo_publicacion == "libro" ? (
+            <SpaceBetween size="m">
+              <Container>
+                <SpaceBetween size="s">
+                  <ColumnLayout columns={3}>
+                    <FormField label="Isbn" stretch>
+                      <Input value={data.isbn} readOnly />
+                    </FormField>
+                    <FormField label="Fecha de publicación" stretch>
+                      <Input value={data.fecha_publicacion} readOnly />
+                    </FormField>
+                    <FormField label="Volumen" stretch>
+                      <Input value={data.volumen} readOnly />
+                    </FormField>
+                    <FormField label="Edición" stretch>
+                      <Input value={data.edicion} readOnly />
+                    </FormField>
+                    <FormField label="Total de páginas" stretch>
+                      <Input value={data.pagina_total} readOnly />
+                    </FormField>
+                  </ColumnLayout>
+                  <FormField label="Palabras clave" stretch>
+                    {data.palabras_clave.length > 0 ? (
+                      <TokenGroup items={data.palabras_clave} readOnly />
+                    ) : (
+                      <>No tiene palabras clave</>
+                    )}
+                  </FormField>
+                  <FormField label="Url" stretch>
+                    <Input value={data.url} readOnly />
+                  </FormField>
+                </SpaceBetween>
+              </Container>
+              <Container>
+                <ColumnLayout columns={3}>
+                  <FormField label="Editorial" stretch>
+                    <Input value={data.editorial} readOnly />
+                  </FormField>
+                  <FormField label="Ciudad" stretch>
+                    <Input value={data.lugar_publicacion} readOnly />
+                  </FormField>
+                  <FormField label="País" stretch>
+                    <Input value={data.pais} readOnly />
+                  </FormField>
+                </ColumnLayout>
+              </Container>
             </SpaceBetween>
-          </Container>
+          ) : data.tipo_publicacion == "capitulo" ? (
+            <SpaceBetween size="m">
+              <Container>
+                <SpaceBetween size="s">
+                  <ColumnLayout columns={2}>
+                    <FormField label="Isbn" stretch>
+                      <Input value={data.isbn} readOnly />
+                    </FormField>
+                    <FormField label="Doi" stretch>
+                      <Input value={data.doi} readOnly />
+                    </FormField>
+                  </ColumnLayout>
+                  <FormField label="Palabras clave" stretch>
+                    {data.palabras_clave.length > 0 ? (
+                      <TokenGroup items={data.palabras_clave} readOnly />
+                    ) : (
+                      <>No tiene palabras clave</>
+                    )}
+                  </FormField>
+                  <ColumnLayout columns={3}>
+                    <FormField label="Página inicio" stretch>
+                      <Input value={data.pagina_inicial} readOnly />
+                    </FormField>
+                    <FormField label="Página final" stretch>
+                      <Input value={data.pagina_final} readOnly />
+                    </FormField>
+                  </ColumnLayout>
+                  <FormField label="Url" stretch>
+                    <Input value={data.url} readOnly />
+                  </FormField>
+                </SpaceBetween>
+              </Container>
+              <Container>
+                <SpaceBetween size="s">
+                  <FormField label="Título de libro" stretch>
+                    <Input value={data.publicacion_nombre} readOnly />
+                  </FormField>
+                  <FormField label="Editorial" stretch>
+                    <Input value={data.editorial} readOnly />
+                  </FormField>
+                  <ColumnLayout columns={3}>
+                    <FormField label="Ciudad" stretch>
+                      <Input value={data.lugar_publicacion} readOnly />
+                    </FormField>
+                    <FormField label="Edición" stretch>
+                      <Input value={data.edicion} readOnly />
+                    </FormField>
+                    <FormField label="Volumen" stretch>
+                      <Input value={data.volumen} readOnly />
+                    </FormField>
+                  </ColumnLayout>
+                  <ColumnLayout columns={2}>
+                    <FormField label="Total de páginas" stretch>
+                      <Input value={data.pagina_total} readOnly />
+                    </FormField>
+                    <FormField label="Fecha de publicación" stretch>
+                      <Input value={data.fecha_publicacion} readOnly />
+                    </FormField>
+                  </ColumnLayout>
+                </SpaceBetween>
+              </Container>
+            </SpaceBetween>
+          ) : data.tipo_publicacion == "evento" ? (
+            <SpaceBetween size="m">
+              <Container>
+                <SpaceBetween size="s">
+                  <FormField label="Palabras clave" stretch>
+                    {data.palabras_clave.length > 0 ? (
+                      <TokenGroup items={data.palabras_clave} readOnly />
+                    ) : (
+                      <>No tiene palabras clave</>
+                    )}
+                  </FormField>
+                  <FormField label="Url" stretch>
+                    <Input value={data.url} readOnly />
+                  </FormField>
+                </SpaceBetween>
+              </Container>
+              <Container>
+                <SpaceBetween size="s">
+                  <FormField label="Libro de resumen actas / Revista" stretch>
+                    <Input value={data.publicacion_nombre} readOnly />
+                  </FormField>
+                  <ColumnLayout columns={2}>
+                    <FormField label="Isbn" stretch>
+                      <Input value={data.isbn} readOnly />
+                    </FormField>
+                    <FormField label="Editorial" stretch>
+                      <Input value={data.editorial} readOnly />
+                    </FormField>
+                    <FormField label="Volumen" stretch>
+                      <Input value={data.volumen} readOnly />
+                    </FormField>
+                    <FormField label="Ciudad" stretch>
+                      <Input value={data.lugar_publicacion} readOnly />
+                    </FormField>
+                    <FormField label="Issn" stretch>
+                      <Input value={data.issn} readOnly />
+                    </FormField>
+                    <FormField label="Issn-e" stretch>
+                      <Input value={data.issn_e} readOnly />
+                    </FormField>
+                    <FormField label="Página inicio" stretch>
+                      <Input value={data.pagina_inicial} readOnly />
+                    </FormField>
+                    <FormField label="Página final" stretch>
+                      <Input value={data.pagina_final} readOnly />
+                    </FormField>
+                  </ColumnLayout>
+                </SpaceBetween>
+              </Container>
+              <Container>
+                <FormField label="Nombre del evento" stretch>
+                  <Input value={data.nombre_evento} readOnly />
+                </FormField>
+                <ColumnLayout columns={2}>
+                  <FormField label="Fecha de inicio" stretch>
+                    <Input value={data.fecha_inicio} readOnly />
+                  </FormField>
+                  <FormField label="Fecha de fin" stretch>
+                    <Input value={data.fecha_fin} readOnly />
+                  </FormField>
+                  <FormField label="Ciudad" stretch>
+                    <Input value={data.lugar_publicacion} readOnly />
+                  </FormField>
+                  <FormField label="País" stretch>
+                    <Input value={data.pais} readOnly />
+                  </FormField>
+                </ColumnLayout>
+              </Container>
+            </SpaceBetween>
+          ) : (
+            <></>
+          )}
           <Table
             header={<Box variant="strong">Proyectos asociados</Box>}
             columnDefinitions={[

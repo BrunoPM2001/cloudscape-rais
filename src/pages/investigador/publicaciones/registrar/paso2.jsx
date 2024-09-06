@@ -46,7 +46,7 @@ export default function ({ publicacion_id, loading, setLoading }) {
   const [typeModal, setTypeModal] = useState(null);
 
   //  Hooks
-  const { items, collectionProps, paginationProps } = useCollection(
+  const { items, actions, collectionProps, paginationProps } = useCollection(
     distributions,
     {
       pagination: { pageSize: 10 },
@@ -90,6 +90,7 @@ export default function ({ publicacion_id, loading, setLoading }) {
         enableKeyboardNavigation
         selectionType="single"
         variant="embedded"
+        onRowClick={({ detail }) => actions.setSelectedItems([detail.item])}
         header={
           <Header
             counter={"(" + distributions.length + ")"}

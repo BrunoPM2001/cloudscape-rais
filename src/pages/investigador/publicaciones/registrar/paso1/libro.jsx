@@ -1,8 +1,10 @@
 import {
+  Autosuggest,
   Box,
   ColumnLayout,
   Container,
   DateInput,
+  DatePicker,
   Form,
   FormField,
   Header,
@@ -16,6 +18,8 @@ import {
 import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { useFormValidation } from "../../../../../hooks/useFormValidation";
 import axiosBase from "../../../../../api/axios";
+import { useAutosuggest } from "../../../../../hooks/useAutosuggest";
+import ModalIncluirmeAutor from "../components/modalIncluirmeAutor";
 
 const initialForm = {
   categoria_autor: null,
@@ -44,17 +48,34 @@ const formRules = {
   pagina_total: { required: true },
   fecha_publicacion: { required: true },
   palabras_clave: { required: true, noEmpty: true },
-  url: { required: true },
 };
 
 export default forwardRef(function (props, ref) {
   //  State
   const [loadingData, setLoadingData] = useState(false);
   const [paises, setPaises] = useState([]);
+  const [publicacion, setPublicacion] = useState({});
 
   //  Hooks
   const { formValues, formErrors, handleChange, validateForm, setFormValues } =
     useFormValidation(initialForm, formRules);
+
+  const {
+    loading: loading1,
+    options: options1,
+    setOptions: setOptions1,
+    value: value1,
+    setValue: setValue1,
+    setAvoidSelect: setAvoidSelect1,
+  } = useAutosuggest("investigador/publicaciones/libros/searchTitulo");
+  const {
+    loading: loading2,
+    options: options2,
+    setOptions: setOptions2,
+    value: value2,
+    setValue: setValue2,
+    setAvoidSelect: setAvoidSelect2,
+  } = useAutosuggest("investigador/publicaciones/libros/searchIsbn");
 
   //  Function
   const listaPaises = async () => {
@@ -84,6 +105,8 @@ export default forwardRef(function (props, ref) {
       palabras_clave: data.palabras_clave,
       pais: { value: data.data.pais },
     });
+    setValue1(data.data.titulo);
+    setValue2(data.data.isbn);
     setLoadingData(false);
   };
 
@@ -144,18 +167,56 @@ export default forwardRef(function (props, ref) {
                 />
               </FormField>
               <FormField label="ISBN" stretch errorText={formErrors.isbn}>
-                <Input
-                  placeholder="Escriba el isbn"
-                  value={formValues.isbn}
-                  onChange={({ detail }) => handleChange("isbn", detail.value)}
+                <Autosuggest
+                  onChange={({ detail }) => {
+                    handleChange("isbn", detail.value);
+                    setOptions2([]);
+                    setValue2(detail.value);
+                    if (detail.value == "") {
+                      setPublicacion({});
+                    }
+                  }}
+                  onSelect={({ detail }) => {
+                    handleChange("isbn", detail.value);
+                    if (detail.selectedOption?.id != undefined) {
+                      const { value, ...rest } = detail.selectedOption;
+                      setPublicacion(rest);
+                      setAvoidSelect2(false);
+                    }
+                  }}
+                  value={value2}
+                  options={options2}
+                  loadingText="Cargando data"
+                  placeholder="Isbn de la publicación"
+                  statusType={loading2 ? "loading" : "finished"}
+                  empty="No se encontraron resultados"
                 />
               </FormField>
             </ColumnLayout>
             <FormField label="Título" stretch errorText={formErrors.titulo}>
-              <Input
-                placeholder="Escriba el título de la publicación"
-                value={formValues.titulo}
-                onChange={({ detail }) => handleChange("titulo", detail.value)}
+              <Autosuggest
+                onChange={({ detail }) => {
+                  handleChange("titulo", detail.value);
+                  setOptions1([]);
+                  setValue1(detail.value);
+                  if (detail.value == "") {
+                    setPublicacion({});
+                  }
+                }}
+                onSelect={({ detail }) => {
+                  handleChange("titulo", detail.value);
+                  if (detail.selectedOption?.id != undefined) {
+                    const { value, ...rest } = detail.selectedOption;
+                    setPublicacion(rest);
+                    setAvoidSelect1(false);
+                  }
+                }}
+                value={value1}
+                options={options1}
+                loadingText="Cargando data"
+                placeholder="Título de la publicación"
+                statusType={loading1 ? "loading" : "finished"}
+                empty="No se encontraron resultados"
               />
             </FormField>
             <FormField
@@ -286,11 +347,12 @@ export default forwardRef(function (props, ref) {
               </FormField>
               <FormField
                 label="Fecha de publicación"
+                constraintText="En caso no tenga la fecha exacta coloque 1ero de enero del año de publicación"
                 stretch
                 errorText={formErrors.fecha_publicacion}
               >
-                <DateInput
-                  placeholder="Escriba la fecha de publicación"
+                <DatePicker
+                  placeholder="YYYY/MM/DD"
                   value={formValues.fecha_publicacion}
                   onChange={({ detail }) =>
                     handleChange("fecha_publicacion", detail.value)
@@ -301,6 +363,16 @@ export default forwardRef(function (props, ref) {
           </SpaceBetween>
         )}
       </Form>
+      {publicacion?.id && (
+        <ModalIncluirmeAutor
+          id={publicacion.id}
+          close={() => {
+            setPublicacion({});
+            setValue1("");
+            setValue2("");
+          }}
+        />
+      )}
     </Container>
   );
 });

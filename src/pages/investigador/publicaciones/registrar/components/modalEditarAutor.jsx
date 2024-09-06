@@ -121,6 +121,7 @@ export default ({ id, item, visible, setVisible, reload, optAutor }) => {
                 <Popover
                   header="Descripción"
                   content="En caso la publicación presente filiación con San Marcos"
+                  triggerType="custom"
                 >
                   <Link variant="info">Info</Link>
                 </Popover>
@@ -143,6 +144,7 @@ export default ({ id, item, visible, setVisible, reload, optAutor }) => {
                 <Popover
                   header="Descripción"
                   content="En caso la publicación solo presente filiación con una institución"
+                  triggerType="custom"
                 >
                   <Link variant="info">Info</Link>
                 </Popover>

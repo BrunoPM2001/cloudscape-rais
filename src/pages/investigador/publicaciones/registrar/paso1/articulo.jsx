@@ -5,6 +5,7 @@ import {
   ColumnLayout,
   Container,
   DateInput,
+  DatePicker,
   Form,
   FormField,
   Header,
@@ -226,7 +227,7 @@ export default forwardRef(function (props, ref) {
                   }}
                   onSelect={({ detail }) => {
                     handleChange("doi", detail.value);
-                    if (detail.selectedOption.id != undefined) {
+                    if (detail.selectedOption?.id != undefined) {
                       const { value, ...rest } = detail.selectedOption;
                       setPublicacion(rest);
                       setAvoidSelect2(false);
@@ -256,7 +257,7 @@ export default forwardRef(function (props, ref) {
                     { value: "Artículo de revisión" },
                     { value: "Comunicación o nota corta" },
                   ]}
-                ></Select>
+                />
               </FormField>
             </ColumnLayout>
             <FormField label="Título" stretch errorText={formErrors.titulo}>
@@ -271,7 +272,7 @@ export default forwardRef(function (props, ref) {
                 }}
                 onSelect={({ detail }) => {
                   handleChange("titulo", detail.value);
-                  if (detail.selectedOption.id != undefined) {
+                  if (detail.selectedOption?.id != undefined) {
                     const { value, ...rest } = detail.selectedOption;
                     setPublicacion(rest);
                     setAvoidSelect1(false);
@@ -363,7 +364,7 @@ export default forwardRef(function (props, ref) {
                 stretch
                 errorText={formErrors.fecha_publicacion}
               >
-                <DateInput
+                <DatePicker
                   placeholder="YYYY/MM/DD"
                   value={formValues.fecha_publicacion}
                   onChange={({ detail }) =>
@@ -382,14 +383,18 @@ export default forwardRef(function (props, ref) {
                 onChange={({ detail }) => {
                   setOptions3([]);
                   setValue3(detail.value);
+                  handleChange("publicacion_nombre", detail.value);
                 }}
                 onSelect={({ detail }) => {
-                  if (detail.selectedOption.value != undefined) {
+                  console.log(detail);
+                  if (detail.selectedOption?.value != undefined) {
                     const { value, ...rest } = detail.selectedOption;
                     handleChange("publicacion_nombre", rest.revista);
                     handleChange("issn", rest.issn);
                     handleChange("issn_e", rest.issne);
                     setAvoidSelect3(false);
+                  } else {
+                    handleChange("publicacion_nombre", detail.value);
                   }
                 }}
                 value={value3}
