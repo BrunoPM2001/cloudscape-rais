@@ -13,16 +13,14 @@ import {
   TokenGroup,
 } from "@cloudscape-design/components";
 import { useContext, useEffect, useState } from "react";
-import { useFormValidation } from "../../../../../../../hooks/useFormValidation";
-import axiosBase from "../../../../../../../api/axios";
-import NotificationContext from "../../../../../../../providers/notificationProvider";
-import { useLocation } from "react-router-dom";
+import { useFormValidation } from "../../../../../../hooks/useFormValidation";
+import axiosBase from "../../../../../../api/axios";
 import queryString from "query-string";
+import NotificationContext from "../../../../../../providers/notificationProvider";
 
 const initialForm = {
   titulo: "",
   url: "",
-  uri: "",
   tipo_tesis: null,
   fecha_publicacion: "",
   pagina_total: "",
@@ -36,7 +34,6 @@ const initialForm = {
 const formRules = {
   titulo: { required: true },
   url: { required: true },
-  uri: { required: true },
   tipo_tesis: { required: true },
   fecha_publicacion: { required: true },
   pagina_total: { required: true },
@@ -47,39 +44,26 @@ const formRules = {
 };
 
 const tipo_tesis = [
-  { value: "Bachiller" },
-  { value: "Título Profesional" },
+  { value: "Licenciatura" },
   { value: "Maestría" },
   { value: "Doctorado" },
-  { value: "Segunda Especialidad" },
 ];
 
 export default function ({ data }) {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
 
-  //  Url
-  const location = useLocation();
-  const { id } = queryString.parse(location.search);
-
   //  State
   const [paises, setPaises] = useState([]);
   const [loadingGuardar, setLoadingGuardar] = useState(false);
 
   //  Hooks
-  const { formValues, formErrors, handleChange, validateForm, setFormValues } =
+  const { formValues, formErrors, handleChange, validateForm } =
     useFormValidation(initialForm, formRules);
 
   //  Function
-  const getData = async () => {
-    setPaises(data.paises);
-    setFormValues({
-      ...initialForm,
-      ...data.data,
-      tipo_tesis: { value: data.data.tipo_tesis },
-      pais: { value: data.data.pais },
-      palabras_clave: data.palabras_clave,
-    });
+  const getData = () => {
+    setPaises(data);
   };
 
   const guardarData = async () => {
@@ -87,7 +71,7 @@ export default function ({ data }) {
       setLoadingGuardar(true);
       const res = await axiosBase.post("admin/estudios/publicaciones/paso1", {
         ...formValues,
-        id,
+        tipo: "tesis",
       });
       const data = res.data;
       pushNotification(data.detail, data.message, notifications.length + 1);
@@ -105,8 +89,12 @@ export default function ({ data }) {
       header={
         <Header
           actions={
-            <Button loading={loadingGuardar} onClick={guardarData}>
-              Actualizar datos
+            <Button
+              variant="primary"
+              loading={loadingGuardar}
+              onClick={guardarData}
+            >
+              Guardar datos
             </Button>
           }
         >
@@ -139,13 +127,6 @@ export default function ({ data }) {
             placeholder="Escriba la URL de su tesis"
             value={formValues.url}
             onChange={({ detail }) => handleChange("url", detail.value)}
-          />
-        </FormField>
-        <FormField label="Uri" stretch errorText={formErrors.uri}>
-          <Input
-            placeholder="Escriba la URI de su tesis"
-            value={formValues.uri}
-            onChange={({ detail }) => handleChange("uri", detail.value)}
           />
         </FormField>
         <ColumnLayout columns={3}>

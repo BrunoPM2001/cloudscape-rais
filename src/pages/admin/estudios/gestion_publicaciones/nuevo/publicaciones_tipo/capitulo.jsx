@@ -14,11 +14,10 @@ import {
   TokenGroup,
 } from "@cloudscape-design/components";
 import { useContext, useEffect, useState } from "react";
-import { useFormValidation } from "../../../../../../../hooks/useFormValidation";
-import { useLocation } from "react-router-dom";
 import queryString from "query-string";
-import NotificationContext from "../../../../../../../providers/notificationProvider";
-import axiosBase from "../../../../../../../api/axios";
+import { useFormValidation } from "../../../../../../hooks/useFormValidation";
+import NotificationContext from "../../../../../../providers/notificationProvider";
+import axiosBase from "../../../../../../api/axios";
 
 const initialForm = {
   titulo: "",
@@ -61,27 +60,16 @@ export default function ({ data }) {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
 
-  //  Url
-  const location = useLocation();
-  const { id } = queryString.parse(location.search);
-
   //  State
   const [paises, setPaises] = useState([]);
   const [loadingGuardar, setLoadingGuardar] = useState(false);
 
   //  Hooks
-  const { formValues, formErrors, handleChange, validateForm, setFormValues } =
+  const { formValues, formErrors, handleChange, validateForm } =
     useFormValidation(initialForm, formRules);
 
   const getData = async () => {
-    setPaises(data.paises);
-    setFormValues({
-      ...initialForm,
-      ...data.data,
-      pais: { value: data.data.pais },
-      art_tipo: { value: data.data.art_tipo },
-      palabras_clave: data.palabras_clave,
-    });
+    setPaises(data);
   };
 
   const guardarData = async () => {
@@ -89,7 +77,7 @@ export default function ({ data }) {
       setLoadingGuardar(true);
       const res = await axiosBase.post("admin/estudios/publicaciones/paso1", {
         ...formValues,
-        id,
+        tipo: "capitulo",
       });
       const data = res.data;
       pushNotification(data.detail, data.message, notifications.length + 1);
@@ -107,8 +95,12 @@ export default function ({ data }) {
       header={
         <Header
           actions={
-            <Button loading={loadingGuardar} onClick={guardarData}>
-              Actualizar datos
+            <Button
+              variant="primary"
+              loading={loadingGuardar}
+              onClick={guardarData}
+            >
+              Guardar datos
             </Button>
           }
         >

@@ -4,22 +4,19 @@ import {
   Container,
   DateInput,
   DatePicker,
-  Form,
   FormField,
   Header,
   Input,
   Link,
   Select,
   SpaceBetween,
-  Spinner,
   TokenGroup,
 } from "@cloudscape-design/components";
 import { useContext, useEffect, useState } from "react";
-import { useFormValidation } from "../../../../../../../hooks/useFormValidation";
-import axiosBase from "../../../../../../../api/axios";
-import { useLocation } from "react-router-dom";
+import { useFormValidation } from "../../../../../../hooks/useFormValidation";
+import axiosBase from "../../../../../../api/axios";
 import queryString from "query-string";
-import NotificationContext from "../../../../../../../providers/notificationProvider";
+import NotificationContext from "../../../../../../providers/notificationProvider";
 
 const initialForm = {
   titulo: "",
@@ -77,10 +74,6 @@ export default function ({ data }) {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
 
-  //  Url
-  const location = useLocation();
-  const { id } = queryString.parse(location.search);
-
   //  State
   const [paises, setPaises] = useState([]);
   const [loadingGuardar, setLoadingGuardar] = useState(false);
@@ -91,7 +84,7 @@ export default function ({ data }) {
 
   //  Function
   const getData = async () => {
-    setPaises(data.paises);
+    setPaises(data);
     setFormValues({
       ...initialForm,
       ...data.data,
@@ -106,7 +99,7 @@ export default function ({ data }) {
       setLoadingGuardar(true);
       const res = await axiosBase.post("admin/estudios/publicaciones/paso1", {
         ...formValues,
-        id,
+        tipo: "evento",
       });
       const data = res.data;
       pushNotification(data.detail, data.message, notifications.length + 1);
@@ -125,8 +118,12 @@ export default function ({ data }) {
         header={
           <Header
             actions={
-              <Button loading={loadingGuardar} onClick={guardarData}>
-                Actualizar datos
+              <Button
+                variant="primary"
+                loading={loadingGuardar}
+                onClick={guardarData}
+              >
+                Guardar datos
               </Button>
             }
           >

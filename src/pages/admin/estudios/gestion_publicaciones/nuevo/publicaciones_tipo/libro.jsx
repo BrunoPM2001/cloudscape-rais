@@ -3,23 +3,21 @@ import {
   Button,
   ColumnLayout,
   Container,
-  Form,
+  DatePicker,
   FormField,
   Header,
   Input,
   Link,
   Select,
   SpaceBetween,
-  Spinner,
   StatusIndicator,
   TokenGroup,
 } from "@cloudscape-design/components";
 import { useContext, useEffect, useState } from "react";
-import { useFormValidation } from "../../../../../../../hooks/useFormValidation";
-import axiosBase from "../../../../../../../api/axios";
-import NotificationContext from "../../../../../../../providers/notificationProvider";
-import { useLocation } from "react-router-dom";
 import queryString from "query-string";
+import axiosBase from "../../../../../../api/axios";
+import { useFormValidation } from "../../../../../../hooks/useFormValidation";
+import NotificationContext from "../../../../../../providers/notificationProvider";
 
 const initialForm = {
   categoria_autor: null,
@@ -56,28 +54,17 @@ export default function ({ data }) {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
 
-  //  Url
-  const location = useLocation();
-  const { id } = queryString.parse(location.search);
-
   //  State
   const [paises, setPaises] = useState([]);
   const [loadingGuardar, setLoadingGuardar] = useState(false);
 
   //  Hooks
-  const { formValues, formErrors, handleChange, validateForm, setFormValues } =
+  const { formValues, formErrors, handleChange, validateForm } =
     useFormValidation(initialForm, formRules);
 
   //  Function
   const getData = async () => {
-    setPaises(data.paises);
-    setFormValues({
-      ...initialForm,
-      ...data.data,
-      categoria_autor: { value: data.data.categoria },
-      palabras_clave: data.palabras_clave,
-      pais: { value: data.data.pais },
-    });
+    setPaises(data);
   };
 
   const guardarData = async () => {
@@ -85,7 +72,7 @@ export default function ({ data }) {
       setLoadingGuardar(true);
       const res = await axiosBase.post("admin/estudios/publicaciones/paso1", {
         ...formValues,
-        id,
+        tipo: "libro",
       });
       const data = res.data;
       pushNotification(data.detail, data.message, notifications.length + 1);
@@ -103,8 +90,12 @@ export default function ({ data }) {
       header={
         <Header
           actions={
-            <Button loading={loadingGuardar} onClick={guardarData}>
-              Actualizar datos
+            <Button
+              variant="primary"
+              loading={loadingGuardar}
+              onClick={guardarData}
+            >
+              Guardar datos
             </Button>
           }
         >
@@ -280,8 +271,8 @@ export default function ({ data }) {
             stretch
             errorText={formErrors.fecha_publicacion}
           >
-            <Input
-              placeholder="Escriba la fecha de publicación"
+            <DatePicker
+              placeholder="YYYY/MM/DD"
               value={formValues.fecha_publicacion}
               onChange={({ detail }) =>
                 handleChange("fecha_publicacion", detail.value)

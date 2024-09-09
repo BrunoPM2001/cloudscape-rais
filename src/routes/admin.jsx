@@ -2,6 +2,9 @@ import { Suspense, lazy } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { NotificationProvider } from "../providers/notificationProvider";
 
+const Nueva_publicacion = lazy(() =>
+  import("../pages/admin/estudios/gestion_publicaciones/nuevo/index.jsx")
+);
 const Proyectos_evaluados = lazy(() =>
   import("../pages/admin/facultad/proyectos_evaluados/index.jsx")
 );
@@ -270,6 +273,10 @@ const routes = createBrowserRouter(
             {
               path: "detalle",
               element: <Detalle_publicacion />,
+            },
+            {
+              path: "nuevo",
+              element: <Nueva_publicacion />,
             },
           ],
         },

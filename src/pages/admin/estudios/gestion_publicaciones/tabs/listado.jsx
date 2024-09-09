@@ -331,50 +331,42 @@ export default () => {
             actions={
               <SpaceBetween direction="horizontal" size="xs">
                 <ButtonDropdown
-                  onItemClick={({ detail }) => {
-                    if (detail.id == "action_1") {
-                      setEditVisible(true);
-                    } else if (detail.id == "action_2") {
-                      setDeleteVisible(true);
-                    }
-                  }}
                   items={[
                     {
                       text: "Artículo de revista",
-                      id: "action_1",
+                      id: "articulo",
                       disabled: false,
                     },
                     {
                       text: "Capítulo de libro",
-                      id: "action_2",
+                      id: "capitulo",
                       disabled: false,
                     },
                     {
                       text: "Libro",
-                      id: "action_3",
+                      id: "libro",
                       disabled: false,
                     },
                     {
                       text: "Evento científico",
-                      id: "action_4",
+                      id: "evento",
                       disabled: false,
                     },
                     {
                       text: "Tesis propia",
-                      id: "action_5",
+                      id: "tesis",
                       disabled: false,
                     },
                     {
                       text: "Tesis asesoría",
-                      id: "action_6",
-                      disabled: false,
-                    },
-                    {
-                      text: "Patente",
-                      id: "action_7",
+                      id: "tesis-asesoria",
                       disabled: false,
                     },
                   ]}
+                  onItemClick={({ detail }) => {
+                    window.location.href =
+                      "gestion_publicaciones/nuevo?tipo=" + detail.id;
+                  }}
                 >
                   Nuevo
                 </ButtonDropdown>
