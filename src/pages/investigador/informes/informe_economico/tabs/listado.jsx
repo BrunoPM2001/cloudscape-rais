@@ -122,6 +122,7 @@ export default () => {
   const [distributions, setDistribution] = useState([]);
   const {
     items,
+    actions,
     filteredItemsCount,
     collectionProps,
     paginationProps,
@@ -148,7 +149,6 @@ export default () => {
     sorting: {},
     selection: {},
   });
-  const [enableBtn, setEnableBtn] = useState(true);
 
   //  Functions
   const getData = async () => {
@@ -166,14 +166,6 @@ export default () => {
     getData();
   }, []);
 
-  useEffect(() => {
-    if (collectionProps.selectedItems.length > 0) {
-      setEnableBtn(true);
-    } else {
-      setEnableBtn(false);
-    }
-  }, [collectionProps.selectedItems]);
-
   return (
     <Table
       {...collectionProps}
@@ -186,12 +178,13 @@ export default () => {
       resizableColumns
       enableKeyboardNavigation
       selectionType="single"
+      onRowClick={({ detail }) => actions.setSelectedItems([detail.item])}
       header={
         <Header
           actions={
             <Button
               variant="primary"
-              disabled={!enableBtn}
+              disabled={collectionProps.selectedItems.length == 0}
               onClick={() => {
                 const query = queryString.stringify({
                   id: collectionProps.selectedItems[0]?.id,

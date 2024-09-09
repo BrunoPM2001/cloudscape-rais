@@ -9,6 +9,7 @@ import Cifras from "./cifras";
 import Asignacion from "./tabs/asignacion";
 import Comprobantes from "./tabs/comprobantes";
 import Transferencias from "./tabs/transferencias";
+import InformeCumplimiento from "./tabs/informeCumplimiento";
 
 const breadcrumbs = [
   {
@@ -95,6 +96,17 @@ export default function Informe_economico_detalles() {
       content: (
         <Transferencias
           data={data.transferencias ?? {}}
+          loading={loading}
+          reload={getData}
+        />
+      ),
+    },
+    {
+      id: "informe",
+      label: "Informe de cumplimiento",
+      content: (
+        <InformeCumplimiento
+          data={data.informe ?? {}}
           loading={loading}
           reload={getData}
         />
