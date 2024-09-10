@@ -28,7 +28,7 @@ export default ({ close, reload, id, options, limit }) => {
   const formRules = {
     tipo: { required: true },
     partida: { required: true },
-    monto: { required: true, lessThan: limit },
+    monto: { required: true, lessThan: Number(limit) },
   };
 
   //  Hooks
