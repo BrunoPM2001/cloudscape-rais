@@ -87,12 +87,10 @@ const propsRepetidas = {
 };
 
 const initialForm = {
-  monto: "0",
   file: [],
 };
 
 const formRules = {
-  monto: { required: true, moreEqualThan: 3360, lessThan: 25750 },
   file: { isFile: true, maxSize: 6 * 1024 * 1024 },
 };
 
@@ -103,7 +101,11 @@ export default function Convocatoria_registro_taller_5() {
   //  States
   const [loading, setLoading] = useState(true);
   const [loadingBtn, setLoadingBtn] = useState(false);
-  const [data, setData] = useState({ presupuesto: [], partidas: [] });
+  const [data, setData] = useState({
+    presupuesto: [],
+    partidas: [],
+    montos: {},
+  });
   const [type, setType] = useState("");
   const [errors, setErrors] = useState([]);
 
@@ -203,11 +205,14 @@ export default function Convocatoria_registro_taller_5() {
                   info: (
                     <Badge color="blue">
                       Monto disponible: S/{" "}
-                      {3360 -
-                        items.reduce(
-                          (acc, curr) => acc + Number(curr.monto),
-                          0
-                        )}
+                      {parseFloat(
+                        data.montos.monto_coefinanciamiento +
+                          data.montos.subvencion -
+                          items.reduce(
+                            (acc, curr) => acc + Number(curr.monto),
+                            0
+                          )
+                      ).toFixed(2)}
                     </Badge>
                   ),
                   description: "Montos y partidas",
@@ -260,7 +265,8 @@ export default function Convocatoria_registro_taller_5() {
                                 </Button>
                                 <Button
                                   disabled={
-                                    3360 ==
+                                    data.montos.monto_coefinanciamiento +
+                                      data.montos.subvencion ==
                                     items.reduce(
                                       (acc, curr) => acc + Number(curr.monto),
                                       0
@@ -305,16 +311,13 @@ export default function Convocatoria_registro_taller_5() {
                       >
                         <Container fitHeight>
                           <FormField
-                            label="Indique el monto según el artículo 9, participación de facultad para cofinanciamiento"
-                            errorText={formErrors.monto}
+                            label="Monto según el artículo 9, participación de facultad para cofinanciamiento"
                             stretch
                           >
                             <Input
-                              value={formValues.monto}
+                              value={data.montos.monto_coefinanciamiento}
                               type="number"
-                              onChange={({ detail }) =>
-                                handleChange("monto", detail.value)
-                              }
+                              readOnly
                             />
                           </FormField>
                         </Container>
@@ -326,7 +329,7 @@ export default function Convocatoria_registro_taller_5() {
                             variant="awsui-value-large"
                             color="text-status-info"
                           >
-                            S/ 2700
+                            S/ {data.montos.subvencion}
                           </Box>
                         </Container>
                       </Grid>
@@ -363,13 +366,14 @@ export default function Convocatoria_registro_taller_5() {
                           reload={getData}
                           id={data.datos.proyecto_id}
                           options={data.partidas}
-                          limit={
-                            3360 -
-                            items.reduce(
-                              (acc, curr) => acc + Number(curr.monto),
-                              0
-                            )
-                          }
+                          limit={parseFloat(
+                            data.montos.monto_coefinanciamiento +
+                              data.montos.subvencion -
+                              items.reduce(
+                                (acc, curr) => acc + Number(curr.monto),
+                                0
+                              )
+                          ).toFixed(2)}
                         />
                       ) : type == "update" ? (
                         <ModalEditPartida
@@ -377,14 +381,15 @@ export default function Convocatoria_registro_taller_5() {
                           reload={getData}
                           item={collectionProps.selectedItems[0]}
                           options={data.partidas}
-                          limit={
-                            3360 -
-                            items.reduce(
-                              (acc, curr) => acc + Number(curr.monto),
-                              0
-                            ) +
-                            Number(collectionProps.selectedItems[0].monto)
-                          }
+                          limit={parseFloat(
+                            data.montos.monto_coefinanciamiento +
+                              data.montos.subvencion -
+                              items.reduce(
+                                (acc, curr) => acc + Number(curr.monto),
+                                0
+                              ) +
+                              Number(collectionProps.selectedItems[0].monto)
+                          ).toFixed(2)}
                         />
                       ) : (
                         type == "delete" && (

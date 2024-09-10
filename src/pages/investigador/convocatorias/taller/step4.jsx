@@ -68,7 +68,10 @@ export default function Convocatoria_registro_taller_4() {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState({ actividades: [] });
   const [type, setType] = useState("");
-  const [errors, setErrors] = useState([]);
+  const [errors, setErrors] = useState([
+    "Necesita tener al menos " + CANTIDAD_ACTIVIDADES + " actividades",
+    "Debe distribuir " + CANTIDAD_HORAS + " horas como mínimo",
+  ]);
 
   //  Hooks
   const { items, collectionProps, actions } = useCollection(data.actividades, {
@@ -83,13 +86,12 @@ export default function Convocatoria_registro_taller_4() {
     );
     const data = res.data;
     setData(data);
-    setErrors([]);
     setLoading(false);
   };
 
   const handleNavigate = (index) => {
     if (index == 4) {
-      let tempErrors = [...errors];
+      let tempErrors = [];
 
       if (items.length < CANTIDAD_ACTIVIDADES) {
         tempErrors.push(
