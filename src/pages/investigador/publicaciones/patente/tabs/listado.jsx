@@ -235,7 +235,18 @@ export default () => {
               >
                 Acciones para publicaciones
               </ButtonDropdown>
-              <Button variant="primary">Registrar</Button>
+              <Button
+                loading={loadingBtn}
+                variant="primary"
+                onClick={() => {
+                  const query = queryString.stringify({
+                    tipo: "patente",
+                  });
+                  window.location.href = "registrar/paso1?" + query;
+                }}
+              >
+                Registrar
+              </Button>
             </SpaceBetween>
           }
         >

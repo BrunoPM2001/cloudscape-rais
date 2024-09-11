@@ -15,6 +15,7 @@ import Tesis_propia from "./paso1/tesis_propia.jsx";
 import Evento from "./paso1/evento.jsx";
 import Tesis_asesoria from "./paso1/tesis_asesoria.jsx";
 import axiosBase from "../../../../api/axios.js";
+import Patente from "./paso1/patente.jsx";
 
 const breadcrumbs = [
   {
@@ -142,7 +143,12 @@ export default function Registrar_articulo_1() {
                       publicacion_id={publicacion_id}
                     />
                   ) : (
-                    <div></div>
+                    tipo == "patente" && (
+                      <Patente
+                        ref={(el) => (pasoRefs.current[0] = el)}
+                        publicacion_id={publicacion_id}
+                      />
+                    )
                   )}
                 </>
               ),
