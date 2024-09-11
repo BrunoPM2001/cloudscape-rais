@@ -150,7 +150,7 @@ export default () => {
                       disabled: false,
                     },
                     {
-                      text: "Reinicar contraseña",
+                      text: "Reiniciar contraseña",
                       id: "action_2",
                       disabled: false,
                     },

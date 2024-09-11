@@ -117,9 +117,6 @@ const columnDisplay = [
 ];
 
 export default () => {
-  //  Context
-  const { notifications, pushNotification } = useContext(NotificationContext);
-
   //  Data states
   const [loading, setLoading] = useState(true);
   const [loadingBtn, setLoadingBtn] = useState(false);
@@ -192,11 +189,10 @@ export default () => {
                 onItemClick={async ({ detail }) => {
                   if (detail.id == "action_1") {
                     const query = queryString.stringify({
-                      publicacion_id: collectionProps.selectedItems[0].id,
-                      tipo: "patente",
+                      id: collectionProps.selectedItems[0].id,
                     });
                     window.location.href =
-                      "registrar/paso" +
+                      "patente/paso" +
                       collectionProps.selectedItems[0].step +
                       "?" +
                       query;
@@ -211,8 +207,8 @@ export default () => {
                     text: "Editar",
                     id: "action_1",
                     disabled:
-                      collectionProps.selectedItems[0]?.estado != 6 &&
-                      collectionProps.selectedItems[0]?.estado != 2
+                      collectionProps.selectedItems[0]?.estado != "Observado" &&
+                      collectionProps.selectedItems[0]?.estado != "En proceso"
                         ? true
                         : false,
                   },
@@ -220,16 +216,13 @@ export default () => {
                     text: "Eliminar",
                     id: "action_2",
                     disabled:
-                      collectionProps.selectedItems[0]?.estado != 6
+                      collectionProps.selectedItems[0]?.estado != "En proceso"
                         ? true
                         : false,
                   },
                   {
                     text: "Reporte",
                     id: "action_3",
-                    disabled:
-                      collectionProps.selectedItems[0]?.estado == 6 ||
-                      collectionProps.selectedItems[0]?.estado == 2,
                   },
                 ]}
               >
@@ -239,10 +232,7 @@ export default () => {
                 loading={loadingBtn}
                 variant="primary"
                 onClick={() => {
-                  const query = queryString.stringify({
-                    tipo: "patente",
-                  });
-                  window.location.href = "registrar/paso1?" + query;
+                  window.location.href = "patente/paso1";
                 }}
               >
                 Registrar

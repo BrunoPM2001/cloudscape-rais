@@ -2,6 +2,18 @@ import { Suspense, lazy } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { NotificationProvider } from "../providers/notificationProvider.jsx";
 
+const Registrar_patente_4 = lazy(() =>
+  import("../pages/investigador/publicaciones/patente/registrar/step4.jsx")
+);
+const Registrar_patente_3 = lazy(() =>
+  import("../pages/investigador/publicaciones/patente/registrar/step3.jsx")
+);
+const Registrar_patente_2 = lazy(() =>
+  import("../pages/investigador/publicaciones/patente/registrar/step2.jsx")
+);
+const Registrar_patente_1 = lazy(() =>
+  import("../pages/investigador/publicaciones/patente/registrar/step1.jsx")
+);
 const Solicitar_grupo9 = lazy(() =>
   import("../pages/investigador/grupo/grupo/solicitar/step9.jsx")
 );
@@ -290,7 +302,28 @@ const routes = createBrowserRouter(
         },
         {
           path: "patente",
-          element: <Patentes />,
+          children: [
+            {
+              path: "",
+              element: <Patentes />,
+            },
+            {
+              path: "paso1",
+              element: <Registrar_patente_1 />,
+            },
+            {
+              path: "paso2",
+              element: <Registrar_patente_2 />,
+            },
+            {
+              path: "paso3",
+              element: <Registrar_patente_3 />,
+            },
+            {
+              path: "paso4",
+              element: <Registrar_patente_4 />,
+            },
+          ],
         },
         {
           path: "registrar",

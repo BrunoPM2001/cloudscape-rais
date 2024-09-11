@@ -288,10 +288,6 @@ export default () => {
                   {
                     text: "Reporte",
                     id: "action_3",
-                    disabled:
-                      collectionProps.selectedItems[0]?.estado ==
-                        "En proceso" ||
-                      collectionProps.selectedItems[0]?.estado == "Observado",
                   },
                 ]}
               >

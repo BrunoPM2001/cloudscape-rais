@@ -1,21 +1,16 @@
 import {
   Alert,
   Autosuggest,
-  Box,
   ColumnLayout,
   Container,
   DatePicker,
   Form,
   FormField,
-  Grid,
   Header,
   Input,
-  Multiselect,
   Select,
   SpaceBetween,
   Spinner,
-  StatusIndicator,
-  TokenGroup,
 } from "@cloudscape-design/components";
 import {
   forwardRef,
@@ -31,34 +26,20 @@ import { useAutosuggest } from "../../../../../hooks/useAutosuggest";
 import ModalIncluirmeAutor from "../components/modalIncluirmeAutor";
 
 const initialForm = {
-  doi: "",
-  art_tipo: null,
   titulo: "",
-  palabras_clave_input: "",
-  palabras_clave: [],
-  pagina_inicial: "",
-  pagina_final: "",
-  fecha_publicacion: "",
-  publicacion_nombre: "",
-  issn: "",
-  issn_e: "",
-  volumen: "",
-  edicion: "",
-  indexada: [],
-  url: "",
+  nro_registro: "",
+  tipo: null,
+  nro_expediente: "",
+  fecha_presentacion: "",
+  oficina_presentacion: "",
+  enlace: "",
 };
 
 const formRules = {
-  doi: { required: true },
-  art_tipo: { required: true },
   titulo: { required: true },
-  palabras_clave: { required: true, noEmpty: true },
-  pagina_inicial: { required: true },
-  pagina_final: { required: true },
-  fecha_publicacion: { required: true },
-  publicacion_nombre: { required: true },
-  volumen: { required: true },
-  edicion: { required: true },
+  nro_registro: { required: true },
+  tipo: { required: true },
+  fecha_presentacion: { required: true },
 };
 
 export default forwardRef(function (props, ref) {
@@ -186,24 +167,20 @@ export default forwardRef(function (props, ref) {
               <FormField
                 label="Número de registro"
                 stretch
-                errorText={formErrors.pagina_inicial}
+                errorText={formErrors.nro_registro}
               >
                 <Input
-                  value={formValues.pagina_inicial}
+                  value={formValues.nro_registro}
                   onChange={({ detail }) =>
-                    handleChange("pagina_inicial", detail.value)
+                    handleChange("nro_registro", detail.value)
                   }
                 />
               </FormField>
-              <FormField
-                label="Tipo"
-                stretch
-                errorText={formErrors.pagina_inicial}
-              >
+              <FormField label="Tipo" stretch errorText={formErrors.tipo}>
                 <Select
-                  selectedOption={formValues.pagina_inicial}
+                  selectedOption={formValues.tipo}
                   onChange={({ detail }) =>
-                    handleChange("pagina_inicial", detail.selectedOption)
+                    handleChange("tipo", detail.selectedOption)
                   }
                   options={[
                     { value: "Patente de invención" },
@@ -215,23 +192,25 @@ export default forwardRef(function (props, ref) {
               <FormField
                 label="Número de expediente"
                 stretch
-                errorText={formErrors.pagina_inicial}
+                errorText={formErrors.nro_expediente}
               >
                 <Input
-                  value={formValues.pagina_inicial}
+                  value={formValues.nro_expediente}
                   onChange={({ detail }) =>
-                    handleChange("pagina_inicial", detail.value)
+                    handleChange("nro_expediente", detail.value)
                   }
                 />
               </FormField>
               <FormField
                 label="Fecha de presentación"
                 stretch
-                errorText={formErrors.fecha}
+                errorText={formErrors.fecha_presentacion}
               >
                 <DatePicker
-                  value={formValues.fecha}
-                  onChange={({ detail }) => handleChange("fecha", detail.value)}
+                  value={formValues.fecha_presentacion}
+                  onChange={({ detail }) =>
+                    handleChange("fecha_presentacion", detail.value)
+                  }
                 />
               </FormField>
             </ColumnLayout>
@@ -239,24 +218,24 @@ export default forwardRef(function (props, ref) {
               <FormField
                 label="Oficina de presentación"
                 stretch
-                errorText={formErrors.pagina_inicial}
+                errorText={formErrors.oficina_presentacion}
               >
                 <Input
-                  value={formValues.pagina_inicial}
+                  value={formValues.oficina_presentacion}
                   onChange={({ detail }) =>
-                    handleChange("pagina_inicial", detail.value)
+                    handleChange("oficina_presentacion", detail.value)
                   }
                 />
               </FormField>
               <FormField
-                label="Número de expediente"
+                label="Enlace de la patente"
                 stretch
-                errorText={formErrors.pagina_inicial}
+                errorText={formErrors.enlace}
               >
                 <Input
-                  value={formValues.pagina_inicial}
+                  value={formValues.enlace}
                   onChange={({ detail }) =>
-                    handleChange("pagina_inicial", detail.value)
+                    handleChange("enlace", detail.value)
                   }
                 />
               </FormField>
@@ -280,7 +259,6 @@ export default forwardRef(function (props, ref) {
           close={() => {
             setPublicacion({});
             setValue1("");
-            setValue2("");
           }}
         />
       )}
