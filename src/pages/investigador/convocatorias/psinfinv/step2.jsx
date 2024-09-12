@@ -3,8 +3,10 @@ import {
   Box,
   ColumnLayout,
   Container,
+  FileUpload,
   FormField,
   Input,
+  Link,
   Select,
   SpaceBetween,
   Spinner,
@@ -54,8 +56,7 @@ const initialForm = {
 const formRules = {
   resumen_ejecutivo: { required: true, limitWords: 200 },
   resumen_esperado: { required: true },
-  palabras_clave_input: { required: true },
-  palabras_clave: { required: true },
+  palabras_clave: { required: true, noEmpty: true },
   antecedentes: { required: true },
   objetivos_generales: { required: true },
   objetivos_especificos: { required: true },
@@ -65,6 +66,24 @@ const formRules = {
   referencias_bibliograficas: { required: true },
   file1: { isFile: true, maxSize: 6 * 1024 * 1024 },
   file2: { isFile: true, maxSize: 6 * 1024 * 1024 },
+};
+
+const propsRepetidas = {
+  showFileLastModified: true,
+  showFileSize: true,
+  showFileThumbnail: true,
+  constraintText:
+    "El documento debe estar firmado, en formato PDF y no debe superar los 6 MB",
+  i18nStrings: {
+    uploadButtonText: (e) => (e ? "Cargar archivos" : "Cargar archivo"),
+    dropzoneText: (e) =>
+      e
+        ? "Arrastre los archivos para cargarlos"
+        : "Arrastre el archivo para cargarlo",
+    removeFileAriaLabel: (e) => `Eliminar archivo ${e + 1}`,
+    errorIconAriaLabel: "Error",
+  },
+  accept: ".pdf",
 };
 
 export default function Registro_psinfinv_2() {
@@ -79,7 +98,6 @@ export default function Registro_psinfinv_2() {
   const [loading, setLoading] = useState(true);
   const [loadingBtn, setLoadingBtn] = useState(false);
   const [errors, setErrors] = useState([]);
-  const [data, setData] = useState({});
 
   //  Hooks
   const { formValues, formErrors, handleChange, validateForm } =
@@ -89,7 +107,7 @@ export default function Registro_psinfinv_2() {
   const getData = async () => {
     setLoading(true);
     const res = await axiosBase.get(
-      "investigador/convocatorias/psinfinv/verificar1",
+      "investigador/convocatorias/psinfinv/verificar2",
       {
         params: {
           id,
@@ -97,10 +115,32 @@ export default function Registro_psinfinv_2() {
       }
     );
     const info = res.data;
-    setData(info);
     if (!info.estado) {
       setErrors(info.errores);
     } else {
+      if (info.descripcion.length != 0) {
+        handleChange("resumen_ejecutivo", info.descripcion.resumen_ejecutivo);
+        handleChange("resumen_esperado", info.descripcion.resumen_esperado);
+        handleChange("antecedentes", info.descripcion.antecedentes);
+        handleChange(
+          "objetivos_generales",
+          info.descripcion.objetivos_generales
+        );
+        handleChange(
+          "objetivos_especificos",
+          info.descripcion.objetivos_especificos
+        );
+        handleChange("justificacion", info.descripcion.justificacion);
+        handleChange("hipotesis", info.descripcion.hipotesis);
+        handleChange(
+          "metodologia_trabajo",
+          info.descripcion.metodologia_trabajo
+        );
+        handleChange(
+          "referencias_bibliograficas",
+          info.descripcion.referencias_bibliograficas
+        );
+      }
     }
     setLoading(false);
   };
@@ -108,9 +148,26 @@ export default function Registro_psinfinv_2() {
   const siguiente = async () => {
     if (validateForm()) {
       setLoadingBtn(true);
+      const form = new FormData();
+      form.append("id", id);
+      form.append("resumen_ejecutivo", formValues.resumen_ejecutivo);
+      form.append("resumen_esperado", formValues.resumen_esperado);
+      form.append("palabras_clave", formValues.palabras_clave);
+      form.append("antecedentes", formValues.antecedentes);
+      form.append("objetivos_generales", formValues.objetivos_generales);
+      form.append("objetivos_especificos", formValues.objetivos_especificos);
+      form.append("justificacion", formValues.justificacion);
+      form.append("hipotesis", formValues.hipotesis);
+      form.append("metodologia_trabajo", formValues.metodologia_trabajo);
+      form.append(
+        "referencias_bibliograficas",
+        formValues.referencias_bibliograficas
+      );
+      form.append("file1", formValues.file1[0]);
+      form.append("file2", formValues.file2[0]);
       const res = await axiosBase.post(
-        "investigador/convocatorias/psinfinv/registrar1",
-        formValues
+        "investigador/convocatorias/psinfinv/registrar2",
+        form
       );
       const info = res.data;
       if (info.message == "success") {
@@ -136,7 +193,7 @@ export default function Registro_psinfinv_2() {
       helpInfo="Información sobre la páginal actual para poder mostrarla al público
       en general."
       disableOverlap
-      contentType="wizard"
+      contentType="table"
     >
       {loading ? (
         <Box>
@@ -165,26 +222,39 @@ export default function Registro_psinfinv_2() {
                     <Tabs
                       tabs={[
                         {
-                          id: "resumen",
+                          id: "resumen_ejecutivo",
                           label: "Resumen ejecutivo",
                           content: (
-                            <Tiptap
-                              value={formValues.resumen_ejecutivo}
-                              handleChange={handleChange}
-                              name="resumen_ejecutivo"
-                              limitWords={10}
-                            />
+                            <FormField
+                              label="Detalle el resumen"
+                              stretch
+                              errorText={formErrors.resumen_ejecutivo}
+                            >
+                              <Tiptap
+                                value={formValues.resumen_ejecutivo}
+                                handleChange={handleChange}
+                                name="resumen_ejecutivo"
+                                limitWords={200}
+                              />
+                            </FormField>
                           ),
                         },
                         {
                           id: "resumen_esperado",
                           label: "Resultado esperado",
                           content: (
-                            <Tiptap
-                              value={formValues.resumen_esperado}
-                              handleChange={handleChange}
-                              name="resumen_esperado"
-                            />
+                            <FormField
+                              label="Detalle los resultados que espera conseguir"
+                              stretch
+                              errorText={formErrors.resumen_esperado}
+                            >
+                              <Tiptap
+                                value={formValues.resumen_esperado}
+                                handleChange={handleChange}
+                                name="resumen_esperado"
+                                limitWords={300}
+                              />
+                            </FormField>
                           ),
                         },
                         {
@@ -193,6 +263,7 @@ export default function Registro_psinfinv_2() {
                           content: (
                             <FormField
                               label="Palabras clave"
+                              constraintText="Máximo 5 palabras"
                               description={
                                 <StatusIndicator type="warning">
                                   <Box
@@ -253,77 +324,173 @@ export default function Registro_psinfinv_2() {
                           id: "antecedentes",
                           label: "Antecedentes",
                           content: (
-                            <Tiptap
-                              value={formValues.antecedentes}
-                              handleChange={handleChange}
-                              name="antecedentes"
-                            />
+                            <FormField
+                              label="Indique los antecedentes del proyecto"
+                              stretch
+                              errorText={formErrors.antecedentes}
+                            >
+                              <Tiptap
+                                value={formValues.antecedentes}
+                                handleChange={handleChange}
+                                name="antecedentes"
+                                limitWords={1000}
+                              />
+                            </FormField>
                           ),
                         },
                         {
                           id: "objetivos_generales",
-                          label: "Objetivos generales",
+                          label: "Objetivo general",
                           content: (
-                            <Tiptap
-                              value={formValues.objetivos_generales}
-                              handleChange={handleChange}
-                              name="objetivos_generales"
-                            />
+                            <FormField
+                              label="Indique el objetivo general que espera alcanzar"
+                              stretch
+                              errorText={formErrors.objetivos_generales}
+                            >
+                              <Tiptap
+                                value={formValues.objetivos_generales}
+                                handleChange={handleChange}
+                                name="objetivos_generales"
+                                limitWords={200}
+                              />
+                            </FormField>
                           ),
                         },
                         {
                           id: "objetivos_especificos",
                           label: "Objetivos específicos",
                           content: (
-                            <Tiptap
-                              value={formValues.objetivos_especificos}
-                              handleChange={handleChange}
-                              name="objetivos_especificos"
-                            />
+                            <FormField
+                              label="Indique el objetivo general que espera alcanzar"
+                              stretch
+                              errorText={formErrors.objetivos_especificos}
+                            >
+                              <Tiptap
+                                value={formValues.objetivos_especificos}
+                                handleChange={handleChange}
+                                name="objetivos_especificos"
+                                limitWords={200}
+                              />
+                            </FormField>
                           ),
                         },
                         {
                           id: "justificacion",
                           label: "Justificación",
                           content: (
-                            <Tiptap
-                              value={formValues.justificacion}
-                              handleChange={handleChange}
-                              name="justificacion"
-                            />
+                            <FormField
+                              label="Definir las razones del por qué se aborda la investigación y el aporte de los resultados para el beneficio de la sociedad, desarrollo científico ó tecnológico."
+                              stretch
+                              errorText={formErrors.justificacion}
+                            >
+                              <Tiptap
+                                value={formValues.justificacion}
+                                handleChange={handleChange}
+                                name="justificacion"
+                                limitWords={400}
+                              />
+                            </FormField>
                           ),
                         },
                         {
                           id: "hipotesis",
                           label: "Hipótesis",
                           content: (
-                            <Tiptap
-                              value={formValues.hipotesis}
-                              handleChange={handleChange}
-                              name="hipotesis"
-                            />
+                            <FormField
+                              label="Clara y coherente con el problema central."
+                              stretch
+                              errorText={formErrors.hipotesis}
+                            >
+                              <Tiptap
+                                value={formValues.hipotesis}
+                                handleChange={handleChange}
+                                name="hipotesis"
+                                limitWords={200}
+                              />
+                            </FormField>
                           ),
                         },
                         {
                           id: "metodologia_trabajo",
                           label: "Metodología de trabajo",
                           content: (
-                            <Tiptap
-                              value={formValues.metodologia_trabajo}
-                              handleChange={handleChange}
-                              name="metodologia_trabajo"
-                            />
+                            <SpaceBetween size="m">
+                              <FormField
+                                label="Diseño de la investigación, método y técnicas a ser utilizadas, etapas del estudio"
+                                stretch
+                                errorText={formErrors.metodologia_trabajo}
+                              >
+                                <Tiptap
+                                  value={formValues.metodologia_trabajo}
+                                  handleChange={handleChange}
+                                  name="metodologia_trabajo"
+                                  limitWords={1500}
+                                />
+                              </FormField>
+                              <Container>
+                                <FormField label="Anexo">
+                                  <FileUpload
+                                    {...propsRepetidas}
+                                    value={formValues.file1}
+                                    onChange={({ detail }) =>
+                                      handleChange("file1", detail.value)
+                                    }
+                                  />
+                                </FormField>
+                              </Container>
+                            </SpaceBetween>
                           ),
                         },
                         {
                           id: "referencias_bibliograficas",
                           label: "Referencias bibliográficas",
                           content: (
-                            <Tiptap
-                              value={formValues.referencias_bibliograficas}
-                              handleChange={handleChange}
-                              name="referencias_bibliograficas"
-                            />
+                            <FormField
+                              label="Ordenadas en función a algún sistema internacionalmente reconocido como: Vancouver, APA o Council of Science Editors (CSE)"
+                              stretch
+                              errorText={formErrors.referencias_bibliograficas}
+                            >
+                              <Tiptap
+                                value={formValues.referencias_bibliograficas}
+                                handleChange={handleChange}
+                                name="referencias_bibliograficas"
+                                limitWords={1500}
+                              />
+                            </FormField>
+                          ),
+                        },
+                        {
+                          id: "propiedad_intelectual",
+                          label: "Propiedad intelectual",
+                          content: (
+                            <Container>
+                              <FormField
+                                label="Propiedad intelectual"
+                                description={
+                                  <>
+                                    Puede descargar la plantilla en{" "}
+                                    <Link
+                                      href="/minio/templates/propiedad-intelectual.docx"
+                                      external="true"
+                                      variant="primary"
+                                      fontSize="body-s"
+                                      target="_blank"
+                                    >
+                                      este enlace.
+                                    </Link>
+                                  </>
+                                }
+                                errorText={formErrors.file1}
+                              >
+                                <FileUpload
+                                  {...propsRepetidas}
+                                  value={formValues.file1}
+                                  onChange={({ detail }) =>
+                                    handleChange("file1", detail.value)
+                                  }
+                                />
+                              </FormField>
+                            </Container>
                           ),
                         },
                       ]}
