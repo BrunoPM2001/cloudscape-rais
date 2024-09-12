@@ -152,7 +152,12 @@ export default function Registro_psinfinv_2() {
       form.append("id", id);
       form.append("resumen_ejecutivo", formValues.resumen_ejecutivo);
       form.append("resumen_esperado", formValues.resumen_esperado);
-      form.append("palabras_clave", formValues.palabras_clave);
+      form.append(
+        "palabras_clave",
+        formValues.palabras_clave.length == 1
+          ? formValues.palabras_clave[0].label
+          : formValues.palabras_clave.map((item) => item.label).join(",")
+      );
       form.append("antecedentes", formValues.antecedentes);
       form.append("objetivos_generales", formValues.objetivos_generales);
       form.append("objetivos_especificos", formValues.objetivos_especificos);
@@ -480,13 +485,13 @@ export default function Registro_psinfinv_2() {
                                     </Link>
                                   </>
                                 }
-                                errorText={formErrors.file1}
+                                errorText={formErrors.file2}
                               >
                                 <FileUpload
                                   {...propsRepetidas}
-                                  value={formValues.file1}
+                                  value={formValues.file2}
                                   onChange={({ detail }) =>
-                                    handleChange("file1", detail.value)
+                                    handleChange("file2", detail.value)
                                   }
                                 />
                               </FormField>
