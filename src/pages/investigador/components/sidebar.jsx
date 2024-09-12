@@ -153,6 +153,11 @@ const navItems = [
         text: "Talleres de Investigación y Posgrado",
         href: "/investigador/convocatoria/taller/paso1",
       },
+      {
+        type: "link",
+        text: "Proyecto de investigación sin financiamiento",
+        href: "/investigador/convocatoria/psinfinv/paso1",
+      },
     ],
   },
   {
