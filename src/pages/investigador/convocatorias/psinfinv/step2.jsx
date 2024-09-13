@@ -541,16 +541,16 @@ export default function Registro_psinfinv_2() {
                   ),
                 },
                 {
-                  title: "Plan de trabajo",
-                  description: "Justificación, objetivos y metas",
+                  title: "Responsable del proyecto",
+                  description: "Datos del responsable",
                 },
                 {
-                  title: "Programa del taller",
+                  title: "Integrantes",
                   description: "Listado de las actividades del taller",
                 },
                 {
-                  title: "Financiamiento",
-                  description: "Montos y partidas",
+                  title: "Calendario",
+                  description: "Listado de actividades junto al responsable",
                 },
                 {
                   title: "Instrucciones finales",

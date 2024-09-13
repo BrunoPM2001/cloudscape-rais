@@ -2,6 +2,15 @@ import { Suspense, lazy } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { NotificationProvider } from "../providers/notificationProvider.jsx";
 
+const Registro_psinfinv_6 = lazy(() =>
+  import("../pages/investigador/convocatorias/psinfinv/step6.jsx")
+);
+const Registro_psinfinv_5 = lazy(() =>
+  import("../pages/investigador/convocatorias/psinfinv/step5.jsx")
+);
+const Registro_psinfinv_4 = lazy(() =>
+  import("../pages/investigador/convocatorias/psinfinv/step4.jsx")
+);
 const Registro_psinfinv_3 = lazy(() =>
   import("../pages/investigador/convocatorias/psinfinv/step3.jsx")
 );
@@ -494,6 +503,18 @@ const routes = createBrowserRouter(
             {
               path: "paso3",
               element: <Registro_psinfinv_3 />,
+            },
+            {
+              path: "paso4",
+              element: <Registro_psinfinv_4 />,
+            },
+            {
+              path: "paso5",
+              element: <Registro_psinfinv_5 />,
+            },
+            {
+              path: "paso6",
+              element: <Registro_psinfinv_6 />,
             },
           ],
         },

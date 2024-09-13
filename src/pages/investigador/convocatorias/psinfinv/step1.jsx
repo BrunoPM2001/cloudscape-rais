@@ -123,44 +123,53 @@ export default function Registro_psinfinv_1() {
     );
     const info = res.data;
     setData(info);
-    if (!info.estado) {
-      setErrors(info.errores);
+    if (info.go) {
+      const query = queryString.stringify({ id: info.go });
+      window.location.href = "paso" + info.step + "?" + query;
     } else {
-      handleChange("nombres", info.datos.nombres);
-      handleChange("area", info.datos.area);
-      handleChange("facultad", info.datos.facultad);
-      handleChange("grupo_nombre", info.datos.grupo_nombre);
-      handleChange("ods", info.datos.ods);
+      if (!info.estado) {
+        setErrors(info.errores);
+      } else {
+        handleChange("nombres", info.datos.nombres);
+        handleChange("area", info.datos.area);
+        handleChange("facultad", info.datos.facultad);
+        handleChange("grupo_nombre", info.datos.grupo_nombre);
+        handleChange("ods", info.datos.ods);
 
-      if (info.proyecto) {
-        handleChange("titulo", info.proyecto.titulo);
-        handleChange(
-          "tipo_investigacion",
-          tipo_investigaciones.find(
-            (opt) => opt.value == info.proyecto.tipo_investigacion
-          )
-        );
-        handleChange("localizacion", { value: info.proyecto.localizacion });
+        if (info.proyecto) {
+          handleChange("titulo", info.proyecto.titulo);
+          handleChange(
+            "tipo_investigacion",
+            tipo_investigaciones.find(
+              (opt) => opt.value == info.proyecto.tipo_investigacion
+            )
+          );
+          handleChange("localizacion", { value: info.proyecto.localizacion });
 
-        handleChange(
-          "linea",
-          info.lineas.find(
-            (opt) => opt.value == info.proyecto.linea_investigacion_id
-          )
-        );
+          handleChange(
+            "linea",
+            info.lineas.find(
+              (opt) => opt.value == info.proyecto.linea_investigacion_id
+            )
+          );
 
-        const ocde_3 = info.ocde.find(
-          (opt) => opt.value == info.proyecto.ocde_id
-        );
-        const ocde_2 = info.ocde.find((opt) => opt.value == ocde_3?.parent_id);
-        const ocde_1 = info.ocde.find((opt) => opt.value == ocde_2?.parent_id);
-        handleChange("ocde", ocde_3);
-        handleChange("ocde2", ocde_2);
-        handleChange("ocde1", ocde_1);
-        handleChange("id", id);
+          const ocde_3 = info.ocde.find(
+            (opt) => opt.value == info.proyecto.ocde_id
+          );
+          const ocde_2 = info.ocde.find(
+            (opt) => opt.value == ocde_3?.parent_id
+          );
+          const ocde_1 = info.ocde.find(
+            (opt) => opt.value == ocde_2?.parent_id
+          );
+          handleChange("ocde", ocde_3);
+          handleChange("ocde2", ocde_2);
+          handleChange("ocde1", ocde_1);
+          handleChange("id", id);
+        }
       }
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const siguiente = async () => {
@@ -381,7 +390,7 @@ export default function Registro_psinfinv_1() {
                             />
                           </FormField>
                           <FormField
-                            label="Tipo de investigación"
+                            label="Localización"
                             errorText={formErrors.localizacion}
                             stretch
                           >
@@ -403,20 +412,20 @@ export default function Registro_psinfinv_1() {
                   ),
                 },
                 {
-                  title: "Comité organizador",
-                  description: "Listado de integrantes para el taller",
+                  title: "Descripción del proyecto",
+                  description: "Listado de detalles a completar",
                 },
                 {
-                  title: "Plan de trabajo",
-                  description: "Justificación, objetivos y metas",
+                  title: "Responsable del proyecto",
+                  description: "Datos del responsable",
                 },
                 {
-                  title: "Programa del taller",
+                  title: "Integrantes",
                   description: "Listado de las actividades del taller",
                 },
                 {
-                  title: "Financiamiento",
-                  description: "Montos y partidas",
+                  title: "Calendario",
+                  description: "Listado de actividades junto al responsable",
                 },
                 {
                   title: "Instrucciones finales",

@@ -182,12 +182,12 @@ export default function Registro_psinfinv_3() {
                   ),
                 },
                 {
-                  title: "Programa del taller",
+                  title: "Integrantes",
                   description: "Listado de las actividades del taller",
                 },
                 {
-                  title: "Financiamiento",
-                  description: "Montos y partidas",
+                  title: "Calendario",
+                  description: "Listado de actividades junto al responsable",
                 },
                 {
                   title: "Instrucciones finales",
