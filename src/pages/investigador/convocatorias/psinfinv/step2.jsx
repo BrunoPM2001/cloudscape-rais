@@ -1,13 +1,11 @@
 import {
   Alert,
   Box,
-  ColumnLayout,
   Container,
   FileUpload,
   FormField,
   Input,
   Link,
-  Select,
   SpaceBetween,
   Spinner,
   StatusIndicator,
@@ -98,6 +96,7 @@ export default function Registro_psinfinv_2() {
   const [loading, setLoading] = useState(true);
   const [loadingBtn, setLoadingBtn] = useState(false);
   const [errors, setErrors] = useState([]);
+  const [data, setData] = useState({});
 
   //  Hooks
   const { formValues, formErrors, handleChange, validateForm } =
@@ -115,6 +114,7 @@ export default function Registro_psinfinv_2() {
       }
     );
     const info = res.data;
+    setData(info);
     if (!info.estado) {
       setErrors(info.errores);
     } else {
@@ -139,6 +139,11 @@ export default function Registro_psinfinv_2() {
         handleChange(
           "referencias_bibliograficas",
           info.descripcion.referencias_bibliograficas
+        );
+        const palabras = info.palabras_clave.split(",");
+        handleChange(
+          "palabras_clave",
+          palabras.map((element) => ({ label: element }))
         );
       }
     }
@@ -177,9 +182,9 @@ export default function Registro_psinfinv_2() {
       const info = res.data;
       if (info.message == "success") {
         const query = queryString.stringify({
-          id: info.id,
+          id,
         });
-        window.location.href = "paso2?" + query;
+        window.location.href = "paso3?" + query;
       } else {
         pushNotification(info.detail, info.message, notifications.length + 1);
       }
@@ -268,7 +273,6 @@ export default function Registro_psinfinv_2() {
                           content: (
                             <FormField
                               label="Palabras clave"
-                              constraintText="Máximo 5 palabras"
                               description={
                                 <StatusIndicator type="warning">
                                   <Box
@@ -277,7 +281,7 @@ export default function Registro_psinfinv_2() {
                                     fontSize="body-s"
                                   >
                                     Presionar la tecla de enter para añadir una
-                                    palabra
+                                    palabra, máximo 5 palabras
                                   </Box>
                                 </StatusIndicator>
                               }
@@ -296,7 +300,8 @@ export default function Registro_psinfinv_2() {
                                 onKeyDown={({ detail }) => {
                                   if (
                                     detail.key == "Enter" &&
-                                    formValues.palabras_clave_input != ""
+                                    formValues.palabras_clave_input != "" &&
+                                    formValues.palabras_clave.length < 5
                                   ) {
                                     handleChange("palabras_clave", [
                                       ...formValues.palabras_clave,
@@ -433,7 +438,25 @@ export default function Registro_psinfinv_2() {
                                 />
                               </FormField>
                               <Container>
-                                <FormField label="Anexo">
+                                <FormField
+                                  label="Anexo"
+                                  description={
+                                    data.archivos.metodologia != null && (
+                                      <>
+                                        Ya ha cargado un{" "}
+                                        <Link
+                                          href={data.archivos.metodologia}
+                                          external="true"
+                                          variant="primary"
+                                          fontSize="body-s"
+                                          target="_blank"
+                                        >
+                                          archivo.
+                                        </Link>
+                                      </>
+                                    )
+                                  }
+                                >
                                   <FileUpload
                                     {...propsRepetidas}
                                     value={formValues.file1}
@@ -483,6 +506,21 @@ export default function Registro_psinfinv_2() {
                                     >
                                       este enlace.
                                     </Link>
+                                    {data.archivos.propiedad != null && (
+                                      <>
+                                        {" "}
+                                        Ya ha cargado un{" "}
+                                        <Link
+                                          href={data.archivos.propiedad}
+                                          external="true"
+                                          variant="primary"
+                                          fontSize="body-s"
+                                          target="_blank"
+                                        >
+                                          archivo.
+                                        </Link>
+                                      </>
+                                    )}
                                   </>
                                 }
                                 errorText={formErrors.file2}
