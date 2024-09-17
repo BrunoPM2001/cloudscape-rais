@@ -122,6 +122,10 @@ export default function Registro_psinfinv_3() {
                             </Box>
                             <Box>{data.fecha_nac}</Box>
                           </div>
+                          <div>
+                            <Box variant="awsui-key-label">Tipo</Box>
+                            <Box>{data.tipo}</Box>
+                          </div>
                         </SpaceBetween>
                         <SpaceBetween size="s">
                           <div>
@@ -137,10 +141,6 @@ export default function Registro_psinfinv_3() {
                           <div>
                             <Box variant="awsui-key-label">Grado</Box>
                             <Box>{data.grado}</Box>
-                          </div>
-                          <div>
-                            <Box variant="awsui-key-label">Tipo</Box>
-                            <Box>{data.tipo}</Box>
                           </div>
                           <div>
                             <Box variant="awsui-key-label">

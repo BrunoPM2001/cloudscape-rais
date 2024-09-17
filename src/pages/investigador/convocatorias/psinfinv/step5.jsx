@@ -18,6 +18,7 @@ import { useLocation } from "react-router-dom";
 import { useCollection } from "@cloudscape-design/collection-hooks";
 import ModalAddActividad from "./components/modalAddActividad.jsx";
 import ModalDeleteActividad from "./components/modalDeleteActividad.jsx";
+import ModalEditActividad from "./components/modalEditActividad.jsx";
 
 const breadcrumbs = [
   {
@@ -220,12 +221,18 @@ export default function Registro_psinfinv_5() {
                                   onItemClick={({ detail }) => {
                                     if (detail.id == "action_1_1") {
                                       setType("delete");
+                                    } else if (detail.id == "action_1_2") {
+                                      setType("edit");
                                     }
                                   }}
                                   items={[
                                     {
                                       text: "Eliminar",
                                       id: "action_1_1",
+                                    },
+                                    {
+                                      text: "Editar",
+                                      id: "action_1_2",
                                     },
                                   ]}
                                 >
@@ -265,12 +272,19 @@ export default function Registro_psinfinv_5() {
                           close={() => setType("")}
                           integrantes={integrantes}
                         />
+                      ) : type == "delete" ? (
+                        <ModalDeleteActividad
+                          id={collectionProps.selectedItems[0].id}
+                          reload={getData}
+                          close={() => setType("")}
+                        />
                       ) : (
-                        type == "delete" && (
-                          <ModalDeleteActividad
-                            id={collectionProps.selectedItems[0].id}
+                        type == "edit" && (
+                          <ModalEditActividad
+                            item={collectionProps.selectedItems[0]}
                             reload={getData}
                             close={() => setType("")}
+                            integrantes={integrantes}
                           />
                         )
                       )}

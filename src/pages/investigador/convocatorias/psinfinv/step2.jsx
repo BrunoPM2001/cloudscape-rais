@@ -250,24 +250,6 @@ export default function Registro_psinfinv_2() {
                           ),
                         },
                         {
-                          id: "resumen_esperado",
-                          label: "Resultado esperado",
-                          content: (
-                            <FormField
-                              label="Detalle los resultados que espera conseguir"
-                              stretch
-                              errorText={formErrors.resumen_esperado}
-                            >
-                              <Tiptap
-                                value={formValues.resumen_esperado}
-                                handleChange={handleChange}
-                                name="resumen_esperado"
-                                limitWords={300}
-                              />
-                            </FormField>
-                          ),
-                        },
-                        {
                           id: "palabras_clave",
                           label: "Palabras clave",
                           content: (
@@ -292,10 +274,12 @@ export default function Registro_psinfinv_2() {
                                 placeholder="Escriba las palabras clave"
                                 value={formValues.palabras_clave_input}
                                 onChange={({ detail }) => {
-                                  handleChange(
-                                    "palabras_clave_input",
-                                    detail.value
-                                  );
+                                  if (!/.*\s.*/.test(detail.value)) {
+                                    handleChange(
+                                      "palabras_clave_input",
+                                      detail.value
+                                    );
+                                  }
                                 }}
                                 onKeyDown={({ detail }) => {
                                   if (
@@ -371,7 +355,7 @@ export default function Registro_psinfinv_2() {
                           label: "Objetivos específicos",
                           content: (
                             <FormField
-                              label="Indique el objetivo general que espera alcanzar"
+                              label="Indique los objetivos específicos que espera alcanzar"
                               stretch
                               errorText={formErrors.objetivos_especificos}
                             >
@@ -534,6 +518,24 @@ export default function Registro_psinfinv_2() {
                                 />
                               </FormField>
                             </Container>
+                          ),
+                        },
+                        {
+                          id: "resumen_esperado",
+                          label: "Resultado esperado",
+                          content: (
+                            <FormField
+                              label="Detalle los resultados que espera conseguir"
+                              stretch
+                              errorText={formErrors.resumen_esperado}
+                            >
+                              <Tiptap
+                                value={formValues.resumen_esperado}
+                                handleChange={handleChange}
+                                name="resumen_esperado"
+                                limitWords={300}
+                              />
+                            </FormField>
                           ),
                         },
                       ]}

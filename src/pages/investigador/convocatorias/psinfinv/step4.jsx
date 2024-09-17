@@ -194,7 +194,7 @@ export default function Registro_psinfinv_4() {
                 },
                 {
                   title: "Integrantes",
-                  description: "Listado de las actividades del taller",
+                  description: "Deben ser integrantes registrados del GI",
                   content: (
                     <SpaceBetween size="m">
                       {alert.length > 0 && (
