@@ -93,7 +93,7 @@ export default () => {
               <Button onClick={() => setTypeModal("solicitud")}>
                 Solicitar CDI
               </Button>
-            ) : data.solicitud.estado == "Observado" ? (
+            ) : data?.solicitud?.estado == "Observado" ? (
               <SpaceBetween size="xs" direction="horizontal">
                 <Button onClick={() => setTypeModal("obs")}>Ver obs.</Button>
                 <Button onClick={() => setTypeModal("observado")}>
@@ -112,8 +112,9 @@ export default () => {
             </Alert>
           ) : data.estado == 1 ? (
             <Alert header="No cumple con los prerrequisitos para solicitar CDI">
-              Necesita tener registrado su CTI VITAE, Google Scholar y asociado
-              su ORCID al RAIS.
+              Necesita tener registrado su CTI VITAE, Google Scholar, ORCID
+              asociado al RAIS y su nivel de Renacyt no debe ser María R. ni
+              Carlos M.
             </Alert>
           ) : data.estado == 2 ? (
             <>

@@ -2,6 +2,7 @@ import {
   Badge,
   Box,
   Container,
+  Header,
   SpaceBetween,
   Table,
 } from "@cloudscape-design/components";
@@ -10,12 +11,16 @@ export default ({ data }) => {
   return (
     <Container
       header={
-        <SpaceBetween size="xxs" alignItems="center" direction="horizontal">
-          <Box variant="h3">D5</Box>
-          <Badge color={data.cumple ? "green" : "red"}>
-            {data.cumple ? "Sí cumple" : "No cumple"}
-          </Badge>
-        </SpaceBetween>
+        <Header
+          variant="h3"
+          actions={
+            <Badge color={data.cumple ? "green" : "red"}>
+              {data.cumple ? "Sí cumple" : "No cumple"}
+            </Badge>
+          }
+        >
+          D5
+        </Header>
       }
     >
       <Table

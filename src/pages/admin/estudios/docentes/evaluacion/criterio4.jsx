@@ -1,7 +1,12 @@
 import {
   Badge,
   Box,
+  Button,
   Container,
+  Header,
+  Icon,
+  Link,
+  Popover,
   SpaceBetween,
   Table,
 } from "@cloudscape-design/components";
@@ -10,12 +15,16 @@ export default ({ data }) => {
   return (
     <Container
       header={
-        <SpaceBetween size="xxs" alignItems="center" direction="horizontal">
-          <Box variant="h3">D4</Box>
-          <Badge color={data.cumple ? "green" : "red"}>
-            {data.cumple ? "Sí cumple" : "No cumple"}
-          </Badge>
-        </SpaceBetween>
+        <Header
+          variant="h3"
+          actions={
+            <Badge color={data.cumple ? "green" : "red"}>
+              {data.cumple ? "Sí cumple" : "No cumple"}
+            </Badge>
+          }
+        >
+          D4
+        </Header>
       }
     >
       <Table
@@ -48,6 +57,11 @@ export default ({ data }) => {
             header: "Filiación UNMSM",
             cell: (item) => item.filiacion,
           },
+          {
+            id: "filiacion_unica",
+            header: "Filiación única",
+            cell: (item) => item.filiacion_unica,
+          },
         ]}
         columnDisplay={[
           { id: "titulo", visible: true },
@@ -55,6 +69,7 @@ export default ({ data }) => {
           { id: "codigo_registro", visible: true },
           { id: "indexada", visible: true },
           { id: "filiacion", visible: true },
+          { id: "filiacion_unica", visible: true },
         ]}
         items={data.lista}
         empty={

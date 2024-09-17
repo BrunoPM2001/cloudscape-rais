@@ -3,20 +3,24 @@ import {
   Box,
   ColumnLayout,
   Container,
+  Header,
   Link,
-  SpaceBetween,
 } from "@cloudscape-design/components";
 
 export default ({ data }) => {
   return (
     <Container
       header={
-        <SpaceBetween size="xxs" alignItems="center" direction="horizontal">
-          <Box variant="h3">D1</Box>
-          <Badge color={data.cumple ? "green" : "red"}>
-            {data.cumple ? "Sí cumple" : "No cumple"}
-          </Badge>
-        </SpaceBetween>
+        <Header
+          variant="h3"
+          actions={
+            <Badge color={data.cumple ? "green" : "red"}>
+              {data.cumple ? "Sí cumple" : "No cumple"}
+            </Badge>
+          }
+        >
+          D1
+        </Header>
       }
       fitHeight
     >

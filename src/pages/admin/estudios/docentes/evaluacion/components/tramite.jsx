@@ -18,6 +18,11 @@ const opt_confirmar = [
   { value: 0, label: "No" },
 ];
 
+const opt_norma = [
+  { value: "R.R. 009077-2024-R (Directiva 2024)" },
+  { value: "R.R. 006682-2023-R (Directiva 2023)" },
+];
+
 const initialForm = {
   confirmar: null,
   descripcion: "",
@@ -126,20 +131,36 @@ export default ({ id, data, reload }) => {
           </div>
         </ColumnLayout>
         <SpaceBetween size="s">
-          <FormField
-            label="Confirmar evaluación"
-            errorText={formErrors.confirmar}
-            stretch
-          >
-            <Select
-              placeholder="Escoja una opción"
-              options={opt_confirmar}
-              selectedOption={formValues.confirmar}
-              onChange={({ detail }) =>
-                handleChange("confirmar", detail.selectedOption)
-              }
-            />
-          </FormField>
+          <ColumnLayout columns={2}>
+            <FormField
+              label="Confirmar evaluación"
+              errorText={formErrors.confirmar}
+              stretch
+            >
+              <Select
+                placeholder="Escoja una opción"
+                options={opt_confirmar}
+                selectedOption={formValues.confirmar}
+                onChange={({ detail }) =>
+                  handleChange("confirmar", detail.selectedOption)
+                }
+              />
+            </FormField>
+            <FormField
+              label="Normativa de evaluación"
+              errorText={formErrors.norma}
+              stretch
+            >
+              <Select
+                placeholder="Escoja una opción"
+                options={opt_norma}
+                selectedOption={formValues.norma}
+                onChange={({ detail }) =>
+                  handleChange("norma", detail.selectedOption)
+                }
+              />
+            </FormField>
+          </ColumnLayout>
           <FormField label="Descripción" stretch>
             <Textarea
               value={formValues.descripcion}

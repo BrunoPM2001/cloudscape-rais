@@ -7,6 +7,7 @@ import queryString from "query-string";
 import {
   Box,
   Grid,
+  Link,
   SpaceBetween,
   Spinner,
 } from "@cloudscape-design/components";
@@ -69,8 +70,26 @@ export default function Docente_investigador_evaluacion() {
     <BaseLayout
       breadcrumbs={breadcrumbs}
       header="Docentes investigadores"
-      helpInfo="Información sobre la páginal actual para poder mostrarla al público
-      en general."
+      helpInfo={
+        <div>
+          <h4>Respecto a los campos de filiación y filiación única en D4</h4>
+          <ul>
+            <li>
+              Puede figurar como <b>Sí</b> o <b>No</b> si es que el autor ha
+              completado los campos al registrar su publicación.
+            </li>
+            <li>
+              Si figura un guión <b>(-)</b> indica que el campo respectivo no ha
+              sido marcado con ninguna opción (Sí o No), esto se puede editar
+              desde el módulo de{" "}
+              <Link href="/admin/estudios/gestion_publicaciones" external>
+                Gestión de publicaciones
+              </Link>{" "}
+              en la sección de <b>Autores.</b>
+            </li>
+          </ul>
+        </div>
+      }
     >
       <SpaceBetween size="l">
         <Detalles
