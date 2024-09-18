@@ -4,6 +4,7 @@ import {
   ColumnLayout,
   Container,
   Header,
+  Link,
   SpaceBetween,
   Spinner,
   StatusIndicator,
@@ -79,7 +80,16 @@ export default ({ id, data, loading, reload }) => {
           </div>
           <div>
             <Box variant="awsui-key-label">CTI Vitae</Box>
-            {loading ? <Spinner /> : <div>{data.cti_vitae}</div>}
+            {loading ? (
+              <Spinner />
+            ) : (
+              <Link
+                href={`https://ctivitae.concytec.gob.pe/appDirectorioCTI/VerDatosInvestigador.do?id_investigador=${data.cti_vitae}`}
+                external
+              >
+                {data.cti_vitae}
+              </Link>
+            )}
           </div>
           <div>
             <Box variant="awsui-key-label">Renacyt</Box>
@@ -99,7 +109,10 @@ export default ({ id, data, loading, reload }) => {
             <Box variant="awsui-key-label">Google scholar</Box>
             {loading ? <Spinner /> : <div>{data.google_scholar}</div>}
           </div>
-
+          <div>
+            <Box variant="awsui-key-label">Scopus ID</Box>
+            {loading ? <Spinner /> : <div>{data.scopus_id}</div>}
+          </div>
           <div>
             <Box variant="awsui-key-label">Fecha de envío de la solicitud</Box>
             {loading ? <Spinner /> : <div>{data.created_at}</div>}

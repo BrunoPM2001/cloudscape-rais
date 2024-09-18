@@ -29,6 +29,18 @@ const FILTER_PROPS = [
     operators: stringOperators,
   },
   {
+    propertyLabel: "Fecha constancia",
+    key: "fecha_constancia",
+    groupValuesLabel: "Fechas de constancia",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "Fecha de fin de constancia",
+    key: "fecha_fin",
+    groupValuesLabel: "Fechas de fin de constancia",
+    operators: stringOperators,
+  },
+  {
     propertyLabel: "Facultad",
     key: "facultad",
     groupValuesLabel: "Facultades",
@@ -95,28 +107,38 @@ const columnDefinitions = [
     isRowHeader: true,
   },
   {
-    id: "tipo_eval",
-    header: "Tipo de evaluación",
-    cell: (item) => item.tipo_eval,
-    sortingField: "tipo_eval",
-  },
-  {
     id: "tipo",
     header: "Tipo",
     cell: (item) => item.tipo,
     sortingField: "tipo",
   },
   {
+    id: "fecha_constancia",
+    header: "Fecha de aprobación",
+    cell: (item) => item.fecha_constancia,
+    sortingField: "fecha_constancia",
+    minWidth: 120,
+  },
+  {
+    id: "fecha_fin",
+    header: "Fecha de vencimiento",
+    cell: (item) => item.fecha_fin,
+    sortingField: "fecha_fin",
+    minWidth: 120,
+  },
+  {
     id: "facultad",
     header: "Facultad",
     cell: (item) => item.facultad,
     sortingField: "facultad",
+    minWidth: 180,
   },
   {
     id: "codigo_orcid",
     header: "Orcid",
     cell: (item) => item.codigo_orcid,
     sortingField: "codigo_orcid",
+    minWidth: 120,
   },
   {
     id: "apellido1",
@@ -165,6 +187,8 @@ const columnDefinitions = [
 const columnDisplay = [
   { id: "estado", visible: true },
   { id: "tipo", visible: true },
+  { id: "fecha_constancia", visible: true },
+  { id: "fecha_fin", visible: true },
   { id: "facultad", visible: true },
   { id: "codigo_orcid", visible: true },
   { id: "apellido1", visible: true },
@@ -234,7 +258,7 @@ export default () => {
         columnDisplay={columnDisplay}
         loading={loading}
         loadingText="Cargando datos"
-        resizableColumns
+        wrapLines
         enableKeyboardNavigation
         selectionType="single"
         onRowClick={({ detail }) => actions.setSelectedItems([detail.item])}
@@ -265,7 +289,7 @@ export default () => {
         filter={
           <PropertyFilter
             {...propertyFilterProps}
-            filteringPlaceholder="Buscar grupo"
+            filteringPlaceholder="Buscar docente investigador"
             countText={`${filteredItemsCount} coincidencias`}
             expandToViewport
           />

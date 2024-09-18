@@ -38,6 +38,11 @@ export default ({ data }) => {
             isRowHeader: true,
           },
           {
+            id: "tipo_publicacion",
+            header: "Tipo",
+            cell: (item) => item.tipo_publicacion,
+          },
+          {
             id: "periodo",
             header: "Periodo",
             cell: (item) => item.periodo,
@@ -65,6 +70,7 @@ export default ({ data }) => {
         ]}
         columnDisplay={[
           { id: "titulo", visible: true },
+          { id: "tipo_publicacion", visible: true },
           { id: "periodo", visible: true },
           { id: "codigo_registro", visible: true },
           { id: "indexada", visible: true },

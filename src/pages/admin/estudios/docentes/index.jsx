@@ -37,8 +37,9 @@ export default function Docente_investigador() {
       helpInfo="Información sobre la páginal actual para poder mostrarla al público
       en general."
       disableOverlap
+      contentType="table"
     >
-      <Tabs tabs={tabs} ariaLabel="Opciones de docentes investigado" />
+      <Tabs tabs={tabs} ariaLabel="Opciones de docentes investigador" />
     </BaseLayout>
   );
 }

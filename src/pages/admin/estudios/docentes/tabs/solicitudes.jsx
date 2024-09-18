@@ -132,12 +132,14 @@ const columnDefinitions = [
     header: "Facultad",
     cell: (item) => item.facultad,
     sortingField: "facultad",
+    minWidth: 180,
   },
   {
     id: "codigo_orcid",
     header: "Orcid",
     cell: (item) => item.codigo_orcid,
     sortingField: "codigo_orcid",
+    minWidth: 120,
   },
   {
     id: "apellido1",
@@ -181,6 +183,13 @@ const columnDefinitions = [
     cell: (item) => item.email3,
     sortingField: "email3",
   },
+  {
+    id: "created_at",
+    header: "Fecha de creación",
+    cell: (item) => item.created_at,
+    sortingField: "created_at",
+    minWidth: 120,
+  },
 ];
 
 const columnDisplay = [
@@ -197,6 +206,7 @@ const columnDisplay = [
   { id: "doc_numero", visible: true },
   { id: "telefono_movil", visible: true },
   { id: "email3", visible: true },
+  { id: "created_at", visible: true },
 ];
 
 export default () => {
@@ -258,7 +268,7 @@ export default () => {
         columnDisplay={columnDisplay}
         loading={loading}
         loadingText="Cargando datos"
-        resizableColumns
+        wrapLines
         enableKeyboardNavigation
         selectionType="single"
         onRowClick={({ detail }) => actions.setSelectedItems([detail.item])}
@@ -289,7 +299,7 @@ export default () => {
         filter={
           <PropertyFilter
             {...propertyFilterProps}
-            filteringPlaceholder="Buscar grupo"
+            filteringPlaceholder="Buscar solicitud de docente investigador"
             countText={`${filteredItemsCount} coincidencias`}
             expandToViewport
           />

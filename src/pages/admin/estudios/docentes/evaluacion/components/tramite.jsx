@@ -25,11 +25,13 @@ const opt_norma = [
 
 const initialForm = {
   confirmar: null,
+  norma: null,
   descripcion: "",
 };
 
 const formRules = {
   confirmar: { required: true },
+  norma: { required: true },
 };
 
 export default ({ id, data, reload }) => {
