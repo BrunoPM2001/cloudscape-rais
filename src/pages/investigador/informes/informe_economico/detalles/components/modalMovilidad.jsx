@@ -278,7 +278,7 @@ export default ({
               <FormField
                 label="Archivo"
                 description={
-                  "El archivo cargado no debe superar los 4 MB (solo se aceptan los formatos jpg, jpeg y pdf)"
+                  "El archivo cargado no debe superar los 4 MB (solo se aceptan PDFs)"
                 }
                 errorText={formErrors.file}
               >
@@ -313,7 +313,7 @@ export default ({
                     removeFileAriaLabel: (e) => `Eliminar archivo ${e + 1}`,
                     errorIconAriaLabel: "Error",
                   }}
-                  accept=".jpg, .jpeg,  .pdf"
+                  accept=".pdf"
                 />
               </FormField>
             )}
