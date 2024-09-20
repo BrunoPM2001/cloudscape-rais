@@ -8,8 +8,9 @@ import Paso2 from "./paso2.jsx";
 import BaseLayout from "../../components/baseLayout";
 import { useLocation } from "react-router-dom";
 import queryString from "query-string";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axiosBase from "../../../../api/axios.js";
+import NotificationContext from "../../../../providers/notificationProvider.jsx";
 
 const breadcrumbs = [
   {
@@ -25,9 +26,13 @@ const breadcrumbs = [
 ];
 
 export default function Registrar_articulo_2() {
+  //  Context
+  const { notifications, pushNotification } = useContext(NotificationContext);
+
   //  States
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState({});
+  const [checked, setChecked] = useState(false);
 
   //  Url
   const location = useLocation();
@@ -40,11 +45,19 @@ export default function Registrar_articulo_2() {
   //  Functions
   const handleNavigate = async (detail) => {
     if (detail.requestedStepIndex > 1) {
-      const query = queryString.stringify({
-        publicacion_id,
-        tipo,
-      });
-      window.location.href = "paso3?" + query;
+      if (checked) {
+        const query = queryString.stringify({
+          publicacion_id,
+          tipo,
+        });
+        window.location.href = "paso3?" + query;
+      } else {
+        pushNotification(
+          "Necesita marcar la declaración",
+          "warning",
+          notifications.length + 1
+        );
+      }
     } else {
       const query = queryString.stringify({
         publicacion_id,
@@ -111,6 +124,8 @@ export default function Registrar_articulo_2() {
                   publicacion_id={publicacion_id}
                   loading={loading}
                   setLoading={setLoading}
+                  checked={checked}
+                  setChecked={setChecked}
                 />
               ),
             },

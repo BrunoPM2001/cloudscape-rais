@@ -6,6 +6,7 @@ import {
   Form,
   Button,
   Input,
+  FileUpload,
 } from "@cloudscape-design/components";
 import { useContext, useState } from "react";
 import axiosBase from "../../../../../api/axios";
@@ -14,14 +15,16 @@ import { useFormValidation } from "../../../../../hooks/useFormValidation";
 
 const initialForm = {
   codigo_proyecto: "",
-  titulo: "",
+  nombre_proyecto: "",
   entidad_financiadora: "",
+  file: [],
 };
 
 const formRules = {
   codigo_proyecto: { required: false },
-  titulo: { required: true },
+  nombre_proyecto: { required: true },
   entidad_financiadora: { required: true },
+  file: { required: true, isFile: true, maxSize: 6 * 1024 * 1024 },
 };
 
 export default ({ id, visible, setVisible, reload }) => {
@@ -39,14 +42,15 @@ export default ({ id, visible, setVisible, reload }) => {
   const agregarProyecto = async () => {
     if (validateForm()) {
       setLoadingCreate(true);
+      const form = new FormData();
+      form.append("publicacion_id", id);
+      form.append("codigo_proyecto", formValues.codigo_proyecto);
+      form.append("nombre_proyecto", formValues.nombre_proyecto);
+      form.append("entidad_financiadora", formValues.entidad_financiadora);
+      form.append("file", formValues.file[0]);
       const res = await axiosBase.post(
         "investigador/publicaciones/utils/agregarProyecto",
-        {
-          publicacion_id: id,
-          codigo_proyecto: formValues.codigo_proyecto,
-          nombre_proyecto: formValues.titulo,
-          entidad_financiadora: formValues.entidad_financiadora,
-        }
+        form
       );
       const data = res.data;
       setLoadingCreate(false);
@@ -84,12 +88,14 @@ export default ({ id, visible, setVisible, reload }) => {
           <FormField
             label="Título del proyecto"
             stretch
-            errorText={formErrors.titulo}
+            errorText={formErrors.nombre_proyecto}
           >
             <Input
               placeholder="Escriba el título de proyecto"
-              value={formValues.titulo}
-              onChange={({ detail }) => handleChange("titulo", detail.value)}
+              value={formValues.nombre_proyecto}
+              onChange={({ detail }) =>
+                handleChange("nombre_proyecto", detail.value)
+              }
             />
           </FormField>
           <FormField
@@ -116,6 +122,33 @@ export default ({ id, visible, setVisible, reload }) => {
               onChange={({ detail }) =>
                 handleChange("entidad_financiadora", detail.value)
               }
+            />
+          </FormField>
+          <FormField
+            label="Documento de sustento"
+            stretch
+            errorText={formErrors.file}
+          >
+            <FileUpload
+              value={formValues.file}
+              onChange={({ detail }) => {
+                handleChange("file", detail.value);
+              }}
+              showFileLastModified
+              showFileSize
+              showFileThumbnail
+              constraintText="El archivo cargado no debe superar los 6 MB"
+              i18nStrings={{
+                uploadButtonText: (e) =>
+                  e ? "Cargar archivos" : "Cargar archivo",
+                dropzoneText: (e) =>
+                  e
+                    ? "Arrastre los archivos para cargarlos"
+                    : "Arrastre el archivo para cargarlo",
+                removeFileAriaLabel: (e) => `Eliminar archivo ${e + 1}`,
+                errorIconAriaLabel: "Error",
+              }}
+              accept=".pdf"
             />
           </FormField>
         </SpaceBetween>

@@ -87,7 +87,7 @@ const formRules = {
   url: { required: false },
 };
 
-export default function ({ data, reload }) {
+export default function ({ data, setData, reload }) {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
 
@@ -112,6 +112,7 @@ export default function ({ data, reload }) {
     useAutosuggest("admin/estudios/publicaciones/searchRevista");
 
   const getData = async () => {
+    setRevistasIndexadas(data.revistas);
     setFormValues({
       ...initialForm,
       ...data.data,
@@ -122,7 +123,6 @@ export default function ({ data, reload }) {
     });
     setValue(data.data.publicacion_nombre);
     setAvoidSelect(false);
-    setRevistasIndexadas(data.revistas);
     setWos(data.wos);
   };
 
@@ -213,7 +213,16 @@ export default function ({ data, reload }) {
               <Input
                 placeholder="Escriba el doi"
                 value={formValues.doi}
-                onChange={({ detail }) => handleChange("doi", detail.value)}
+                onChange={({ detail }) => {
+                  handleChange("doi", detail.value);
+                  setData({
+                    ...data,
+                    data: {
+                      ...data.data,
+                      doi: detail.value,
+                    },
+                  });
+                }}
               />
             </FormField>
             <FormField
@@ -226,6 +235,13 @@ export default function ({ data, reload }) {
                 selectedOption={formValues.art_tipo}
                 onChange={({ detail }) => {
                   handleChange("art_tipo", detail.selectedOption);
+                  setData({
+                    ...data,
+                    data: {
+                      ...data.data,
+                      art_tipo: detail.selectedOption.value,
+                    },
+                  });
                 }}
                 options={[
                   { value: "Artículo original" },
@@ -239,7 +255,16 @@ export default function ({ data, reload }) {
             <Input
               placeholder="Escriba el título de la publicación"
               value={formValues.titulo}
-              onChange={({ detail }) => handleChange("titulo", detail.value)}
+              onChange={({ detail }) => {
+                handleChange("titulo", detail.value);
+                setData({
+                  ...data,
+                  data: {
+                    ...data.data,
+                    titulo: detail.value,
+                  },
+                });
+              }}
             />
           </FormField>
           <ColumnLayout columns={3}>
@@ -251,9 +276,16 @@ export default function ({ data, reload }) {
               <Input
                 placeholder="N° de la pág. inicial"
                 value={formValues.pagina_inicial}
-                onChange={({ detail }) =>
-                  handleChange("pagina_inicial", detail.value)
-                }
+                onChange={({ detail }) => {
+                  handleChange("pagina_inicial", detail.value);
+                  setData({
+                    ...data,
+                    data: {
+                      ...data.data,
+                      pagina_inicial: detail.value,
+                    },
+                  });
+                }}
               />
             </FormField>
             <FormField
@@ -264,9 +296,16 @@ export default function ({ data, reload }) {
               <Input
                 placeholder="N° de la pág. final"
                 value={formValues.pagina_final}
-                onChange={({ detail }) =>
-                  handleChange("pagina_final", detail.value)
-                }
+                onChange={({ detail }) => {
+                  handleChange("pagina_final", detail.value);
+                  setData({
+                    ...data,
+                    data: {
+                      ...data.data,
+                      pagina_final: detail.value,
+                    },
+                  });
+                }}
               />
             </FormField>
             <FormField
@@ -278,9 +317,16 @@ export default function ({ data, reload }) {
               <DateInput
                 placeholder="YYYY/MM/DD"
                 value={formValues.fecha_publicacion}
-                onChange={({ detail }) =>
-                  handleChange("fecha_publicacion", detail.value)
-                }
+                onChange={({ detail }) => {
+                  handleChange("fecha_publicacion", detail.value);
+                  setData({
+                    ...data,
+                    data: {
+                      ...data.data,
+                      fecha_publicacion: detail.value,
+                    },
+                  });
+                }}
               />
             </FormField>
           </ColumnLayout>
@@ -300,7 +346,16 @@ export default function ({ data, reload }) {
             <Input
               placeholder="Escriba la URL de su publicación"
               value={formValues.url}
-              onChange={({ detail }) => handleChange("url", detail.value)}
+              onChange={({ detail }) => {
+                handleChange("url", detail.value);
+                setData({
+                  ...data,
+                  data: {
+                    ...data.data,
+                    url: detail.value,
+                  },
+                });
+              }}
             />
           </FormField>
           <FormField
@@ -311,7 +366,16 @@ export default function ({ data, reload }) {
             <Textarea
               placeholder="Resumen del artículo"
               value={formValues.resumen}
-              onChange={({ detail }) => handleChange("resumen", detail.value)}
+              onChange={({ detail }) => {
+                handleChange("resumen", detail.value);
+                setData({
+                  ...data,
+                  data: {
+                    ...data.data,
+                    resumen: detail.value,
+                  },
+                });
+              }}
             />
           </FormField>
           <FormField
@@ -345,6 +409,13 @@ export default function ({ data, reload }) {
                     ...formValues.palabras_clave,
                     { label: formValues.palabras_clave_input },
                   ]);
+                  setData({
+                    ...data,
+                    palabras_clave: [
+                      ...formValues.palabras_clave,
+                      { label: formValues.palabras_clave_input },
+                    ],
+                  });
                   handleChange("palabras_clave_input", "");
                 }
               }}
@@ -389,6 +460,13 @@ export default function ({ data, reload }) {
                 setOptions([]);
                 setValue(detail.value);
                 handleChange("publicacion_nombre", detail.value);
+                setData({
+                  ...data,
+                  data: {
+                    ...data.data,
+                    publicacion_nombre: detail.value,
+                  },
+                });
               }}
               onSelect={({ detail }) => {
                 if (detail.selectedOption.value != undefined) {
@@ -396,6 +474,15 @@ export default function ({ data, reload }) {
                   handleChange("publicacion_nombre", rest.revista);
                   handleChange("issn", rest.issn);
                   handleChange("issn_e", rest.issne);
+                  setData({
+                    ...data,
+                    data: {
+                      ...data.data,
+                      publicacion_nombre: rest.revista,
+                      issn: rest.issn,
+                      issn_e: rest.issne,
+                    },
+                  });
                   setAvoidSelect(false);
                 }
               }}
@@ -426,7 +513,16 @@ export default function ({ data, reload }) {
               <Input
                 placeholder="Escriba el ISSN"
                 value={formValues.issn}
-                onChange={({ detail }) => handleChange("issn", detail.value)}
+                onChange={({ detail }) => {
+                  handleChange("issn", detail.value);
+                  setData({
+                    ...data,
+                    data: {
+                      ...data.data,
+                      issn: detail.value,
+                    },
+                  });
+                }}
               />
             </FormField>
             <FormField
@@ -447,21 +543,48 @@ export default function ({ data, reload }) {
               <Input
                 placeholder="Escriba el ISSN-E"
                 value={formValues.issn_e}
-                onChange={({ detail }) => handleChange("issn_e", detail.value)}
+                onChange={({ detail }) => {
+                  handleChange("issn_e", detail.value);
+                  setData({
+                    ...data,
+                    data: {
+                      ...data.data,
+                      issn_e: detail.value,
+                    },
+                  });
+                }}
               />
             </FormField>
             <FormField label="Volumen" stretch errorText={formErrors.volumen}>
               <Input
                 placeholder="Escriba el volumen de su publicación"
                 value={formValues.volumen}
-                onChange={({ detail }) => handleChange("volumen", detail.value)}
+                onChange={({ detail }) => {
+                  handleChange("volumen", detail.value);
+                  setData({
+                    ...data,
+                    data: {
+                      ...data.data,
+                      volumen: detail.value,
+                    },
+                  });
+                }}
               />
             </FormField>
             <FormField label="Número" stretch errorText={formErrors.edicion}>
               <Input
                 placeholder="Escriba el nro de su publicación"
                 value={formValues.edicion}
-                onChange={({ detail }) => handleChange("edicion", detail.value)}
+                onChange={({ detail }) => {
+                  handleChange("edicion", detail.value);
+                  setData({
+                    ...data,
+                    data: {
+                      ...data.data,
+                      edicion: detail.value,
+                    },
+                  });
+                }}
               />
             </FormField>
           </ColumnLayout>
@@ -473,18 +596,24 @@ export default function ({ data, reload }) {
             >
               <SpaceBetween size="m">
                 <Multiselect
-                  statusType="finished"
+                  statusType={
+                    revistasIndexadas.length == 0 ? "loading" : "finished"
+                  }
                   virtualScroll
                   filteringType="auto"
                   placeholder="Escoga las revistas"
                   empty="No hay revistas"
                   selectedOptions={formValues.indexada}
-                  onChange={({ detail }) =>
-                    handleChange("indexada", detail.selectedOptions)
-                  }
+                  onChange={({ detail }) => {
+                    handleChange("indexada", detail.selectedOptions);
+                    setData({
+                      ...data,
+                      indexada: detail.selectedOptions,
+                    });
+                  }}
                   options={[
                     {
-                      label: "Grupo de revistas",
+                      label: "Seleccionar todos",
                       options: revistasIndexadas,
                     },
                   ]}
@@ -523,9 +652,13 @@ export default function ({ data, reload }) {
                   filteringType="auto"
                   placeholder="Escoga las revistas"
                   selectedOptions={formValues.wos}
-                  onChange={({ detail }) =>
-                    handleChange("wos", detail.selectedOptions)
-                  }
+                  onChange={({ detail }) => {
+                    handleChange("wos", detail.selectedOptions);
+                    setData({
+                      ...data,
+                      indexada_wos: detail.selectedOptions,
+                    });
+                  }}
                   options={wos}
                 />
                 <Grid gridDefinition={gridDefinition}>

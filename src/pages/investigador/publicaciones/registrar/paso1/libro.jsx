@@ -3,7 +3,6 @@ import {
   Box,
   ColumnLayout,
   Container,
-  DateInput,
   DatePicker,
   Form,
   FormField,

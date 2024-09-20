@@ -97,6 +97,7 @@ export default function Admin_main() {
       header="Resumen:"
       helpInfo="Información sobre la páginal actual para poder mostrarla al público
       en general."
+      contentType="dashboard"
     >
       <Grid gridDefinition={gridDefinition}>
         <Cifras data={data.metricas} loading={loading} />

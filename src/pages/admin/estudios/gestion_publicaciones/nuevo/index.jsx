@@ -9,7 +9,7 @@ import Evento from "./publicaciones_tipo/evento";
 import Libro from "./publicaciones_tipo/libro";
 import Tesis_asesoria from "./publicaciones_tipo/tesis_asesoria";
 import Tesis_propia from "./publicaciones_tipo/tesis_propia";
-import { Box, Container, Spinner } from "@cloudscape-design/components";
+import { Container, Spinner } from "@cloudscape-design/components";
 
 const breadcrumbs = [
   {

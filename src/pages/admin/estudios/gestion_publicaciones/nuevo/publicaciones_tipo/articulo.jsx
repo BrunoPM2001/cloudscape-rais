@@ -4,7 +4,7 @@ import {
   Button,
   ColumnLayout,
   Container,
-  DateInput,
+  DatePicker,
   FormField,
   Header,
   Input,
@@ -89,7 +89,12 @@ export default function ({ data }) {
       const data = res.data;
       pushNotification(data.detail, data.message, notifications.length + 1);
       setLoadingGuardar(false);
-      reload();
+      if (data.message == "success") {
+        const query = queryString.stringify({
+          id: data.id,
+        });
+        window.location.href = "detalle?" + query;
+      }
     }
   };
 
@@ -196,7 +201,7 @@ export default function ({ data }) {
               stretch
               errorText={formErrors.fecha_publicacion}
             >
-              <DateInput
+              <DatePicker
                 placeholder="YYYY/MM/DD"
                 value={formValues.fecha_publicacion}
                 onChange={({ detail }) =>

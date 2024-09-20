@@ -48,7 +48,7 @@ const initialForm = {
 };
 
 const formRules = {
-  doi: { required: true },
+  doi: { required: true, regex: /^10/ },
   art_tipo: { required: true },
   titulo: { required: true },
   palabras_clave: { required: true, noEmpty: true },
@@ -456,12 +456,7 @@ export default forwardRef(function (props, ref) {
                 onChange={({ detail }) =>
                   handleChange("indexada", detail.selectedOptions)
                 }
-                options={[
-                  {
-                    label: "Grupo de revistas",
-                    options: revistasIndexadas,
-                  },
-                ]}
+                options={revistasIndexadas}
               />
             </FormField>
             <FormField

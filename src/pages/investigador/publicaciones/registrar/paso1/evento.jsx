@@ -2,11 +2,9 @@ import {
   Autosuggest,
   ColumnLayout,
   Container,
-  DateInput,
   DatePicker,
   Form,
   FormField,
-  Header,
   Input,
   Select,
   SpaceBetween,
@@ -166,7 +164,7 @@ export default forwardRef(function (props, ref) {
           <Container>
             <SpaceBetween size="s">
               <FormField
-                label="Título del evento"
+                label="Título de la publicación"
                 stretch
                 errorText={formErrors.titulo}
               >

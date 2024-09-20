@@ -3,7 +3,6 @@ import {
   Box,
   ColumnLayout,
   Container,
-  DateInput,
   DatePicker,
   Form,
   FormField,
@@ -42,6 +41,7 @@ const initialForm = {
 
 const formRules = {
   titulo: { required: true },
+  doi: { regex: /^10/ },
   pagina_inicial: { required: true },
   pagina_final: { required: true },
   fecha_publicacion: { required: true },
@@ -177,7 +177,19 @@ export default forwardRef(function (props, ref) {
               />
             </FormField>
             <ColumnLayout columns={4}>
-              <FormField label="DOI" stretch errorText={formErrors.doi}>
+              <FormField
+                label="DOI"
+                constraintText={
+                  <>
+                    <Box variant="small">Colocar solo el código, ejemplo: </Box>{" "}
+                    <Box variant="small" color="text-status-info">
+                      10.47366/sabia.v5n1a3
+                    </Box>
+                  </>
+                }
+                stretch
+                errorText={formErrors.doi}
+              >
                 <Input
                   placeholder="Escriba el doi"
                   value={formValues.doi}

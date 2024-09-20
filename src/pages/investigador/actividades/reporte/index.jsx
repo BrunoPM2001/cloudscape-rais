@@ -50,7 +50,12 @@ export default function Proyecto_detalle() {
 
   const opciones = (tipo, estado) => {
     if (estado != -1 && estado != 0) {
-      if (tipo == "PCONFIGI" || tipo == "PRO-CTIE" || tipo == "PCONFIGI-INV") {
+      if (
+        tipo == "PCONFIGI" ||
+        tipo == "PRO-CTIE" ||
+        tipo == "PCONFIGI-INV" ||
+        tipo == "PMULTI"
+      ) {
         setItems([
           {
             id: "action_1",

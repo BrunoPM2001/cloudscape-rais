@@ -37,12 +37,6 @@ const FILTER_PROPS = [
     operators: stringOperators,
   },
   {
-    propertyLabel: "Observaciones",
-    key: "observaciones_usuario",
-    groupValuesLabel: "Observaciones",
-    operators: stringOperators,
-  },
-  {
     propertyLabel: "Año de publicación",
     key: "año_publicacion",
     groupValuesLabel: "Años de publicación",
@@ -83,12 +77,6 @@ const columnDefinitions = [
     sortingField: "revista",
   },
   {
-    id: "observaciones_usuario",
-    header: "Observaciones",
-    cell: (item) => item.observaciones_usuario,
-    sortingField: "observaciones_usuario",
-  },
-  {
     id: "año_publicacion",
     header: "Año de publicación",
     cell: (item) => item.año_publicacion,
@@ -99,6 +87,12 @@ const columnDefinitions = [
     header: "Puntaje",
     cell: (item) => item.puntaje,
     sortingField: "puntaje",
+  },
+  {
+    id: "observaciones_usuario",
+    header: "Observaciones",
+    cell: (item) => item.observaciones_usuario,
+    sortingField: "observaciones_usuario",
   },
   {
     id: "estado",
@@ -136,9 +130,9 @@ const columnDisplay = [
   { id: "id", visible: true },
   { id: "titulo", visible: true },
   { id: "revista", visible: true },
-  { id: "observaciones_usuario", visible: true },
   { id: "año_publicacion", visible: true },
   { id: "puntaje", visible: true },
+  { id: "observaciones_usuario", visible: true },
   { id: "estado", visible: true },
 ];
 

@@ -101,6 +101,12 @@ const columnDefinitions = [
     sortingField: "puntaje",
   },
   {
+    id: "observaciones_usuario",
+    header: "Observaciones",
+    cell: (item) => item.observaciones_usuario,
+    sortingField: "observaciones_usuario",
+  },
+  {
     id: "estado",
     header: "Estado",
     cell: (item) => (
@@ -139,6 +145,7 @@ const columnDisplay = [
   { id: "isbn", visible: true },
   { id: "año_publicacion", visible: true },
   { id: "puntaje", visible: true },
+  { id: "observaciones_usuario", visible: true },
   { id: "estado", visible: true },
 ];
 

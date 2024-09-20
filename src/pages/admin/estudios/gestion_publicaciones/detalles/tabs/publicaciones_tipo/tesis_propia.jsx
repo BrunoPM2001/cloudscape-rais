@@ -50,7 +50,7 @@ const tipo_tesis = [
   { value: "Doctorado" },
 ];
 
-export default function ({ data }) {
+export default function ({ data, setData }) {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
 
@@ -113,7 +113,16 @@ export default function ({ data }) {
           <Input
             placeholder="Escriba el título de la tesis"
             value={formValues.titulo}
-            onChange={({ detail }) => handleChange("titulo", detail.value)}
+            onChange={({ detail }) => {
+              handleChange("titulo", detail.value);
+              setData({
+                ...data,
+                data: {
+                  ...data.data,
+                  titulo: detail.value,
+                },
+              });
+            }}
           />
         </FormField>
         <FormField
@@ -132,7 +141,16 @@ export default function ({ data }) {
           <Input
             placeholder="Escriba la URL de su tesis"
             value={formValues.url}
-            onChange={({ detail }) => handleChange("url", detail.value)}
+            onChange={({ detail }) => {
+              handleChange("url", detail.value);
+              setData({
+                ...data,
+                data: {
+                  ...data.data,
+                  url: detail.value,
+                },
+              });
+            }}
           />
         </FormField>
         <ColumnLayout columns={3}>
@@ -146,6 +164,13 @@ export default function ({ data }) {
               selectedOption={formValues.tipo_tesis}
               onChange={({ detail }) => {
                 handleChange("tipo_tesis", detail.selectedOption);
+                setData({
+                  ...data,
+                  data: {
+                    ...data.data,
+                    tipo_tesis: detail.selectedOption.value,
+                  },
+                });
               }}
               options={tipo_tesis}
             />
@@ -158,9 +183,16 @@ export default function ({ data }) {
             <DateInput
               placeholder="YYYY-MM-DD"
               value={formValues.fecha_publicacion}
-              onChange={({ detail }) =>
-                handleChange("fecha_publicacion", detail.value)
-              }
+              onChange={({ detail }) => {
+                handleChange("fecha_publicacion", detail.value);
+                setData({
+                  ...data,
+                  data: {
+                    ...data.data,
+                    fecha_publicacion: detail.value,
+                  },
+                });
+              }}
             />
           </FormField>
           <FormField
@@ -172,9 +204,16 @@ export default function ({ data }) {
               placeholder="Cantidad de páginas"
               type="number"
               value={formValues.pagina_total}
-              onChange={({ detail }) =>
-                handleChange("pagina_total", detail.value)
-              }
+              onChange={({ detail }) => {
+                handleChange("pagina_total", detail.value);
+                setData({
+                  ...data,
+                  data: {
+                    ...data.data,
+                    pagina_total: detail.value,
+                  },
+                });
+              }}
             />
           </FormField>
           <FormField
@@ -185,9 +224,16 @@ export default function ({ data }) {
             <Input
               placeholder="Universidad en la que se presentó la tesis"
               value={formValues.universidad}
-              onChange={({ detail }) =>
-                handleChange("universidad", detail.value)
-              }
+              onChange={({ detail }) => {
+                handleChange("universidad", detail.value);
+                setData({
+                  ...data,
+                  data: {
+                    ...data.data,
+                    universidad: detail.value,
+                  },
+                });
+              }}
             />
           </FormField>
           <FormField
@@ -198,9 +244,16 @@ export default function ({ data }) {
             <Input
               placeholder="Lugar de la publicación"
               value={formValues.lugar_publicacion}
-              onChange={({ detail }) =>
-                handleChange("lugar_publicacion", detail.value)
-              }
+              onChange={({ detail }) => {
+                handleChange("lugar_publicacion", detail.value);
+                setData({
+                  ...data,
+                  data: {
+                    ...data.data,
+                    lugar_publicacion: detail.value,
+                  },
+                });
+              }}
             />
           </FormField>
           <FormField label="País" stretch errorText={formErrors.pais}>
@@ -211,6 +264,13 @@ export default function ({ data }) {
               selectedOption={formValues.pais}
               onChange={({ detail }) => {
                 handleChange("pais", detail.selectedOption);
+                setData({
+                  ...data,
+                  data: {
+                    ...data.data,
+                    pais: detail.selectedOption.value,
+                  },
+                });
               }}
               options={paises}
             />
@@ -247,6 +307,13 @@ export default function ({ data }) {
                   ...formValues.palabras_clave,
                   { label: formValues.palabras_clave_input },
                 ]);
+                setData({
+                  ...data,
+                  palabras_clave: [
+                    ...formValues.palabras_clave,
+                    { label: formValues.palabras_clave_input },
+                  ],
+                });
                 handleChange("palabras_clave_input", "");
               }
             }}

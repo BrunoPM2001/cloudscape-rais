@@ -34,6 +34,7 @@ export default function Detalle_publicacion() {
     proyectos: [],
     autores: [],
   });
+  const [detalles, setDetalles] = useState({});
   const [loading, setLoading] = useState(true);
 
   //  Url
@@ -49,6 +50,7 @@ export default function Detalle_publicacion() {
       },
     });
     const data = res.data;
+    setDetalles(data.detalle);
     setInfo(data);
     setLoading(false);
   };
@@ -64,7 +66,8 @@ export default function Detalle_publicacion() {
       label: "Detalles",
       content: (
         <Info
-          data={info.detalle}
+          data={detalles}
+          setData={setDetalles}
           loading={loading}
           tipo={info?.tipo}
           reload={getData}

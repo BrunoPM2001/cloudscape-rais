@@ -3,7 +3,7 @@ import {
   Button,
   ColumnLayout,
   Container,
-  DateInput,
+  DatePicker,
   FormField,
   Header,
   Input,
@@ -160,7 +160,7 @@ export default function ({ data }) {
             stretch
             errorText={formErrors.fecha_publicacion}
           >
-            <DateInput
+            <DatePicker
               placeholder="YYYY-MM-DD"
               value={formValues.fecha_publicacion}
               onChange={({ detail }) =>

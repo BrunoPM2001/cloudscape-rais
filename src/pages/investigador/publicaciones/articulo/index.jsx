@@ -31,6 +31,7 @@ export default function Articulos() {
       helpInfo="Información sobre la páginal actual para poder mostrarla al público
       en general."
       disableOverlap
+      contentType="table"
     >
       <Tabs tabs={tabs} />
     </BaseLayout>

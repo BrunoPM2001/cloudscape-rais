@@ -4,14 +4,12 @@ import {
   Container,
   DateInput,
   DatePicker,
-  Form,
   FormField,
   Header,
   Input,
   Link,
   Select,
   SpaceBetween,
-  Spinner,
   TokenGroup,
 } from "@cloudscape-design/components";
 import { useContext, useEffect, useState } from "react";
@@ -73,7 +71,7 @@ const optsPresentacion = [
   { value: "Poster" },
 ];
 
-export default function ({ data }) {
+export default function ({ data, setData }) {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
 
@@ -136,14 +134,23 @@ export default function ({ data }) {
       >
         <SpaceBetween size="s">
           <FormField
-            label="Título del evento"
+            label="Título de la publicación"
             stretch
             errorText={formErrors.titulo}
           >
             <Input
               placeholder="Escriba el título del evento"
               value={formValues.titulo}
-              onChange={({ detail }) => handleChange("titulo", detail.value)}
+              onChange={({ detail }) => {
+                handleChange("titulo", detail.value);
+                setData({
+                  ...data,
+                  data: {
+                    ...data.data,
+                    titulo: detail.value,
+                  },
+                });
+              }}
             />
           </FormField>
           <FormField
@@ -154,9 +161,16 @@ export default function ({ data }) {
             <Select
               placeholder="Escoja una opción"
               selectedOption={formValues.tipo_presentacion}
-              onChange={({ detail }) =>
-                handleChange("tipo_presentacion", detail.selectedOption)
-              }
+              onChange={({ detail }) => {
+                handleChange("tipo_presentacion", detail.selectedOption);
+                setData({
+                  ...data,
+                  data: {
+                    ...data.data,
+                    tipo_presentacion: detail.selectedOption.value,
+                  },
+                });
+              }}
               options={optsPresentacion}
             />
           </FormField>
@@ -181,6 +195,13 @@ export default function ({ data }) {
                     ...formValues.palabras_clave,
                     { label: formValues.palabras_clave_input },
                   ]);
+                  setData({
+                    ...data,
+                    palabras_clave: [
+                      ...formValues.palabras_clave,
+                      { label: formValues.palabras_clave_input },
+                    ],
+                  });
                   handleChange("palabras_clave_input", "");
                 }
               }}
@@ -207,9 +228,16 @@ export default function ({ data }) {
             <Input
               placeholder="Escriba el nombre en caso lo tenga como dato"
               value={formValues.publicacion_nombre}
-              onChange={({ detail }) =>
-                handleChange("publicacion_nombre", detail.value)
-              }
+              onChange={({ detail }) => {
+                handleChange("publicacion_nombre", detail.value);
+                setData({
+                  ...data,
+                  data: {
+                    ...data.data,
+                    publicacion_nombre: detail.value,
+                  },
+                });
+              }}
             />
           </FormField>
           <ColumnLayout columns={4}>
@@ -243,7 +271,16 @@ export default function ({ data }) {
               <Input
                 placeholder="Escriba el isbn"
                 value={formValues.isbn}
-                onChange={({ detail }) => handleChange("isbn", detail.value)}
+                onChange={({ detail }) => {
+                  handleChange("isbn", detail.value);
+                  setData({
+                    ...data,
+                    data: {
+                      ...data.data,
+                      isbn: detail.value,
+                    },
+                  });
+                }}
               />
             </FormField>
             <FormField
@@ -254,9 +291,16 @@ export default function ({ data }) {
               <Input
                 placeholder="Escriba el nombre de la editorial"
                 value={formValues.editorial}
-                onChange={({ detail }) =>
-                  handleChange("editorial", detail.value)
-                }
+                onChange={({ detail }) => {
+                  handleChange("editorial", detail.value);
+                  setData({
+                    ...data,
+                    data: {
+                      ...data.data,
+                      editorial: detail.value,
+                    },
+                  });
+                }}
               />
             </FormField>
             <FormField
@@ -267,7 +311,16 @@ export default function ({ data }) {
               <Input
                 placeholder="Escriba el volumen de su publicación"
                 value={formValues.volumen}
-                onChange={({ detail }) => handleChange("volumen", detail.value)}
+                onChange={({ detail }) => {
+                  handleChange("volumen", detail.value);
+                  setData({
+                    ...data,
+                    data: {
+                      ...data.data,
+                      volumen: detail.value,
+                    },
+                  });
+                }}
               />
             </FormField>
             <FormField
@@ -278,9 +331,16 @@ export default function ({ data }) {
               <Input
                 placeholder="Escriba el nombre de la ciudad de edición"
                 value={formValues.ciudad_edicion}
-                onChange={({ detail }) =>
-                  handleChange("ciudad_edicion", detail.value)
-                }
+                onChange={({ detail }) => {
+                  handleChange("ciudad_edicion", detail.value);
+                  setData({
+                    ...data,
+                    data: {
+                      ...data.data,
+                      ciudad_edicion: detail.value,
+                    },
+                  });
+                }}
               />
             </FormField>
             <FormField
@@ -301,7 +361,16 @@ export default function ({ data }) {
               <Input
                 placeholder="Escriba el issn"
                 value={formValues.issn}
-                onChange={({ detail }) => handleChange("issn", detail.value)}
+                onChange={({ detail }) => {
+                  handleChange("issn", detail.value);
+                  setData({
+                    ...data,
+                    data: {
+                      ...data.data,
+                      issn: detail.value,
+                    },
+                  });
+                }}
               />
             </FormField>
             <FormField
@@ -322,7 +391,16 @@ export default function ({ data }) {
               <Input
                 placeholder="Escriba el issn-e"
                 value={formValues.issn_e}
-                onChange={({ detail }) => handleChange("issn_e", detail.value)}
+                onChange={({ detail }) => {
+                  handleChange("issn_e", detail.value);
+                  setData({
+                    ...data,
+                    data: {
+                      ...data.data,
+                      issn_e: detail.value,
+                    },
+                  });
+                }}
               />
             </FormField>
             <FormField
@@ -334,9 +412,16 @@ export default function ({ data }) {
                 type="number"
                 placeholder="Escriba el n° de página inicial"
                 value={formValues.pagina_inicial}
-                onChange={({ detail }) =>
-                  handleChange("pagina_inicial", detail.value)
-                }
+                onChange={({ detail }) => {
+                  handleChange("pagina_inicial", detail.value);
+                  setData({
+                    ...data,
+                    data: {
+                      ...data.data,
+                      pagina_inicial: detail.value,
+                    },
+                  });
+                }}
               />
             </FormField>
             <FormField
@@ -348,9 +433,16 @@ export default function ({ data }) {
                 type="number"
                 placeholder="Escriba el n° de página final"
                 value={formValues.pagina_final}
-                onChange={({ detail }) =>
-                  handleChange("pagina_final", detail.value)
-                }
+                onChange={({ detail }) => {
+                  handleChange("pagina_final", detail.value);
+                  setData({
+                    ...data,
+                    data: {
+                      ...data.data,
+                      pagina_final: detail.value,
+                    },
+                  });
+                }}
               />
             </FormField>
             <FormField
@@ -361,9 +453,16 @@ export default function ({ data }) {
               <DateInput
                 placeholder="YYYY/MM/DD"
                 value={formValues.fecha_publicacion}
-                onChange={({ detail }) =>
-                  handleChange("fecha_publicacion", detail.value)
-                }
+                onChange={({ detail }) => {
+                  handleChange("fecha_publicacion", detail.value);
+                  setData({
+                    ...data,
+                    data: {
+                      ...data.data,
+                      fecha_publicacion: detail.value,
+                    },
+                  });
+                }}
               />
             </FormField>
           </ColumnLayout>
@@ -379,9 +478,16 @@ export default function ({ data }) {
             <Input
               placeholder="Escriba el nombre del evento"
               value={formValues.evento_nombre}
-              onChange={({ detail }) =>
-                handleChange("evento_nombre", detail.value)
-              }
+              onChange={({ detail }) => {
+                handleChange("evento_nombre", detail.value);
+                setData({
+                  ...data,
+                  data: {
+                    ...data.data,
+                    evento_nombre: detail.value,
+                  },
+                });
+              }}
             />
           </FormField>
           <ColumnLayout columns={4}>
@@ -393,9 +499,16 @@ export default function ({ data }) {
               <DatePicker
                 placeholder="YYYY-MM-DD"
                 value={formValues?.fecha_inicio ?? ""}
-                onChange={({ detail }) =>
-                  handleChange("fecha_inicio", detail.value)
-                }
+                onChange={({ detail }) => {
+                  handleChange("fecha_inicio", detail.value);
+                  setData({
+                    ...data,
+                    data: {
+                      ...data.data,
+                      fecha_inicio: detail.value,
+                    },
+                  });
+                }}
               />
             </FormField>
             <FormField
@@ -406,16 +519,32 @@ export default function ({ data }) {
               <DatePicker
                 placeholder="YYYY-MM-DD"
                 value={formValues?.fecha_fin ?? ""}
-                onChange={({ detail }) =>
-                  handleChange("fecha_fin", detail.value)
-                }
+                onChange={({ detail }) => {
+                  handleChange("fecha_fin", detail.value);
+                  setData({
+                    ...data,
+                    data: {
+                      ...data.data,
+                      fecha_fin: detail.value,
+                    },
+                  });
+                }}
               />
             </FormField>
             <FormField label="Ciudad" stretch errorText={formErrors.ciudad}>
               <Input
                 placeholder="Escriba el nombre de la ciudad"
                 value={formValues.ciudad}
-                onChange={({ detail }) => handleChange("ciudad", detail.value)}
+                onChange={({ detail }) => {
+                  handleChange("ciudad", detail.value);
+                  setData({
+                    ...data,
+                    data: {
+                      ...data.data,
+                      ciudad: detail.value,
+                    },
+                  });
+                }}
               />
             </FormField>
             <FormField label="País" stretch errorText={formErrors.pais}>
@@ -426,6 +555,13 @@ export default function ({ data }) {
                 selectedOption={formValues.pais}
                 onChange={({ detail }) => {
                   handleChange("pais", detail.selectedOption);
+                  setData({
+                    ...data,
+                    data: {
+                      ...data.data,
+                      pais: detail.selectedOption.value,
+                    },
+                  });
                 }}
                 options={paises}
               />
@@ -447,7 +583,16 @@ export default function ({ data }) {
             <Input
               placeholder="Escriba la URL de su publicación"
               value={formValues.url}
-              onChange={({ detail }) => handleChange("url", detail.value)}
+              onChange={({ detail }) => {
+                handleChange("url", detail.value);
+                setData({
+                  ...data,
+                  data: {
+                    ...data.data,
+                    url: detail.value,
+                  },
+                });
+              }}
             />
           </FormField>
         </SpaceBetween>

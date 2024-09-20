@@ -1,7 +1,9 @@
 import {
+  Alert,
   Box,
   Button,
   ButtonDropdown,
+  Checkbox,
   Container,
   Header,
   Pagination,
@@ -31,15 +33,37 @@ const columnDefinitions = [
     header: "Entidad financiadora",
     cell: (item) => item.entidad_financiadora,
   },
+  {
+    id: "url",
+    header: "Documento",
+    cell: (item) =>
+      item.url ? (
+        <Button
+          iconName="download"
+          variant="inline-icon"
+          href={item.url}
+          target="_blank"
+        />
+      ) : (
+        "No"
+      ),
+  },
 ];
 
 const columnDisplay = [
   { id: "codigo_proyecto", visible: true },
   { id: "nombre_proyecto", visible: true },
   { id: "entidad_financiadora", visible: true },
+  { id: "url", visible: true },
 ];
 
-export default function ({ publicacion_id, loading, setLoading }) {
+export default function ({
+  publicacion_id,
+  loading,
+  setLoading,
+  checked,
+  setChecked,
+}) {
   //  State
   const [distributions, setDistribution] = useState([]);
   const [visible, setVisible] = useState(false);
@@ -77,7 +101,7 @@ export default function ({ publicacion_id, loading, setLoading }) {
   }, []);
 
   return (
-    <Container>
+    <SpaceBetween size="m">
       <Table
         {...collectionProps}
         trackBy="id"
@@ -89,7 +113,6 @@ export default function ({ publicacion_id, loading, setLoading }) {
         resizableColumns
         enableKeyboardNavigation
         selectionType="single"
-        variant="embedded"
         onRowClick={({ detail }) => actions.setSelectedItems([detail.item])}
         header={
           <Header
@@ -122,11 +145,11 @@ export default function ({ publicacion_id, loading, setLoading }) {
                   }}
                   items={[
                     {
-                      text: "Proyecto registrado en la UNMSM",
+                      text: "Proyecto aprobado en la UNMSM",
                       id: "action_1",
                     },
                     {
-                      text: "Proyecto no registrado en la UNMSM",
+                      text: "Proyecto no vinculado en la UNMSM",
                       id: "action_2",
                     },
                   ]}
@@ -148,6 +171,17 @@ export default function ({ publicacion_id, loading, setLoading }) {
           </Box>
         }
       />
+      <Alert header="Declaración jurada">
+        Declaro que en caso no haya registrado ningún proyecto significará que
+        la publicación que estoy registrando no está vinculada a ningún proyecto
+        (Interno o externo de la UNMSM)
+      </Alert>
+      <Checkbox
+        onChange={({ detail }) => setChecked(detail.checked)}
+        checked={checked}
+      >
+        Estoy de acuerdo
+      </Checkbox>
       {visible && typeModal == "registrado" && (
         <ModalRegistrado
           id={publicacion_id}
@@ -172,6 +206,6 @@ export default function ({ publicacion_id, loading, setLoading }) {
           visible={visible}
         />
       )}
-    </Container>
+    </SpaceBetween>
   );
 }

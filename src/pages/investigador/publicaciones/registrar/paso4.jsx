@@ -98,7 +98,7 @@ export default forwardRef(function ({ publicacion_id, tipo }, ref) {
             showFileLastModified
             showFileSize
             showFileThumbnail
-            constraintText="Adjunte el acta de sustentación (el archivo cargado no debe superar los 6 MB)"
+            constraintText="Adjunte el archivo de la publicación (el archivo cargado no debe superar los 6 MB)"
             i18nStrings={{
               uploadButtonText: (e) =>
                 e ? "Cargar archivos" : "Cargar archivo",
