@@ -83,7 +83,7 @@ const opt_estado = [
   { value: 9, label: "Duplicado" },
 ];
 
-export default ({ id }) => {
+export default ({ id, changes, reload }) => {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
 
@@ -122,6 +122,7 @@ export default ({ id }) => {
       file_comentario: [],
     });
     setLoading(false);
+    reload();
   };
 
   const reporte = async () => {
@@ -140,26 +141,35 @@ export default ({ id }) => {
   };
 
   const update = async () => {
-    if (validateForm()) {
-      setUpdating(true);
-      const form = new FormData();
-      form.append("id", id);
-      form.append("validado", formValues.validado?.value ?? null);
-      form.append("categoria_id", formValues.categoria_id?.value ?? null);
-      form.append("comentario", formValues.comentario);
-      form.append("observaciones_usuario", formValues.observaciones_usuario);
-      form.append("resolucion", formValues.resolucion);
-      form.append("estado", formValues.estado?.value);
-      form.append("file", formValues.file[0]);
-      form.append("file_comentario", formValues.file_comentario[0]);
-      const res = await axiosBase.post(
-        "admin/estudios/publicaciones/updateDetalle",
-        form
+    console.log(changes);
+    if (changes <= 1) {
+      if (validateForm()) {
+        setUpdating(true);
+        const form = new FormData();
+        form.append("id", id);
+        form.append("validado", formValues.validado?.value ?? null);
+        form.append("categoria_id", formValues.categoria_id?.value ?? null);
+        form.append("comentario", formValues.comentario);
+        form.append("observaciones_usuario", formValues.observaciones_usuario);
+        form.append("resolucion", formValues.resolucion);
+        form.append("estado", formValues.estado?.value);
+        form.append("file", formValues.file[0]);
+        form.append("file_comentario", formValues.file_comentario[0]);
+        const res = await axiosBase.post(
+          "admin/estudios/publicaciones/updateDetalle",
+          form
+        );
+        const data = res.data;
+        pushNotification(data.detail, data.message, notifications.length + 1);
+        setUpdating(false);
+        getData();
+      }
+    } else {
+      pushNotification(
+        "No ha guardado los cambios hechos en la pestaña de Detalles",
+        "warning",
+        notifications.length + 1
       );
-      const data = res.data;
-      pushNotification(data.detail, data.message, notifications.length + 1);
-      setUpdating(false);
-      getData();
     }
   };
 

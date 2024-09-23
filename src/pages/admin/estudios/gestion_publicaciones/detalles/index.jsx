@@ -36,6 +36,7 @@ export default function Detalle_publicacion() {
   });
   const [detalles, setDetalles] = useState({});
   const [loading, setLoading] = useState(true);
+  const [changes, setChanges] = useState(0);
 
   //  Url
   const location = useLocation();
@@ -52,12 +53,17 @@ export default function Detalle_publicacion() {
     const data = res.data;
     setDetalles(data.detalle);
     setInfo(data);
+    setChanges(0);
     setLoading(false);
   };
 
   useEffect(() => {
     getData();
   }, []);
+
+  useEffect(() => {
+    setChanges((prev) => prev + 1);
+  }, [detalles]);
 
   //  Tabs
   const tabs = [
@@ -103,7 +109,7 @@ export default function Detalle_publicacion() {
       en general."
     >
       <SpaceBetween size="l">
-        <Detalles id={id} />
+        <Detalles id={id} changes={changes} reload={getData} />
         <Tabs tabs={tabs} />
       </SpaceBetween>
     </BaseLayout>
