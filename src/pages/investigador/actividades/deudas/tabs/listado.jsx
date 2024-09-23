@@ -1,7 +1,6 @@
 import {
   Badge,
   Box,
-  Button,
   Header,
   Pagination,
   PropertyFilter,
@@ -79,6 +78,17 @@ const columnDefinitions = [
     cell: (item) => item.periodo,
     sortingField: "periodo",
   },
+  {
+    id: "deuda",
+    header: "Deuda",
+    cell: (item) => (
+      <Badge color={item.deuda == "Sí" || item.deuda == "SI" ? "red" : "green"}>
+        {item.deuda}
+      </Badge>
+    ),
+
+    sortingField: "deuda",
+  },
 ];
 
 const columnDisplay = [
@@ -87,6 +97,7 @@ const columnDisplay = [
   { id: "tipo_proyecto", visible: true },
   { id: "condicion", visible: true },
   { id: "periodo", visible: true },
+  { id: "deuda", visible: true },
 ];
 
 export default () => {

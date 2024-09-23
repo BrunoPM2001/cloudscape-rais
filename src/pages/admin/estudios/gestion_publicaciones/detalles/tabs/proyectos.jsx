@@ -32,12 +32,28 @@ const columnDefinitions = [
     header: "Entidad financiadora",
     cell: (item) => item.entidad_financiadora,
   },
+  {
+    id: "url",
+    header: "Documento",
+    cell: (item) =>
+      item.url ? (
+        <Button
+          iconName="download"
+          variant="inline-icon"
+          href={item.url}
+          target="_blank"
+        />
+      ) : (
+        "No"
+      ),
+  },
 ];
 
 const columnDisplay = [
   { id: "codigo_proyecto", visible: true },
   { id: "nombre_proyecto", visible: true },
   { id: "entidad_financiadora", visible: true },
+  { id: "url", visible: true },
 ];
 
 export default function ({ loading, data, reload }) {
