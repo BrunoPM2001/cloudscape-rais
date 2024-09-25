@@ -40,14 +40,14 @@ const columnDefinitions = [
     cell: (item) => item.actividad,
   },
   {
-    id: "fecha_inicio",
-    header: "Fecha de inicio",
-    cell: (item) => item.fecha_inicio,
-  },
-  {
     id: "responsable",
     header: "Responsable",
     cell: (item) => item.responsable,
+  },
+  {
+    id: "fecha_inicio",
+    header: "Fecha de inicio",
+    cell: (item) => item.fecha_inicio,
   },
   {
     id: "fecha_fin",

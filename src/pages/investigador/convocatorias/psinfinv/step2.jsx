@@ -150,45 +150,52 @@ export default function Registro_psinfinv_2() {
     setLoading(false);
   };
 
-  const siguiente = async () => {
-    if (validateForm()) {
-      setLoadingBtn(true);
-      const form = new FormData();
-      form.append("id", id);
-      form.append("resumen_ejecutivo", formValues.resumen_ejecutivo);
-      form.append("resumen_esperado", formValues.resumen_esperado);
-      form.append(
-        "palabras_clave",
-        formValues.palabras_clave.length == 1
-          ? formValues.palabras_clave[0].label
-          : formValues.palabras_clave.map((item) => item.label).join(",")
-      );
-      form.append("antecedentes", formValues.antecedentes);
-      form.append("objetivos_generales", formValues.objetivos_generales);
-      form.append("objetivos_especificos", formValues.objetivos_especificos);
-      form.append("justificacion", formValues.justificacion);
-      form.append("hipotesis", formValues.hipotesis);
-      form.append("metodologia_trabajo", formValues.metodologia_trabajo);
-      form.append(
-        "referencias_bibliograficas",
-        formValues.referencias_bibliograficas
-      );
-      form.append("file1", formValues.file1[0]);
-      form.append("file2", formValues.file2[0]);
-      const res = await axiosBase.post(
-        "investigador/convocatorias/psinfinv/registrar2",
-        form
-      );
-      const info = res.data;
-      if (info.message == "success") {
-        const query = queryString.stringify({
-          id,
-        });
-        window.location.href = "paso3?" + query;
-      } else {
-        pushNotification(info.detail, info.message, notifications.length + 1);
+  const handleNavigate = async (index) => {
+    if (index == 2) {
+      if (validateForm()) {
+        setLoadingBtn(true);
+        const form = new FormData();
+        form.append("id", id);
+        form.append("resumen_ejecutivo", formValues.resumen_ejecutivo);
+        form.append("resumen_esperado", formValues.resumen_esperado);
+        form.append(
+          "palabras_clave",
+          formValues.palabras_clave.length == 1
+            ? formValues.palabras_clave[0].label
+            : formValues.palabras_clave.map((item) => item.label).join(",")
+        );
+        form.append("antecedentes", formValues.antecedentes);
+        form.append("objetivos_generales", formValues.objetivos_generales);
+        form.append("objetivos_especificos", formValues.objetivos_especificos);
+        form.append("justificacion", formValues.justificacion);
+        form.append("hipotesis", formValues.hipotesis);
+        form.append("metodologia_trabajo", formValues.metodologia_trabajo);
+        form.append(
+          "referencias_bibliograficas",
+          formValues.referencias_bibliograficas
+        );
+        form.append("file1", formValues.file1[0]);
+        form.append("file2", formValues.file2[0]);
+        const res = await axiosBase.post(
+          "investigador/convocatorias/psinfinv/registrar2",
+          form
+        );
+        const info = res.data;
+        if (info.message == "success") {
+          const query = queryString.stringify({
+            id,
+          });
+          window.location.href = "paso3?" + query;
+        } else {
+          pushNotification(info.detail, info.message, notifications.length + 1);
+        }
+        setLoadingBtn(false);
       }
-      setLoadingBtn(false);
+    } else {
+      const query = queryString.stringify({
+        id,
+      });
+      window.location.href = "paso" + (index + 1) + "?" + query;
     }
   };
 
@@ -214,7 +221,9 @@ export default function Registro_psinfinv_2() {
         <>
           {errors.length == 0 ? (
             <Wizard
-              onNavigate={siguiente}
+              onNavigate={({ detail }) =>
+                handleNavigate(detail.requestedStepIndex)
+              }
               activeStepIndex={1}
               isLoadingNextStep={loadingBtn}
               onCancel={() => {

@@ -32,6 +32,11 @@ const Docente_investigador = lazy(() =>
 const Asignar_evaluador = lazy(() =>
   import("../pages/admin/facultad/evaluadores/index.jsx")
 );
+const Detalle_proyecto_psinfinv = lazy(() =>
+  import(
+    "../pages/admin/estudios/gestion_proyectos_grupos/detalle/psinfinv/index.jsx"
+  )
+);
 const Detalle_proyecto_pconfigi = lazy(() =>
   import(
     "../pages/admin/estudios/gestion_proyectos_grupos/detalle/pconfigi/index.jsx"
@@ -207,6 +212,10 @@ const routes = createBrowserRouter(
                 {
                   path: "pconfigi",
                   element: <Detalle_proyecto_pconfigi />,
+                },
+                {
+                  path: "psinfinv",
+                  element: <Detalle_proyecto_psinfinv />,
                 },
               ],
             },
