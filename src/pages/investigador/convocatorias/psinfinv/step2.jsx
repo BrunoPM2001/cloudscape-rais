@@ -481,12 +481,12 @@ export default function Registro_psinfinv_2() {
                           ),
                         },
                         {
-                          id: "propiedad_intelectual",
-                          label: "Propiedad intelectual",
+                          id: "declaracion_jurada",
+                          label: "Declaración jurada",
                           content: (
                             <Container>
                               <FormField
-                                label="Propiedad intelectual"
+                                label="Declaración jurada"
                                 description={
                                   <>
                                     Puede descargar el compromiso de
