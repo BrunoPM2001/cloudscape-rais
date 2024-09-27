@@ -489,9 +489,10 @@ export default function Registro_psinfinv_2() {
                                 label="Propiedad intelectual"
                                 description={
                                   <>
-                                    Puede descargar la plantilla en{" "}
+                                    Puede descargar el compromiso de
+                                    confidencialidad de propiedad intelectual en{" "}
                                     <Link
-                                      href="/minio/templates/propiedad-intelectual.docx"
+                                      href="/minio/templates/COMPROMISO_CONFIDENCIALIDAD_PROPIEDAD_INTELECTUAL.docx"
                                       external="true"
                                       variant="primary"
                                       fontSize="body-s"
