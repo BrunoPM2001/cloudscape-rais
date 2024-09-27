@@ -5,7 +5,6 @@ import {
   ColumnLayout,
   Container,
   Header,
-  Link,
   SpaceBetween,
   Spinner,
   StatusIndicator,
@@ -97,7 +96,7 @@ export default ({ data, loading, proyecto_id, reload }) => {
         </Header>
       }
     >
-      <ColumnLayout columns={4} variant="text-grid">
+      <ColumnLayout columns={3} variant="text-grid">
         <SpaceBetween size="s">
           <div>
             <Box variant="awsui-key-label">Título</Box>
@@ -172,78 +171,24 @@ export default ({ data, loading, proyecto_id, reload }) => {
         </SpaceBetween>
         <SpaceBetween size="s">
           <div>
-            <Box variant="awsui-key-label">Grupo de investigación</Box>
-            {loading ? <Spinner /> : <div>{data.grupo_nombre}</div>}
-          </div>
-          <div>
-            <Box variant="awsui-key-label">Área académica</Box>
-            {loading ? <Spinner /> : <div>{data.area}</div>}
-          </div>
-          <div>
             <Box variant="awsui-key-label">Facultad</Box>
             {loading ? <Spinner /> : <div>{data.facultad}</div>}
           </div>
           <div>
-            <Box variant="awsui-key-label">Línea de investigación</Box>
-            {loading ? <Spinner /> : <div>{data.linea}</div>}
+            <Box variant="awsui-key-label">Fecha de inicio</Box>
+            {loading ? <Spinner /> : <div>{data.fecha_inicio}</div>}
           </div>
           <div>
-            <Box variant="awsui-key-label">Área de conocimiento OCDE</Box>
-            {loading ? <Spinner /> : <div>{data.ocde}</div>}
-          </div>
-        </SpaceBetween>
-        <SpaceBetween size="s">
-          <div>
-            <Box variant="awsui-key-label">Localización</Box>
-            {loading ? <Spinner /> : <div>{data.localizacion}</div>}
+            <Box variant="awsui-key-label">Fecha de fin</Box>
+            {loading ? <Spinner /> : <div>{data.fecha_fin}</div>}
           </div>
           <div>
-            <Box variant="awsui-key-label">Anexo (metodología)</Box>
-            {loading ? (
-              <Spinner />
-            ) : (
-              <div>
-                {data.url1 != null ? (
-                  <>
-                    <Link
-                      href={data.url1}
-                      external="true"
-                      variant="primary"
-                      fontSize="body-s"
-                      target="_blank"
-                    >
-                      Descargar archivo
-                    </Link>
-                  </>
-                ) : (
-                  <>No se cargó ningún archivo</>
-                )}
-              </div>
-            )}
+            <Box variant="awsui-key-label">Resolución rectoral</Box>
+            {loading ? <Spinner /> : <div>{data.resolucion_rectoral}</div>}
           </div>
           <div>
-            <Box variant="awsui-key-label">Propiedad intelectual</Box>
-            {loading ? (
-              <Spinner />
-            ) : (
-              <div>
-                {data.url2 != null ? (
-                  <>
-                    <Link
-                      href={data.url2}
-                      external="true"
-                      variant="primary"
-                      fontSize="body-s"
-                      target="_blank"
-                    >
-                      Descargar archivo
-                    </Link>
-                  </>
-                ) : (
-                  <>No se cargó ningún archivo</>
-                )}
-              </div>
-            )}
+            <Box variant="awsui-key-label">Fecha de resolución rectoral</Box>
+            {loading ? <Spinner /> : <div>{data.resolucion_fecha}</div>}
           </div>
         </SpaceBetween>
         <SpaceBetween size="s">

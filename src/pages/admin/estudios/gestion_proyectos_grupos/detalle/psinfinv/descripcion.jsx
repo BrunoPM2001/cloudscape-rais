@@ -98,7 +98,7 @@ export default ({ data, loading }) => {
           />
         )}
       </ExpandableSection>
-      <ExpandableSection headerText="Resumen esperado">
+      <ExpandableSection headerText="Resultado esperado">
         {loading ? (
           <Spinner />
         ) : (

@@ -303,6 +303,18 @@ export default () => {
                     ].toLowerCase() +
                     "?" +
                     query;
+                } else if (
+                  collectionProps.selectedItems[0][
+                    "tipo_proyecto"
+                  ].toLowerCase() == "pinvpos"
+                ) {
+                  window.location.href =
+                    "proyectos_grupos/detalle/" +
+                    collectionProps.selectedItems[0][
+                      "tipo_proyecto"
+                    ].toLowerCase() +
+                    "?" +
+                    query;
                 } else {
                   window.location.href =
                     "proyectos_grupos/detalle/pconfigi" + "?" + query;

@@ -3,9 +3,10 @@ import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import queryString from "query-string";
 import Detalles from "./detalles";
-import Integrantes from "../tabs/integrantes";
-import Descripcion from "../tabs/descripcion";
-import Calendario from "../tabs/calendario";
+import Integrantes from "./integrantes";
+import Documentos from "./documentos";
+import Descripcion from "./descripcion";
+import Calendario from "./calendario";
 import Presupuesto from "../tabs/presupuesto";
 import axiosBase from "../../../../../../api/axios";
 import BaseLayout from "../../../../components/baseLayout";
@@ -29,7 +30,7 @@ const breadcrumbs = [
   },
 ];
 
-export default function Detalle_proyecto_pconfigi() {
+export default function Detalle_proyecto_pinvpos() {
   //  State
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(true);
@@ -40,6 +41,11 @@ export default function Detalle_proyecto_pconfigi() {
       id: "integrantes",
       label: "Integrantes",
       content: <Integrantes data={data.miembros} loading={loading} />,
+    },
+    {
+      id: "documentos",
+      label: "Documentos",
+      content: <Documentos data={data.documentos} loading={loading} />,
     },
     {
       id: "descripcion",
