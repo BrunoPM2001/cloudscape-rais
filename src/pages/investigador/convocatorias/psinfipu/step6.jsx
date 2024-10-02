@@ -26,7 +26,7 @@ const breadcrumbs = [
   },
 ];
 
-export default function Registro_psinfinv_6() {
+export default function Registro_psinfipu_6() {
   //  Url
   const location = useLocation();
   const { id } = queryString.parse(location.search);
@@ -44,7 +44,7 @@ export default function Registro_psinfinv_6() {
   const getData = async () => {
     setLoading(true);
     const res = await axiosBase.get(
-      "investigador/convocatorias/psinfinv/verificar6",
+      "investigador/convocatorias/psinfipu/verificar6",
       {
         params: {
           id,
@@ -68,7 +68,7 @@ export default function Registro_psinfinv_6() {
   const reporte = async () => {
     setLoadingReporte(true);
     const res = await axiosBase.get(
-      "investigador/convocatorias/psinfinv/reporte",
+      "investigador/convocatorias/psinfipu/reporte",
       {
         params: {
           id,

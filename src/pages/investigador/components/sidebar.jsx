@@ -158,6 +158,11 @@ const navItems = [
         text: "Proyecto de investigación sin financiamiento",
         href: "/investigador/convocatoria/psinfinv/paso1",
       },
+      {
+        type: "link",
+        text: "Proyecto de publicación académica",
+        href: "/investigador/convocatoria/psinfipu",
+      },
     ],
   },
   {

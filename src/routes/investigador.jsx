@@ -2,6 +2,27 @@ import { Suspense, lazy } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { NotificationProvider } from "../providers/notificationProvider.jsx";
 
+const Registro_psinfipu_0 = lazy(() =>
+  import("../pages/investigador/convocatorias/psinfipu/step0.jsx")
+);
+const Registro_psinfipu_6 = lazy(() =>
+  import("../pages/investigador/convocatorias/psinfipu/step6.jsx")
+);
+const Registro_psinfipu_5 = lazy(() =>
+  import("../pages/investigador/convocatorias/psinfipu/step5.jsx")
+);
+const Registro_psinfipu_4 = lazy(() =>
+  import("../pages/investigador/convocatorias/psinfipu/step4.jsx")
+);
+const Registro_psinfipu_3 = lazy(() =>
+  import("../pages/investigador/convocatorias/psinfipu/step3.jsx")
+);
+const Registro_psinfipu_2 = lazy(() =>
+  import("../pages/investigador/convocatorias/psinfipu/step2.jsx")
+);
+const Registro_psinfipu_1 = lazy(() =>
+  import("../pages/investigador/convocatorias/psinfipu/step1.jsx")
+);
 const Registro_psinfinv_6 = lazy(() =>
   import("../pages/investigador/convocatorias/psinfinv/step6.jsx")
 );
@@ -515,6 +536,39 @@ const routes = createBrowserRouter(
             {
               path: "paso6",
               element: <Registro_psinfinv_6 />,
+            },
+          ],
+        },
+        {
+          path: "psinfipu",
+          children: [
+            {
+              path: "",
+              element: <Registro_psinfipu_0 />,
+            },
+            {
+              path: "paso1",
+              element: <Registro_psinfipu_1 />,
+            },
+            {
+              path: "paso2",
+              element: <Registro_psinfipu_2 />,
+            },
+            {
+              path: "paso3",
+              element: <Registro_psinfipu_3 />,
+            },
+            {
+              path: "paso4",
+              element: <Registro_psinfipu_4 />,
+            },
+            {
+              path: "paso5",
+              element: <Registro_psinfipu_5 />,
+            },
+            {
+              path: "paso6",
+              element: <Registro_psinfipu_6 />,
             },
           ],
         },
