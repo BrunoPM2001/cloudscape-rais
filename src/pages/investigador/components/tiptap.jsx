@@ -154,7 +154,12 @@ export default ({ value, name, handleChange, limitWords }) => {
       </div>
       <EditorContent editor={editor} />
       {limitWords && (
-        <Box float="right" color="text-status-inactive" margin={{ top: "xxs" }}>
+        <Box
+          float="right"
+          color="text-status-inactive"
+          fontSize="body-s"
+          margin={{ top: "xxs" }}
+        >
           Máximo {limitWords} palabras ({editor.storage.characterCount.words()}
           {""}/{limitWords})
         </Box>

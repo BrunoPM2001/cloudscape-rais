@@ -597,10 +597,10 @@ const routes = createBrowserRouter(
               path: "",
               element: <Informe_academico />,
             },
-            // {
-            //   path: "presentar",
-            //   element: <Presentar_informe />,
-            // },
+            {
+              path: "presentar",
+              element: <Presentar_informe />,
+            },
           ],
         },
       ],

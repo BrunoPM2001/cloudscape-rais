@@ -1,13 +1,8 @@
 import {
   Box,
   Button,
-  ColumnLayout,
   Container,
-  FileUpload,
-  FormField,
   Header,
-  Input,
-  Link,
   SpaceBetween,
   Spinner,
   Table,
@@ -24,48 +19,15 @@ import NotificationContext from "../../../../../../providers/notificationProvide
 const initialForm = {
   id: null,
   estado: 0,
-  resumen_ejecutivo: "",
-  palabras_clave: "",
   infinal1: "",
   infinal2: "",
   infinal3: "",
   infinal4: "",
   infinal5: "",
   infinal6: "",
-  infinal7: "",
-  infinal9: "",
-  infinal10: "",
-  file1: [],
-  file2: [],
 };
 
-const formRules = {
-  file1: { isFile: true, maxSize: 6 * 1024 * 1024 },
-  file2: { isFile: true, maxSize: 6 * 1024 * 1024 },
-};
-
-const propsRepetidas = {
-  showFileLastModified: true,
-  showFileSize: true,
-  showFileThumbnail: true,
-  i18nStrings: {
-    uploadButtonText: (e) => (e ? "Cargar archivos" : "Cargar archivo"),
-    dropzoneText: (e) =>
-      e
-        ? "Arrastre los archivos para cargarlos"
-        : "Arrastre el archivo para cargarlo",
-    removeFileAriaLabel: (e) => `Eliminar archivo ${e + 1}`,
-    errorIconAriaLabel: "Error",
-  },
-  accept: ".pdf",
-};
-
-const propsEnlaces = {
-  external: "true",
-  variant: "primary",
-  fontSize: "body-s",
-  target: "_blank",
-};
+const formRules = {};
 
 export default () => {
   //  Context
@@ -80,7 +42,6 @@ export default () => {
   const [loading, setLoading] = useState(true);
   const [loadingBtn, setLoadingBtn] = useState(false);
   const [loadingSave, setLoadingSave] = useState(false);
-  const [files, setFiles] = useState({});
   const [proyecto, setProyecto] = useState({});
   const [miembros, setMiembros] = useState([]);
 
@@ -104,19 +65,13 @@ export default () => {
     const data = res.data;
     setProyecto(data.proyecto);
     setMiembros(data.miembros);
-    setFiles(data.archivos);
     if (data.informe) {
-      handleChange("resumen_ejecutivo", data.informe.resumen_ejecutivo ?? "");
-      handleChange("palabras_clave", data.informe.palabras_clave ?? "");
       handleChange("infinal1", data.informe.infinal1 ?? "");
       handleChange("infinal2", data.informe.infinal2 ?? "");
       handleChange("infinal3", data.informe.infinal3 ?? "");
       handleChange("infinal4", data.informe.infinal4 ?? "");
       handleChange("infinal5", data.informe.infinal5 ?? "");
       handleChange("infinal6", data.informe.infinal6 ?? "");
-      handleChange("infinal7", data.informe.infinal7 ?? "");
-      handleChange("infinal9", data.informe.infinal9 ?? "");
-      handleChange("infinal10", data.informe.infinal10 ?? "");
       handleChange("estado", data.informe.estado);
       handleChange("id", data.informe.id);
     }
@@ -129,19 +84,12 @@ export default () => {
     form.append("id", id);
     form.append("proyecto_id", proyecto_id);
     form.append("tipo_proyecto", tipo_proyecto);
-    form.append("resumen_ejecutivo", formValues.resumen_ejecutivo);
-    form.append("palabras_clave", formValues.palabras_clave);
     form.append("infinal1", formValues.infinal1);
     form.append("infinal2", formValues.infinal2);
     form.append("infinal3", formValues.infinal3);
     form.append("infinal4", formValues.infinal4);
     form.append("infinal5", formValues.infinal5);
     form.append("infinal6", formValues.infinal6);
-    form.append("infinal7", formValues.infinal7);
-    form.append("infinal9", formValues.infinal9);
-    form.append("infinal10", formValues.infinal10);
-    form.append("file1", formValues.file1[0]);
-    form.append("file2", formValues.file2[0]);
     const res = await axiosBase.post(
       "investigador/informes/informe_academico/sendData",
       form
@@ -256,8 +204,6 @@ export default () => {
           steps={[
             {
               title: "Información",
-              description:
-                "Programa de equipamiento científico para investigación de la UNMSM",
               content: (
                 <SpaceBetween size="l">
                   <Container>
@@ -287,48 +233,14 @@ export default () => {
                         {loading ? <Spinner /> : <Box>{proyecto.periodo}</Box>}
                       </div>
                       <div>
-                        <Box variant="awsui-key-label">Grupo</Box>
-                        {loading ? (
-                          <Spinner />
-                        ) : (
-                          <Box>{proyecto.grupo_nombre}</Box>
-                        )}
-                      </div>
-                      <div>
-                        <Box variant="awsui-key-label">Localización</Box>
-                        {loading ? (
-                          <Spinner />
-                        ) : (
-                          <Box>{proyecto.localizacion}</Box>
-                        )}
-                      </div>
-                      <div>
                         <Box variant="awsui-key-label">Facultad</Box>
                         {loading ? <Spinner /> : <Box>{proyecto.facultad}</Box>}
-                      </div>
-                      <div>
-                        <Box variant="awsui-key-label">
-                          Línea de investigación
-                        </Box>
-                        {loading ? <Spinner /> : <Box>{proyecto.linea}</Box>}
-                      </div>
-                      <div>
-                        <Box variant="awsui-key-label">
-                          Tipo de investigación
-                        </Box>
-                        {loading ? (
-                          <Spinner />
-                        ) : (
-                          <Box>{proyecto.tipo_investigacion}</Box>
-                        )}
                       </div>
                     </SpaceBetween>
                   </Container>
                   <Table
                     trackBy="id"
-                    header={
-                      <Header>Miembros del equipo de investigación</Header>
-                    }
+                    header={<Header>Comité organizador</Header>}
                     columnDefinitions={[
                       {
                         id: "condicion",
@@ -351,36 +263,7 @@ export default () => {
               ),
             },
             {
-              title: "Resumen",
-              description:
-                "Breve descripción del estudio, en no más de 200 palabras",
-              content: (
-                <Tiptap
-                  value={formValues.resumen_ejecutivo}
-                  handleChange={handleChange}
-                  name="resumen_ejecutivo"
-                />
-              ),
-              isOptional: true,
-            },
-            {
-              title: "Palabras clave",
-              description: "Sepárelas por comas",
-              content: (
-                <FormField label="Palabras clave" stretch>
-                  <Input
-                    value={formValues.palabras_clave}
-                    onChange={({ detail }) =>
-                      handleChange("palabras_clave", detail.value)
-                    }
-                  />
-                </FormField>
-              ),
-              isOptional: true,
-            },
-            {
-              title: "Introducción",
-              description: "Importancia de los resultados de la investigación",
+              title: "Objetivos y metas",
               content: (
                 <Tiptap
                   value={formValues.infinal1}
@@ -391,8 +274,7 @@ export default () => {
               isOptional: true,
             },
             {
-              title: "Metodologías",
-              description: "Metodología y técnicas de investigación utilizadas",
+              title: "Comité organizador",
               content: (
                 <Tiptap
                   value={formValues.infinal2}
@@ -403,9 +285,7 @@ export default () => {
               isOptional: true,
             },
             {
-              title: "Resultados",
-              description:
-                "Capítulos, títulos, subtítulos, tablas, gráficos según corresponda",
+              title: "Programa del evento",
               content: (
                 <Tiptap
                   value={formValues.infinal3}
@@ -416,7 +296,7 @@ export default () => {
               isOptional: true,
             },
             {
-              title: "Discusión",
+              title: "Descripción del evento",
               content: (
                 <Tiptap
                   value={formValues.infinal4}
@@ -427,7 +307,7 @@ export default () => {
               isOptional: true,
             },
             {
-              title: "Conclusiones",
+              title: "Conclusión y recomendaciones",
               content: (
                 <Tiptap
                   value={formValues.infinal5}
@@ -438,111 +318,12 @@ export default () => {
               isOptional: true,
             },
             {
-              title: "Recomendaciones",
+              title: "Reporte de asistencia",
               content: (
                 <Tiptap
                   value={formValues.infinal6}
                   handleChange={handleChange}
                   name="infinal6"
-                />
-              ),
-              isOptional: true,
-            },
-            {
-              title: "Referencias bibliográficas",
-              content: (
-                <Tiptap
-                  value={formValues.infinal7}
-                  handleChange={handleChange}
-                  name="infinal7"
-                />
-              ),
-              isOptional: true,
-            },
-            {
-              title: "Anexos",
-              description: "Archivos adjuntos (ninguno debe superar los 6 MB)",
-              content: (
-                <Container>
-                  <ColumnLayout columns={2}>
-                    <FormField
-                      label="Adjuntar archivo digital"
-                      description={
-                        files["informe-PCONFIGI-INFORME"] && (
-                          <>
-                            Ya ha cargado un{" "}
-                            <Link
-                              {...propsEnlaces}
-                              href={files["informe-PCONFIGI-INFORME"]}
-                            >
-                              archivo.
-                            </Link>
-                          </>
-                        )
-                      }
-                      stretch
-                      errorText={formErrors.file1}
-                    >
-                      <FileUpload
-                        {...propsRepetidas}
-                        value={formValues.file1}
-                        onChange={({ detail }) => {
-                          handleChange("file1", detail.value);
-                        }}
-                      />
-                    </FormField>
-                    <FormField
-                      label="Reporte de Viabilidad"
-                      info={
-                        <Link variant="info" href="#">
-                          Descargar modelo
-                        </Link>
-                      }
-                      constraintText="Remitir el formulario con los campos completados (ver modelo) a la Dirección de Promoción DGITT-VRIP dp.vrip@unmsm.edu.pe"
-                      description={
-                        files.viabilidad && (
-                          <>
-                            Ya ha cargado un{" "}
-                            <Link {...propsEnlaces} href={files.viabilidad}>
-                              archivo.
-                            </Link>
-                          </>
-                        )
-                      }
-                      stretch
-                      errorText={formErrors.file2}
-                    >
-                      <FileUpload
-                        {...propsRepetidas}
-                        value={formValues.file2}
-                        onChange={({ detail }) => {
-                          handleChange("file2", detail.value);
-                        }}
-                      />
-                    </FormField>
-                  </ColumnLayout>
-                </Container>
-              ),
-              isOptional: true,
-            },
-            {
-              title: "Aplicación práctica e impacto",
-              content: (
-                <Tiptap
-                  value={formValues.infinal9}
-                  handleChange={handleChange}
-                  name="infinal9"
-                />
-              ),
-              isOptional: true,
-            },
-            {
-              title: "Publicación",
-              content: (
-                <Tiptap
-                  value={formValues.infinal10}
-                  handleChange={handleChange}
-                  name="infinal10"
                 />
               ),
               isOptional: true,
