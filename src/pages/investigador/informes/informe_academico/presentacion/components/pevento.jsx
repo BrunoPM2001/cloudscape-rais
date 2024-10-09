@@ -153,7 +153,11 @@ export default () => {
             header={
               <Header
                 actions={
-                  <Button iconName="file" onClick={reporte}>
+                  <Button
+                    iconName="file"
+                    loading={loadingBtn}
+                    onClick={reporte}
+                  >
                     Reporte
                   </Button>
                 }

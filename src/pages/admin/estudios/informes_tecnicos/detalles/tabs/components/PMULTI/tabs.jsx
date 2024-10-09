@@ -11,8 +11,9 @@ import Referencias from "./referencias";
 import Anexos from "./anexos";
 import Aplicacion from "./aplicacion";
 import Publicacion from "./publicacion";
+import Calendario from "./calendario";
 
-export default function Pmulti_tabs({ formValues, handleChange }) {
+export default function Pmulti_tabs({ formValues, handleChange, actividades }) {
   const tabs = [
     {
       id: "resumen",
@@ -121,6 +122,11 @@ export default function Pmulti_tabs({ formValues, handleChange }) {
           handleChange={handleChange}
         />
       ),
+    },
+    {
+      id: "calendario",
+      label: "Calendario",
+      content: <Calendario data={actividades} />,
     },
     //  TODO - Implementar las últimas dos tabs (flojera)
   ];

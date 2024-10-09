@@ -18,6 +18,7 @@ export default ({
   formValues,
   handleChange,
   files,
+  actividades,
 }) => {
   return (
     <>
@@ -68,7 +69,11 @@ export default ({
       ) : tipo_proyecto == "PINTERDIS" ? (
         <Pinterdis_tabs formValues={formValues} handleChange={handleChange} />
       ) : tipo_proyecto == "PMULTI" ? (
-        <Pmulti_tabs formValues={formValues} handleChange={handleChange} />
+        <Pmulti_tabs
+          formValues={formValues}
+          handleChange={handleChange}
+          actividades={actividades}
+        />
       ) : tipo_proyecto == "PSINFINV" ? (
         <Psinfinv_tabs formValues={formValues} handleChange={handleChange} />
       ) : tipo_proyecto == "PSINFIPU" ? (

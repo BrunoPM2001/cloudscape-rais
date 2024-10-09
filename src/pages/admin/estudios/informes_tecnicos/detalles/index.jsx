@@ -80,6 +80,7 @@ export default function Detalle_informe_tecnico() {
   const [urls, setUrls] = useState();
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
+  const [actividades, setActividades] = useState([]);
 
   //  Hooks
   const { formValues, formErrors, handleChange, validateForm, setFormValues } =
@@ -104,6 +105,8 @@ export default function Detalle_informe_tecnico() {
     );
     const data = res.data.detalles;
     setUrls(res.data.archivos);
+    setActividades(res.data.actividades);
+    console.log(res.data.actividades);
     const stateKeys = Object.keys(formValues);
 
     // Crear un nuevo objeto solo con las propiedades de DATA que están en el estado
@@ -196,6 +199,7 @@ export default function Detalle_informe_tecnico() {
               tipo_informe={tipo_informe}
               loading={loading}
               files={urls}
+              actividades={actividades}
             />
           </>
         )}

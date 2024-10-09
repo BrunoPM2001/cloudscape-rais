@@ -173,8 +173,8 @@ const navItems = [
       {
         type: "link",
         text: "Informe académico",
-        href: "/investigador/informes/informeAcademico",
-        // href: "#",
+        // href: "/investigador/informes/informeAcademico",
+        href: "#",
       },
       {
         type: "link",

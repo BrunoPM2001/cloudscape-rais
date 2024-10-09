@@ -72,7 +72,7 @@ export default ({ data, loading, reload }) => {
   const reporte = async () => {
     setLoadingBtn(true);
     const res = await axiosBase.get(
-      "investigador/informes/informe_economico/reportePresupuesto",
+      "investigador/informes/informe_economico/reporteInforme",
       {
         params: {
           id: id,
@@ -209,7 +209,9 @@ export default ({ data, loading, reload }) => {
               action={
                 <SpaceBetween size="xs" direction="horizontal">
                   <Button onClick={() => setType("informe")}>Ver</Button>
-                  <Button variant="primary">Imprimir</Button>
+                  <Button variant="primary" onClick={reporte}>
+                    Imprimir
+                  </Button>
                 </SpaceBetween>
               }
             >

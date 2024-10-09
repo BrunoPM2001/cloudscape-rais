@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  ButtonDropdown,
   Container,
   FileUpload,
   FormField,
@@ -64,6 +65,42 @@ const propsEnlaces = {
   target: "_blank",
 };
 
+const columnDefinitions = [
+  {
+    id: "actividad",
+    header: "Actividad",
+    cell: (item) => item.actividad,
+  },
+  {
+    id: "justificacion",
+    header: "Justificación",
+    cell: (item) => item.justificacion,
+  },
+  {
+    id: "responsable",
+    header: "Responsable",
+    cell: (item) => item.responsable,
+  },
+  {
+    id: "fecha_inicio",
+    header: "Fecha de inicio",
+    cell: (item) => item.fecha_inicio,
+  },
+  {
+    id: "fecha_fin",
+    header: "Fecha de fin",
+    cell: (item) => item.fecha_fin,
+  },
+];
+
+const columnDisplay = [
+  { id: "actividad", visible: true },
+  { id: "justificacion", visible: true },
+  { id: "responsable", visible: true },
+  { id: "fecha_inicio", visible: true },
+  { id: "fecha_fin", visible: true },
+];
+
 export default () => {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
@@ -80,10 +117,20 @@ export default () => {
   const [files, setFiles] = useState({});
   const [proyecto, setProyecto] = useState({});
   const [miembros, setMiembros] = useState([]);
+  const [actividades, setActividades] = useState([]);
+  const [moda, setModal] = useState("");
 
   //  Hooks
   const { formValues, formErrors, handleChange, validateForm, setFormValues } =
     useFormValidation(initialForm, formRules);
+
+  const { items, actions, collectionProps, paginationProps } = useCollection(
+    actividades,
+    {
+      sorting: {},
+      selection: {},
+    }
+  );
 
   //  Functions
   const getData = async () => {
@@ -102,6 +149,7 @@ export default () => {
     setProyecto(data.proyecto);
     setMiembros(data.miembros);
     setFiles(data.archivos);
+    setActividades(data.actividades);
     if (data.informe) {
       handleChange("resumen_ejecutivo", data.informe.resumen_ejecutivo ?? "");
       handleChange("palabras_clave", data.informe.palabras_clave ?? "");
@@ -473,12 +521,12 @@ export default () => {
                   <FormField
                     label="Adjuntar archivo digital"
                     description={
-                      files["informe-PINTERDIS-INFORME"] && (
+                      files["informe-PMULTI-INFORME"] && (
                         <>
                           Ya ha cargado un{" "}
                           <Link
                             {...propsEnlaces}
-                            href={files["informe-PINTERDIS-INFORME"]}
+                            href={files["informe-PMULTI-INFORME"]}
                           >
                             archivo.
                           </Link>
@@ -523,6 +571,70 @@ export default () => {
                 />
               ),
               isOptional: true,
+            },
+            {
+              title: "Calendario de actividades",
+              content: (
+                <Table
+                  {...collectionProps}
+                  trackBy="id"
+                  items={items}
+                  columnDefinitions={columnDefinitions}
+                  columnDisplay={columnDisplay}
+                  enableKeyboardNavigation
+                  selectionType="single"
+                  onRowClick={({ detail }) =>
+                    actions.setSelectedItems([detail.item])
+                  }
+                  header={
+                    <Header
+                      counter={"(" + data.length + ")"}
+                      actions={
+                        <ButtonDropdown
+                          disabled={
+                            collectionProps.selectedItems.length > 0
+                              ? false
+                              : true
+                          }
+                          variant="normal"
+                          onItemClick={({ detail }) => {
+                            if (detail.id == "action_1_1") {
+                              setType("delete");
+                            } else if (detail.id == "action_1_2") {
+                              setType("edit");
+                            }
+                          }}
+                          items={[
+                            {
+                              text: "Cargar archivo",
+                              id: "action_1_1",
+                            },
+                            {
+                              text: "Ver archivo cargado",
+                              id: "action_1_2",
+                            },
+                          ]}
+                        >
+                          Acciones
+                        </ButtonDropdown>
+                      }
+                    >
+                      Actividades
+                    </Header>
+                  }
+                  empty={
+                    <Box
+                      margin={{ vertical: "xs" }}
+                      textAlign="center"
+                      color="inherit"
+                    >
+                      <SpaceBetween size="m">
+                        <b>No hay registros...</b>
+                      </SpaceBetween>
+                    </Box>
+                  }
+                />
+              ),
             },
             //  TODO - Implementar las últimas secciones (flojera)
           ]}
