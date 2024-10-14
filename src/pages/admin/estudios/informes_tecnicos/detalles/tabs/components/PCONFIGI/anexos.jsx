@@ -6,74 +6,87 @@ import {
   Link,
 } from "@cloudscape-design/components";
 
-export default ({ value1, value2, handleChange }) => {
+const propsRepetidas = {
+  showFileLastModified: true,
+  showFileSize: true,
+  showFileThumbnail: true,
+  i18nStrings: {
+    uploadButtonText: (e) => (e ? "Cargar archivos" : "Cargar archivo"),
+    dropzoneText: (e) =>
+      e
+        ? "Arrastre los archivos para cargarlos"
+        : "Arrastre el archivo para cargarlo",
+    removeFileAriaLabel: (e) => `Eliminar archivo ${e + 1}`,
+    errorIconAriaLabel: "Error",
+  },
+  accept: ".pdf",
+};
+
+const propsEnlaces = {
+  external: "true",
+  variant: "primary",
+  fontSize: "body-s",
+  target: "_blank",
+};
+
+export default ({ value1, value2, handleChange, files }) => {
   return (
     <Container>
       <ColumnLayout columns={2}>
-        <FormField label="Archivo digital" stretch>
+        <FormField
+          label="Archivo digital"
+          stretch
+          description={
+            files["informe-PCONFIGI-INFORME"] && (
+              <>
+                Ya ha cargado un{" "}
+                <Link
+                  {...propsEnlaces}
+                  href={files["informe-PCONFIGI-INFORME"]}
+                >
+                  archivo.
+                </Link>
+              </>
+            )
+          }
+        >
           <FileUpload
+            {...propsRepetidas}
             value={value1}
             onChange={({ detail }) => {
               handleChange("file1", detail.value);
             }}
-            showFileLastModified
-            showFileSize
-            showFileThumbnail
-            constraintText="El archivo cargado no debe superar los 6 MB"
-            i18nStrings={{
-              uploadButtonText: (e) =>
-                e ? "Cargar archivos" : "Cargar archivo",
-              dropzoneText: (e) =>
-                e
-                  ? "Arrastre los archivos para cargarlos"
-                  : "Arrastre el archivo para cargarlo",
-              removeFileAriaLabel: (e) => `Eliminar archivo ${e + 1}`,
-              errorIconAriaLabel: "Error",
-            }}
-            accept=".jpeg, .jpg, .png,  .pdf"
           />
         </FormField>
         <FormField
           label="Reporte de viabilidad"
+          info={
+            <Link
+              variant="info"
+              href="/minio/templates/Modelo_Reporte_Viabilidad.xlsx"
+            >
+              Descargar modelo
+            </Link>
+          }
+          constraintText="Remitir el formulario con los campos completados (ver modelo) a la Dirección de Promoción DGITT-VRIP dp.vrip@unmsm.edu.pe"
           description={
-            <>
-              Puede descargar el modelo en{" "}
-              <Link
-                href="/minio/templates/Modelo_Reporte_Viabilidad.xlsx"
-                external="true"
-                variant="primary"
-                fontSize="body-s"
-                target="_blank"
-              >
-                este enlace.
-              </Link>{" "}
-              Remitir el formulario con los campos completados (según el modelo)
-              a la Dirección de Promoción DGITT - VRIP{" "}
-              <strong>dp.vrip@unmsm.edu.pe</strong>
-            </>
+            files["viabilidad"] && (
+              <>
+                Ya ha cargado un{" "}
+                <Link {...propsEnlaces} href={files["viabilidad"]}>
+                  archivo.
+                </Link>
+              </>
+            )
           }
           stretch
         >
           <FileUpload
+            {...propsRepetidas}
             value={value2}
             onChange={({ detail }) => {
               handleChange("file2", detail.value);
             }}
-            showFileLastModified
-            showFileSize
-            showFileThumbnail
-            constraintText="El archivo cargado no debe superar los 6 MB"
-            i18nStrings={{
-              uploadButtonText: (e) =>
-                e ? "Cargar archivos" : "Cargar archivo",
-              dropzoneText: (e) =>
-                e
-                  ? "Arrastre los archivos para cargarlos"
-                  : "Arrastre el archivo para cargarlo",
-              removeFileAriaLabel: (e) => `Eliminar archivo ${e + 1}`,
-              errorIconAriaLabel: "Error",
-            }}
-            accept=".jpeg, .jpg, .png,  .pdf"
           />
         </FormField>
       </ColumnLayout>

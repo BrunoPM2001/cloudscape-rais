@@ -3,6 +3,7 @@ import classNames from "classnames";
 import { useEditor, EditorContent } from "@tiptap/react";
 import Document from "@tiptap/extension-document";
 import Paragraph from "@tiptap/extension-paragraph";
+import HardBreak from "@tiptap/extension-hard-break";
 import Text from "@tiptap/extension-text";
 import Bold from "@tiptap/extension-bold";
 import Underline from "@tiptap/extension-underline";
@@ -12,7 +13,9 @@ import Blockquote from "@tiptap/extension-blockquote";
 import BulletList from "@tiptap/extension-bullet-list";
 import OrderedList from "@tiptap/extension-ordered-list";
 import ListItem from "@tiptap/extension-list-item";
-import { Icon } from "@cloudscape-design/components";
+import CharacterCount from "@tiptap/extension-character-count";
+import WordCount from "../../../hooks/WordCount";
+import { Box, Icon } from "@cloudscape-design/components";
 import {
   BoldIcon,
   ItalicIcon,
@@ -23,12 +26,14 @@ import {
 } from "lucide-react";
 import "./app.css";
 
-export default ({ value, name, handleChange }) => {
+export default ({ value, name, handleChange, limitWords }) => {
   const editor = useEditor(
     {
       extensions: [
         Document,
-        History,
+        History.configure({
+          newGroupDelay: 1,
+        }),
         Paragraph,
         Text,
         Bold,
@@ -38,6 +43,13 @@ export default ({ value, name, handleChange }) => {
         BulletList,
         OrderedList,
         ListItem,
+        HardBreak,
+        CharacterCount.configure({}),
+        WordCount.configure(
+          limitWords && {
+            limit: limitWords,
+          }
+        ),
       ],
       content: value,
       onUpdate: ({ editor }) => {
@@ -143,6 +155,17 @@ export default ({ value, name, handleChange }) => {
         </button>
       </div>
       <EditorContent editor={editor} />
+      {limitWords && (
+        <Box
+          float="right"
+          color="text-status-inactive"
+          fontSize="body-s"
+          margin={{ top: "xxs" }}
+        >
+          Máximo {limitWords} palabras ({editor.storage.characterCount.words()}
+          {""}/{limitWords})
+        </Box>
+      )}
     </div>
   );
 };

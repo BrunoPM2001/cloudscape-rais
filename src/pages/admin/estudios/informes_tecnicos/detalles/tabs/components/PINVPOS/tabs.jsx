@@ -14,7 +14,6 @@ export default function Pinvpost_tabs({ formValues, handleChange }) {
         <Objetivos
           value={formValues?.objetivos_taller}
           handleChange={handleChange}
-          loading={loading}
         />
       ),
     },
@@ -26,7 +25,6 @@ export default function Pinvpost_tabs({ formValues, handleChange }) {
           value1={formValues?.fecha_evento}
           value2={formValues?.propuestas_taller}
           handleChange={handleChange}
-          loading={loading}
         />
       ),
     },
@@ -37,7 +35,6 @@ export default function Pinvpost_tabs({ formValues, handleChange }) {
         <Conclusiones
           value={formValues?.conclusion_taller}
           handleChange={handleChange}
-          loading={loading}
         />
       ),
     },
@@ -48,7 +45,6 @@ export default function Pinvpost_tabs({ formValues, handleChange }) {
         <Recomendaciones
           value={formValues?.recomendacion_taller}
           handleChange={handleChange}
-          loading={loading}
         />
       ),
     },
@@ -59,7 +55,6 @@ export default function Pinvpost_tabs({ formValues, handleChange }) {
         <Asistencia
           value={formValues?.asistencia_taller}
           handleChange={handleChange}
-          loading={loading}
         />
       ),
     },

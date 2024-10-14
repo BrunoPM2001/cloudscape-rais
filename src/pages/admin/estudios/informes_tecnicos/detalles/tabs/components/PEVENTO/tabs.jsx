@@ -38,7 +38,7 @@ export default function Pevento_tabs({ formValues, handleChange }) {
     },
     {
       id: "conclusiones",
-      label: "Concluiones",
+      label: "Conclusiones",
       content: (
         <Conclusiones
           value={formValues?.infinal5}

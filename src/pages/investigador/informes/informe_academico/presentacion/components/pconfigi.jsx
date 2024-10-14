@@ -283,7 +283,7 @@ export default () => {
                         {loading ? (
                           <Spinner />
                         ) : (
-                          <Box>{proyecto.resolucion}</Box>
+                          <Box>{proyecto.resolucion_rectoral}</Box>
                         )}
                       </div>
                       <div>
@@ -363,6 +363,7 @@ export default () => {
                   value={formValues.resumen_ejecutivo}
                   handleChange={handleChange}
                   name="resumen_ejecutivo"
+                  limitWords={200}
                 />
               ),
               isOptional: true,
@@ -390,6 +391,7 @@ export default () => {
                   value={formValues.infinal1}
                   handleChange={handleChange}
                   name="infinal1"
+                  limitWords={600}
                 />
               ),
               isOptional: true,
@@ -402,6 +404,7 @@ export default () => {
                   value={formValues.infinal2}
                   handleChange={handleChange}
                   name="infinal2"
+                  limitWords={600}
                 />
               ),
               isOptional: true,
@@ -415,6 +418,7 @@ export default () => {
                   value={formValues.infinal3}
                   handleChange={handleChange}
                   name="infinal3"
+                  limitWords={2000}
                 />
               ),
               isOptional: true,
@@ -426,6 +430,7 @@ export default () => {
                   value={formValues.infinal4}
                   handleChange={handleChange}
                   name="infinal4"
+                  limitWords={600}
                 />
               ),
               isOptional: true,
@@ -437,6 +442,7 @@ export default () => {
                   value={formValues.infinal5}
                   handleChange={handleChange}
                   name="infinal5"
+                  limitWords={600}
                 />
               ),
               isOptional: true,
@@ -448,6 +454,7 @@ export default () => {
                   value={formValues.infinal6}
                   handleChange={handleChange}
                   name="infinal6"
+                  limitWords={2000}
                 />
               ),
               isOptional: true,
@@ -459,6 +466,7 @@ export default () => {
                   value={formValues.infinal7}
                   handleChange={handleChange}
                   name="infinal7"
+                  limitWords={2000}
                 />
               ),
               isOptional: true,
@@ -498,7 +506,10 @@ export default () => {
                     <FormField
                       label="Reporte de Viabilidad"
                       info={
-                        <Link variant="info" href="#">
+                        <Link
+                          variant="info"
+                          href="/minio/templates/Modelo_Reporte_Viabilidad.xlsx"
+                        >
                           Descargar modelo
                         </Link>
                       }
@@ -536,6 +547,7 @@ export default () => {
                   value={formValues.infinal9}
                   handleChange={handleChange}
                   name="infinal9"
+                  limitWords={2000}
                 />
               ),
               isOptional: true,
@@ -547,6 +559,7 @@ export default () => {
                   value={formValues.infinal10}
                   handleChange={handleChange}
                   name="infinal10"
+                  limitWords={2000}
                 />
               ),
               isOptional: true,

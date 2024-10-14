@@ -1,12 +1,15 @@
 import {
   Box,
   Button,
+  ButtonDropdown,
+  ColumnLayout,
   Container,
   FileUpload,
   FormField,
   Header,
   Input,
   Link,
+  Modal,
   SpaceBetween,
   Spinner,
   Table,
@@ -19,6 +22,8 @@ import axiosBase from "../../../../../../api/axios";
 import { useLocation } from "react-router-dom";
 import queryString from "query-string";
 import NotificationContext from "../../../../../../providers/notificationProvider";
+import { useCollection } from "@cloudscape-design/collection-hooks";
+import ModalCargarActividad from "./modalCargarActividad";
 
 const initialForm = {
   id: null,
@@ -35,6 +40,17 @@ const initialForm = {
   infinal9: "",
   infinal10: "",
   file1: [],
+  file2: [],
+  file3: [],
+  file4: [],
+  file5: [],
+  file6: [],
+  file7: [],
+  file8: [],
+  file9: [],
+  file10: [],
+  file11: [],
+  file12: [],
 };
 
 const formRules = {
@@ -64,6 +80,47 @@ const propsEnlaces = {
   target: "_blank",
 };
 
+const columnDefinitions = [
+  {
+    id: "actividad",
+    header: "Actividad",
+    cell: (item) => item.actividad,
+    minWidth: 160,
+  },
+  {
+    id: "justificacion",
+    header: "Justificación",
+    cell: (item) => item.justificacion,
+    minWidth: 160,
+  },
+  {
+    id: "responsable",
+    header: "Responsable",
+    cell: (item) => item.responsable,
+    minWidth: 140,
+  },
+  {
+    id: "fecha_inicio",
+    header: "Fecha de inicio",
+    cell: (item) => item.fecha_inicio,
+    minWidth: 115,
+  },
+  {
+    id: "fecha_fin",
+    header: "Fecha de fin",
+    cell: (item) => item.fecha_fin,
+    minWidth: 115,
+  },
+];
+
+const columnDisplay = [
+  { id: "actividad", visible: true },
+  { id: "justificacion", visible: true },
+  { id: "responsable", visible: true },
+  { id: "fecha_inicio", visible: true },
+  { id: "fecha_fin", visible: true },
+];
+
 export default () => {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
@@ -80,10 +137,20 @@ export default () => {
   const [files, setFiles] = useState({});
   const [proyecto, setProyecto] = useState({});
   const [miembros, setMiembros] = useState([]);
+  const [actividades, setActividades] = useState([]);
+  const [modal, setModal] = useState("");
 
   //  Hooks
   const { formValues, formErrors, handleChange, validateForm, setFormValues } =
     useFormValidation(initialForm, formRules);
+
+  const { items, actions, collectionProps, paginationProps } = useCollection(
+    actividades,
+    {
+      sorting: {},
+      selection: {},
+    }
+  );
 
   //  Functions
   const getData = async () => {
@@ -102,6 +169,7 @@ export default () => {
     setProyecto(data.proyecto);
     setMiembros(data.miembros);
     setFiles(data.archivos);
+    setActividades(data.actividades);
     if (data.informe) {
       handleChange("resumen_ejecutivo", data.informe.resumen_ejecutivo ?? "");
       handleChange("palabras_clave", data.informe.palabras_clave ?? "");
@@ -138,6 +206,17 @@ export default () => {
     form.append("infinal9", formValues.infinal9);
     form.append("infinal10", formValues.infinal10);
     form.append("file1", formValues.file1[0]);
+    form.append("file2", formValues.file2[0]);
+    form.append("file3", formValues.file3[0]);
+    form.append("file4", formValues.file4[0]);
+    form.append("file5", formValues.file5[0]);
+    form.append("file6", formValues.file6[0]);
+    form.append("file7", formValues.file7[0]);
+    form.append("file8", formValues.file8[0]);
+    form.append("file9", formValues.file9[0]);
+    form.append("file10", formValues.file10[0]);
+    form.append("file11", formValues.file11[0]);
+    form.append("file12", formValues.file12[0]);
     const res = await axiosBase.post(
       "investigador/informes/informe_academico/sendData",
       form
@@ -524,8 +603,403 @@ export default () => {
               ),
               isOptional: true,
             },
+            {
+              title: "Calendario de actividades",
+              content: (
+                <Table
+                  {...collectionProps}
+                  trackBy="id"
+                  items={items}
+                  columnDefinitions={columnDefinitions}
+                  columnDisplay={columnDisplay}
+                  wrapLines
+                  selectionType="single"
+                  onRowClick={({ detail }) =>
+                    actions.setSelectedItems([detail.item])
+                  }
+                  header={
+                    <Header
+                      counter={"(" + actividades.length + ")"}
+                      actions={
+                        <ButtonDropdown
+                          disabled={
+                            collectionProps.selectedItems.length > 0
+                              ? false
+                              : true
+                          }
+                          variant="normal"
+                          onItemClick={({ detail }) => {
+                            if (detail.id == "action_1_1") {
+                              setModal("cargar");
+                            } else if (detail.id == "action_1_2") {
+                              window.open(
+                                files[
+                                  "actividad" +
+                                    collectionProps.selectedItems[0]?.indice
+                                ],
+                                "_blank"
+                              );
+                            }
+                          }}
+                          items={[
+                            {
+                              text: "Cargar archivo",
+                              id: "action_1_1",
+                            },
+                            {
+                              text: "Ver archivo cargado",
+                              id: "action_1_2",
+                              disabled:
+                                !files[
+                                  "actividad" +
+                                    collectionProps.selectedItems[0]?.indice
+                                ],
+                            },
+                          ]}
+                        >
+                          Acciones
+                        </ButtonDropdown>
+                      }
+                    >
+                      Actividades
+                    </Header>
+                  }
+                  empty={
+                    <Box
+                      margin={{ vertical: "xs" }}
+                      textAlign="center"
+                      color="inherit"
+                    >
+                      <SpaceBetween size="m">
+                        <b>No hay registros...</b>
+                      </SpaceBetween>
+                    </Box>
+                  }
+                />
+              ),
+              isOptional: true,
+            },
+            {
+              title: "Entregables",
+              content: (
+                <SpaceBetween size="l">
+                  <Container
+                    header={
+                      <Box variant="h4">
+                        Dos (02) artículos publicados o aceptados en revistas
+                        indizadas a SCOPUS O WoS,o un libro,o dos(02) capítulos
+                        de libro publicados en editoriales reconocido prestigio,
+                        de acuerdo con las normas internas de la universidad.
+                      </Box>
+                    }
+                  >
+                    <ColumnLayout columns={2}>
+                      <FormField
+                        label="Primer artículo"
+                        stretch
+                        description={
+                          files["articulo1"] && (
+                            <>
+                              Ya ha cargado un{" "}
+                              <Link {...propsEnlaces} href={files["articulo1"]}>
+                                archivo.
+                              </Link>
+                            </>
+                          )
+                        }
+                      >
+                        <FileUpload
+                          {...propsRepetidas}
+                          value={formValues.file2}
+                          onChange={({ detail }) => {
+                            handleChange("file2", detail.value);
+                          }}
+                        />
+                      </FormField>
+                      <FormField
+                        label="Segundo artículo"
+                        stretch
+                        description={
+                          files["articulo2"] && (
+                            <>
+                              Ya ha cargado un{" "}
+                              <Link {...propsEnlaces} href={files["articulo2"]}>
+                                archivo.
+                              </Link>
+                            </>
+                          )
+                        }
+                      >
+                        <FileUpload
+                          {...propsRepetidas}
+                          value={formValues.file3}
+                          onChange={({ detail }) => {
+                            handleChange("file3", detail.value);
+                          }}
+                        />
+                      </FormField>
+                    </ColumnLayout>
+                  </Container>
+                  <Container
+                    header={
+                      <Box variant="h4">
+                        Cuatro (04) tesis sustentadas, siendo tres(03) de ellas
+                        de pregrado y la una(01) de posgrado.En el caso de las
+                        tesis realizadas por estudiante(s) de la(s)
+                        universidad(es) colaboradora(s) el asesor presenta el
+                        acta de sustentación al responsable del proyecto.
+                      </Box>
+                    }
+                  >
+                    <ColumnLayout columns={2}>
+                      <FormField
+                        label="Primera tesis de pregrado"
+                        stretch
+                        description={
+                          files["tesis1"] && (
+                            <>
+                              Ya ha cargado un{" "}
+                              <Link {...propsEnlaces} href={files["tesis1"]}>
+                                archivo.
+                              </Link>
+                            </>
+                          )
+                        }
+                      >
+                        <FileUpload
+                          {...propsRepetidas}
+                          value={formValues.file4}
+                          onChange={({ detail }) => {
+                            handleChange("file4", detail.value);
+                          }}
+                        />
+                      </FormField>
+                      <FormField
+                        label="Segunda tesis de pregrado"
+                        stretch
+                        description={
+                          files["tesis2"] && (
+                            <>
+                              Ya ha cargado un{" "}
+                              <Link {...propsEnlaces} href={files["tesis2"]}>
+                                archivo.
+                              </Link>
+                            </>
+                          )
+                        }
+                      >
+                        <FileUpload
+                          {...propsRepetidas}
+                          value={formValues.file5}
+                          onChange={({ detail }) => {
+                            handleChange("file5", detail.value);
+                          }}
+                        />
+                      </FormField>
+                      <FormField
+                        label="Tercera tesis de pregrado"
+                        stretch
+                        description={
+                          files["tesis3"] && (
+                            <>
+                              Ya ha cargado un{" "}
+                              <Link {...propsEnlaces} href={files["tesis3"]}>
+                                archivo.
+                              </Link>
+                            </>
+                          )
+                        }
+                      >
+                        <FileUpload
+                          {...propsRepetidas}
+                          value={formValues.file6}
+                          onChange={({ detail }) => {
+                            handleChange("file6", detail.value);
+                          }}
+                        />
+                      </FormField>
+                      <FormField
+                        label="Primera tesis de posgrado"
+                        stretch
+                        description={
+                          files["tesis4"] && (
+                            <>
+                              Ya ha cargado un{" "}
+                              <Link {...propsEnlaces} href={files["tesis4"]}>
+                                archivo.
+                              </Link>
+                            </>
+                          )
+                        }
+                      >
+                        <FileUpload
+                          {...propsRepetidas}
+                          value={formValues.file7}
+                          onChange={({ detail }) => {
+                            handleChange("file7", detail.value);
+                          }}
+                        />
+                      </FormField>
+                    </ColumnLayout>
+                  </Container>
+                  <Container
+                    header={
+                      <Box variant="h4">
+                        Cuatro (04) trabajos de investigación para obtener el
+                        grado de bachiller.
+                      </Box>
+                    }
+                  >
+                    <ColumnLayout columns={2}>
+                      <FormField
+                        label="Primera investigación"
+                        stretch
+                        description={
+                          files["investigacion1"] && (
+                            <>
+                              Ya ha cargado un{" "}
+                              <Link
+                                {...propsEnlaces}
+                                href={files["investigacion1"]}
+                              >
+                                archivo.
+                              </Link>
+                            </>
+                          )
+                        }
+                      >
+                        <FileUpload
+                          {...propsRepetidas}
+                          value={formValues.file8}
+                          onChange={({ detail }) => {
+                            handleChange("file8", detail.value);
+                          }}
+                        />
+                      </FormField>
+                      <FormField
+                        label="Segunda investigación"
+                        stretch
+                        description={
+                          files["investigacion2"] && (
+                            <>
+                              Ya ha cargado un{" "}
+                              <Link
+                                {...propsEnlaces}
+                                href={files["investigacion2"]}
+                              >
+                                archivo.
+                              </Link>
+                            </>
+                          )
+                        }
+                      >
+                        <FileUpload
+                          {...propsRepetidas}
+                          value={formValues.file9}
+                          onChange={({ detail }) => {
+                            handleChange("file9", detail.value);
+                          }}
+                        />
+                      </FormField>
+                      <FormField
+                        label="Tercera investigación"
+                        stretch
+                        description={
+                          files["investigacion3"] && (
+                            <>
+                              Ya ha cargado un{" "}
+                              <Link
+                                {...propsEnlaces}
+                                href={files["investigacion3"]}
+                              >
+                                archivo.
+                              </Link>
+                            </>
+                          )
+                        }
+                      >
+                        <FileUpload
+                          {...propsRepetidas}
+                          value={formValues.file10}
+                          onChange={({ detail }) => {
+                            handleChange("file10", detail.value);
+                          }}
+                        />
+                      </FormField>
+                      <FormField
+                        label="Cuarta investigación"
+                        stretch
+                        description={
+                          files["investigacion4"] && (
+                            <>
+                              Ya ha cargado un{" "}
+                              <Link
+                                {...propsEnlaces}
+                                href={files["investigacion4"]}
+                              >
+                                archivo.
+                              </Link>
+                            </>
+                          )
+                        }
+                      >
+                        <FileUpload
+                          {...propsRepetidas}
+                          value={formValues.file11}
+                          onChange={({ detail }) => {
+                            handleChange("file11", detail.value);
+                          }}
+                        />
+                      </FormField>
+                    </ColumnLayout>
+                  </Container>
+                  <Container
+                    header={
+                      <Box variant="h4">
+                        La formación de una red científica o el registro y/o
+                        inscripción al menos de una (01) solicitud de protección
+                        de propiedad intelectual y de transferencia tecnólogica
+                        según la naturaleza del proyecto.
+                      </Box>
+                    }
+                  >
+                    <FormField
+                      label="Archivo"
+                      stretch
+                      description={
+                        files["registro"] && (
+                          <>
+                            Ya ha cargado un{" "}
+                            <Link {...propsEnlaces} href={files["registro"]}>
+                              archivo.
+                            </Link>
+                          </>
+                        )
+                      }
+                    >
+                      <FileUpload
+                        {...propsRepetidas}
+                        value={formValues.file12}
+                        onChange={({ detail }) => {
+                          handleChange("file12", detail.value);
+                        }}
+                      />
+                    </FormField>
+                  </Container>
+                </SpaceBetween>
+              ),
+              isOptional: true,
+            },
             //  TODO - Implementar las últimas secciones (flojera)
           ]}
+        />
+      )}
+      {modal == "cargar" && (
+        <ModalCargarActividad
+          proyecto_id={proyecto_id}
+          indice={collectionProps.selectedItems[0]?.indice}
+          close={() => setModal("")}
+          reload={getData}
         />
       )}
     </>

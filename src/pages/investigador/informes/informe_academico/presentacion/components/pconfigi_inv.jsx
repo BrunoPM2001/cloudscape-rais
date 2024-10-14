@@ -277,7 +277,7 @@ export default () => {
                         {loading ? (
                           <Spinner />
                         ) : (
-                          <Box>{proyecto.resolucion}</Box>
+                          <Box>{proyecto.resolucion_rectoral}</Box>
                         )}
                       </div>
                       <div>

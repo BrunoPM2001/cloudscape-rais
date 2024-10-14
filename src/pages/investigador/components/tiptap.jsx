@@ -3,6 +3,7 @@ import classNames from "classnames";
 import { useEditor, EditorContent } from "@tiptap/react";
 import Document from "@tiptap/extension-document";
 import Paragraph from "@tiptap/extension-paragraph";
+import HardBreak from "@tiptap/extension-hard-break";
 import Text from "@tiptap/extension-text";
 import Bold from "@tiptap/extension-bold";
 import Underline from "@tiptap/extension-underline";
@@ -42,6 +43,7 @@ export default ({ value, name, handleChange, limitWords }) => {
         BulletList,
         OrderedList,
         ListItem,
+        HardBreak,
         CharacterCount.configure({}),
         WordCount.configure(
           limitWords && {

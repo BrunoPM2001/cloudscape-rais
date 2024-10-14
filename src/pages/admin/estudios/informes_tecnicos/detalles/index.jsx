@@ -67,6 +67,12 @@ const initialForm = {
   file4: [],
   file5: [],
   file6: [],
+  file7: [],
+  file8: [],
+  file9: [],
+  file10: [],
+  file11: [],
+  file12: [],
 };
 
 const formRules = {};
@@ -106,7 +112,6 @@ export default function Detalle_informe_tecnico() {
     const data = res.data.detalles;
     setUrls(res.data.archivos);
     setActividades(res.data.actividades);
-    console.log(res.data.actividades);
     const stateKeys = Object.keys(formValues);
 
     // Crear un nuevo objeto solo con las propiedades de DATA que están en el estado

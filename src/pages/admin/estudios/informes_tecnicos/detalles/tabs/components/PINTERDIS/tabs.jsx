@@ -11,8 +11,15 @@ import Referencias from "./referencias";
 import Anexos from "./anexos";
 import Aplicacion from "./aplicacion";
 import Publicacion from "./publicacion";
+import Calendario from "./calendario";
+import Entregables from "./entregables";
 
-export default function Pinterdis_tabs({ formValues, handleChange }) {
+export default function Pinterdis_tabs({
+  formValues,
+  handleChange,
+  actividades,
+  files,
+}) {
   const tabs = [
     {
       id: "resumen",
@@ -102,6 +109,7 @@ export default function Pinterdis_tabs({ formValues, handleChange }) {
         <Anexos
           value1={formValues?.file1} // CATEGORIA = informe-PINTERDIS-INFORME
           handleChange={handleChange}
+          files={files}
         />
       ),
     },
@@ -119,6 +127,32 @@ export default function Pinterdis_tabs({ formValues, handleChange }) {
         <Publicacion
           value={formValues?.infinal10}
           handleChange={handleChange}
+        />
+      ),
+    },
+    {
+      id: "calendario",
+      label: "Calendario",
+      content: <Calendario data={actividades} files={files} />,
+    },
+    {
+      id: "entregables",
+      label: "Entregables",
+      content: (
+        <Entregables
+          value2={formValues?.file2}
+          value3={formValues?.file3}
+          value4={formValues?.file4}
+          value5={formValues?.file5}
+          value6={formValues?.file6}
+          value7={formValues?.file7}
+          value8={formValues?.file8}
+          value9={formValues?.file9}
+          value10={formValues?.file10}
+          value11={formValues?.file11}
+          value12={formValues?.file12}
+          handleChange={handleChange}
+          files={files}
         />
       ),
     },

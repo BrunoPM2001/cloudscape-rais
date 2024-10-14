@@ -3,7 +3,7 @@ import Pconfigi_tabs from "./components/PCONFIGI/tabs";
 import Pconfigi_inv_tabs from "./components/PCONFIGI_INV/tabs";
 import Pevento_tabs from "./components/PEVENTO/tabs";
 import Pinterdis_tabs from "./components/PINTERDIS/tabs";
-import Pinvpost_tabs from "./components/PINVPOST/tabs";
+import Pinvpos_tabs from "./components/PINVPOS/tabs";
 import Pmulti_tabs from "./components/PMULTI/tabs";
 import Psinfinv_tabs from "./components/PSINFINV/tabs";
 import Psinfipu_tabs from "./components/PSINFIPU/tabs";
@@ -22,8 +22,8 @@ export default ({
 }) => {
   return (
     <>
-      {tipo_proyecto == "PINVPOST" ? (
-        <Pinvpost_tabs formValues={formValues} handleChange={handleChange} />
+      {tipo_proyecto == "PINVPOS" ? (
+        <Pinvpos_tabs formValues={formValues} handleChange={handleChange} />
       ) : tipo_proyecto == "PTPDOCTO" &&
         tipo_informe != "Informe académico final" ? (
         <Ptpdocto_tabs formValues={formValues} handleChange={handleChange} />
@@ -58,16 +58,26 @@ export default ({
           files={files}
         />
       ) : tipo_proyecto == "PCONFIGI" ? (
-        <Pconfigi_tabs formValues={formValues} handleChange={handleChange} />
+        <Pconfigi_tabs
+          formValues={formValues}
+          handleChange={handleChange}
+          files={files}
+        />
       ) : tipo_proyecto == "PCONFIGI-INV" ? (
         <Pconfigi_inv_tabs
           formValues={formValues}
           handleChange={handleChange}
+          files={files}
         />
       ) : tipo_proyecto == "PEVENTO" ? (
         <Pevento_tabs formValues={formValues} handleChange={handleChange} />
       ) : tipo_proyecto == "PINTERDIS" ? (
-        <Pinterdis_tabs formValues={formValues} handleChange={handleChange} />
+        <Pinterdis_tabs
+          formValues={formValues}
+          handleChange={handleChange}
+          actividades={actividades}
+          files={files}
+        />
       ) : tipo_proyecto == "PMULTI" ? (
         <Pmulti_tabs
           formValues={formValues}
