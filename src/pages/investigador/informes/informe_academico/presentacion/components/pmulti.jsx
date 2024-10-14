@@ -20,6 +20,7 @@ import axiosBase from "../../../../../../api/axios";
 import { useLocation } from "react-router-dom";
 import queryString from "query-string";
 import NotificationContext from "../../../../../../providers/notificationProvider";
+import { useCollection } from "@cloudscape-design/collection-hooks";
 
 const initialForm = {
   id: null,
@@ -80,16 +81,19 @@ const columnDefinitions = [
     id: "responsable",
     header: "Responsable",
     cell: (item) => item.responsable,
+    minWidth: 140,
   },
   {
     id: "fecha_inicio",
     header: "Fecha de inicio",
     cell: (item) => item.fecha_inicio,
+    minWidth: 115,
   },
   {
     id: "fecha_fin",
     header: "Fecha de fin",
     cell: (item) => item.fecha_fin,
+    minWidth: 115,
   },
 ];
 
@@ -118,7 +122,7 @@ export default () => {
   const [proyecto, setProyecto] = useState({});
   const [miembros, setMiembros] = useState([]);
   const [actividades, setActividades] = useState([]);
-  const [moda, setModal] = useState("");
+  const [modal, setModal] = useState("");
 
   //  Hooks
   const { formValues, formErrors, handleChange, validateForm, setFormValues } =
@@ -581,14 +585,14 @@ export default () => {
                   items={items}
                   columnDefinitions={columnDefinitions}
                   columnDisplay={columnDisplay}
-                  enableKeyboardNavigation
+                  wrapLines
                   selectionType="single"
                   onRowClick={({ detail }) =>
                     actions.setSelectedItems([detail.item])
                   }
                   header={
                     <Header
-                      counter={"(" + data.length + ")"}
+                      counter={"(" + actividades.length + ")"}
                       actions={
                         <ButtonDropdown
                           disabled={
@@ -635,6 +639,7 @@ export default () => {
                   }
                 />
               ),
+              isOptional: true,
             },
             //  TODO - Implementar las últimas secciones (flojera)
           ]}
