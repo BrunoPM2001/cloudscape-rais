@@ -67,13 +67,15 @@ export default () => {
     setProyecto(data.proyecto);
     setFiles(data.archivos);
     if (data.informe) {
-      handleChange("resumen_ejecutivo", data.informe.resumen_ejecutivo ?? "");
-      handleChange("infinal1", data.informe.infinal1 ?? "");
-      handleChange("infinal2", data.informe.infinal2 ?? "");
-      handleChange("infinal3", data.informe.infinal3 ?? "");
-      handleChange("infinal4", data.informe.infinal4 ?? "");
-      handleChange("infinal5", data.informe.infinal5 ?? "");
-      handleChange("infinal6", data.informe.infinal6 ?? "");
+      handleChange("objetivos_taller", data.informe.objetivos_taller ?? "");
+      handleChange("fecha_evento", data.informe.fecha_evento ?? "");
+      handleChange("propuestas_taller", data.informe.propuestas_taller ?? "");
+      handleChange("conclusion_taller", data.informe.conclusion_taller ?? "");
+      handleChange(
+        "recomendacion_taller",
+        data.informe.recomendacion_taller ?? ""
+      );
+      handleChange("asistencia_taller", data.informe.asistencia_taller ?? "");
       handleChange("estado", data.informe.estado);
       handleChange("id", data.informe.id);
     }
@@ -86,13 +88,12 @@ export default () => {
     form.append("id", id);
     form.append("proyecto_id", proyecto_id);
     form.append("tipo_proyecto", tipo_proyecto);
-    form.append("resumen_ejecutivo", formValues.resumen_ejecutivo);
-    form.append("infinal1", formValues.infinal1);
-    form.append("infinal2", formValues.infinal2);
-    form.append("infinal3", formValues.infinal3);
-    form.append("infinal4", formValues.infinal4);
-    form.append("infinal5", formValues.infinal5);
-    form.append("infinal6", formValues.infinal6);
+    form.append("objetivos_taller", formValues.objetivos_taller);
+    form.append("fecha_evento", formValues.fecha_evento);
+    form.append("propuestas_taller", formValues.propuestas_taller);
+    form.append("conclusion_taller", formValues.conclusion_taller);
+    form.append("recomendacion_taller", formValues.recomendacion_taller);
+    form.append("asistencia_taller", formValues.asistencia_taller);
     const res = await axiosBase.post(
       "investigador/informes/informe_academico/sendData",
       form

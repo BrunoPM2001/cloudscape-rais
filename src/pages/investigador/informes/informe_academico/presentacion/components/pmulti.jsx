@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   ButtonDropdown,
+  ColumnLayout,
   Container,
   FileUpload,
   FormField,
@@ -21,6 +22,7 @@ import { useLocation } from "react-router-dom";
 import queryString from "query-string";
 import NotificationContext from "../../../../../../providers/notificationProvider";
 import { useCollection } from "@cloudscape-design/collection-hooks";
+import ModalCargarActividad from "./modalCargarActividad";
 
 const initialForm = {
   id: null,
@@ -37,6 +39,14 @@ const initialForm = {
   infinal9: "",
   infinal10: "",
   file1: [],
+  file2: [],
+  file3: [],
+  file4: [],
+  file5: [],
+  file6: [],
+  file7: [],
+  file8: [],
+  file9: [],
 };
 
 const formRules = {
@@ -71,11 +81,13 @@ const columnDefinitions = [
     id: "actividad",
     header: "Actividad",
     cell: (item) => item.actividad,
+    minWidth: 160,
   },
   {
     id: "justificacion",
     header: "Justificación",
     cell: (item) => item.justificacion,
+    minWidth: 160,
   },
   {
     id: "responsable",
@@ -190,6 +202,14 @@ export default () => {
     form.append("infinal9", formValues.infinal9);
     form.append("infinal10", formValues.infinal10);
     form.append("file1", formValues.file1[0]);
+    form.append("file2", formValues.file2[0]);
+    form.append("file3", formValues.file3[0]);
+    form.append("file4", formValues.file4[0]);
+    form.append("file5", formValues.file5[0]);
+    form.append("file6", formValues.file6[0]);
+    form.append("file7", formValues.file7[0]);
+    form.append("file8", formValues.file8[0]);
+    form.append("file9", formValues.file9[0]);
     const res = await axiosBase.post(
       "investigador/informes/informe_academico/sendData",
       form
@@ -329,7 +349,7 @@ export default () => {
                         {loading ? (
                           <Spinner />
                         ) : (
-                          <Box>{proyecto.resolucion}</Box>
+                          <Box>{proyecto.resolucion_rectoral}</Box>
                         )}
                       </div>
                       <div>
@@ -603,9 +623,15 @@ export default () => {
                           variant="normal"
                           onItemClick={({ detail }) => {
                             if (detail.id == "action_1_1") {
-                              setType("delete");
+                              setModal("cargar");
                             } else if (detail.id == "action_1_2") {
-                              setType("edit");
+                              window.open(
+                                files[
+                                  "actividad" +
+                                    collectionProps.selectedItems[0]?.indice
+                                ],
+                                "_blank"
+                              );
                             }
                           }}
                           items={[
@@ -616,6 +642,11 @@ export default () => {
                             {
                               text: "Ver archivo cargado",
                               id: "action_1_2",
+                              disabled:
+                                !files[
+                                  "actividad" +
+                                    collectionProps.selectedItems[0]?.indice
+                                ],
                             },
                           ]}
                         >
@@ -641,8 +672,242 @@ export default () => {
               ),
               isOptional: true,
             },
-            //  TODO - Implementar las últimas secciones (flojera)
+            {
+              title: "Entregables",
+              description:
+                "Se deben lograr como mínimo los siguientes productos",
+              content: (
+                <SpaceBetween size="l">
+                  <Container
+                    header={
+                      <Box variant="h4">
+                        Tres(03) artículos publicados o aceptados en revistas
+                        indizadas a SCOPUS O WoS, dos (02) de ellos en Q1 o Q2,
+                        o un (01) libro, o dos (02) capítulos de libros
+                        publicados en editoriales de reconocido prestigio, de
+                        acuerdo con las normas internas de la universidad.
+                      </Box>
+                    }
+                  >
+                    <ColumnLayout columns={2}>
+                      <FormField
+                        label="Primer artículo"
+                        stretch
+                        description={
+                          files["articulo1"] && (
+                            <>
+                              Ya ha cargado un{" "}
+                              <Link {...propsEnlaces} href={files["articulo1"]}>
+                                archivo.
+                              </Link>
+                            </>
+                          )
+                        }
+                      >
+                        <FileUpload
+                          {...propsRepetidas}
+                          value={formValues.file2}
+                          onChange={({ detail }) => {
+                            handleChange("file2", detail.value);
+                          }}
+                        />
+                      </FormField>
+                      <FormField
+                        label="Segundo artículo"
+                        stretch
+                        description={
+                          files["articulo2"] && (
+                            <>
+                              Ya ha cargado un{" "}
+                              <Link {...propsEnlaces} href={files["articulo2"]}>
+                                archivo.
+                              </Link>
+                            </>
+                          )
+                        }
+                      >
+                        <FileUpload
+                          {...propsRepetidas}
+                          value={formValues.file3}
+                          onChange={({ detail }) => {
+                            handleChange("file3", detail.value);
+                          }}
+                        />
+                      </FormField>
+                      <FormField
+                        label="Tercer artículo"
+                        stretch
+                        description={
+                          files["articulo3"] && (
+                            <>
+                              Ya ha cargado un{" "}
+                              <Link {...propsEnlaces} href={files["articulo3"]}>
+                                archivo.
+                              </Link>
+                            </>
+                          )
+                        }
+                      >
+                        <FileUpload
+                          {...propsRepetidas}
+                          value={formValues.file4}
+                          onChange={({ detail }) => {
+                            handleChange("file4", detail.value);
+                          }}
+                        />
+                      </FormField>
+                      <FormField
+                        label="Primer capítulo de libro"
+                        stretch
+                        description={
+                          files["capituloLibro1"] && (
+                            <>
+                              Ya ha cargado un{" "}
+                              <Link
+                                {...propsEnlaces}
+                                href={files["capituloLibro1"]}
+                              >
+                                archivo.
+                              </Link>
+                            </>
+                          )
+                        }
+                      >
+                        <FileUpload
+                          {...propsRepetidas}
+                          value={formValues.file5}
+                          onChange={({ detail }) => {
+                            handleChange("file5", detail.value);
+                          }}
+                        />
+                      </FormField>
+                      <FormField
+                        label="Segundo capítulo de libro"
+                        stretch
+                        description={
+                          files["capituloLibro2"] && (
+                            <>
+                              Ya ha cargado un{" "}
+                              <Link
+                                {...propsEnlaces}
+                                href={files["capituloLibro2"]}
+                              >
+                                archivo.
+                              </Link>
+                            </>
+                          )
+                        }
+                      >
+                        <FileUpload
+                          {...propsRepetidas}
+                          value={formValues.file6}
+                          onChange={({ detail }) => {
+                            handleChange("file6", detail.value);
+                          }}
+                        />
+                      </FormField>
+                    </ColumnLayout>
+                  </Container>
+                  <Container
+                    header={
+                      <Box variant="h4">
+                        Dos (02) tesis defendidas, siendo una de ellas de
+                        pregrado y la otra de posgrado.
+                      </Box>
+                    }
+                  >
+                    <ColumnLayout columns={2}>
+                      <FormField
+                        label="Primera tesis de pregrado"
+                        stretch
+                        description={
+                          files["tesis1"] && (
+                            <>
+                              Ya ha cargado un{" "}
+                              <Link {...propsEnlaces} href={files["tesis1"]}>
+                                archivo.
+                              </Link>
+                            </>
+                          )
+                        }
+                      >
+                        <FileUpload
+                          {...propsRepetidas}
+                          value={formValues.file7}
+                          onChange={({ detail }) => {
+                            handleChange("file7", detail.value);
+                          }}
+                        />
+                      </FormField>
+                      <FormField
+                        label="Primera tesis de posgrado"
+                        stretch
+                        description={
+                          files["tesis4"] && (
+                            <>
+                              Ya ha cargado un{" "}
+                              <Link {...propsEnlaces} href={files["tesis4"]}>
+                                archivo.
+                              </Link>
+                            </>
+                          )
+                        }
+                      >
+                        <FileUpload
+                          {...propsRepetidas}
+                          value={formValues.file8}
+                          onChange={({ detail }) => {
+                            handleChange("file8", detail.value);
+                          }}
+                        />
+                      </FormField>
+                    </ColumnLayout>
+                  </Container>
+                  <Container
+                    header={
+                      <Box variant="h4">
+                        Un registro y/o inscripción de solicitud de protección
+                        de propiedad intelectual o de transferencia según la
+                        naturaleza del proyecto.
+                      </Box>
+                    }
+                  >
+                    <FormField
+                      label="Registro"
+                      stretch
+                      description={
+                        files["registro"] && (
+                          <>
+                            Ya ha cargado un{" "}
+                            <Link {...propsEnlaces} href={files["registro"]}>
+                              archivo.
+                            </Link>
+                          </>
+                        )
+                      }
+                    >
+                      <FileUpload
+                        {...propsRepetidas}
+                        value={formValues.file9}
+                        onChange={({ detail }) => {
+                          handleChange("file9", detail.value);
+                        }}
+                      />
+                    </FormField>
+                  </Container>
+                </SpaceBetween>
+              ),
+              isOptional: true,
+            },
           ]}
+        />
+      )}
+      {modal == "cargar" && (
+        <ModalCargarActividad
+          proyecto_id={proyecto_id}
+          indice={collectionProps.selectedItems[0]?.indice}
+          close={() => setModal("")}
+          reload={getData}
         />
       )}
     </>
