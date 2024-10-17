@@ -154,7 +154,6 @@ export default ({ grupo_estado }) => {
   //  Data state
   const [incluirVisible, setIncluirVisible] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [selectedItems, setSelectedItems] = useState([]);
   const [distributions, setDistribution] = useState([]);
   const {
     items,
@@ -185,7 +184,6 @@ export default ({ grupo_estado }) => {
     sorting: { defaultState: { sortingColumn: columnDefinitions[0] } },
     selection: {},
   });
-  const [enableBtn, setEnableBtn] = useState(false);
   const [typeModal, setTypeModal] = useState("");
   const [tipoMiembros, setTipoMiembros] = useState({
     label: "Integrantes",
@@ -212,14 +210,6 @@ export default ({ grupo_estado }) => {
     getData();
   }, [tipoMiembros]);
 
-  useEffect(() => {
-    if (selectedItems.length > 0) {
-      setEnableBtn(true);
-    } else {
-      setEnableBtn(false);
-    }
-  }, [selectedItems]);
-
   return (
     <>
       <Table
@@ -233,18 +223,7 @@ export default ({ grupo_estado }) => {
         resizableColumns
         enableKeyboardNavigation
         selectionType="single"
-        selectedItems={selectedItems}
-        onSelectionChange={({ detail }) =>
-          setSelectedItems(detail.selectedItems)
-        }
-        ariaLabels={{
-          selectionGroupLabel: "Items selection",
-          allItemsSelectionLabel: ({ selectedItems }) =>
-            `${selectedItems.length} ${
-              selectedItems.length === 1 ? "item" : "items"
-            } selected`,
-          itemSelectionLabel: ({ selectedItems }, item) => item.name,
-        }}
+        onRowClick={({ detail }) => actions.setSelectedItems([detail.item])}
         empty={
           <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
             <SpaceBetween size="m">
@@ -327,13 +306,18 @@ export default ({ grupo_estado }) => {
                   Acciones para el grupo
                 </ButtonDropdown>
                 <ButtonDropdown
-                  disabled={!enableBtn || grupo_estado < 0}
+                  disabled={
+                    collectionProps.selectedItems.length == 0 ||
+                    grupo_estado < 0
+                  }
                   variant="primary"
                   items={[
                     {
                       text: "Excluir",
                       id: "action_2_1",
-                      disabled: false,
+                      disabled:
+                        collectionProps.selectedItems[0]?.cargo ==
+                        "Coordinador",
                     },
                     {
                       text: "Visualizar",
@@ -349,7 +333,9 @@ export default ({ grupo_estado }) => {
                       text: "Cambiar cargo",
                       id: "action_2_4",
                       disabled:
-                        selectedItems[0]?.condicion != "Titular" ? true : false,
+                        collectionProps.selectedItems[0]?.condicion != "Titular"
+                          ? true
+                          : false,
                     },
                   ]}
                   onItemClick={({ detail }) => {
@@ -408,31 +394,31 @@ export default ({ grupo_estado }) => {
             visible={incluirVisible}
             setVisible={setIncluirVisible}
             reload={getData}
-            item={selectedItems}
+            item={collectionProps.selectedItems}
           />
         ) : typeModal == "Visualizar" ? (
           <ModalInformacionMiembro
             visible={incluirVisible}
             setVisible={setIncluirVisible}
-            id={selectedItems[0].id}
+            id={collectionProps.selectedItems[0].id}
           />
         ) : typeModal == "Condicion" ? (
           <ModalCambiarCondicion
             visible={incluirVisible}
             setVisible={setIncluirVisible}
             reload={getData}
-            id={selectedItems[0].id}
-            current={selectedItems[0].condicion}
-            nombres={selectedItems[0].nombres}
+            id={collectionProps.selectedItems[0].id}
+            current={collectionProps.selectedItems[0].condicion}
+            nombres={collectionProps.selectedItems[0].nombres}
           />
         ) : (
           <ModalCambiarCargo
             visible={incluirVisible}
             setVisible={setIncluirVisible}
             reload={getData}
-            id={selectedItems[0].id}
-            current={selectedItems[0].cargo}
-            nombres={selectedItems[0].nombres}
+            id={collectionProps.selectedItems[0].id}
+            current={collectionProps.selectedItems[0].cargo}
+            nombres={collectionProps.selectedItems[0].nombres}
           />
         ))}
     </>

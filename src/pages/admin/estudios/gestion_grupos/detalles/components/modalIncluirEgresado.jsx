@@ -80,6 +80,7 @@ export default ({ visible, setVisible, reload }) => {
       let formData = new FormData();
       formData.append("tipo_registro", "egresado");
       formData.append("sum_id", form.id);
+      formData.append("tipo", form.tipo);
       formData.append("investigador_id", form.investigador_id);
       formData.append("grupo_id", id);
       formData.append("condicion", "Adherente");

@@ -204,17 +204,8 @@ export default ({ data, loading, grupo_id, reload }) => {
             {loading ? (
               <Spinner />
             ) : (
-              <Link
-                href={
-                  data.infraestructura_sgestion == null
-                    ? "#"
-                    : data.infraestructura_sgestion
-                }
-                target="_blank"
-              >
-                {data.infraestructura_sgestion == null
-                  ? "No hay archivos adjuntos"
-                  : "Descargar"}
+              <Link href={data.url ? data.url : "#"} target="_blank">
+                {data.url ? "Descargar" : "No hay archivos adjuntos"}
               </Link>
             )}
           </div>

@@ -98,43 +98,36 @@ const columnDefinitions = [
     cell: (item) => (
       <Badge
         color={
-          item.estado == -1
+          item.estado == "Eliminado"
             ? "red"
-            : item.estado == 0
+            : item.estado == "No aprobado"
             ? "grey"
-            : item.estado == 1
+            : item.estado == "Aprobado"
             ? "green"
-            : item.estado == 2
-            ? "grey"
-            : item.estado == 3
-            ? "grey"
-            : item.estado == 5
+            : item.estado == "En evaluación"
             ? "blue"
-            : item.estado == 5
+            : item.estado == "Enviado"
             ? "blue"
-            : item.estado == 6
+            : item.estado == "En proceso"
             ? "grey"
+            : item.estado == "Anulado"
+            ? "red"
+            : item.estado == "Sustentado"
+            ? "blue"
+            : item.estado == "En ejecución"
+            ? "blue"
+            : item.estado == "Ejecutado"
+            ? "green"
+            : item.estado == "Concluido"
+            ? "green"
             : "red"
         }
       >
-        {item.estado == -1
-          ? "Eliminado"
-          : item.estado == 0
-          ? "No aprobado"
-          : item.estado == 1
-          ? "Aprobado"
-          : item.estado == 2
-          ? "Observado"
-          : item.estado == 3
-          ? "En evaluación"
-          : item.estado == 5
-          ? "Enviado"
-          : item.estado == 6
-          ? "En proceso"
-          : "Error"}
+        {item.estado}
       </Badge>
     ),
     sortingField: "estado",
+    minWidth: 135,
   },
 ];
 
