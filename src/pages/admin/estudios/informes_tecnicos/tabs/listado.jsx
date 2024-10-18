@@ -99,6 +99,7 @@ const columnDefinitions = [
     header: "Título",
     cell: (item) => item.titulo,
     sortingField: "titulo",
+    minWidth: 250,
   },
   {
     id: "cantidad_informes",
@@ -111,12 +112,14 @@ const columnDefinitions = [
     header: "Responsable",
     cell: (item) => item.responsable,
     sortingField: "responsable",
+    minWidth: 200,
   },
   {
     id: "facultad",
     header: "Facultad",
     cell: (item) => item.facultad,
     sortingField: "facultad",
+    minWidth: 150,
   },
   {
     id: "periodo",
@@ -145,6 +148,7 @@ const columnDefinitions = [
       </Badge>
     ),
     sortingField: "estado",
+    minWidth: 120,
   },
 ];
 
@@ -252,10 +256,10 @@ export default () => {
         columnDisplay={columnDisplay}
         loading={loading}
         loadingText="Cargando datos"
-        resizableColumns
         enableKeyboardNavigation
         selectionType="single"
         onRowClick={({ detail }) => actions.setSelectedItems([detail.item])}
+        wrapLines
         header={
           <Header
             actions={
