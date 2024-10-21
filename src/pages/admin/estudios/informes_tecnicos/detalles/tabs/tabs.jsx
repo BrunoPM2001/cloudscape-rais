@@ -85,13 +85,22 @@ export default ({
           actividades={actividades}
         />
       ) : tipo_proyecto == "PSINFINV" ? (
-        <Psinfinv_tabs formValues={formValues} handleChange={handleChange} />
+        <Psinfinv_tabs
+          formValues={formValues}
+          handleChange={handleChange}
+          files={files}
+        />
       ) : tipo_proyecto == "PSINFIPU" ? (
-        <Psinfipu_tabs formValues={formValues} handleChange={handleChange} />
+        <Psinfipu_tabs
+          formValues={formValues}
+          handleChange={handleChange}
+          files={files}
+        />
       ) : tipo_proyecto == "PTPBACHILLER" ? (
         <Ptpbachiller_tabs
           formValues={formValues}
           handleChange={handleChange}
+          files={files}
         />
       ) : (
         <></>

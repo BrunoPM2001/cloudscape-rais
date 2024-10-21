@@ -24,16 +24,7 @@ const initialForm = {
   id: null,
   estado: 0,
   resumen_ejecutivo: "",
-  palabras_clave: "",
   infinal1: "",
-  infinal2: "",
-  infinal3: "",
-  infinal4: "",
-  infinal5: "",
-  infinal6: "",
-  infinal7: "",
-  infinal9: "",
-  infinal10: "",
   file1: [],
 };
 
@@ -104,16 +95,7 @@ export default () => {
     setFiles(data.archivos);
     if (data.informe) {
       handleChange("resumen_ejecutivo", data.informe.resumen_ejecutivo ?? "");
-      handleChange("palabras_clave", data.informe.palabras_clave ?? "");
       handleChange("infinal1", data.informe.infinal1 ?? "");
-      handleChange("infinal2", data.informe.infinal2 ?? "");
-      handleChange("infinal3", data.informe.infinal3 ?? "");
-      handleChange("infinal4", data.informe.infinal4 ?? "");
-      handleChange("infinal5", data.informe.infinal5 ?? "");
-      handleChange("infinal6", data.informe.infinal6 ?? "");
-      handleChange("infinal7", data.informe.infinal7 ?? "");
-      handleChange("infinal9", data.informe.infinal9 ?? "");
-      handleChange("infinal10", data.informe.infinal10 ?? "");
       handleChange("estado", data.informe.estado);
       handleChange("id", data.informe.id);
     }
@@ -127,16 +109,7 @@ export default () => {
     form.append("proyecto_id", proyecto_id);
     form.append("tipo_proyecto", tipo_proyecto);
     form.append("resumen_ejecutivo", formValues.resumen_ejecutivo);
-    form.append("palabras_clave", formValues.palabras_clave);
     form.append("infinal1", formValues.infinal1);
-    form.append("infinal2", formValues.infinal2);
-    form.append("infinal3", formValues.infinal3);
-    form.append("infinal4", formValues.infinal4);
-    form.append("infinal5", formValues.infinal5);
-    form.append("infinal6", formValues.infinal6);
-    form.append("infinal7", formValues.infinal7);
-    form.append("infinal9", formValues.infinal9);
-    form.append("infinal10", formValues.infinal10);
     form.append("file1", formValues.file1[0]);
     const res = await axiosBase.post(
       "investigador/informes/informe_academico/sendData",
@@ -341,37 +314,9 @@ export default () => {
               ),
             },
             {
-              title: "Resumen",
+              title: "Aportes",
               description:
-                "Breve descripción del estudio, en no más de 200 palabras",
-              content: (
-                <Tiptap
-                  value={formValues.resumen_ejecutivo}
-                  handleChange={handleChange}
-                  name="resumen_ejecutivo"
-                  limitWords={200}
-                />
-              ),
-              isOptional: true,
-            },
-            {
-              title: "Palabras clave",
-              description: "Sepárelas por comas",
-              content: (
-                <FormField label="Palabras clave" stretch>
-                  <Input
-                    value={formValues.palabras_clave}
-                    onChange={({ detail }) =>
-                      handleChange("palabras_clave", detail.value)
-                    }
-                  />
-                </FormField>
-              ),
-              isOptional: true,
-            },
-            {
-              title: "Introducción",
-              description: "Importancia de los resultados de la investigación",
+                "Indique los nombres de todos los miembros del equipo precisando su participación y aporte en el trabajo de acuerdo a las labores que le fueron asignadas",
               content: (
                 <Tiptap
                   value={formValues.infinal1}
@@ -383,94 +328,34 @@ export default () => {
               isOptional: true,
             },
             {
-              title: "Metodologías",
-              description: "Metodología y técnicas de investigación utilizadas",
-              content: (
-                <Tiptap
-                  value={formValues.infinal2}
-                  handleChange={handleChange}
-                  name="infinal2"
-                  limitWords={600}
-                />
-              ),
-              isOptional: true,
-            },
-            {
-              title: "Resultados",
+              title: "Impacto",
               description:
-                "Capítulos, títulos, subtítulos, tablas, gráficos según corresponda",
+                "Señale el aporte e impacto para la sociedad de la publicación",
               content: (
                 <Tiptap
-                  value={formValues.infinal3}
+                  value={formValues.resumen_ejecutivo}
                   handleChange={handleChange}
-                  name="infinal3"
-                  limitWords={2000}
-                />
-              ),
-              isOptional: true,
-            },
-            {
-              title: "Discusión",
-              content: (
-                <Tiptap
-                  value={formValues.infinal4}
-                  handleChange={handleChange}
-                  name="infinal4"
-                  limitWords={600}
-                />
-              ),
-              isOptional: true,
-            },
-            {
-              title: "Conclusiones",
-              content: (
-                <Tiptap
-                  value={formValues.infinal5}
-                  handleChange={handleChange}
-                  name="infinal5"
-                  limitWords={600}
-                />
-              ),
-              isOptional: true,
-            },
-            {
-              title: "Recomendaciones",
-              content: (
-                <Tiptap
-                  value={formValues.infinal6}
-                  handleChange={handleChange}
-                  name="infinal6"
-                  limitWords={2000}
-                />
-              ),
-              isOptional: true,
-            },
-            {
-              title: "Referencias bibliográficas",
-              content: (
-                <Tiptap
-                  value={formValues.infinal7}
-                  handleChange={handleChange}
-                  name="infinal7"
-                  limitWords={2000}
+                  name="resumen_ejecutivo"
+                  limitWords={200}
                 />
               ),
               isOptional: true,
             },
             {
               title: "Anexos",
-              description: "Archivos adjuntos (ninguno debe superar los 6 MB)",
+              description:
+                "Artículo, capítulo o libro (ninguno debe superar los 6 MB)",
               content: (
                 <Container>
                   <FormField
                     label="Adjuntar archivo digital"
                     description={
-                      files["informe-PSINFINV-INFORME"] && (
+                      files["informe-PSINFIPU-RESULTADOS"] && (
                         <>
                           Ya ha cargado un{" "}
                           <Link
                             {...propsEnlaces}
-                            href={files["informe-PSINFINV-INFORME"]}
+                            href={files["informe-PSINFIPU-RESULTADOS"]}
                           >
                             archivo.
                           </Link>
@@ -489,30 +374,6 @@ export default () => {
                     />
                   </FormField>
                 </Container>
-              ),
-              isOptional: true,
-            },
-            {
-              title: "Aplicación práctica e impacto",
-              content: (
-                <Tiptap
-                  value={formValues.infinal9}
-                  handleChange={handleChange}
-                  name="infinal9"
-                  limitWords={2000}
-                />
-              ),
-              isOptional: true,
-            },
-            {
-              title: "Publicación",
-              content: (
-                <Tiptap
-                  value={formValues.infinal10}
-                  handleChange={handleChange}
-                  name="infinal10"
-                  limitWords={2000}
-                />
               ),
               isOptional: true,
             },

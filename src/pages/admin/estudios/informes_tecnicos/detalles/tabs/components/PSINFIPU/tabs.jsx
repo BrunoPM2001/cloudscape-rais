@@ -3,7 +3,7 @@ import Aportes from "./aportes";
 import Impacto from "./impacto";
 import Anexos from "./anexos";
 
-export default function Psinfipu_tabs({ formValues, handleChange }) {
+export default function Psinfipu_tabs({ formValues, handleChange, files }) {
   const tabs = [
     {
       id: "aportes",
@@ -29,6 +29,7 @@ export default function Psinfipu_tabs({ formValues, handleChange }) {
         <Anexos
           value1={formValues?.file1} //  CATEGORIA = informe-PSINFIPU-RESULTADOS
           handleChange={handleChange}
+          files={files}
         />
       ),
     },

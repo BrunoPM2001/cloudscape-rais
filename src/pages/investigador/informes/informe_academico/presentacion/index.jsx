@@ -8,6 +8,8 @@ import Pevento from "./components/pevento";
 import Pinterdis from "./components/pinterdis";
 import Pmulti from "./components/pmulti";
 import Pinvpos from "./components/pinvpos";
+import Psinfinv from "./components/psinfinv";
+import Psinfipu from "./components/psinfipu";
 
 const breadcrumbs = [
   {
@@ -50,6 +52,10 @@ export default function Presentar_informe() {
         <Pinterdis />
       ) : tipo_proyecto == "PINVPOS" ? (
         <Pinvpos />
+      ) : tipo_proyecto == "PSINFINV" ? (
+        <Psinfinv />
+      ) : tipo_proyecto == "PSINFIPU" ? (
+        <Psinfipu />
       ) : (
         tipo_proyecto == "PMULTI" && <Pmulti />
       )}

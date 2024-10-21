@@ -7,7 +7,7 @@ import Problema from "./problema";
 import Acciones from "./acciones";
 import Sugerencias from "./sugerencias";
 
-export default function Ptpbachiller_tabs({ formValues, handleChange }) {
+export default function Ptpbachiller_tabs({ formValues, handleChange, files }) {
   const tabs = [
     {
       id: "producto",

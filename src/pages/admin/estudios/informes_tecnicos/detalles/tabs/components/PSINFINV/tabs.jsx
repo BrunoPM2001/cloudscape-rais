@@ -12,7 +12,7 @@ import Anexos from "./anexos";
 import Aplicacion from "./aplicacion";
 import Publicacion from "./publicacion";
 
-export default function Psinfinv_tabs({ formValues, handleChange }) {
+export default function Psinfinv_tabs({ formValues, handleChange, files }) {
   const tabs = [
     {
       id: "resumen",
@@ -102,6 +102,7 @@ export default function Psinfinv_tabs({ formValues, handleChange }) {
         <Anexos
           value1={formValues?.file1} //  CATEGORIA = informe-PSINFINV-INFORME
           handleChange={handleChange}
+          files={files}
         />
       ),
     },
