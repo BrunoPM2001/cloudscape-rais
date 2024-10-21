@@ -6,7 +6,7 @@ import Problemas_identificados from "./problemas_identificados";
 import Anexos from "./anexos";
 import Resultados from "./resultados";
 
-const Ptpdocto_tabs = ({ formValues, handleChange }) => {
+const Ptpdocto_tabs = ({ formValues, handleChange, files }) => {
   const tabs = [
     {
       id: "porcentaje",
@@ -53,7 +53,7 @@ const Ptpdocto_tabs = ({ formValues, handleChange }) => {
   return <Tabs tabs={tabs} />;
 };
 
-const Ptpdocto_final_tabs = ({ formValues, handleChange }) => {
+const Ptpdocto_final_tabs = ({ formValues, handleChange, files }) => {
   const tabs = [
     {
       id: "entregables",
@@ -63,6 +63,7 @@ const Ptpdocto_final_tabs = ({ formValues, handleChange }) => {
           value1={formValues?.file1} //  CATEGORIA - informe-PTPDOCTO-INFORME-FINAL-tesis
           value2={formValues?.file2} //  CATEGORIA - informe-PTPDOCTO-INFORME-FINAL-acta
           handleChange={handleChange}
+          files={files}
         />
       ),
     },

@@ -191,6 +191,7 @@ export default () => {
                   id: collectionProps.selectedItems[0]?.id,
                   tipo_proyecto:
                     collectionProps.selectedItems[0]?.tipo_proyecto,
+                  informe: collectionProps.selectedItems[0]?.informe,
                 });
                 window.location.href = "informeAcademico/presentar?" + query;
               }}

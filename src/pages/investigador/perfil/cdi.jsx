@@ -59,21 +59,28 @@ export default () => {
               variant="h3"
               actions={
                 data.estado == 3 && (
-                  <Badge
-                    color={
-                      data.solicitud.estado == "Enviado"
-                        ? "blue"
-                        : data.solicitud.estado == "Observado"
-                        ? "grey"
-                        : data.solicitud.estado == "En trámite"
-                        ? "blue"
-                        : data.solicitud.estado == "Pendiente"
-                        ? "blue"
-                        : "red"
-                    }
+                  <SpaceBetween
+                    size="xs"
+                    direction="horizontal"
+                    alignItems="center"
                   >
-                    {data.solicitud.estado}
-                  </Badge>
+                    <Box fontSize="body-s">Estado</Box>
+                    <Badge
+                      color={
+                        data.solicitud.estado == "Enviado"
+                          ? "green"
+                          : data.solicitud.estado == "Observado"
+                          ? "grey"
+                          : data.solicitud.estado == "En trámite"
+                          ? "blue"
+                          : data.solicitud.estado == "Pendiente"
+                          ? "blue"
+                          : "red"
+                      }
+                    >
+                      {data.solicitud.estado}
+                    </Badge>
+                  </SpaceBetween>
                 )
               }
               description={
@@ -93,15 +100,15 @@ export default () => {
               <Button onClick={() => setTypeModal("solicitud")}>
                 Solicitar CDI
               </Button>
-            ) : data?.solicitud?.estado == "Observado" ? (
-              <SpaceBetween size="xs" direction="horizontal">
-                <Button onClick={() => setTypeModal("obs")}>Ver obs.</Button>
-                <Button onClick={() => setTypeModal("observado")}>
-                  Actualizar solicitud
-                </Button>
-              </SpaceBetween>
             ) : (
-              <Button onClick={() => setTypeModal("obs")}>Ver obs.</Button>
+              data?.solicitud?.estado == "Observado" && (
+                <SpaceBetween size="xs" direction="horizontal">
+                  <Button onClick={() => setTypeModal("obs")}>Ver obs.</Button>
+                  <Button onClick={() => setTypeModal("observado")}>
+                    Actualizar solicitud
+                  </Button>
+                </SpaceBetween>
+              )
             ))
           }
         >

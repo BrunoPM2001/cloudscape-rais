@@ -10,6 +10,10 @@ import Pmulti from "./components/pmulti";
 import Pinvpos from "./components/pinvpos";
 import Psinfinv from "./components/psinfinv";
 import Psinfipu from "./components/psinfipu";
+import Ptpbachiller from "./components/ptpbachiller";
+import Ptpdocto1 from "./components/ptpdocto1";
+import Ptpdocto2 from "./components/ptpdocto2";
+import Ptpdocto3 from "./components/ptpdocto3";
 
 const breadcrumbs = [
   {
@@ -31,7 +35,7 @@ const breadcrumbs = [
 export default function Presentar_informe() {
   //  Url
   const location = useLocation();
-  const { tipo_proyecto } = queryString.parse(location.search);
+  const { tipo_proyecto, informe } = queryString.parse(location.search);
 
   return (
     <BaseLayout
@@ -56,6 +60,18 @@ export default function Presentar_informe() {
         <Psinfinv />
       ) : tipo_proyecto == "PSINFIPU" ? (
         <Psinfipu />
+      ) : tipo_proyecto == "PTPBACHILLER" ? (
+        <Ptpbachiller />
+      ) : tipo_proyecto == "PTPDOCTO" ? (
+        <>
+          {informe == "Informe académico de avance" ? (
+            <Ptpdocto1 />
+          ) : informe == "Segundo informe académico de avance" ? (
+            <Ptpdocto2 />
+          ) : (
+            informe == "Informe académico final" && <Ptpdocto3 />
+          )}
+        </>
       ) : (
         tipo_proyecto == "PMULTI" && <Pmulti />
       )}

@@ -3,9 +3,6 @@ import Producto from "./producto";
 import Informe from "./informe";
 import Otros from "./otros";
 import Anexos from "./anexos";
-import Problema from "./problema";
-import Acciones from "./acciones";
-import Sugerencias from "./sugerencias";
 
 export default function Ptpbachiller_tabs({ formValues, handleChange, files }) {
   const tabs = [
@@ -40,30 +37,31 @@ export default function Ptpbachiller_tabs({ formValues, handleChange, files }) {
         <Anexos
           value1={formValues?.file1} //  CATEGORIA = informe-PTPBACHILLER-INFORME
           handleChange={handleChange}
+          files={files}
         />
       ),
     },
-    {
-      id: "problema",
-      label: "Descripción del problema",
-      content: (
-        <Problema value={formValues?.infinal3} handleChange={handleChange} />
-      ),
-    },
-    {
-      id: "acciones",
-      label: "Acciones tomadas",
-      content: (
-        <Acciones value={formValues?.infinal4} handleChange={handleChange} />
-      ),
-    },
-    {
-      id: "sugerencias",
-      label: "Sugerencias",
-      content: (
-        <Sugerencias value={formValues?.infinal5} handleChange={handleChange} />
-      ),
-    },
+    // {
+    //   id: "problema",
+    //   label: "Descripción del problema",
+    //   content: (
+    //     <Problema value={formValues?.infinal3} handleChange={handleChange} />
+    //   ),
+    // },
+    // {
+    //   id: "acciones",
+    //   label: "Acciones tomadas",
+    //   content: (
+    //     <Acciones value={formValues?.infinal4} handleChange={handleChange} />
+    //   ),
+    // },
+    // {
+    //   id: "sugerencias",
+    //   label: "Sugerencias",
+    //   content: (
+    //     <Sugerencias value={formValues?.infinal5} handleChange={handleChange} />
+    //   ),
+    // },
   ];
 
   return <Tabs tabs={tabs} />;

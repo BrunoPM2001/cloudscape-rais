@@ -32,6 +32,7 @@ export default ({
         <Ptpdocto_final_tabs
           formValues={formValues}
           handleChange={handleChange}
+          files={files}
         />
       ) : tipo_proyecto == "PTPMAEST" &&
         tipo_informe != "Informe académico final" ? (
