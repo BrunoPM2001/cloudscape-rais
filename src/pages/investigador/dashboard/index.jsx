@@ -1,4 +1,4 @@
-import { Grid } from "@cloudscape-design/components";
+import { Alert, Grid, SpaceBetween } from "@cloudscape-design/components";
 import Cifras from "./widgets/cifras.jsx";
 import Publicaciones from "./widgets/publicaciones.jsx";
 import Extras from "./widgets/extras.jsx";
@@ -60,6 +60,7 @@ export default function Investigador_main() {
     metricas: null,
     tipos_publicaciones: [],
     tipos_proyectos: [],
+    alerta: false,
   });
   const [loading, setLoading] = useState(true);
 
@@ -83,12 +84,20 @@ export default function Investigador_main() {
       helpInfo="Información sobre la páginal actual para poder mostrarla al público
       en general."
     >
-      <Grid gridDefinition={gridDefinition}>
-        <Cifras data={data.metricas} loading={loading} />
-        <Extras data={data.detalles} loading={loading} />
-        <Publicaciones data={data.tipos_publicaciones} loading={loading} />
-        <Proyectos data={data.tipos_proyectos} loading={loading} />
-      </Grid>
+      <SpaceBetween size="m">
+        {data.alerta == 1 && (
+          <Alert
+            type="warning"
+            header="Su constancia de docente investigador está por vencer"
+          />
+        )}
+        <Grid gridDefinition={gridDefinition}>
+          <Cifras data={data.metricas} loading={loading} />
+          <Extras data={data.detalles} loading={loading} />
+          <Publicaciones data={data.tipos_publicaciones} loading={loading} />
+          <Proyectos data={data.tipos_proyectos} loading={loading} />
+        </Grid>
+      </SpaceBetween>
     </BaseLayout>
   );
 }

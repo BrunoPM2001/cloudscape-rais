@@ -136,6 +136,7 @@ export default () => {
   const [distributions, setDistribution] = useState([]);
   const {
     items,
+    actions,
     filteredItemsCount,
     collectionProps,
     paginationProps,
@@ -189,6 +190,7 @@ export default () => {
       resizableColumns
       enableKeyboardNavigation
       selectionType="single"
+      onRowClick={({ detail }) => actions.setSelectedItems([detail.item])}
       header={
         <Header
           actions={

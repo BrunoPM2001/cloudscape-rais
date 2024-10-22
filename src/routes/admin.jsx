@@ -37,6 +37,11 @@ const Detalle_proyecto_pinvpos = lazy(() =>
     "../pages/admin/estudios/gestion_proyectos_grupos/detalle/pinvpos/index.jsx"
   )
 );
+const Detalle_proyecto_psinfipu = lazy(() =>
+  import(
+    "../pages/admin/estudios/gestion_proyectos_grupos/detalle/psinfipu/index.jsx"
+  )
+);
 const Detalle_proyecto_psinfinv = lazy(() =>
   import(
     "../pages/admin/estudios/gestion_proyectos_grupos/detalle/psinfinv/index.jsx"
@@ -221,6 +226,10 @@ const routes = createBrowserRouter(
                 {
                   path: "psinfinv",
                   element: <Detalle_proyecto_psinfinv />,
+                },
+                {
+                  path: "psinfipu",
+                  element: <Detalle_proyecto_psinfipu />,
                 },
                 {
                   path: "pinvpos",
