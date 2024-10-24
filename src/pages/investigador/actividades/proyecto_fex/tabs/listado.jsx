@@ -202,19 +202,28 @@ export default () => {
       header={
         <Header
           actions={
-            <Button
-              disabled={collectionProps.selectedItems.length == 0}
-              variant="primary"
-              onClick={() => {
-                const query = queryString.stringify({
-                  proyecto_id: collectionProps.selectedItems[0]["id"],
-                  antiguo: collectionProps.selectedItems[0]["antiguo"],
-                });
-                window.location.href = "proyectoDetalle?" + query;
-              }}
-            >
-              Ver detalles
-            </Button>
+            <SpaceBetween size="xs" direction="horizontal">
+              <Button
+                disabled={collectionProps.selectedItems.length == 0}
+                onClick={() => {
+                  const query = queryString.stringify({
+                    proyecto_id: collectionProps.selectedItems[0]["id"],
+                    antiguo: collectionProps.selectedItems[0]["antiguo"],
+                  });
+                  window.location.href = "proyectoDetalle?" + query;
+                }}
+              >
+                Ver detalles
+              </Button>
+              <Button
+                onClick={() => {
+                  window.location.href = "proyectosFex/paso1";
+                }}
+                variant="primary"
+              >
+                Registrar
+              </Button>
+            </SpaceBetween>
           }
         >
           Proyectos ({distributions.length})

@@ -2,6 +2,18 @@ import { Suspense, lazy } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { NotificationProvider } from "../providers/notificationProvider.jsx";
 
+const Registro_pfex_4 = lazy(() =>
+  import("../pages/investigador/actividades/proyecto_fex/registrar/step4.jsx")
+);
+const Registro_pfex_3 = lazy(() =>
+  import("../pages/investigador/actividades/proyecto_fex/registrar/step3.jsx")
+);
+const Registro_pfex_2 = lazy(() =>
+  import("../pages/investigador/actividades/proyecto_fex/registrar/step2.jsx")
+);
+const Registro_pfex_1 = lazy(() =>
+  import("../pages/investigador/actividades/proyecto_fex/registrar/step1.jsx")
+);
 const Registro_psinfipu_0 = lazy(() =>
   import("../pages/investigador/convocatorias/psinfipu/step0.jsx")
 );
@@ -264,7 +276,28 @@ const routes = createBrowserRouter(
         },
         {
           path: "proyectosFEX",
-          element: <Proyectos_FEX />,
+          children: [
+            {
+              path: "",
+              element: <Proyectos_FEX />,
+            },
+            {
+              path: "paso1",
+              element: <Registro_pfex_1 />,
+            },
+            {
+              path: "paso2",
+              element: <Registro_pfex_2 />,
+            },
+            {
+              path: "paso3",
+              element: <Registro_pfex_3 />,
+            },
+            {
+              path: "paso4",
+              element: <Registro_pfex_4 />,
+            },
+          ],
         },
         {
           path: "proyectosMulti",

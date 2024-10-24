@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   ButtonDropdown,
   Header,
   SpaceBetween,
@@ -11,7 +12,10 @@ import { useLocation } from "react-router-dom";
 import queryString from "query-string";
 import BaseLayout from "../../../components/baseLayout";
 import axiosBase from "../../../../../api/axios";
+import ModalAgregarDoc from "./components/modalAgregarDoc";
 import { useCollection } from "@cloudscape-design/collection-hooks";
+import ModalEditarDoc from "./components/modalEditarDoc";
+import ModalEliminar from "./components/modalEliminar";
 
 const breadcrumbs = [
   {
@@ -30,11 +34,12 @@ const breadcrumbs = [
   },
 ];
 
-export default function Registrar_proyecto_fex_4() {
+export default function Registrar_proyecto_fex_3() {
   //  States
   const [loadingData, setLoadingData] = useState(true);
   const [data, setData] = useState([]);
   const [type, setType] = useState("");
+  const [doc_tipo, setDoc_tipo] = useState("");
 
   //  Url
   const location = useLocation();
@@ -52,15 +57,15 @@ export default function Registrar_proyecto_fex_4() {
       id,
     });
     if (detail.requestedStepIndex > 1) {
-      window.location.href = "paso_4?" + query;
+      window.location.href = "paso4?" + query;
     } else {
-      window.location.href = "paso_2?" + query;
+      window.location.href = "paso2?" + query;
     }
   };
 
   const getData = async () => {
     setLoadingData(true);
-    const res = await axiosBase.get("admin/estudios/proyectosFEX/datosPaso4", {
+    const res = await axiosBase.get("investigador/actividades/fex/datosPaso3", {
       params: {
         id,
       },
@@ -82,7 +87,7 @@ export default function Registrar_proyecto_fex_4() {
     >
       <Wizard
         onNavigate={({ detail }) => handleNavigate(detail)}
-        activeStepIndex={3}
+        activeStepIndex={2}
         onCancel={() => {
           window.location.href = "../proyectos_fex";
         }}
@@ -95,47 +100,68 @@ export default function Registrar_proyecto_fex_4() {
           },
           {
             title: "Documentos",
-          },
-          {
-            title: "Integrantes",
+            description: "Convenios, contratos, presupuesto o resoluciones",
             content: (
               <Table
                 {...collectionProps}
                 trackBy="id"
                 columnDefinitions={[
                   {
-                    id: "tipo_integrante",
-                    header: "Tipo de integrante",
-                    cell: (item) => item.tipo_integrante,
+                    id: "doc_tipo",
+                    header: "Tipo de documento",
+                    cell: (item) => {
+                      switch (item.doc_tipo) {
+                        case "D01":
+                          return "Convenio, contrato o lo que haga sus veces";
+                        case "D04":
+                          return "Proyecto propuesto (última versión aprobada)";
+                        case "D12":
+                          return "Resolución rectoral (RR)";
+                        default:
+                          return "Tipo de documento desconocido";
+                      }
+                    },
                     isRowHeader: true,
+                    minWidth: 200,
                   },
                   {
-                    id: "nombres",
-                    header: "Nombres",
-                    cell: (item) => item.nombres,
+                    id: "nombre",
+                    header: "Nombre",
+                    cell: (item) => item.nombre,
+                    minWidth: 200,
                   },
                   {
-                    id: "doc_numero",
-                    header: "N° documento",
-                    cell: (item) => item.doc_numero,
+                    id: "comentario",
+                    header: "Comentario",
+                    cell: (item) => item.comentario,
+                    minWidth: 200,
                   },
                   {
-                    id: "responsable",
-                    header: "Responsable",
-                    cell: (item) => item.responsable,
+                    id: "fecha",
+                    header: "Fecha",
+                    cell: (item) => item.fecha,
+                    minWidth: 115,
                   },
                   {
-                    id: "facultad",
-                    header: "Facultad",
-                    cell: (item) => item.facultad,
+                    id: "url",
+                    header: "Archivo",
+                    cell: (item) => (
+                      <Button
+                        iconName="download"
+                        variant="inline-icon"
+                        href={item.url}
+                        target="_blank"
+                      />
+                    ),
+                    minWidth: 95,
                   },
                 ]}
                 columnDisplay={[
-                  { id: "tipo_integrante", visible: true },
-                  { id: "nombres", visible: true },
-                  { id: "doc_numero", visible: true },
-                  { id: "responsable", visible: true },
-                  { id: "facultad", visible: true },
+                  { id: "doc_tipo", visible: true },
+                  { id: "nombre", visible: true },
+                  { id: "comentario", visible: true },
+                  { id: "fecha", visible: true },
+                  { id: "url", visible: true },
                 ]}
                 selectionType="single"
                 items={items}
@@ -197,12 +223,12 @@ export default function Registrar_proyecto_fex_4() {
                             }
                           }}
                         >
-                          Agregar
+                          Agregar doc
                         </ButtonDropdown>
                       </SpaceBetween>
                     }
                   >
-                    Integrantes
+                    Documentos cargados
                   </Header>
                 }
                 empty={
@@ -219,8 +245,33 @@ export default function Registrar_proyecto_fex_4() {
               />
             ),
           },
+          {
+            title: "Integrantes",
+          },
         ]}
       />
+      {type == "add" ? (
+        <ModalAgregarDoc
+          id={id}
+          doc_tipo={doc_tipo}
+          close={() => setType("")}
+          reload={getData}
+        />
+      ) : type == "update" ? (
+        <ModalEditarDoc
+          item={collectionProps.selectedItems[0]}
+          close={() => setType("")}
+          reload={getData}
+        />
+      ) : type == "delete" ? (
+        <ModalEliminar
+          id={collectionProps.selectedItems[0].id}
+          close={() => setType("")}
+          reload={getData}
+        />
+      ) : (
+        <></>
+      )}
     </BaseLayout>
   );
 }

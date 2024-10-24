@@ -60,7 +60,7 @@ export default function Registrar_proyecto_fex_4() {
 
   const getData = async () => {
     setLoadingData(true);
-    const res = await axiosBase.get("admin/estudios/proyectosFEX/datosPaso4", {
+    const res = await axiosBase.get("investigador/actividades/fex/datosPaso4", {
       params: {
         id,
       },
