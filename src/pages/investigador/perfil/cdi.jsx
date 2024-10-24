@@ -68,13 +68,13 @@ export default () => {
                     <Badge
                       color={
                         data.solicitud.estado == "Enviado"
-                          ? "green"
+                          ? "blue"
                           : data.solicitud.estado == "Observado"
                           ? "grey"
                           : data.solicitud.estado == "En trámite"
-                          ? "blue"
+                          ? "green"
                           : data.solicitud.estado == "Pendiente"
-                          ? "blue"
+                          ? "green"
                           : "red"
                       }
                     >

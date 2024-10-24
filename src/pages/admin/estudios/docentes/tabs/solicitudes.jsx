@@ -86,12 +86,16 @@ const columnDefinitions = [
       <Box textAlign="center">
         <Badge
           color={
-            item.estado == "En trámite"
+            item.estado == "Enviado"
               ? "blue"
-              : item.estado == "Enviado"
-              ? "green"
               : item.estado == "No aprobado"
               ? "red"
+              : item.estado == "Observado"
+              ? "grey"
+              : item.estado == "En trámite"
+              ? "green"
+              : item.estado == "Pendiente"
+              ? "green"
               : "grey"
           }
         >

@@ -140,7 +140,7 @@ export default ({ id, data, reload }) => {
           </div>
           <div>
             <Box variant="awsui-key-label">Evaluación técnica</Box>
-            <div>{data.estado_tecnico}</div>
+            <div>Aprobado</div>
           </div>
           <div>
             <Box variant="awsui-key-label">Autoridad</Box>

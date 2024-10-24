@@ -67,10 +67,10 @@ export default ({ id, data, loading, reload }) => {
                     ? "in-progress"
                     : data.estado == "Enviado"
                     ? "info"
-                    : data.estado == "Aprobado"
-                    ? "success"
                     : data.estado == "Pendiente"
                     ? "pending"
+                    : data.estado == "Vigente"
+                    ? "success"
                     : "error"
                 }
               >

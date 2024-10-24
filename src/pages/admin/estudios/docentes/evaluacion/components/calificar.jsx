@@ -11,7 +11,10 @@ import { useState } from "react";
 import { useFormValidation } from "../../../../../../hooks/useFormValidation";
 import axiosBase from "../../../../../../api/axios";
 
-const opt_tecnica = [{ value: "Aprobado" }, { value: "No aprobado" }];
+const opt_tecnica = [
+  { value: "En trámite", label: "Aprobado" },
+  { value: "No aprobado", label: "No aprobado" },
+];
 
 const initialForm = {
   estado_tecnico: null,
