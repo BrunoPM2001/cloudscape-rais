@@ -87,6 +87,7 @@ export default ({ close, proyecto_id, reload }) => {
       if (validateForm()) {
         setLoadingCreate(true);
         const form = new FormData();
+        form.append("proyecto_id", proyecto_id);
         form.append("codigo_orcid", formValues.codigo_orcid);
         form.append("apellido1", formValues.apellido1);
         form.append("apellido2", formValues.apellido2);
@@ -108,11 +109,9 @@ export default ({ close, proyecto_id, reload }) => {
         form.append("biografia", formValues.biografia);
         form.append("observacion", formValues.observacion);
         form.append("grupo_id", proyecto_id);
-        form.append("tipo_registro", "externo");
-        form.append("condicion", "Adherente");
-        form.append("tipo", "Externo");
+        form.append("tipo", "Nuevo");
         const res = await axiosBase.post(
-          "investigador/grupo/solicitar/agregarMiembro",
+          "investigador/actividades/fex/agregarExterno",
           form
         );
         const data = res.data;
@@ -122,6 +121,20 @@ export default ({ close, proyecto_id, reload }) => {
         pushNotification(data.detail, data.message, notifications.length + 1);
       }
     } else {
+      setLoadingCreate(true);
+      const form1 = new FormData();
+      form1.append("proyecto_id", proyecto_id);
+      form1.append("tipo", "Antiguo");
+      form1.append("investigador_id", form.investigador_id);
+      const res = await axiosBase.post(
+        "investigador/actividades/fex/agregarExterno",
+        form1
+      );
+      const data = res.data;
+      setLoadingCreate(false);
+      close();
+      reload();
+      pushNotification(data.detail, data.message, notifications.length + 1);
     }
   };
 
