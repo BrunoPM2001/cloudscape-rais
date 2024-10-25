@@ -146,6 +146,7 @@ export default () => {
   const [distributions, setDistribution] = useState([]);
   const {
     items,
+    actions,
     filteredItemsCount,
     collectionProps,
     paginationProps,
@@ -199,6 +200,7 @@ export default () => {
       resizableColumns
       enableKeyboardNavigation
       selectionType="single"
+      onRowClick={({ detail }) => actions.setSelectedItems([detail.item])}
       header={
         <Header
           actions={
@@ -214,6 +216,17 @@ export default () => {
                 }}
               >
                 Ver detalles
+              </Button>
+              <Button
+                disabled={collectionProps.selectedItems.length == 0}
+                onClick={() => {
+                  const query = queryString.stringify({
+                    id: collectionProps.selectedItems[0]["id"],
+                  });
+                  window.location.href = "proyectosFex/paso1?" + query;
+                }}
+              >
+                Editar
               </Button>
               <Button
                 onClick={() => {

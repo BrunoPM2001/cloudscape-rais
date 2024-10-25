@@ -157,8 +157,8 @@ const navItems = [
       {
         type: "link",
         text: "Proyecto de investigación sin financiamiento",
-        // href: "/investigador/convocatoria/psinfinv/paso1",
-        href: "#",
+        href: "/investigador/convocatoria/psinfinv/paso1",
+        // href: "#",
       },
       {
         type: "link",

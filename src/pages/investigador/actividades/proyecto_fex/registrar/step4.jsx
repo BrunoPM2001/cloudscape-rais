@@ -12,6 +12,9 @@ import queryString from "query-string";
 import BaseLayout from "../../../components/baseLayout";
 import axiosBase from "../../../../../api/axios";
 import { useCollection } from "@cloudscape-design/collection-hooks";
+import ModalAddDocente from "./components/modalAddDocente";
+import ModalAddEstudiante from "./components/modalAddEstudiante";
+import ModalAddExterno from "./components/modalAddExterno";
 
 const breadcrumbs = [
   {
@@ -34,14 +37,14 @@ export default function Registrar_proyecto_fex_4() {
   //  States
   const [loadingData, setLoadingData] = useState(true);
   const [data, setData] = useState([]);
-  const [type, setType] = useState("");
+  const [modal, setModal] = useState("");
 
   //  Url
   const location = useLocation();
   const { id } = queryString.parse(location.search);
 
   //  Hooks
-  const { items, collectionProps } = useCollection(data, {
+  const { items, actions, collectionProps } = useCollection(data, {
     sorting: {},
     selection: {},
   });
@@ -51,11 +54,8 @@ export default function Registrar_proyecto_fex_4() {
     const query = queryString.stringify({
       id,
     });
-    if (detail.requestedStepIndex > 1) {
-      window.location.href = "paso_4?" + query;
-    } else {
-      window.location.href = "paso_2?" + query;
-    }
+    window.location.href =
+      "paso" + (detail.requestedStepIndex + 1) + "?" + query;
   };
 
   const getData = async () => {
@@ -101,33 +101,38 @@ export default function Registrar_proyecto_fex_4() {
             content: (
               <Table
                 {...collectionProps}
-                trackBy="id"
+                trackBy="doc_numero"
                 columnDefinitions={[
                   {
                     id: "tipo_integrante",
                     header: "Tipo de integrante",
                     cell: (item) => item.tipo_integrante,
                     isRowHeader: true,
+                    minWidth: 130,
                   },
                   {
                     id: "nombres",
                     header: "Nombres",
                     cell: (item) => item.nombres,
+                    minWidth: 125,
                   },
                   {
                     id: "doc_numero",
                     header: "N° documento",
                     cell: (item) => item.doc_numero,
+                    minWidth: 120,
                   },
                   {
                     id: "responsable",
                     header: "Responsable",
                     cell: (item) => item.responsable,
+                    minWidth: 130,
                   },
                   {
                     id: "facultad",
                     header: "Facultad",
                     cell: (item) => item.facultad,
+                    minWidth: 110,
                   },
                 ]}
                 columnDisplay={[
@@ -142,6 +147,9 @@ export default function Registrar_proyecto_fex_4() {
                 loading={loadingData}
                 loadingText="Cargando datos"
                 wrapLines
+                onRowClick={({ detail }) =>
+                  actions.setSelectedItems([detail.item])
+                }
                 header={
                   <Header
                     variant="h3"
@@ -151,19 +159,13 @@ export default function Registrar_proyecto_fex_4() {
                           disabled={collectionProps.selectedItems.length == 0}
                           items={[
                             {
-                              id: "action_4",
-                              text: "Editar",
-                            },
-                            {
                               id: "action_5",
                               text: "Eliminar",
                             },
                           ]}
                           onItemClick={({ detail }) => {
-                            if (detail.id == "action_4") {
-                              setType("update");
-                            } else if (detail.id == "action_5") {
-                              setType("delete");
+                            if (detail.id == "action_5") {
+                              setModal("deleteMiembro");
                             }
                           }}
                         >
@@ -173,27 +175,24 @@ export default function Registrar_proyecto_fex_4() {
                           items={[
                             {
                               id: "action_1",
-                              text: "Convenio, contrato o lo que haga sus veces",
+                              text: "Docente",
                             },
                             {
                               id: "action_2",
-                              text: "Proyecto propuesto (última versión aprobada)",
+                              text: "Tesista",
                             },
                             {
                               id: "action_3",
-                              text: "Resolución rectoral (RR)",
+                              text: "Externo",
                             },
                           ]}
                           onItemClick={({ detail }) => {
                             if (detail.id == "action_1") {
-                              setDoc_tipo("D01");
-                              setType("add");
+                              setModal("addDocente");
                             } else if (detail.id == "action_2") {
-                              setDoc_tipo("D04");
-                              setType("add");
+                              setModal("addTesista");
                             } else if (detail.id == "action_3") {
-                              setDoc_tipo("D12");
-                              setType("add");
+                              setModal("addExterno");
                             }
                           }}
                         >
@@ -221,6 +220,27 @@ export default function Registrar_proyecto_fex_4() {
           },
         ]}
       />
+      {modal == "addDocente" ? (
+        <ModalAddDocente
+          close={() => setModal("")}
+          proyecto_id={id}
+          reload={getData}
+        />
+      ) : modal == "addTesista" ? (
+        <ModalAddEstudiante
+          close={() => setModal("")}
+          proyecto_id={id}
+          reload={getData}
+        />
+      ) : (
+        modal == "addExterno" && (
+          <ModalAddExterno
+            close={() => setModal("")}
+            proyecto_id={id}
+            reload={getData}
+          />
+        )
+      )}
     </BaseLayout>
   );
 }
