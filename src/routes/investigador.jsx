@@ -2,6 +2,9 @@ import { Suspense, lazy } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { NotificationProvider } from "../providers/notificationProvider.jsx";
 
+const Registro_pfex_5 = lazy(() =>
+  import("../pages/investigador/actividades/proyecto_fex/registrar/step5.jsx")
+);
 const Registro_pfex_4 = lazy(() =>
   import("../pages/investigador/actividades/proyecto_fex/registrar/step4.jsx")
 );
@@ -296,6 +299,10 @@ const routes = createBrowserRouter(
             {
               path: "paso4",
               element: <Registro_pfex_4 />,
+            },
+            {
+              path: "paso5",
+              element: <Registro_pfex_5 />,
             },
           ],
         },

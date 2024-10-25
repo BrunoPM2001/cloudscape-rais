@@ -84,7 +84,7 @@ export default function Registrar_proyecto_fex_4() {
         onNavigate={({ detail }) => handleNavigate(detail)}
         activeStepIndex={3}
         onCancel={() => {
-          window.location.href = "../proyectos_fex";
+          window.location.href = "../proyectosFex";
         }}
         steps={[
           {
@@ -217,6 +217,9 @@ export default function Registrar_proyecto_fex_4() {
                 }
               />
             ),
+          },
+          {
+            title: "Envío de propuesta",
           },
         ]}
       />

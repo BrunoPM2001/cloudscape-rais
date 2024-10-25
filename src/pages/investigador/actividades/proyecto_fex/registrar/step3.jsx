@@ -56,11 +56,8 @@ export default function Registrar_proyecto_fex_3() {
     const query = queryString.stringify({
       id,
     });
-    if (detail.requestedStepIndex > 1) {
-      window.location.href = "paso4?" + query;
-    } else {
-      window.location.href = "paso2?" + query;
-    }
+    window.location.href =
+      "paso" + (detail.requestedStepIndex + 1) + "?" + query;
   };
 
   const getData = async () => {
@@ -89,7 +86,7 @@ export default function Registrar_proyecto_fex_3() {
         onNavigate={({ detail }) => handleNavigate(detail)}
         activeStepIndex={2}
         onCancel={() => {
-          window.location.href = "../proyectos_fex";
+          window.location.href = "../proyectosFex";
         }}
         steps={[
           {

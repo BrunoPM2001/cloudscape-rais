@@ -175,7 +175,7 @@ export default function Registrar_proyecto_fex_2() {
         activeStepIndex={1}
         isLoadingNextStep={loading}
         onCancel={() => {
-          window.location.href = "../proyectos_fex";
+          window.location.href = "../proyectosFex";
         }}
         steps={[
           {
