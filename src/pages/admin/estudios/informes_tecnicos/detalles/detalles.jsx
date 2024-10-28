@@ -12,7 +12,10 @@ import {
   SpaceBetween,
   Textarea,
 } from "@cloudscape-design/components";
-import { useEffect } from "react";
+import queryString from "query-string";
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
+import axiosBase from "../../../../../api/axios";
 
 const opts = [
   { value: 0, label: "En proceso" },
@@ -28,6 +31,32 @@ export default ({
   updating,
   updateInforme,
 }) => {
+  //  Url
+  const location = useLocation();
+  const { id, tipo_proyecto, tipo_informe } = queryString.parse(
+    location.search
+  );
+
+  //  States
+  const [loadingReporte, setLoadingReporte] = useState(false);
+
+  //  Functions
+  const reporte = async () => {
+    setLoadingReporte(true);
+    const res = await axiosBase.get("admin/estudios/informesTecnicos/reporte", {
+      params: {
+        informe_tecnico_id: id,
+        tipo_informe,
+        tipo_proyecto,
+      },
+      responseType: "blob",
+    });
+    setLoadingReporte(false);
+    const blob = await res.data;
+    const url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
+  };
+
   useEffect(() => {
     handleChange(
       "estado",
@@ -40,13 +69,18 @@ export default ({
       header={
         <Header
           actions={
-            <Button
-              variant="primary"
-              loading={updating}
-              onClick={updateInforme}
-            >
-              Guardar informe
-            </Button>
+            <SpaceBetween size="xs" direction="horizontal">
+              <Button loading={loadingReporte} onClick={reporte}>
+                Reporte
+              </Button>
+              <Button
+                variant="primary"
+                loading={updating}
+                onClick={updateInforme}
+              >
+                Guardar informe
+              </Button>
+            </SpaceBetween>
           }
         >
           <SpaceBetween size="xxs" alignItems="center" direction="horizontal">

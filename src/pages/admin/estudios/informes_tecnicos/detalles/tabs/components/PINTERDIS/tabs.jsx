@@ -13,14 +13,22 @@ import Aplicacion from "./aplicacion";
 import Publicacion from "./publicacion";
 import Calendario from "./calendario";
 import Entregables from "./entregables";
+import Info from "./info";
 
 export default function Pinterdis_tabs({
+  proyecto,
+  miembros,
   formValues,
   handleChange,
   actividades,
   files,
 }) {
   const tabs = [
+    {
+      id: "info",
+      label: "Info general",
+      content: <Info proyecto={proyecto} miembros={miembros} />,
+    },
     {
       id: "resumen",
       label: "Resumen",

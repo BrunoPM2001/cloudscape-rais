@@ -260,14 +260,14 @@ export default function Registrar_proyecto_fex_3() {
           close={() => setType("")}
           reload={getData}
         />
-      ) : type == "delete" ? (
-        <ModalEliminar
-          id={collectionProps.selectedItems[0].id}
-          close={() => setType("")}
-          reload={getData}
-        />
       ) : (
-        <></>
+        type == "delete" && (
+          <ModalEliminar
+            id={collectionProps.selectedItems[0].id}
+            close={() => setType("")}
+            reload={getData}
+          />
+        )
       )}
     </BaseLayout>
   );

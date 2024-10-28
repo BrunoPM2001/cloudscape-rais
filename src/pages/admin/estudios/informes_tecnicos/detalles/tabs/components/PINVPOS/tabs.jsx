@@ -4,9 +4,20 @@ import Conclusiones from "./conclusiones";
 import Objetivos from "./objetivos";
 import Programa_taller from "./programa_taller";
 import Recomendaciones from "./recomendaciones";
+import Info from "./info";
 
-export default function Pinvpost_tabs({ formValues, handleChange }) {
+export default function Pinvpost_tabs({
+  proyecto,
+  miembros,
+  formValues,
+  handleChange,
+}) {
   const tabs = [
+    {
+      id: "info",
+      label: "Info general",
+      content: <Info proyecto={proyecto} miembros={miembros} />,
+    },
     {
       id: "objetivos",
       label: "Objetivos",

@@ -13,6 +13,8 @@ import { Ptpgrado_tabs, Ptpgrado_final_tabs } from "./components/PTPGRADO/tabs";
 import { Ptpmaest_final_tabs, Ptpmaest_tabs } from "./components/PTPMAEST/tabs";
 
 export default ({
+  proyecto,
+  miembros,
   tipo_proyecto,
   tipo_informe,
   formValues,
@@ -23,49 +25,81 @@ export default ({
   return (
     <>
       {tipo_proyecto == "PINVPOS" ? (
-        <Pinvpos_tabs formValues={formValues} handleChange={handleChange} />
+        <Pinvpos_tabs
+          proyecto={proyecto}
+          miembros={miembros}
+          formValues={formValues}
+          handleChange={handleChange}
+        />
       ) : tipo_proyecto == "PTPDOCTO" &&
         tipo_informe != "Informe académico final" ? (
-        <Ptpdocto_tabs formValues={formValues} handleChange={handleChange} />
+        <Ptpdocto_tabs
+          proyecto={proyecto}
+          miembros={miembros}
+          formValues={formValues}
+          handleChange={handleChange}
+        />
       ) : tipo_proyecto == "PTPDOCTO" &&
         tipo_informe == "Informe académico final" ? (
         <Ptpdocto_final_tabs
+          proyecto={proyecto}
+          miembros={miembros}
           formValues={formValues}
           handleChange={handleChange}
           files={files}
         />
       ) : tipo_proyecto == "PTPMAEST" &&
         tipo_informe != "Informe académico final" ? (
-        <Ptpmaest_tabs formValues={formValues} handleChange={handleChange} />
+        <Ptpmaest_tabs
+          proyecto={proyecto}
+          miembros={miembros}
+          formValues={formValues}
+          handleChange={handleChange}
+        />
       ) : tipo_proyecto == "PTPMAEST" &&
         tipo_informe == "Informe académico final" ? (
         <Ptpmaest_final_tabs
+          proyecto={proyecto}
+          miembros={miembros}
           formValues={formValues}
           handleChange={handleChange}
         />
       ) : tipo_proyecto == "PTPGRADO" &&
         tipo_informe != "Informe académico final" ? (
-        <Ptpgrado_tabs formValues={formValues} handleChange={handleChange} />
+        <Ptpgrado_tabs
+          proyecto={proyecto}
+          miembros={miembros}
+          formValues={formValues}
+          handleChange={handleChange}
+        />
       ) : tipo_proyecto == "PTPGRADO" &&
         tipo_informe == "Informe académico final" ? (
         <Ptpgrado_final_tabs
+          proyecto={proyecto}
+          miembros={miembros}
           formValues={formValues}
           handleChange={handleChange}
         />
       ) : tipo_proyecto == "ECI" ? (
         <Eci_tabs
+          proyecto={proyecto}
+          miembros={miembros}
           formValues={formValues}
           handleChange={handleChange}
           files={files}
         />
       ) : tipo_proyecto == "PCONFIGI" ? (
         <Pconfigi_tabs
+          proyecto={proyecto}
+          miembros={miembros}
           formValues={formValues}
           handleChange={handleChange}
           files={files}
         />
       ) : tipo_proyecto == "PCONFIGI-INV" ? (
         <Pconfigi_inv_tabs
+          proyecto={proyecto}
+          miembros={miembros}
           formValues={formValues}
           handleChange={handleChange}
           files={files}
@@ -74,6 +108,8 @@ export default ({
         <Pevento_tabs formValues={formValues} handleChange={handleChange} />
       ) : tipo_proyecto == "PINTERDIS" ? (
         <Pinterdis_tabs
+          proyecto={proyecto}
+          miembros={miembros}
           formValues={formValues}
           handleChange={handleChange}
           actividades={actividades}
@@ -87,18 +123,24 @@ export default ({
         />
       ) : tipo_proyecto == "PSINFINV" ? (
         <Psinfinv_tabs
+          proyecto={proyecto}
+          miembros={miembros}
           formValues={formValues}
           handleChange={handleChange}
           files={files}
         />
       ) : tipo_proyecto == "PSINFIPU" ? (
         <Psinfipu_tabs
+          proyecto={proyecto}
+          miembros={miembros}
           formValues={formValues}
           handleChange={handleChange}
           files={files}
         />
       ) : tipo_proyecto == "PTPBACHILLER" ? (
         <Ptpbachiller_tabs
+          proyecto={proyecto}
+          miembros={miembros}
           formValues={formValues}
           handleChange={handleChange}
           files={files}

@@ -1,11 +1,7 @@
 import {
   Alert,
-  Box,
   Button,
-  ButtonDropdown,
-  Header,
   SpaceBetween,
-  Table,
   Wizard,
 } from "@cloudscape-design/components";
 import { useContext, useEffect, useState } from "react";
@@ -13,10 +9,6 @@ import { useLocation } from "react-router-dom";
 import queryString from "query-string";
 import BaseLayout from "../../../components/baseLayout";
 import axiosBase from "../../../../../api/axios";
-import { useCollection } from "@cloudscape-design/collection-hooks";
-import ModalAddDocente from "./components/modalAddDocente";
-import ModalAddEstudiante from "./components/modalAddEstudiante";
-import ModalAddExterno from "./components/modalAddExterno";
 import NotificationContext from "../../../../../providers/notificationProvider";
 
 const breadcrumbs = [
@@ -95,6 +87,7 @@ export default function Registrar_proyecto_fex_5() {
         activeStepIndex={4}
         submitButtonText="Enviar"
         onSubmit={enviar}
+        isLoadingNextStep={loadingBtn}
         onCancel={() => {
           window.location.href = "../proyectosFex";
         }}

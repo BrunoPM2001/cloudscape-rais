@@ -7,9 +7,15 @@ import Problemas_identificados from "./problemas_identificados";
 import Reporte_meses from "./reporte_meses";
 import Describir from "./describir";
 import Otros from "./otros";
+import Info from "./info";
 
-const Ptpgrado_tabs = ({ formValues, handleChange }) => {
+const Ptpgrado_tabs = ({ proyecto, miembros, formValues, handleChange }) => {
   const tabs = [
+    {
+      id: "info",
+      label: "Info general",
+      content: <Info proyecto={proyecto} miembros={miembros} />,
+    },
     {
       id: "reporte_meses",
       label: "Reporte de n° de meses de avance",
@@ -75,8 +81,18 @@ const Ptpgrado_tabs = ({ formValues, handleChange }) => {
   return <Tabs tabs={tabs} />;
 };
 
-const Ptpgrado_final_tabs = ({ formValues, handleChange }) => {
+const Ptpgrado_final_tabs = ({
+  proyecto,
+  miembros,
+  formValues,
+  handleChange,
+}) => {
   const tabs = [
+    {
+      id: "info",
+      label: "Info general",
+      content: <Info proyecto={proyecto} miembros={miembros} />,
+    },
     {
       id: "describir",
       label: "Describir situación",

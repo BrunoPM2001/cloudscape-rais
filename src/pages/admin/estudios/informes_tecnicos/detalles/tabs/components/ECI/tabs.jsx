@@ -7,9 +7,21 @@ import Gestion_uso from "./gestion_uso";
 import Impacto_uso from "./impacto_uso";
 import Proceso_instalacion from "./proceso_instalacion";
 import Resumen_ejecutivo from "./resumen_ejecutivo";
+import Info from "./info";
 
-export default function Eci_tabs({ formValues, handleChange, files }) {
+export default function Eci_tabs({
+  proyecto,
+  miembros,
+  formValues,
+  handleChange,
+  files,
+}) {
   const tabs = [
+    {
+      id: "info",
+      label: "Info general",
+      content: <Info proyecto={proyecto} miembros={miembros} />,
+    },
     {
       id: "resumen",
       label: "Resumen",

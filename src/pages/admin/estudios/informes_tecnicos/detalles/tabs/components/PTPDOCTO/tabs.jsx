@@ -5,9 +5,21 @@ import Porcentaje_avance from "./porcentaje_avance";
 import Problemas_identificados from "./problemas_identificados";
 import Anexos from "./anexos";
 import Resultados from "./resultados";
+import Info from "./info";
 
-const Ptpdocto_tabs = ({ formValues, handleChange, files }) => {
+const Ptpdocto_tabs = ({
+  proyecto,
+  miembros,
+  formValues,
+  handleChange,
+  files,
+}) => {
   const tabs = [
+    {
+      id: "info",
+      label: "Info general",
+      content: <Info proyecto={proyecto} miembros={miembros} />,
+    },
     {
       id: "porcentaje",
       label: "Porcentaje estimado de avance académico",
@@ -53,8 +65,19 @@ const Ptpdocto_tabs = ({ formValues, handleChange, files }) => {
   return <Tabs tabs={tabs} />;
 };
 
-const Ptpdocto_final_tabs = ({ formValues, handleChange, files }) => {
+const Ptpdocto_final_tabs = ({
+  proyecto,
+  miembros,
+  formValues,
+  handleChange,
+  files,
+}) => {
   const tabs = [
+    {
+      id: "info",
+      label: "Info general",
+      content: <Info proyecto={proyecto} miembros={miembros} />,
+    },
     {
       id: "entregables",
       label: "Entregables",

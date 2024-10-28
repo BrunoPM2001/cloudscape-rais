@@ -2,9 +2,21 @@ import { Tabs } from "@cloudscape-design/components";
 import Aportes from "./aportes";
 import Impacto from "./impacto";
 import Anexos from "./anexos";
+import Info from "./info";
 
-export default function Psinfipu_tabs({ formValues, handleChange, files }) {
+export default function Psinfipu_tabs({
+  proyecto,
+  miembros,
+  formValues,
+  handleChange,
+  files,
+}) {
   const tabs = [
+    {
+      id: "info",
+      label: "Info general",
+      content: <Info proyecto={proyecto} miembros={miembros} />,
+    },
     {
       id: "aportes",
       label: "Aportes",

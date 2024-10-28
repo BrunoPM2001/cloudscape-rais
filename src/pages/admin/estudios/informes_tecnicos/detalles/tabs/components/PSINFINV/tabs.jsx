@@ -11,9 +11,21 @@ import Referencias from "./referencias";
 import Anexos from "./anexos";
 import Aplicacion from "./aplicacion";
 import Publicacion from "./publicacion";
+import Info from "./info";
 
-export default function Psinfinv_tabs({ formValues, handleChange, files }) {
+export default function Psinfinv_tabs({
+  proyecto,
+  miembros,
+  formValues,
+  handleChange,
+  files,
+}) {
   const tabs = [
+    {
+      id: "info",
+      label: "Info general",
+      content: <Info proyecto={proyecto} miembros={miembros} />,
+    },
     {
       id: "resumen",
       label: "Resumen",

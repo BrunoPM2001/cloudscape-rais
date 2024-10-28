@@ -34,6 +34,7 @@ export default ({ close, proyecto_id, reload }) => {
       {
         proyecto_id: proyecto_id,
         investigador_id: form.investigador_id,
+        sum_id: form.id,
         condicion: 47,
       }
     );

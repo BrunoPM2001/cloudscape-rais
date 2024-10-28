@@ -3,9 +3,21 @@ import Producto from "./producto";
 import Informe from "./informe";
 import Otros from "./otros";
 import Anexos from "./anexos";
+import Info from "./info";
 
-export default function Ptpbachiller_tabs({ formValues, handleChange, files }) {
+export default function Ptpbachiller_tabs({
+  proyecto,
+  miembros,
+  formValues,
+  handleChange,
+  files,
+}) {
   const tabs = [
+    {
+      id: "info",
+      label: "Info general",
+      content: <Info proyecto={proyecto} miembros={miembros} />,
+    },
     {
       id: "producto",
       label: "Producto de investigación",

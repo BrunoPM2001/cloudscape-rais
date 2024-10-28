@@ -83,6 +83,8 @@ export default function Detalle_informe_tecnico() {
 
   //  State
   const [data, setData] = useState({});
+  const [proyecto, setProyecto] = useState({});
+  const [miembros, setMiembros] = useState([]);
   const [urls, setUrls] = useState();
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
@@ -110,6 +112,8 @@ export default function Detalle_informe_tecnico() {
       }
     );
     const data = res.data.detalles;
+    setProyecto(res.data.proyecto);
+    setMiembros(res.data.miembros);
     setUrls(res.data.archivos);
     setActividades(res.data.actividades);
     const stateKeys = Object.keys(formValues);
@@ -198,6 +202,8 @@ export default function Detalle_informe_tecnico() {
               updateInforme={updateInforme}
             />
             <Tabs_custom
+              proyecto={proyecto}
+              miembros={miembros}
               formValues={formValues}
               handleChange={handleChange}
               tipo_proyecto={tipo_proyecto}

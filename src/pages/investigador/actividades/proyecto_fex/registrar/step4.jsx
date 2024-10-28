@@ -15,6 +15,7 @@ import { useCollection } from "@cloudscape-design/collection-hooks";
 import ModalAddDocente from "./components/modalAddDocente";
 import ModalAddEstudiante from "./components/modalAddEstudiante";
 import ModalAddExterno from "./components/modalAddExterno";
+import ModalEliminarIntegrante from "./components/modalEliminarIntegrante";
 
 const breadcrumbs = [
   {
@@ -161,6 +162,9 @@ export default function Registrar_proyecto_fex_4() {
                             {
                               id: "action_5",
                               text: "Eliminar",
+                              disabled:
+                                collectionProps.selectedItems[0]?.responsable ==
+                                "Sí",
                             },
                           ]}
                           onItemClick={({ detail }) => {
@@ -172,6 +176,7 @@ export default function Registrar_proyecto_fex_4() {
                           Acciones
                         </ButtonDropdown>
                         <ButtonDropdown
+                          variant="primary"
                           items={[
                             {
                               id: "action_1",
@@ -235,11 +240,17 @@ export default function Registrar_proyecto_fex_4() {
           proyecto_id={id}
           reload={getData}
         />
+      ) : modal == "addExterno" ? (
+        <ModalAddExterno
+          close={() => setModal("")}
+          proyecto_id={id}
+          reload={getData}
+        />
       ) : (
-        modal == "addExterno" && (
-          <ModalAddExterno
+        modal == "deleteMiembro" && (
+          <ModalEliminarIntegrante
+            id={collectionProps.selectedItems[0].id}
             close={() => setModal("")}
-            proyecto_id={id}
             reload={getData}
           />
         )

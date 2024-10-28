@@ -218,7 +218,10 @@ export default () => {
                 Ver detalles
               </Button>
               <Button
-                disabled={collectionProps.selectedItems.length == 0}
+                disabled={
+                  collectionProps.selectedItems.length == 0 ||
+                  collectionProps.selectedItems[0]?.estado != "En proceso"
+                }
                 onClick={() => {
                   const query = queryString.stringify({
                     id: collectionProps.selectedItems[0]["id"],
