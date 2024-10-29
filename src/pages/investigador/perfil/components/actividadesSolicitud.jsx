@@ -82,8 +82,13 @@ export default ({ data, antiguo }) => {
   };
 
   return (
-    <Container
-      header={
+    <Container>
+      <SpaceBetween size="m">
+        <Alert type="warning" header="Sobre los documentos cargados">
+          Recuerde que en caso de no coincidir el tipo de actividad con el
+          documento cargado se rechazará su solicitud, las publicaciones
+          cargadas solo deben ser de San Marcos.
+        </Alert>
         <Header
           variant="h3"
           description="
@@ -100,9 +105,6 @@ export default ({ data, antiguo }) => {
         >
           Actividades extras
         </Header>
-      }
-    >
-      <SpaceBetween size="m">
         <ColumnLayout columns={2}>
           <FormField label="Tipo de actividad" errorText={formErrors.opcion}>
             <Select
@@ -158,7 +160,7 @@ export default ({ data, antiguo }) => {
               }
             />
           </FormField>
-          <FormField label="Tipo de actividad" errorText={formErrors.file}>
+          <FormField label="Documento de prueba" errorText={formErrors.file}>
             <FileUpload
               value={formValues.file}
               onChange={({ detail }) => handleChange("file", detail.value)}
