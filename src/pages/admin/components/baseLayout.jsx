@@ -7,7 +7,7 @@ import {
 } from "@cloudscape-design/components";
 import Sidebar from "./sidebar";
 import Navbar from "./navbar";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { createPortal } from "react-dom";
 import NotificationContext from "../../../providers/notificationProvider";
 import Helpbar from "./helpbar";
@@ -24,9 +24,13 @@ export default function BaseLayout({
   helpInfo,
   disableOverlap = false,
   contentType = "default",
+  openHelpBar = false,
 }) {
   //  Context
   const { notifications } = useContext(NotificationContext);
+
+  //  State
+  const [openHelp, setOpenHelp] = useState(openHelpBar);
 
   return (
     <>
@@ -38,8 +42,10 @@ export default function BaseLayout({
         navigation={<Sidebar />}
         notifications={<Flashbar items={notifications} stackItems />}
         tools={<Helpbar>{helpInfo}</Helpbar>}
-        contentType={contentType}
+        toolsOpen={openHelp}
+        onToolsChange={({ detail }) => setOpenHelp((prev) => !prev)}
         headerSelector="#header"
+        contentType={contentType}
         content={
           <ContentLayout
             headerVariant="high-contrast"

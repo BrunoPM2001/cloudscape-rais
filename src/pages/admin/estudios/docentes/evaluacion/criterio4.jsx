@@ -1,12 +1,8 @@
 import {
   Badge,
   Box,
-  Button,
   Container,
   Header,
-  Icon,
-  Link,
-  Popover,
   SpaceBetween,
   Table,
 } from "@cloudscape-design/components";
@@ -22,6 +18,7 @@ export default ({ data }) => {
               {data.cumple ? "Sí cumple" : "No cumple"}
             </Badge>
           }
+          description="Necesita tener al menos una publicación con filiación UNMSM para cumplir este requisito (Art. 12 Procedimiento para ser evaluado y designado docente investigador de la UNMSM)"
         >
           D4
         </Header>

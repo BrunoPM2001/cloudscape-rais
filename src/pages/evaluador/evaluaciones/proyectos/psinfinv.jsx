@@ -1,3 +1,5 @@
+import { Button } from "@cloudscape-design/components";
+
 const rowT = {
   border: "1px solid #ddd",
   textAlign: "left",
@@ -46,31 +48,46 @@ const styles = {
   rowOdd: {
     backgroundColor: "#f2f2f2", // Color para las filas impares
   },
-
 };
 
 const Psinfinv = ({ data }) => {
-
-
   const rows = [
     { label: "Título", value: data.proyecto?.titulo || "No disponible" },
-    { label: "Grupo de Investigación", value: data.proyecto?.grupo || "No disponible" },
+    {
+      label: "Grupo de Investigación",
+      value: data.proyecto?.grupo || "No disponible",
+    },
     { label: "Área académica", value: data.proyecto?.area || "No disponible" },
-    { label: "Unidad de investigación", value: data.proyecto?.facultad || "No disponible" },
+    {
+      label: "Unidad de investigación",
+      value: data.proyecto?.facultad || "No disponible",
+    },
     { label: "Facultad", value: data.proyecto?.facultad || "No disponible" },
-    { label: "Línea de investigación", value: data.proyecto?.linea_investigacion || "No disponible" },
-    { label: "Tipo de investigación", value: data.proyecto?.linea || "-" },
-    { label: "Localización", value: data.proyecto?.localizacion || "No disponible" },
+    {
+      label: "Línea de investigación",
+      value: data.proyecto?.linea_investigacion || "No disponible",
+    },
+    {
+      label: "Tipo de investigación",
+      value: data.detalles["tipo_investigacion"] ?? "No disponible",
+    },
+    {
+      label: "Localización",
+      value: data.proyecto?.localizacion || "No disponible",
+    },
     { label: "Línea OCDE", value: data.proyecto?.ocde || "No disponible" },
   ];
 
   return (
     <div>
+      <h1 style={{ textAlign: "center" }}>
+        Proyecto de Investigación - Sin Financiamiento (PSINFINV)
+      </h1>
 
-      <h1 style={{ textAlign: "center" }}>Proyecto de Investigación - Sin Financiamiento (PSINFINV)</h1>
-
-      <hr /><br />
-      <h1>Información General</h1><br />
+      <hr />
+      <br />
+      <h1>Información General</h1>
+      <br />
 
       <div style={styles.container}>
         <table style={styles.table}>
@@ -96,22 +113,31 @@ const Psinfinv = ({ data }) => {
         </table>
       </div>
       <br />
-      <h1><b>Descripción del proyecto</b></h1><br />
-      <h2><b>A. Resumen</b></h2>
+      <h1>
+        <b>Descripción del proyecto</b>
+      </h1>
+      <br />
+      <h2>
+        <b>A. Resumen</b>
+      </h2>
       <div
         style={justifyText}
         dangerouslySetInnerHTML={{
           __html: data.detalles.resumen_ejecutivo,
         }}
       ></div>
-      <h2><b>B. Antecedentes</b></h2>
+      <h2>
+        <b>B. Antecedentes</b>
+      </h2>
       <div
         style={justifyText}
         dangerouslySetInnerHTML={{
           __html: data.detalles.antecedentes,
         }}
       ></div>
-      <h2><b>C. Objetivos</b></h2>
+      <h2>
+        <b>C. Objetivos</b>
+      </h2>
       <h4>C.1 Objetivo General</h4>
       <div
         style={justifyText}
@@ -126,35 +152,77 @@ const Psinfinv = ({ data }) => {
           __html: data.detalles.objetivos_especificos,
         }}
       ></div>
-      <h2><b>D. Justificación</b></h2>
+      <h2>
+        <b>D. Justificación</b>
+      </h2>
       <div
         style={justifyText}
         dangerouslySetInnerHTML={{
           __html: data.detalles.justificacion,
         }}
       ></div>
-      <h2><b>E. Hipotesis</b></h2>
+      <h2>
+        <b>E. Hipotesis</b>
+      </h2>
       <div
         style={justifyText}
         dangerouslySetInnerHTML={{
           __html: data.detalles.hipotesis,
         }}
       ></div>
-      <h2><b>F. Metodología de Trabajo</b></h2>
+      <h2>
+        <b>F. Metodología de Trabajo</b>
+      </h2>
       <div
         style={justifyText}
         dangerouslySetInnerHTML={{
           __html: data.detalles.metodologia_trabajo,
         }}
       ></div>
-      <h2><b>G. Propiedad Intelectual </b></h2>
-      <div
-        style={justifyText}
-        dangerouslySetInnerHTML={{
-          __html: data.detalles.propiedad_intelectual,
-        }}
-      ></div>
-      <h2><b>H. Referencias Bibliograficas </b></h2>
+      <div>
+        {data.documentos.recurso == "METODOLOGIA_TRABAJO" ? (
+          <Button
+            ariaLabel="Archivo de metodología de trabajo"
+            href={data.documentos.METODOLOGIA_TRABAJO}
+            iconAlign="right"
+            iconName="external"
+            variant="primary"
+            fontSize="body-s"
+            target="_blank"
+          >
+            Descargar archivo
+          </Button>
+        ) : (
+          <>No se cargó ningún archivo</>
+        )}
+      </div>
+      <h2>
+        <b>G. Propiedad Intelectual </b>
+      </h2>
+      <div>
+        {data.documentos.recurso == "PROPIEDAD_INTELECTUAL" ? (
+          <>
+            <Button
+              ariaLabel="Archivo de propiedad intelectual"
+              href={data.documentos.PROPIEDAD_INTELECTUAL}
+              iconAlign="right"
+              iconName="external"
+              variant="primary"
+              fontSize="body-s"
+              target="_blank"
+            >
+              Descargar archivo
+            </Button>
+          </>
+        ) : (
+          <>
+            <b>No se cargó ningún archivo</b>
+          </>
+        )}
+      </div>
+      <h2>
+        <b>H. Referencias Bibliograficas </b>
+      </h2>
       <div
         style={justifyText}
         dangerouslySetInnerHTML={{
@@ -223,7 +291,6 @@ const Psinfinv = ({ data }) => {
           </tbody>
         </table>
       </div>
-
     </div>
   );
 };

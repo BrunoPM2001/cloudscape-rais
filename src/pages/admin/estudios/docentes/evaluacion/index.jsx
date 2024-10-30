@@ -5,6 +5,7 @@ import axiosBase from "../../../../../api/axios";
 import { useLocation } from "react-router-dom";
 import queryString from "query-string";
 import {
+  Alert,
   Box,
   Grid,
   Link,
@@ -72,6 +73,11 @@ export default function Docente_investigador_evaluacion() {
       header="Docentes investigadores"
       helpInfo={
         <div>
+          <Alert>
+            Necesita tener al menos una publicación con filiación UNMSM para
+            cumplir este requisito (Art. 12 Procedimiento para ser evaluado y
+            designado docente investigador de la UNMSM)
+          </Alert>
           <h4>Respecto a los campos de filiación y filiación única en D4</h4>
           <ul>
             <li>
@@ -90,6 +96,7 @@ export default function Docente_investigador_evaluacion() {
           </ul>
         </div>
       }
+      openHelpBar={true}
     >
       <SpaceBetween size="l">
         <Detalles

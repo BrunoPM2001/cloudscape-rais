@@ -28,6 +28,7 @@ export default () => {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState({});
   const [typeModal, setTypeModal] = useState("");
+  const [visibleAlert, setVisibleAlert] = useState(true);
 
   //  Functions
   const getData = async () => {
@@ -41,6 +42,8 @@ export default () => {
   const close = () => {
     setTypeModal("");
   };
+
+  const closeAlert = () => setVisibleAlert(false);
 
   useEffect(() => {
     getData();
@@ -180,6 +183,14 @@ export default () => {
                   </Box>
                   <StatusIndicator type="pending">No evaluado</StatusIndicator>
                 </div>
+                {visibleAlert && (
+                  <Alert
+                    dismissible
+                    onDismiss={closeAlert}
+                    header="Recuerde que necesita tener al menos una publicación con
+                    filiación UNMSM para ser calificado como Docente Investigador"
+                  />
+                )}
               </SpaceBetween>
               {typeModal == "req1" ? (
                 <ModalReq1 data={data.req1} close={close} />
