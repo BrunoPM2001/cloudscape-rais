@@ -135,8 +135,8 @@ const columnDisplay = [
 export default () => {
   //  Data states
   const [loading, setLoading] = useState(true);
-  const [selectedItems, setSelectedItems] = useState([]);
   const [distributions, setDistribution] = useState([]);
+  const [loadingReporte, setLoadingReporte] = useState(false);
   const {
     items,
     actions,
@@ -166,7 +166,6 @@ export default () => {
     sorting: {},
     selection: {},
   });
-  const [enableBtn, setEnableBtn] = useState(true);
 
   //  Functions
   const getData = async () => {
@@ -177,18 +176,24 @@ export default () => {
     setLoading(false);
   };
 
+  const reporte = async () => {
+    setLoadingReporte(true);
+    const res = await axiosBase.get("investigador/grupo/reporteGrupo", {
+      params: {
+        id: collectionProps.selectedItems[0].id,
+      },
+      responseType: "blob",
+    });
+    const blob = await res.data;
+    const url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
+    setLoadingReporte(false);
+  };
+
   //  Effects
   useEffect(() => {
     getData();
   }, []);
-
-  useEffect(() => {
-    if (selectedItems.length > 0) {
-      setEnableBtn(true);
-    } else {
-      setEnableBtn(false);
-    }
-  }, [selectedItems]);
 
   return (
     <Table
@@ -202,21 +207,21 @@ export default () => {
       resizableColumns
       enableKeyboardNavigation
       selectionType="single"
-      selectedItems={selectedItems}
-      onSelectionChange={({ detail }) => setSelectedItems(detail.selectedItems)}
+      onRowClick={({ detail }) => actions.setSelectedItems([detail.item])}
       header={
         <Header
           actions={
             <ButtonDropdown
-              disabled={!enableBtn}
+              loading={loadingReporte}
+              disabled={!collectionProps.selectedItems.length}
               onItemClick={({ detail }) => {
                 if (detail.id == "action_1") {
                   const query = queryString.stringify({
-                    id: selectedItems[0]["id"],
+                    id: collectionProps.selectedItems[0]["id"],
                   });
                   window.location.href = "grupo/detalles?" + query;
                 } else if (detail.id == "action_2") {
-                  // setDeleteVisible(true);
+                  reporte();
                 }
               }}
               items={[

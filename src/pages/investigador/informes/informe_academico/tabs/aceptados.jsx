@@ -2,7 +2,6 @@ import {
   Badge,
   Box,
   Button,
-  ButtonDropdown,
   Header,
   Pagination,
   PropertyFilter,
@@ -176,10 +175,11 @@ export default () => {
   const descargar = async () => {
     setLoadingBtn(true);
     const res = await axiosBase.get(
-      "investigador/informes/informe_academico/verInforme",
+      "investigador/informes/informe_academico/reporte",
       {
         params: {
-          id: collectionProps.selectedItems[0].id,
+          informe_tecnico_id: collectionProps.selectedItems[0].id,
+          tipo_proyecto: collectionProps.selectedItems[0].tipo_proyecto,
         },
         responseType: "blob",
       }
