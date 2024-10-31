@@ -134,6 +134,16 @@ const columnDefinitions = [
     ),
     sortingField: "estado",
   },
+  {
+    id: "created_at",
+    header: "Fecha de creación",
+    cell: (item) => item.created_at,
+  },
+  {
+    id: "updated_at",
+    header: "Fecha de actualización",
+    cell: (item) => item.updated_at,
+  },
 ];
 
 const columnDisplay = [
@@ -145,6 +155,8 @@ const columnDisplay = [
   { id: "coordinador", visible: true },
   { id: "cantidad_integrantes", visible: true },
   { id: "estado", visible: true },
+  { id: "created_at", visible: true },
+  { id: "updated_at", visible: true },
 ];
 
 export default () => {
@@ -177,7 +189,12 @@ export default () => {
       ),
     },
     pagination: { pageSize: 10 },
-    sorting: {},
+    sorting: {
+      defaultState: {
+        sortingColumn: columnDefinitions[0],
+        isDescending: true,
+      },
+    },
     selection: {},
   });
 

@@ -29,7 +29,7 @@ export default ({ value1, value2, handleChange }) => {
               removeFileAriaLabel: (e) => `Eliminar archivo ${e + 1}`,
               errorIconAriaLabel: "Error",
             }}
-            accept=".jpeg, .jpg, .png,  .pdf"
+            accept=".pdf"
           />
         </FormField>
         <FormField label="Acta de sustentación" stretch>
@@ -52,7 +52,7 @@ export default ({ value1, value2, handleChange }) => {
               removeFileAriaLabel: (e) => `Eliminar archivo ${e + 1}`,
               errorIconAriaLabel: "Error",
             }}
-            accept=".jpeg, .jpg, .png,  .pdf"
+            accept=".pdf"
           />
         </FormField>
       </ColumnLayout>

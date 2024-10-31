@@ -22,7 +22,11 @@ export default () => {
   //  Data
   useEffect(() => {
     const getData = async () => {
-      const res = await axiosBase.get("admin/estudios/grupos/docs/" + id);
+      const res = await axiosBase.get("admin/estudios/grupos/docs", {
+        params: {
+          id,
+        },
+      });
       const data = await res.data;
       setItems(data.data);
       setLoading(!loading);

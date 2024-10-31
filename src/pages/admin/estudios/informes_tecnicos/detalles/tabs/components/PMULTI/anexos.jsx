@@ -26,7 +26,7 @@ export default ({ value1, handleChange }) => {
             removeFileAriaLabel: (e) => `Eliminar archivo ${e + 1}`,
             errorIconAriaLabel: "Error",
           }}
-          accept=".jpeg, .jpg, .png,  .pdf"
+          accept=".pdf"
         />
       </FormField>
     </Container>

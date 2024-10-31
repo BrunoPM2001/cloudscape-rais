@@ -8,6 +8,7 @@ import {
   Pagination,
   FormField,
   Select,
+  Link,
 } from "@cloudscape-design/components";
 import { useCollection } from "@cloudscape-design/collection-hooks";
 import { useEffect, useState } from "react";
@@ -71,30 +72,50 @@ const columnDefinitions = [
     header: "Documento de identidad",
     cell: (item) => item.doc_numero,
     sortingField: "doc_numero",
+    minWidth: 150,
   },
   {
     id: "nombres",
     header: "Nombres",
     cell: (item) => item.nombres,
     sortingField: "nombres",
+    minWidth: 220,
   },
   {
     id: "codigo_orcid",
     header: "Código orcid",
-    cell: (item) => item.codigo_orcid,
+    cell: (item) => (
+      <Link href={`https://orcid.org/${item.codigo_orcid}`} target="_blank">
+        {item.codigo_orcid}
+      </Link>
+    ),
     sortingField: "codigo_orcid",
+    minWidth: 200,
   },
   {
     id: "google_scholar",
     header: "Google Scholar",
-    cell: (item) => item.google_scholar,
+    cell: (item) => (
+      <Link href={item.google_scholar} target="_blank">
+        {item.google_scholar}
+      </Link>
+    ),
     sortingField: "google_scholar",
+    minWidth: 200,
   },
   {
     id: "cti_vitae",
     header: "CTI Vitae",
-    cell: (item) => item.cti_vitae,
+    cell: (item) => (
+      <Link
+        href={`https://ctivitae.concytec.gob.pe/appDirectorioCTI/VerDatosInvestigador.do?id_investigador=${item.cti_vitae}`}
+        target="_blank"
+      >
+        {item.cti_vitae}
+      </Link>
+    ),
     sortingField: "cti_vitae",
+    minWidth: 120,
   },
   {
     id: "tipo",
@@ -119,6 +140,7 @@ const columnDefinitions = [
     header: "Proyectos en ejecución",
     cell: (item) => item.proyectos,
     sortingField: "proyectos",
+    minWidth: 150,
   },
   {
     id: "fecha_inclusion",
@@ -181,7 +203,7 @@ export default ({ grupo_estado }) => {
       ),
     },
     pagination: { pageSize: 10 },
-    sorting: { defaultState: { sortingColumn: columnDefinitions[0] } },
+    sorting: {},
     selection: {},
   });
   const [typeModal, setTypeModal] = useState("");
@@ -220,9 +242,9 @@ export default ({ grupo_estado }) => {
         columnDisplay={columnDisplay}
         loading={loading}
         loadingText="Cargando datos"
-        resizableColumns
         enableKeyboardNavigation
         selectionType="single"
+        wrapLines
         onRowClick={({ detail }) => actions.setSelectedItems([detail.item])}
         empty={
           <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
@@ -401,6 +423,7 @@ export default ({ grupo_estado }) => {
             visible={incluirVisible}
             setVisible={setIncluirVisible}
             id={collectionProps.selectedItems[0].id}
+            tipo={collectionProps.selectedItems[0].condicion}
           />
         ) : typeModal == "Condicion" ? (
           <ModalCambiarCondicion

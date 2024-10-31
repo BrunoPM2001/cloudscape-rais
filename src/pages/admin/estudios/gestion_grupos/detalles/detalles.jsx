@@ -1,4 +1,5 @@
 import {
+  Badge,
   Box,
   Button,
   ButtonDropdown,
@@ -77,7 +78,11 @@ export default ({ data, loading, grupo_id, reload }) => {
             </SpaceBetween>
           }
         >
-          Detalles del grupo
+          <SpaceBetween size="xs" alignItems="center" direction="horizontal">
+            <Box variant="h1">Detalles del grupo</Box>
+            <Badge color="green">{grupo_id}</Badge>
+            <Badge color="blue">{data.grupo_nombre_corto}</Badge>
+          </SpaceBetween>
         </Header>
       }
     >

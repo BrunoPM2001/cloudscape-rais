@@ -14,6 +14,7 @@ import { useState, useEffect } from "react";
 import { useCollection } from "@cloudscape-design/collection-hooks";
 import axiosBase from "../../../../../api/axios";
 import queryString from "query-string";
+import ModalAudit from "../components/modalAudit";
 
 const stringOperators = [":", "!:", "=", "!=", "^", "!^"];
 
@@ -171,6 +172,7 @@ export default () => {
   const [informes, setInformes] = useState([]);
   const [distributions, setDistribution] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
+  const [modal, setModal] = useState("");
   const {
     items,
     actions,
@@ -306,6 +308,11 @@ export default () => {
       <Table
         columnDefinitions={[
           {
+            id: "id",
+            header: "Id",
+            cell: (item) => item.id,
+          },
+          {
             id: "informe",
             header: "Informe",
             cell: (item) => item.informe,
@@ -352,6 +359,7 @@ export default () => {
           },
         ]}
         columnDisplay={[
+          { id: "id", visible: true },
           { id: "informe", visible: true },
           { id: "fecha_envio", visible: true },
           { id: "estado", visible: true },
@@ -380,7 +388,13 @@ export default () => {
         header={
           <Header
             actions={
-              <SpaceBetween size="s">
+              <SpaceBetween size="xs" direction="horizontal">
+                <Button
+                  disabled={selectedItems.length == 0}
+                  onClick={() => setModal("audit")}
+                >
+                  Ver auditoría
+                </Button>
                 <Button
                   variant="primary"
                   disabled={selectedItems.length == 0}
@@ -403,6 +417,9 @@ export default () => {
           </Header>
         }
       />
+      {modal == "audit" && (
+        <ModalAudit close={() => setModal("")} id={selectedItems[0].id} />
+      )}
     </SpaceBetween>
   );
 };
