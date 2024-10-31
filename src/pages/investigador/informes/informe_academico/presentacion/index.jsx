@@ -14,6 +14,7 @@ import Ptpbachiller from "./components/ptpbachiller";
 import Ptpdocto1 from "./components/ptpdocto1";
 import Ptpdocto2 from "./components/ptpdocto2";
 import Ptpdocto3 from "./components/ptpdocto3";
+import Proctie from "./components/proctie";
 
 const breadcrumbs = [
   {
@@ -72,8 +73,10 @@ export default function Presentar_informe() {
             informe == "Informe académico final" && <Ptpdocto3 />
           )}
         </>
+      ) : tipo_proyecto == "PMULTI" ? (
+        <Pmulti />
       ) : (
-        tipo_proyecto == "PMULTI" && <Pmulti />
+        tipo_proyecto == "PRO-CTIE" && <Proctie />
       )}
     </BaseLayout>
   );
