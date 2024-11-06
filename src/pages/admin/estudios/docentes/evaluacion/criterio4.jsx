@@ -1,4 +1,5 @@
 import {
+  Alert,
   Badge,
   Box,
   Container,
@@ -24,6 +25,29 @@ export default ({ data }) => {
         </Header>
       }
     >
+      <Alert
+        dismissible
+        statusIconAriaLabel="Info"
+        header="Articulo 12° Procedimientos para ser evaluado y designado docente investigador de la UNMSM"
+      >
+        <ul style={{ paddingLeft: "16px", margin: 0 }}>
+          b) El VRIP realizará la evaluación de las actividades de investigación
+          de los docentes con base en la información registrada en el RAIS
+          <a
+            href="https://vrip.unmsm.edu.pe/wp-content/uploads/2024/07/RR_009077-2024-R.pdf"
+            target="_blank"
+          >
+            {" "}
+            (Descargar Directiva)
+          </a>
+        </ul>
+        <ul style={{ paddingLeft: "16px", margin: 0 }}>
+          <li>
+            Todas las publicaciones deben tener Filiación UNMSM. En caso
+            contrario la solicitud debe ser <b>OBSERVADA</b>.
+          </li>
+        </ul>
+      </Alert>
       <Table
         variant="embedded"
         wrapLines

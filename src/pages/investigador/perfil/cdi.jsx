@@ -10,6 +10,7 @@ import {
   SpaceBetween,
   StatusIndicator,
   Badge,
+  Popover,
 } from "@cloudscape-design/components";
 import axiosBase from "../../../api/axios";
 import { useEffect, useState } from "react";
@@ -129,6 +130,28 @@ export default () => {
           ) : data.estado == 2 ? (
             <>
               <SpaceBetween size="s">
+                <Alert
+                  dismissible
+                  statusIconAriaLabel="Info"
+                  header="Información Sobre Publicaciones con Filiación"
+                >
+                  <ul style={{ paddingLeft: "16px", margin: 0 }}>
+                    <li>
+                      Todas las publicaciones deben tener Filiación UNMSM. En
+                      caso contrario su solicitud será OBSERVADA.
+                    </li>
+                    <li>
+                      Debe eliminar sus publicaciones sin Filiación UNMSM de su
+                      perfil RAIS.
+                    </li>
+                  </ul>
+                  <Link
+                    href="https://vrip.unmsm.edu.pe/wp-content/uploads/2024/07/RR_009077-2024-R.pdf"
+                    target="_blank"
+                  >
+                    Ver Directiva ( Art 12° b) )
+                  </Link>
+                </Alert>
                 <div>
                   <Box variant="awsui-key-label">
                     Renacyt{" "}
@@ -153,6 +176,35 @@ export default () => {
                     <Link variant="info" onClick={() => setTypeModal("req3")}>
                       Info
                     </Link>
+                    <br />
+                    <Popover
+                      header="Información sobre Publicaciones con Filiación: "
+                      content={
+                        <Box variant="awsui-key-label" margin="s">
+                          <ul style={{ paddingLeft: "16px", margin: 0 }}>
+                            <li>
+                              Todas las publicaciones deben tener Filiación
+                              UNMSM. En caso contrario su solicitud será
+                              OBSERVADA.
+                            </li>
+                            <li>
+                              Debe eliminar publicaciones sin Filiación UNMSM de
+                              su perfil RAIS.
+                            </li>
+                          </ul>
+                          <Link
+                            href="https://vrip.unmsm.edu.pe/wp-content/uploads/2024/07/RR_009077-2024-R.pdf"
+                            target="_blank"
+                          >
+                            Ver Directiva ( Art 12° b) )
+                          </Link>
+                        </Box>
+                      }
+                    >
+                      <Box style={{ display: "inline-block" }}>
+                        <StatusIndicator type="info" /> Click aqui
+                      </Box>
+                    </Popover>
                   </Box>
                   <StatusIndicator type="pending">No evaluado</StatusIndicator>
                 </div>
@@ -218,6 +270,28 @@ export default () => {
           ) : data.estado == 3 ? (
             <>
               <SpaceBetween size="s">
+                <Alert
+                  dismissible
+                  statusIconAriaLabel="Info"
+                  header="Información Sobre Publicaciones con Filiación:"
+                >
+                  <ul style={{ paddingLeft: "16px", margin: 0 }}>
+                    <li>
+                      Todas las publicaciones deben tener Filiación UNMSM. En
+                      caso contrario su solicitud será OBSERVADA.
+                    </li>
+                    <li>
+                      Debe eliminar sus publicaciones sin Filiación UNMSM de su
+                      perfil RAIS.
+                    </li>
+                  </ul>
+                  <Link
+                    href="https://vrip.unmsm.edu.pe/wp-content/uploads/2024/07/RR_009077-2024-R.pdf"
+                    target="_blank"
+                  >
+                    Ver Directiva ( Art 12° b) )
+                  </Link>
+                </Alert>
                 <div>
                   <Box variant="awsui-key-label">
                     Renacyt{" "}
@@ -263,11 +337,54 @@ export default () => {
                     <Link variant="info" onClick={() => setTypeModal("req4")}>
                       Info
                     </Link>
+                    <br />
+                    <Popover
+                      header="Información sobre Publicaciones con Filiación: "
+                      content={
+                        <Box variant="awsui-key-label" margin="s">
+                          <ul style={{ paddingLeft: "16px", margin: 0 }}>
+                            <li>
+                              Todas las publicaciones deben tener Filiación
+                              UNMSM. En caso contrario su solicitud será
+                              OBSERVADA.
+                            </li>
+                            <li>
+                              Debe eliminar publicaciones sin Filiación UNMSM de
+                              su perfil RAIS.
+                            </li>
+                          </ul>
+                          <Link
+                            href="https://vrip.unmsm.edu.pe/wp-content/uploads/2024/07/RR_009077-2024-R.pdf"
+                            target="_blank"
+                          >
+                            Ver Directiva ( Art 12° b) )
+                          </Link>
+                        </Box>
+                      }
+                    >
+                      <Box style={{ display: "inline-block" }}>
+                        <StatusIndicator type="info" /> Click aqui
+                      </Box>
+                    </Popover>
                   </Box>
                   <StatusIndicator
-                    type={data.solicitud.d4.cumple > 0 ? "success" : "error"}
+                    type={
+                      data.solicitud.d4.cumple > 0 &&
+                      data.solicitud.d4.evaluacion > 0
+                        ? "warning"
+                        : data.solicitud.d4.cumple > 0 &&
+                          data.solicitud.d4.evaluacion === 0
+                        ? "success"
+                        : "error"
+                    }
                   >
-                    {data.solicitud.d4.cumple > 0 ? "Sí cumple" : "No cumple"}
+                    {data.solicitud.d4.cumple > 0 &&
+                    data.solicitud.d4.evaluacion > 0
+                      ? "En evaluación"
+                      : data.solicitud.d4.cumple > 0 &&
+                        data.solicitud.d4.evaluacion === 0
+                      ? "Cumple"
+                      : "No cumple"}
                   </StatusIndicator>
                 </div>
                 <div>

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosBase = axios.create({
-  baseURL: "http://localhost:8000/api/",
+  baseURL: "/api/",
 });
 
 //  Token requests
@@ -20,8 +20,6 @@ axiosBase.interceptors.response.use(
         window.location.href = "/";
         console.error("Unauthorized");
       } else if (error.response.status === 404) {
-        // localStorage.clear();
-        // window.location.href = "/";
         console.error("Server error");
       }
     } else if (error.request) {

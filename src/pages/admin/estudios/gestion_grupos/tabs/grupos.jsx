@@ -85,6 +85,7 @@ const columnDefinitions = [
     header: "Nombre de grupo",
     cell: (item) => item.grupo_nombre,
     sortingField: "grupo_nombre",
+    minWidth: 250,
   },
   {
     id: "grupo_nombre_corto",
@@ -103,12 +104,14 @@ const columnDefinitions = [
     header: "Facultad",
     cell: (item) => item.facultad,
     sortingField: "facultad",
+    minWidth: 200,
   },
   {
     id: "coordinador",
     header: "Coordinador",
     cell: (item) => item.coordinador,
     sortingField: "coordinador",
+    minWidth: 250,
   },
   {
     id: "cantidad_integrantes",
@@ -121,6 +124,7 @@ const columnDefinitions = [
     header: "R.R.",
     cell: (item) => item.resolucion_rectoral,
     sortingField: "resolucion_rectoral",
+    minWidth: 150,
   },
   {
     id: "estado",
@@ -148,11 +152,13 @@ const columnDefinitions = [
     id: "created_at",
     header: "Fecha de creación",
     cell: (item) => item.created_at,
+    minWidth: 130,
   },
   {
     id: "updated_at",
     header: "Fecha de actualización",
     cell: (item) => item.updated_at,
+    minWidth: 130,
   },
 ];
 
@@ -232,7 +238,7 @@ export default () => {
       columnDisplay={columnDisplay}
       loading={loading}
       loadingText="Cargando datos"
-      resizableColumns
+      wrapLines
       enableKeyboardNavigation
       selectionType="single"
       onRowClick={({ detail }) => actions.setSelectedItems([detail.item])}

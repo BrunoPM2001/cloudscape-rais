@@ -1,4 +1,5 @@
 import { Button } from "@cloudscape-design/components";
+
 const rowT = {
   border: "1px solid #ddd",
   textAlign: "left",
@@ -67,7 +68,6 @@ const Psinfipu = ({ data }) => {
     { label: "Localización", value: data.proyecto?.localizacion || "-" },
     { label: "Línea OCDE", value: data.proyecto?.ocde || "-" },
   ];
-
   const descripcion = [
     {
       label: " Responsable de la investigación previa",
@@ -79,7 +79,10 @@ const Psinfipu = ({ data }) => {
     },
     { label: " ORCID", value: data.responsable?.codigo_orcid || "-" },
     { label: " SCOPUS", value: data.responsable?.scopus_id || "-" },
-    { label: " GOOGLE SCOLAR", value: data.responsable?.google_scholar || "-" },
+    {
+      label: " GOOGLE SCHOLAR",
+      value: data.responsable?.google_scholar || "-",
+    },
     {
       label: " Editorial o revista en la que se publicará",
       value: data.detalles["publicacion_editorial"] ?? "-",
@@ -168,7 +171,21 @@ const Psinfipu = ({ data }) => {
                 <td style={styles.td}>
                   <strong>{row.label}</strong>
                 </td>
-                <td style={styles.td}>: {row.value}</td>
+                <td style={styles.td}>
+                  :{" "}
+                  {row.label === "GOOGLE SCHOLAR" ? (
+                    <a
+                      href={row.value}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ color: "blue", textDecoration: "underline" }}
+                    >
+                      {row.value}
+                    </a>
+                  ) : (
+                    row.value
+                  )}
+                </td>
               </tr>
             ))}
           </tbody>
@@ -188,18 +205,6 @@ const Psinfipu = ({ data }) => {
             </tr>
           </thead>
           <tbody>
-            {/* {investigación_base.map((row, index) => (
-                            <tr
-                                key={index}
-                                style={index % 2 === 0 ? styles.rowEven : styles.rowOdd}
-                            >
-                                <td style={styles.td}>
-                                    <strong>{row.label}</strong>
-                                </td>
-                                <td style={styles.td}>: {row.value}</td>
-                            </tr>
-                        ))} */}
-
             <tr>
               <td style={styles.td}>
                 <strong>Tesis maestria</strong>
@@ -226,6 +231,7 @@ const Psinfipu = ({ data }) => {
                 )}
               </td>
             </tr>
+            {/* Tesis Doctorado */}
             <tr>
               <td style={styles.td}>
                 <strong>Tesis Doctorado</strong>
@@ -249,6 +255,34 @@ const Psinfipu = ({ data }) => {
                   </>
                 ) : (
                   <>No se cargó ningún archivo</>
+                )}
+              </td>
+            </tr>
+            {/* Investigacion UNMSM*/}
+            <tr>
+              <td style={styles.td}>
+                <strong>Investigación UNMSM</strong>
+              </td>
+              <td style={styles.td}>
+                {data.investigacion ? (
+                  <>
+                    : {data.investigacion.codigo_proyecto ?? "-"} -{" "}
+                    {data.investigacion.tipo_proyecto ?? "-"} -{" "}
+                    {data.investigacion.titulo ?? "-"}
+                    <Button
+                      ariaLabel="Investigación UNMSM"
+                      href={data.investigacion.codigo_proyecto}
+                      iconAlign="right"
+                      iconName="external"
+                      variant="primary"
+                      fontSize="body-s"
+                      target="_blank"
+                    >
+                      (Click para Ver)
+                    </Button>
+                  </>
+                ) : (
+                  <>No se vinculó a ningún proyecto</>
                 )}
               </td>
             </tr>
@@ -299,6 +333,7 @@ const Psinfipu = ({ data }) => {
               <th style={styles.rowT}>Tipo integrante en el grupo</th>
               <th style={styles.rowT}>Tipo Tesis</th>
               <th style={styles.rowT}>Titulo Tesis</th>
+              <th style={styles.rowT}>Deudas</th>
             </tr>
           </thead>
           <tbody>
@@ -314,6 +349,19 @@ const Psinfipu = ({ data }) => {
                 <td style={styles.td}>{item.tipo_integrante_grupo}</td>
                 <td style={styles.td}>{item.tipo_tesis}</td>
                 <td style={styles.td}>{item.titulo_tesis}</td>
+                <td style={{ ...styles.td, textAlign: "center" }}>
+                  {item.deudas.length > 0 ? (
+                    item.deudas.map((deuda, deudaIndex) => (
+                      <div key={deudaIndex} style={{ marginBottom: "4px" }}>
+                        <span>
+                          {deuda.pcodigo ?? ""} - {deuda.categoria ?? ""}
+                        </span>
+                      </div>
+                    ))
+                  ) : (
+                    <span>No</span>
+                  )}
+                </td>
               </tr>
             ))}
           </tbody>

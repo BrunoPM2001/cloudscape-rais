@@ -245,6 +245,30 @@ export default ({ data, loading, proyecto_id, reload }) => {
               </div>
             )}
           </div>
+          <div>
+            <Box variant="awsui-key-label">Proyecto asosiado</Box>
+            {loading ? (
+              <Spinner />
+            ) : (
+              <div>
+                {data.url3 != null ? (
+                  <>
+                    <Link
+                      href={data.url3}
+                      external="true"
+                      variant="primary"
+                      fontSize="body-s"
+                      target="_blank"
+                    >
+                      Ir a ver el proyecto
+                    </Link>
+                  </>
+                ) : (
+                  <>No se asoció a ningún proyecto antiguo</>
+                )}
+              </div>
+            )}
+          </div>
         </SpaceBetween>
         <SpaceBetween size="s">
           <div>
