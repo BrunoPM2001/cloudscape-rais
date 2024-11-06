@@ -145,10 +145,10 @@ export default function Docente_investigador_evaluacion() {
               <Tramite id={id} data={data.detalles} reload={getData} />
             ) : data.detalles.estado == "Pendiente" ? (
               <Constancia id={id} data={data.detalles} reload={getData} />
-            ) : data.detalles.estado == "Aprobado" ? (
-              <Aprobado id={id} data={data.detalles} />
             ) : (
-              <></>
+              data.detalles.estado == "Vigente" && (
+                <Aprobado id={id} data={data.detalles} />
+              )
             )}
           </SpaceBetween>
         )}

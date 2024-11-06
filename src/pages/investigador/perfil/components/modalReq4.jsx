@@ -52,7 +52,7 @@ export default ({ data, close }) => {
             {
               id: "filiacion",
               header: "Filiación UNMSM",
-              cell: (item) => item.filiacion,
+              cell: (item) => (item.filiacion == 0 ? "No" : "Sí"),
             },
           ]}
           columnDisplay={[
