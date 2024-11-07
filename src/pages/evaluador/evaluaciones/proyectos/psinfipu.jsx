@@ -1,4 +1,5 @@
 import { Button } from "@cloudscape-design/components";
+import axiosBase from "../../../../api/axios";
 
 const rowT = {
   border: "1px solid #ddd",
@@ -268,17 +269,25 @@ const Psinfipu = ({ data }) => {
                   <>
                     : {data.investigacion.codigo_proyecto ?? "-"} -{" "}
                     {data.investigacion.tipo_proyecto ?? "-"} -{" "}
-                    {data.investigacion.titulo ?? "-"}
+                    {data.investigacion.titulo ?? "-"} -{" "}
                     <Button
-                      ariaLabel="Investigación UNMSM"
-                      href={data.investigacion.codigo_proyecto}
-                      iconAlign="right"
-                      iconName="external"
                       variant="primary"
-                      fontSize="body-s"
-                      target="_blank"
+                      onClick={async () => {
+                        const res = await axiosBase.get(
+                          "evaluador/evaluaciones/reportePasado",
+                          {
+                            params: {
+                              proyecto_id: data.investigacion.proyecto_id,
+                            },
+                            responseType: "blob",
+                          }
+                        );
+                        const blob = await res.data;
+                        const url = URL.createObjectURL(blob);
+                        window.open(url, "_blank");
+                      }}
                     >
-                      (Click para Ver)
+                      (Ver reporte)
                     </Button>
                   </>
                 ) : (
