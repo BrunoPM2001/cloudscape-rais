@@ -13,7 +13,7 @@ import ProyectosIntegrante from "./tabs/proyectosIntegrante";
 import Incluido from "./tabs/incluido";
 import Informacion_adherente from "./tabs/informacion_adherente";
 
-export default ({ visible, setVisible, id, tipo }) => {
+export default ({ close, id, tipo }) => {
   //  States
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState({
@@ -39,9 +39,9 @@ export default ({ visible, setVisible, id, tipo }) => {
 
   return (
     <Modal
-      onDismiss={() => setVisible(false)}
-      visible={visible}
+      visible
       size="large"
+      onDismiss={close}
       header={
         <Header description="Información general del integrante y proyectos en los que ha participado siendo miembro del grupo">
           Información del integrante de grupo

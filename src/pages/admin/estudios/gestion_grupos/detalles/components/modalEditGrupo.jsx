@@ -93,7 +93,7 @@ const formRules = {
   web: { required: false },
 };
 
-export default ({ visible, setVisible, item, grupo_id, reload }) => {
+export default ({ close, item, grupo_id, reload }) => {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
 
@@ -128,7 +128,7 @@ export default ({ visible, setVisible, item, grupo_id, reload }) => {
       pushNotification(data.detail, data.message, notifications.length + 1);
       reload();
       setLoading(false);
-      setVisible(false);
+      close();
     }
   };
 
@@ -150,13 +150,13 @@ export default ({ visible, setVisible, item, grupo_id, reload }) => {
 
   return (
     <Modal
-      onDismiss={() => setVisible(false)}
-      visible={visible}
+      visible
       size="large"
+      onDismiss={close}
       footer={
         <Box float="right">
           <SpaceBetween direction="horizontal" size="xs">
-            <Button variant="normal" onClick={() => setVisible(false)}>
+            <Button variant="normal" onClick={close}>
               Cancelar
             </Button>
             <Button variant="primary" loading={loading} onClick={editarGrupo}>

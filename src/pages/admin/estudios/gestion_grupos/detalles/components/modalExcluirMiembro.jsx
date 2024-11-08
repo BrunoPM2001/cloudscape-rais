@@ -61,7 +61,7 @@ export default ({ visible, setVisible, item, reload }) => {
       );
       const data = await response.data;
       setLoading(false);
-      setVisible(false);
+      close();
       pushNotification(data.detail, data.message, notifications.length + 1);
       reload();
     }
@@ -69,13 +69,13 @@ export default ({ visible, setVisible, item, reload }) => {
 
   return (
     <Modal
-      onDismiss={() => setVisible(false)}
-      visible={visible}
+      visible
       size="large"
+      onDismiss={close}
       footer={
         <Box float="right">
           <SpaceBetween direction="horizontal" size="xs">
-            <Button variant="normal" onClick={() => setVisible(false)}>
+            <Button variant="normal" onClick={close}>
               Cancelar
             </Button>
             <Button

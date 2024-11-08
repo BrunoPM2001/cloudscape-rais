@@ -12,7 +12,7 @@ import NotificationContext from "../../../../../../providers/notificationProvide
 import axiosBase from "../../../../../../api/axios";
 import { useFormValidation } from "../../../../../../hooks/useFormValidation";
 
-export default ({ visible, setVisible, reload, id, current, nombres }) => {
+export default ({ close, reload, id, current, nombres }) => {
   //  Constantes
   const initialForm = {
     condicion: { value: current },
@@ -45,19 +45,19 @@ export default ({ visible, setVisible, reload, id, current, nombres }) => {
       pushNotification(data.detail, data.message, notifications.length + 1);
       reload();
       setLoading(false);
-      setVisible(false);
+      close();
     }
   };
 
   return (
     <Modal
-      onDismiss={() => setVisible(false)}
-      visible={visible}
+      visible
+      onDismiss={close}
       size="medium"
       footer={
         <Box float="right">
           <SpaceBetween direction="horizontal" size="xs">
-            <Button variant="normal" onClick={() => setVisible(false)}>
+            <Button variant="normal" onClick={close}>
               Cancelar
             </Button>
             <Button

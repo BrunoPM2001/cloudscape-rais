@@ -21,7 +21,7 @@ const formRules = {
   grupo_categoria: { required: true },
 };
 
-export default ({ visible, setVisible, grupo_id }) => {
+export default ({ close, grupo_id }) => {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
 
@@ -45,20 +45,20 @@ export default ({ visible, setVisible, grupo_id }) => {
       const data = res.data;
       pushNotification(data.detail, data.message, notifications.length + 1);
       setLoading(false);
-      setVisible(false);
+      close();
       setTimeout(() => (window.location.href = "../grupos"), 5000);
     }
   };
 
   return (
     <Modal
-      onDismiss={() => setVisible(false)}
-      visible={visible}
+      visible
+      onDismiss={close}
       size="medium"
       footer={
         <Box float="right">
           <SpaceBetween direction="horizontal" size="xs">
-            <Button variant="normal" onClick={() => setVisible(false)}>
+            <Button variant="normal" onClick={close}>
               Cancelar
             </Button>
             <Button

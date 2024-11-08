@@ -69,7 +69,7 @@ const formRules = {
   file: { required: true, isFile: true, maxSize: 2 * 1024 * 1024 },
 };
 
-export default ({ visible, setVisible, reload }) => {
+export default ({ close, reload }) => {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
 
@@ -125,21 +125,21 @@ export default ({ visible, setVisible, reload }) => {
       );
       const data = res.data;
       setLoadingCreate(false);
-      setVisible(false);
       reload();
+      close();
       pushNotification(data.detail, data.message, notifications.length + 1);
     }
   };
 
   return (
     <Modal
-      onDismiss={() => setVisible(false)}
-      visible={visible}
+      visible
+      onDismiss={close}
       size="large"
       footer={
         <Box float="right">
           <SpaceBetween direction="horizontal" size="xs">
-            <Button variant="normal" onClick={() => setVisible(false)}>
+            <Button variant="normal" onClick={close}>
               Cancelar
             </Button>
             <Button

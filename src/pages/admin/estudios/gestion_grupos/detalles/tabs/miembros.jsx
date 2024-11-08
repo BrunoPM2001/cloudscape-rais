@@ -23,6 +23,8 @@ import ModalExcluirMiembro from "../components/modalExcluirMiembro";
 import ModalInformacionMiembro from "../components/modalInformacionMiembro";
 import ModalCambiarCargo from "../components/modalCambiarCargo";
 import ModalCambiarCondicion from "../components/modalCambiarCondicion";
+import ModalEditarTitular from "../components/modalEditarTitular";
+import ModalEditarAdherenteInterno from "../components/modalEditarAdherenteInterno";
 
 const stringOperators = [":", "!:", "=", "!=", "^", "!^"];
 
@@ -174,7 +176,6 @@ const columnDisplay = [
 
 export default ({ grupo_estado }) => {
   //  Data state
-  const [incluirVisible, setIncluirVisible] = useState(false);
   const [loading, setLoading] = useState(true);
   const [distributions, setDistribution] = useState([]);
   const {
@@ -206,7 +207,7 @@ export default ({ grupo_estado }) => {
     sorting: {},
     selection: {},
   });
-  const [typeModal, setTypeModal] = useState("");
+  const [modal, setModal] = useState("");
   const [tipoMiembros, setTipoMiembros] = useState({
     label: "Integrantes",
     value: 1,
@@ -311,17 +312,13 @@ export default ({ grupo_estado }) => {
                   ]}
                   onItemClick={({ detail }) => {
                     if (detail.id == "action_1_1") {
-                      setIncluirVisible(true);
-                      setTypeModal("Titular");
+                      setModal("Titular");
                     } else if (detail.id == "action_1_2_1") {
-                      setIncluirVisible(true);
-                      setTypeModal("Externo");
+                      setModal("Externo");
                     } else if (detail.id == "action_1_2_2") {
-                      setIncluirVisible(true);
-                      setTypeModal("Estudiante");
+                      setModal("Estudiante");
                     } else if (detail.id == "action_1_2_3") {
-                      setIncluirVisible(true);
-                      setTypeModal("Egresado");
+                      setModal("Egresado");
                     }
                   }}
                 >
@@ -334,6 +331,10 @@ export default ({ grupo_estado }) => {
                   }
                   variant="primary"
                   items={[
+                    {
+                      text: "Editar",
+                      id: "action_2_0",
+                    },
                     {
                       text: "Excluir",
                       id: "action_2_1",
@@ -361,18 +362,16 @@ export default ({ grupo_estado }) => {
                     },
                   ]}
                   onItemClick={({ detail }) => {
-                    if (detail.id == "action_2_1") {
-                      setIncluirVisible(true);
-                      setTypeModal("Excluir");
+                    if (detail.id == "action_2_0") {
+                      setModal("Editar");
+                    } else if (detail.id == "action_2_1") {
+                      setModal("Excluir");
                     } else if (detail.id == "action_2_2") {
-                      setIncluirVisible(true);
-                      setTypeModal("Visualizar");
+                      setModal("Visualizar");
                     } else if (detail.id == "action_2_3") {
-                      setIncluirVisible(true);
-                      setTypeModal("Condicion");
+                      setModal("Condicion");
                     } else if (detail.id == "action_2_4") {
-                      setIncluirVisible(true);
-                      setTypeModal("Cargo");
+                      setModal("Cargo");
                     }
                   }}
                 >
@@ -386,64 +385,62 @@ export default ({ grupo_estado }) => {
         }
         pagination={<Pagination {...paginationProps} />}
       />
-      {incluirVisible &&
-        (typeModal == "Titular" ? (
-          <ModalIncluirTitular
-            visible={incluirVisible}
-            setVisible={setIncluirVisible}
-            reload={getData}
-          />
-        ) : typeModal == "Externo" ? (
-          <ModalIncluirExterno
-            visible={incluirVisible}
-            setVisible={setIncluirVisible}
-            reload={getData}
-          />
-        ) : typeModal == "Estudiante" ? (
-          <ModalIncluirEstudiante
-            visible={incluirVisible}
-            setVisible={setIncluirVisible}
-            reload={getData}
-          />
-        ) : typeModal == "Egresado" ? (
-          <ModalIncluirEgresado
-            visible={incluirVisible}
-            setVisible={setIncluirVisible}
-            reload={getData}
-          />
-        ) : typeModal == "Excluir" ? (
-          <ModalExcluirMiembro
-            visible={incluirVisible}
-            setVisible={setIncluirVisible}
-            reload={getData}
-            item={collectionProps.selectedItems}
-          />
-        ) : typeModal == "Visualizar" ? (
-          <ModalInformacionMiembro
-            visible={incluirVisible}
-            setVisible={setIncluirVisible}
-            id={collectionProps.selectedItems[0].id}
-            tipo={collectionProps.selectedItems[0].condicion}
-          />
-        ) : typeModal == "Condicion" ? (
-          <ModalCambiarCondicion
-            visible={incluirVisible}
-            setVisible={setIncluirVisible}
-            reload={getData}
-            id={collectionProps.selectedItems[0].id}
-            current={collectionProps.selectedItems[0].condicion}
-            nombres={collectionProps.selectedItems[0].nombres}
-          />
-        ) : (
-          <ModalCambiarCargo
-            visible={incluirVisible}
-            setVisible={setIncluirVisible}
-            reload={getData}
-            id={collectionProps.selectedItems[0].id}
-            current={collectionProps.selectedItems[0].cargo}
-            nombres={collectionProps.selectedItems[0].nombres}
-          />
-        ))}
+      {modal == "Titular" ? (
+        <ModalIncluirTitular close={() => setModal("")} reload={getData} />
+      ) : modal == "Externo" ? (
+        <ModalIncluirExterno close={() => setModal("")} reload={getData} />
+      ) : modal == "Estudiante" ? (
+        <ModalIncluirEstudiante close={() => setModal("")} reload={getData} />
+      ) : modal == "Egresado" ? (
+        <ModalIncluirEgresado close={() => setModal("")} reload={getData} />
+      ) : modal == "Excluir" ? (
+        <ModalExcluirMiembro
+          close={() => setModal("")}
+          reload={getData}
+          item={collectionProps.selectedItems}
+        />
+      ) : modal == "Visualizar" ? (
+        <ModalInformacionMiembro
+          close={() => setModal("")}
+          id={collectionProps.selectedItems[0].id}
+          tipo={collectionProps.selectedItems[0].condicion}
+        />
+      ) : modal == "Condicion" ? (
+        <ModalCambiarCondicion
+          close={() => setModal("")}
+          reload={getData}
+          id={collectionProps.selectedItems[0].id}
+          current={collectionProps.selectedItems[0].condicion}
+          nombres={collectionProps.selectedItems[0].nombres}
+        />
+      ) : modal == "Cargo" ? (
+        <ModalCambiarCargo
+          close={() => setModal("")}
+          reload={getData}
+          id={collectionProps.selectedItems[0].id}
+          current={collectionProps.selectedItems[0].cargo}
+          nombres={collectionProps.selectedItems[0].nombres}
+        />
+      ) : modal == "Editar" ? (
+        <>
+          {collectionProps.selectedItems[0].condicion == "Titular" ? (
+            <ModalEditarTitular
+              close={() => setModal("")}
+              id={collectionProps.selectedItems[0].id}
+            />
+          ) : collectionProps.selectedItems[0].condicion == "Adherente" &&
+            collectionProps.selectedItems[0].tipo != "Externo" ? (
+            <ModalEditarAdherenteInterno
+              close={() => setModal("")}
+              id={collectionProps.selectedItems[0].id}
+            />
+          ) : (
+            <></>
+          )}
+        </>
+      ) : (
+        <></>
+      )}
     </>
   );
 };
