@@ -15,6 +15,7 @@ import { useState } from "react";
 import ModalEditGrupo from "./components/modalEditGrupo";
 import ModalAprobarSolicitud from "./components/modalAprobarSolicitud";
 import ModalDisolverGrupo from "./components/modalDisolverGrupo";
+import axiosBase from "../../../../../api/axios";
 
 export default ({ data, loading, grupo_id, reload }) => {
   //  States
@@ -53,13 +54,26 @@ export default ({ data, loading, grupo_id, reload }) => {
                         },
                       ]
                 }
-                onItemClick={({ detail }) => {
+                onItemClick={async ({ detail }) => {
                   if (detail.id == "action_1_3") {
                     setVisible(true);
                     setTypeModal("disolver_grupo");
                   } else if (detail.id == "action_2_1") {
                     setVisible(true);
                     setTypeModal("aprobar_soli");
+                  } else if (detail.id == "action_1_2") {
+                    const res = await axiosBase.get(
+                      "admin/estudios/grupos/reporte",
+                      {
+                        params: {
+                          id: grupo_id,
+                        },
+                        responseType: "blob",
+                      }
+                    );
+                    const blob = await res.data;
+                    const url = URL.createObjectURL(blob);
+                    window.open(url, "_blank");
                   }
                 }}
               >
