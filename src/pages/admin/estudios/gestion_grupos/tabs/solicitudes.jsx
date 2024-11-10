@@ -258,6 +258,7 @@ export default () => {
           filteringPlaceholder="Buscar solicitud"
           countText={`${filteredItemsCount} coincidencias`}
           expandToViewport
+          virtualScroll
         />
       }
       pagination={<Pagination {...paginationProps} />}

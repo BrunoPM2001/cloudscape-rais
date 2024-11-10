@@ -269,6 +269,7 @@ export default () => {
           filteringPlaceholder="Buscar grupo"
           countText={`${filteredItemsCount} coincidencias`}
           expandToViewport
+          virtualScroll
         />
       }
       pagination={<Pagination {...paginationProps} />}

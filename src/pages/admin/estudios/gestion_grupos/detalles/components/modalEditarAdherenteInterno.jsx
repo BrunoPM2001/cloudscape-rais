@@ -56,7 +56,7 @@ export default ({ close, id }) => {
   const update = async () => {
     if (validateForm()) {
       setLoadingUpdate(true);
-      const res = await axiosBase.put("admin/estudios/grupos/editarMiembro", {
+      const res = await axiosBase.post("admin/estudios/grupos/editarMiembro", {
         ...formValues,
         tipo: "interno",
       });

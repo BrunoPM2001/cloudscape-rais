@@ -32,7 +32,7 @@ const formRules = {
   observacion_excluir: { required: false },
 };
 
-export default ({ visible, setVisible, item, reload }) => {
+export default ({ close, item, reload }) => {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
 

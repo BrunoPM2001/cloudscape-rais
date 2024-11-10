@@ -1,22 +1,44 @@
 import {
-  Alert,
   Box,
   Button,
   ColumnLayout,
-  DatePicker,
+  FileUpload,
   FormField,
   Grid,
   Input,
+  Link,
   Modal,
   Select,
   SpaceBetween,
-  Spinner,
   Textarea,
 } from "@cloudscape-design/components";
 import { useContext, useEffect, useState } from "react";
 import axiosBase from "../../../../../../api/axios";
 import { useFormValidation } from "../../../../../../hooks/useFormValidation";
 import NotificationContext from "../../../../../../providers/notificationProvider";
+
+const propsRepetidas = {
+  showFileLastModified: true,
+  showFileSize: true,
+  showFileThumbnail: true,
+  i18nStrings: {
+    uploadButtonText: (e) => (e ? "Cargar archivos" : "Cargar archivo"),
+    dropzoneText: (e) =>
+      e
+        ? "Arrastre los archivos para cargarlos"
+        : "Arrastre el archivo para cargarlo",
+    removeFileAriaLabel: (e) => `Eliminar archivo ${e + 1}`,
+    errorIconAriaLabel: "Error",
+  },
+  accept: ".pdf",
+};
+
+const propsEnlaces = {
+  external: "true",
+  variant: "primary",
+  fontSize: "body-s",
+  target: "_blank",
+};
 
 const initialForm = {
   codigo_orcid: "",
@@ -42,14 +64,15 @@ const initialForm = {
 };
 
 const formRules = {
-  cti_vitae: { required: true },
+  codigo_orcid: { required: true },
+  sexo: { required: true },
+  pais: { required: true },
+  email1: { required: true },
+  doc_tipo: { required: true },
+  doc_numero: { required: true },
   titulo_profesional: { required: true },
   grado: { required: true },
-  instituto: { required: true },
-  codigo_orcid: { required: true },
-  email3: { required: true },
-  telefono_movil: { required: true },
-  google_scholar: { required: true },
+  posicion_unmsm: { required: true },
 };
 
 const opt_grados = [
@@ -65,6 +88,8 @@ const opt_doc_tipo = [
   { value: "CEX" },
   { value: "PASAPORTE" },
 ];
+
+const opt_sexo = [{ value: "M" }, { value: "F" }];
 
 const opt_posicion = [{ value: "Emérito" }, { value: "Profesor visitante" }];
 
@@ -94,6 +119,12 @@ export default ({ close, id }) => {
       ...info.detalle,
       grado: opt_grados.find((opt) => opt.value == info.detalle.grado),
       pais: info.paises.find((opt) => opt.value == info.detalle.pais),
+      sexo: opt_sexo.find((opt) => opt.value == info.detalle.sexo),
+      doc_tipo: opt_doc_tipo.find((opt) => opt.value == info.detalle.doc_tipo),
+      posicion_unmsm: opt_posicion.find(
+        (opt) => opt.value == info.detalle.posicion_unmsm
+      ),
+      file: [],
     });
     setLoading(false);
   };
@@ -101,13 +132,34 @@ export default ({ close, id }) => {
   const update = async () => {
     if (validateForm()) {
       setLoadingUpdate(true);
-      const res = await axiosBase.put("admin/estudios/grupos/editarMiembro", {
-        ...formValues,
-        id,
-        grado: formValues.grado.value,
-        instituto: formValues.instituto.value,
-        tipo: "externo",
-      });
+      const form = new FormData();
+      form.append("tipo", "externo");
+      form.append("grupo_id", formValues.grupo_id);
+      form.append("investigador_id", formValues.investigador_id);
+      form.append("codigo_orcid", formValues.codigo_orcid);
+      form.append("apellido1", formValues.apellido1);
+      form.append("apellido2", formValues.apellido2);
+      form.append("nombres", formValues.nombres);
+      form.append("sexo", formValues.sexo.value);
+      form.append("institucion", formValues.institucion);
+      form.append("pais", formValues.pais.value);
+      form.append("email1", formValues.email1);
+      form.append("doc_tipo", formValues.doc_tipo.value);
+      form.append("doc_numero", formValues.doc_numero);
+      form.append("telefono_movil", formValues.telefono_movil);
+      form.append("titulo_profesional", formValues.titulo_profesional);
+      form.append("grado", formValues.grado.value);
+      form.append("especialidad", formValues.especialidad);
+      form.append("researcher_id", formValues.researcher_id);
+      form.append("scopus_id", formValues.scopus_id);
+      form.append("link", formValues.link);
+      form.append("posicion_unmsm", formValues.posicion_unmsm.value);
+      form.append("biografia", formValues.biografia);
+      form.append("file", formValues.file[0]);
+      const res = await axiosBase.post(
+        "admin/estudios/grupos/editarMiembro",
+        form
+      );
       const data = res.data;
       setLoadingUpdate(false);
       pushNotification(data.detail, data.message, notifications.length + 1);
@@ -204,29 +256,32 @@ export default ({ close, id }) => {
             { colspan: { default: 12, xs: 9 } },
             { colspan: { default: 12, xs: 3 } },
           ]}
-        ></Grid>
-        <FormField
-          label="Institución"
-          errorText={formErrors.institucion}
-          stretch
         >
-          <Input
-            disabled={loading}
-            value={formValues.institucion}
-            onChange={({ detail }) => handleChange("institucion", detail.value)}
-          />
-        </FormField>
-        <FormField label="País" errorText={formErrors.pais} stretch>
-          <Select
-            disabled={loading}
-            placeholder="Escoja una opción"
-            options={paises}
-            selectedOption={formValues.pais}
-            onChange={({ detail }) =>
-              handleChange("pais", detail.selectedOption)
-            }
-          />
-        </FormField>
+          <FormField
+            label="Institución"
+            errorText={formErrors.institucion}
+            stretch
+          >
+            <Input
+              disabled={loading}
+              value={formValues.institucion}
+              onChange={({ detail }) =>
+                handleChange("institucion", detail.value)
+              }
+            />
+          </FormField>
+          <FormField label="País" errorText={formErrors.pais} stretch>
+            <Select
+              disabled={loading}
+              placeholder="Escoja una opción"
+              options={paises}
+              selectedOption={formValues.pais}
+              onChange={({ detail }) =>
+                handleChange("pais", detail.selectedOption)
+              }
+            />
+          </FormField>
+        </Grid>
         <ColumnLayout columns={4}>
           <FormField
             label="Correo principal"
@@ -279,6 +334,9 @@ export default ({ close, id }) => {
         </ColumnLayout>
         <Grid
           gridDefinition={[
+            { colspan: { default: 12, xs: 4 } },
+            { colspan: { default: 12, xs: 4 } },
+            { colspan: { default: 12, xs: 4 } },
             { colspan: { default: 12, xs: 4 } },
             { colspan: { default: 12, xs: 4 } },
             { colspan: { default: 12, xs: 4 } },
@@ -373,6 +431,29 @@ export default ({ close, id }) => {
             disabled={loading}
             value={formValues.biografia}
             onChange={({ detail }) => handleChange("biografia", detail.value)}
+          />
+        </FormField>
+        <FormField
+          label="Formato de adhesión"
+          errorText={formErrors.file}
+          stretch
+          description={
+            formValues.url && (
+              <>
+                Ya ha cargado un{" "}
+                <Link {...propsEnlaces} href={formValues.url}>
+                  archivo.
+                </Link>
+              </>
+            )
+          }
+        >
+          <FileUpload
+            {...propsRepetidas}
+            value={formValues.file}
+            onChange={({ detail }) => {
+              handleChange("file", detail.value);
+            }}
           />
         </FormField>
       </SpaceBetween>

@@ -25,6 +25,7 @@ import ModalCambiarCargo from "../components/modalCambiarCargo";
 import ModalCambiarCondicion from "../components/modalCambiarCondicion";
 import ModalEditarTitular from "../components/modalEditarTitular";
 import ModalEditarAdherenteInterno from "../components/modalEditarAdherenteInterno";
+import ModalEditarAdherenteExterno from "../components/modalEditarAdherenteExterno";
 
 const stringOperators = [":", "!:", "=", "!=", "^", "!^"];
 
@@ -435,7 +436,10 @@ export default ({ grupo_estado }) => {
               id={collectionProps.selectedItems[0].id}
             />
           ) : (
-            <></>
+            <ModalEditarAdherenteExterno
+              close={() => setModal("")}
+              id={collectionProps.selectedItems[0].id}
+            />
           )}
         </>
       ) : (
