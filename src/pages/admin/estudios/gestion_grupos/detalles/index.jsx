@@ -33,52 +33,13 @@ const breadcrumbs = [
 ];
 
 export default function Detalle_grupo() {
-  //  State
-  const [data, setData] = useState({});
-  const [loading, setLoading] = useState(true);
-
-  //  Tabs
-  const tabs = [
-    {
-      id: "miembros",
-      label: "Miembros",
-      content: <Miembros grupo_estado={data.estado} />,
-    },
-    {
-      id: "documentos",
-      label: "Documentos",
-      content: <Documentos />,
-    },
-    {
-      id: "lineas",
-      label: "Lineas",
-      content: <Lineas />,
-    },
-    {
-      id: "proyectos",
-      label: "Proyectos",
-      content: <Proyectos />,
-    },
-    {
-      id: "publicaciones",
-      label: "Publicaciones",
-      content: <Publicaciones />,
-    },
-    {
-      id: "laboratorios",
-      label: "Laboratorios",
-      content: <Laboratorios />,
-    },
-    {
-      id: "extras",
-      label: "Extras",
-      content: <Extras data={data} loading={loading} />,
-    },
-  ];
-
   //  Url
   const location = useLocation();
   const { id } = queryString.parse(location.search);
+
+  //  State
+  const [data, setData] = useState({});
+  const [loading, setLoading] = useState(true);
 
   //  Functions
   const getData = async () => {
@@ -107,7 +68,53 @@ export default function Detalle_grupo() {
           grupo_id={id}
           reload={getData}
         />
-        <Tabs tabs={tabs} ariaLabel="Opciones de grupo" />
+        <Tabs
+          tabs={[
+            {
+              id: "miembros",
+              label: "Miembros",
+              content: <Miembros grupo_estado={data.estado} />,
+            },
+            {
+              id: "documentos",
+              label: "Documentos",
+              content: <Documentos />,
+            },
+            {
+              id: "lineas",
+              label: "Lineas",
+              content: <Lineas />,
+            },
+            {
+              id: "proyectos",
+              label: "Proyectos",
+              content: <Proyectos />,
+            },
+            {
+              id: "publicaciones",
+              label: "Publicaciones",
+              content: <Publicaciones />,
+            },
+            {
+              id: "laboratorios",
+              label: "Laboratorios",
+              content: <Laboratorios />,
+            },
+            {
+              id: "extras",
+              label: "Extras",
+              content: (
+                <Extras
+                  data={data}
+                  loading={loading}
+                  grupo_id={id}
+                  reload={getData}
+                />
+              ),
+            },
+          ]}
+          ariaLabel="Opciones de grupo"
+        />
       </SpaceBetween>
     </BaseLayout>
   );

@@ -3,19 +3,20 @@ import {
   Button,
   ColumnLayout,
   DatePicker,
-  Form,
   FormField,
   Header,
   Input,
   Modal,
   Select,
   SpaceBetween,
+  Tabs,
   Textarea,
 } from "@cloudscape-design/components";
 import { useContext, useEffect, useState } from "react";
 import NotificationContext from "../../../../../../providers/notificationProvider";
 import axiosBase from "../../../../../../api/axios";
 import { useFormValidation } from "../../../../../../hooks/useFormValidation";
+import Tiptap from "../../../../components/tiptap";
 
 const statesGrupo = [
   {
@@ -72,6 +73,9 @@ const initialForm = {
   direccion: "",
   email: "",
   web: "",
+  presentacion: "",
+  objetivos: "",
+  servicios: "",
 };
 
 const formRules = {
@@ -167,198 +171,225 @@ export default ({ close, item, grupo_id, reload }) => {
       }
       header="Editar datos del grupo"
     >
-      <Form>
-        <SpaceBetween size="m">
+      <SpaceBetween size="m">
+        <FormField
+          label="Nombre del grupo"
+          stretch
+          errorText={formErrors.grupo_nombre}
+        >
+          <Input
+            value={formValues.grupo_nombre}
+            onChange={({ detail }) =>
+              handleChange("grupo_nombre", detail.value)
+            }
+          />
+        </FormField>
+        <FormField
+          label="Nombre corto del grupo"
+          stretch
+          errorText={formErrors.grupo_nombre_corto}
+        >
+          <Input
+            value={formValues.grupo_nombre_corto}
+            onChange={({ detail }) =>
+              handleChange("grupo_nombre_corto", detail.value)
+            }
+          />
+        </FormField>
+        <ColumnLayout columns={4}>
           <FormField
-            label="Nombre del grupo"
+            label="R.R. de creación"
             stretch
-            errorText={formErrors.grupo_nombre}
+            errorText={formErrors.resolucion_rectoral_creacion}
           >
             <Input
-              value={formValues.grupo_nombre}
+              placeholder="Escriba el n° de RR"
+              value={formValues.resolucion_rectoral_creacion}
               onChange={({ detail }) =>
-                handleChange("grupo_nombre", detail.value)
+                handleChange("resolucion_rectoral_creacion", detail.value)
               }
             />
           </FormField>
           <FormField
-            label="Nombre corto del grupo"
+            label="Fecha de R.R. de creación"
             stretch
-            errorText={formErrors.grupo_nombre_corto}
+            errorText={formErrors.resolucion_creacion_fecha}
+          >
+            <DatePicker
+              placeholder="YYYY/MM/DD"
+              value={formValues.resolucion_creacion_fecha}
+              onChange={({ detail }) =>
+                handleChange("resolucion_creacion_fecha", detail.value)
+              }
+            />
+          </FormField>
+          <FormField
+            label="R.R. actual"
+            stretch
+            errorText={formErrors.resolucion_rectoral}
           >
             <Input
-              value={formValues.grupo_nombre_corto}
+              placeholder="Escriba el n° de RR"
+              value={formValues.resolucion_rectoral}
               onChange={({ detail }) =>
-                handleChange("grupo_nombre_corto", detail.value)
-              }
-            />
-          </FormField>
-          <ColumnLayout columns={4}>
-            <FormField
-              label="R.R. de creación"
-              stretch
-              errorText={formErrors.resolucion_rectoral_creacion}
-            >
-              <Input
-                placeholder="Escriba el n° de RR"
-                value={formValues.resolucion_rectoral_creacion}
-                onChange={({ detail }) =>
-                  handleChange("resolucion_rectoral_creacion", detail.value)
-                }
-              />
-            </FormField>
-            <FormField
-              label="Fecha de R.R. de creación"
-              stretch
-              errorText={formErrors.resolucion_creacion_fecha}
-            >
-              <DatePicker
-                placeholder="YYYY/MM/DD"
-                value={formValues.resolucion_creacion_fecha}
-                onChange={({ detail }) =>
-                  handleChange("resolucion_creacion_fecha", detail.value)
-                }
-              />
-            </FormField>
-            <FormField
-              label="R.R. actual"
-              stretch
-              errorText={formErrors.resolucion_rectoral}
-            >
-              <Input
-                placeholder="Escriba el n° de RR"
-                value={formValues.resolucion_rectoral}
-                onChange={({ detail }) =>
-                  handleChange("resolucion_rectoral", detail.value)
-                }
-              />
-            </FormField>
-            <FormField
-              label="Fecha de R.R. actual"
-              stretch
-              errorText={formErrors.resolucion_fecha}
-            >
-              <DatePicker
-                placeholder="YYYY/MM/DD"
-                value={formValues.resolucion_fecha}
-                onChange={({ detail }) =>
-                  handleChange("resolucion_fecha", detail.value)
-                }
-              />
-            </FormField>
-          </ColumnLayout>
-          <FormField
-            label="Observaciones"
-            stretch
-            errorText={formErrors.observaciones}
-          >
-            <Textarea
-              value={formValues.observaciones}
-              onChange={({ detail }) =>
-                handleChange("observaciones", detail.value)
+                handleChange("resolucion_rectoral", detail.value)
               }
             />
           </FormField>
           <FormField
-            label="Observaciones al investigador"
+            label="Fecha de R.R. actual"
             stretch
-            errorText={formErrors.observaciones_admin}
+            errorText={formErrors.resolucion_fecha}
           >
-            <Textarea
-              rows={3}
-              value={formValues.observaciones_admin}
+            <DatePicker
+              placeholder="YYYY/MM/DD"
+              value={formValues.resolucion_fecha}
               onChange={({ detail }) =>
-                handleChange("observaciones_admin", detail.value)
+                handleChange("resolucion_fecha", detail.value)
               }
             />
           </FormField>
-          <ColumnLayout columns={item.tipo == "grupo" ? 2 : 1}>
-            <FormField label="Estado" stretch errorText={formErrors.estado}>
+        </ColumnLayout>
+        <FormField
+          label="Observaciones"
+          stretch
+          errorText={formErrors.observaciones}
+        >
+          <Textarea
+            value={formValues.observaciones}
+            onChange={({ detail }) =>
+              handleChange("observaciones", detail.value)
+            }
+          />
+        </FormField>
+        <FormField
+          label="Observaciones al investigador"
+          stretch
+          errorText={formErrors.observaciones_admin}
+        >
+          <Textarea
+            rows={3}
+            value={formValues.observaciones_admin}
+            onChange={({ detail }) =>
+              handleChange("observaciones_admin", detail.value)
+            }
+          />
+        </FormField>
+        <ColumnLayout columns={item.tipo == "grupo" ? 2 : 1}>
+          <FormField label="Estado" stretch errorText={formErrors.estado}>
+            <Select
+              options={optEstado}
+              selectedOption={formValues.estado}
+              onChange={({ detail }) =>
+                handleChange("estado", detail.selectedOption)
+              }
+            />
+          </FormField>
+          {item.tipo == "grupo" && (
+            <FormField
+              label="Categoría del grupo"
+              stretch
+              errorText={formErrors.grupo_categoria}
+            >
               <Select
-                options={optEstado}
-                selectedOption={formValues.estado}
+                placeholder="Escoja una categoría"
+                options={[
+                  { value: "A" },
+                  { value: "B" },
+                  { value: "C" },
+                  { value: "D" },
+                ]}
+                selectedOption={formValues.grupo_categoria}
                 onChange={({ detail }) =>
-                  handleChange("estado", detail.selectedOption)
+                  handleChange("grupo_categoria", detail.selectedOption)
                 }
               />
             </FormField>
-            {item.tipo == "grupo" && (
-              <FormField
-                label="Categoría del grupo"
-                stretch
-                errorText={formErrors.grupo_categoria}
-              >
-                <Select
-                  placeholder="Escoja una categoría"
-                  options={[
-                    { value: "A" },
-                    { value: "B" },
-                    { value: "C" },
-                    { value: "D" },
-                  ]}
-                  selectedOption={formValues.grupo_categoria}
-                  onChange={({ detail }) =>
-                    handleChange("grupo_categoria", detail.selectedOption)
-                  }
+          )}
+        </ColumnLayout>
+        <Header>Datos del grupo</Header>
+        <ColumnLayout columns={3}>
+          <FormField label="Teléfono" stretch errorText={formErrors.telefono}>
+            <Input
+              placeholder="Escriba el n° de telefono"
+              value={formValues.telefono}
+              onChange={({ detail }) => handleChange("telefono", detail.value)}
+            />
+          </FormField>
+          <FormField label="Anexo" stretch errorText={formErrors.anexo}>
+            <Input
+              placeholder="Escriba el n° de anexo"
+              value={formValues.anexo}
+              onChange={({ detail }) => handleChange("anexo", detail.value)}
+            />
+          </FormField>
+          <FormField label="Oficina" stretch errorText={formErrors.oficina}>
+            <Input
+              placeholder="Escriba el nombre de oficina"
+              value={formValues.oficina}
+              onChange={({ detail }) => handleChange("oficina", detail.value)}
+            />
+          </FormField>
+          <FormField label="Dirección" stretch errorText={formErrors.direccion}>
+            <Input
+              placeholder="Escriba la direccion"
+              value={formValues.direccion}
+              onChange={({ detail }) => handleChange("direccion", detail.value)}
+            />
+          </FormField>
+          <FormField label="Correo" stretch errorText={formErrors.email}>
+            <Input
+              placeholder="Escriba la direccion de email"
+              value={formValues.email}
+              onChange={({ detail }) => handleChange("email", detail.value)}
+            />
+          </FormField>
+          <FormField label="Web" stretch errorText={formErrors.web}>
+            <Input
+              placeholder="Escriba la direccion de su página web"
+              value={formValues.web}
+              onChange={({ detail }) => handleChange("web", detail.value)}
+            />
+          </FormField>
+        </ColumnLayout>
+        <Tabs
+          tabs={[
+            {
+              id: "edit_1",
+              label: "Presentación",
+              content: (
+                <Tiptap
+                  value={formValues.presentacion}
+                  handleChange={handleChange}
+                  name="presentacion"
                 />
-              </FormField>
-            )}
-          </ColumnLayout>
-          <Header>Datos del grupo</Header>
-          <ColumnLayout columns={3}>
-            <FormField label="Teléfono" stretch errorText={formErrors.telefono}>
-              <Input
-                placeholder="Escriba el n° de telefono"
-                value={formValues.telefono}
-                onChange={({ detail }) =>
-                  handleChange("telefono", detail.value)
-                }
-              />
-            </FormField>
-            <FormField label="Anexo" stretch errorText={formErrors.anexo}>
-              <Input
-                placeholder="Escriba el n° de anexo"
-                value={formValues.anexo}
-                onChange={({ detail }) => handleChange("anexo", detail.value)}
-              />
-            </FormField>
-            <FormField label="Oficina" stretch errorText={formErrors.oficina}>
-              <Input
-                placeholder="Escriba el nombre de oficina"
-                value={formValues.oficina}
-                onChange={({ detail }) => handleChange("oficina", detail.value)}
-              />
-            </FormField>
-            <FormField
-              label="Dirección"
-              stretch
-              errorText={formErrors.direccion}
-            >
-              <Input
-                placeholder="Escriba la direccion"
-                value={formValues.direccion}
-                onChange={({ detail }) =>
-                  handleChange("direccion", detail.value)
-                }
-              />
-            </FormField>
-            <FormField label="Correo" stretch errorText={formErrors.email}>
-              <Input
-                placeholder="Escriba la direccion de email"
-                value={formValues.email}
-                onChange={({ detail }) => handleChange("email", detail.value)}
-              />
-            </FormField>
-            <FormField label="Web" stretch errorText={formErrors.web}>
-              <Input
-                placeholder="Escriba la direccion de su página web"
-                value={formValues.web}
-                onChange={({ detail }) => handleChange("web", detail.value)}
-              />
-            </FormField>
-          </ColumnLayout>
-        </SpaceBetween>
-      </Form>
+              ),
+            },
+            {
+              id: "edit_2",
+              label: "Objetivos",
+              content: (
+                <Tiptap
+                  value={formValues.objetivos}
+                  handleChange={handleChange}
+                  name="objetivos"
+                />
+              ),
+            },
+            {
+              id: "edit_3",
+              label: "Servicios ",
+              content: (
+                <Tiptap
+                  value={formValues.servicios}
+                  handleChange={handleChange}
+                  name="servicios"
+                />
+              ),
+            },
+          ]}
+        />
+      </SpaceBetween>
     </Modal>
   );
 };

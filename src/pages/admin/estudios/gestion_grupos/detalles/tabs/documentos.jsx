@@ -87,7 +87,12 @@ export default () => {
         header={
           <Header
             actions={
-              <Button onClick={() => setModal("eliminar")}>Eliminar</Button>
+              <Button
+                onClick={() => setModal("eliminar")}
+                disabled={collectionProps.selectedItems.length == 0}
+              >
+                Eliminar
+              </Button>
             }
           >
             Documentos

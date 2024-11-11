@@ -341,7 +341,10 @@ export default ({ grupo_estado }) => {
                       id: "action_2_1",
                       disabled:
                         collectionProps.selectedItems[0]?.cargo ==
-                        "Coordinador",
+                          "Coordinador" ||
+                        collectionProps.selectedItems[0]?.condicion.startsWith(
+                          "Ex"
+                        ),
                     },
                     {
                       text: "Visualizar",
@@ -351,7 +354,10 @@ export default ({ grupo_estado }) => {
                     {
                       text: "Cambiar condición",
                       id: "action_2_3",
-                      disabled: false,
+                      disabled:
+                        collectionProps.selectedItems[0]?.condicion.startsWith(
+                          "Ex"
+                        ),
                     },
                     {
                       text: "Cambiar cargo",

@@ -15,12 +15,12 @@ import { useState } from "react";
 import ModalEditGrupo from "./components/modalEditGrupo";
 import ModalAprobarSolicitud from "./components/modalAprobarSolicitud";
 import ModalDisolverGrupo from "./components/modalDisolverGrupo";
+import ModalSubirDoc from "./components/modalSubirDoc";
 import axiosBase from "../../../../../api/axios";
 
 export default ({ data, loading, grupo_id, reload }) => {
   //  States
-  const [visible, setVisible] = useState(false);
-  const [typeModal, setTypeModal] = useState("");
+  const [modal, setModal] = useState("");
 
   return (
     <Container
@@ -46,21 +46,27 @@ export default ({ data, loading, grupo_id, reload }) => {
                           id: "action_1_3",
                           text: "Disolver grupo",
                         },
+                        {
+                          id: "action_1_4",
+                          text: "Subir documento",
+                        },
                       ]
                     : [
                         {
                           id: "action_2_1",
                           text: "Aprobar solicitud",
                         },
+                        {
+                          id: "action_1_4",
+                          text: "Subir documento",
+                        },
                       ]
                 }
                 onItemClick={async ({ detail }) => {
                   if (detail.id == "action_1_3") {
-                    setVisible(true);
-                    setTypeModal("disolver_grupo");
+                    setModal("disolver_grupo");
                   } else if (detail.id == "action_2_1") {
-                    setVisible(true);
-                    setTypeModal("aprobar_soli");
+                    setModal("aprobar_soli");
                   } else if (detail.id == "action_1_2") {
                     const res = await axiosBase.get(
                       "admin/estudios/grupos/reporte",
@@ -74,6 +80,8 @@ export default ({ data, loading, grupo_id, reload }) => {
                     const blob = await res.data;
                     const url = URL.createObjectURL(blob);
                     window.open(url, "_blank");
+                  } else if (detail.id == "action_1_4") {
+                    setModal("subir_doc");
                   }
                 }}
               >
@@ -82,8 +90,7 @@ export default ({ data, loading, grupo_id, reload }) => {
               <Button
                 variant="primary"
                 onClick={() => {
-                  setVisible(true);
-                  setTypeModal("edit");
+                  setModal("edit");
                 }}
                 disabled={loading || data.estado < 0}
               >
@@ -123,6 +130,10 @@ export default ({ data, loading, grupo_id, reload }) => {
                 type={
                   data.estado == -2
                     ? "error"
+                    : data.estado == -1
+                    ? "error"
+                    : data.estado == 0
+                    ? "error"
                     : data.estado == 1
                     ? "info"
                     : data.estado == 2
@@ -142,6 +153,8 @@ export default ({ data, loading, grupo_id, reload }) => {
                   ? "Disuelto"
                   : data.estado == -1
                   ? "Eliminado"
+                  : data.estado == 0
+                  ? "No aprobado"
                   : data.estado == 1
                   ? "Reconocido"
                   : data.estado == 2
@@ -230,30 +243,26 @@ export default ({ data, loading, grupo_id, reload }) => {
           </div>
         </SpaceBetween>
       </ColumnLayout>
-      {visible &&
-        (typeModal == "edit" ? (
-          <ModalEditGrupo
-            visible={visible}
-            setVisible={setVisible}
-            item={data}
+      {modal == "edit" ? (
+        <ModalEditGrupo
+          close={() => setModal("")}
+          item={data}
+          grupo_id={grupo_id}
+          reload={reload}
+        />
+      ) : modal == "aprobar_soli" ? (
+        <ModalAprobarSolicitud close={() => setModal("")} grupo_id={grupo_id} />
+      ) : modal == "disolver_grupo" ? (
+        <ModalDisolverGrupo close={() => setModal("")} grupo_id={grupo_id} />
+      ) : (
+        modal == "subir_doc" && (
+          <ModalSubirDoc
+            close={() => setModal("")}
             grupo_id={grupo_id}
             reload={reload}
           />
-        ) : typeModal == "aprobar_soli" ? (
-          <ModalAprobarSolicitud
-            visible={visible}
-            setVisible={setVisible}
-            grupo_id={grupo_id}
-          />
-        ) : typeModal == "disolver_grupo" ? (
-          <ModalDisolverGrupo
-            visible={visible}
-            setVisible={setVisible}
-            grupo_id={grupo_id}
-          />
-        ) : (
-          <></>
-        ))}
+        )
+      )}
     </Container>
   );
 };

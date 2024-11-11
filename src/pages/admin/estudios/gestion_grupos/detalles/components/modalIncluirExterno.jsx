@@ -1,12 +1,11 @@
 import {
-  Autosuggest,
+  Alert,
   Box,
   Button,
   ColumnLayout,
   FileUpload,
-  Form,
   FormField,
-  Header,
+  Grid,
   Input,
   Link,
   Modal,
@@ -14,7 +13,7 @@ import {
   SpaceBetween,
   Textarea,
 } from "@cloudscape-design/components";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useFormValidation } from "../../../../../../hooks/useFormValidation";
 import { useLocation } from "react-router-dom";
 import queryString from "query-string";
@@ -75,6 +74,9 @@ export default ({ close, reload }) => {
 
   //  States
   const [loadingCreate, setLoadingCreate] = useState(false);
+  const [verificando, setVerificando] = useState(false);
+  const [alert, setAlert] = useState("");
+  const [paises, setPaises] = useState([]);
 
   //  Hooks
   const {
@@ -131,6 +133,45 @@ export default ({ close, reload }) => {
     }
   };
 
+  const validarOrcid = async () => {
+    if (/^\d{4}-\d{4}-\d{4}-\d{4}$/.test(formValues.codigo_orcid)) {
+      setAlert("");
+      setVerificando(true);
+      const res = await axiosBase.get("admin/estudios/grupos/validarOrcid", {
+        params: {
+          codigo_orcid: formValues.codigo_orcid,
+        },
+      });
+      const data = res.data;
+      setVerificando(false);
+      if (data.message == "error") {
+        setAlert("No se encontró infomación de este orcid");
+      } else {
+        const info = data.data;
+        handleChange("nombres", info.nombres);
+        handleChange("apellido1", info.apellido1);
+        handleChange("apellido2", info.apellido2);
+        handleChange("titulo_profesional", info.titulo_profesional);
+        handleChange(
+          "pais",
+          paises.find((opt) => opt.code == info.pais)
+        );
+      }
+    } else {
+      setAlert("Tiene que escribir un código orcid válido");
+    }
+  };
+
+  const getPaises = async () => {
+    const res = await axiosBase.get("admin/estudios/publicaciones/getPaises");
+    const data = res.data;
+    setPaises(data);
+  };
+
+  useEffect(() => {
+    getPaises();
+  }, []);
+
   return (
     <Modal
       visible
@@ -144,7 +185,7 @@ export default ({ close, reload }) => {
             </Button>
             <Button
               variant="primary"
-              onClick={() => agregarMiembro()}
+              onClick={agregarMiembro}
               loading={loadingCreate}
             >
               Incluir miembro
@@ -154,15 +195,22 @@ export default ({ close, reload }) => {
       }
       header="Incluir miembro al grupo"
     >
-      <Form
-        header={<Header>Registrar investigador externo</Header>}
-        variant="embedded"
-      >
-        <SpaceBetween size="xs">
-          <FormField
-            label="Código ORCID"
-            stretch
-            errorText={formErrors.codigo_orcid}
+      <SpaceBetween size="xs">
+        {alert != "" && (
+          <Alert type="error" dismissible onDismiss={() => setAlert("")}>
+            {alert}
+          </Alert>
+        )}
+        <FormField
+          label="Código ORCID"
+          stretch
+          errorText={formErrors.codigo_orcid}
+        >
+          <Grid
+            gridDefinition={[
+              { colspan: { default: 12, xs: 9 } },
+              { colspan: { default: 12, xs: 3 } },
+            ]}
           >
             <Input
               value={formValues.codigo_orcid}
@@ -170,294 +218,271 @@ export default ({ close, reload }) => {
                 handleChange("codigo_orcid", detail.value)
               }
             />
-          </FormField>
-          <ColumnLayout columns={3}>
-            <FormField
-              label="Apellido paterno"
-              stretch
-              errorText={formErrors.apellido1}
-            >
-              <Input
-                value={formValues.apellido1}
-                onChange={({ detail }) =>
-                  handleChange("apellido1", detail.value)
-                }
-              />
-            </FormField>
-            <FormField
-              label="Apellido materno"
-              stretch
-              errorText={formErrors.apellido2}
-            >
-              <Input
-                value={formValues.apellido2}
-                onChange={({ detail }) =>
-                  handleChange("apellido2", detail.value)
-                }
-              />
-            </FormField>
-            <FormField label="Nombres" stretch errorText={formErrors.nombres}>
-              <Input
-                value={formValues.nombres}
-                onChange={({ detail }) => handleChange("nombres", detail.value)}
-              />
-            </FormField>
-            <FormField label="Sexo" stretch errorText={formErrors.sexo}>
-              <Select
-                controlId="sexo"
-                placeholder="Escoga una opción"
-                selectedOption={formValues.sexo}
-                onChange={({ detail }) =>
-                  handleChange("sexo", detail.selectedOption)
-                }
-                options={[
-                  {
-                    label: "Masculino",
-                    value: "M",
-                  },
-                  {
-                    label: "Femenino",
-                    value: "F",
-                  },
-                ]}
-              />
-            </FormField>
-            <FormField
-              label="Institución"
-              stretch
-              errorText={formErrors.institucion}
-            >
-              <Input
-                value={formValues.institucion}
-                onChange={({ detail }) =>
-                  handleChange("institucion", detail.value)
-                }
-              />
-            </FormField>
-            <FormField label="País" stretch errorText={formErrors.pais}>
-              <Select
-                controlId="pais"
-                placeholder="Escoga una opción"
-                selectedOption={formValues.pais}
-                onChange={({ detail }) =>
-                  handleChange("pais", detail.selectedOption)
-                }
-                options={[
-                  // TODO - LISTA DE PAISES ESTÁTICA O DESDE EL BACKEND
-                  {
-                    label: "Perú",
-                    value: "M",
-                  },
-                  {
-                    label: "Argentina",
-                    value: "F",
-                  },
-                ]}
-              />
-            </FormField>
-            <FormField
-              label="Correo principal"
-              stretch
-              errorText={formErrors.direccion1}
-            >
-              <Input
-                value={formValues.direccion1}
-                onChange={({ detail }) =>
-                  handleChange("direccion1", detail.value)
-                }
-              />
-            </FormField>
-            <FormField
-              label="Tipo doc."
-              stretch
-              errorText={formErrors.doc_tipo}
-            >
-              <Select
-                placeholder="Escoga una opción"
-                selectedOption={formValues.doc_tipo}
-                onChange={({ detail }) =>
-                  handleChange("doc_tipo", detail.selectedOption)
-                }
-                options={[
-                  {
-                    label: "DNI",
-                    value: "DNI",
-                  },
-                  {
-                    label: "Carné de extranjería",
-                    value: "CEX",
-                  },
-                  {
-                    label: "Pasaporte",
-                    value: "PASAPORTE",
-                  },
-                ]}
-              />
-            </FormField>
-            <FormField
-              label="N° documento"
-              stretch
-              errorText={formErrors.doc_numero}
-            >
-              <Input
-                value={formValues.doc_numero}
-                onChange={({ detail }) =>
-                  handleChange("doc_numero", detail.value)
-                }
-              />
-            </FormField>
-            <FormField
-              label="N° celular"
-              stretch
-              errorText={formErrors.telefono_movil}
-            >
-              <Input
-                value={formValues.telefono_movil}
-                onChange={({ detail }) =>
-                  handleChange("telefono_movil", detail.value)
-                }
-              />
-            </FormField>
-            <FormField
-              label="Título profesional"
-              stretch
-              errorText={formErrors.titulo_profesional}
-            >
-              <Input
-                value={formValues.titulo_profesional}
-                onChange={({ detail }) =>
-                  handleChange("titulo_profesional", detail.value)
-                }
-              />
-            </FormField>
-            <FormField
-              label="Grado académico"
-              stretch
-              errorText={formErrors.grado}
-            >
-              <Input
-                value={formValues.grado}
-                onChange={({ detail }) => handleChange("grado", detail.value)}
-              />
-            </FormField>
-            <FormField
-              label="Especialidad"
-              stretch
-              errorText={formErrors.especialidad}
-            >
-              <Input
-                value={formValues.especialidad}
-                onChange={({ detail }) =>
-                  handleChange("especialidad", detail.value)
-                }
-              />
-            </FormField>
-            <FormField
-              label="Researcher ID"
-              stretch
-              errorText={formErrors.researcher_id}
-            >
-              <Input
-                value={formValues.researcher_id}
-                onChange={({ detail }) =>
-                  handleChange("researcher_id", detail.value)
-                }
-              />
-            </FormField>
-            <FormField
-              label="Scopus ID"
-              stretch
-              errorText={formErrors.scopus_id}
-            >
-              <Input
-                value={formValues.scopus_id}
-                onChange={({ detail }) =>
-                  handleChange("scopus_id", detail.value)
-                }
-              />
-            </FormField>
-            <FormField label="Sitio web" stretch errorText={formErrors.link}>
-              <Input
-                value={formValues.link}
-                onChange={({ detail }) => handleChange("link", detail.value)}
-              />
-            </FormField>
-            <FormField
-              label="Posición en la UNMSM"
-              stretch
-              errorText={formErrors.posicion_unmsm}
-            >
-              <Input
-                value={formValues.posicion_unmsm}
-                onChange={({ detail }) =>
-                  handleChange("posicion_unmsm", detail.value)
-                }
-              />
-            </FormField>
-          </ColumnLayout>
+            <Button onClick={validarOrcid} loading={verificando}>
+              Verificar orcid
+            </Button>
+          </Grid>
+        </FormField>
+        <ColumnLayout columns={3}>
           <FormField
-            label="Perfil de investigador"
+            label="Apellido paterno"
             stretch
-            errorText={formErrors.biografia}
+            errorText={formErrors.apellido1}
           >
-            <Textarea
-              value={formValues.biografia}
-              onChange={({ detail }) => handleChange("biografia", detail.value)}
+            <Input
+              value={formValues.apellido1}
+              onChange={({ detail }) => handleChange("apellido1", detail.value)}
             />
           </FormField>
           <FormField
-            label="Observación / Comentario"
+            label="Apellido materno"
             stretch
-            errorText={formErrors.observacion}
+            errorText={formErrors.apellido2}
           >
-            <Textarea
-              value={formValues.observacion}
+            <Input
+              value={formValues.apellido2}
+              onChange={({ detail }) => handleChange("apellido2", detail.value)}
+            />
+          </FormField>
+          <FormField label="Nombres" stretch errorText={formErrors.nombres}>
+            <Input
+              value={formValues.nombres}
+              onChange={({ detail }) => handleChange("nombres", detail.value)}
+            />
+          </FormField>
+          <FormField label="Sexo" stretch errorText={formErrors.sexo}>
+            <Select
+              controlId="sexo"
+              placeholder="Escoga una opción"
+              selectedOption={formValues.sexo}
               onChange={({ detail }) =>
-                handleChange("observacion", detail.value)
+                handleChange("sexo", detail.selectedOption)
+              }
+              options={[
+                {
+                  label: "Masculino",
+                  value: "M",
+                },
+                {
+                  label: "Femenino",
+                  value: "F",
+                },
+              ]}
+            />
+          </FormField>
+          <FormField
+            label="Institución"
+            stretch
+            errorText={formErrors.institucion}
+          >
+            <Input
+              value={formValues.institucion}
+              onChange={({ detail }) =>
+                handleChange("institucion", detail.value)
+              }
+            />
+          </FormField>
+          <FormField label="País" stretch errorText={formErrors.pais}>
+            <Select
+              controlId="pais"
+              placeholder="Escoga una opción"
+              selectedOption={formValues.pais}
+              onChange={({ detail }) =>
+                handleChange("pais", detail.selectedOption)
+              }
+              options={paises}
+            />
+          </FormField>
+          <FormField
+            label="Correo principal"
+            stretch
+            errorText={formErrors.direccion1}
+          >
+            <Input
+              value={formValues.direccion1}
+              onChange={({ detail }) =>
+                handleChange("direccion1", detail.value)
+              }
+            />
+          </FormField>
+          <FormField label="Tipo doc." stretch errorText={formErrors.doc_tipo}>
+            <Select
+              placeholder="Escoga una opción"
+              selectedOption={formValues.doc_tipo}
+              onChange={({ detail }) =>
+                handleChange("doc_tipo", detail.selectedOption)
+              }
+              options={[
+                {
+                  label: "DNI",
+                  value: "DNI",
+                },
+                {
+                  label: "Carné de extranjería",
+                  value: "CEX",
+                },
+                {
+                  label: "Pasaporte",
+                  value: "PASAPORTE",
+                },
+              ]}
+            />
+          </FormField>
+          <FormField
+            label="N° documento"
+            stretch
+            errorText={formErrors.doc_numero}
+          >
+            <Input
+              value={formValues.doc_numero}
+              onChange={({ detail }) =>
+                handleChange("doc_numero", detail.value)
               }
             />
           </FormField>
           <FormField
-            label="Formato de adhesión"
-            description={
-              <>
-                Puede descargar la plantilla de formato de adhesión en{" "}
-                <Link
-                  href="/minio/templates/formato-adhesion-gi-externo.docx"
-                  external="true"
-                  variant="primary"
-                  fontSize="body-s"
-                  target="_blank"
-                >
-                  este enlace.
-                </Link>
-              </>
-            }
-            errorText={formErrors.file}
+            label="N° celular"
+            stretch
+            errorText={formErrors.telefono_movil}
           >
-            <FileUpload
-              value={formValues.file}
-              onChange={({ detail }) => handleChange("file", detail.value)}
-              ref={(ref) => registerFileInput("file", ref)}
-              showFileLastModified
-              showFileSize
-              showFileThumbnail
-              constraintText="El archivo cargado no debe superar los 2 MB"
-              i18nStrings={{
-                uploadButtonText: (e) =>
-                  e ? "Cargar archivos" : "Cargar archivo",
-                dropzoneText: (e) =>
-                  e
-                    ? "Arrastre los archivos para cargarlos"
-                    : "Arrastre el archivo para cargarlo",
-                removeFileAriaLabel: (e) => `Eliminar archivo ${e + 1}`,
-                errorIconAriaLabel: "Error",
-              }}
-              accept=".docx, .doc,  .pdf"
+            <Input
+              value={formValues.telefono_movil}
+              onChange={({ detail }) =>
+                handleChange("telefono_movil", detail.value)
+              }
             />
           </FormField>
-        </SpaceBetween>
-      </Form>
+          <FormField
+            label="Título profesional"
+            stretch
+            errorText={formErrors.titulo_profesional}
+          >
+            <Input
+              value={formValues.titulo_profesional}
+              onChange={({ detail }) =>
+                handleChange("titulo_profesional", detail.value)
+              }
+            />
+          </FormField>
+          <FormField
+            label="Grado académico"
+            stretch
+            errorText={formErrors.grado}
+          >
+            <Input
+              value={formValues.grado}
+              onChange={({ detail }) => handleChange("grado", detail.value)}
+            />
+          </FormField>
+          <FormField
+            label="Especialidad"
+            stretch
+            errorText={formErrors.especialidad}
+          >
+            <Input
+              value={formValues.especialidad}
+              onChange={({ detail }) =>
+                handleChange("especialidad", detail.value)
+              }
+            />
+          </FormField>
+          <FormField
+            label="Researcher ID"
+            stretch
+            errorText={formErrors.researcher_id}
+          >
+            <Input
+              value={formValues.researcher_id}
+              onChange={({ detail }) =>
+                handleChange("researcher_id", detail.value)
+              }
+            />
+          </FormField>
+          <FormField label="Scopus ID" stretch errorText={formErrors.scopus_id}>
+            <Input
+              value={formValues.scopus_id}
+              onChange={({ detail }) => handleChange("scopus_id", detail.value)}
+            />
+          </FormField>
+          <FormField label="Sitio web" stretch errorText={formErrors.link}>
+            <Input
+              value={formValues.link}
+              onChange={({ detail }) => handleChange("link", detail.value)}
+            />
+          </FormField>
+          <FormField
+            label="Posición en la UNMSM"
+            stretch
+            errorText={formErrors.posicion_unmsm}
+          >
+            <Input
+              value={formValues.posicion_unmsm}
+              onChange={({ detail }) =>
+                handleChange("posicion_unmsm", detail.value)
+              }
+            />
+          </FormField>
+        </ColumnLayout>
+        <FormField
+          label="Perfil de investigador"
+          stretch
+          errorText={formErrors.biografia}
+        >
+          <Textarea
+            value={formValues.biografia}
+            onChange={({ detail }) => handleChange("biografia", detail.value)}
+          />
+        </FormField>
+        <FormField
+          label="Observación / Comentario"
+          stretch
+          errorText={formErrors.observacion}
+        >
+          <Textarea
+            value={formValues.observacion}
+            onChange={({ detail }) => handleChange("observacion", detail.value)}
+          />
+        </FormField>
+        <FormField
+          label="Formato de adhesión"
+          description={
+            <>
+              Puede descargar la plantilla de formato de adhesión en{" "}
+              <Link
+                href="/minio/templates/formato-adhesion-gi-externo.docx"
+                external="true"
+                variant="primary"
+                fontSize="body-s"
+                target="_blank"
+              >
+                este enlace.
+              </Link>
+            </>
+          }
+          errorText={formErrors.file}
+        >
+          <FileUpload
+            value={formValues.file}
+            onChange={({ detail }) => handleChange("file", detail.value)}
+            ref={(ref) => registerFileInput("file", ref)}
+            showFileLastModified
+            showFileSize
+            showFileThumbnail
+            constraintText="El archivo cargado no debe superar los 2 MB"
+            i18nStrings={{
+              uploadButtonText: (e) =>
+                e ? "Cargar archivos" : "Cargar archivo",
+              dropzoneText: (e) =>
+                e
+                  ? "Arrastre los archivos para cargarlos"
+                  : "Arrastre el archivo para cargarlo",
+              removeFileAriaLabel: (e) => `Eliminar archivo ${e + 1}`,
+              errorIconAriaLabel: "Error",
+            }}
+            accept=".docx, .doc,  .pdf"
+          />
+        </FormField>
+      </SpaceBetween>
     </Modal>
   );
 };

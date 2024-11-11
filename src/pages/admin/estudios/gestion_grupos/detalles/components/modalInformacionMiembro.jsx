@@ -12,6 +12,7 @@ import Informacion_titular from "./tabs/informacion_titular";
 import ProyectosIntegrante from "./tabs/proyectosIntegrante";
 import Incluido from "./tabs/incluido";
 import Informacion_adherente from "./tabs/informacion_adherente";
+import Excluido from "./tabs/excluido";
 
 export default ({ close, id, tipo }) => {
   //  States
@@ -44,7 +45,9 @@ export default ({ close, id, tipo }) => {
       onDismiss={close}
       header={
         <Header description="Información general del integrante y proyectos en los que ha participado siendo miembro del grupo">
-          Información del integrante de grupo
+          {tipo.startsWith("Ex")
+            ? "Información del ex-integrante de grupo"
+            : "Información del integrante de grupo"}
         </Header>
       }
     >
@@ -79,8 +82,12 @@ export default ({ close, id, tipo }) => {
             },
             {
               id: "inclusion",
-              label: "Inclusión",
-              content: <Incluido data={data.informacion} loading={loading} />,
+              label: tipo.startsWith("Ex") ? "Exclusión" : "Inclusión",
+              content: tipo.startsWith("Ex") ? (
+                <Excluido data={data.informacion} loading={loading} />
+              ) : (
+                <Incluido data={data.informacion} loading={loading} />
+              ),
             },
           ]}
         />
