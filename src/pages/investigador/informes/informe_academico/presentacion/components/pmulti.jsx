@@ -1,4 +1,5 @@
 import {
+  Alert,
   Box,
   Button,
   ButtonDropdown,
@@ -123,7 +124,9 @@ export default () => {
 
   //  Url
   const location = useLocation();
-  const { id, proyecto_id, tipo_proyecto } = queryString.parse(location.search);
+  const { id, proyecto_id, tipo_proyecto, informe } = queryString.parse(
+    location.search
+  );
 
   //  States
   const [step, setStep] = useState(0);
@@ -179,6 +182,7 @@ export default () => {
       handleChange("infinal9", data.informe.infinal9 ?? "");
       handleChange("infinal10", data.informe.infinal10 ?? "");
       handleChange("estado", data.informe.estado);
+      handleChange("observaciones", data.informe.observaciones);
       handleChange("id", data.informe.id);
     }
     setLoading(false);
@@ -239,10 +243,12 @@ export default () => {
   const reporte = async () => {
     setLoadingBtn(true);
     const res = await axiosBase.get(
-      "investigador/informes/informe_academico/verInforme",
+      "investigador/informes/informe_academico/reporte",
       {
         params: {
-          id: formValues.id,
+          informe_tecnico_id: id,
+          tipo_informe: informe,
+          tipo_proyecto,
         },
         responseType: "blob",
       }
@@ -266,7 +272,7 @@ export default () => {
             <Spinner /> Cargando datos
           </Container>
         </>
-      ) : formValues.estado ? (
+      ) : formValues.estado == 1 || formValues.estado == 2 ? (
         <>
           <br />
           <Container
@@ -307,600 +313,629 @@ export default () => {
           </Container>
         </>
       ) : (
-        <Wizard
-          onNavigate={({ detail }) => setStep(detail.requestedStepIndex)}
-          activeStepIndex={step}
-          onCancel={() => {
-            window.location.href = "../informeAcademico";
-          }}
-          i18nStrings={{
-            optional: "Completar",
-          }}
-          secondaryActions={
-            <Button onClick={sendData} loading={loadingSave}>
-              Guardar informe
-            </Button>
-          }
-          onSubmit={presentar}
-          isLoadingNextStep={loadingSave}
-          submitButtonText="Enviar informe"
-          allowSkipTo
-          steps={[
-            {
-              title: "Información",
-              content: (
-                <SpaceBetween size="l">
-                  <Container>
-                    <SpaceBetween size="m">
-                      <div>
-                        <Box variant="awsui-key-label">Título</Box>
-                        {loading ? <Spinner /> : <Box>{proyecto.titulo}</Box>}
-                      </div>
-                      <div>
-                        <Box variant="awsui-key-label">Código</Box>
-                        {loading ? (
-                          <Spinner />
-                        ) : (
-                          <Box>{proyecto.codigo_proyecto}</Box>
-                        )}
-                      </div>
-                      <div>
-                        <Box variant="awsui-key-label">Resolución</Box>
-                        {loading ? (
-                          <Spinner />
-                        ) : (
-                          <Box>{proyecto.resolucion_rectoral}</Box>
-                        )}
-                      </div>
-                      <div>
-                        <Box variant="awsui-key-label">Año</Box>
-                        {loading ? <Spinner /> : <Box>{proyecto.periodo}</Box>}
-                      </div>
-                      <div>
-                        <Box variant="awsui-key-label">Grupo</Box>
-                        {loading ? (
-                          <Spinner />
-                        ) : (
-                          <Box>{proyecto.grupo_nombre}</Box>
-                        )}
-                      </div>
-                      <div>
-                        <Box variant="awsui-key-label">Localización</Box>
-                        {loading ? (
-                          <Spinner />
-                        ) : (
-                          <Box>{proyecto.localizacion}</Box>
-                        )}
-                      </div>
-                      <div>
-                        <Box variant="awsui-key-label">Facultad</Box>
-                        {loading ? <Spinner /> : <Box>{proyecto.facultad}</Box>}
-                      </div>
-                      <div>
-                        <Box variant="awsui-key-label">
-                          Línea de investigación
-                        </Box>
-                        {loading ? <Spinner /> : <Box>{proyecto.linea}</Box>}
-                      </div>
-                      <div>
-                        <Box variant="awsui-key-label">
-                          Tipo de investigación
-                        </Box>
-                        {loading ? (
-                          <Spinner />
-                        ) : (
-                          <Box>{proyecto.tipo_investigacion}</Box>
-                        )}
-                      </div>
-                    </SpaceBetween>
-                  </Container>
-                  <Table
-                    trackBy="id"
-                    header={
-                      <Header>Miembros del equipo de investigación</Header>
-                    }
-                    columnDefinitions={[
-                      {
-                        id: "condicion",
-                        header: "Condición",
-                        cell: (item) => item.condicion,
-                      },
-                      {
-                        id: "nombres",
-                        header: "Integrante",
-                        cell: (item) => item.nombres,
-                      },
-                    ]}
-                    columnDisplay={[
-                      { id: "condicion", visible: true },
-                      { id: "nombres", visible: true },
-                    ]}
-                    items={miembros}
+        <SpaceBetween size="xs">
+          {formValues.estado == 3 && (
+            <Box margin={{ top: "s" }}>
+              <Alert type="error" header="Observaciones">
+                {formValues.observaciones}
+              </Alert>
+            </Box>
+          )}
+          <Wizard
+            onNavigate={({ detail }) => setStep(detail.requestedStepIndex)}
+            activeStepIndex={step}
+            onCancel={() => {
+              window.location.href = "../informeAcademico";
+            }}
+            i18nStrings={{
+              optional: "Completar",
+            }}
+            secondaryActions={
+              <Button onClick={sendData} loading={loadingSave}>
+                Guardar informe
+              </Button>
+            }
+            onSubmit={presentar}
+            isLoadingNextStep={loadingSave}
+            submitButtonText="Enviar informe"
+            allowSkipTo
+            steps={[
+              {
+                title: "Información",
+                content: (
+                  <SpaceBetween size="l">
+                    <Container>
+                      <SpaceBetween size="m">
+                        <div>
+                          <Box variant="awsui-key-label">Título</Box>
+                          {loading ? <Spinner /> : <Box>{proyecto.titulo}</Box>}
+                        </div>
+                        <div>
+                          <Box variant="awsui-key-label">Código</Box>
+                          {loading ? (
+                            <Spinner />
+                          ) : (
+                            <Box>{proyecto.codigo_proyecto}</Box>
+                          )}
+                        </div>
+                        <div>
+                          <Box variant="awsui-key-label">Resolución</Box>
+                          {loading ? (
+                            <Spinner />
+                          ) : (
+                            <Box>{proyecto.resolucion_rectoral}</Box>
+                          )}
+                        </div>
+                        <div>
+                          <Box variant="awsui-key-label">Año</Box>
+                          {loading ? (
+                            <Spinner />
+                          ) : (
+                            <Box>{proyecto.periodo}</Box>
+                          )}
+                        </div>
+                        <div>
+                          <Box variant="awsui-key-label">Grupo</Box>
+                          {loading ? (
+                            <Spinner />
+                          ) : (
+                            <Box>{proyecto.grupo_nombre}</Box>
+                          )}
+                        </div>
+                        <div>
+                          <Box variant="awsui-key-label">Localización</Box>
+                          {loading ? (
+                            <Spinner />
+                          ) : (
+                            <Box>{proyecto.localizacion}</Box>
+                          )}
+                        </div>
+                        <div>
+                          <Box variant="awsui-key-label">Facultad</Box>
+                          {loading ? (
+                            <Spinner />
+                          ) : (
+                            <Box>{proyecto.facultad}</Box>
+                          )}
+                        </div>
+                        <div>
+                          <Box variant="awsui-key-label">
+                            Línea de investigación
+                          </Box>
+                          {loading ? <Spinner /> : <Box>{proyecto.linea}</Box>}
+                        </div>
+                        <div>
+                          <Box variant="awsui-key-label">
+                            Tipo de investigación
+                          </Box>
+                          {loading ? (
+                            <Spinner />
+                          ) : (
+                            <Box>{proyecto.tipo_investigacion}</Box>
+                          )}
+                        </div>
+                      </SpaceBetween>
+                    </Container>
+                    <Table
+                      trackBy="id"
+                      header={
+                        <Header>Miembros del equipo de investigación</Header>
+                      }
+                      columnDefinitions={[
+                        {
+                          id: "condicion",
+                          header: "Condición",
+                          cell: (item) => item.condicion,
+                        },
+                        {
+                          id: "nombres",
+                          header: "Integrante",
+                          cell: (item) => item.nombres,
+                        },
+                      ]}
+                      columnDisplay={[
+                        { id: "condicion", visible: true },
+                        { id: "nombres", visible: true },
+                      ]}
+                      items={miembros}
+                    />
+                  </SpaceBetween>
+                ),
+              },
+              {
+                title: "Resumen",
+                description:
+                  "Breve descripción del estudio, en no más de 200 palabras",
+                content: (
+                  <Tiptap
+                    value={formValues.resumen_ejecutivo}
+                    handleChange={handleChange}
+                    name="resumen_ejecutivo"
+                    limitWords={200}
                   />
-                </SpaceBetween>
-              ),
-            },
-            {
-              title: "Resumen",
-              description:
-                "Breve descripción del estudio, en no más de 200 palabras",
-              content: (
-                <Tiptap
-                  value={formValues.resumen_ejecutivo}
-                  handleChange={handleChange}
-                  name="resumen_ejecutivo"
-                  limitWords={200}
-                />
-              ),
-              isOptional: true,
-            },
-            {
-              title: "Palabras clave",
-              description: "Sepárelas por comas",
-              content: (
-                <FormField label="Palabras clave" stretch>
-                  <Input
-                    value={formValues.palabras_clave}
-                    onChange={({ detail }) =>
-                      handleChange("palabras_clave", detail.value)
-                    }
-                  />
-                </FormField>
-              ),
-              isOptional: true,
-            },
-            {
-              title: "Introducción",
-              description: "Importancia de los resultados de la investigación",
-              content: (
-                <Tiptap
-                  value={formValues.infinal1}
-                  handleChange={handleChange}
-                  name="infinal1"
-                  limitWords={600}
-                />
-              ),
-              isOptional: true,
-            },
-            {
-              title: "Metodologías",
-              description: "Metodología y técnicas de investigación utilizadas",
-              content: (
-                <Tiptap
-                  value={formValues.infinal2}
-                  handleChange={handleChange}
-                  name="infinal2"
-                  limitWords={600}
-                />
-              ),
-              isOptional: true,
-            },
-            {
-              title: "Resultados",
-              description:
-                "Capítulos, títulos, subtítulos, tablas, gráficos según corresponda",
-              content: (
-                <Tiptap
-                  value={formValues.infinal3}
-                  handleChange={handleChange}
-                  name="infinal3"
-                  limitWords={2000}
-                />
-              ),
-              isOptional: true,
-            },
-            {
-              title: "Discusión",
-              content: (
-                <Tiptap
-                  value={formValues.infinal4}
-                  handleChange={handleChange}
-                  name="infinal4"
-                  limitWords={600}
-                />
-              ),
-              isOptional: true,
-            },
-            {
-              title: "Conclusiones",
-              content: (
-                <Tiptap
-                  value={formValues.infinal5}
-                  handleChange={handleChange}
-                  name="infinal5"
-                  limitWords={600}
-                />
-              ),
-              isOptional: true,
-            },
-            {
-              title: "Recomendaciones",
-              content: (
-                <Tiptap
-                  value={formValues.infinal6}
-                  handleChange={handleChange}
-                  name="infinal6"
-                  limitWords={2000}
-                />
-              ),
-              isOptional: true,
-            },
-            {
-              title: "Referencias bibliográficas",
-              content: (
-                <Tiptap
-                  value={formValues.infinal7}
-                  handleChange={handleChange}
-                  name="infinal7"
-                  limitWords={2000}
-                />
-              ),
-              isOptional: true,
-            },
-            {
-              title: "Anexos",
-              description: "Archivos adjuntos (ninguno debe superar los 6 MB)",
-              content: (
-                <Container>
-                  <FormField
-                    label="Adjuntar archivo digital"
-                    description={
-                      files["informe-PMULTI-INFORME"] && (
-                        <>
-                          Ya ha cargado un{" "}
-                          <Link
-                            {...propsEnlaces}
-                            href={files["informe-PMULTI-INFORME"]}
-                          >
-                            archivo.
-                          </Link>
-                        </>
-                      )
-                    }
-                    stretch
-                    errorText={formErrors.file1}
-                  >
-                    <FileUpload
-                      {...propsRepetidas}
-                      value={formValues.file1}
-                      onChange={({ detail }) => {
-                        handleChange("file1", detail.value);
-                      }}
+                ),
+                isOptional: true,
+              },
+              {
+                title: "Palabras clave",
+                description: "Sepárelas por comas",
+                content: (
+                  <FormField label="Palabras clave" stretch>
+                    <Input
+                      value={formValues.palabras_clave}
+                      onChange={({ detail }) =>
+                        handleChange("palabras_clave", detail.value)
+                      }
                     />
                   </FormField>
-                </Container>
-              ),
-              isOptional: true,
-            },
-            {
-              title: "Aplicación práctica e impacto",
-              content: (
-                <Tiptap
-                  value={formValues.infinal9}
-                  handleChange={handleChange}
-                  name="infinal9"
-                  limitWords={2000}
-                />
-              ),
-              isOptional: true,
-            },
-            {
-              title: "Publicación",
-              content: (
-                <Tiptap
-                  value={formValues.infinal10}
-                  handleChange={handleChange}
-                  name="infinal10"
-                  limitWords={2000}
-                />
-              ),
-              isOptional: true,
-            },
-            {
-              title: "Calendario de actividades",
-              content: (
-                <Table
-                  {...collectionProps}
-                  trackBy="id"
-                  items={items}
-                  columnDefinitions={columnDefinitions}
-                  columnDisplay={columnDisplay}
-                  wrapLines
-                  selectionType="single"
-                  onRowClick={({ detail }) =>
-                    actions.setSelectedItems([detail.item])
-                  }
-                  header={
-                    <Header
-                      counter={"(" + actividades.length + ")"}
-                      actions={
-                        <ButtonDropdown
-                          disabled={
-                            collectionProps.selectedItems.length > 0
-                              ? false
-                              : true
-                          }
-                          variant="normal"
-                          onItemClick={({ detail }) => {
-                            if (detail.id == "action_1_1") {
-                              setModal("cargar");
-                            } else if (detail.id == "action_1_2") {
-                              window.open(
-                                files[
-                                  "actividad" +
-                                    collectionProps.selectedItems[0]?.indice
-                                ],
-                                "_blank"
-                              );
-                            }
-                          }}
-                          items={[
-                            {
-                              text: "Cargar archivo",
-                              id: "action_1_1",
-                            },
-                            {
-                              text: "Ver archivo cargado",
-                              id: "action_1_2",
-                              disabled:
-                                !files[
-                                  "actividad" +
-                                    collectionProps.selectedItems[0]?.indice
-                                ],
-                            },
-                          ]}
-                        >
-                          Acciones
-                        </ButtonDropdown>
-                      }
-                    >
-                      Actividades
-                    </Header>
-                  }
-                  empty={
-                    <Box
-                      margin={{ vertical: "xs" }}
-                      textAlign="center"
-                      color="inherit"
-                    >
-                      <SpaceBetween size="m">
-                        <b>No hay registros...</b>
-                      </SpaceBetween>
-                    </Box>
-                  }
-                />
-              ),
-              isOptional: true,
-            },
-            {
-              title: "Entregables",
-              description:
-                "Se deben lograr como mínimo los siguientes productos",
-              content: (
-                <SpaceBetween size="l">
-                  <Container
-                    header={
-                      <Box variant="h4">
-                        Tres(03) artículos publicados o aceptados en revistas
-                        indizadas a SCOPUS O WoS, dos (02) de ellos en Q1 o Q2,
-                        o un (01) libro, o dos (02) capítulos de libros
-                        publicados en editoriales de reconocido prestigio, de
-                        acuerdo con las normas internas de la universidad.
-                      </Box>
-                    }
-                  >
-                    <ColumnLayout columns={2}>
-                      <FormField
-                        label="Primer artículo"
-                        stretch
-                        description={
-                          files["articulo1"] && (
-                            <>
-                              Ya ha cargado un{" "}
-                              <Link {...propsEnlaces} href={files["articulo1"]}>
-                                archivo.
-                              </Link>
-                            </>
-                          )
-                        }
-                      >
-                        <FileUpload
-                          {...propsRepetidas}
-                          value={formValues.file2}
-                          onChange={({ detail }) => {
-                            handleChange("file2", detail.value);
-                          }}
-                        />
-                      </FormField>
-                      <FormField
-                        label="Segundo artículo"
-                        stretch
-                        description={
-                          files["articulo2"] && (
-                            <>
-                              Ya ha cargado un{" "}
-                              <Link {...propsEnlaces} href={files["articulo2"]}>
-                                archivo.
-                              </Link>
-                            </>
-                          )
-                        }
-                      >
-                        <FileUpload
-                          {...propsRepetidas}
-                          value={formValues.file3}
-                          onChange={({ detail }) => {
-                            handleChange("file3", detail.value);
-                          }}
-                        />
-                      </FormField>
-                      <FormField
-                        label="Tercer artículo"
-                        stretch
-                        description={
-                          files["articulo3"] && (
-                            <>
-                              Ya ha cargado un{" "}
-                              <Link {...propsEnlaces} href={files["articulo3"]}>
-                                archivo.
-                              </Link>
-                            </>
-                          )
-                        }
-                      >
-                        <FileUpload
-                          {...propsRepetidas}
-                          value={formValues.file4}
-                          onChange={({ detail }) => {
-                            handleChange("file4", detail.value);
-                          }}
-                        />
-                      </FormField>
-                      <FormField
-                        label="Primer capítulo de libro"
-                        stretch
-                        description={
-                          files["capituloLibro1"] && (
-                            <>
-                              Ya ha cargado un{" "}
-                              <Link
-                                {...propsEnlaces}
-                                href={files["capituloLibro1"]}
-                              >
-                                archivo.
-                              </Link>
-                            </>
-                          )
-                        }
-                      >
-                        <FileUpload
-                          {...propsRepetidas}
-                          value={formValues.file5}
-                          onChange={({ detail }) => {
-                            handleChange("file5", detail.value);
-                          }}
-                        />
-                      </FormField>
-                      <FormField
-                        label="Segundo capítulo de libro"
-                        stretch
-                        description={
-                          files["capituloLibro2"] && (
-                            <>
-                              Ya ha cargado un{" "}
-                              <Link
-                                {...propsEnlaces}
-                                href={files["capituloLibro2"]}
-                              >
-                                archivo.
-                              </Link>
-                            </>
-                          )
-                        }
-                      >
-                        <FileUpload
-                          {...propsRepetidas}
-                          value={formValues.file6}
-                          onChange={({ detail }) => {
-                            handleChange("file6", detail.value);
-                          }}
-                        />
-                      </FormField>
-                    </ColumnLayout>
-                  </Container>
-                  <Container
-                    header={
-                      <Box variant="h4">
-                        Dos (02) tesis defendidas, siendo una de ellas de
-                        pregrado y la otra de posgrado.
-                      </Box>
-                    }
-                  >
-                    <ColumnLayout columns={2}>
-                      <FormField
-                        label="Primera tesis de pregrado"
-                        stretch
-                        description={
-                          files["tesis1"] && (
-                            <>
-                              Ya ha cargado un{" "}
-                              <Link {...propsEnlaces} href={files["tesis1"]}>
-                                archivo.
-                              </Link>
-                            </>
-                          )
-                        }
-                      >
-                        <FileUpload
-                          {...propsRepetidas}
-                          value={formValues.file7}
-                          onChange={({ detail }) => {
-                            handleChange("file7", detail.value);
-                          }}
-                        />
-                      </FormField>
-                      <FormField
-                        label="Primera tesis de posgrado"
-                        stretch
-                        description={
-                          files["tesis4"] && (
-                            <>
-                              Ya ha cargado un{" "}
-                              <Link {...propsEnlaces} href={files["tesis4"]}>
-                                archivo.
-                              </Link>
-                            </>
-                          )
-                        }
-                      >
-                        <FileUpload
-                          {...propsRepetidas}
-                          value={formValues.file8}
-                          onChange={({ detail }) => {
-                            handleChange("file8", detail.value);
-                          }}
-                        />
-                      </FormField>
-                    </ColumnLayout>
-                  </Container>
-                  <Container
-                    header={
-                      <Box variant="h4">
-                        Un registro y/o inscripción de solicitud de protección
-                        de propiedad intelectual o de transferencia según la
-                        naturaleza del proyecto.
-                      </Box>
-                    }
-                  >
+                ),
+                isOptional: true,
+              },
+              {
+                title: "Introducción",
+                description:
+                  "Importancia de los resultados de la investigación",
+                content: (
+                  <Tiptap
+                    value={formValues.infinal1}
+                    handleChange={handleChange}
+                    name="infinal1"
+                    limitWords={600}
+                  />
+                ),
+                isOptional: true,
+              },
+              {
+                title: "Metodologías",
+                description:
+                  "Metodología y técnicas de investigación utilizadas",
+                content: (
+                  <Tiptap
+                    value={formValues.infinal2}
+                    handleChange={handleChange}
+                    name="infinal2"
+                    limitWords={600}
+                  />
+                ),
+                isOptional: true,
+              },
+              {
+                title: "Resultados",
+                description:
+                  "Capítulos, títulos, subtítulos, tablas, gráficos según corresponda",
+                content: (
+                  <Tiptap
+                    value={formValues.infinal3}
+                    handleChange={handleChange}
+                    name="infinal3"
+                    limitWords={2000}
+                  />
+                ),
+                isOptional: true,
+              },
+              {
+                title: "Discusión",
+                content: (
+                  <Tiptap
+                    value={formValues.infinal4}
+                    handleChange={handleChange}
+                    name="infinal4"
+                    limitWords={600}
+                  />
+                ),
+                isOptional: true,
+              },
+              {
+                title: "Conclusiones",
+                content: (
+                  <Tiptap
+                    value={formValues.infinal5}
+                    handleChange={handleChange}
+                    name="infinal5"
+                    limitWords={600}
+                  />
+                ),
+                isOptional: true,
+              },
+              {
+                title: "Recomendaciones",
+                content: (
+                  <Tiptap
+                    value={formValues.infinal6}
+                    handleChange={handleChange}
+                    name="infinal6"
+                    limitWords={2000}
+                  />
+                ),
+                isOptional: true,
+              },
+              {
+                title: "Referencias bibliográficas",
+                content: (
+                  <Tiptap
+                    value={formValues.infinal7}
+                    handleChange={handleChange}
+                    name="infinal7"
+                    limitWords={2000}
+                  />
+                ),
+                isOptional: true,
+              },
+              {
+                title: "Anexos",
+                description:
+                  "Archivos adjuntos (ninguno debe superar los 6 MB)",
+                content: (
+                  <Container>
                     <FormField
-                      label="Registro"
-                      stretch
+                      label="Adjuntar archivo digital"
                       description={
-                        files["registro"] && (
+                        files["informe-PMULTI-INFORME"] && (
                           <>
                             Ya ha cargado un{" "}
-                            <Link {...propsEnlaces} href={files["registro"]}>
+                            <Link
+                              {...propsEnlaces}
+                              href={files["informe-PMULTI-INFORME"]}
+                            >
                               archivo.
                             </Link>
                           </>
                         )
                       }
+                      stretch
+                      errorText={formErrors.file1}
                     >
                       <FileUpload
                         {...propsRepetidas}
-                        value={formValues.file9}
+                        value={formValues.file1}
                         onChange={({ detail }) => {
-                          handleChange("file9", detail.value);
+                          handleChange("file1", detail.value);
                         }}
                       />
                     </FormField>
                   </Container>
-                </SpaceBetween>
-              ),
-              isOptional: true,
-            },
-          ]}
-        />
+                ),
+                isOptional: true,
+              },
+              {
+                title: "Aplicación práctica e impacto",
+                content: (
+                  <Tiptap
+                    value={formValues.infinal9}
+                    handleChange={handleChange}
+                    name="infinal9"
+                    limitWords={2000}
+                  />
+                ),
+                isOptional: true,
+              },
+              {
+                title: "Publicación",
+                content: (
+                  <Tiptap
+                    value={formValues.infinal10}
+                    handleChange={handleChange}
+                    name="infinal10"
+                    limitWords={2000}
+                  />
+                ),
+                isOptional: true,
+              },
+              {
+                title: "Calendario de actividades",
+                content: (
+                  <Table
+                    {...collectionProps}
+                    trackBy="id"
+                    items={items}
+                    columnDefinitions={columnDefinitions}
+                    columnDisplay={columnDisplay}
+                    wrapLines
+                    selectionType="single"
+                    onRowClick={({ detail }) =>
+                      actions.setSelectedItems([detail.item])
+                    }
+                    header={
+                      <Header
+                        counter={"(" + actividades.length + ")"}
+                        actions={
+                          <ButtonDropdown
+                            disabled={
+                              collectionProps.selectedItems.length > 0
+                                ? false
+                                : true
+                            }
+                            variant="normal"
+                            onItemClick={({ detail }) => {
+                              if (detail.id == "action_1_1") {
+                                setModal("cargar");
+                              } else if (detail.id == "action_1_2") {
+                                window.open(
+                                  files[
+                                    "actividad" +
+                                      collectionProps.selectedItems[0]?.indice
+                                  ],
+                                  "_blank"
+                                );
+                              }
+                            }}
+                            items={[
+                              {
+                                text: "Cargar archivo",
+                                id: "action_1_1",
+                              },
+                              {
+                                text: "Ver archivo cargado",
+                                id: "action_1_2",
+                                disabled:
+                                  !files[
+                                    "actividad" +
+                                      collectionProps.selectedItems[0]?.indice
+                                  ],
+                              },
+                            ]}
+                          >
+                            Acciones
+                          </ButtonDropdown>
+                        }
+                      >
+                        Actividades
+                      </Header>
+                    }
+                    empty={
+                      <Box
+                        margin={{ vertical: "xs" }}
+                        textAlign="center"
+                        color="inherit"
+                      >
+                        <SpaceBetween size="m">
+                          <b>No hay registros...</b>
+                        </SpaceBetween>
+                      </Box>
+                    }
+                  />
+                ),
+                isOptional: true,
+              },
+              {
+                title: "Entregables",
+                description:
+                  "Se deben lograr como mínimo los siguientes productos",
+                content: (
+                  <SpaceBetween size="l">
+                    <Container
+                      header={
+                        <Box variant="h4">
+                          Tres(03) artículos publicados o aceptados en revistas
+                          indizadas a SCOPUS O WoS, dos (02) de ellos en Q1 o
+                          Q2, o un (01) libro, o dos (02) capítulos de libros
+                          publicados en editoriales de reconocido prestigio, de
+                          acuerdo con las normas internas de la universidad.
+                        </Box>
+                      }
+                    >
+                      <ColumnLayout columns={2}>
+                        <FormField
+                          label="Primer artículo"
+                          stretch
+                          description={
+                            files["articulo1"] && (
+                              <>
+                                Ya ha cargado un{" "}
+                                <Link
+                                  {...propsEnlaces}
+                                  href={files["articulo1"]}
+                                >
+                                  archivo.
+                                </Link>
+                              </>
+                            )
+                          }
+                        >
+                          <FileUpload
+                            {...propsRepetidas}
+                            value={formValues.file2}
+                            onChange={({ detail }) => {
+                              handleChange("file2", detail.value);
+                            }}
+                          />
+                        </FormField>
+                        <FormField
+                          label="Segundo artículo"
+                          stretch
+                          description={
+                            files["articulo2"] && (
+                              <>
+                                Ya ha cargado un{" "}
+                                <Link
+                                  {...propsEnlaces}
+                                  href={files["articulo2"]}
+                                >
+                                  archivo.
+                                </Link>
+                              </>
+                            )
+                          }
+                        >
+                          <FileUpload
+                            {...propsRepetidas}
+                            value={formValues.file3}
+                            onChange={({ detail }) => {
+                              handleChange("file3", detail.value);
+                            }}
+                          />
+                        </FormField>
+                        <FormField
+                          label="Tercer artículo"
+                          stretch
+                          description={
+                            files["articulo3"] && (
+                              <>
+                                Ya ha cargado un{" "}
+                                <Link
+                                  {...propsEnlaces}
+                                  href={files["articulo3"]}
+                                >
+                                  archivo.
+                                </Link>
+                              </>
+                            )
+                          }
+                        >
+                          <FileUpload
+                            {...propsRepetidas}
+                            value={formValues.file4}
+                            onChange={({ detail }) => {
+                              handleChange("file4", detail.value);
+                            }}
+                          />
+                        </FormField>
+                        <FormField
+                          label="Primer capítulo de libro"
+                          stretch
+                          description={
+                            files["capituloLibro1"] && (
+                              <>
+                                Ya ha cargado un{" "}
+                                <Link
+                                  {...propsEnlaces}
+                                  href={files["capituloLibro1"]}
+                                >
+                                  archivo.
+                                </Link>
+                              </>
+                            )
+                          }
+                        >
+                          <FileUpload
+                            {...propsRepetidas}
+                            value={formValues.file5}
+                            onChange={({ detail }) => {
+                              handleChange("file5", detail.value);
+                            }}
+                          />
+                        </FormField>
+                        <FormField
+                          label="Segundo capítulo de libro"
+                          stretch
+                          description={
+                            files["capituloLibro2"] && (
+                              <>
+                                Ya ha cargado un{" "}
+                                <Link
+                                  {...propsEnlaces}
+                                  href={files["capituloLibro2"]}
+                                >
+                                  archivo.
+                                </Link>
+                              </>
+                            )
+                          }
+                        >
+                          <FileUpload
+                            {...propsRepetidas}
+                            value={formValues.file6}
+                            onChange={({ detail }) => {
+                              handleChange("file6", detail.value);
+                            }}
+                          />
+                        </FormField>
+                      </ColumnLayout>
+                    </Container>
+                    <Container
+                      header={
+                        <Box variant="h4">
+                          Dos (02) tesis defendidas, siendo una de ellas de
+                          pregrado y la otra de posgrado.
+                        </Box>
+                      }
+                    >
+                      <ColumnLayout columns={2}>
+                        <FormField
+                          label="Primera tesis de pregrado"
+                          stretch
+                          description={
+                            files["tesis1"] && (
+                              <>
+                                Ya ha cargado un{" "}
+                                <Link {...propsEnlaces} href={files["tesis1"]}>
+                                  archivo.
+                                </Link>
+                              </>
+                            )
+                          }
+                        >
+                          <FileUpload
+                            {...propsRepetidas}
+                            value={formValues.file7}
+                            onChange={({ detail }) => {
+                              handleChange("file7", detail.value);
+                            }}
+                          />
+                        </FormField>
+                        <FormField
+                          label="Primera tesis de posgrado"
+                          stretch
+                          description={
+                            files["tesis4"] && (
+                              <>
+                                Ya ha cargado un{" "}
+                                <Link {...propsEnlaces} href={files["tesis4"]}>
+                                  archivo.
+                                </Link>
+                              </>
+                            )
+                          }
+                        >
+                          <FileUpload
+                            {...propsRepetidas}
+                            value={formValues.file8}
+                            onChange={({ detail }) => {
+                              handleChange("file8", detail.value);
+                            }}
+                          />
+                        </FormField>
+                      </ColumnLayout>
+                    </Container>
+                    <Container
+                      header={
+                        <Box variant="h4">
+                          Un registro y/o inscripción de solicitud de protección
+                          de propiedad intelectual o de transferencia según la
+                          naturaleza del proyecto.
+                        </Box>
+                      }
+                    >
+                      <FormField
+                        label="Registro"
+                        stretch
+                        description={
+                          files["registro"] && (
+                            <>
+                              Ya ha cargado un{" "}
+                              <Link {...propsEnlaces} href={files["registro"]}>
+                                archivo.
+                              </Link>
+                            </>
+                          )
+                        }
+                      >
+                        <FileUpload
+                          {...propsRepetidas}
+                          value={formValues.file9}
+                          onChange={({ detail }) => {
+                            handleChange("file9", detail.value);
+                          }}
+                        />
+                      </FormField>
+                    </Container>
+                  </SpaceBetween>
+                ),
+                isOptional: true,
+              },
+            ]}
+          />
+        </SpaceBetween>
       )}
       {modal == "cargar" && (
         <ModalCargarActividad

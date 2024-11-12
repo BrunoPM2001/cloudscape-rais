@@ -1,4 +1,5 @@
 import {
+  Alert,
   Box,
   Button,
   Container,
@@ -36,7 +37,9 @@ export default () => {
 
   //  Url
   const location = useLocation();
-  const { id, proyecto_id, tipo_proyecto } = queryString.parse(location.search);
+  const { id, proyecto_id, tipo_proyecto, informe } = queryString.parse(
+    location.search
+  );
 
   //  States
   const [step, setStep] = useState(0);
@@ -77,6 +80,7 @@ export default () => {
       );
       handleChange("asistencia_taller", data.informe.asistencia_taller ?? "");
       handleChange("estado", data.informe.estado);
+      handleChange("observaciones", data.informe.observaciones);
       handleChange("id", data.informe.id);
     }
     setLoading(false);
@@ -123,10 +127,12 @@ export default () => {
   const reporte = async () => {
     setLoadingBtn(true);
     const res = await axiosBase.get(
-      "investigador/informes/informe_academico/verInforme",
+      "investigador/informes/informe_academico/reporte",
       {
         params: {
-          id: formValues.id,
+          informe_tecnico_id: id,
+          tipo_informe: informe,
+          tipo_proyecto,
         },
         responseType: "blob",
       }
@@ -150,7 +156,7 @@ export default () => {
             <Spinner /> Cargando datos
           </Container>
         </>
-      ) : formValues.estado ? (
+      ) : formValues.estado == 1 || formValues.estado == 2 ? (
         <>
           <br />
           <Container
@@ -191,134 +197,147 @@ export default () => {
           </Container>
         </>
       ) : (
-        <Wizard
-          onNavigate={({ detail }) => setStep(detail.requestedStepIndex)}
-          activeStepIndex={step}
-          onCancel={() => {
-            window.location.href = "../informeAcademico";
-          }}
-          i18nStrings={{
-            optional: "Completar",
-          }}
-          secondaryActions={
-            <Button onClick={sendData} loading={loadingSave}>
-              Guardar informe
-            </Button>
-          }
-          onSubmit={presentar}
-          isLoadingNextStep={loadingSave}
-          submitButtonText="Enviar informe"
-          allowSkipTo
-          steps={[
-            {
-              title: "Información",
-              description:
-                "Programa de equipamiento científico para investigación de la UNMSM",
-              content: (
-                <Container>
+        <SpaceBetween size="xs">
+          {formValues.estado == 3 && (
+            <Box margin={{ top: "s" }}>
+              <Alert type="error" header="Observaciones">
+                {formValues.observaciones}
+              </Alert>
+            </Box>
+          )}
+          <Wizard
+            onNavigate={({ detail }) => setStep(detail.requestedStepIndex)}
+            activeStepIndex={step}
+            onCancel={() => {
+              window.location.href = "../informeAcademico";
+            }}
+            i18nStrings={{
+              optional: "Completar",
+            }}
+            secondaryActions={
+              <Button onClick={sendData} loading={loadingSave}>
+                Guardar informe
+              </Button>
+            }
+            onSubmit={presentar}
+            isLoadingNextStep={loadingSave}
+            submitButtonText="Enviar informe"
+            allowSkipTo
+            steps={[
+              {
+                title: "Información",
+                description:
+                  "Programa de equipamiento científico para investigación de la UNMSM",
+                content: (
+                  <Container>
+                    <SpaceBetween size="m">
+                      <div>
+                        <Box variant="awsui-key-label">Título</Box>
+                        {loading ? <Spinner /> : <Box>{proyecto.titulo}</Box>}
+                      </div>
+                      <div>
+                        <Box variant="awsui-key-label">Código</Box>
+                        {loading ? (
+                          <Spinner />
+                        ) : (
+                          <Box>{proyecto.codigo_proyecto}</Box>
+                        )}
+                      </div>
+                      <div>
+                        <Box variant="awsui-key-label">Resolución</Box>
+                        {loading ? (
+                          <Spinner />
+                        ) : (
+                          <Box>{proyecto.resolucion}</Box>
+                        )}
+                      </div>
+                      <div>
+                        <Box variant="awsui-key-label">Año</Box>
+                        {loading ? <Spinner /> : <Box>{proyecto.periodo}</Box>}
+                      </div>
+                      <div>
+                        <Box variant="awsui-key-label">Facultad</Box>
+                        {loading ? <Spinner /> : <Box>{proyecto.facultad}</Box>}
+                      </div>
+                    </SpaceBetween>
+                  </Container>
+                ),
+              },
+              {
+                title: "Objetivos",
+                description: "Objetivos y metas del taller que se alcanzaron",
+                content: (
+                  <Tiptap
+                    value={formValues.objetivos_taller}
+                    handleChange={handleChange}
+                    name="objetivos_taller"
+                  />
+                ),
+                isOptional: true,
+              },
+              {
+                title: "Programa taller",
+                description:
+                  "Indicar al detalle las actividades programadas/realizadas",
+                content: (
                   <SpaceBetween size="m">
-                    <div>
-                      <Box variant="awsui-key-label">Título</Box>
-                      {loading ? <Spinner /> : <Box>{proyecto.titulo}</Box>}
-                    </div>
-                    <div>
-                      <Box variant="awsui-key-label">Código</Box>
-                      {loading ? (
-                        <Spinner />
-                      ) : (
-                        <Box>{proyecto.codigo_proyecto}</Box>
-                      )}
-                    </div>
-                    <div>
-                      <Box variant="awsui-key-label">Resolución</Box>
-                      {loading ? <Spinner /> : <Box>{proyecto.resolucion}</Box>}
-                    </div>
-                    <div>
-                      <Box variant="awsui-key-label">Año</Box>
-                      {loading ? <Spinner /> : <Box>{proyecto.periodo}</Box>}
-                    </div>
-                    <div>
-                      <Box variant="awsui-key-label">Facultad</Box>
-                      {loading ? <Spinner /> : <Box>{proyecto.facultad}</Box>}
-                    </div>
+                    <FormField label="Fecha del evento" stretch>
+                      <DatePicker
+                        placeholder="YYYY-MM-DD"
+                        value={formValues.fecha_evento ?? ""}
+                        onChange={({ detail }) =>
+                          handleChange("fecha_evento", detail.value)
+                        }
+                      />
+                    </FormField>
+                    <FormField label="Programa del taller" stretch>
+                      <Tiptap
+                        value={formValues.propuestas_taller}
+                        handleChange={handleChange}
+                        name="propuestas_taller"
+                      />
+                    </FormField>
                   </SpaceBetween>
-                </Container>
-              ),
-            },
-            {
-              title: "Objetivos",
-              description: "Objetivos y metas del taller que se alcanzaron",
-              content: (
-                <Tiptap
-                  value={formValues.objetivos_taller}
-                  handleChange={handleChange}
-                  name="objetivos_taller"
-                />
-              ),
-              isOptional: true,
-            },
-            {
-              title: "Programa taller",
-              description:
-                "Indicar al detalle las actividades programadas/realizadas",
-              content: (
-                <SpaceBetween size="m">
-                  <FormField label="Fecha del evento" stretch>
-                    <DatePicker
-                      placeholder="YYYY-MM-DD"
-                      value={formValues.fecha_evento ?? ""}
-                      onChange={({ detail }) =>
-                        handleChange("fecha_evento", detail.value)
-                      }
-                    />
-                  </FormField>
-                  <FormField label="Programa del taller" stretch>
-                    <Tiptap
-                      value={formValues.propuestas_taller}
-                      handleChange={handleChange}
-                      name="propuestas_taller"
-                    />
-                  </FormField>
-                </SpaceBetween>
-              ),
-              isOptional: true,
-            },
-            {
-              title: "Conclusiones",
-              content: (
-                <Tiptap
-                  value={formValues.conclusion_taller}
-                  handleChange={handleChange}
-                  name="conclusion_taller"
-                />
-              ),
-              isOptional: true,
-            },
-            {
-              title: "Recomendaciones",
-              content: (
-                <Tiptap
-                  value={formValues.recomendacion_taller}
-                  handleChange={handleChange}
-                  name="recomendacion_taller"
-                />
-              ),
-              isOptional: true,
-            },
-            {
-              title: "Asistencia",
-              description: "Obligatoria para docentes a TC y DE",
-              content: (
-                <Tiptap
-                  value={formValues.asistencia_taller}
-                  handleChange={handleChange}
-                  name="asistencia_taller"
-                />
-              ),
-              isOptional: true,
-            },
-          ]}
-        />
+                ),
+                isOptional: true,
+              },
+              {
+                title: "Conclusiones",
+                content: (
+                  <Tiptap
+                    value={formValues.conclusion_taller}
+                    handleChange={handleChange}
+                    name="conclusion_taller"
+                  />
+                ),
+                isOptional: true,
+              },
+              {
+                title: "Recomendaciones",
+                content: (
+                  <Tiptap
+                    value={formValues.recomendacion_taller}
+                    handleChange={handleChange}
+                    name="recomendacion_taller"
+                  />
+                ),
+                isOptional: true,
+              },
+              {
+                title: "Asistencia",
+                description: "Obligatoria para docentes a TC y DE",
+                content: (
+                  <Tiptap
+                    value={formValues.asistencia_taller}
+                    handleChange={handleChange}
+                    name="asistencia_taller"
+                  />
+                ),
+                isOptional: true,
+              },
+            ]}
+          />
+        </SpaceBetween>
       )}
     </>
   );

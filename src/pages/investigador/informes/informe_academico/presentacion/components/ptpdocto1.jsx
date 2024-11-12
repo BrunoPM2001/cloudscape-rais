@@ -1,4 +1,5 @@
 import {
+  Alert,
   Box,
   Button,
   Container,
@@ -104,6 +105,7 @@ export default () => {
       handleChange("infinal1", data.informe.infinal1 ?? "");
       handleChange("infinal2", data.informe.infinal2 ?? "");
       handleChange("estado", data.informe.estado);
+      handleChange("observaciones", data.informe.observaciones);
       handleChange("id", data.informe.id);
     }
     setLoading(false);
@@ -149,10 +151,12 @@ export default () => {
   const reporte = async () => {
     setLoadingBtn(true);
     const res = await axiosBase.get(
-      "investigador/informes/informe_academico/verInforme",
+      "investigador/informes/informe_academico/reporte",
       {
         params: {
-          id: formValues.id,
+          informe_tecnico_id: id,
+          tipo_informe: informe,
+          tipo_proyecto,
         },
         responseType: "blob",
       }
@@ -176,7 +180,7 @@ export default () => {
             <Spinner /> Cargando datos
           </Container>
         </>
-      ) : formValues.estado ? (
+      ) : formValues.estado == 1 || formValues.estado == 2 ? (
         <>
           <br />
           <Container
@@ -217,192 +221,209 @@ export default () => {
           </Container>
         </>
       ) : (
-        <Wizard
-          onNavigate={({ detail }) => setStep(detail.requestedStepIndex)}
-          activeStepIndex={step}
-          onCancel={() => {
-            window.location.href = "../informeAcademico";
-          }}
-          i18nStrings={{
-            optional: "Completar",
-          }}
-          secondaryActions={
-            <Button onClick={sendData} loading={loadingSave}>
-              Guardar informe
-            </Button>
-          }
-          onSubmit={presentar}
-          isLoadingNextStep={loadingSave}
-          submitButtonText="Enviar informe"
-          allowSkipTo
-          steps={[
-            {
-              title: "Información",
-              description:
-                "Programa de equipamiento científico para investigación de la UNMSM",
-              content: (
-                <SpaceBetween size="l">
-                  <Container>
-                    <SpaceBetween size="m">
-                      <div>
-                        <Box variant="awsui-key-label">Título</Box>
-                        {loading ? <Spinner /> : <Box>{proyecto.titulo}</Box>}
-                      </div>
-                      <div>
-                        <Box variant="awsui-key-label">Código</Box>
-                        {loading ? (
-                          <Spinner />
-                        ) : (
-                          <Box>{proyecto.codigo_proyecto}</Box>
-                        )}
-                      </div>
-                      <div>
-                        <Box variant="awsui-key-label">Resolución</Box>
-                        {loading ? (
-                          <Spinner />
-                        ) : (
-                          <Box>{proyecto.resolucion_rectoral}</Box>
-                        )}
-                      </div>
-                      <div>
-                        <Box variant="awsui-key-label">Año</Box>
-                        {loading ? <Spinner /> : <Box>{proyecto.periodo}</Box>}
-                      </div>
-                      <div>
-                        <Box variant="awsui-key-label">Grupo</Box>
-                        {loading ? (
-                          <Spinner />
-                        ) : (
-                          <Box>{proyecto.grupo_nombre}</Box>
-                        )}
-                      </div>
-                      <div>
-                        <Box variant="awsui-key-label">Localización</Box>
-                        {loading ? (
-                          <Spinner />
-                        ) : (
-                          <Box>{proyecto.localizacion}</Box>
-                        )}
-                      </div>
-                      <div>
-                        <Box variant="awsui-key-label">Facultad</Box>
-                        {loading ? <Spinner /> : <Box>{proyecto.facultad}</Box>}
-                      </div>
-                      <div>
-                        <Box variant="awsui-key-label">
-                          Línea de investigación
-                        </Box>
-                        {loading ? <Spinner /> : <Box>{proyecto.linea}</Box>}
-                      </div>
-                    </SpaceBetween>
-                  </Container>
-                  <Table
-                    trackBy="id"
-                    header={
-                      <Header>Miembros del equipo de investigación</Header>
-                    }
-                    columnDefinitions={[
-                      {
-                        id: "condicion",
-                        header: "Condición",
-                        cell: (item) => item.condicion,
-                      },
-                      {
-                        id: "nombres",
-                        header: "Integrante",
-                        cell: (item) => item.nombres,
-                      },
-                    ]}
-                    columnDisplay={[
-                      { id: "condicion", visible: true },
-                      { id: "nombres", visible: true },
-                    ]}
-                    items={miembros}
-                  />
-                </SpaceBetween>
-              ),
-            },
-            {
-              title: "Porcentaje estimado de avance académico",
-              content: (
-                <FormField label="Porcentaje estimado de avance" stretch>
-                  <Input
-                    value={formValues.infinal7}
-                    type="number"
-                    onChange={({ detail }) =>
-                      handleChange("infinal7", detail.value)
-                    }
-                  />
-                </FormField>
-              ),
-              isOptional: true,
-            },
-            {
-              title: "Descripción de actividades realizadas",
-              content: (
-                <SpaceBetween size="m">
-                  <Tiptap
-                    value={formValues.infinal1}
-                    handleChange={handleChange}
-                    name="infinal1"
-                    limitWords={200}
-                  />
-                  <FormField
-                    label="Medios probatorios"
-                    description={
-                      files["informe-PTPDOCTO-INFORME-AVANCE"] && (
-                        <>
-                          Ya ha cargado un{" "}
-                          <Link
-                            {...propsEnlaces}
-                            href={files["informe-PTPDOCTO-INFORME-AVANCE"]}
-                          >
-                            archivo.
-                          </Link>
-                        </>
-                      )
-                    }
-                    stretch
-                    errorText={formErrors.file1}
-                  >
-                    <FileUpload
-                      {...propsRepetidas}
-                      value={formValues.file1}
-                      onChange={({ detail }) => {
-                        handleChange("file1", detail.value);
-                      }}
+        <SpaceBetween size="xs">
+          {formValues.estado == 3 && (
+            <Box margin={{ top: "s" }}>
+              <Alert type="error" header="Observaciones">
+                {formValues.observaciones}
+              </Alert>
+            </Box>
+          )}
+          <Wizard
+            onNavigate={({ detail }) => setStep(detail.requestedStepIndex)}
+            activeStepIndex={step}
+            onCancel={() => {
+              window.location.href = "../informeAcademico";
+            }}
+            i18nStrings={{
+              optional: "Completar",
+            }}
+            secondaryActions={
+              <Button onClick={sendData} loading={loadingSave}>
+                Guardar informe
+              </Button>
+            }
+            onSubmit={presentar}
+            isLoadingNextStep={loadingSave}
+            submitButtonText="Enviar informe"
+            allowSkipTo
+            steps={[
+              {
+                title: "Información",
+                description:
+                  "Programa de equipamiento científico para investigación de la UNMSM",
+                content: (
+                  <SpaceBetween size="l">
+                    <Container>
+                      <SpaceBetween size="m">
+                        <div>
+                          <Box variant="awsui-key-label">Título</Box>
+                          {loading ? <Spinner /> : <Box>{proyecto.titulo}</Box>}
+                        </div>
+                        <div>
+                          <Box variant="awsui-key-label">Código</Box>
+                          {loading ? (
+                            <Spinner />
+                          ) : (
+                            <Box>{proyecto.codigo_proyecto}</Box>
+                          )}
+                        </div>
+                        <div>
+                          <Box variant="awsui-key-label">Resolución</Box>
+                          {loading ? (
+                            <Spinner />
+                          ) : (
+                            <Box>{proyecto.resolucion_rectoral}</Box>
+                          )}
+                        </div>
+                        <div>
+                          <Box variant="awsui-key-label">Año</Box>
+                          {loading ? (
+                            <Spinner />
+                          ) : (
+                            <Box>{proyecto.periodo}</Box>
+                          )}
+                        </div>
+                        <div>
+                          <Box variant="awsui-key-label">Grupo</Box>
+                          {loading ? (
+                            <Spinner />
+                          ) : (
+                            <Box>{proyecto.grupo_nombre}</Box>
+                          )}
+                        </div>
+                        <div>
+                          <Box variant="awsui-key-label">Localización</Box>
+                          {loading ? (
+                            <Spinner />
+                          ) : (
+                            <Box>{proyecto.localizacion}</Box>
+                          )}
+                        </div>
+                        <div>
+                          <Box variant="awsui-key-label">Facultad</Box>
+                          {loading ? (
+                            <Spinner />
+                          ) : (
+                            <Box>{proyecto.facultad}</Box>
+                          )}
+                        </div>
+                        <div>
+                          <Box variant="awsui-key-label">
+                            Línea de investigación
+                          </Box>
+                          {loading ? <Spinner /> : <Box>{proyecto.linea}</Box>}
+                        </div>
+                      </SpaceBetween>
+                    </Container>
+                    <Table
+                      trackBy="id"
+                      header={
+                        <Header>Miembros del equipo de investigación</Header>
+                      }
+                      columnDefinitions={[
+                        {
+                          id: "condicion",
+                          header: "Condición",
+                          cell: (item) => item.condicion,
+                        },
+                        {
+                          id: "nombres",
+                          header: "Integrante",
+                          cell: (item) => item.nombres,
+                        },
+                      ]}
+                      columnDisplay={[
+                        { id: "condicion", visible: true },
+                        { id: "nombres", visible: true },
+                      ]}
+                      items={miembros}
+                    />
+                  </SpaceBetween>
+                ),
+              },
+              {
+                title: "Porcentaje estimado de avance académico",
+                content: (
+                  <FormField label="Porcentaje estimado de avance" stretch>
+                    <Input
+                      value={formValues.infinal7}
+                      type="number"
+                      onChange={({ detail }) =>
+                        handleChange("infinal7", detail.value)
+                      }
                     />
                   </FormField>
-                </SpaceBetween>
-              ),
-              isOptional: true,
-            },
-            {
-              title: "Evaluación global de ejecución académica",
-              content: (
-                <Tiptap
-                  value={formValues.infinal3}
-                  handleChange={handleChange}
-                  name="infinal3"
-                  limitWords={200}
-                />
-              ),
-              isOptional: true,
-            },
-            {
-              title: "Problemas identificados",
-              content: (
-                <Tiptap
-                  value={formValues.infinal2}
-                  handleChange={handleChange}
-                  name="infinal2"
-                  limitWords={600}
-                />
-              ),
-              isOptional: true,
-            },
-          ]}
-        />
+                ),
+                isOptional: true,
+              },
+              {
+                title: "Descripción de actividades realizadas",
+                content: (
+                  <SpaceBetween size="m">
+                    <Tiptap
+                      value={formValues.infinal1}
+                      handleChange={handleChange}
+                      name="infinal1"
+                      limitWords={200}
+                    />
+                    <FormField
+                      label="Medios probatorios"
+                      description={
+                        files["informe-PTPDOCTO-INFORME-AVANCE"] && (
+                          <>
+                            Ya ha cargado un{" "}
+                            <Link
+                              {...propsEnlaces}
+                              href={files["informe-PTPDOCTO-INFORME-AVANCE"]}
+                            >
+                              archivo.
+                            </Link>
+                          </>
+                        )
+                      }
+                      stretch
+                      errorText={formErrors.file1}
+                    >
+                      <FileUpload
+                        {...propsRepetidas}
+                        value={formValues.file1}
+                        onChange={({ detail }) => {
+                          handleChange("file1", detail.value);
+                        }}
+                      />
+                    </FormField>
+                  </SpaceBetween>
+                ),
+                isOptional: true,
+              },
+              {
+                title: "Evaluación global de ejecución académica",
+                content: (
+                  <Tiptap
+                    value={formValues.infinal3}
+                    handleChange={handleChange}
+                    name="infinal3"
+                    limitWords={200}
+                  />
+                ),
+                isOptional: true,
+              },
+              {
+                title: "Problemas identificados",
+                content: (
+                  <Tiptap
+                    value={formValues.infinal2}
+                    handleChange={handleChange}
+                    name="infinal2"
+                    limitWords={600}
+                  />
+                ),
+                isOptional: true,
+              },
+            ]}
+          />
+        </SpaceBetween>
       )}
     </>
   );

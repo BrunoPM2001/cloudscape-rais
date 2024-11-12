@@ -6,6 +6,29 @@ import {
   Link,
 } from "@cloudscape-design/components";
 
+const propsRepetidas = {
+  showFileLastModified: true,
+  showFileSize: true,
+  showFileThumbnail: true,
+  i18nStrings: {
+    uploadButtonText: (e) => (e ? "Cargar archivos" : "Cargar archivo"),
+    dropzoneText: (e) =>
+      e
+        ? "Arrastre los archivos para cargarlos"
+        : "Arrastre el archivo para cargarlo",
+    removeFileAriaLabel: (e) => `Eliminar archivo ${e + 1}`,
+    errorIconAriaLabel: "Error",
+  },
+  accept: ".pdf",
+};
+
+const propsEnlaces = {
+  external: "true",
+  variant: "primary",
+  fontSize: "body-s",
+  target: "_blank",
+};
+
 export default ({
   value1,
   value2,
@@ -22,271 +45,133 @@ export default ({
         <FormField
           label="Documento de conformidad firmada por el coordinador del GI"
           description={
-            files.find((opt) => opt.categoria == "anexo1") ? (
+            files["anexo1"] && (
               <>
-                Cargado el{" "}
-                {files.find((opt) => opt.categoria == "anexo1").comentario},{" "}
-                <Link
-                  href={files.find((opt) => opt.categoria == "anexo1").url}
-                  external="true"
-                  variant="primary"
-                  fontSize="body-s"
-                  target="_blank"
-                >
-                  descargar archivo.
+                Ya ha cargado un{" "}
+                <Link {...propsEnlaces} href={files["anexo1"]}>
+                  archivo.
                 </Link>
               </>
-            ) : (
-              <></>
             )
           }
           stretch
         >
           <FileUpload
+            {...propsRepetidas}
             value={value1}
             onChange={({ detail }) => {
               handleChange("file1", detail.value);
             }}
-            showFileLastModified
-            showFileSize
-            showFileThumbnail
-            constraintText="El archivo cargado no debe superar los 6 MB"
-            i18nStrings={{
-              uploadButtonText: (e) =>
-                e ? "Cargar archivos" : "Cargar archivo",
-              dropzoneText: (e) =>
-                e
-                  ? "Arrastre los archivos para cargarlos"
-                  : "Arrastre el archivo para cargarlo",
-              removeFileAriaLabel: (e) => `Eliminar archivo ${e + 1}`,
-              errorIconAriaLabel: "Error",
-            }}
-            accept=".pdf"
           />
         </FormField>
         <FormField
           label="Imágenes del equipo/gabinete instalado"
           description={
-            files.find((opt) => opt.categoria == "anexo2") ? (
+            files["anexo2"] && (
               <>
-                Cargado el{" "}
-                {files.find((opt) => opt.categoria == "anexo2").comentario},{" "}
-                <Link
-                  href={files.find((opt) => opt.categoria == "anexo2").url}
-                  external="true"
-                  variant="primary"
-                  fontSize="body-s"
-                  target="_blank"
-                >
-                  descargar archivo.
+                Ya ha cargado un{" "}
+                <Link {...propsEnlaces} href={files["anexo2"]}>
+                  archivo.
                 </Link>
               </>
-            ) : (
-              <></>
             )
           }
           stretch
         >
           <FileUpload
+            {...propsRepetidas}
             value={value2}
             onChange={({ detail }) => {
               handleChange("file2", detail.value);
             }}
-            showFileLastModified
-            showFileSize
-            showFileThumbnail
-            constraintText="El archivo cargado no debe superar los 6 MB"
-            i18nStrings={{
-              uploadButtonText: (e) =>
-                e ? "Cargar archivos" : "Cargar archivo",
-              dropzoneText: (e) =>
-                e
-                  ? "Arrastre los archivos para cargarlos"
-                  : "Arrastre el archivo para cargarlo",
-              removeFileAriaLabel: (e) => `Eliminar archivo ${e + 1}`,
-              errorIconAriaLabel: "Error",
-            }}
-            accept=".pdf"
           />
         </FormField>
         <FormField
           label="Imágenes de equipos complementarios al equipo/gabinete instalado"
           description={
-            files.find((opt) => opt.categoria == "anexo3") ? (
+            files["anexo3"] && (
               <>
-                Cargado el{" "}
-                {files.find((opt) => opt.categoria == "anexo3").comentario},{" "}
-                <Link
-                  href={files.find((opt) => opt.categoria == "anexo3").url}
-                  external="true"
-                  variant="primary"
-                  fontSize="body-s"
-                  target="_blank"
-                >
-                  descargar archivo.
+                Ya ha cargado un{" "}
+                <Link {...propsEnlaces} href={files["anexo3"]}>
+                  archivo.
                 </Link>
               </>
-            ) : (
-              <></>
             )
           }
           stretch
         >
           <FileUpload
+            {...propsRepetidas}
             value={value3}
             onChange={({ detail }) => {
               handleChange("file3", detail.value);
             }}
-            showFileLastModified
-            showFileSize
-            showFileThumbnail
-            constraintText="El archivo cargado no debe superar los 6 MB"
-            i18nStrings={{
-              uploadButtonText: (e) =>
-                e ? "Cargar archivos" : "Cargar archivo",
-              dropzoneText: (e) =>
-                e
-                  ? "Arrastre los archivos para cargarlos"
-                  : "Arrastre el archivo para cargarlo",
-              removeFileAriaLabel: (e) => `Eliminar archivo ${e + 1}`,
-              errorIconAriaLabel: "Error",
-            }}
-            accept=".pdf"
           />
         </FormField>
         <FormField
           label="Formato de control del uso del equipo, incluir uso compartido"
           description={
-            files.find((opt) => opt.categoria == "anexo4") ? (
+            files["anexo4"] && (
               <>
-                Cargado el{" "}
-                {files.find((opt) => opt.categoria == "anexo4").comentario},{" "}
-                <Link
-                  href={files.find((opt) => opt.categoria == "anexo4").url}
-                  external="true"
-                  variant="primary"
-                  fontSize="body-s"
-                  target="_blank"
-                >
-                  descargar archivo.
+                Ya ha cargado un{" "}
+                <Link {...propsEnlaces} href={files["anexo4"]}>
+                  archivo.
                 </Link>
               </>
-            ) : (
-              <></>
             )
           }
           stretch
         >
           <FileUpload
+            {...propsRepetidas}
             value={value4}
             onChange={({ detail }) => {
               handleChange("file4", detail.value);
             }}
-            showFileLastModified
-            showFileSize
-            showFileThumbnail
-            constraintText="El archivo cargado no debe superar los 6 MB"
-            i18nStrings={{
-              uploadButtonText: (e) =>
-                e ? "Cargar archivos" : "Cargar archivo",
-              dropzoneText: (e) =>
-                e
-                  ? "Arrastre los archivos para cargarlos"
-                  : "Arrastre el archivo para cargarlo",
-              removeFileAriaLabel: (e) => `Eliminar archivo ${e + 1}`,
-              errorIconAriaLabel: "Error",
-            }}
-            accept=".pdf"
           />
         </FormField>
         <FormField
           label="Plan de manejo de residuos, efluentes y/o emisiones"
           description={
-            files.find((opt) => opt.categoria == "anexo5") ? (
+            files["anexo5"] && (
               <>
-                Cargado el{" "}
-                {files.find((opt) => opt.categoria == "anexo5").comentario},{" "}
-                <Link
-                  href={files.find((opt) => opt.categoria == "anexo5").url}
-                  external="true"
-                  variant="primary"
-                  fontSize="body-s"
-                  target="_blank"
-                >
-                  descargar archivo.
+                Ya ha cargado un{" "}
+                <Link {...propsEnlaces} href={files["anexo5"]}>
+                  archivo.
                 </Link>
               </>
-            ) : (
-              <>Solo si es que corresponde</>
             )
           }
           stretch
         >
           <FileUpload
+            {...propsRepetidas}
             value={value5}
             onChange={({ detail }) => {
               handleChange("file5", detail.value);
             }}
-            showFileLastModified
-            showFileSize
-            showFileThumbnail
-            constraintText="El archivo cargado no debe superar los 6 MB"
-            i18nStrings={{
-              uploadButtonText: (e) =>
-                e ? "Cargar archivos" : "Cargar archivo",
-              dropzoneText: (e) =>
-                e
-                  ? "Arrastre los archivos para cargarlos"
-                  : "Arrastre el archivo para cargarlo",
-              removeFileAriaLabel: (e) => `Eliminar archivo ${e + 1}`,
-              errorIconAriaLabel: "Error",
-            }}
-            accept=".pdf"
           />
         </FormField>
         <FormField
           label="Otros documentos"
           description={
-            files.find((opt) => opt.categoria == "anexo6") ? (
+            files["anexo6"] && (
               <>
-                Cargado el{" "}
-                {files.find((opt) => opt.categoria == "anexo6").comentario},{" "}
-                <Link
-                  href={files.find((opt) => opt.categoria == "anexo6").url}
-                  external="true"
-                  variant="primary"
-                  fontSize="body-s"
-                  target="_blank"
-                >
-                  descargar archivo.
+                Ya ha cargado un{" "}
+                <Link {...propsEnlaces} href={files["anexo6"]}>
+                  archivo.
                 </Link>
               </>
-            ) : (
-              <>Si fueran necesarios</>
             )
           }
           stretch
         >
           <FileUpload
+            {...propsRepetidas}
             value={value6}
             onChange={({ detail }) => {
               handleChange("file6", detail.value);
             }}
-            showFileLastModified
-            showFileSize
-            showFileThumbnail
-            constraintText="El archivo cargado no debe superar los 6 MB"
-            i18nStrings={{
-              uploadButtonText: (e) =>
-                e ? "Cargar archivos" : "Cargar archivo",
-              dropzoneText: (e) =>
-                e
-                  ? "Arrastre los archivos para cargarlos"
-                  : "Arrastre el archivo para cargarlo",
-              removeFileAriaLabel: (e) => `Eliminar archivo ${e + 1}`,
-              errorIconAriaLabel: "Error",
-            }}
-            accept=".pdf"
           />
         </FormField>
       </ColumnLayout>

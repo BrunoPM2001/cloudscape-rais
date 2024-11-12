@@ -1,4 +1,5 @@
 import {
+  Alert,
   Box,
   Button,
   ColumnLayout,
@@ -73,7 +74,9 @@ export default () => {
 
   //  Url
   const location = useLocation();
-  const { id, proyecto_id, tipo_proyecto } = queryString.parse(location.search);
+  const { id, proyecto_id, tipo_proyecto, informe } = queryString.parse(
+    location.search
+  );
 
   //  States
   const [step, setStep] = useState(0);
@@ -118,6 +121,7 @@ export default () => {
       handleChange("infinal9", data.informe.infinal9 ?? "");
       handleChange("infinal10", data.informe.infinal10 ?? "");
       handleChange("estado", data.informe.estado);
+      handleChange("observaciones", data.informe.observaciones);
       handleChange("id", data.informe.id);
     }
     setLoading(false);
@@ -171,10 +175,12 @@ export default () => {
   const reporte = async () => {
     setLoadingBtn(true);
     const res = await axiosBase.get(
-      "investigador/informes/informe_academico/verInforme",
+      "investigador/informes/informe_academico/reporte",
       {
         params: {
-          id: formValues.id,
+          informe_tecnico_id: id,
+          tipo_informe: informe,
+          tipo_proyecto,
         },
         responseType: "blob",
       }
@@ -198,7 +204,7 @@ export default () => {
             <Spinner /> Cargando datos
           </Container>
         </>
-      ) : formValues.estado ? (
+      ) : formValues.estado == 1 || formValues.estado == 2 ? (
         <>
           <br />
           <Container
@@ -239,333 +245,353 @@ export default () => {
           </Container>
         </>
       ) : (
-        <Wizard
-          onNavigate={({ detail }) => setStep(detail.requestedStepIndex)}
-          activeStepIndex={step}
-          onCancel={() => {
-            window.location.href = "../informeAcademico";
-          }}
-          i18nStrings={{
-            optional: "Completar",
-          }}
-          secondaryActions={
-            <Button onClick={sendData} loading={loadingSave}>
-              Guardar informe
-            </Button>
-          }
-          onSubmit={presentar}
-          isLoadingNextStep={loadingSave}
-          submitButtonText="Enviar informe"
-          allowSkipTo
-          steps={[
-            {
-              title: "Información",
-              description:
-                "Programa de equipamiento científico para investigación de la UNMSM",
-              content: (
-                <SpaceBetween size="l">
+        <SpaceBetween size="xs">
+          {formValues.estado == 3 && (
+            <Box margin={{ top: "s" }}>
+              <Alert type="error" header="Observaciones">
+                {formValues.observaciones}
+              </Alert>
+            </Box>
+          )}
+          <Wizard
+            onNavigate={({ detail }) => setStep(detail.requestedStepIndex)}
+            activeStepIndex={step}
+            onCancel={() => {
+              window.location.href = "../informeAcademico";
+            }}
+            i18nStrings={{
+              optional: "Completar",
+            }}
+            secondaryActions={
+              <Button onClick={sendData} loading={loadingSave}>
+                Guardar informe
+              </Button>
+            }
+            onSubmit={presentar}
+            isLoadingNextStep={loadingSave}
+            submitButtonText="Enviar informe"
+            allowSkipTo
+            steps={[
+              {
+                title: "Información",
+                description:
+                  "Programa de equipamiento científico para investigación de la UNMSM",
+                content: (
+                  <SpaceBetween size="l">
+                    <Container>
+                      <SpaceBetween size="m">
+                        <div>
+                          <Box variant="awsui-key-label">Título</Box>
+                          {loading ? <Spinner /> : <Box>{proyecto.titulo}</Box>}
+                        </div>
+                        <div>
+                          <Box variant="awsui-key-label">Código</Box>
+                          {loading ? (
+                            <Spinner />
+                          ) : (
+                            <Box>{proyecto.codigo_proyecto}</Box>
+                          )}
+                        </div>
+                        <div>
+                          <Box variant="awsui-key-label">Resolución</Box>
+                          {loading ? (
+                            <Spinner />
+                          ) : (
+                            <Box>{proyecto.resolucion_rectoral}</Box>
+                          )}
+                        </div>
+                        <div>
+                          <Box variant="awsui-key-label">Año</Box>
+                          {loading ? (
+                            <Spinner />
+                          ) : (
+                            <Box>{proyecto.periodo}</Box>
+                          )}
+                        </div>
+                        <div>
+                          <Box variant="awsui-key-label">Grupo</Box>
+                          {loading ? (
+                            <Spinner />
+                          ) : (
+                            <Box>{proyecto.grupo_nombre}</Box>
+                          )}
+                        </div>
+                        <div>
+                          <Box variant="awsui-key-label">Localización</Box>
+                          {loading ? (
+                            <Spinner />
+                          ) : (
+                            <Box>{proyecto.localizacion}</Box>
+                          )}
+                        </div>
+                        <div>
+                          <Box variant="awsui-key-label">Facultad</Box>
+                          {loading ? (
+                            <Spinner />
+                          ) : (
+                            <Box>{proyecto.facultad}</Box>
+                          )}
+                        </div>
+                        <div>
+                          <Box variant="awsui-key-label">
+                            Línea de investigación
+                          </Box>
+                          {loading ? <Spinner /> : <Box>{proyecto.linea}</Box>}
+                        </div>
+                        <div>
+                          <Box variant="awsui-key-label">
+                            Tipo de investigación
+                          </Box>
+                          {loading ? (
+                            <Spinner />
+                          ) : (
+                            <Box>{proyecto.tipo_investigacion}</Box>
+                          )}
+                        </div>
+                      </SpaceBetween>
+                    </Container>
+                    <Table
+                      trackBy="id"
+                      header={
+                        <Header>Miembros del equipo de investigación</Header>
+                      }
+                      columnDefinitions={[
+                        {
+                          id: "condicion",
+                          header: "Condición",
+                          cell: (item) => item.condicion,
+                        },
+                        {
+                          id: "nombres",
+                          header: "Integrante",
+                          cell: (item) => item.nombres,
+                        },
+                      ]}
+                      columnDisplay={[
+                        { id: "condicion", visible: true },
+                        { id: "nombres", visible: true },
+                      ]}
+                      items={miembros}
+                    />
+                  </SpaceBetween>
+                ),
+              },
+              {
+                title: "Resumen",
+                description:
+                  "Breve descripción del estudio, en no más de 200 palabras",
+                content: (
+                  <Tiptap
+                    value={formValues.resumen_ejecutivo}
+                    handleChange={handleChange}
+                    name="resumen_ejecutivo"
+                    limitWords={200}
+                  />
+                ),
+                isOptional: true,
+              },
+              {
+                title: "Palabras clave",
+                description: "Sepárelas por comas",
+                content: (
+                  <FormField label="Palabras clave" stretch>
+                    <Input
+                      value={formValues.palabras_clave}
+                      onChange={({ detail }) =>
+                        handleChange("palabras_clave", detail.value)
+                      }
+                    />
+                  </FormField>
+                ),
+                isOptional: true,
+              },
+              {
+                title: "Introducción",
+                description:
+                  "Importancia de los resultados de la investigación",
+                content: (
+                  <Tiptap
+                    value={formValues.infinal1}
+                    handleChange={handleChange}
+                    name="infinal1"
+                    limitWords={600}
+                  />
+                ),
+                isOptional: true,
+              },
+              {
+                title: "Metodologías",
+                description:
+                  "Metodología y técnicas de investigación utilizadas",
+                content: (
+                  <Tiptap
+                    value={formValues.infinal2}
+                    handleChange={handleChange}
+                    name="infinal2"
+                    limitWords={600}
+                  />
+                ),
+                isOptional: true,
+              },
+              {
+                title: "Resultados",
+                description:
+                  "Capítulos, títulos, subtítulos, tablas, gráficos según corresponda",
+                content: (
+                  <Tiptap
+                    value={formValues.infinal3}
+                    handleChange={handleChange}
+                    name="infinal3"
+                    limitWords={2000}
+                  />
+                ),
+                isOptional: true,
+              },
+              {
+                title: "Discusión",
+                content: (
+                  <Tiptap
+                    value={formValues.infinal4}
+                    handleChange={handleChange}
+                    name="infinal4"
+                    limitWords={600}
+                  />
+                ),
+                isOptional: true,
+              },
+              {
+                title: "Conclusiones",
+                content: (
+                  <Tiptap
+                    value={formValues.infinal5}
+                    handleChange={handleChange}
+                    name="infinal5"
+                    limitWords={600}
+                  />
+                ),
+                isOptional: true,
+              },
+              {
+                title: "Recomendaciones",
+                content: (
+                  <Tiptap
+                    value={formValues.infinal6}
+                    handleChange={handleChange}
+                    name="infinal6"
+                    limitWords={2000}
+                  />
+                ),
+                isOptional: true,
+              },
+              {
+                title: "Referencias bibliográficas",
+                content: (
+                  <Tiptap
+                    value={formValues.infinal7}
+                    handleChange={handleChange}
+                    name="infinal7"
+                    limitWords={2000}
+                  />
+                ),
+                isOptional: true,
+              },
+              {
+                title: "Anexos",
+                description:
+                  "Archivos adjuntos (ninguno debe superar los 6 MB)",
+                content: (
                   <Container>
-                    <SpaceBetween size="m">
-                      <div>
-                        <Box variant="awsui-key-label">Título</Box>
-                        {loading ? <Spinner /> : <Box>{proyecto.titulo}</Box>}
-                      </div>
-                      <div>
-                        <Box variant="awsui-key-label">Código</Box>
-                        {loading ? (
-                          <Spinner />
-                        ) : (
-                          <Box>{proyecto.codigo_proyecto}</Box>
-                        )}
-                      </div>
-                      <div>
-                        <Box variant="awsui-key-label">Resolución</Box>
-                        {loading ? (
-                          <Spinner />
-                        ) : (
-                          <Box>{proyecto.resolucion_rectoral}</Box>
-                        )}
-                      </div>
-                      <div>
-                        <Box variant="awsui-key-label">Año</Box>
-                        {loading ? <Spinner /> : <Box>{proyecto.periodo}</Box>}
-                      </div>
-                      <div>
-                        <Box variant="awsui-key-label">Grupo</Box>
-                        {loading ? (
-                          <Spinner />
-                        ) : (
-                          <Box>{proyecto.grupo_nombre}</Box>
-                        )}
-                      </div>
-                      <div>
-                        <Box variant="awsui-key-label">Localización</Box>
-                        {loading ? (
-                          <Spinner />
-                        ) : (
-                          <Box>{proyecto.localizacion}</Box>
-                        )}
-                      </div>
-                      <div>
-                        <Box variant="awsui-key-label">Facultad</Box>
-                        {loading ? <Spinner /> : <Box>{proyecto.facultad}</Box>}
-                      </div>
-                      <div>
-                        <Box variant="awsui-key-label">
-                          Línea de investigación
-                        </Box>
-                        {loading ? <Spinner /> : <Box>{proyecto.linea}</Box>}
-                      </div>
-                      <div>
-                        <Box variant="awsui-key-label">
-                          Tipo de investigación
-                        </Box>
-                        {loading ? (
-                          <Spinner />
-                        ) : (
-                          <Box>{proyecto.tipo_investigacion}</Box>
-                        )}
-                      </div>
-                    </SpaceBetween>
+                    <ColumnLayout columns={2}>
+                      <FormField
+                        label="Adjuntar archivo digital"
+                        description={
+                          files["informe-PCONFIGI-INFORME"] && (
+                            <>
+                              Ya ha cargado un{" "}
+                              <Link
+                                {...propsEnlaces}
+                                href={files["informe-PCONFIGI-INFORME"]}
+                              >
+                                archivo.
+                              </Link>
+                            </>
+                          )
+                        }
+                        stretch
+                        errorText={formErrors.file1}
+                      >
+                        <FileUpload
+                          {...propsRepetidas}
+                          value={formValues.file1}
+                          onChange={({ detail }) => {
+                            handleChange("file1", detail.value);
+                          }}
+                        />
+                      </FormField>
+                      <FormField
+                        label="Reporte de Viabilidad"
+                        info={
+                          <Link
+                            variant="info"
+                            href="/minio/templates/Modelo_Reporte_Viabilidad.xlsx"
+                          >
+                            Descargar modelo
+                          </Link>
+                        }
+                        constraintText="Remitir el formulario con los campos completados (ver modelo) a la Dirección de Promoción DGITT-VRIP dp.vrip@unmsm.edu.pe"
+                        description={
+                          files.viabilidad && (
+                            <>
+                              Ya ha cargado un{" "}
+                              <Link {...propsEnlaces} href={files.viabilidad}>
+                                archivo.
+                              </Link>
+                            </>
+                          )
+                        }
+                        stretch
+                        errorText={formErrors.file2}
+                      >
+                        <FileUpload
+                          {...propsRepetidas}
+                          value={formValues.file2}
+                          onChange={({ detail }) => {
+                            handleChange("file2", detail.value);
+                          }}
+                        />
+                      </FormField>
+                    </ColumnLayout>
                   </Container>
-                  <Table
-                    trackBy="id"
-                    header={
-                      <Header>Miembros del equipo de investigación</Header>
-                    }
-                    columnDefinitions={[
-                      {
-                        id: "condicion",
-                        header: "Condición",
-                        cell: (item) => item.condicion,
-                      },
-                      {
-                        id: "nombres",
-                        header: "Integrante",
-                        cell: (item) => item.nombres,
-                      },
-                    ]}
-                    columnDisplay={[
-                      { id: "condicion", visible: true },
-                      { id: "nombres", visible: true },
-                    ]}
-                    items={miembros}
+                ),
+                isOptional: true,
+              },
+              {
+                title: "Aplicación práctica e impacto",
+                content: (
+                  <Tiptap
+                    value={formValues.infinal9}
+                    handleChange={handleChange}
+                    name="infinal9"
+                    limitWords={2000}
                   />
-                </SpaceBetween>
-              ),
-            },
-            {
-              title: "Resumen",
-              description:
-                "Breve descripción del estudio, en no más de 200 palabras",
-              content: (
-                <Tiptap
-                  value={formValues.resumen_ejecutivo}
-                  handleChange={handleChange}
-                  name="resumen_ejecutivo"
-                  limitWords={200}
-                />
-              ),
-              isOptional: true,
-            },
-            {
-              title: "Palabras clave",
-              description: "Sepárelas por comas",
-              content: (
-                <FormField label="Palabras clave" stretch>
-                  <Input
-                    value={formValues.palabras_clave}
-                    onChange={({ detail }) =>
-                      handleChange("palabras_clave", detail.value)
-                    }
+                ),
+                isOptional: true,
+              },
+              {
+                title: "Publicación",
+                content: (
+                  <Tiptap
+                    value={formValues.infinal10}
+                    handleChange={handleChange}
+                    name="infinal10"
+                    limitWords={2000}
                   />
-                </FormField>
-              ),
-              isOptional: true,
-            },
-            {
-              title: "Introducción",
-              description: "Importancia de los resultados de la investigación",
-              content: (
-                <Tiptap
-                  value={formValues.infinal1}
-                  handleChange={handleChange}
-                  name="infinal1"
-                  limitWords={600}
-                />
-              ),
-              isOptional: true,
-            },
-            {
-              title: "Metodologías",
-              description: "Metodología y técnicas de investigación utilizadas",
-              content: (
-                <Tiptap
-                  value={formValues.infinal2}
-                  handleChange={handleChange}
-                  name="infinal2"
-                  limitWords={600}
-                />
-              ),
-              isOptional: true,
-            },
-            {
-              title: "Resultados",
-              description:
-                "Capítulos, títulos, subtítulos, tablas, gráficos según corresponda",
-              content: (
-                <Tiptap
-                  value={formValues.infinal3}
-                  handleChange={handleChange}
-                  name="infinal3"
-                  limitWords={2000}
-                />
-              ),
-              isOptional: true,
-            },
-            {
-              title: "Discusión",
-              content: (
-                <Tiptap
-                  value={formValues.infinal4}
-                  handleChange={handleChange}
-                  name="infinal4"
-                  limitWords={600}
-                />
-              ),
-              isOptional: true,
-            },
-            {
-              title: "Conclusiones",
-              content: (
-                <Tiptap
-                  value={formValues.infinal5}
-                  handleChange={handleChange}
-                  name="infinal5"
-                  limitWords={600}
-                />
-              ),
-              isOptional: true,
-            },
-            {
-              title: "Recomendaciones",
-              content: (
-                <Tiptap
-                  value={formValues.infinal6}
-                  handleChange={handleChange}
-                  name="infinal6"
-                  limitWords={2000}
-                />
-              ),
-              isOptional: true,
-            },
-            {
-              title: "Referencias bibliográficas",
-              content: (
-                <Tiptap
-                  value={formValues.infinal7}
-                  handleChange={handleChange}
-                  name="infinal7"
-                  limitWords={2000}
-                />
-              ),
-              isOptional: true,
-            },
-            {
-              title: "Anexos",
-              description: "Archivos adjuntos (ninguno debe superar los 6 MB)",
-              content: (
-                <Container>
-                  <ColumnLayout columns={2}>
-                    <FormField
-                      label="Adjuntar archivo digital"
-                      description={
-                        files["informe-PCONFIGI-INFORME"] && (
-                          <>
-                            Ya ha cargado un{" "}
-                            <Link
-                              {...propsEnlaces}
-                              href={files["informe-PCONFIGI-INFORME"]}
-                            >
-                              archivo.
-                            </Link>
-                          </>
-                        )
-                      }
-                      stretch
-                      errorText={formErrors.file1}
-                    >
-                      <FileUpload
-                        {...propsRepetidas}
-                        value={formValues.file1}
-                        onChange={({ detail }) => {
-                          handleChange("file1", detail.value);
-                        }}
-                      />
-                    </FormField>
-                    <FormField
-                      label="Reporte de Viabilidad"
-                      info={
-                        <Link
-                          variant="info"
-                          href="/minio/templates/Modelo_Reporte_Viabilidad.xlsx"
-                        >
-                          Descargar modelo
-                        </Link>
-                      }
-                      constraintText="Remitir el formulario con los campos completados (ver modelo) a la Dirección de Promoción DGITT-VRIP dp.vrip@unmsm.edu.pe"
-                      description={
-                        files.viabilidad && (
-                          <>
-                            Ya ha cargado un{" "}
-                            <Link {...propsEnlaces} href={files.viabilidad}>
-                              archivo.
-                            </Link>
-                          </>
-                        )
-                      }
-                      stretch
-                      errorText={formErrors.file2}
-                    >
-                      <FileUpload
-                        {...propsRepetidas}
-                        value={formValues.file2}
-                        onChange={({ detail }) => {
-                          handleChange("file2", detail.value);
-                        }}
-                      />
-                    </FormField>
-                  </ColumnLayout>
-                </Container>
-              ),
-              isOptional: true,
-            },
-            {
-              title: "Aplicación práctica e impacto",
-              content: (
-                <Tiptap
-                  value={formValues.infinal9}
-                  handleChange={handleChange}
-                  name="infinal9"
-                  limitWords={2000}
-                />
-              ),
-              isOptional: true,
-            },
-            {
-              title: "Publicación",
-              content: (
-                <Tiptap
-                  value={formValues.infinal10}
-                  handleChange={handleChange}
-                  name="infinal10"
-                  limitWords={2000}
-                />
-              ),
-              isOptional: true,
-            },
-          ]}
-        />
+                ),
+                isOptional: true,
+              },
+            ]}
+          />
+        </SpaceBetween>
       )}
     </>
   );

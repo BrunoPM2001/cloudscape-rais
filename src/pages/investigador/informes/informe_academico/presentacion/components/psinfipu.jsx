@@ -1,4 +1,5 @@
 import {
+  Alert,
   Box,
   Button,
   Container,
@@ -61,7 +62,9 @@ export default () => {
 
   //  Url
   const location = useLocation();
-  const { id, proyecto_id, tipo_proyecto } = queryString.parse(location.search);
+  const { id, proyecto_id, tipo_proyecto, informe } = queryString.parse(
+    location.search
+  );
 
   //  States
   const [step, setStep] = useState(0);
@@ -97,6 +100,7 @@ export default () => {
       handleChange("resumen_ejecutivo", data.informe.resumen_ejecutivo ?? "");
       handleChange("infinal1", data.informe.infinal1 ?? "");
       handleChange("estado", data.informe.estado);
+      handleChange("observaciones", data.informe.observaciones);
       handleChange("id", data.informe.id);
     }
     setLoading(false);
@@ -140,10 +144,12 @@ export default () => {
   const reporte = async () => {
     setLoadingBtn(true);
     const res = await axiosBase.get(
-      "investigador/informes/informe_academico/verInforme",
+      "investigador/informes/informe_academico/reporte",
       {
         params: {
-          id: formValues.id,
+          informe_tecnico_id: id,
+          tipo_informe: informe,
+          tipo_proyecto,
         },
         responseType: "blob",
       }
@@ -167,7 +173,7 @@ export default () => {
             <Spinner /> Cargando datos
           </Container>
         </>
-      ) : formValues.estado ? (
+      ) : formValues.estado == 1 || formValues.estado == 2 ? (
         <>
           <br />
           <Container
@@ -208,177 +214,194 @@ export default () => {
           </Container>
         </>
       ) : (
-        <Wizard
-          onNavigate={({ detail }) => setStep(detail.requestedStepIndex)}
-          activeStepIndex={step}
-          onCancel={() => {
-            window.location.href = "../informeAcademico";
-          }}
-          i18nStrings={{
-            optional: "Completar",
-          }}
-          secondaryActions={
-            <Button onClick={sendData} loading={loadingSave}>
-              Guardar informe
-            </Button>
-          }
-          onSubmit={presentar}
-          isLoadingNextStep={loadingSave}
-          submitButtonText="Enviar informe"
-          allowSkipTo
-          steps={[
-            {
-              title: "Información",
-              description:
-                "Programa de equipamiento científico para investigación de la UNMSM",
-              content: (
-                <SpaceBetween size="l">
-                  <Container>
-                    <SpaceBetween size="m">
-                      <div>
-                        <Box variant="awsui-key-label">Título</Box>
-                        {loading ? <Spinner /> : <Box>{proyecto.titulo}</Box>}
-                      </div>
-                      <div>
-                        <Box variant="awsui-key-label">Código</Box>
-                        {loading ? (
-                          <Spinner />
-                        ) : (
-                          <Box>{proyecto.codigo_proyecto}</Box>
-                        )}
-                      </div>
-                      <div>
-                        <Box variant="awsui-key-label">Resolución</Box>
-                        {loading ? (
-                          <Spinner />
-                        ) : (
-                          <Box>{proyecto.resolucion_rectoral}</Box>
-                        )}
-                      </div>
-                      <div>
-                        <Box variant="awsui-key-label">Año</Box>
-                        {loading ? <Spinner /> : <Box>{proyecto.periodo}</Box>}
-                      </div>
-                      <div>
-                        <Box variant="awsui-key-label">Grupo</Box>
-                        {loading ? (
-                          <Spinner />
-                        ) : (
-                          <Box>{proyecto.grupo_nombre}</Box>
-                        )}
-                      </div>
-                      <div>
-                        <Box variant="awsui-key-label">Localización</Box>
-                        {loading ? (
-                          <Spinner />
-                        ) : (
-                          <Box>{proyecto.localizacion}</Box>
-                        )}
-                      </div>
-                      <div>
-                        <Box variant="awsui-key-label">Facultad</Box>
-                        {loading ? <Spinner /> : <Box>{proyecto.facultad}</Box>}
-                      </div>
-                      <div>
-                        <Box variant="awsui-key-label">
-                          Línea de investigación
-                        </Box>
-                        {loading ? <Spinner /> : <Box>{proyecto.linea}</Box>}
-                      </div>
-                    </SpaceBetween>
-                  </Container>
-                  <Table
-                    trackBy="id"
-                    header={
-                      <Header>Miembros del equipo de investigación</Header>
-                    }
-                    columnDefinitions={[
-                      {
-                        id: "condicion",
-                        header: "Condición",
-                        cell: (item) => item.condicion,
-                      },
-                      {
-                        id: "nombres",
-                        header: "Integrante",
-                        cell: (item) => item.nombres,
-                      },
-                    ]}
-                    columnDisplay={[
-                      { id: "condicion", visible: true },
-                      { id: "nombres", visible: true },
-                    ]}
-                    items={miembros}
-                  />
-                </SpaceBetween>
-              ),
-            },
-            {
-              title: "Aportes",
-              description:
-                "Indique los nombres de todos los miembros del equipo precisando su participación y aporte en el trabajo de acuerdo a las labores que le fueron asignadas",
-              content: (
-                <Tiptap
-                  value={formValues.infinal1}
-                  handleChange={handleChange}
-                  name="infinal1"
-                  limitWords={800}
-                />
-              ),
-              isOptional: true,
-            },
-            {
-              title: "Impacto",
-              description:
-                "Señale el aporte e impacto para la sociedad de la publicación",
-              content: (
-                <Tiptap
-                  value={formValues.resumen_ejecutivo}
-                  handleChange={handleChange}
-                  name="resumen_ejecutivo"
-                  limitWords={200}
-                />
-              ),
-              isOptional: true,
-            },
-            {
-              title: "Anexos",
-              description:
-                "Artículo, capítulo o libro (ninguno debe superar los 6 MB)",
-              content: (
-                <Container>
-                  <FormField
-                    label="Adjuntar archivo digital"
-                    description={
-                      files["informe-PSINFIPU-RESULTADOS"] && (
-                        <>
-                          Ya ha cargado un{" "}
-                          <Link
-                            {...propsEnlaces}
-                            href={files["informe-PSINFIPU-RESULTADOS"]}
-                          >
-                            archivo.
-                          </Link>
-                        </>
-                      )
-                    }
-                    stretch
-                    errorText={formErrors.file1}
-                  >
-                    <FileUpload
-                      {...propsRepetidas}
-                      value={formValues.file1}
-                      onChange={({ detail }) => {
-                        handleChange("file1", detail.value);
-                      }}
+        <SpaceBetween size="xs">
+          {formValues.estado == 3 && (
+            <Box margin={{ top: "s" }}>
+              <Alert type="error" header="Observaciones">
+                {formValues.observaciones}
+              </Alert>
+            </Box>
+          )}
+          <Wizard
+            onNavigate={({ detail }) => setStep(detail.requestedStepIndex)}
+            activeStepIndex={step}
+            onCancel={() => {
+              window.location.href = "../informeAcademico";
+            }}
+            i18nStrings={{
+              optional: "Completar",
+            }}
+            secondaryActions={
+              <Button onClick={sendData} loading={loadingSave}>
+                Guardar informe
+              </Button>
+            }
+            onSubmit={presentar}
+            isLoadingNextStep={loadingSave}
+            submitButtonText="Enviar informe"
+            allowSkipTo
+            steps={[
+              {
+                title: "Información",
+                description:
+                  "Programa de equipamiento científico para investigación de la UNMSM",
+                content: (
+                  <SpaceBetween size="l">
+                    <Container>
+                      <SpaceBetween size="m">
+                        <div>
+                          <Box variant="awsui-key-label">Título</Box>
+                          {loading ? <Spinner /> : <Box>{proyecto.titulo}</Box>}
+                        </div>
+                        <div>
+                          <Box variant="awsui-key-label">Código</Box>
+                          {loading ? (
+                            <Spinner />
+                          ) : (
+                            <Box>{proyecto.codigo_proyecto}</Box>
+                          )}
+                        </div>
+                        <div>
+                          <Box variant="awsui-key-label">Resolución</Box>
+                          {loading ? (
+                            <Spinner />
+                          ) : (
+                            <Box>{proyecto.resolucion_rectoral}</Box>
+                          )}
+                        </div>
+                        <div>
+                          <Box variant="awsui-key-label">Año</Box>
+                          {loading ? (
+                            <Spinner />
+                          ) : (
+                            <Box>{proyecto.periodo}</Box>
+                          )}
+                        </div>
+                        <div>
+                          <Box variant="awsui-key-label">Grupo</Box>
+                          {loading ? (
+                            <Spinner />
+                          ) : (
+                            <Box>{proyecto.grupo_nombre}</Box>
+                          )}
+                        </div>
+                        <div>
+                          <Box variant="awsui-key-label">Localización</Box>
+                          {loading ? (
+                            <Spinner />
+                          ) : (
+                            <Box>{proyecto.localizacion}</Box>
+                          )}
+                        </div>
+                        <div>
+                          <Box variant="awsui-key-label">Facultad</Box>
+                          {loading ? (
+                            <Spinner />
+                          ) : (
+                            <Box>{proyecto.facultad}</Box>
+                          )}
+                        </div>
+                        <div>
+                          <Box variant="awsui-key-label">
+                            Línea de investigación
+                          </Box>
+                          {loading ? <Spinner /> : <Box>{proyecto.linea}</Box>}
+                        </div>
+                      </SpaceBetween>
+                    </Container>
+                    <Table
+                      trackBy="id"
+                      header={
+                        <Header>Miembros del equipo de investigación</Header>
+                      }
+                      columnDefinitions={[
+                        {
+                          id: "condicion",
+                          header: "Condición",
+                          cell: (item) => item.condicion,
+                        },
+                        {
+                          id: "nombres",
+                          header: "Integrante",
+                          cell: (item) => item.nombres,
+                        },
+                      ]}
+                      columnDisplay={[
+                        { id: "condicion", visible: true },
+                        { id: "nombres", visible: true },
+                      ]}
+                      items={miembros}
                     />
-                  </FormField>
-                </Container>
-              ),
-              isOptional: true,
-            },
-          ]}
-        />
+                  </SpaceBetween>
+                ),
+              },
+              {
+                title: "Aportes",
+                description:
+                  "Indique los nombres de todos los miembros del equipo precisando su participación y aporte en el trabajo de acuerdo a las labores que le fueron asignadas",
+                content: (
+                  <Tiptap
+                    value={formValues.infinal1}
+                    handleChange={handleChange}
+                    name="infinal1"
+                    limitWords={800}
+                  />
+                ),
+                isOptional: true,
+              },
+              {
+                title: "Impacto",
+                description:
+                  "Señale el aporte e impacto para la sociedad de la publicación",
+                content: (
+                  <Tiptap
+                    value={formValues.resumen_ejecutivo}
+                    handleChange={handleChange}
+                    name="resumen_ejecutivo"
+                    limitWords={200}
+                  />
+                ),
+                isOptional: true,
+              },
+              {
+                title: "Anexos",
+                description:
+                  "Artículo, capítulo o libro (ninguno debe superar los 6 MB)",
+                content: (
+                  <Container>
+                    <FormField
+                      label="Adjuntar archivo digital"
+                      description={
+                        files["informe-PSINFIPU-RESULTADOS"] && (
+                          <>
+                            Ya ha cargado un{" "}
+                            <Link
+                              {...propsEnlaces}
+                              href={files["informe-PSINFIPU-RESULTADOS"]}
+                            >
+                              archivo.
+                            </Link>
+                          </>
+                        )
+                      }
+                      stretch
+                      errorText={formErrors.file1}
+                    >
+                      <FileUpload
+                        {...propsRepetidas}
+                        value={formValues.file1}
+                        onChange={({ detail }) => {
+                          handleChange("file1", detail.value);
+                        }}
+                      />
+                    </FormField>
+                  </Container>
+                ),
+                isOptional: true,
+              },
+            ]}
+          />
+        </SpaceBetween>
       )}
     </>
   );

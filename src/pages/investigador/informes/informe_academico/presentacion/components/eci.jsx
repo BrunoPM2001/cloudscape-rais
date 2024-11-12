@@ -1,4 +1,5 @@
 import {
+  Alert,
   Box,
   Button,
   ColumnLayout,
@@ -76,7 +77,9 @@ export default () => {
 
   //  Url
   const location = useLocation();
-  const { id, proyecto_id, tipo_proyecto } = queryString.parse(location.search);
+  const { id, proyecto_id, tipo_proyecto, informe } = queryString.parse(
+    location.search
+  );
 
   //  States
   const [step, setStep] = useState(0);
@@ -115,6 +118,7 @@ export default () => {
       handleChange("infinal5", data.informe.infinal5 ?? "");
       handleChange("infinal6", data.informe.infinal6 ?? "");
       handleChange("estado", data.informe.estado);
+      handleChange("observaciones", data.informe.observaciones);
       handleChange("id", data.informe.id);
     }
     setLoading(false);
@@ -168,10 +172,12 @@ export default () => {
   const reporte = async () => {
     setLoadingBtn(true);
     const res = await axiosBase.get(
-      "investigador/informes/informe_academico/verInforme",
+      "investigador/informes/informe_academico/reporte",
       {
         params: {
-          id: formValues.id,
+          informe_tecnico_id: id,
+          tipo_informe: informe,
+          tipo_proyecto,
         },
         responseType: "blob",
       }
@@ -195,7 +201,7 @@ export default () => {
             <Spinner /> Cargando datos
           </Container>
         </>
-      ) : formValues.estado ? (
+      ) : formValues.estado == 1 || formValues.estado == 2 ? (
         <>
           <br />
           <Container
@@ -236,315 +242,328 @@ export default () => {
           </Container>
         </>
       ) : (
-        <Wizard
-          onNavigate={({ detail }) => setStep(detail.requestedStepIndex)}
-          activeStepIndex={step}
-          onCancel={() => {
-            window.location.href = "../informeAcademico";
-          }}
-          i18nStrings={{
-            optional: "Completar",
-          }}
-          secondaryActions={
-            <Button onClick={sendData} loading={loadingSave}>
-              Guardar informe
-            </Button>
-          }
-          onSubmit={presentar}
-          isLoadingNextStep={loadingSave}
-          submitButtonText="Enviar informe"
-          allowSkipTo
-          steps={[
-            {
-              title: "Información",
-              description:
-                "Programa de equipamiento científico para investigación de la UNMSM",
-              content: (
-                <Container>
-                  <SpaceBetween size="m">
-                    <div>
-                      <Box variant="awsui-key-label">Título</Box>
-                      {loading ? <Spinner /> : <Box>{proyecto.titulo}</Box>}
-                    </div>
-                    <div>
-                      <Box variant="awsui-key-label">Código</Box>
-                      {loading ? (
-                        <Spinner />
-                      ) : (
-                        <Box>{proyecto.codigo_proyecto}</Box>
-                      )}
-                    </div>
-                    <div>
-                      <Box variant="awsui-key-label">Resolución</Box>
-                      {loading ? <Spinner /> : <Box>{proyecto.resolucion}</Box>}
-                    </div>
-                    <div>
-                      <Box variant="awsui-key-label">Año</Box>
-                      {loading ? <Spinner /> : <Box>{proyecto.periodo}</Box>}
-                    </div>
-                    <div>
-                      <Box variant="awsui-key-label">Grupo </Box>
-                      {loading ? (
-                        <Spinner />
-                      ) : (
-                        <Box>{proyecto.grupo_nombre}</Box>
-                      )}
-                    </div>
-                    <div>
-                      <Box variant="awsui-key-label">Facultad</Box>
-                      {loading ? <Spinner /> : <Box>{proyecto.facultad}</Box>}
-                    </div>
-                    <div>
-                      <Box variant="awsui-key-label">Coordinador</Box>
-                      {loading ? (
-                        <Spinner />
-                      ) : (
-                        <Box>{proyecto.responsable}</Box>
-                      )}
-                    </div>
-                  </SpaceBetween>
-                </Container>
-              ),
-            },
-            {
-              title: "Resumen",
-              description:
-                "Breve descripción de los equipos/gabinete adquiridos",
-              content: (
-                <Tiptap
-                  value={formValues.resumen_ejecutivo}
-                  handleChange={handleChange}
-                  name="resumen_ejecutivo"
-                />
-              ),
-              isOptional: true,
-            },
-            {
-              title: "Proceso de instalación",
-              description:
-                "Se expone todo el proceso de instalación del equipo/gabinete",
-              content: (
-                <Tiptap
-                  value={formValues.infinal1}
-                  handleChange={handleChange}
-                  name="infinal1"
-                />
-              ),
-              isOptional: true,
-            },
-            {
-              title: "Funcionamiento",
-              description: "Describir la situación actual del funcionamiento",
-              content: (
-                <Tiptap
-                  value={formValues.infinal2}
-                  handleChange={handleChange}
-                  name="infinal2"
-                />
-              ),
-              isOptional: true,
-            },
-            {
-              title: "Gestión de uso",
-              description: "Describir la situación actual del funcionamiento",
-              content: (
-                <Tiptap
-                  value={formValues.infinal3}
-                  handleChange={handleChange}
-                  name="infinal3"
-                />
-              ),
-              isOptional: true,
-            },
-            {
-              title: "Aplicación práctica e impacto",
-              description:
-                "Señale las aplicaciones prácticas más importantes, el aporte o conclusión principal e impacto para la sociedad",
-              content: (
-                <Tiptap
-                  value={formValues.infinal4}
-                  handleChange={handleChange}
-                  name="infinal4"
-                />
-              ),
-              isOptional: true,
-            },
-            {
-              title: "Impacto - uso",
-              description:
-                "Indicar los resultados del uso del equipo/gabinete como: publicación, tesis o patente, incluir usos en colaboración y/o compartido",
-              content: (
-                <Tiptap
-                  value={formValues.infinal5}
-                  handleChange={handleChange}
-                  name="infinal5"
-                />
-              ),
-              isOptional: true,
-            },
-            {
-              title: "Documentos adjuntos",
-              description: "Archivos adjuntos",
-              content: (
-                <Container>
-                  <ColumnLayout columns={2}>
-                    <FormField
-                      label="Documento de conformidad firmada por el coordinador del GI"
-                      description={
-                        files.anexo1 && (
-                          <>
-                            Ya ha cargado un{" "}
-                            <Link {...propsEnlaces} href={files.anexo1}>
-                              archivo.
-                            </Link>
-                          </>
-                        )
-                      }
-                      stretch
-                      errorText={formErrors.file1}
-                    >
-                      <FileUpload
-                        {...propsRepetidas}
-                        value={formValues.file1}
-                        onChange={({ detail }) => {
-                          handleChange("file1", detail.value);
-                        }}
-                      />
-                    </FormField>
-                    <FormField
-                      label="Imágenes del equipo/gabinete instalado"
-                      description={
-                        files.anexo2 && (
-                          <>
-                            Ya ha cargado un{" "}
-                            <Link {...propsEnlaces} href={files.anexo2}>
-                              archivo.
-                            </Link>
-                          </>
-                        )
-                      }
-                      stretch
-                      errorText={formErrors.file2}
-                    >
-                      <FileUpload
-                        {...propsRepetidas}
-                        value={formValues.file2}
-                        onChange={({ detail }) => {
-                          handleChange("file2", detail.value);
-                        }}
-                      />
-                    </FormField>
-                    <FormField
-                      label="Imágenes de equipos complementarios al equipo/gabinete instalado"
-                      description={
-                        files.anexo3 && (
-                          <>
-                            Ya ha cargado un{" "}
-                            <Link {...propsEnlaces} href={files.anexo3}>
-                              archivo.
-                            </Link>
-                          </>
-                        )
-                      }
-                      stretch
-                      errorText={formErrors.file3}
-                    >
-                      <FileUpload
-                        {...propsRepetidas}
-                        value={formValues.file3}
-                        onChange={({ detail }) => {
-                          handleChange("file3", detail.value);
-                        }}
-                      />
-                    </FormField>
-                    <FormField
-                      label="Formato de control del uso del equipo, incluir uso compartido"
-                      description={
-                        files.anexo4 && (
-                          <>
-                            Ya ha cargado un{" "}
-                            <Link {...propsEnlaces} href={files.anexo4}>
-                              archivo.
-                            </Link>
-                          </>
-                        )
-                      }
-                      stretch
-                      errorText={formErrors.file4}
-                    >
-                      <FileUpload
-                        {...propsRepetidas}
-                        value={formValues.file4}
-                        onChange={({ detail }) => {
-                          handleChange("file4", detail.value);
-                        }}
-                      />
-                    </FormField>
-                    <FormField
-                      label="Plan de manejo de residuos, efluentes y/o emisiones"
-                      description={
-                        files.anexo5 && (
-                          <>
-                            Ya ha cargado un{" "}
-                            <Link {...propsEnlaces} href={files.anexo5}>
-                              archivo.
-                            </Link>
-                          </>
-                        )
-                      }
-                      stretch
-                      errorText={formErrors.file5}
-                    >
-                      <FileUpload
-                        {...propsRepetidas}
-                        value={formValues.file5}
-                        onChange={({ detail }) => {
-                          handleChange("file5", detail.value);
-                        }}
-                      />
-                    </FormField>
-                    <FormField
-                      label="Otros documentos"
-                      description={
-                        files.anexo6 && (
-                          <>
-                            Ya ha cargado un{" "}
-                            <Link {...propsEnlaces} href={files.anexo6}>
-                              archivo.
-                            </Link>
-                          </>
-                        )
-                      }
-                      stretch
-                      errorText={formErrors.file6}
-                    >
-                      <FileUpload
-                        {...propsRepetidas}
-                        value={formValues.file6}
-                        onChange={({ detail }) => {
-                          handleChange("file6", detail.value);
-                        }}
-                      />
-                    </FormField>
-                  </ColumnLayout>
-                </Container>
-              ),
-              isOptional: true,
-            },
-            {
-              title: "Dificultades",
-              description: "Dificultades encontradas",
-              content: (
-                <Tiptap
-                  value={formValues.infinal6}
-                  handleChange={handleChange}
-                  name="infinal6"
-                />
-              ),
-              isOptional: true,
-            },
-          ]}
-        />
+        <SpaceBetween size="xs">
+          {formValues.estado == 3 && (
+            <Box margin={{ top: "s" }}>
+              <Alert type="error" header="Observaciones">
+                {formValues.observaciones}
+              </Alert>
+            </Box>
+          )}
+          <Wizard
+            onNavigate={({ detail }) => setStep(detail.requestedStepIndex)}
+            activeStepIndex={step}
+            onCancel={() => {
+              window.location.href = "../informeAcademico";
+            }}
+            i18nStrings={{
+              optional: "Completar",
+            }}
+            secondaryActions={
+              <Button onClick={sendData} loading={loadingSave}>
+                Guardar informe
+              </Button>
+            }
+            onSubmit={presentar}
+            isLoadingNextStep={loadingSave}
+            submitButtonText="Enviar informe"
+            allowSkipTo
+            steps={[
+              {
+                title: "Información",
+                description:
+                  "Programa de equipamiento científico para investigación de la UNMSM",
+                content: (
+                  <Container>
+                    <SpaceBetween size="m">
+                      <div>
+                        <Box variant="awsui-key-label">Título</Box>
+                        {loading ? <Spinner /> : <Box>{proyecto.titulo}</Box>}
+                      </div>
+                      <div>
+                        <Box variant="awsui-key-label">Código</Box>
+                        {loading ? (
+                          <Spinner />
+                        ) : (
+                          <Box>{proyecto.codigo_proyecto}</Box>
+                        )}
+                      </div>
+                      <div>
+                        <Box variant="awsui-key-label">Resolución</Box>
+                        {loading ? (
+                          <Spinner />
+                        ) : (
+                          <Box>{proyecto.resolucion}</Box>
+                        )}
+                      </div>
+                      <div>
+                        <Box variant="awsui-key-label">Año</Box>
+                        {loading ? <Spinner /> : <Box>{proyecto.periodo}</Box>}
+                      </div>
+                      <div>
+                        <Box variant="awsui-key-label">Grupo </Box>
+                        {loading ? (
+                          <Spinner />
+                        ) : (
+                          <Box>{proyecto.grupo_nombre}</Box>
+                        )}
+                      </div>
+                      <div>
+                        <Box variant="awsui-key-label">Facultad</Box>
+                        {loading ? <Spinner /> : <Box>{proyecto.facultad}</Box>}
+                      </div>
+                      <div>
+                        <Box variant="awsui-key-label">Coordinador</Box>
+                        {loading ? (
+                          <Spinner />
+                        ) : (
+                          <Box>{proyecto.responsable}</Box>
+                        )}
+                      </div>
+                    </SpaceBetween>
+                  </Container>
+                ),
+              },
+              {
+                title: "Resumen",
+                description:
+                  "Breve descripción de los equipos/gabinete adquiridos",
+                content: (
+                  <Tiptap
+                    value={formValues.resumen_ejecutivo}
+                    handleChange={handleChange}
+                    name="resumen_ejecutivo"
+                  />
+                ),
+                isOptional: true,
+              },
+              {
+                title: "Proceso de instalación",
+                description:
+                  "Se expone todo el proceso de instalación del equipo/gabinete",
+                content: (
+                  <Tiptap
+                    value={formValues.infinal1}
+                    handleChange={handleChange}
+                    name="infinal1"
+                  />
+                ),
+                isOptional: true,
+              },
+              {
+                title: "Funcionamiento",
+                description: "Describir la situación actual del funcionamiento",
+                content: (
+                  <Tiptap
+                    value={formValues.infinal2}
+                    handleChange={handleChange}
+                    name="infinal2"
+                  />
+                ),
+                isOptional: true,
+              },
+              {
+                title: "Gestión de uso",
+                description: "Describir la situación actual del funcionamiento",
+                content: (
+                  <Tiptap
+                    value={formValues.infinal3}
+                    handleChange={handleChange}
+                    name="infinal3"
+                  />
+                ),
+                isOptional: true,
+              },
+              {
+                title: "Aplicación práctica e impacto",
+                description:
+                  "Señale las aplicaciones prácticas más importantes, el aporte o conclusión principal e impacto para la sociedad",
+                content: (
+                  <Tiptap
+                    value={formValues.infinal4}
+                    handleChange={handleChange}
+                    name="infinal4"
+                  />
+                ),
+                isOptional: true,
+              },
+              {
+                title: "Impacto - uso",
+                description:
+                  "Indicar los resultados del uso del equipo/gabinete como: publicación, tesis o patente, incluir usos en colaboración y/o compartido",
+                content: (
+                  <Tiptap
+                    value={formValues.infinal5}
+                    handleChange={handleChange}
+                    name="infinal5"
+                  />
+                ),
+                isOptional: true,
+              },
+              {
+                title: "Documentos adjuntos",
+                description: "Archivos adjuntos",
+                content: (
+                  <Container>
+                    <ColumnLayout columns={2}>
+                      <FormField
+                        label="Documento de conformidad firmada por el coordinador del GI"
+                        description={
+                          files.anexo1 && (
+                            <>
+                              Ya ha cargado un{" "}
+                              <Link {...propsEnlaces} href={files.anexo1}>
+                                archivo.
+                              </Link>
+                            </>
+                          )
+                        }
+                        stretch
+                        errorText={formErrors.file1}
+                      >
+                        <FileUpload
+                          {...propsRepetidas}
+                          value={formValues.file1}
+                          onChange={({ detail }) => {
+                            handleChange("file1", detail.value);
+                          }}
+                        />
+                      </FormField>
+                      <FormField
+                        label="Imágenes del equipo/gabinete instalado"
+                        description={
+                          files.anexo2 && (
+                            <>
+                              Ya ha cargado un{" "}
+                              <Link {...propsEnlaces} href={files.anexo2}>
+                                archivo.
+                              </Link>
+                            </>
+                          )
+                        }
+                        stretch
+                        errorText={formErrors.file2}
+                      >
+                        <FileUpload
+                          {...propsRepetidas}
+                          value={formValues.file2}
+                          onChange={({ detail }) => {
+                            handleChange("file2", detail.value);
+                          }}
+                        />
+                      </FormField>
+                      <FormField
+                        label="Imágenes de equipos complementarios al equipo/gabinete instalado"
+                        description={
+                          files.anexo3 && (
+                            <>
+                              Ya ha cargado un{" "}
+                              <Link {...propsEnlaces} href={files.anexo3}>
+                                archivo.
+                              </Link>
+                            </>
+                          )
+                        }
+                        stretch
+                        errorText={formErrors.file3}
+                      >
+                        <FileUpload
+                          {...propsRepetidas}
+                          value={formValues.file3}
+                          onChange={({ detail }) => {
+                            handleChange("file3", detail.value);
+                          }}
+                        />
+                      </FormField>
+                      <FormField
+                        label="Formato de control del uso del equipo, incluir uso compartido"
+                        description={
+                          files.anexo4 && (
+                            <>
+                              Ya ha cargado un{" "}
+                              <Link {...propsEnlaces} href={files.anexo4}>
+                                archivo.
+                              </Link>
+                            </>
+                          )
+                        }
+                        stretch
+                        errorText={formErrors.file4}
+                      >
+                        <FileUpload
+                          {...propsRepetidas}
+                          value={formValues.file4}
+                          onChange={({ detail }) => {
+                            handleChange("file4", detail.value);
+                          }}
+                        />
+                      </FormField>
+                      <FormField
+                        label="Plan de manejo de residuos, efluentes y/o emisiones"
+                        description={
+                          files.anexo5 && (
+                            <>
+                              Ya ha cargado un{" "}
+                              <Link {...propsEnlaces} href={files.anexo5}>
+                                archivo.
+                              </Link>
+                            </>
+                          )
+                        }
+                        stretch
+                        errorText={formErrors.file5}
+                      >
+                        <FileUpload
+                          {...propsRepetidas}
+                          value={formValues.file5}
+                          onChange={({ detail }) => {
+                            handleChange("file5", detail.value);
+                          }}
+                        />
+                      </FormField>
+                      <FormField
+                        label="Otros documentos"
+                        description={
+                          files.anexo6 && (
+                            <>
+                              Ya ha cargado un{" "}
+                              <Link {...propsEnlaces} href={files.anexo6}>
+                                archivo.
+                              </Link>
+                            </>
+                          )
+                        }
+                        stretch
+                        errorText={formErrors.file6}
+                      >
+                        <FileUpload
+                          {...propsRepetidas}
+                          value={formValues.file6}
+                          onChange={({ detail }) => {
+                            handleChange("file6", detail.value);
+                          }}
+                        />
+                      </FormField>
+                    </ColumnLayout>
+                  </Container>
+                ),
+                isOptional: true,
+              },
+              {
+                title: "Dificultades",
+                description: "Dificultades encontradas",
+                content: (
+                  <Tiptap
+                    value={formValues.infinal6}
+                    handleChange={handleChange}
+                    name="infinal6"
+                  />
+                ),
+                isOptional: true,
+              },
+            ]}
+          />
+        </SpaceBetween>
       )}
     </>
   );
