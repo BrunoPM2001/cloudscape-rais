@@ -180,6 +180,7 @@ export default () => {
         params: {
           informe_tecnico_id: collectionProps.selectedItems[0].id,
           tipo_proyecto: collectionProps.selectedItems[0].tipo_proyecto,
+          tipo_informe: collectionProps.selectedItems[0].informe,
         },
         responseType: "blob",
       }

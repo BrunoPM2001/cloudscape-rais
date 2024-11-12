@@ -1,5 +1,6 @@
 import Eci_tabs from "./components/ECI/tabs";
 import Pconfigi_tabs from "./components/PCONFIGI/tabs";
+import Pro_ctie_tabs from "./components/PRO_CTIE/tabs";
 import Pconfigi_inv_tabs from "./components/PCONFIGI_INV/tabs";
 import Pevento_tabs from "./components/PEVENTO/tabs";
 import Pinterdis_tabs from "./components/PINTERDIS/tabs";
@@ -82,6 +83,14 @@ export default ({
         />
       ) : tipo_proyecto == "ECI" ? (
         <Eci_tabs
+          proyecto={proyecto}
+          miembros={miembros}
+          formValues={formValues}
+          handleChange={handleChange}
+          files={files}
+        />
+      ) : tipo_proyecto == "PRO-CTIE" ? (
+        <Pro_ctie_tabs
           proyecto={proyecto}
           miembros={miembros}
           formValues={formValues}
