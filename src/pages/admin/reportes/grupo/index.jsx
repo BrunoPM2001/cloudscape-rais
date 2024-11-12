@@ -48,12 +48,12 @@ export default function Reporte_grupo() {
 
   const reporte = async () => {
     setLoading(true);
-    const res = await axiosBase.get(
-      "admin/reportes/grupo/" + form.estado + "/" + form.facultad + "/null",
-      {
-        responseType: "blob",
-      }
-    );
+    const res = await axiosBase.get("admin/reportes/grupo", {
+      params: {
+        ...form,
+      },
+      responseType: "blob",
+    });
     setLoading(false);
     const blob = await res.data;
     const url = URL.createObjectURL(blob);
