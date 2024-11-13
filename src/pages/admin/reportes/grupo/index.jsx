@@ -1,4 +1,5 @@
 import {
+  Autosuggest,
   Button,
   Container,
   Form,
@@ -10,6 +11,7 @@ import {
 import { useState } from "react";
 import axiosBase from "../../../../api/axios";
 import BaseLayout from "../../components/baseLayout";
+import { useAutosuggest } from "../../../../hooks/useAutosuggest";
 
 const breadcrumbs = [
   {
@@ -29,6 +31,7 @@ export default function Reporte_grupo() {
   const [form, setForm] = useState({
     estado: null,
     facultad: null,
+    grupo_id: null,
   });
 
   const [selectedOptions, setSelectedOptions] = useState({
@@ -36,7 +39,11 @@ export default function Reporte_grupo() {
     facultad: null,
   });
 
-  const [loading, setLoading] = useState(false);
+  const [loadingReport, setLoadingReport] = useState(false);
+
+  //  Hooks
+  const { loading, options, setOptions, value, setValue, setAvoidSelect } =
+    useAutosuggest("admin/reportes/searchCoordinador");
 
   //  Functions
   const clearForm = () => {
@@ -47,14 +54,14 @@ export default function Reporte_grupo() {
   };
 
   const reporte = async () => {
-    setLoading(true);
+    setLoadingReport(true);
     const res = await axiosBase.get("admin/reportes/grupo", {
       params: {
         ...form,
       },
       responseType: "blob",
     });
-    setLoading(false);
+    setLoadingReport(false);
     const blob = await res.data;
     const url = URL.createObjectURL(blob);
     window.open(url, "_blank");
@@ -70,7 +77,6 @@ export default function Reporte_grupo() {
       <SpaceBetween size="l">
         <Container>
           <Form
-            variant="embedded"
             actions={
               <SpaceBetween direction="horizontal" size="xs">
                 <Button variant="normal" onClick={() => clearForm()}>
@@ -78,7 +84,7 @@ export default function Reporte_grupo() {
                 </Button>
                 <Button
                   variant="primary"
-                  loading={loading}
+                  loading={loadingReport}
                   onClick={() => reporte()}
                 >
                   Generar reporte
@@ -163,6 +169,36 @@ export default function Reporte_grupo() {
                       value: "20",
                     },
                   ]}
+                />
+              </FormField>
+              <FormField label="Coordinador" stretch>
+                <Autosuggest
+                  onChange={({ detail }) => {
+                    setOptions([]);
+                    setValue(detail.value);
+                    if (detail.value == "") {
+                      setForm((prev) => ({
+                        ...prev,
+                        grupo_id: null,
+                      }));
+                    }
+                  }}
+                  onSelect={({ detail }) => {
+                    if (detail.selectedOption.grupo_id != undefined) {
+                      const { grupo_id } = detail.selectedOption;
+                      setForm((prev) => ({
+                        ...prev,
+                        grupo_id,
+                      }));
+                      setAvoidSelect(false);
+                    }
+                  }}
+                  value={value}
+                  options={options}
+                  loadingText="Cargando data"
+                  placeholder="Buscar por nombre, código o facultad"
+                  statusType={loading ? "loading" : "finished"}
+                  empty="No se encontraron resultados"
                 />
               </FormField>
             </SpaceBetween>
