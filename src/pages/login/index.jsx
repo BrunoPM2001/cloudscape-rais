@@ -20,6 +20,7 @@ const userTypeRoutes = {
   Usuario_admin: "/admin",
   Usuario_investigador: "/investigador",
   Usuario_evaluador: "/evaluador",
+  Usuario_facultad: "/facultad",
 };
 
 export default function Login() {
