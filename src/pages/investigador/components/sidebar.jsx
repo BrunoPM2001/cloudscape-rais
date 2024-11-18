@@ -142,6 +142,11 @@ const navItems = [
     text: "Convocatorias",
     defaultExpanded: false,
     items: [
+      // {
+      //   type: "link",
+      //   text: "Proyecto con financiamiento",
+      //   href: "/investigador/convocatoria/pconfigi/paso1",
+      // },
       {
         type: "link",
         text: "Proyecto de Ciencia, Tecnología, Innovación y Emprendimiento",
@@ -157,8 +162,8 @@ const navItems = [
       {
         type: "link",
         text: "Proyecto de investigación sin financiamiento",
-        href: "/investigador/convocatoria/psinfinv/paso1",
-        // href: "#",
+        // href: "/investigador/convocatoria/psinfinv/paso1",
+        href: "#",
       },
       {
         type: "link",

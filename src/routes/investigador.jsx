@@ -2,6 +2,30 @@ import { Suspense, lazy } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { NotificationProvider } from "../providers/notificationProvider.jsx";
 
+const Registro_pconfigi_8 = lazy(() =>
+  import("../pages/investigador/convocatorias/pconfigi/step8.jsx")
+);
+const Registro_pconfigi_7 = lazy(() =>
+  import("../pages/investigador/convocatorias/pconfigi/step7.jsx")
+);
+const Registro_pconfigi_6 = lazy(() =>
+  import("../pages/investigador/convocatorias/pconfigi/step6.jsx")
+);
+const Registro_pconfigi_5 = lazy(() =>
+  import("../pages/investigador/convocatorias/pconfigi/step5.jsx")
+);
+const Registro_pconfigi_4 = lazy(() =>
+  import("../pages/investigador/convocatorias/pconfigi/step4.jsx")
+);
+const Registro_pconfigi_3 = lazy(() =>
+  import("../pages/investigador/convocatorias/pconfigi/step3.jsx")
+);
+const Registro_pconfigi_2 = lazy(() =>
+  import("../pages/investigador/convocatorias/pconfigi/step2.jsx")
+);
+const Registro_pconfigi_1 = lazy(() =>
+  import("../pages/investigador/convocatorias/pconfigi/step1.jsx")
+);
 const Registro_pfex_5 = lazy(() =>
   import("../pages/investigador/actividades/proyecto_fex/registrar/step5.jsx")
 );
@@ -484,6 +508,43 @@ const routes = createBrowserRouter(
     {
       path: "convocatoria",
       children: [
+        {
+          path: "pconfigi",
+          children: [
+            {
+              path: "paso1",
+              element: <Registro_pconfigi_1 />,
+            },
+            {
+              path: "paso2",
+              element: <Registro_pconfigi_2 />,
+            },
+            {
+              path: "paso3",
+              element: <Registro_pconfigi_3 />,
+            },
+            {
+              path: "paso4",
+              element: <Registro_pconfigi_4 />,
+            },
+            {
+              path: "paso5",
+              element: <Registro_pconfigi_5 />,
+            },
+            {
+              path: "paso6",
+              element: <Registro_pconfigi_6 />,
+            },
+            {
+              path: "paso7",
+              element: <Registro_pconfigi_7 />,
+            },
+            {
+              path: "paso8",
+              element: <Registro_pconfigi_8 />,
+            },
+          ],
+        },
         {
           path: "proctie",
           children: [
