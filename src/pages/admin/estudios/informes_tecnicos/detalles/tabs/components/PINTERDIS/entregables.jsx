@@ -67,9 +67,10 @@ export default ({
               files["articulo1"] && (
                 <>
                   Ya ha cargado un{" "}
-                  <Link {...propsEnlaces} href={files["articulo1"]}>
-                    archivo.
-                  </Link>
+                  <Link {...propsEnlaces} href={files["articulo1"].url}>
+                    archivo
+                  </Link>{" "}
+                  el {files["articulo1"].fecha}
                 </>
               )
             }
@@ -89,9 +90,10 @@ export default ({
               files["articulo2"] && (
                 <>
                   Ya ha cargado un{" "}
-                  <Link {...propsEnlaces} href={files["articulo2"]}>
-                    archivo.
-                  </Link>
+                  <Link {...propsEnlaces} href={files["articulo2"].url}>
+                    archivo
+                  </Link>{" "}
+                  el {files["articulo2"].fecha}
                 </>
               )
             }
@@ -124,9 +126,10 @@ export default ({
               files["tesis1"] && (
                 <>
                   Ya ha cargado un{" "}
-                  <Link {...propsEnlaces} href={files["tesis1"]}>
-                    archivo.
-                  </Link>
+                  <Link {...propsEnlaces} href={files["tesis1"].url}>
+                    archivo
+                  </Link>{" "}
+                  el {files["tesis1"].fecha}
                 </>
               )
             }
@@ -146,9 +149,10 @@ export default ({
               files["tesis2"] && (
                 <>
                   Ya ha cargado un{" "}
-                  <Link {...propsEnlaces} href={files["tesis2"]}>
-                    archivo.
-                  </Link>
+                  <Link {...propsEnlaces} href={files["tesis2"].url}>
+                    archivo
+                  </Link>{" "}
+                  el {files["tesis2"].fecha}
                 </>
               )
             }
@@ -168,9 +172,10 @@ export default ({
               files["tesis3"] && (
                 <>
                   Ya ha cargado un{" "}
-                  <Link {...propsEnlaces} href={files["tesis3"]}>
-                    archivo.
-                  </Link>
+                  <Link {...propsEnlaces} href={files["tesis3"].url}>
+                    archivo
+                  </Link>{" "}
+                  el {files["tesis3"].fecha}
                 </>
               )
             }
@@ -190,9 +195,10 @@ export default ({
               files["tesis4"] && (
                 <>
                   Ya ha cargado un{" "}
-                  <Link {...propsEnlaces} href={files["tesis4"]}>
-                    archivo.
-                  </Link>
+                  <Link {...propsEnlaces} href={files["tesis4"].url}>
+                    archivo
+                  </Link>{" "}
+                  el {files["tesis4"].fecha}
                 </>
               )
             }
@@ -223,9 +229,10 @@ export default ({
               files["investigacion1"] && (
                 <>
                   Ya ha cargado un{" "}
-                  <Link {...propsEnlaces} href={files["investigacion1"]}>
-                    archivo.
-                  </Link>
+                  <Link {...propsEnlaces} href={files["investigacion1"].url}>
+                    archivo
+                  </Link>{" "}
+                  el {files["investigacion1"].fecha}
                 </>
               )
             }
@@ -245,9 +252,10 @@ export default ({
               files["investigacion2"] && (
                 <>
                   Ya ha cargado un{" "}
-                  <Link {...propsEnlaces} href={files["investigacion2"]}>
-                    archivo.
-                  </Link>
+                  <Link {...propsEnlaces} href={files["investigacion2"].url}>
+                    archivo
+                  </Link>{" "}
+                  el {files["investigacion2"].fecha}
                 </>
               )
             }
@@ -267,9 +275,10 @@ export default ({
               files["investigacion3"] && (
                 <>
                   Ya ha cargado un{" "}
-                  <Link {...propsEnlaces} href={files["investigacion3"]}>
-                    archivo.
-                  </Link>
+                  <Link {...propsEnlaces} href={files["investigacion3"].url}>
+                    archivo
+                  </Link>{" "}
+                  el {files["investigacion3"].fecha}
                 </>
               )
             }
@@ -289,9 +298,10 @@ export default ({
               files["investigacion4"] && (
                 <>
                   Ya ha cargado un{" "}
-                  <Link {...propsEnlaces} href={files["investigacion4"]}>
-                    archivo.
-                  </Link>
+                  <Link {...propsEnlaces} href={files["investigacion4"].url}>
+                    archivo
+                  </Link>{" "}
+                  el {files["investigacion4"].fecha}
                 </>
               )
             }
@@ -322,9 +332,10 @@ export default ({
             files["registro"] && (
               <>
                 Ya ha cargado un{" "}
-                <Link {...propsEnlaces} href={files["registro"]}>
-                  archivo.
-                </Link>
+                <Link {...propsEnlaces} href={files["registro"].url}>
+                  archivo
+                </Link>{" "}
+                el {files["registro"].fecha}
               </>
             )
           }

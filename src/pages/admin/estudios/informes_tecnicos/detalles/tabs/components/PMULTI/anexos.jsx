@@ -4,10 +4,27 @@ import {
   FormField,
 } from "@cloudscape-design/components";
 
-export default ({ value1, handleChange }) => {
+export default ({ value1, handleChange, files }) => {
   return (
     <Container>
-      <FormField label="Archivo digital" stretch>
+      <FormField
+        label="Archivo digital"
+        stretch
+        description={
+          files["informe-PMULTI-INFORME"] && (
+            <>
+              Ya ha cargado un{" "}
+              <Link
+                {...propsEnlaces}
+                href={files["informe-PMULTI-INFORME"].url}
+              >
+                archivo
+              </Link>{" "}
+              el {files["informe-PMULTI-INFORME"].fecha}
+            </>
+          )
+        }
+      >
         <FileUpload
           value={value1}
           onChange={({ detail }) => {

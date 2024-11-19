@@ -39,9 +39,13 @@ export default ({ value1, handleChange, files }) => {
           files["informe-PRO-CTIE-INFORME"] && (
             <>
               Ya ha cargado un{" "}
-              <Link {...propsEnlaces} href={files["informe-PRO-CTIE-INFORME"]}>
-                archivo.
-              </Link>
+              <Link
+                {...propsEnlaces}
+                href={files["informe-PRO-CTIE-INFORME"].url}
+              >
+                archivo
+              </Link>{" "}
+              el {files["informe-PRO-CTIE-INFORME"].fecha}
             </>
           )
         }

@@ -129,6 +129,7 @@ export default ({
           formValues={formValues}
           handleChange={handleChange}
           actividades={actividades}
+          files={files}
         />
       ) : tipo_proyecto == "PSINFINV" ? (
         <Psinfinv_tabs

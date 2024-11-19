@@ -42,10 +42,11 @@ export default ({ value1, value2, handleChange, files }) => {
                 Ya ha cargado un{" "}
                 <Link
                   {...propsEnlaces}
-                  href={files["informe-PCONFIGI-INFORME"]}
+                  href={files["informe-PCONFIGI-INFORME"].url}
                 >
-                  archivo.
-                </Link>
+                  archivo
+                </Link>{" "}
+                el {files["informe-PCONFIGI-INFORME"].fecha}
               </>
             )
           }
@@ -73,9 +74,10 @@ export default ({ value1, value2, handleChange, files }) => {
             files["viabilidad"] && (
               <>
                 Ya ha cargado un{" "}
-                <Link {...propsEnlaces} href={files["viabilidad"]}>
-                  archivo.
-                </Link>
+                <Link {...propsEnlaces} href={files["viabilidad"].url}>
+                  archivo
+                </Link>{" "}
+                el {files["viabilidad"].fecha}
               </>
             )
           }

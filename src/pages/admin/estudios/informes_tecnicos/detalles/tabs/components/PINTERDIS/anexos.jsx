@@ -38,9 +38,13 @@ export default ({ value1, handleChange, files }) => {
           files["informe-PINTERDIS-INFORME"] && (
             <>
               Ya ha cargado un{" "}
-              <Link {...propsEnlaces} href={files["informe-PINTERDIS-INFORME"]}>
-                archivo.
-              </Link>
+              <Link
+                {...propsEnlaces}
+                href={files["informe-PINTERDIS-INFORME"].url}
+              >
+                archivo
+              </Link>{" "}
+              el {files["informe-PINTERDIS-INFORME"].fecha}
             </>
           )
         }

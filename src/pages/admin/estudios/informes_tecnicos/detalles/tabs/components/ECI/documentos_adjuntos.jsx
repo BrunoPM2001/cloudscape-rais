@@ -48,9 +48,10 @@ export default ({
             files["anexo1"] && (
               <>
                 Ya ha cargado un{" "}
-                <Link {...propsEnlaces} href={files["anexo1"]}>
-                  archivo.
-                </Link>
+                <Link {...propsEnlaces} href={files["anexo1"].url}>
+                  archivo
+                </Link>{" "}
+                el {files["anexo1"].fecha}
               </>
             )
           }
@@ -70,9 +71,10 @@ export default ({
             files["anexo2"] && (
               <>
                 Ya ha cargado un{" "}
-                <Link {...propsEnlaces} href={files["anexo2"]}>
-                  archivo.
-                </Link>
+                <Link {...propsEnlaces} href={files["anexo2"].url}>
+                  archivo
+                </Link>{" "}
+                el {files["anexo2"].fecha}
               </>
             )
           }
@@ -92,9 +94,10 @@ export default ({
             files["anexo3"] && (
               <>
                 Ya ha cargado un{" "}
-                <Link {...propsEnlaces} href={files["anexo3"]}>
-                  archivo.
-                </Link>
+                <Link {...propsEnlaces} href={files["anexo3"].url}>
+                  archivo
+                </Link>{" "}
+                el {files["anexo3"].fecha}
               </>
             )
           }
@@ -114,9 +117,10 @@ export default ({
             files["anexo4"] && (
               <>
                 Ya ha cargado un{" "}
-                <Link {...propsEnlaces} href={files["anexo4"]}>
-                  archivo.
-                </Link>
+                <Link {...propsEnlaces} href={files["anexo4"].url}>
+                  archivo
+                </Link>{" "}
+                el {files["anexo4"].fecha}
               </>
             )
           }
@@ -136,9 +140,10 @@ export default ({
             files["anexo5"] && (
               <>
                 Ya ha cargado un{" "}
-                <Link {...propsEnlaces} href={files["anexo5"]}>
-                  archivo.
-                </Link>
+                <Link {...propsEnlaces} href={files["anexo5"].url}>
+                  archivo
+                </Link>{" "}
+                el {files["anexo5"].fecha}
               </>
             )
           }
@@ -158,9 +163,10 @@ export default ({
             files["anexo6"] && (
               <>
                 Ya ha cargado un{" "}
-                <Link {...propsEnlaces} href={files["anexo6"]}>
-                  archivo.
-                </Link>
+                <Link {...propsEnlaces} href={files["anexo6"].url}>
+                  archivo
+                </Link>{" "}
+                el {files["anexo6"].fecha}
               </>
             )
           }

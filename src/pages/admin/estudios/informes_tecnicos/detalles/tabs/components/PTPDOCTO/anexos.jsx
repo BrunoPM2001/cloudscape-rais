@@ -42,10 +42,11 @@ export default ({ value1, value2, handleChange, files }) => {
                 Ya ha cargado un{" "}
                 <Link
                   {...propsEnlaces}
-                  href={files["informe-PTPDOCTO-INFORME-FINAL-tesis"]}
+                  href={files["informe-PTPDOCTO-INFORME-FINAL-tesis"].url}
                 >
-                  archivo.
-                </Link>
+                  archivo
+                </Link>{" "}
+                el {files["informe-PTPDOCTO-INFORME-FINAL-tesis"].fecha}
               </>
             )
           }
@@ -67,10 +68,11 @@ export default ({ value1, value2, handleChange, files }) => {
                 Ya ha cargado un{" "}
                 <Link
                   {...propsEnlaces}
-                  href={files["informe-PTPDOCTO-INFORME-FINAL-acta"]}
+                  href={files["informe-PTPDOCTO-INFORME-FINAL-acta"].url}
                 >
-                  archivo.
-                </Link>
+                  archivo
+                </Link>{" "}
+                el {files["informe-PTPDOCTO-INFORME-FINAL-acta"].fecha}
               </>
             )
           }

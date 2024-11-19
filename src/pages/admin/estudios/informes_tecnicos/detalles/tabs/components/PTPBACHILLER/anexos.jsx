@@ -40,10 +40,11 @@ export default ({ value1, handleChange, files }) => {
               Ya ha cargado un{" "}
               <Link
                 {...propsEnlaces}
-                href={files["informe-PTPBACHILLER-INFORME"]}
+                href={files["informe-PTPBACHILLER-INFORME"].url}
               >
-                archivo.
-              </Link>
+                archivo
+              </Link>{" "}
+              el {files["informe-PTPBACHILLER-INFORME"].fecha}
             </>
           )
         }
