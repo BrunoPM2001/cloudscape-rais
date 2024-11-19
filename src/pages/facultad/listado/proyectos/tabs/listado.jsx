@@ -16,8 +16,14 @@ const stringOperators = [":", "!:", "=", "!=", "^", "!^"];
 
 const FILTER_PROPS = [
   {
+    propertyLabel: "Tipo",
+    key: "tipo_proyecto",
+    groupValuesLabel: "Tipos",
+    operators: stringOperators,
+  },
+  {
     propertyLabel: "Código",
-    key: "codigo",
+    key: "codigo_proyecto",
     groupValuesLabel: "Códigos",
     operators: stringOperators,
   },
@@ -28,15 +34,15 @@ const FILTER_PROPS = [
     operators: stringOperators,
   },
   {
-    propertyLabel: "Deuda",
-    key: "deuda",
-    groupValuesLabel: "Deudas",
+    propertyLabel: "Periodo",
+    key: "periodo",
+    groupValuesLabel: "Periodos",
     operators: stringOperators,
   },
   {
-    propertyLabel: "Facultad",
-    key: "facultad",
-    groupValuesLabel: "Facultades",
+    propertyLabel: "Resolución",
+    key: "resolucion_rectoral",
+    groupValuesLabel: "Resoluciones",
     operators: stringOperators,
   },
   {
@@ -61,17 +67,35 @@ const FILTER_PROPS = [
 
 const columnDefinitions = [
   {
-    id: "codigo",
+    id: "tipo_proyecto",
+    header: "Tipo",
+    cell: (item) => item.tipo_proyecto,
+    sortingField: "tipo_proyecto",
+  },
+  {
+    id: "codigo_proyecto",
     header: "Código",
-    cell: (item) => item.codigo,
-    sortingField: "codigo",
+    cell: (item) => item.codigo_proyecto,
+    sortingField: "codigo_proyecto",
   },
   {
     id: "titulo",
     header: "Título",
-    cell: (item) => item.xtitulo,
+    cell: (item) => item.titulo,
     sortingField: "titulo",
-    minWidth: "400px",
+    minWidth: 400,
+  },
+  {
+    id: "resolucion_rectoral",
+    header: "Resolución",
+    cell: (item) => item.resolucion_rectoral,
+    sortingField: "resolucion_rectoral",
+  },
+  {
+    id: "periodo",
+    header: "Periodo",
+    cell: (item) => item.periodo,
+    sortingField: "periodo",
   },
   {
     id: "deuda",
@@ -100,18 +124,11 @@ const columnDefinitions = [
     minWidth: "180px",
   },
   {
-    id: "facultad",
-    header: "Facultad",
-    cell: (item) => item.facultad,
-    sortingField: "facultad",
-    minWidth: "250px",
-  },
-  {
     id: "responsable",
     header: "Responsable",
     cell: (item) => item.responsable,
     sortingField: "responsable",
-    minWidth: "300px",
+    minWidth: 300,
   },
   {
     id: "fecha_inscripcion",
@@ -124,56 +141,53 @@ const columnDefinitions = [
     id: "estado",
     header: "Estado ",
     cell: (item) => (
-      <span
-        style={{
-          display: "inline-block",
-          padding: "0.2em 0.5em",
-          borderRadius: "4px",
-          color: "white",
-          backgroundColor:
-            item.estado === "Eliminado"
-              ? "#FF4D4F" // custom red
-              : item.estado === "No aprobado"
-              ? "#595959" // dark grey
-              : item.estado === "Aprobado"
-              ? "#4CAF50" // green
-              : item.estado === "En evaluación"
-              ? "#1890FF" // blue
-              : item.estado === "Enviado"
-              ? "#007ACC" // light blue
-              : item.estado === "En proceso"
-              ? "#BFBFBF" // light grey
-              : item.estado === "Anulado"
-              ? "#A8071A" // dark red
-              : item.estado === "Sustentado"
-              ? "#2F54EB" // navy blue
-              : item.estado === "En ejecución"
-              ? "#13C2C2" // teal
-              : item.estado === "Ejecutado"
-              ? "#237804" // dark green
-              : item.estado === "Concluido"
-              ? "#52C41A" // emerald green
-              : "#D9D9D9", // default color
-        }}
+      <Badge
+        color={
+          item.estado == "Eliminado"
+            ? "red"
+            : item.estado == "No aprobado"
+            ? "severity-high"
+            : item.estado == "Aprobado"
+            ? "green"
+            : item.estado == "En evaluación"
+            ? "grey"
+            : item.estado == "Enviado"
+            ? "blue"
+            : item.estado == "En proceso"
+            ? "grey"
+            : item.estado == "Anulado"
+            ? "severity-critical"
+            : item.estado == "Sustentado"
+            ? "blue"
+            : item.estado == "En ejecución"
+            ? "blue"
+            : item.estado == "Ejecutado"
+            ? "green"
+            : item.estado == "Concluido"
+            ? "severity-low"
+            : "red"
+        }
       >
         {item.estado}
-      </span>
+      </Badge>
     ),
     sortingField: "estado",
+    minWidth: 135,
   },
 ];
 
 const columnDisplay = [
-  { id: "codigo", visible: true },
+  { id: "tipo_proyecto", visible: true },
+  { id: "codigo_proyecto", visible: true },
   { id: "titulo", visible: true },
+  { id: "periodo", visible: true },
   { id: "deuda", visible: true },
-  { id: "facultad", visible: true },
   { id: "responsable", visible: true },
   { id: "fecha_inscripcion", visible: true },
   { id: "estado", visible: true },
 ];
 
-const Listado = () => {
+export default () => {
   const [loading, setLoading] = useState(true);
   const [distributions, setDistribution] = useState([]);
   const {
@@ -208,17 +222,7 @@ const Listado = () => {
   const getData = async () => {
     setLoading(true);
     const res = await axiosBase.get("facultad/listado/proyectos/listado");
-    const sanitizedData = res.data.proyectos.map((item) => ({
-      ...item,
-      codigo: item.codigo || "-",
-      xtitulo: item.xtitulo || "-",
-      deuda: item.deuda || "-",
-      facultad: item.facultad || "-",
-      responsable: item.responsable || "-",
-      fecha_inscripcion: item.fecha_inscripcion || "-",
-      estado: item.estado || "-",
-    }));
-    setDistribution(sanitizedData);
+    setDistribution(res.data);
     setLoading(false);
   };
 
@@ -229,7 +233,7 @@ const Listado = () => {
   return (
     <Table
       {...collectionProps}
-      trackBy="proyecto_id"
+      trackBy="id"
       items={items}
       columnDefinitions={columnDefinitions}
       columnDisplay={columnDisplay}
@@ -240,18 +244,19 @@ const Listado = () => {
       filter={
         <PropertyFilter
           {...propertyFilterProps}
-          filteringPlaceholder="Buscar investigador"
+          filteringPlaceholder="Buscar proyecto"
           countText={`${filteredItemsCount} coincidencias`}
+          virtualScroll
           expandToViewport
         />
       }
       header={
         <Header
-          // counter={"(" + distributions.length + ")"}
+          counter={"(" + distributions.length + ")"}
           actions={
             <SpaceBetween direction="horizontal" size="xs">
               <ButtonDropdown
-                // disabled={!enableBtn || grupo_estado < 0}
+                disabled={loading}
                 variant="primary"
                 items={[
                   {
@@ -300,5 +305,3 @@ const Listado = () => {
     />
   );
 };
-
-export default Listado;
