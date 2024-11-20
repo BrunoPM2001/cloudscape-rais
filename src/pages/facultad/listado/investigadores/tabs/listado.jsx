@@ -1,18 +1,14 @@
 import {
-  Badge,
   Box,
-  Button,
   Header,
   Pagination,
   PropertyFilter,
   SpaceBetween,
   Table,
-  Container,
   ButtonDropdown,
 } from "@cloudscape-design/components";
 import { useState, useEffect } from "react";
 import { useCollection } from "@cloudscape-design/collection-hooks";
-import queryString from "query-string";
 import axiosBase from "../../../../../api/axios";
 
 const stringOperators = [":", "!:", "=", "!=", "^", "!^"];
@@ -107,13 +103,6 @@ const FILTER_PROPS = [
 
 const columnDefinitions = [
   {
-    id: "facultad",
-    header: "Facultad",
-    cell: (item) => item.facultad,
-    sortingField: "facultad",
-    width: "200px",
-  },
-  {
     id: "codigo",
     header: "Código",
     cell: (item) => item.codigo,
@@ -124,14 +113,14 @@ const columnDefinitions = [
     header: "Tipo Docente",
     cell: (item) => item.tipo,
     sortingField: "tipo",
-    width: "200px",
+    minWidth: 200,
   },
   {
     id: "docente",
     header: "Apellidos y Nombres",
     cell: (item) => item.docente,
-    sortingField: "docente", // Cambia a "nombre_completo" si este campo está calculado en los datos
-    width: "300px",
+    sortingField: "docente",
+    minWidth: 300,
   },
   {
     id: "fecha_nacimiento",
@@ -206,8 +195,9 @@ const columnDisplay = [
   { id: "puntaje_total", visible: true },
 ];
 
-const Listado = () => {
+export default () => {
   const [loading, setLoading] = useState(true);
+  const [loadingReport, setLoadingReport] = useState(false);
   const [distributions, setDistribution] = useState([]);
   const {
     items,
@@ -244,6 +234,35 @@ const Listado = () => {
     setDistribution(res.data);
     setLoading(false);
   };
+
+  const exportExcel = async () => {
+    setLoadingReport(true);
+    const res = await axiosBase.get(
+      "facultad/listado/investigadores/excelInvestigadores",
+      {
+        responseType: "blob",
+      }
+    );
+    const blob = await res.data;
+    const url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
+    setLoadingReport(false);
+  };
+
+  const exportPdf = async () => {
+    setLoadingReport(true);
+    const res = await axiosBase.get(
+      "facultad/listado/investigadores/pdfInvestigadores",
+      {
+        responseType: "blob",
+      }
+    );
+    const blob = await res.data;
+    const url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
+    setLoadingReport(false);
+  };
+
   useEffect(() => {
     getData();
   }, []);
@@ -270,39 +289,29 @@ const Listado = () => {
         }
         header={
           <Header
-            // counter={"(" + distributions.length + ")"}
+            counter={"(" + distributions.length + ")"}
             actions={
               <SpaceBetween direction="horizontal" size="xs">
                 <ButtonDropdown
-                  // disabled={!enableBtn || grupo_estado < 0}
+                  disabled={loading}
                   variant="primary"
                   items={[
                     {
-                      text: "Reporte en PDF",
+                      text: "Reporte de puntaje de pub.",
                       id: "action_2_1",
-                      disabled: false,
                     },
                     {
-                      text: "Reporte en Excel",
+                      text: "Descargar excel",
                       id: "action_2_2",
-                      disabled: false,
                     },
                   ]}
-                  // onItemClick={({ detail }) => {
-                  //     if (detail.id == "action_2_1") {
-                  //         setIncluirVisible(true);
-                  //         setTypeModal("Excluir");
-                  //     } else if (detail.id == "action_2_2") {
-                  //         setIncluirVisible(true);
-                  //         setTypeModal("Visualizar");
-                  //     } else if (detail.id == "action_2_3") {
-                  //         setIncluirVisible(true);
-                  //         setTypeModal("Condicion");
-                  //     } else if (detail.id == "action_2_4") {
-                  //         setIncluirVisible(true);
-                  //         setTypeModal("Cargo");
-                  //     }
-                  // }}
+                  onItemClick={({ detail }) => {
+                    if (detail.id == "action_2_1") {
+                      exportPdf();
+                    } else if (detail.id == "action_2_2") {
+                      exportExcel();
+                    }
+                  }}
                 >
                   Reportes
                 </ButtonDropdown>
@@ -324,5 +333,3 @@ const Listado = () => {
     </>
   );
 };
-
-export default Listado;

@@ -187,7 +187,6 @@ const Listado = () => {
       loading={loading}
       loadingText="Cargando datos"
       enableKeyboardNavigation
-      selectionType="single"
       wrapLines
       filter={
         <PropertyFilter

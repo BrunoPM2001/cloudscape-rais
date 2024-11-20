@@ -176,7 +176,7 @@ export default function Registro_pconfigi_1() {
     if (validateForm()) {
       setLoadingBtn(true);
       const res = await axiosBase.post(
-        "investigador/convocatorias/psinfinv/registrar1",
+        "investigador/convocatorias/pconfigi/registrar1",
         formValues
       );
       const info = res.data;

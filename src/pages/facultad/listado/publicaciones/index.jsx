@@ -32,6 +32,7 @@ export default function Publicaciones() {
       helpInfo="Información sobre la páginal actual para poder mostrarla al público
       en general."
       disableOverlap
+      contentType="table"
     >
       <Tabs tabs={tabs} />
     </BaseLayout>
