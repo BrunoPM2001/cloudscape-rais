@@ -163,6 +163,7 @@ const columnDefinitions = [
     header: "Código Orcid",
     cell: (item) => item.codigo_orcid,
     sortingField: "codigo_orcid",
+    minWidth: 200,
   },
   {
     id: "sexo",
@@ -294,6 +295,7 @@ export default () => {
               <SpaceBetween direction="horizontal" size="xs">
                 <ButtonDropdown
                   disabled={loading}
+                  loading={loadingReport}
                   variant="primary"
                   items={[
                     {

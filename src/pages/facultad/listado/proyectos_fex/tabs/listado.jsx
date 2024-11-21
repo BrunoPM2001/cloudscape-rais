@@ -6,6 +6,7 @@ import {
   SpaceBetween,
   Table,
   ButtonDropdown,
+  Badge,
 } from "@cloudscape-design/components";
 import { useState, useEffect } from "react";
 import { useCollection } from "@cloudscape-design/collection-hooks";
@@ -106,36 +107,34 @@ const columnDefinitions = [
     header: "ID",
     cell: (item) => item.id,
     sortingField: "id",
-    isRowHeader: true,
-    minWidth: "80px",
   },
   {
     id: "codigo_proyecto",
     header: "Código",
     cell: (item) => item.codigo_proyecto,
     sortingField: "codigo_proyecto",
-    minWidth: "150px",
+    minWidth: 150,
   },
   {
     id: "titulo",
     header: "Título",
     cell: (item) => item.titulo,
     sortingField: "titulo",
-    minWidth: "450px",
+    minWidth: 450,
   },
   {
     id: "responsable",
     header: "Responsable",
     cell: (item) => item.responsable,
     sortingField: "responsable",
-    minWidth: "300px",
+    minWidth: 300,
   },
   {
     id: "facultad",
     header: "Facultad",
     cell: (item) => item.facultad,
     sortingField: "facultad",
-    minWidth: "200px",
+    minWidth: 200,
   },
   {
     id: "periodo",
@@ -148,7 +147,7 @@ const columnDefinitions = [
     header: "Moneda",
     cell: (item) => item.moneda,
     sortingField: "moneda",
-    minWidth: "100px",
+    minWidth: 100,
   },
   {
     id: "aporte_no_unmsm",
@@ -173,60 +172,55 @@ const columnDefinitions = [
     header: "Monto asignado",
     cell: (item) => item.monto_asignado,
     sortingField: "monto_asignado",
-    minWidth: "200px",
+    minWidth: 200,
   },
   {
     id: "participacion_unmsm",
     header: "Participación UNMSM",
     cell: (item) => item.participacion_unmsm,
     sortingField: "participacion_unmsm",
-    minWidth: "200px",
+    minWidth: 200,
   },
   {
     id: "fuente_fin",
     header: "Fuente financiamiento",
     cell: (item) => item.fuente_fin,
     sortingField: "fuente_fin",
-    minWidth: "200px",
+    minWidth: 200,
   },
   {
     id: "estado",
     header: "Estado",
     cell: (item) => (
-      <span
-        style={{
-          display: "inline-block",
-          padding: "0.2em 0.5em",
-          borderRadius: "4px",
-          color: "white",
-          backgroundColor:
-            item.estado === "Eliminado"
-              ? "#FF4D4F" // custom red
-              : item.estado === "No aprobado"
-              ? "#595959" // dark grey
-              : item.estado === "Aprobado"
-              ? "#52C41A" // green
-              : item.estado === "En evaluación"
-              ? "#1890FF" // blue
-              : item.estado === "Enviado"
-              ? "#40A9FF" // light blue
-              : item.estado === "En proceso"
-              ? "#BFBFBF" // light grey
-              : item.estado === "Anulado"
-              ? "#A8071A" // dark red
-              : item.estado === "Sustentado"
-              ? "#2F54EB" // navy blue
-              : item.estado === "En ejecución"
-              ? "#13C2C2" // teal
-              : item.estado === "Ejecutado"
-              ? "#237804" // dark green
-              : item.estado === "Concluido"
-              ? "#52C41A" // emerald green
-              : "#D9D9D9", // default color
-        }}
+      <Badge
+        color={
+          item.estado == "Eliminado"
+            ? "red"
+            : item.estado == "No aprobado"
+            ? "severity-high"
+            : item.estado == "Aprobado"
+            ? "green"
+            : item.estado == "En evaluación"
+            ? "grey"
+            : item.estado == "Enviado"
+            ? "blue"
+            : item.estado == "En proceso"
+            ? "grey"
+            : item.estado == "Anulado"
+            ? "severity-critical"
+            : item.estado == "Sustentado"
+            ? "blue"
+            : item.estado == "En ejecución"
+            ? "blue"
+            : item.estado == "Ejecutado"
+            ? "green"
+            : item.estado == "Concluido"
+            ? "severity-low"
+            : "red"
+        }
       >
         {item.estado}
-      </span>
+      </Badge>
     ),
     sortingField: "estado",
     minWidth: "150px",
@@ -317,45 +311,7 @@ export default () => {
         />
       }
       header={
-        <Header
-          counter={"(" + distributions.length + ")"}
-          actions={
-            <SpaceBetween direction="horizontal" size="xs">
-              <ButtonDropdown
-                variant="primary"
-                items={[
-                  {
-                    text: "Reporte en PDF",
-                    id: "action_2_1",
-                    disabled: false,
-                  },
-                  {
-                    text: "Reporte en Excel",
-                    id: "action_2_2",
-                    disabled: false,
-                  },
-                ]}
-                // onItemClick={({ detail }) => {
-                //     if (detail.id == "action_2_1") {
-                //         setIncluirVisible(true);
-                //         setTypeModal("Excluir");
-                //     } else if (detail.id == "action_2_2") {
-                //         setIncluirVisible(true);
-                //         setTypeModal("Visualizar");
-                //     } else if (detail.id == "action_2_3") {
-                //         setIncluirVisible(true);
-                //         setTypeModal("Condicion");
-                //     } else if (detail.id == "action_2_4") {
-                //         setIncluirVisible(true);
-                //         setTypeModal("Cargo");
-                //     }
-                // }}
-              >
-                Reportes
-              </ButtonDropdown>
-            </SpaceBetween>
-          }
-        >
+        <Header counter={"(" + distributions.length + ")"}>
           Proyectos de Financiamiento Externo
         </Header>
       }

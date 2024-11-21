@@ -213,11 +213,13 @@ const columnDisplay = [
   { id: "fecha_creacion", visible: true },
 ];
 
-const Listado = () => {
+export default () => {
   const [loading, setLoading] = useState(true);
+  const [loadingReport, setLoadingReport] = useState(false);
   const [distributions, setDistribution] = useState([]);
   const {
     items,
+    actions,
     filteredItemsCount,
     collectionProps,
     paginationProps,
@@ -252,6 +254,31 @@ const Listado = () => {
     setLoading(false);
   };
 
+  const reporte = async () => {
+    setLoadingReport(true);
+    const res = await axiosBase.get("facultad/listado/grupos/pdfGrupo", {
+      params: {
+        id: collectionProps.selectedItems[0].id,
+      },
+      responseType: "blob",
+    });
+    const blob = await res.data;
+    const url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
+    setLoadingReport(false);
+  };
+
+  const reporteExcel = async () => {
+    setLoadingReport(true);
+    const res = await axiosBase.get("facultad/reportes/excelGrupos", {
+      responseType: "blob",
+    });
+    const blob = await res.data;
+    const url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
+    setLoadingReport(false);
+  };
+
   useEffect(() => {
     getData();
   }, []);
@@ -267,6 +294,7 @@ const Listado = () => {
       loadingText="Cargando datos"
       enableKeyboardNavigation
       selectionType="single"
+      onRowClick={({ detail }) => actions.setSelectedItems([detail.item])}
       wrapLines
       filter={
         <PropertyFilter
@@ -282,38 +310,21 @@ const Listado = () => {
           counter={"(" + distributions.length + ")"}
           actions={
             <SpaceBetween direction="horizontal" size="xs">
-              <ButtonDropdown
-                variant="primary"
-                items={[
-                  {
-                    text: "Reporte en PDF",
-                    id: "action_2_1",
-                    disabled: false,
-                  },
-                  {
-                    text: "Reporte en Excel",
-                    id: "action_2_2",
-                    disabled: false,
-                  },
-                ]}
-                // onItemClick={({ detail }) => {
-                //     if (detail.id == "action_2_1") {
-                //         setIncluirVisible(true);
-                //         setTypeModal("Excluir");
-                //     } else if (detail.id == "action_2_2") {
-                //         setIncluirVisible(true);
-                //         setTypeModal("Visualizar");
-                //     } else if (detail.id == "action_2_3") {
-                //         setIncluirVisible(true);
-                //         setTypeModal("Condicion");
-                //     } else if (detail.id == "action_2_4") {
-                //         setIncluirVisible(true);
-                //         setTypeModal("Cargo");
-                //     }
-                // }}
+              <Button
+                disabled={loading}
+                loading={loadingReport}
+                onClick={reporteExcel}
               >
-                Reportes
-              </ButtonDropdown>
+                Reporte de grupos
+              </Button>
+              <Button
+                disabled={loading || collectionProps.selectedItems.length == 0}
+                loading={loadingReport}
+                onClick={reporte}
+                variant="primary"
+              >
+                Reporte de grupo
+              </Button>
             </SpaceBetween>
           }
         >
@@ -331,5 +342,3 @@ const Listado = () => {
     />
   );
 };
-
-export default Listado;

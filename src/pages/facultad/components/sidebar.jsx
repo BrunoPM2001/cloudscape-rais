@@ -5,7 +5,7 @@ const navItems = [
   {
     type: "section",
     text: "Listado",
-    defaultExpanded: false,
+    defaultExpanded: true,
     items: [
       {
         type: "link",

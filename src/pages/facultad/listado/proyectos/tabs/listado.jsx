@@ -5,10 +5,10 @@ import {
   PropertyFilter,
   SpaceBetween,
   Table,
-  ButtonDropdown,
   Badge,
+  Button,
 } from "@cloudscape-design/components";
-import { useState, useEffect } from "react";
+import { useState, useEffect, act } from "react";
 import { useCollection } from "@cloudscape-design/collection-hooks";
 import axiosBase from "../../../../../api/axios";
 
@@ -121,7 +121,7 @@ const columnDefinitions = [
     ),
 
     sortingField: "deuda",
-    minWidth: "180px",
+    minWidth: 180,
   },
   {
     id: "responsable",
@@ -135,7 +135,7 @@ const columnDefinitions = [
     header: "Fecha de Inscripción",
     cell: (item) => item.fecha_inscripcion,
     sortingField: "fecha_inscripcion",
-    minWidth: "200px",
+    minWidth: 200,
   },
   {
     id: "estado",
@@ -192,6 +192,7 @@ export default () => {
   const [distributions, setDistribution] = useState([]);
   const {
     items,
+    actions,
     filteredItemsCount,
     collectionProps,
     paginationProps,
@@ -239,6 +240,8 @@ export default () => {
       columnDisplay={columnDisplay}
       loading={loading}
       loadingText="Cargando datos"
+      selectionType="single"
+      onRowClick={({ detail }) => actions.setSelectedItems([detail.item])}
       enableKeyboardNavigation
       wrapLines
       filter={
@@ -255,39 +258,9 @@ export default () => {
           counter={"(" + distributions.length + ")"}
           actions={
             <SpaceBetween direction="horizontal" size="xs">
-              <ButtonDropdown
-                disabled={loading}
-                variant="primary"
-                items={[
-                  {
-                    text: "Reporte en PDF",
-                    id: "action_2_1",
-                    disabled: false,
-                  },
-                  {
-                    text: "Reporte en Excel",
-                    id: "action_2_2",
-                    disabled: false,
-                  },
-                ]}
-                // onItemClick={({ detail }) => {
-                //     if (detail.id == "action_2_1") {
-                //         setIncluirVisible(true);
-                //         setTypeModal("Excluir");
-                //     } else if (detail.id == "action_2_2") {
-                //         setIncluirVisible(true);
-                //         setTypeModal("Visualizar");
-                //     } else if (detail.id == "action_2_3") {
-                //         setIncluirVisible(true);
-                //         setTypeModal("Condicion");
-                //     } else if (detail.id == "action_2_4") {
-                //         setIncluirVisible(true);
-                //         setTypeModal("Cargo");
-                //     }
-                // }}
-              >
-                Reportes
-              </ButtonDropdown>
+              <Button disabled={loading} variant="primary">
+                Reporte
+              </Button>
             </SpaceBetween>
           }
         >

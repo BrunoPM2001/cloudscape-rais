@@ -1,7 +1,7 @@
 import {
+  Badge,
   Box,
   Button,
-  ButtonDropdown,
   Header,
   Pagination,
   PropertyFilter,
@@ -28,21 +28,21 @@ const FILTER_PROPS = [
     operators: stringOperators,
   },
   {
-    propertyLabel: "Tipo de Evaluación",
-    key: "tipo_evaluacion",
+    propertyLabel: "Tipo de evaluación",
+    key: "tipo_eval",
     groupValuesLabel: "Tipos de Evaluaciones",
     operators: stringOperators,
   },
   {
-    propertyLabel: "Fecha de Constancia",
+    propertyLabel: "Fecha de constancia",
     key: "fecha_constancia",
     groupValuesLabel: "Fechas de Constancia",
     operators: stringOperators,
   },
   {
-    propertyLabel: "Fecha Fin",
+    propertyLabel: "Fecha fin",
     key: "fecha_fin",
-    groupValuesLabel: "Fecha Fins",
+    groupValuesLabel: "Fechas Fin",
     operators: stringOperators,
   },
   {
@@ -52,8 +52,8 @@ const FILTER_PROPS = [
     operators: stringOperators,
   },
   {
-    propertyLabel: "Codigo Orcid",
-    key: "codigo_orcid",
+    propertyLabel: "Código Orcid",
+    key: "orcid",
     groupValuesLabel: "Orcids",
     operators: stringOperators,
   },
@@ -76,9 +76,15 @@ const FILTER_PROPS = [
     operators: stringOperators,
   },
   {
-    propertyLabel: "Movil",
-    key: "telefono_celular",
+    propertyLabel: "Móvil",
+    key: "telefono_movil",
     groupValuesLabel: "Móviles",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "Correo institucional",
+    key: "email3",
+    groupValuesLabel: "Correos",
     operators: stringOperators,
   },
 ];
@@ -89,31 +95,51 @@ const columnDefinitions = [
     header: "ID",
     cell: (item) => item.id,
     sortingField: "id",
-    isRowHeader: true,
   },
   {
     id: "estado",
     header: "Estado",
-    cell: (item) => item.estado,
+    cell: (item) => (
+      <Badge
+        color={
+          item.estado == "No vigente"
+            ? "severity-critical"
+            : item.estado == "Observado"
+            ? "severity-medium"
+            : item.estado == "Anulado"
+            ? "red"
+            : item.estado == "Vigente"
+            ? "green"
+            : item.estado == "No aprobado"
+            ? "severity-high"
+            : "blue"
+        }
+      >
+        {item.estado}
+      </Badge>
+    ),
     sortingField: "estado",
+    minWidth: 130,
   },
   {
-    id: "tipo_evaluacion",
+    id: "tipo_eval",
     header: "Tipo de Evaluación",
     cell: (item) => item.tipo_eval,
-    sortingField: "tipo_evaluacion",
+    sortingField: "tipo_eval",
   },
   {
     id: "fecha_constancia",
     header: "Fecha de Constancia",
     cell: (item) => item.fecha_constancia,
     sortingField: "fecha_constancia",
+    minWidth: 130,
   },
   {
     id: "fecha_fin",
     header: "Fecha Fin",
     cell: (item) => item.fecha_fin,
     sortingField: "fecha_fin",
+    minWidth: 130,
   },
   {
     id: "tipo_docente",
@@ -122,10 +148,11 @@ const columnDefinitions = [
     sortingField: "tipo_docente",
   },
   {
-    id: "codigo_orcid",
+    id: "orcid",
     header: "Codigo Orcid",
-    cell: (item) => item.codigo_orcid,
-    sortingField: "codigo_orcid",
+    cell: (item) => item.orcid,
+    sortingField: "orcid",
+    minWidth: 130,
   },
   {
     id: "apellido_paterno",
@@ -158,30 +185,38 @@ const columnDefinitions = [
     sortingField: "num_documento",
   },
   {
-    id: "telefono_celular",
+    id: "telefono_movil",
     header: "Movil",
     cell: (item) => item.telefono_movil,
-    sortingField: "telefono_celular",
+    sortingField: "telefono_movil",
+  },
+  {
+    id: "email3",
+    header: "Correo institucional",
+    cell: (item) => item.email3,
+    sortingField: "email3",
   },
 ];
 
 const columnDisplay = [
   { id: "estado", visible: true },
-  { id: "tipo_evaluacion", visible: true },
+  { id: "tipo_eval", visible: true },
   { id: "fecha_constancia", visible: true },
   { id: "fecha_fin", visible: true },
   { id: "tipo_docente", visible: true },
-  { id: "codigo_orcid", visible: true },
+  { id: "orcid", visible: true },
   { id: "apellido_paterno", visible: true },
   { id: "apellido_materno", visible: true },
   { id: "nombres", visible: true },
   { id: "tipo_documento", visible: true },
   { id: "num_documento", visible: true },
-  { id: "telefono_celular", visible: true },
+  { id: "telefono_movil", visible: true },
+  { id: "email3", visible: true },
 ];
 
-const Listado = () => {
+export default () => {
   const [loading, setLoading] = useState(true);
+  const [loadingReport, setLoadingReport] = useState(false);
   const [distributions, setDistribution] = useState([]);
   const {
     items,
@@ -220,6 +255,21 @@ const Listado = () => {
     setDistribution(res.data);
     setLoading(false);
   };
+
+  const exportExcel = async () => {
+    setLoadingReport(true);
+    const res = await axiosBase.get(
+      "facultad/listado/docente_investigador/excelDocentes",
+      {
+        responseType: "blob",
+      }
+    );
+    const blob = await res.data;
+    const url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
+    setLoadingReport(false);
+  };
+
   useEffect(() => {
     getData();
   }, []);
@@ -234,14 +284,20 @@ const Listado = () => {
       loading={loading}
       loadingText="Cargando datos"
       enableKeyboardNavigation
-      selectionType="single"
       wrapLines
       header={
         <Header
           counter={"(" + distributions.length + ")"}
           actions={
             <SpaceBetween direction="horizontal" size="xs">
-              <Button variant="primary">Reporte en xlsx</Button>
+              <Button
+                variant="primary"
+                disabled={loading}
+                loading={loadingReport}
+                onClick={exportExcel}
+              >
+                Reporte en xlsx
+              </Button>
             </SpaceBetween>
           }
         >
@@ -267,5 +323,3 @@ const Listado = () => {
     />
   );
 };
-
-export default Listado;

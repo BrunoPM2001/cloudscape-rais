@@ -5,7 +5,7 @@ import {
   PropertyFilter,
   SpaceBetween,
   Table,
-  ButtonDropdown,
+  Button,
 } from "@cloudscape-design/components";
 import { useState, useEffect } from "react";
 import { useCollection } from "@cloudscape-design/collection-hooks";
@@ -134,8 +134,9 @@ const columnDisplay = [
   { id: "periodo", visible: true },
 ];
 
-const Listado = () => {
+export default () => {
   const [loading, setLoading] = useState(true);
+  const [loadingReport, setLoadingReport] = useState(false);
   const [distributions, setDistribution] = useState([]);
   const {
     items,
@@ -173,6 +174,17 @@ const Listado = () => {
     setLoading(false);
   };
 
+  const reporte = async () => {
+    setLoadingReport(true);
+    const res = await axiosBase.get("facultad/listado/deudas/pdfDeudas", {
+      responseType: "blob",
+    });
+    const blob = await res.data;
+    const url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
+    setLoadingReport(false);
+  };
+
   useEffect(() => {
     getData();
   }, []);
@@ -200,40 +212,14 @@ const Listado = () => {
         <Header
           counter={"(" + distributions.length + ")"}
           actions={
-            <SpaceBetween direction="horizontal" size="xs">
-              <ButtonDropdown
-                variant="primary"
-                items={[
-                  {
-                    text: "Reporte en PDF",
-                    id: "action_2_1",
-                    disabled: false,
-                  },
-                  {
-                    text: "Reporte en Excel",
-                    id: "action_2_2",
-                    disabled: false,
-                  },
-                ]}
-                // onItemClick={({ detail }) => {
-                //     if (detail.id == "action_2_1") {
-                //         setIncluirVisible(true);
-                //         setTypeModal("Excluir");
-                //     } else if (detail.id == "action_2_2") {
-                //         setIncluirVisible(true);
-                //         setTypeModal("Visualizar");
-                //     } else if (detail.id == "action_2_3") {
-                //         setIncluirVisible(true);
-                //         setTypeModal("Condicion");
-                //     } else if (detail.id == "action_2_4") {
-                //         setIncluirVisible(true);
-                //         setTypeModal("Cargo");
-                //     }
-                // }}
-              >
-                Reportes
-              </ButtonDropdown>
-            </SpaceBetween>
+            <Button
+              variant="primary"
+              disabled={loading}
+              loading={loadingReport}
+              onClick={reporte}
+            >
+              Reporte
+            </Button>
           }
         >
           Deudas de Proyectos
@@ -250,5 +236,3 @@ const Listado = () => {
     />
   );
 };
-
-export default Listado;
