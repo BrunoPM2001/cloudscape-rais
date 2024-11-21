@@ -185,6 +185,17 @@ export default () => {
     setLoadingReport(false);
   };
 
+  const reporteExcel = async () => {
+    setLoadingReport(true);
+    const res = await axiosBase.get("facultad/reportes/excelDeudas", {
+      responseType: "blob",
+    });
+    const blob = await res.data;
+    const url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
+    setLoadingReport(false);
+  };
+
   useEffect(() => {
     getData();
   }, []);
@@ -212,14 +223,23 @@ export default () => {
         <Header
           counter={"(" + distributions.length + ")"}
           actions={
-            <Button
-              variant="primary"
-              disabled={loading}
-              loading={loadingReport}
-              onClick={reporte}
-            >
-              Reporte
-            </Button>
+            <SpaceBetween direction="horizontal" size="xs">
+              <Button
+                disabled={loading}
+                loading={loadingReport}
+                onClick={reporteExcel}
+              >
+                Excel
+              </Button>
+              <Button
+                variant="primary"
+                disabled={loading}
+                loading={loadingReport}
+                onClick={reporte}
+              >
+                Reporte
+              </Button>
+            </SpaceBetween>
           }
         >
           Deudas de Proyectos
