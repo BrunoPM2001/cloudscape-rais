@@ -28,6 +28,12 @@ const FILTER_PROPS = [
     operators: stringOperators,
   },
   {
+    propertyLabel: "Tipo de publicación",
+    key: "tipo_publicacion",
+    groupValuesLabel: "Tipos de publicaciones",
+    operators: stringOperators,
+  },
+  {
     propertyLabel: "Estado",
     key: "estado",
     groupValuesLabel: "Estados",
