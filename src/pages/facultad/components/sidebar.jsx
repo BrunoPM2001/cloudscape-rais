@@ -24,11 +24,6 @@ const navItems = [
       },
       {
         type: "link",
-        text: "Proyectos de GI",
-        href: "/facultad/listado/proyectos_gi",
-      },
-      {
-        type: "link",
         text: "Proyectos de FEX",
         href: "/facultad/listado/proyectos_fex",
       },

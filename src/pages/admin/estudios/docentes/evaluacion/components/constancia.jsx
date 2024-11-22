@@ -64,15 +64,6 @@ export default ({ id, data, reload }) => {
     setLoading(false);
   };
 
-  const enviarCorreo = async () => {
-    setLoading(true);
-    const res = await axiosBase.post("admin/estudios/docentes/enviarCorreo", {
-      id,
-    });
-    const data = res.data;
-    setLoading(false);
-  };
-
   const subir = async () => {
     if (validateForm()) {
       setLoading(true);
@@ -92,14 +83,6 @@ export default ({ id, data, reload }) => {
           variant="h3"
           actions={
             <SpaceBetween size="xs" direction="horizontal">
-              {/* <Button
-                loading={loading}
-                iconName="send"
-                iconAlign="right"
-                onClick={enviarCorreo}
-              >
-                Enviar correo con la CDI al VRIP
-              </Button> */}
               <ButtonDropdown
                 loading={loading}
                 items={[

@@ -1,15 +1,20 @@
 import {
   Box,
+  Button,
   ButtonDropdown,
   ColumnLayout,
   Container,
   Header,
   SpaceBetween,
 } from "@cloudscape-design/components";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import axiosBase from "../../../../../../api/axios";
+import NotificationContext from "../../../../../../providers/notificationProvider";
 
 export default ({ id, data }) => {
+  //  Context
+  const { notifications, pushNotification } = useContext(NotificationContext);
+
   //  States
   const [loading, setLoading] = useState(false);
 
@@ -42,6 +47,18 @@ export default ({ id, data }) => {
     setLoading(false);
   };
 
+  const enviarCorreo = async () => {
+    setLoading(true);
+    const res = await axiosBase.get("admin/estudios/docentes/enviarCdiCorreo", {
+      params: {
+        id,
+      },
+    });
+    const data = res.data;
+    pushNotification(data.detail, data.message, notifications.length + 1);
+    setLoading(false);
+  };
+
   const constanciaFirmada = async () => {
     setLoading(true);
     const res = await axiosBase.get(
@@ -64,6 +81,14 @@ export default ({ id, data }) => {
           variant="h3"
           actions={
             <SpaceBetween size="xs" direction="horizontal">
+              <Button
+                loading={loading}
+                iconName="send"
+                iconAlign="right"
+                onClick={enviarCorreo}
+              >
+                Enviar CDI al usuario
+              </Button>
               <ButtonDropdown
                 loading={loading}
                 items={[
