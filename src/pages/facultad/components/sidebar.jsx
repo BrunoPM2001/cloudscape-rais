@@ -59,7 +59,7 @@ export default function Sidebar({ activeHref = "#" }) {
         text: "Facultad",
         href: "/facultad",
       }}
-      activeHref={location.pathname}
+      activeHref={"/facultad" + location.pathname}
       items={navItems}
     />
   );
