@@ -11,9 +11,10 @@ import {
 export default ({ data, soli, close }) => {
   return (
     <Modal
-      onDismiss={close}
       visible
       size="medium"
+      onDismiss={close}
+      header="Renacyt"
       footer={
         <Box float="right">
           <Button variant="normal" onClick={close}>
@@ -21,7 +22,6 @@ export default ({ data, soli, close }) => {
           </Button>
         </Box>
       }
-      header="Renacyt"
     >
       <SpaceBetween size="s">
         <div>
@@ -32,7 +32,7 @@ export default ({ data, soli, close }) => {
           <>
             <ColumnLayout columns={2} variant="text-grid">
               <div>
-                <Box variant="awsui-key-label">Código renacyt</Box>
+                <Box variant="awsui-key-label">Código renacyt1</Box>
                 <div>{data == "" ? "No figura" : data}</div>
               </div>
               <div>

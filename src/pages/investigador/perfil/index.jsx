@@ -1,5 +1,4 @@
 import {
-  Box,
   Button,
   ColumnLayout,
   Container,
@@ -10,7 +9,6 @@ import {
   Select,
   SpaceBetween,
   Spinner,
-  StatusIndicator,
   Textarea,
 } from "@cloudscape-design/components";
 import BaseLayout from "../components/baseLayout";

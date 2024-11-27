@@ -9,7 +9,12 @@ export default ({ value, handleChange }) => {
         description="Capítulos, títulos y/o subtítulos según corresponda"
         stretch
       >
-        <Tiptap value={value} handleChange={handleChange} name="infinal3" />
+        <Tiptap
+          value={value}
+          handleChange={handleChange}
+          name="infinal3"
+          limitWords={2000}
+        />
       </FormField>
     </Container>
   );

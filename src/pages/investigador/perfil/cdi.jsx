@@ -259,8 +259,8 @@ export default () => {
               ) : typeModal == "solicitud" ? (
                 <ModalSolicitud
                   data={data.rrhh}
-                  actividades={data.actividades_extra}
                   close={close}
+                  actividades={data.actividades_extra}
                   reload={getData}
                 />
               ) : (
