@@ -4,6 +4,7 @@ import {
   Button,
   Table,
   SpaceBetween,
+  Header,
 } from "@cloudscape-design/components";
 
 export default ({ data, close }) => {
@@ -19,65 +20,58 @@ export default ({ data, close }) => {
           </Button>
         </Box>
       }
-      header="Publicaciones con filiación"
+      header={
+        <Header description="Las publicaciones deberán tener filiación obligatoria con la UNMSM.">
+          Publicaciones con filiación
+        </Header>
+      }
     >
-      <SpaceBetween size="s">
-        <div>
-          Las publicaciones deberán tener filiación obligatoria con la UNMSM.
-        </div>
-        <Table
-          wrapLines
-          columnDefinitions={[
-            {
-              id: "titulo",
-              header: "Título",
-              cell: (item) => item.titulo,
-              isRowHeader: true,
-            },
-            {
-              id: "periodo",
-              header: "Periodo",
-              cell: (item) => item.periodo,
-            },
-            {
-              id: "codigo_registro",
-              header: "Código",
-              cell: (item) => item.codigo_registro,
-            },
-            {
-              id: "indexada",
-              header: "Revista indexada",
-              cell: (item) => item.indexada,
-            },
-            {
-              id: "filiacion",
-              header: "Filiación UNMSM",
-              cell: (item) => item.filiacion,
-            },
-            {
-              id: "filiacion_unica",
-              header: "Filiación única",
-              cell: (item) => item.filiacion_unica,
-            },
-          ]}
-          columnDisplay={[
-            { id: "titulo", visible: true },
-            { id: "periodo", visible: true },
-            { id: "codigo_registro", visible: true },
-            { id: "indexada", visible: true },
-            { id: "filiacion", visible: true },
-            { id: "filiacion_unica", visible: true },
-          ]}
-          items={data}
-          empty={
-            <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
-              <SpaceBetween size="m">
-                <b>No hay registros...</b>
-              </SpaceBetween>
-            </Box>
-          }
-        />
-      </SpaceBetween>
+      <Table
+        wrapLines
+        columnDefinitions={[
+          {
+            id: "titulo",
+            header: "Título",
+            cell: (item) => item.titulo,
+            isRowHeader: true,
+          },
+          {
+            id: "periodo",
+            header: "Periodo",
+            cell: (item) => item.periodo,
+          },
+          {
+            id: "codigo_registro",
+            header: "Código",
+            cell: (item) => item.codigo_registro,
+          },
+          {
+            id: "indexada",
+            header: "Revista indexada",
+            cell: (item) => item.indexada,
+          },
+          {
+            id: "filiacion",
+            header: "Filiación UNMSM",
+            cell: (item) => (item.filiacion == 0 ? "No" : "Sí"),
+          },
+        ]}
+        columnDisplay={[
+          { id: "titulo", visible: true },
+          { id: "periodo", visible: true },
+          { id: "codigo_registro", visible: true },
+          { id: "indexada", visible: true },
+          { id: "filiacion", visible: true },
+        ]}
+        items={data}
+        empty={
+          <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
+            <SpaceBetween size="m">
+              <b>No hay registros...</b>
+            </SpaceBetween>
+          </Box>
+        }
+      />
     </Modal>
   );
 };

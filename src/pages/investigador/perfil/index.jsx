@@ -140,6 +140,7 @@ export default function Perfil() {
           Guardar cambios
         </Button>
       }
+      contentType="cards"
     >
       {loading ? (
         <Container>

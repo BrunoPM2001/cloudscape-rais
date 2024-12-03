@@ -13,6 +13,7 @@ export default ({ value, handleChange }) => {
           value={value}
           handleChange={handleChange}
           name="resumen_ejecutivo"
+          limitWords={200}
         />
       </FormField>
     </Container>

@@ -1,35 +1,18 @@
-import {
-  Box,
-  Form,
-  Link,
-  Alert,
-  Button,
-  Header,
-  Spinner,
-  Container,
-  SpaceBetween,
-  StatusIndicator,
-  Badge,
-  Popover,
-} from "@cloudscape-design/components";
+import { Spinner, Container } from "@cloudscape-design/components";
 import axiosBase from "../../../api/axios";
-import { useEffect, useState } from "react";
-import ModalReq1 from "./components/modalReq1";
-import ModalReq2 from "./components/modalReq2";
-import ModalReq4 from "./components/modalReq4";
-import ModalReq3 from "./components/modalReq3";
-import ModalReq5 from "./components/modalReq5";
-import ModalReq6 from "./components/modalReq6";
-import ModalSolicitud from "./components/modalSolicitud";
-import ModalObservado from "./components/modalObservado";
-import ModalObservaciones from "./components/modalObservaciones";
+import Estado5 from "./components/estado5";
+import Estado4 from "./components/estado4";
+import Estado0 from "./components/estado0";
+import Estado1 from "./components/estado1";
+import Estado2 from "./components/estado2";
+import Estado3 from "./components/estado3";
+import Estado6 from "./components/estado6";
+import { useState, useEffect } from "react";
 
 export default () => {
   //  States
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState({});
-  const [typeModal, setTypeModal] = useState("");
-  const [visibleAlert, setVisibleAlert] = useState(true);
 
   //  Functions
   const getData = async () => {
@@ -39,12 +22,6 @@ export default () => {
     setLoading(false);
     setData(data);
   };
-
-  const close = () => {
-    setTypeModal("");
-  };
-
-  const closeAlert = () => setVisibleAlert(false);
 
   useEffect(() => {
     getData();
@@ -57,410 +34,23 @@ export default () => {
           <Spinner /> Cargando información de CDI
         </>
       ) : (
-        <Form
-          header={
-            <Header
-              variant="h3"
-              actions={
-                data.estado == 3 && (
-                  <SpaceBetween
-                    size="xs"
-                    direction="horizontal"
-                    alignItems="center"
-                  >
-                    <Box fontSize="body-s">Estado</Box>
-                    <Badge
-                      color={
-                        data.solicitud.estado == "Enviado"
-                          ? "blue"
-                          : data.solicitud.estado == "Observado"
-                          ? "grey"
-                          : data.solicitud.estado == "En trámite"
-                          ? "green"
-                          : data.solicitud.estado == "Pendiente"
-                          ? "green"
-                          : "red"
-                      }
-                    >
-                      {data.solicitud.estado}
-                    </Badge>
-                  </SpaceBetween>
-                )
-              }
-              description={
-                data.estado == 3 && <>Fecha de envío: {data.solicitud.fecha}</>
-              }
-            >
-              {data.estado == 3 ? (
-                <>Solicitud CDI</>
-              ) : (
-                <>Requisitos para solicitar CDI</>
-              )}
-            </Header>
-          }
-          actions={
-            data.estado != 4 &&
-            (data.estado == 2 ? (
-              <Button onClick={() => setTypeModal("solicitud")}>
-                Solicitar CDI
-              </Button>
-            ) : (
-              data?.solicitud?.estado == "Observado" && (
-                <SpaceBetween size="xs" direction="horizontal">
-                  <Button onClick={() => setTypeModal("obs")}>Ver obs.</Button>
-                  <Button onClick={() => setTypeModal("observado")}>
-                    Actualizar solicitud
-                  </Button>
-                </SpaceBetween>
-              )
-            ))
-          }
-        >
+        <>
           {data.estado == 0 ? (
-            <Alert header="No figura su registro en RRHH" type="warning">
-              Comuníquese con el personal del RAIS en caso vea este error si es
-              que usted es docente desde hace más de un mes en la UNMMS
-            </Alert>
+            <Estado0 />
           ) : data.estado == 1 ? (
-            <Alert header="No cumple con los prerrequisitos para solicitar CDI">
-              Necesita tener registrado su CTI VITAE, Google Scholar, ORCID
-              asociado al RAIS y su nivel de Renacyt no debe ser María R. ni
-              Carlos M.
-            </Alert>
+            <Estado1 />
           ) : data.estado == 2 ? (
-            <>
-              <SpaceBetween size="s">
-                <Alert
-                  dismissible
-                  statusIconAriaLabel="Info"
-                  header="Información Sobre Publicaciones con Filiación"
-                >
-                  <ul style={{ paddingLeft: "16px", margin: 0 }}>
-                    <li>
-                      Todas las publicaciones deben tener Filiación UNMSM. En
-                      caso contrario su solicitud será OBSERVADA.
-                    </li>
-                    <li>
-                      Debe eliminar sus publicaciones sin Filiación UNMSM de su
-                      perfil RAIS.
-                    </li>
-                  </ul>
-                  <Link
-                    href="https://vrip.unmsm.edu.pe/wp-content/uploads/2024/07/RR_009077-2024-R.pdf"
-                    target="_blank"
-                  >
-                    Ver Directiva ( Art 12° b) )
-                  </Link>
-                </Alert>
-                <div>
-                  <Box variant="awsui-key-label">
-                    Renacyt{" "}
-                    <Link variant="info" onClick={() => setTypeModal("req1")}>
-                      Info
-                    </Link>
-                  </Box>
-                  <StatusIndicator type="pending">No evaluado</StatusIndicator>
-                </div>
-                <div>
-                  <Box variant="awsui-key-label">
-                    Grupo de investigación{" "}
-                    <Link variant="info" onClick={() => setTypeModal("req2")}>
-                      Info
-                    </Link>
-                  </Box>
-                  <StatusIndicator type="pending">No evaluado</StatusIndicator>
-                </div>
-                <div>
-                  <Box variant="awsui-key-label">
-                    Actividades de Investigación{" "}
-                    <Link variant="info" onClick={() => setTypeModal("req3")}>
-                      Info
-                    </Link>
-                    <br />
-                    <Popover
-                      header="Información sobre Publicaciones con Filiación: "
-                      content={
-                        <Box variant="awsui-key-label" margin="s">
-                          <ul style={{ paddingLeft: "16px", margin: 0 }}>
-                            <li>
-                              Todas las publicaciones deben tener Filiación
-                              UNMSM. En caso contrario su solicitud será
-                              OBSERVADA.
-                            </li>
-                            <li>
-                              Debe eliminar publicaciones sin Filiación UNMSM de
-                              su perfil RAIS.
-                            </li>
-                          </ul>
-                          <Link
-                            href="https://vrip.unmsm.edu.pe/wp-content/uploads/2024/07/RR_009077-2024-R.pdf"
-                            target="_blank"
-                          >
-                            Ver Directiva ( Art 12° b) )
-                          </Link>
-                        </Box>
-                      }
-                    >
-                      <Box style={{ display: "inline-block" }}>
-                        <StatusIndicator type="info" /> Click aqui
-                      </Box>
-                    </Popover>
-                  </Box>
-                  <StatusIndicator type="pending">No evaluado</StatusIndicator>
-                </div>
-                <div>
-                  <Box variant="awsui-key-label">
-                    Publicaciones con filiación{" "}
-                    <Link variant="info" onClick={() => setTypeModal("req4")}>
-                      Info
-                    </Link>
-                  </Box>
-                  <StatusIndicator type="pending">No evaluado</StatusIndicator>
-                </div>
-                <div>
-                  <Box variant="awsui-key-label">
-                    Deudas{" "}
-                    <Link variant="info" onClick={() => setTypeModal("req5")}>
-                      Info
-                    </Link>
-                  </Box>
-                  <StatusIndicator type="pending">No evaluado</StatusIndicator>
-                </div>
-                <div>
-                  <Box variant="awsui-key-label">
-                    Declaración Jurada (DJ){" "}
-                    <Link variant="info" onClick={() => setTypeModal("req6")}>
-                      Info
-                    </Link>
-                  </Box>
-                  <StatusIndicator type="pending">No evaluado</StatusIndicator>
-                </div>
-                {visibleAlert && (
-                  <Alert
-                    dismissible
-                    onDismiss={closeAlert}
-                    header="Recuerde que necesita tener al menos una publicación con
-                    filiación UNMSM para ser calificado como Docente Investigador"
-                  />
-                )}
-              </SpaceBetween>
-              {typeModal == "req1" ? (
-                <ModalReq1 data={data.req1} close={close} />
-              ) : typeModal == "req2" ? (
-                <ModalReq2 data={data.req2} close={close} />
-              ) : typeModal == "req3" ? (
-                <ModalReq3 data={data.req3} close={close} />
-              ) : typeModal == "req4" ? (
-                <ModalReq4 data={data.req4} close={close} />
-              ) : typeModal == "req5" ? (
-                <ModalReq5 data={data.req5} close={close} />
-              ) : typeModal == "req6" ? (
-                <ModalReq6 data={data.req6} close={close} />
-              ) : typeModal == "solicitud" ? (
-                <ModalSolicitud
-                  data={data.rrhh}
-                  close={close}
-                  actividades={data.actividades_extra}
-                  reload={getData}
-                />
-              ) : (
-                <></>
-              )}
-            </>
+            <Estado2 data={data} reload={getData} />
           ) : data.estado == 3 ? (
-            <>
-              <SpaceBetween size="s">
-                <Alert
-                  dismissible
-                  statusIconAriaLabel="Info"
-                  header="Información Sobre Publicaciones con Filiación:"
-                >
-                  <ul style={{ paddingLeft: "16px", margin: 0 }}>
-                    <li>
-                      Todas las publicaciones deben tener Filiación UNMSM. En
-                      caso contrario su solicitud será OBSERVADA.
-                    </li>
-                    <li>
-                      Debe eliminar sus publicaciones sin Filiación UNMSM de su
-                      perfil RAIS.
-                    </li>
-                  </ul>
-                  <Link
-                    href="https://vrip.unmsm.edu.pe/wp-content/uploads/2024/07/RR_009077-2024-R.pdf"
-                    target="_blank"
-                  >
-                    Ver Directiva ( Art 12° b) )
-                  </Link>
-                </Alert>
-                <div>
-                  <Box variant="awsui-key-label">
-                    Renacyt{" "}
-                    <Link variant="info" onClick={() => setTypeModal("req1")}>
-                      Info
-                    </Link>
-                  </Box>
-                  <StatusIndicator
-                    type={data.solicitud.d1.cumple ? "success" : "error"}
-                  >
-                    {data.solicitud.d1.cumple ? "Sí cumple" : "No cumple"}
-                  </StatusIndicator>
-                </div>
-                <div>
-                  <Box variant="awsui-key-label">
-                    Grupo de investigación{" "}
-                    <Link variant="info" onClick={() => setTypeModal("req2")}>
-                      Info
-                    </Link>
-                  </Box>
-                  <StatusIndicator
-                    type={data.solicitud.d2.cumple ? "success" : "error"}
-                  >
-                    {data.solicitud.d2.cumple ? "Sí cumple" : "No cumple"}
-                  </StatusIndicator>
-                </div>
-                <div>
-                  <Box variant="awsui-key-label">
-                    Actividades de Investigación{" "}
-                    <Link variant="info" onClick={() => setTypeModal("req3")}>
-                      Info
-                    </Link>
-                  </Box>
-                  <StatusIndicator
-                    type={data.solicitud.d3.cumple ? "success" : "error"}
-                  >
-                    {data.solicitud.d3.cumple ? "Sí cumple" : "No cumple"}
-                  </StatusIndicator>
-                </div>
-                <div>
-                  <Box variant="awsui-key-label">
-                    Publicaciones con filiación{" "}
-                    <Link variant="info" onClick={() => setTypeModal("req4")}>
-                      Info
-                    </Link>
-                    <br />
-                    <Popover
-                      header="Información sobre Publicaciones con Filiación: "
-                      content={
-                        <Box variant="awsui-key-label" margin="s">
-                          <ul style={{ paddingLeft: "16px", margin: 0 }}>
-                            <li>
-                              Todas las publicaciones deben tener Filiación
-                              UNMSM. En caso contrario su solicitud será
-                              OBSERVADA.
-                            </li>
-                            <li>
-                              Debe eliminar publicaciones sin Filiación UNMSM de
-                              su perfil RAIS.
-                            </li>
-                          </ul>
-                          <Link
-                            href="https://vrip.unmsm.edu.pe/wp-content/uploads/2024/07/RR_009077-2024-R.pdf"
-                            target="_blank"
-                          >
-                            Ver Directiva ( Art 12° b) )
-                          </Link>
-                        </Box>
-                      }
-                    >
-                      <Box style={{ display: "inline-block" }}>
-                        <StatusIndicator type="info" /> Click aqui
-                      </Box>
-                    </Popover>
-                  </Box>
-                  <StatusIndicator
-                    type={
-                      data.solicitud.d4.cumple > 0 &&
-                      data.solicitud.d4.evaluacion > 0
-                        ? "warning"
-                        : data.solicitud.d4.cumple > 0 &&
-                          data.solicitud.d4.evaluacion === 0
-                        ? "success"
-                        : "error"
-                    }
-                  >
-                    {data.solicitud.d4.cumple > 0 &&
-                    data.solicitud.d4.evaluacion > 0
-                      ? "En evaluación"
-                      : data.solicitud.d4.cumple > 0 &&
-                        data.solicitud.d4.evaluacion === 0
-                      ? "Cumple"
-                      : "No cumple"}
-                  </StatusIndicator>
-                </div>
-                <div>
-                  <Box variant="awsui-key-label">
-                    Deudas{" "}
-                    <Link variant="info" onClick={() => setTypeModal("req5")}>
-                      Info
-                    </Link>
-                  </Box>
-                  <StatusIndicator
-                    type={data.solicitud.d5.cumple ? "success" : "error"}
-                  >
-                    {data.solicitud.d5.cumple ? "Sí cumple" : "No cumple"}
-                  </StatusIndicator>
-                </div>
-                <div>
-                  <Box variant="awsui-key-label">
-                    Declaración Jurada (DJ){" "}
-                    <Link variant="info" onClick={() => setTypeModal("req6")}>
-                      Info
-                    </Link>
-                  </Box>
-                  <StatusIndicator
-                    type={data.solicitud.d6.cumple > 0 ? "success" : "error"}
-                  >
-                    {data.solicitud.d6.cumple > 0 ? "Sí cumple" : "No cumple"}
-                  </StatusIndicator>
-                </div>
-              </SpaceBetween>
-              {typeModal == "req1" ? (
-                <ModalReq1 data={data.solicitud.d1.valor} soli close={close} />
-              ) : typeModal == "req2" ? (
-                <ModalReq2 data={data.solicitud.d2.valor} close={close} />
-              ) : typeModal == "req3" ? (
-                <ModalReq3 data={data.solicitud.d3.lista} close={close} />
-              ) : typeModal == "req4" ? (
-                <ModalReq4 data={data.solicitud.d4.lista} close={close} />
-              ) : typeModal == "req5" ? (
-                <ModalReq5 data={data.solicitud.d5.lista} close={close} />
-              ) : typeModal == "req6" ? (
-                <ModalReq6 data={data.solicitud.d6.lista} close={close} />
-              ) : typeModal == "obs" ? (
-                <ModalObservaciones data={data.solicitud.obs} close={close} />
-              ) : typeModal == "observado" ? (
-                <ModalObservado
-                  id={data.solicitud.id}
-                  antiguo={data.solicitud.antiguo}
-                  close={close}
-                  reload={getData}
-                />
-              ) : (
-                <></>
-              )}
-            </>
+            <Estado3 data={data} />
+          ) : data.estado == 4 ? (
+            <Estado4 data={data} />
+          ) : data.estado == 5 ? (
+            <Estado5 data={data} reload={getData} />
           ) : (
-            <Alert
-              header="Constancia CDI"
-              type="success"
-              action={
-                <Button
-                  iconName="download"
-                  href={data.url}
-                  target="_blank"
-                  variant="primary"
-                  iconAlign="right"
-                >
-                  Descargar
-                </Button>
-              }
-            >
-              Vigente desde el {data.fecha_inicio} hasta el {data.fecha_fin}. La
-              validez del presente documento está condicionada a la vigencia de
-              su registro en RENACYT.
-            </Alert>
+            <Estado6 data={data} />
           )}
-        </Form>
+        </>
       )}
     </Container>
   );

@@ -4,6 +4,7 @@ import {
   Button,
   ColumnLayout,
   SpaceBetween,
+  Header,
 } from "@cloudscape-design/components";
 
 export default ({ data, close }) => {
@@ -19,13 +20,16 @@ export default ({ data, close }) => {
           </Button>
         </Box>
       }
-      header="Grupo de investigación"
+      header={
+        <Header
+          description="Ser miembro titular de un grupo de investigación activo y reconocido
+          por el VRIP."
+        >
+          Grupo de investigación
+        </Header>
+      }
     >
       <SpaceBetween size="s">
-        <div>
-          Ser miembro titular de un grupo de investigación activo y reconocido
-          por el VRIP
-        </div>
         {data == null ? (
           <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
             <SpaceBetween size="m">

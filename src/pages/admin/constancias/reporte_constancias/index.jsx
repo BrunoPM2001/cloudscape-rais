@@ -8,9 +8,10 @@ import {
   Select,
   SpaceBetween,
 } from "@cloudscape-design/components";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import axiosBase from "../../../../api/axios";
 import BaseLayout from "../../components/baseLayout.jsx";
+import { useAutosuggest } from "../../../../hooks/useAutosuggest.js";
 
 const breadcrumbs = [
   {
@@ -28,9 +29,7 @@ const breadcrumbs = [
 export default function Reporte_constancias() {
   //  States
   const [loadingReporte, setLoadingReporte] = useState(false);
-  const [value, setValue] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [options, setOptions] = useState([]);
+
   const [form, setForm] = useState({
     investigadorId: null,
     tipo: null,
@@ -38,6 +37,65 @@ export default function Reporte_constancias() {
   const [selectedOptions, setSelectedOptions] = useState({
     tipo: null,
   });
+
+  const [opt_constancias, setOpt_constancias] = useState([
+    {
+      label: "Estudios de Investigación",
+      value: "1",
+    },
+    {
+      label: "Grupos de Investigación",
+      value: "2",
+    },
+    {
+      label: "Registro de Publicaciones",
+      value: "3",
+    },
+    {
+      label: "Puntaje de Publicaciones",
+      value: "4",
+    },
+    {
+      label: "Proyectos Multidisciplinarios",
+      value: "5",
+    },
+    {
+      label: "Capitulo de Libro",
+      value: "6",
+    },
+    {
+      label: "Proyectos Equipamiento Científico",
+      value: "7",
+    },
+    {
+      label: "Evaluador de Proyectos",
+      value: "8",
+    },
+    {
+      label: "Eventos UNMSM",
+      value: "9",
+    },
+    {
+      label: "No adeudar Informes",
+      value: "10",
+    },
+    {
+      label: "Asesor de Tésis",
+      value: "11",
+    },
+    {
+      label: "Participante Tesista",
+      value: "12",
+    },
+    {
+      label: "Asesor de Grupo",
+      value: "13",
+    },
+    {
+      label: "Miembro de Grupo",
+      value: "14",
+    },
+  ]);
 
   //  Functions
   const clearForm = () => {
@@ -52,38 +110,29 @@ export default function Reporte_constancias() {
     });
   };
 
-  const getData = async () => {
-    setLoading(true);
-    const res = await axiosBase.get(
-      "admin/admin/usuarios/searchInvestigadorBy",
-      {
-        params: {
-          query: value,
-        },
-      }
-    );
-    const data = res.data;
-    const opt = data.map((item) => {
-      return {
-        detail: item.investigador_id,
-        value: `${item.codigo} | ${item.doc_numero} | ${item.apellido1} ${item.apellido2}, ${item.nombres}`,
-      };
-    });
-    setOptions(opt);
-    setLoading(false);
-  };
+  const { loading, options, setOptions, value, setValue, setAvoidSelect } =
+    useAutosuggest("admin/admin/usuarios/searchConstanciaBy");
 
   const reporte = async () => {
     setLoadingReporte(true);
     let tipoConst;
-    if (form.tipo == 1) {
+    if (form.tipo == 4) {
       tipoConst = "getConstanciaPuntajePublicaciones";
-    } else if (form.tipo == 2) {
-      tipoConst = "getConstanciaPublicacionesCientificas";
     } else if (form.tipo == 3) {
+      tipoConst = "getConstanciaPublicacionesCientificas";
+    } else if (form.tipo == 2) {
       tipoConst = "getConstanciaGrupoInvestigacion";
+    } else if (form.tipo == 1) {
+      tipoConst = "getConstanciaEstudiosInvestigacion";
+    } else if (form.tipo == 7) {
+      tipoConst = "getConstanciaEquipamientoCientifico";
+    } else if (form.tipo == 6) {
+      tipoConst = "getConstanciaCapituloLibro";
+    } else if (form.tipo == 10) {
+      tipoConst = "getConstanciaNoDeuda";
+    } else if (form.tipo == 11) {
+      tipoConst = "getConstanciaTesisAsesoria";
     }
-
     const res = await axiosBase.get(
       "admin/constancias/" + tipoConst + "/" + form.investigadorId,
       {
@@ -96,14 +145,6 @@ export default function Reporte_constancias() {
     window.open(url, "_blank");
   };
 
-  //  Effects
-  useEffect(() => {
-    const temp = setTimeout(() => {
-      getData();
-    }, 1000);
-    return () => clearTimeout(temp);
-  }, [value]);
-
   return (
     <BaseLayout
       breadcrumbs={breadcrumbs}
@@ -113,7 +154,6 @@ export default function Reporte_constancias() {
     >
       <Container>
         <Form
-          variant="embedded"
           actions={
             <SpaceBetween direction="horizontal" size="xs">
               <Button variant="normal" onClick={() => clearForm()}>
@@ -122,6 +162,7 @@ export default function Reporte_constancias() {
               <Button
                 variant="primary"
                 loading={loadingReporte}
+                disabled={!form.investigadorId || !form.tipo} // Deshabilitar el botón si no se ha seleccionado un investigador o un tipo de constancia
                 onClick={() => reporte()}
               >
                 Generar reporte
@@ -134,14 +175,25 @@ export default function Reporte_constancias() {
             <FormField label="Investigador" stretch>
               <Autosuggest
                 onChange={({ detail }) => {
+                  setOptions([]);
                   setValue(detail.value);
+                  if (detail.value == "") {
+                    setForm({});
+                  }
                 }}
                 onSelect={({ detail }) => {
-                  if (detail.selectedOption.detail != undefined) {
-                    setForm((prev) => ({
-                      ...prev,
-                      investigadorId: detail.selectedOption.detail,
-                    }));
+                  if (detail.selectedOption?.investigador_id != undefined) {
+                    const { value, ...rest } = detail.selectedOption;
+                    setForm(rest);
+                    setAvoidSelect(false);
+                    setOpt_constancias((prev) =>
+                      prev.map((item) =>
+                        detail.selectedOption.publicaciones == 0 &&
+                        (item.value == 3 || item.value == 4)
+                          ? { ...item, disabled: true }
+                          : { ...item, disabled: false }
+                      )
+                    );
                   }
                 }}
                 value={value}
@@ -168,21 +220,7 @@ export default function Reporte_constancias() {
                     tipo: detail.selectedOption.value,
                   }));
                 }}
-                options={[
-                  {
-                    label: "Constancia de puntaje de publicaciones",
-                    value: "1",
-                  },
-                  {
-                    label:
-                      "Constancia de registro de publicaciones científicas",
-                    value: "2",
-                  },
-                  {
-                    label: "Constancia de grupo de investigación",
-                    value: "3",
-                  },
-                ]}
+                options={opt_constancias}
               />
             </FormField>
           </SpaceBetween>

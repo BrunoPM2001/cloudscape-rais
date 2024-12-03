@@ -4,6 +4,8 @@ import {
   Button,
   Table,
   SpaceBetween,
+  Header,
+  Alert,
 } from "@cloudscape-design/components";
 
 export default ({ data, close }) => {
@@ -19,14 +21,21 @@ export default ({ data, close }) => {
           </Button>
         </Box>
       }
-      header="Declaración jurada"
+      header={
+        <Header
+          description="Presentar al VRIP una declaración jurada de no haber incurrido en
+          alguna infracción o tener sanción vigente, contempladas en el Código
+          Nacional de la Integridad Científica del Concytec"
+        >
+          Declaración jurada
+        </Header>
+      }
     >
       <SpaceBetween size="s">
-        <div>
-          Presentar al VRIP una declaración jurada de no haber incurrido en
-          alguna infracción o tener sanción vigente, contempladas en el Código
-          Nacional de la Integridad Científica del Concytec
-        </div>
+        <Alert>
+          Recuerde que la constancia se genera al presentar su solicitud o
+          actualizarla
+        </Alert>
         <Table
           columnDefinitions={[
             {

@@ -5,7 +5,12 @@ export default ({ value, handleChange }) => {
   return (
     <Container>
       <FormField label="Publicación" stretch>
-        <Tiptap value={value} handleChange={handleChange} name="infinal10" />
+        <Tiptap
+          value={value}
+          handleChange={handleChange}
+          name="infinal10"
+          limitWords={2000}
+        />
       </FormField>
     </Container>
   );

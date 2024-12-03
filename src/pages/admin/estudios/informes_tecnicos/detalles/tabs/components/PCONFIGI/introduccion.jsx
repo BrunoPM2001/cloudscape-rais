@@ -9,7 +9,12 @@ export default ({ value, handleChange }) => {
         description="Importancia de los resultados de la investigación"
         stretch
       >
-        <Tiptap value={value} handleChange={handleChange} name="infinal1" />
+        <Tiptap
+          value={value}
+          handleChange={handleChange}
+          name="infinal1"
+          limitWords={600}
+        />
       </FormField>
     </Container>
   );

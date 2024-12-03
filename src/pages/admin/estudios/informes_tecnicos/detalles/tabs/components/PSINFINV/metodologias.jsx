@@ -8,7 +8,12 @@ export default ({ value, handleChange }) => {
         label="Metodologías y técnicas de investigación utilizadas"
         stretch
       >
-        <Tiptap value={value} handleChange={handleChange} name="infinal2" />
+        <Tiptap
+          value={value}
+          handleChange={handleChange}
+          name="infinal2"
+          limitWords={600}
+        />
       </FormField>
     </Container>
   );
