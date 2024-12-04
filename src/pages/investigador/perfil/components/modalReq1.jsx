@@ -6,6 +6,7 @@ import {
   ColumnLayout,
   Alert,
   Header,
+  SpaceBetween,
 } from "@cloudscape-design/components";
 
 export default ({ data, soli, close }) => {
@@ -31,7 +32,7 @@ export default ({ data, soli, close }) => {
       }
     >
       {soli ? (
-        <>
+        <SpaceBetween size="m">
           <ColumnLayout columns={2} variant="text-grid">
             <div>
               <Box variant="awsui-key-label">Código renacyt</Box>
@@ -55,9 +56,9 @@ export default ({ data, soli, close }) => {
             Si no puede descargar la constancia es porque el código Renacyt
             registrado en el RAIS es incorrecto
           </Alert>
-        </>
+        </SpaceBetween>
       ) : (
-        <>
+        <SpaceBetween size="m">
           <ColumnLayout columns={2} variant="text-grid">
             <div>
               <Box variant="awsui-key-label">Código renacyt</Box>
@@ -81,7 +82,7 @@ export default ({ data, soli, close }) => {
             Si no puede descargar la constancia es porque el código Renacyt
             registrado en el RAIS es incorrecto
           </Alert>
-        </>
+        </SpaceBetween>
       )}
     </Modal>
   );
