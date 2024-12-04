@@ -42,13 +42,13 @@ export default () => {
           ) : data.estado == 2 ? (
             <Estado2 data={data} reload={getData} />
           ) : data.estado == 3 ? (
-            <Estado3 data={data} />
+            <Estado3 data={data} reload={getData} />
           ) : data.estado == 4 ? (
             <Estado4 data={data} />
           ) : data.estado == 5 ? (
             <Estado5 data={data} reload={getData} />
           ) : (
-            <Estado6 data={data} />
+            <Estado6 data={data} reload={getData} />
           )}
         </>
       )}

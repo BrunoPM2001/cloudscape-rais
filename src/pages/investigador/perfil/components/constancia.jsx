@@ -17,9 +17,9 @@ export default ({ data }) => {
         </Button>
       }
     >
-      Vigente desde el {data.fecha_inicio} hasta el {data.fecha_fin}. La validez
-      del presente documento está condicionada a la vigencia de su registro en
-      RENACYT.
+      Vigente desde el {data.fecha_constancia} hasta el {data.fecha_fin}. La
+      validez del presente documento está condicionada a la vigencia de su
+      registro en RENACYT.
     </Alert>
   );
 };

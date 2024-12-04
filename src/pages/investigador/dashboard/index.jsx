@@ -1,4 +1,9 @@
-import { Alert, Grid, SpaceBetween } from "@cloudscape-design/components";
+import {
+  Alert,
+  Button,
+  Grid,
+  SpaceBetween,
+} from "@cloudscape-design/components";
 import Cifras from "./widgets/cifras.jsx";
 import Publicaciones from "./widgets/publicaciones.jsx";
 import Extras from "./widgets/extras.jsx";
@@ -89,6 +94,16 @@ export default function Investigador_main() {
           <Alert
             type="warning"
             header="Su constancia de docente investigador está por vencer"
+            action={
+              <Button
+                variant="primary"
+                onClick={() => {
+                  window.location.href = "/investigador/perfil";
+                }}
+              >
+                Solicitar renovación
+              </Button>
+            }
           />
         )}
         <Grid gridDefinition={gridDefinition}>

@@ -6,7 +6,7 @@ import {
 } from "@cloudscape-design/components";
 import Solicitud from "./solicitud";
 
-export default ({ data }) => {
+export default ({ data, reload }) => {
   return (
     <SpaceBetween size="xs">
       <Header
@@ -34,7 +34,7 @@ export default ({ data }) => {
       >
         Solicitud en curso
       </Header>
-      <Solicitud data={data.solicitud} />
+      <Solicitud data={data.solicitud} reload={reload} />
     </SpaceBetween>
   );
 };
