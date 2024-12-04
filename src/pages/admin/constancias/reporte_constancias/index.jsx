@@ -31,7 +31,7 @@ export default function Reporte_constancias() {
   const [loadingReporte, setLoadingReporte] = useState(false);
 
   const [form, setForm] = useState({
-    investigadorId: null,
+    investigador_id: null,
     tipo: null,
   });
   const [selectedOptions, setSelectedOptions] = useState({
@@ -134,7 +134,7 @@ export default function Reporte_constancias() {
       tipoConst = "getConstanciaTesisAsesoria";
     }
     const res = await axiosBase.get(
-      "admin/constancias/" + tipoConst + "/" + form.investigadorId,
+      "admin/constancias/" + tipoConst + "/" + form.investigador_id,
       {
         responseType: "blob",
       }
@@ -162,7 +162,9 @@ export default function Reporte_constancias() {
               <Button
                 variant="primary"
                 loading={loadingReporte}
-                disabled={!form.investigadorId || !form.tipo} // Deshabilitar el botón si no se ha seleccionado un investigador o un tipo de constancia
+                disabled={
+                  !form.investigador_id || !form.tipo || !selectedOptions.tipo
+                } // Deshabilitar el botón si no se ha seleccionado un investigador o un tipo de constancia
                 onClick={() => reporte()}
               >
                 Generar reporte
