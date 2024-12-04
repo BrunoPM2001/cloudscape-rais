@@ -197,6 +197,7 @@ export default function ({ data, loading, tipo, reload }) {
     } else if (tipo == "tesis-asesoria") {
       setOptAutor([{ value: "Tesista" }]);
       setTipoAutor([
+        { text: "Asesor / co-asesor docente UNMSM", id: "action_2_1" },
         { text: "Agregar autor estudiante UNMSM", id: "action_2_2" },
       ]);
     }
