@@ -301,7 +301,10 @@ export default ({ id, changes, reload }) => {
               }
             />
           </FormField>
-          <ColumnLayout columns={4}>
+          <ColumnLayout columns={2}>
+            <FormField label="Título">
+              <Input value={formValues.titulo} disabled />
+            </FormField>
             <FormField label="Fecha de envío de publicación">
               <Input value={formValues.fecha_inscripcion} disabled />
             </FormField>
