@@ -5,9 +5,6 @@ import queryString from "query-string";
 import BaseLayout from "../../../components/baseLayout";
 import axiosBase from "../../../../../api/axios";
 import Detalles from "./detalles";
-import Proyectos from "./tabs/proyectos";
-import Autores from "./tabs/autores";
-import Info from "./tabs/info";
 
 const breadcrumbs = [
   {
@@ -109,7 +106,7 @@ export default function Detalle_patente() {
       en general."
     >
       <SpaceBetween size="l">
-        {/* <Detalles id={id} changes={changes} reload={getData} /> */}
+        <Detalles id={id} changes={changes} reload={getData} />
         {/* <Tabs tabs={tabs} /> */}
       </SpaceBetween>
     </BaseLayout>
