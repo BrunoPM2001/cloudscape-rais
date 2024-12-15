@@ -279,7 +279,7 @@ export default () => {
       },
     });
     const data = res.data;
-    setDistribution(data.data);
+    setDistribution(data);
     setLoadingData(false);
   };
 
