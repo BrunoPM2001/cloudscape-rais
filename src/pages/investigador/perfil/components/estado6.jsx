@@ -8,7 +8,7 @@ import {
 import Constancia from "./constancia";
 import Solicitud from "./solicitud";
 
-export default ({ data }) => {
+export default ({ data, reload }) => {
   return (
     <SpaceBetween size="m">
       <Constancia data={data.constancia} />
@@ -39,7 +39,7 @@ export default ({ data }) => {
         >
           Solicitud en curso
         </Header>
-        <Solicitud data={data.solicitud} />
+        <Solicitud data={data.solicitud} reload={reload} />
       </SpaceBetween>
     </SpaceBetween>
   );

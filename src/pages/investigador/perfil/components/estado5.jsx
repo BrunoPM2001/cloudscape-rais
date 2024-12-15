@@ -15,9 +15,13 @@ export default ({ data, reload }) => {
         <Header
           variant="h3"
           description="Puede solicitar una nueva constancia a 2 meses del vencimiento de su constancia vigente."
-          actions={<Button variant="primary">Solicitar</Button>}
+          actions={
+            <Button variant="primary" onClick={() => setModal("solicitar")}>
+              Solicitar renovación
+            </Button>
+          }
         >
-          Solicitar nueva constancia
+          Solicitar CDI
         </Header>
         <Solicitar data={data.solicitar} />
       </SpaceBetween>

@@ -19,6 +19,7 @@ const opt_confirmar = [
 ];
 
 const opt_norma = [
+  { value: "R.R. 012521-2024-R (Directiva 2024 modificada)" },
   { value: "R.R. 009077-2024-R (Directiva 2024)" },
   { value: "R.R. 006682-2023-R (Directiva 2023)" },
 ];

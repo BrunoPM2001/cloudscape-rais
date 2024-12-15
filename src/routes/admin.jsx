@@ -2,6 +2,9 @@ import { Suspense, lazy } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { NotificationProvider } from "../providers/notificationProvider";
 
+const Detalle_patente = lazy(() =>
+  import("../pages/admin/estudios/gestion_publicaciones/patente/index.jsx")
+);
 const Nueva_publicacion = lazy(() =>
   import("../pages/admin/estudios/gestion_publicaciones/nuevo/index.jsx")
 );
@@ -304,6 +307,10 @@ const routes = createBrowserRouter(
             {
               path: "nuevo",
               element: <Nueva_publicacion />,
+            },
+            {
+              path: "patente",
+              element: <Detalle_patente />,
             },
           ],
         },

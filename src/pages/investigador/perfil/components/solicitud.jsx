@@ -1,6 +1,8 @@
 import {
   Alert,
   Box,
+  Button,
+  Form,
   Link,
   SpaceBetween,
   StatusIndicator,
@@ -15,7 +17,7 @@ import ModalObservaciones from "./modalObservaciones";
 import ModalObservado from "./modalObservado";
 import { useState } from "react";
 
-export default ({ data }) => {
+export default ({ data, reload }) => {
   //  States
   const [modal, setModal] = useState("");
 
@@ -23,7 +25,18 @@ export default ({ data }) => {
   const close = () => setModal("");
 
   return (
-    <>
+    <Form
+      actions={
+        data.estado == "Observado" && (
+          <SpaceBetween size="xs" direction="horizontal">
+            <Button onClick={() => setModal("obs")}>Ver obs.</Button>
+            <Button variant="primary" onClick={() => setModal("observado")}>
+              Actualizar solicitud
+            </Button>
+          </SpaceBetween>
+        )
+      }
+    >
       <SpaceBetween size="s">
         <Alert header="Información Sobre Publicaciones con Filiación:">
           <ul style={{ paddingLeft: "16px", margin: 0 }}>
@@ -132,10 +145,10 @@ export default ({ data }) => {
             id={data.id}
             antiguo={data.antiguo}
             close={close}
-            reload={getData}
+            reload={reload}
           />
         )
       )}
-    </>
+    </Form>
   );
 };

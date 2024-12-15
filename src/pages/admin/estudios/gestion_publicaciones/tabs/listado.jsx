@@ -39,6 +39,12 @@ const FILTER_PROPS = [
     operators: stringOperators,
   },
   {
+    propertyLabel: "Tipo de patente",
+    key: "tipo_patente",
+    groupValuesLabel: "Tipos de patente",
+    operators: stringOperators,
+  },
+  {
     propertyLabel: "Isbn",
     key: "isbn",
     groupValuesLabel: "Isbns",
@@ -125,6 +131,12 @@ const columnDefinitions = [
     header: "Tipo",
     cell: (item) => item.tipo,
     sortingField: "tipo",
+  },
+  {
+    id: "tipo_patente",
+    header: "Tipo de patente",
+    cell: (item) => item.tipo_patente,
+    sortingField: "tipo_patente",
   },
   {
     id: "isbn",
@@ -217,6 +229,7 @@ const columnDisplay = [
   { id: "id", visible: true },
   { id: "codigo_registro", visible: true },
   { id: "tipo", visible: true },
+  { id: "tipo_patente", visible: true },
   { id: "titulo", visible: true },
   { id: "isbn", visible: true },
   { id: "issn", visible: true },
@@ -395,8 +408,16 @@ export default () => {
                       const query = queryString.stringify({
                         id: collectionProps.selectedItems[0]["id"],
                       });
-                      window.location.href =
-                        "gestion_publicaciones/detalle?" + query;
+                      //  Redirigir a patentes
+                      if (
+                        collectionProps.selectedItems[0]["tipo"] == "Patente"
+                      ) {
+                        window.location.href =
+                          "gestion_publicaciones/patente?" + query;
+                      } else {
+                        window.location.href =
+                          "gestion_publicaciones/detalle?" + query;
+                      }
                     } else if (detail.id == "action_1_2") {
                       reporte();
                     } else if (detail.id == "action_1_3") {

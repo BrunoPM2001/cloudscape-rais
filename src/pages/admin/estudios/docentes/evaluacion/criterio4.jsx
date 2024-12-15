@@ -25,11 +25,7 @@ export default ({ data }) => {
         </Header>
       }
     >
-      <Alert
-        dismissible
-        statusIconAriaLabel="Info"
-        header="Articulo 12° Procedimientos para ser evaluado y designado docente investigador de la UNMSM"
-      >
+      <Alert header="Articulo 12° Procedimientos para ser evaluado y designado docente investigador de la UNMSM">
         <ul style={{ paddingLeft: "16px", margin: 0 }}>
           b) El VRIP realizará la evaluación de las actividades de investigación
           de los docentes con base en la información registrada en el RAIS
