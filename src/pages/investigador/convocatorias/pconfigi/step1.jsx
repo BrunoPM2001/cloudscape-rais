@@ -326,10 +326,10 @@ export default function Registro_pconfigi_1() {
                                 formValues.ocde1 == null
                                   ? []
                                   : data.ocde.filter(
-                                      (item) =>
-                                        item.parent_id ==
-                                        formValues.ocde1?.value
-                                    )
+                                    (item) =>
+                                      item.parent_id ==
+                                      formValues.ocde1?.value
+                                  )
                               }
                               selectedOption={formValues.ocde2}
                               onChange={({ detail }) => {
@@ -357,10 +357,10 @@ export default function Registro_pconfigi_1() {
                                 formValues.ocde2 == null
                                   ? []
                                   : data.ocde.filter(
-                                      (item) =>
-                                        item.parent_id ==
-                                        formValues.ocde2?.value
-                                    )
+                                    (item) =>
+                                      item.parent_id ==
+                                      formValues.ocde2?.value
+                                  )
                               }
                               selectedOption={formValues.ocde}
                               onChange={({ detail }) =>
@@ -445,14 +445,20 @@ export default function Registro_pconfigi_1() {
           ) : (
             <>
               <br />
-              <Alert
-                header="No puede registrarse en esta convocatoria"
-                type="warning"
-              >
-                {errors.map((item) => {
-                  return <li>{item}</li>;
+              <Alert header="No puede registrarse en esta convocatoria" type="error">
+                {errors.map((item, index) => {
+                  return (
+                    <li key={index}>
+                      {item.isHtml ? (
+                        <span dangerouslySetInnerHTML={{ __html: item.message }} />
+                      ) : (
+                        item.message
+                      )}
+                    </li>
+                  );
                 })}
               </Alert>
+
             </>
           )}
         </>

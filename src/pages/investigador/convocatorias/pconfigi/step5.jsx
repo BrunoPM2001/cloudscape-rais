@@ -83,7 +83,7 @@ export default function Registro_pconfigi_5() {
   const [type, setType] = useState("");
   const [errors, setErrors] = useState([]);
   const [alert, setAlert] = useState([]);
-
+  const [isVisible, setIsVisible] = useState(true);
   //  Hooks
   const { items, collectionProps, actions } = useCollection(data.presupuesto, {
     selection: {},
@@ -181,6 +181,30 @@ export default function Registro_pconfigi_5() {
                   description: "Montos y partidas",
                   content: (
                     <SpaceBetween size="m">
+                      <Alert
+                       dismissible
+                        statusIconAriaLabel="Info"
+                        onDismiss={() => setIsVisible(false)}
+                        header="Artículo 10° Del incentivo a los investigadores que participan en el proyecto de investigación con financiamiento"
+                      >
+                        <ul>
+                          <li>
+                            a)El incentivo a los investigadores será incluido en el presupuesto del proyecto
+                            posterior a la evaluación y según el orden de mérito obtenido.
+                          </li>
+                          <li>
+                            b) El incentivo económico asignado a los investigadores será de acuerdo con el
+                            orden de mérito del proyecto, sin superar el límite establecido de 8,000 soles,
+                            según tabla.
+                              <ul>
+                                <li>Tercio superior (Incentivo S/8000)</li>
+                                <li>Tercio medio (Incentivo S/6000)</li>
+                                <li>Tercio inferior (Incentivo S/4000)</li>
+                              </ul>
+                          </li>
+                        </ul>
+
+                      </Alert>
                       {alert.length > 0 && (
                         <Alert
                           type="warning"
@@ -231,6 +255,7 @@ export default function Registro_pconfigi_5() {
                                 <ButtonDropdown
                                   disabled={
                                     collectionProps.selectedItems.length == 0
+
                                   }
                                   variant="normal"
                                   onItemClick={({ detail }) => {
@@ -244,10 +269,14 @@ export default function Registro_pconfigi_5() {
                                     {
                                       text: "Eliminar",
                                       id: "action_1_1",
+                                      disabled: collectionProps.selectedItems[0]
+                                        ?.partida_id == 61,
                                     },
                                     {
                                       text: "Editar",
                                       id: "action_1_2",
+                                      disabled: collectionProps.selectedItems[0]
+                                        ?.partida_id == 61,
                                     },
                                   ]}
                                 >
@@ -328,10 +357,10 @@ export default function Registro_pconfigi_5() {
                           options={data.partidas}
                           limit={parseFloat(
                             40000 -
-                              items.reduce(
-                                (acc, curr) => acc + Number(curr.monto),
-                                0
-                              )
+                            items.reduce(
+                              (acc, curr) => acc + Number(curr.monto),
+                              0
+                            )
                           ).toFixed(2)}
                         />
                       ) : type == "update" ? (
@@ -342,11 +371,11 @@ export default function Registro_pconfigi_5() {
                           options={data.partidas}
                           limit={parseFloat(
                             40000 -
-                              items.reduce(
-                                (acc, curr) => acc + Number(curr.monto),
-                                0
-                              ) +
-                              Number(collectionProps.selectedItems[0].monto)
+                            items.reduce(
+                              (acc, curr) => acc + Number(curr.monto),
+                              0
+                            ) +
+                            Number(collectionProps.selectedItems[0].monto)
                           ).toFixed(2)}
                         />
                       ) : type == "info" ? (

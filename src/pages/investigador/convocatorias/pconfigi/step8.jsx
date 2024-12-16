@@ -98,7 +98,7 @@ export default function Registro_pconfigi_8() {
       pushNotification(info.detail, info.message, notifications.length + 1);
       setLoadingBtn(false);
       setTimeout(() => {
-        window.location.href = "/investigador";
+        window.location.href = "/investigador/convocatoria/pconfigi";
       }, 5000);
     } else {
       pushNotification(

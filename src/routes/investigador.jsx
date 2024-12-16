@@ -26,6 +26,9 @@ const Registro_pconfigi_2 = lazy(() =>
 const Registro_pconfigi_1 = lazy(() =>
   import("../pages/investigador/convocatorias/pconfigi/step1.jsx")
 );
+const Registro_pconfigi_0 = lazy(() =>
+  import("../pages/investigador/convocatorias/pconfigi/step0.jsx")
+);
 const Registro_pfex_5 = lazy(() =>
   import("../pages/investigador/actividades/proyecto_fex/registrar/step5.jsx")
 );
@@ -511,6 +514,10 @@ const routes = createBrowserRouter(
         {
           path: "pconfigi",
           children: [
+            {
+              path: "",
+              element: <Registro_pconfigi_0 />,
+            },
             {
               path: "paso1",
               element: <Registro_pconfigi_1 />,

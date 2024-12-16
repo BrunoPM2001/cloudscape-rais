@@ -24,9 +24,11 @@ const initialForm = {
 export default ({ close, reload, id, options, limit }) => {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
-
+  // Define los límites para cada partida en un objeto
+ 
   //  States
   const [loading, setLoading] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
 
   const formRules = {
     tipo: { required: true },
@@ -48,12 +50,61 @@ export default ({ close, reload, id, options, limit }) => {
         { ...formValues, id }
       );
       const data = res.data;
+      console.log(data);
       pushNotification(data.detail, data.message, notifications.length + 1);
       close();
       reload();
       setLoading(false);
     }
   };
+  const limits = {
+    6: 800,
+    16: 32000,
+    38: 3000,
+    40: 800,
+    49: 10000,
+    69: 3000,
+    73: 8000,
+    79: 4000,
+  };
+  
+  const isDisabled = () => {
+    const limit = limits[formValues.partida?.value];
+    return limit && formValues.monto > limit; // Desactiva si supera el límite
+  };
+
+  const validateRules = () => {
+    // Define los límites para cada partida en un objeto
+    const limits = {
+      6: 800,
+      16: 32000,
+      38: 3000,
+      40: 800,
+      49: 10000,
+      69: 3000,
+      73: 8000,
+      79: 4000,
+    };
+  
+    // Verifica si el valor actual de partida tiene un límite definido
+    const limit = limits[formValues.partida?.value];
+  
+    if (limit && formValues.monto > limit) {
+      setAlertMessage(
+        `No puedes asignar más de S/ ${limit.toLocaleString("es-PE")} a la partida ${formValues.partida?.label}`
+      );
+    } else {
+      setAlertMessage(""); // Limpia el mensaje si no hay problemas
+    }
+  };
+
+  // Trigger custom validation when values change
+  const handleCustomChange = (field, value) => {
+    handleChange(field, value);
+   // Valida reglas después de actualizar el valor
+  setTimeout(validateRules, 0); // Asegura que los valores actualizados se usen
+  };
+  // console.log(formValues);
 
   return (
     <Modal
@@ -67,7 +118,12 @@ export default ({ close, reload, id, options, limit }) => {
             <Button variant="normal" onClick={close}>
               Cancelar
             </Button>
-            <Button variant="primary" loading={loading} onClick={agregar}>
+            <Button 
+            variant="primary" 
+            loading={loading} 
+            onClick={agregar}
+            disabled={ isDisabled()}
+            >
               Agregar
             </Button>
           </SpaceBetween>
@@ -78,16 +134,23 @@ export default ({ close, reload, id, options, limit }) => {
         <Alert
           header={`Tiene disponible S/ ${limit} para asignar a esta partida`}
         />
+        {alertMessage && (
+          <Alert type="error" header="Supero el monto permitido:">
+            {alertMessage}
+          </Alert>
+        )}
+        {/* tipo */}
         <FormField label="Tipo" errorText={formErrors.tipo} stretch>
           <Select
             placeholder="Escoja una opción"
             options={[{ value: "Bienes" }, { value: "Servicios" }]}
             selectedOption={formValues.tipo}
             onChange={({ detail }) =>
-              handleChange("tipo", detail.selectedOption)
+              handleCustomChange("tipo", detail.selectedOption)
             }
           />
         </FormField>
+
         <FormField label="Partida" errorText={formErrors.partida} stretch>
           <Select
             placeholder="Escoja una opción"
@@ -97,15 +160,16 @@ export default ({ close, reload, id, options, limit }) => {
             )}
             selectedOption={formValues.partida}
             onChange={({ detail }) =>
-              handleChange("partida", detail.selectedOption)
+              handleCustomChange("partida", detail.selectedOption)
             }
           />
         </FormField>
         <FormField label="Monto" errorText={formErrors.monto} stretch>
           <Input
             type="number"
+            
             value={formValues.monto}
-            onChange={({ detail }) => handleChange("monto", detail.value)}
+            onChange={({ detail }) =>  handleCustomChange("monto", detail.value)}
           />
         </FormField>
         <FormField
@@ -116,7 +180,7 @@ export default ({ close, reload, id, options, limit }) => {
           <Textarea
             value={formValues.justificacion}
             onChange={({ detail }) =>
-              handleChange("justificacion", detail.value)
+              handleCustomChange("justificacion", detail.value)
             }
           />
         </FormField>
