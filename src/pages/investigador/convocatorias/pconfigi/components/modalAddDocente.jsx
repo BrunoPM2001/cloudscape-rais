@@ -11,8 +11,15 @@ import {
 import { useContext, useState } from "react";
 import NotificationContext from "../../../../../providers/notificationProvider";
 import { useAutosuggest } from "../../../../../hooks/useAutosuggest";
+import { useFormValidation } from "../../../../../hooks/useFormValidation";
 import axiosBase from "../../../../../api/axios";
 
+const initialForm = {
+  contribucion: "",
+};
+const formRules = {
+  contribucion: { required: true },
+};
 export default ({ close, reload, id }) => {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
@@ -21,11 +28,13 @@ export default ({ close, reload, id }) => {
   const [enableCreate, setEnableCreate] = useState(true);
   const [loadingCreate, setLoadingCreate] = useState(false);
   const [form, setForm] = useState({});
+ 
 
   //  Hooks
   const { loading, options, setOptions, value, setValue, setAvoidSelect } =
     useAutosuggest("investigador/convocatorias/pconfigi/listadoGrupoDocente");
-
+    const { formValues, formErrors, handleChange, validateForm } =
+    useFormValidation(initialForm, formRules);
   //  Functions
   const agregarIntegrante = async () => {
     setLoadingCreate(true);
@@ -105,7 +114,7 @@ export default ({ close, reload, id }) => {
         <FormField
           label="Contribución"
           stretch
-          errorText={formErrors.contribucion}
+          errorText={formErrors.contribucion ?? ""}
         >
           <Input
             value={formValues.contribucion}
