@@ -83,7 +83,7 @@ export default function Registro_pconfigi_5() {
   const [type, setType] = useState("");
   const [errors, setErrors] = useState([]);
   const [alert, setAlert] = useState([]);
-  const [isVisible, setIsVisible] = useState(true);
+  const [isVisible, setIsVisible] = useState([]);
   //  Hooks
   const { items, collectionProps, actions } = useCollection(data.presupuesto, {
     selection: {},
@@ -114,7 +114,16 @@ export default function Registro_pconfigi_5() {
       window.location.href = "paso" + (index + 1) + "?" + query;
     } else {
       let tempErrors = [...errors];
+      const totalMonto = items
+        .filter((item) => item.partida_id !== 61) // Excluir partida_id 61
+        .reduce((sum, item) => sum + parseFloat(item.monto), 0); // Convertir monto a número
+
+      console.log(totalMonto);
+      if (totalMonto < 16000) {
+        tempErrors.push("El monto total minimo para postular a esta convocatoria es de S/. 16,000.00");
+      }
       if (items.filter((item) => item.tipo == "Bienes").length < MIN_BIENES) {
+
         tempErrors.push(
           "Necesita registrar al menos " + MIN_BIENES + " partida de bienes"
         );
@@ -132,6 +141,7 @@ export default function Registro_pconfigi_5() {
   useEffect(() => {
     getData();
   }, []);
+
 
   return (
     <BaseLayout
@@ -182,9 +192,10 @@ export default function Registro_pconfigi_5() {
                   content: (
                     <SpaceBetween size="m">
                       <Alert
-                       dismissible
+                       type="info"
                         statusIconAriaLabel="Info"
-                        onDismiss={() => setIsVisible(false)}
+                        dismissible
+                        onDismiss={() => setIsVisible([])}
                         header="Artículo 10° Del incentivo a los investigadores que participan en el proyecto de investigación con financiamiento"
                       >
                         <ul>
@@ -196,11 +207,11 @@ export default function Registro_pconfigi_5() {
                             b) El incentivo económico asignado a los investigadores será de acuerdo con el
                             orden de mérito del proyecto, sin superar el límite establecido de 8,000 soles,
                             según tabla.
-                              <ul>
-                                <li>Tercio superior (Incentivo S/8000)</li>
-                                <li>Tercio medio (Incentivo S/6000)</li>
-                                <li>Tercio inferior (Incentivo S/4000)</li>
-                              </ul>
+                            <ul>
+                              <li>Tercio superior (Incentivo S/8000)</li>
+                              <li>Tercio medio (Incentivo S/6000)</li>
+                              <li>Tercio inferior (Incentivo S/4000)</li>
+                            </ul>
                           </li>
                         </ul>
 
