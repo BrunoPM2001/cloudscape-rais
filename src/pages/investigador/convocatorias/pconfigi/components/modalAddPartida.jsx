@@ -167,9 +167,14 @@ export default ({ close, reload, id, options, limit }) => {
         <FormField label="Monto" errorText={formErrors.monto} stretch>
           <Input
             type="number"
-            
+            min={0}
             value={formValues.monto}
-            onChange={({ detail }) =>  handleCustomChange("monto", detail.value)}
+            onChange={({ detail }) => {
+              const newValue = detail.value;
+              if (newValue >= 0) {
+                handleCustomChange("monto", newValue);
+              }
+            }}
           />
         </FormField>
         <FormField

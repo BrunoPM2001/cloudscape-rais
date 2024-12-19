@@ -243,8 +243,8 @@ export default function Registro_pconfigi_5() {
                           <Header
                             variant="h3"
                             description={
-                              "Monto máximo: S/40000, monto disponible: S/" +
-                              (40000 -
+                              "Monto máximo: S/32,000.00, monto disponible: S/" +
+                              (32000 -
                                 Number(
                                   items.reduce(
                                     (sum, item) =>
@@ -367,7 +367,7 @@ export default function Registro_pconfigi_5() {
                           id={id}
                           options={data.partidas}
                           limit={parseFloat(
-                            40000 -
+                            32000 -
                             items.reduce(
                               (acc, curr) => acc + Number(curr.monto),
                               0
@@ -381,7 +381,7 @@ export default function Registro_pconfigi_5() {
                           item={collectionProps.selectedItems[0]}
                           options={data.partidas}
                           limit={parseFloat(
-                            40000 -
+                            32000 -
                             items.reduce(
                               (acc, curr) => acc + Number(curr.monto),
                               0
