@@ -144,78 +144,45 @@ const navItems = [
     items: [
       {
         type: "link",
-        text: (
-          <>
-            Programa para la Inducción en Investigación Científica en Verano
-            <div style={{ fontSize: "small", color: "green" }}>
-              <b>Convocatoria Abierta</b>
-            </div>
-          </>
-        ),
-        // href: "/investigador/convocatoria/picv/verificar",
-        href: "/investigador/convocatoria/picv",
-   
+        text: "Programa para la Inducción en Investigación Científica en Verano",
+        // href: "/investigador/convocatoria/picv",
+        info: <Badge color="blue">Pendiente</Badge>,
+        href: "#",
       },
       {
         type: "link",
-        text: 
-            "Programa de Proyectos de Investigación para Grupos de Investigación",
-        info: <Badge color="green">Abierta</Badge>,
-        href: "/investigador/convocatoria/pconfigi",
-       
+        text: "Programa de Proyectos de Investigación para Grupos de Investigación",
+        info: <Badge color="red">Cerrada</Badge>,
+        // href: "/investigador/convocatoria/pconfigi",
+        href: "#",
       },
       {
         type: "link",
         // href: "/investigador/convocatoria/proctie/verificar",
         href: "#",
-        text: (
-          <>
-            Proyecto de Ciencia, Tecnología, Innovación y Emprendimiento
-            <div style={{ fontSize: "small", color: "red" }}>
-              <b>Convocatoria Cerrada</b>
-            </div>
-          </>
-        ),
+        text: "Proyecto de Ciencia, Tecnología, Innovación y Emprendimiento",
+        info: <Badge color="red">Cerrada</Badge>,
       },
       {
         type: "link",
         // href: "/investigador/convocatoria/taller/paso1",
         href: "#",
-        text: (
-          <>
-            Talleres de Investigación y Posgrado
-            <div style={{ fontSize: "small", color: "red" }}>
-              <b>Convocatoria Cerrada</b>
-            </div>
-          </>
-        ),
+        text: "Talleres de Investigación y Posgrado",
+        info: <Badge color="red">Cerrada</Badge>,
       },
       {
         type: "link",
-        text: (
-          <>
-            Proyecto de investigación sin financiamiento
-            <div style={{ fontSize: "small", color: "red" }}>
-              <b>Convocatoria Cerrada</b>
-            </div>
-          </>
-        ),
-        
+        text: "Proyecto de investigación sin financiamiento",
         // href: "/investigador/convocatoria/psinfinv/paso1",
         href: "#",
+        info: <Badge color="red">Cerrada</Badge>,
       },
       {
         type: "link",
-        text: (
-          <>
-           Proyecto de publicación académica"
-            <div style={{ fontSize: "small", color: "red" }}>
-              <b>Convocatoria Cerrada</b>
-            </div>
-          </>
-        ),
+        text: "Proyecto de publicación académica",
         // href: "/investigador/convocatoria/psinfipu",
         href: "#",
+        info: <Badge color="red">Cerrada</Badge>,
       },
     ],
   },
