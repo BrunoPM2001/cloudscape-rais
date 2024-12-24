@@ -142,32 +142,78 @@ const navItems = [
     text: "Convocatorias",
     defaultExpanded: false,
     items: [
-      // {
-      //   type: "link",
-      //   text: "Proyecto con financiamiento",
-      //   href: "/investigador/convocatoria/pconfigi/paso1",
-      // },
       {
         type: "link",
-        text: "Proyecto de Ciencia, Tecnología, Innovación y Emprendimiento",
+        text: (
+          <>
+            Programa para la Inducción en Investigación Científica en Verano
+            <div style={{ fontSize: "small", color: "green" }}>
+              <b>Convocatoria Abierta</b>
+            </div>
+          </>
+        ),
+        // href: "/investigador/convocatoria/picv/verificar",
+        href: "/investigador/convocatoria/picv",
+   
+      },
+      {
+        type: "link",
+        text: 
+            "Programa de Proyectos de Investigación para Grupos de Investigación",
+        info: <Badge color="green">Abierta</Badge>,
+        href: "/investigador/convocatoria/pconfigi",
+       
+      },
+      {
+        type: "link",
         // href: "/investigador/convocatoria/proctie/verificar",
         href: "#",
+        text: (
+          <>
+            Proyecto de Ciencia, Tecnología, Innovación y Emprendimiento
+            <div style={{ fontSize: "small", color: "red" }}>
+              <b>Convocatoria Cerrada</b>
+            </div>
+          </>
+        ),
       },
       {
         type: "link",
-        text: "Talleres de Investigación y Posgrado",
         // href: "/investigador/convocatoria/taller/paso1",
         href: "#",
+        text: (
+          <>
+            Talleres de Investigación y Posgrado
+            <div style={{ fontSize: "small", color: "red" }}>
+              <b>Convocatoria Cerrada</b>
+            </div>
+          </>
+        ),
       },
       {
         type: "link",
-        text: "Proyecto de investigación sin financiamiento",
+        text: (
+          <>
+            Proyecto de investigación sin financiamiento
+            <div style={{ fontSize: "small", color: "red" }}>
+              <b>Convocatoria Cerrada</b>
+            </div>
+          </>
+        ),
+        
         // href: "/investigador/convocatoria/psinfinv/paso1",
         href: "#",
       },
       {
         type: "link",
-        text: "Proyecto de publicación académica",
+        text: (
+          <>
+           Proyecto de publicación académica"
+            <div style={{ fontSize: "small", color: "red" }}>
+              <b>Convocatoria Cerrada</b>
+            </div>
+          </>
+        ),
         // href: "/investigador/convocatoria/psinfipu",
         href: "#",
       },

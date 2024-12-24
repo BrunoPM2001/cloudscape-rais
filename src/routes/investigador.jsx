@@ -29,6 +29,7 @@ const Registro_pconfigi_1 = lazy(() =>
 const Registro_pconfigi_0 = lazy(() =>
   import("../pages/investigador/convocatorias/pconfigi/step0.jsx")
 );
+
 const Registro_pfex_5 = lazy(() =>
   import("../pages/investigador/actividades/proyecto_fex/registrar/step5.jsx")
 );
@@ -161,11 +162,13 @@ const Informe_economico = lazy(() =>
 const Detalle_grupo_invest = lazy(() =>
   import("../pages/investigador/grupo/grupo/detalles/index.jsx")
 );
+
 const Verificar_requisitos = lazy(() =>
   import(
     "../pages/investigador/convocatorias/proyecto_financiamiento/verificar.jsx"
   )
 );
+
 const Registrar_proyecto_paso1 = lazy(() =>
   import(
     "../pages/investigador/convocatorias/proyecto_financiamiento/layout1.jsx"
@@ -201,6 +204,54 @@ const Registrar_proyecto_paso7 = lazy(() =>
     "../pages/investigador/convocatorias/proyecto_financiamiento/layout7.jsx"
   )
 );
+
+const Registrar_picv_paso0 = lazy(() =>
+  import(
+    "../pages/investigador/convocatorias/picv/paso0.jsx"
+  )
+);
+
+const Verificar_requisitos_picv = lazy(() =>
+  import(
+    "../pages/investigador/convocatorias/picv/verificar.jsx"
+  )
+);
+const Registrar_picv_paso1 = lazy(() =>
+  import(
+    "../pages/investigador/convocatorias/picv/layout1.jsx"
+  )
+);
+const Registrar_picv_paso2 = lazy(() =>
+  import(
+    "../pages/investigador/convocatorias/picv/layout2.jsx"
+  )
+);
+const Registrar_picv_paso3 = lazy(() =>
+  import(
+    "../pages/investigador/convocatorias/picv/layout3.jsx"
+  )
+);
+const Registrar_picv_paso4 = lazy(() =>
+  import(
+    "../pages/investigador/convocatorias/picv/layout4.jsx"
+  )
+);
+const Registrar_picv_paso5 = lazy(() =>
+  import(
+    "../pages/investigador/convocatorias/picv/layout5.jsx"
+  )
+);
+const Registrar_picv_paso6 = lazy(() =>
+  import(
+    "../pages/investigador/convocatorias/picv/layout6.jsx"
+  )
+);
+const Registrar_picv_paso7 = lazy(() =>
+  import(
+    "../pages/investigador/convocatorias/picv/layout7.jsx"
+  )
+);
+
 const Proyectos_con_financiamiento = lazy(() =>
   import(
     "../pages/investigador/actividades/proyectos_con_financiamiento/index.jsx"
@@ -586,6 +637,47 @@ const routes = createBrowserRouter(
             {
               path: "paso7",
               element: <Registrar_proyecto_paso7 />,
+            },
+          ],
+        },
+        {
+          path: "picv",
+          children: [
+            {
+              path: "",
+              element: <Registrar_picv_paso0 />,
+            },
+            {
+              path: "verificar",
+              element: <Verificar_requisitos_picv />,
+            },
+            {
+              path: "paso1",
+              element: <Registrar_picv_paso1 />,
+            },
+            {
+              path: "paso2",
+              element: <Registrar_picv_paso2 />,
+            },
+            {
+              path: "paso3",
+              element: <Registrar_picv_paso3 />,
+            },
+            {
+              path: "paso4",
+              element: <Registrar_picv_paso4 />,
+            },
+            {
+              path: "paso5",
+              element: <Registrar_picv_paso5 />,
+            },
+            {
+              path: "paso6",
+              element: <Registrar_picv_paso6 />,
+            },
+            {
+              path: "paso7",
+              element: <Registrar_picv_paso7 />,
             },
           ],
         },
