@@ -40,7 +40,7 @@ export default function Registrar_proyecto_paso3() {
     if (detail.requestedStepIndex > 2) {
       if (!requisitos) {
         pushNotification(
-          "Necesita tener 3 integrantes de tipo Estudiante al menos",
+          "Necesita tener 1 integrante de tipo Estudiante como mínimo.",
           "warning",
           notifications.length + 1
         );

@@ -55,19 +55,17 @@ export default ({ id, visible, setVisible, reload }) => {
       "investigador/convocatorias/picv/verificarEstudiante",
       {
         params: {
-          investigadorId: form.investigador_id,
+          codigo: form.codigo_alumno,
         },
       }
     );
-    const data = res.data;
+    const data = await res.data;
     setIncluirMiembroData(data);
     setLoadingData(false);
     if (data.message == "success") {
       setEnableCreate(false);
     }
   };
-
- 
 
   const agregarIntegrante = async () => {
     if (validateForm()) {
@@ -154,17 +152,17 @@ export default ({ id, visible, setVisible, reload }) => {
                   <SpaceBetween size="xxs">
                     <div>
                       <Box variant="awsui-key-label">Apellidos y nombres:</Box>
-                      <>{`${form.apellido1} ${form.apellido2}, ${form.nombres}`}</>
+                      <>{`${form.apellido_paterno} ${form.apellido_materno}, ${form.nombres}`}</>
                     </div>
                     <div>
                       <Box variant="awsui-key-label">Dni:</Box>
-                      <>{form.doc_numero}</>
+                      <>{form.dni}</>
                     </div>
                   </SpaceBetween>
                   <SpaceBetween size="xxs">
                     <div>
                       <Box variant="awsui-key-label">Código de estudiante:</Box>
-                      <>{form.codigo}</>
+                      <>{form.codigo_alumno}</>
                     </div>
                     <div>
                       <Box variant="awsui-key-label">Facultad:</Box>
@@ -174,11 +172,11 @@ export default ({ id, visible, setVisible, reload }) => {
                   <SpaceBetween size="xxs">
                     <div>
                       <Box variant="awsui-key-label">Permanencia:</Box>
-                      <>Activo</>
+                      <>{form.permanencia}</>
                     </div>
                     <div>
                       <Box variant="awsui-key-label">Correo:</Box>
-                      <>{form.email3}</>
+                      <>{form.correo_electronico}</>
                     </div>
                   </SpaceBetween>
                 </ColumnLayout>

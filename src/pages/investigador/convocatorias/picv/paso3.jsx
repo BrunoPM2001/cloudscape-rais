@@ -15,7 +15,7 @@ import ModalAddEstudiante from "./components/modals/modalAddEstudiante";
 import ModalDeleteEstudiante from "./components/modals/modalDeleteEstudiante";
 import ModalAddEstudiante_externo from "./components/modals/modalAddEstudiante_externo";
 
-const CANTIDAD_MINIMA = 3;
+const CANTIDAD_MINIMA = 1;
 const CANTIDAD_MAXIMA = 6;
 
 const columnDefinitions = [
