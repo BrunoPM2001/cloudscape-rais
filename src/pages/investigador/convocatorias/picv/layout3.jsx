@@ -26,7 +26,7 @@ export default function Registrar_proyecto_paso3() {
   //  States
   const [requisitos, setRequisitos] = useState(false);
   const [loading, setLoading] = useState(true);
-
+  const [maximo , setMaximo] = useState(false);
   //  Url
   const location = useLocation();
   const { proyecto_id } = queryString.parse(location.search);
@@ -40,7 +40,16 @@ export default function Registrar_proyecto_paso3() {
     if (detail.requestedStepIndex > 2) {
       if (!requisitos) {
         pushNotification(
-          "Necesita tener 2 integrantes de tipo estudiante al menos",
+          "Necesita tener 3 integrantes de tipo Estudiante al menos",
+          "warning",
+          notifications.length + 1
+        );
+     
+        return;
+      }
+      if (!maximo) {
+        pushNotification(
+          "No puede tener más de 5 integrantes de tipo Estudiante.",
           "warning",
           notifications.length + 1
         );
@@ -86,6 +95,7 @@ export default function Registrar_proyecto_paso3() {
               <Paso3
                 proyecto_id={proyecto_id}
                 setRequisitos={setRequisitos}
+                setMaximo={setMaximo}
                 loading={loading}
                 setLoading={setLoading}
               />

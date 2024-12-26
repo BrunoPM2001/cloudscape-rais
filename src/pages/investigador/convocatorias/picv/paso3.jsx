@@ -16,6 +16,7 @@ import ModalDeleteEstudiante from "./components/modals/modalDeleteEstudiante";
 import ModalAddEstudiante_externo from "./components/modals/modalAddEstudiante_externo";
 
 const CANTIDAD_MINIMA = 3;
+const CANTIDAD_MAXIMA = 6;
 
 const columnDefinitions = [
   {
@@ -60,7 +61,7 @@ const columnDisplay = [
   { id: "url", visible: true },
 ];
 
-export default function ({ proyecto_id, setRequisitos, loading, setLoading }) {
+export default function ({ proyecto_id, setRequisitos, setMaximo, loading, setLoading }) {
   //  State
   const [distributions, setDistribution] = useState([]);
   const [visible, setVisible] = useState(false);
@@ -80,7 +81,7 @@ export default function ({ proyecto_id, setRequisitos, loading, setLoading }) {
   const getData = async () => {
     setLoading(true);
     const res = await axiosBase.get(
-      "investigador/convocatorias/listarIntegrantes",
+      "investigador/convocatorias/picv/listarIntegrantes",
       {
         params: {
           proyecto_id: proyecto_id,
@@ -88,7 +89,11 @@ export default function ({ proyecto_id, setRequisitos, loading, setLoading }) {
       }
     );
     const data = res.data;
-    setRequisitos(CANTIDAD_MINIMA <= data.length ? true : false);
+    console.log("data", data);
+    const estudiantes = data.filter(integrante => integrante.tipo_integrante === "Estudiante");
+    setRequisitos(CANTIDAD_MINIMA <= estudiantes.length ? true : false);
+    // setRequisitos(CANTIDAD_MINIMA <= data.length ? true : false);
+    setMaximo(CANTIDAD_MAXIMA >= data.length ? true : false);
     setDistribution(data);
     setLoading(false);
   };

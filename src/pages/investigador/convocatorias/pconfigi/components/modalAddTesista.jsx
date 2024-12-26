@@ -58,7 +58,7 @@ export default ({ close, reload, id }) => {
       setLoadingCreate(true);
       const res = await axiosBase.postForm(
         "investigador/convocatorias/pconfigi/agregarIntegrante",
-        { ...form, id, ...formValues, proyecto_integrante_tipo_id: 11 }
+        { ...form, id, ...formValues, proyecto_integrante_tipo_id: 5 }
       );
       const data = res.data;
       setLoadingCreate(false);

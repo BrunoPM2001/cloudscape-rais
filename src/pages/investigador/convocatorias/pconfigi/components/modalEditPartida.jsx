@@ -25,17 +25,22 @@ export default ({ close, reload, item, options, limit }) => {
     16: 32000,
     38: 3000,
     40: 800,
+    41: 8000,
     49: 10000,
     69: 3000,
+    68: 3000,
     73: 8000,
     79: 4000,
   };
-  
   const isDisabled = () => {
     const limit = limits[formValues.partida?.value];
-    return limit && formValues.monto > limit; // Desactiva si supera el límite
+    const monto = parseFloat(formValues.monto); // Asegúrate de que sea un número válido
+    return (
+      isNaN(monto) || // Desactiva si el monto no es un número válido
+      monto <= 0 || // Desactiva si el monto es 0 o menor
+      (limit && monto > limit) // Desactiva si el monto supera el límite
+    );
   };
-
   const validateRules = () => {
     // Define los límites para cada partida en un objeto
     const limits = {
@@ -43,18 +48,22 @@ export default ({ close, reload, item, options, limit }) => {
       16: 32000,
       38: 3000,
       40: 800,
+      41: 8000,
       49: 10000,
       69: 3000,
+      68: 3000,
       73: 8000,
       79: 4000,
     };
-  
+
     // Verifica si el valor actual de partida tiene un límite definido
     const limit = limits[formValues.partida?.value];
-  
+
     if (limit && formValues.monto > limit) {
       setAlertMessage(
-        `No puedes asignar más de S/ ${limit.toLocaleString("es-PE")} a la partida ${formValues.partida?.label}`
+        `No puedes asignar más de S/ ${limit.toLocaleString(
+          "es-PE"
+        )} a la partida ${formValues.partida?.label}`
       );
     } else {
       setAlertMessage(""); // Limpia el mensaje si no hay problemas
@@ -64,8 +73,8 @@ export default ({ close, reload, item, options, limit }) => {
   // Trigger custom validation when values change
   const handleCustomChange = (field, value) => {
     handleChange(field, value);
-   // Valida reglas después de actualizar el valor
-  setTimeout(validateRules, 0); // Asegura que los valores actualizados se usen
+    // Valida reglas después de actualizar el valor
+    setTimeout(validateRules, 0); // Asegura que los valores actualizados se usen
   };
 
   const initialForm = {
@@ -117,7 +126,12 @@ export default ({ close, reload, item, options, limit }) => {
             <Button variant="normal" onClick={close}>
               Cancelar
             </Button>
-            <Button variant="primary" loading={loading} onClick={actualizar} disabled={ isDisabled()}>
+            <Button
+              variant="primary"
+              loading={loading}
+              onClick={actualizar}
+              disabled={isDisabled()}
+            >
               Actualizar
             </Button>
           </SpaceBetween>
@@ -159,8 +173,19 @@ export default ({ close, reload, item, options, limit }) => {
         <FormField label="Monto" errorText={formErrors.monto} stretch>
           <Input
             type="number"
+            min={0}
+            // max={limit}
             value={formValues.monto}
-            onChange={({ detail }) => handleChange("monto", detail.value)}
+            onChange={({ detail }) => {
+              const newValue = detail.value;
+              // Permitir números con hasta dos decimales o vacío
+              if (newValue === "" || /^[0-9]+(\.[0-9]{0,2})?$/.test(newValue)) {
+                // Validar contra el límite solo si el valor no está vacío
+                if (newValue === "" || parseFloat(newValue) <= limit) {
+                  handleCustomChange("monto", newValue);
+                }
+              }
+            }}
           />
         </FormField>
         <FormField

@@ -93,7 +93,7 @@ export default function Registro_psinfipu_0() {
   const { id, titulo, step, estado } = item; // Desestructuramos el objeto para acceder a sus propiedades
 
   console.log(id, titulo, step, estado); // Muestra las propiedades
-
+ const proyecto_id = id;
   //  Functions
   const getData = async () => {
     setLoading(true);
@@ -105,6 +105,7 @@ export default function Registro_psinfipu_0() {
     setLoading(false);
   };
 
+  console.log('proyecto',id)
   const getValidacion = async () => {
     setLoading(true);
     try {
@@ -128,12 +129,12 @@ export default function Registro_psinfipu_0() {
 
   const reporte = async () => {
     setLoadingReporte(true);
+    const query = queryString.stringify({
+          proyecto_id,
+        });
     const res = await axiosBase.get(
-      "investigador/convocatorias/picv/reporte",
+      "investigador/convocatorias/picv/reporte?" + query,
       {
-        params: {
-          id,
-        },
         responseType: "blob",
       }
     );

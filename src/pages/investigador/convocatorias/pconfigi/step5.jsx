@@ -66,7 +66,7 @@ const columnDisplay = [
   { id: "monto", visible: true },
 ];
 
-const MIN_BIENES = 1;
+const MIN_BIENES = 0;
 
 export default function Registro_pconfigi_5() {
   //  Url
@@ -120,10 +120,16 @@ export default function Registro_pconfigi_5() {
 
       console.log(totalMonto);
       if (totalMonto < 16000) {
-        tempErrors.push("El monto total minimo para postular a esta convocatoria es de S/. 16,000.00");
+        tempErrors.push(
+          "El monto total minimo para postular a esta convocatoria es de S/. 16,000.00"
+        );
+      }
+      if (totalMonto > 32000) {
+        tempErrors.push(
+          "El monto total maximo para postular a esta convocatoria es de S/. 32,000.00"
+        );
       }
       if (items.filter((item) => item.tipo == "Bienes").length < MIN_BIENES) {
-
         tempErrors.push(
           "Necesita registrar al menos " + MIN_BIENES + " partida de bienes"
         );
@@ -141,7 +147,6 @@ export default function Registro_pconfigi_5() {
   useEffect(() => {
     getData();
   }, []);
-
 
   return (
     <BaseLayout
@@ -192,7 +197,7 @@ export default function Registro_pconfigi_5() {
                   content: (
                     <SpaceBetween size="m">
                       <Alert
-                       type="info"
+                        type="info"
                         statusIconAriaLabel="Info"
                         dismissible
                         onDismiss={() => setIsVisible([])}
@@ -200,13 +205,15 @@ export default function Registro_pconfigi_5() {
                       >
                         <ul>
                           <li>
-                            a)El incentivo a los investigadores será incluido en el presupuesto del proyecto
-                            posterior a la evaluación y según el orden de mérito obtenido.
+                            a)El incentivo a los investigadores será incluido en
+                            el presupuesto del proyecto posterior a la
+                            evaluación y según el orden de mérito obtenido.
                           </li>
                           <li>
-                            b) El incentivo económico asignado a los investigadores será de acuerdo con el
-                            orden de mérito del proyecto, sin superar el límite establecido de 8,000 soles,
-                            según tabla.
+                            b) El incentivo económico asignado a los
+                            investigadores será de acuerdo con el orden de
+                            mérito del proyecto, sin superar el límite
+                            establecido de 8,000 soles, según tabla.
                             <ul>
                               <li>Tercio superior (Incentivo S/8000)</li>
                               <li>Tercio medio (Incentivo S/6000)</li>
@@ -214,7 +221,6 @@ export default function Registro_pconfigi_5() {
                             </ul>
                           </li>
                         </ul>
-
                       </Alert>
                       {alert.length > 0 && (
                         <Alert
@@ -266,7 +272,6 @@ export default function Registro_pconfigi_5() {
                                 <ButtonDropdown
                                   disabled={
                                     collectionProps.selectedItems.length == 0
-
                                   }
                                   variant="normal"
                                   onItemClick={({ detail }) => {
@@ -280,14 +285,16 @@ export default function Registro_pconfigi_5() {
                                     {
                                       text: "Eliminar",
                                       id: "action_1_1",
-                                      disabled: collectionProps.selectedItems[0]
-                                        ?.partida_id == 61,
+                                      disabled:
+                                        collectionProps.selectedItems[0]
+                                          ?.partida_id == 61,
                                     },
                                     {
                                       text: "Editar",
                                       id: "action_1_2",
-                                      disabled: collectionProps.selectedItems[0]
-                                        ?.partida_id == 61,
+                                      disabled:
+                                        collectionProps.selectedItems[0]
+                                          ?.partida_id == 61,
                                     },
                                   ]}
                                 >
@@ -368,10 +375,10 @@ export default function Registro_pconfigi_5() {
                           options={data.partidas}
                           limit={parseFloat(
                             32000 -
-                            items.reduce(
-                              (acc, curr) => acc + Number(curr.monto),
-                              0
-                            )
+                              items.reduce(
+                                (acc, curr) => acc + Number(curr.monto),
+                                0
+                              )
                           ).toFixed(2)}
                         />
                       ) : type == "update" ? (
@@ -382,11 +389,11 @@ export default function Registro_pconfigi_5() {
                           options={data.partidas}
                           limit={parseFloat(
                             32000 -
-                            items.reduce(
-                              (acc, curr) => acc + Number(curr.monto),
-                              0
-                            ) +
-                            Number(collectionProps.selectedItems[0].monto)
+                              items.reduce(
+                                (acc, curr) => acc + Number(curr.monto),
+                                0
+                              ) +
+                              Number(collectionProps.selectedItems[0].monto)
                           ).toFixed(2)}
                         />
                       ) : type == "info" ? (

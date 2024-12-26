@@ -124,7 +124,7 @@ export default function Registro_pconfigi_7() {
     } else {
       let tempErrors = [...errors];
       if (
-        data.filter((item) => item.tipo_integrante == "Co Responsable").length <
+        data.filter((item) => item.tipo_integrante == "Co responsable").length <
         CO_RESPONSABLE_MIN
       ) {
         tempErrors.push(
@@ -279,13 +279,13 @@ export default function Registro_pconfigi_7() {
                                   }}
                                   items={[
                                     {
-                                      text: "Co Responsable",
+                                      text: "Co responsable",
                                       id: "action_2_1",
                                       disabled:
                                         data.filter(
                                           (item) =>
                                             item.tipo_integrante ==
-                                            "Co Responsable"
+                                            "Co responsable"
                                         ).length == 1,
                                     },
                                     {

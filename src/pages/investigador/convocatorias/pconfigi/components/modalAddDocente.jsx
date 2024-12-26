@@ -28,19 +28,18 @@ export default ({ close, reload, id }) => {
   const [enableCreate, setEnableCreate] = useState(true);
   const [loadingCreate, setLoadingCreate] = useState(false);
   const [form, setForm] = useState({});
- 
 
   //  Hooks
   const { loading, options, setOptions, value, setValue, setAvoidSelect } =
     useAutosuggest("investigador/convocatorias/pconfigi/listadoGrupoDocente");
-    const { formValues, formErrors, handleChange, validateForm } =
+  const { formValues, formErrors, handleChange, validateForm } =
     useFormValidation(initialForm, formRules);
   //  Functions
   const agregarIntegrante = async () => {
     setLoadingCreate(true);
     const res = await axiosBase.postForm(
       "investigador/convocatorias/pconfigi/agregarIntegrante",
-      { ...form, id, proyecto_integrante_tipo_id: 9 }
+      { ...form, id, proyecto_integrante_tipo_id: 3 }
     );
     const data = res.data;
     setLoadingCreate(false);

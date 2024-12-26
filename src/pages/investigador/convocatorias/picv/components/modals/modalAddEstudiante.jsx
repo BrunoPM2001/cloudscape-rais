@@ -55,7 +55,7 @@ export default ({ id, visible, setVisible, reload }) => {
       "investigador/convocatorias/picv/verificarEstudiante",
       {
         params: {
-          codigo: form.codigo_alumno,
+          investigadorId: form.investigador_id,
         },
       }
     );
@@ -66,6 +66,8 @@ export default ({ id, visible, setVisible, reload }) => {
       setEnableCreate(false);
     }
   };
+
+ 
 
   const agregarIntegrante = async () => {
     if (validateForm()) {
