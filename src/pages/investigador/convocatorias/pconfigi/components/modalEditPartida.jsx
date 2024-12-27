@@ -21,16 +21,66 @@ export default ({ close, reload, item, options, limit }) => {
   //  States
   const [loading, setLoading] = useState(false);
   const limits = {
-    6: 800,
-    16: 32000,
-    38: 3000,
-    40: 800,
+    /**Pasajes y viaticos */
+    38: 6000,
+    39: 6000,
+    62: 6000,
+    63: 6000,
+    66: 6000,
+    67: 6000,
+    /**Servicios de terceros */
+    70: 8000,
+    71: 8000,
+    43: 8000,
     41: 8000,
-    49: 10000,
-    69: 3000,
-    68: 3000,
-    73: 8000,
+    44: 8000,
+    57: 8000,
+    46: 8000,
+    47: 8000,
+    48: 8000,
+    45: 8000,
+    49: 8000,
+    52: 8000,
+    /**Asesoria Especializada */
+    78: 4000,
+    50: 4000,
+    74: 4000,
+    55: 4000,
+    56: 4000,
     79: 4000,
+
+    /**Servicios Diversos */
+    49: 10000,
+    73: 10000,
+
+    /**Movilidad local */
+    40: 800,
+    53: 800,
+
+    /* Materiales e insumos */
+
+    4: 32000,
+    5: 32000,
+    9: 32000,
+    16: 32000,
+    22: 32000,
+    13: 32000,
+    14: 32000,
+    23: 32000,
+
+    /**Utiles y materiales de oficina */
+    6: 800,
+    7: 800,
+
+    /**Equipos y bienes duraderos */
+    26: 32000,
+    27: 32000,
+    25: 32000,
+    28: 32000,
+    29: 32000,
+    76: 32000,
+    35: 32000,
+    37: 32000,
   };
   const isDisabled = () => {
     const limit = limits[formValues.partida?.value];
@@ -44,16 +94,66 @@ export default ({ close, reload, item, options, limit }) => {
   const validateRules = () => {
     // Define los límites para cada partida en un objeto
     const limits = {
-      6: 800,
-      16: 32000,
-      38: 3000,
-      40: 800,
+      /**Pasajes y viaticos */
+      38: 6000,
+      39: 6000,
+      62: 6000,
+      63: 6000,
+      66: 6000,
+      67: 6000,
+      /**Servicios de terceros */
+      70: 8000,
+      71: 8000,
+      43: 8000,
       41: 8000,
-      49: 10000,
-      69: 3000,
-      68: 3000,
-      73: 8000,
+      44: 8000,
+      57: 8000,
+      46: 8000,
+      47: 8000,
+      48: 8000,
+      45: 8000,
+      49: 8000,
+      52: 8000,
+      /**Asesoria Especializada */
+      78: 4000,
+      50: 4000,
+      74: 4000,
+      55: 4000,
+      56: 4000,
       79: 4000,
+
+      /**Servicios Diversos */
+      49: 10000,
+      73: 10000,
+
+      /**Movilidad local */
+      40: 800,
+      53: 800,
+
+      /* Materiales e insumos */
+
+      4: 32000,
+      5: 32000,
+      9: 32000,
+      16: 32000,
+      22: 32000,
+      13: 32000,
+      14: 32000,
+      23: 32000,
+
+      /**Utiles y materiales de oficina */
+      6: 800,
+      7: 800,
+
+      /**Equipos y bienes duraderos */
+      26: 32000,
+      27: 32000,
+      25: 32000,
+      28: 32000,
+      29: 32000,
+      76: 32000,
+      35: 32000,
+      37: 32000,
     };
 
     // Verifica si el valor actual de partida tiene un límite definido

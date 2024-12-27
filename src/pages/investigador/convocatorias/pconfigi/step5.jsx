@@ -66,7 +66,7 @@ const columnDisplay = [
   { id: "monto", visible: true },
 ];
 
-const MIN_BIENES = 0;
+const MIN_BIENES = 1;
 
 export default function Registro_pconfigi_5() {
   //  Url
@@ -83,12 +83,19 @@ export default function Registro_pconfigi_5() {
   const [type, setType] = useState("");
   const [errors, setErrors] = useState([]);
   const [alert, setAlert] = useState([]);
-  const [isVisible, setIsVisible] = useState([]);
+  const [alertPresupuesto, setAlertPresupuesto] = useState(true);
+  const [alertVisible, setAlertVisible] = useState(true);
+  const excedidos = [];
   //  Hooks
   const { items, collectionProps, actions } = useCollection(data.presupuesto, {
     selection: {},
   });
-
+  const formatNumber = (number) => {
+    return number.toLocaleString("es-PE", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
+  };
   //  Functions
   const getData = async () => {
     setLoading(true);
@@ -118,7 +125,6 @@ export default function Registro_pconfigi_5() {
         .filter((item) => item.partida_id !== 61) // Excluir partida_id 61
         .reduce((sum, item) => sum + parseFloat(item.monto), 0); // Convertir monto a número
 
-      console.log(totalMonto);
       if (totalMonto < 16000) {
         tempErrors.push(
           "El monto total minimo para postular a esta convocatoria es de S/. 16,000.00"
@@ -126,7 +132,7 @@ export default function Registro_pconfigi_5() {
       }
       if (totalMonto > 32000) {
         tempErrors.push(
-          "El monto total maximo para postular a esta convocatoria es de S/. 32,000.00"
+          "El monto total máximo para postular a esta convocatoria es de S/. 32,000.00"
         );
       }
       if (items.filter((item) => item.tipo == "Bienes").length < MIN_BIENES) {
@@ -135,7 +141,7 @@ export default function Registro_pconfigi_5() {
         );
       }
       setAlert(tempErrors);
-      if (tempErrors.length == 0) {
+      if (tempErrors.length == 0 && excedidos.length == 0) {
         const query = queryString.stringify({
           id,
         });
@@ -143,6 +149,65 @@ export default function Registro_pconfigi_5() {
       }
     }
   };
+  // console.log(data.presupuesto)
+
+  const limits = {
+    pasajesViaticos: 6000,
+    servicioTerceros: 8000,
+    movilidadLocal: 800,
+    serviciosDiversos: 10000,
+    asesoriaEspecializada: 4000,
+    materialesInsumos: 32000,
+    utilesLimpieza: 800,
+    equiposBienes: 32000,
+  };
+
+  const categories = {
+    pasajesViaticos: [66, 68, 38, 39, 63, 62, 67, 69],
+    servicioTerceros: [70, 71, 43, 41, 44, 57, 46, 47, 48, 45, 52],
+    movilidadLocal: [40, 53],
+    serviciosDiversos: [49, 73],
+    asesoriaEspecializada: [78, 50, 74, 55, 56, 79],
+    materialesInsumos: [4, 5, 9, 16, 22, 13, 14, 23],
+    utilesLimpieza: [6, 7],
+    equiposBienes: [26, 27, 76, 35],
+  };
+
+  const categoryNames = {
+    pasajesViaticos: "Pasajes y Viáticos",
+    servicioTerceros: "Servicios de Terceros",
+    movilidadLocal: "Movilidad Local",
+    serviciosDiversos: "Servicios Diversos",
+    asesoriaEspecializada: "Asesoría Especializada",
+    materialesInsumos: "Materiales e Insumos",
+    utilesLimpieza: "Útiles de Limpieza",
+    equiposBienes: "Equipos y Bienes",
+  };
+
+  // Función para calcular y verificar los montos
+  Object.entries(categories).forEach(([category, partidaIds]) => {
+    let total = 0;
+
+    // Sumar los montos de las partidas que pertenecen a la categoría
+    data.presupuesto.forEach((partida) => {
+      if (partidaIds.includes(partida.partida_id)) {
+        total += parseFloat(partida.monto);
+      }
+    });
+
+    // Verificar si excede el límite
+    if (total > limits[category]) {
+      excedidos.push(
+        `Excedió el presupuesto para ${
+          categoryNames[category]
+        }. Total: S/. ${formatNumber(total)}, Límite: S/. ${formatNumber(
+          limits[category]
+        )}`
+      );
+    }
+  });
+
+  console.log(excedidos);
 
   useEffect(() => {
     getData();
@@ -196,32 +261,46 @@ export default function Registro_pconfigi_5() {
                   description: "Montos y partidas",
                   content: (
                     <SpaceBetween size="m">
-                      <Alert
-                        type="info"
-                        statusIconAriaLabel="Info"
-                        dismissible
-                        onDismiss={() => setIsVisible([])}
-                        header="Artículo 10° Del incentivo a los investigadores que participan en el proyecto de investigación con financiamiento"
-                      >
-                        <ul>
-                          <li>
-                            a)El incentivo a los investigadores será incluido en
-                            el presupuesto del proyecto posterior a la
-                            evaluación y según el orden de mérito obtenido.
-                          </li>
-                          <li>
-                            b) El incentivo económico asignado a los
-                            investigadores será de acuerdo con el orden de
-                            mérito del proyecto, sin superar el límite
-                            establecido de 8,000 soles, según tabla.
-                            <ul>
-                              <li>Tercio superior (Incentivo S/8000)</li>
-                              <li>Tercio medio (Incentivo S/6000)</li>
-                              <li>Tercio inferior (Incentivo S/4000)</li>
-                            </ul>
-                          </li>
-                        </ul>
-                      </Alert>
+                      {excedidos.length > 0 && alertPresupuesto && (
+                        <Alert
+                          type="warning"
+                          header="Tiene que cumplir los siguientes requisitos"
+                          dismissible
+                          onDismiss={() => setAlertPresupuesto(false)}
+                        >
+                          {excedidos.map((item, index) => (
+                            <li key={index}>{item}</li>
+                          ))}
+                        </Alert>
+                      )}
+                      {alertVisible && (
+                        <Alert
+                          type="info"
+                          statusIconAriaLabel="Info"
+                          dismissible
+                          onDismiss={() => setAlertVisible(false)}
+                          header="Artículo 10° Del incentivo a los investigadores que participan en el proyecto de investigación con financiamiento"
+                        >
+                          <ul>
+                            <li>
+                              a)El incentivo a los investigadores será incluido
+                              en el presupuesto del proyecto posterior a la
+                              evaluación y según el orden de mérito obtenido.
+                            </li>
+                            <li>
+                              b) El incentivo económico asignado a los
+                              investigadores será de acuerdo con el orden de
+                              mérito del proyecto, sin superar el límite
+                              establecido de 8,000 soles, según tabla.
+                              <ul>
+                                <li>Tercio superior (Incentivo S/8000)</li>
+                                <li>Tercio medio (Incentivo S/6000)</li>
+                                <li>Tercio inferior (Incentivo S/4000)</li>
+                              </ul>
+                            </li>
+                          </ul>
+                        </Alert>
+                      )}
                       {alert.length > 0 && (
                         <Alert
                           type="warning"
@@ -373,6 +452,7 @@ export default function Registro_pconfigi_5() {
                           reload={getData}
                           id={id}
                           options={data.partidas}
+                          presupuesto={data.presupuesto}
                           limit={parseFloat(
                             32000 -
                               items.reduce(

@@ -56,6 +56,7 @@ export default ({ id, visible, setVisible, reload }) => {
       {
         params: {
           codigo: form.codigo_alumno,
+          investigadorID: form.investigador_id,
         },
       }
     );
