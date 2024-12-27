@@ -61,14 +61,20 @@ const columnDisplay = [
   { id: "url", visible: true },
 ];
 
-export default function ({ proyecto_id, setRequisitos, setMaximo, loading, setLoading }) {
+export default function ({
+  proyecto_id,
+  setRequisitos,
+  setMaximo,
+  loading,
+  setLoading,
+}) {
   //  State
   const [distributions, setDistribution] = useState([]);
   const [visible, setVisible] = useState(false);
   const [typeModal, setTypeModal] = useState(null);
 
   //  Hooks
-  const { items, collectionProps, paginationProps } = useCollection(
+  const { items, actions, collectionProps, paginationProps } = useCollection(
     distributions,
     {
       pagination: { pageSize: 10 },
@@ -89,11 +95,11 @@ export default function ({ proyecto_id, setRequisitos, setMaximo, loading, setLo
       }
     );
     const data = res.data;
-    console.log("data", data);
-    const estudiantes = data.filter(integrante => integrante.tipo_integrante === "Estudiante");
-    setRequisitos(CANTIDAD_MINIMA <= estudiantes.length ? true : false);
-    // setRequisitos(CANTIDAD_MINIMA <= data.length ? true : false);
-    setMaximo(CANTIDAD_MAXIMA >= data.length ? true : false);
+    const estudiantes = data.filter(
+      (integrante) => integrante.tipo == "Estudiante"
+    );
+    setRequisitos(CANTIDAD_MINIMA <= estudiantes.length);
+    setMaximo(CANTIDAD_MAXIMA >= data.length);
     setDistribution(data);
     setLoading(false);
   };
@@ -116,6 +122,7 @@ export default function ({ proyecto_id, setRequisitos, setMaximo, loading, setLo
         resizableColumns
         enableKeyboardNavigation
         selectionType="single"
+        onRowClick={({ detail }) => actions.setSelectedItems([detail.item])}
         variant="embedded"
         header={
           <Header
@@ -166,6 +173,7 @@ export default function ({ proyecto_id, setRequisitos, setMaximo, loading, setLo
                       id: "action_2_2",
                     },
                   ]}
+                  disabled={distributions.length > 5}
                 >
                   Agregar integrante
                 </ButtonDropdown>

@@ -1,8 +1,12 @@
 import {
+  Box,
   Container,
-  SpaceBetween,
+  FormField,
+  Input,
   Spinner,
+  StatusIndicator,
   Tabs,
+  TokenGroup,
 } from "@cloudscape-design/components";
 import {
   forwardRef,
@@ -14,15 +18,7 @@ import {
 import axiosBase from "../../../../api/axios";
 import { useFormValidation } from "../../../../hooks/useFormValidation";
 import NotificationContext from "../../../../providers/notificationProvider";
-import Resumen from "./components/tabs/resumen";
-import Palabras_clave from "./components/tabs/palabras_clave";
-import Antecedentes from "./components/tabs/antecedentes";
-import Justificacion from "./components/tabs/justificacion";
-import Contribucion from "./components/tabs/contribucion";
-import Hipotesis from "./components/tabs/hipotesis";
-import Objetivos from "./components/tabs/objetivos";
-import Metodologia from "./components/tabs/metodologia";
-import Referencias from "./components/tabs/referencias";
+import Tiptap from "../../components/tiptap";
 
 const initialForm = {
   resumen: "",
@@ -66,100 +62,201 @@ export default forwardRef(function ({ proyecto_id }, ref) {
       id: "resumen_ejecutivo",
       label: "Resumen ejecutivo",
       content: (
-        <Resumen
-          value={formValues.resumen}
-          error={formErrors.resumen}
-          handleChange={handleChange}
-        />
+        <FormField
+          label="Indique los antecedentes del proyecto"
+          stretch
+          errorText={formErrors.resumen}
+        >
+          <Tiptap
+            value={formValues.resumen}
+            handleChange={handleChange}
+            name="resumen"
+            limitWords={1000}
+          />
+        </FormField>
       ),
     },
     {
       id: "palabras_clave",
       label: "Palabras clave",
       content: (
-        <Palabras_clave
-          value1={formValues.palabras_clave_input}
-          value2={formValues.palabras_clave}
-          error={formErrors.palabras_clave}
-          handleChange={handleChange}
-        />
+        <FormField
+          label="Palabras clave"
+          description={
+            <StatusIndicator type="warning">
+              <Box
+                variant="strong"
+                color="text-status-warning"
+                fontSize="body-s"
+              >
+                Presionar la tecla de enter para añadir una palabra, máximo 5
+                palabras
+              </Box>
+            </StatusIndicator>
+          }
+          stretch
+          errorText={formErrors.palabras_clave}
+        >
+          <Input
+            placeholder="Escriba las palabras clave"
+            value={formValues.palabras_clave_input}
+            onChange={({ detail }) => {
+              if (!/.*\s.*/.test(detail.value)) {
+                handleChange("palabras_clave_input", detail.value);
+              }
+            }}
+            onKeyDown={({ detail }) => {
+              if (
+                detail.key == "Enter" &&
+                formValues.palabras_clave_input != "" &&
+                formValues.palabras_clave.length < 5
+              ) {
+                handleChange("palabras_clave", [
+                  ...formValues.palabras_clave,
+                  {
+                    label: formValues.palabras_clave_input,
+                  },
+                ]);
+                handleChange("palabras_clave_input", "");
+              }
+            }}
+          />
+          <TokenGroup
+            items={formValues.palabras_clave}
+            onDismiss={({ detail: { itemIndex } }) => {
+              handleChange("palabras_clave", [
+                ...formValues.palabras_clave.slice(0, itemIndex),
+                ...formValues.palabras_clave.slice(itemIndex + 1),
+              ]);
+            }}
+          />
+        </FormField>
       ),
     },
     {
       id: "antecedentes",
       label: "Antecedentes, estado del arte y planteamiento del problema",
       content: (
-        <Antecedentes
-          value={formValues.antecedentes}
-          error={formErrors.antecedentes}
-          handleChange={handleChange}
-        />
+        <FormField
+          label="Indique los antecedentes del proyecto"
+          stretch
+          errorText={formErrors.antecedentes}
+        >
+          <Tiptap
+            value={formValues.antecedentes}
+            handleChange={handleChange}
+            name="antecedentes"
+            limitWords={1000}
+          />
+        </FormField>
       ),
     },
     {
       id: "justificacion",
       label: "Justificación",
       content: (
-        <Justificacion
-          value={formValues.justificacion}
-          error={formErrors.justificacion}
-          handleChange={handleChange}
-        />
+        <FormField
+          label="Definir las razones del por qué se aborda la investigación y el aporte de los resultados para el beneficio de la sociedad, desarrollo científico ó tecnológico"
+          stretch
+          errorText={formErrors.justificacion}
+        >
+          <Tiptap
+            value={formValues.justificacion}
+            handleChange={handleChange}
+            name="justificacion"
+            limitWords={400}
+          />
+        </FormField>
       ),
     },
     {
       id: "contribucion_impacto",
       label: "Contribución e impacto",
       content: (
-        <Contribucion
-          value={formValues.contribucion}
-          error={formErrors.contribucion}
-          handleChange={handleChange}
-        />
+        <FormField
+          label="Aporte científico que se espera obtener de la aplicación de los resultados de la investigación"
+          stretch
+          errorText={formErrors.contribucion}
+        >
+          <Tiptap
+            value={formValues.contribucion}
+            handleChange={handleChange}
+            name="contribucion"
+            limitWords={400}
+          />
+        </FormField>
       ),
     },
     {
       id: "hipotesis",
       label: "Hipótesis",
       content: (
-        <Hipotesis
-          value={formValues.hipotesis}
-          error={formErrors.hipotesis}
-          handleChange={handleChange}
-        />
+        <FormField
+          label="Clara y coherente con el problema central"
+          stretch
+          errorText={formErrors.hipotesis}
+        >
+          <Tiptap
+            value={formValues.hipotesis}
+            handleChange={handleChange}
+            name="hipotesis"
+            limitWords={200}
+          />
+        </FormField>
       ),
     },
     {
       id: "objetivos",
       label: "Objetivos",
       content: (
-        <Objetivos
-          value={formValues.objetivos}
-          error={formErrors.objetivos}
-          handleChange={handleChange}
-        />
+        <FormField
+          label="Indique el objetivo general y los específicos que espera alcanzar"
+          stretch
+          errorText={formErrors.objetivos}
+        >
+          <Tiptap
+            value={formValues.objetivos}
+            handleChange={handleChange}
+            name="objetivos"
+            limitWords={200}
+          />
+        </FormField>
       ),
     },
     {
       id: "metodologia",
       label: "Metodología de trabajo",
       content: (
-        <Metodologia
-          value={formValues.metodologia}
-          error={formErrors.metodologia}
-          handleChange={handleChange}
-        />
+        <FormField
+          label="Diseño de la investigación, método y técnicas a ser utilizadas, etapas del estudio"
+          stretch
+          errorText={formErrors.metodologia}
+        >
+          <Tiptap
+            value={formValues.metodologia}
+            handleChange={handleChange}
+            name="metodologia"
+            limitWords={1500}
+          />
+        </FormField>
       ),
     },
     {
       id: "referencias",
       label: "Referencias bibliográficas",
       content: (
-        <Referencias
-          value={formValues.referencias}
-          error={formErrors.referencias}
-          handleChange={handleChange}
-        />
+        <FormField
+          label="Ordenadas en función a algún sistema internacionalmente reconocido como: Vancouver, APA o Council of Science Editors (CSE)"
+          stretch
+          errorText={formErrors.referencias}
+        >
+          <Tiptap
+            value={formValues.referencias}
+            handleChange={handleChange}
+            name="referencias"
+            limitWords={1500}
+          />
+        </FormField>
       ),
     },
   ];

@@ -113,26 +113,31 @@ export default function Registro_pconfigi_3() {
   const stripHTML = (html) => {
     const doc = new DOMParser().parseFromString(html, "text/html");
     return doc.body.textContent || "";
-
   };
 
   const validateCampos = () => {
     const errores = [];
 
     // Validar cada campo utilizando stripHTML y añadiendo nombres legibles
-    if (!stripHTML(formValues.resumen_ejecutivo).trim()) errores.push(campoNombres.resumen_ejecutivo);
-    if (!stripHTML(formValues.antecedentes).trim()) errores.push(campoNombres.antecedentes);
-    if (!stripHTML(formValues.justificacion).trim()) errores.push(campoNombres.justificacion);
-    if (!stripHTML(formValues.contribucion_impacto).trim()) errores.push(campoNombres.contribucion_impacto);
-    if (!stripHTML(formValues.hipotesis).trim()) errores.push(campoNombres.hipotesis);
-    if (!stripHTML(formValues.objetivos).trim()) errores.push(campoNombres.objetivos);
-    if (!stripHTML(formValues.metodologia_trabajo).trim()) errores.push(campoNombres.metodologia_trabajo);
-    if (!stripHTML(formValues.referencias_bibliograficas).trim()) errores.push(campoNombres.referencias_bibliograficas);
+    if (!stripHTML(formValues.resumen_ejecutivo).trim())
+      errores.push(campoNombres.resumen_ejecutivo);
+    if (!stripHTML(formValues.antecedentes).trim())
+      errores.push(campoNombres.antecedentes);
+    if (!stripHTML(formValues.justificacion).trim())
+      errores.push(campoNombres.justificacion);
+    if (!stripHTML(formValues.contribucion_impacto).trim())
+      errores.push(campoNombres.contribucion_impacto);
+    if (!stripHTML(formValues.hipotesis).trim())
+      errores.push(campoNombres.hipotesis);
+    if (!stripHTML(formValues.objetivos).trim())
+      errores.push(campoNombres.objetivos);
+    if (!stripHTML(formValues.metodologia_trabajo).trim())
+      errores.push(campoNombres.metodologia_trabajo);
+    if (!stripHTML(formValues.referencias_bibliograficas).trim())
+      errores.push(campoNombres.referencias_bibliograficas);
 
     return errores;
   };
-
-
 
   //  Functions
   const getData = async () => {
@@ -180,10 +185,9 @@ export default function Registro_pconfigi_3() {
 
   const handleNavigate = async (index) => {
     if (index == 3) {
-
       const errores = validateCampos();
       if (errores.length > 0) {
-        console.error("Campos vacíos:", errores); // Mostrar errores en consola 
+        console.error("Campos vacíos:", errores); // Mostrar errores en consola
         setErrores(errores); // Guardar errores en el estado para mostrarlos en la interfaz
         setAlertVisible(true);
         return; // Detener la navegación
@@ -236,11 +240,8 @@ export default function Registro_pconfigi_3() {
   };
 
   useEffect(() => {
-
     getData();
   }, []);
-
-
 
   return (
     <BaseLayout
@@ -258,7 +259,6 @@ export default function Registro_pconfigi_3() {
         </Box>
       ) : (
         <>
-
           {errors.length == 0 ? (
             <Wizard
               onNavigate={({ detail }) =>
@@ -286,8 +286,8 @@ export default function Registro_pconfigi_3() {
                     <>
                       {errores.length > 0 && alertVisible && (
                         <Alert
-                        style={{ paddingTop: "16px", paddingBottom: "16px" }}
-                        onDismiss={() => setAlertVisible(false)}
+                          style={{ paddingTop: "16px", paddingBottom: "16px" }}
+                          onDismiss={() => setAlertVisible(false)}
                           dismissible
                           statusIconAriaLabel="Error"
                           type="error"
@@ -333,8 +333,8 @@ export default function Registro_pconfigi_3() {
                                       color="text-status-warning"
                                       fontSize="body-s"
                                     >
-                                      Presionar la tecla de enter para añadir una
-                                      palabra, máximo 5 palabras
+                                      Presionar la tecla de enter para añadir
+                                      una palabra, máximo 5 palabras
                                     </Box>
                                   </StatusIndicator>
                                 }
@@ -361,7 +361,8 @@ export default function Registro_pconfigi_3() {
                                       handleChange("palabras_clave", [
                                         ...formValues.palabras_clave,
                                         {
-                                          label: formValues.palabras_clave_input,
+                                          label:
+                                            formValues.palabras_clave_input,
                                         },
                                       ]);
                                       handleChange("palabras_clave_input", "");
@@ -531,7 +532,9 @@ export default function Registro_pconfigi_3() {
                               <FormField
                                 label="Ordenadas en función a algún sistema internacionalmente reconocido como: Vancouver, APA o Council of Science Editors (CSE)"
                                 stretch
-                                errorText={formErrors.referencias_bibliograficas}
+                                errorText={
+                                  formErrors.referencias_bibliograficas
+                                }
                               >
                                 <Tiptap
                                   value={formValues.referencias_bibliograficas}

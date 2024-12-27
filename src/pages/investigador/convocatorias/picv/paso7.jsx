@@ -5,23 +5,25 @@ import {
   SpaceBetween,
 } from "@cloudscape-design/components";
 import axiosBase from "../../../../api/axios";
-import queryString from "query-string";
+import { useState } from "react";
 
 export default function ({ proyecto_id }) {
+  //  States
+  const [loadingReporte, setLoadingReporte] = useState(false);
+
   //  Functions
   const previsualizar = async () => {
-    const query = queryString.stringify({
-      proyecto_id,
+    setLoadingReporte(true);
+    const res = await axiosBase.get("investigador/convocatorias/picv/reporte", {
+      params: {
+        proyecto_id,
+      },
+      responseType: "blob",
     });
-    const res = await axiosBase.get(
-      "investigador/convocatorias/picv/reporte?" + query,
-      {
-        responseType: "blob",
-      }
-    );
     const blob = res.data;
     const url = URL.createObjectURL(blob);
     window.open(url, "_blank");
+    setLoadingReporte(false);
   };
 
   return (
@@ -30,7 +32,11 @@ export default function ({ proyecto_id }) {
         <Alert
           header="Resumen de proyecto"
           action={
-            <Button variant="primary" onClick={previsualizar}>
+            <Button
+              variant="primary"
+              onClick={previsualizar}
+              loading={loadingReporte}
+            >
               Previsualizar
             </Button>
           }

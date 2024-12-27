@@ -93,6 +93,17 @@ export default ({ id, visible, setVisible, reload }) => {
             >
               <DatePicker
                 placeholder="YYYY/MM/DD"
+                isDateEnabled={(date) => {
+                  if (formValues.fecha_fin != "") {
+                    const newDate = new Date(formValues.fecha_fin);
+                    return date < newDate;
+                  } else {
+                    return true;
+                  }
+                }}
+                dateDisabledReason={() => {
+                  return "La fecha inicial no puede ser mayor a la fecha final";
+                }}
                 value={formValues.fecha_inicio}
                 onChange={({ detail }) =>
                   handleChange("fecha_inicio", detail.value)
@@ -106,6 +117,17 @@ export default ({ id, visible, setVisible, reload }) => {
             >
               <DatePicker
                 placeholder="YYYY/MM/DD"
+                isDateEnabled={(date) => {
+                  if (formValues.fecha_inicio != "") {
+                    const newDate = new Date(formValues.fecha_inicio);
+                    return date > newDate;
+                  } else {
+                    return true;
+                  }
+                }}
+                dateDisabledReason={() => {
+                  return "La fecha final no puede ser menor a la fecha inicial";
+                }}
                 value={formValues.fecha_fin}
                 onChange={({ detail }) =>
                   handleChange("fecha_fin", detail.value)

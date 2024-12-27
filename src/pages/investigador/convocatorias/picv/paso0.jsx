@@ -79,12 +79,11 @@ const columnDisplay = [
 ];
 
 export default function Registro_psinfipu_0() {
+  //  States
   const [loading, setLoading] = useState(true);
   const [validationErrors, setValidationErrors] = useState([]);
   const [distributions, setDistribution] = useState([]);
   const [loadingReporte, setLoadingReporte] = useState(false);
-  const [selectedId, setSelectedId] = useState(null);
-  const [selectedEstado, setSelectedEstado] = useState(null);
   const { items, actions, collectionProps } = useCollection(distributions, {
     sorting: {},
     selection: {},
@@ -92,49 +91,39 @@ export default function Registro_psinfipu_0() {
   const item = items[0] ?? 0; // Accedemos al primer elementotems", items);
   const { id, titulo, step, estado } = item; // Desestructuramos el objeto para acceder a sus propiedades
 
-  console.log(id, titulo, step, estado); // Muestra las propiedades
- const proyecto_id = id;
+  const proyecto_id = id;
   //  Functions
   const getData = async () => {
     setLoading(true);
-    const res = await axiosBase.get(
-      "investigador/convocatorias/picv/listado"
-    );
+    const res = await axiosBase.get("investigador/convocatorias/picv/listado");
     const data = res.data;
     setDistribution(data);
     setLoading(false);
   };
 
-  console.log('proyecto',id)
   const getValidacion = async () => {
     setLoading(true);
-    try {
-      const res = await axiosBase.get(
-        "investigador/convocatorias/picv/validarDatos"
-      );
-      const data = res.data;
+    const res = await axiosBase.get(
+      "investigador/convocatorias/picv/validarDatos"
+    );
+    const data = res.data;
 
-      if (data.errores && Array.isArray(data.errores)) {
-        setValidationErrors(data.errores); // Guardar los errores en el estado
-      } else {
-        setValidationErrors([]); // Limpiar en caso de que no haya errores
-      }
-    } catch (error) {
-      console.error("Error al validar datos:", error);
-      setValidationErrors([]);
-    } finally {
-      setLoading(false);
+    if (data.errores && Array.isArray(data.errores)) {
+      setValidationErrors(data.errores); // Guardar los errores en el estado
+    } else {
+      setValidationErrors([]); // Limpiar en caso de que no haya errores
     }
+    setLoading(false);
   };
 
   const reporte = async () => {
     setLoadingReporte(true);
-    const query = queryString.stringify({
-          proyecto_id,
-        });
     const res = await axiosBase.get(
       "investigador/convocatorias/picv/reporte?" + query,
       {
+        params: {
+          proyecto_id,
+        },
         responseType: "blob",
       }
     );
@@ -146,8 +135,8 @@ export default function Registro_psinfipu_0() {
 
   //  Effects
   useEffect(() => {
-    getData();
     getValidacion();
+    getData();
   }, []);
 
   return (
@@ -170,11 +159,8 @@ export default function Registro_psinfipu_0() {
                   {/* Espacio entre Alert y Table */}
                   {validationErrors.length > 0 && ( // Verificar si hay errores
                     <Alert
-                      style={{ paddingTop: "16px", paddingBottom: "16px" }}
-                      dismissible
-                      statusIconAriaLabel="Error"
-                      type="error"
                       header="No puede postular a otra convocatoria por los siguientes motivos:"
+                      type="error"
                     >
                       <ul style={{ paddingLeft: "20px", margin: "0" }}>
                         {validationErrors.map((error, index) => (
@@ -215,13 +201,15 @@ export default function Registro_psinfipu_0() {
                       actions={
                         <SpaceBetween size="xs" direction="horizontal">
                           <Button
-                            ariaLabel="Report a bug (opens new tab)"
                             loading={loadingReporte}
                             onClick={reporte}
                             iconAlign="right"
                             iconName="external"
                             target="_blank"
-                            disabled={!id || estado != "Enviado"}
+                            disabled={
+                              collectionProps.selectedItems.length == 0 ||
+                              estado != "Enviado"
+                            }
                           >
                             Reporte
                           </Button>
@@ -235,10 +223,10 @@ export default function Registro_psinfipu_0() {
                             onItemClick={({ detail }) => {
                               if (detail.id == "action_1_1") {
                                 const query = queryString.stringify({
-                                  proyecto_id: collectionProps.selectedItems[0]["id"],
+                                  proyecto_id:
+                                    collectionProps.selectedItems[0]["id"],
                                 });
-                                window.location.href =
-                                  "picv/paso1?" + query;
+                                window.location.href = "picv/paso1?" + query;
                               } else if (detail.id == "action_1_2") {
                                 setType("delete");
                               }
@@ -261,7 +249,7 @@ export default function Registro_psinfipu_0() {
                             onClick={() => {
                               window.location.href = "picv/paso1";
                             }}
-                            disabled={validationErrors.length > 0} // Deshabilitar si hay errores
+                            disabled={validationErrors.length > 0 || loading}
                           >
                             Registrar
                           </Button>
