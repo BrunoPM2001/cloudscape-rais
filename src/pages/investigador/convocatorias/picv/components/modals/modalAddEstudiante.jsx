@@ -48,6 +48,7 @@ export default ({ id, visible, setVisible, reload }) => {
     registerFileInput,
   } = useFormValidation(initialForm, formRules);
 
+ 
   //  Functions
   const getData = async () => {
     setLoadingData(true);
@@ -56,7 +57,7 @@ export default ({ id, visible, setVisible, reload }) => {
       {
         params: {
           codigo: form.codigo_alumno,
-          investigadorID: form.investigador_id,
+          investigador_id: form.investigador_id,
         },
       }
     );

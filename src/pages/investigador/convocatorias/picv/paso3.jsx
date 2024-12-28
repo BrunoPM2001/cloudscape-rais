@@ -1,3 +1,4 @@
+
 import {
   Box,
   Button,
@@ -95,14 +96,17 @@ export default function ({
       }
     );
     const data = res.data;
+    console.log(data);
     const estudiantes = data.filter(
-      (integrante) => integrante.tipo == "Estudiante"
+      (integrante) =>
+        integrante.tipo === "Estudiante" || integrante.tipo_integrante === "Colaborador" ||integrante.tipo_integrante == "Estudiante"
     );
     setRequisitos(CANTIDAD_MINIMA <= estudiantes.length);
     setMaximo(CANTIDAD_MAXIMA >= data.length);
     setDistribution(data);
     setLoading(false);
   };
+
 
   //  Effect
   useEffect(() => {
