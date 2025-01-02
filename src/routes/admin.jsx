@@ -60,6 +60,11 @@ const Detalle_proyecto_eci = lazy(() =>
     "../pages/admin/estudios/gestion_proyectos_grupos/detalle/eci/index.jsx"
   )
 );
+const Detalle_proyecto_picv = lazy(() =>
+  import(
+    "../pages/admin/estudios/gestion_proyectos_grupos/detalle/picv/index.jsx"
+  )
+);
 const Detalle_informe_tecnico = lazy(() =>
   import("../pages/admin/estudios/informes_tecnicos/detalles/index.jsx")
 );
@@ -237,6 +242,10 @@ const routes = createBrowserRouter(
                 {
                   path: "pinvpos",
                   element: <Detalle_proyecto_pinvpos />,
+                },
+                {
+                  path: "picv",
+                  element: <Detalle_proyecto_picv />,
                 },
               ],
             },

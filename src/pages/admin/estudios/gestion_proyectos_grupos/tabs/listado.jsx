@@ -235,7 +235,7 @@ export default () => {
     selection: {},
   });
   const [selectedOption, setSelectedOption] = useState({
-    value: "2024",
+    value: "2025",
   });
 
   //  Functions
@@ -327,6 +327,18 @@ export default () => {
                     ].toLowerCase() +
                     "?" +
                     query;
+                } else if (
+                  collectionProps.selectedItems[0][
+                    "tipo_proyecto"
+                  ].toLowerCase() == "picv"
+                ) {
+                  window.location.href =
+                    "proyectos_grupos/detalle/" +
+                    collectionProps.selectedItems[0][
+                      "tipo_proyecto"
+                    ].toLowerCase() +
+                    "?" +
+                    query;
                 } else {
                   window.location.href =
                     "proyectos_grupos/detalle/pconfigi" + "?" + query;
@@ -357,6 +369,7 @@ export default () => {
                   setSelectedOption(detail.selectedOption)
                 }
                 options={[
+                  { value: "2025" },
                   { value: "2024" },
                   { value: "2023" },
                   { value: "2022" },
