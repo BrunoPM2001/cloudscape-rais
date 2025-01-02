@@ -145,16 +145,16 @@ const navItems = [
       {
         type: "link",
         text: "Programa para la Inducción en Investigación Científica en Verano",
-        // href: "/investigador/convocatoria/picv",
-        info: <Badge color="blue">Pendiente</Badge>,
-        href: "#",
+        info: <Badge color="green">Activa</Badge>,
+        href: "/investigador/convocatoria/picv",
+        // href: "#",
       },
       {
         type: "link",
         text: "Programa de Proyectos de Investigación para Grupos de Investigación",
-        info: <Badge color="red">Cerrada</Badge>,
-        // href: "/investigador/convocatoria/pconfigi",
-        href: "#",
+        info: <Badge color="green">Activa</Badge>,
+        href: "/investigador/convocatoria/pconfigi",
+        // href: "#",
       },
       {
         type: "link",
