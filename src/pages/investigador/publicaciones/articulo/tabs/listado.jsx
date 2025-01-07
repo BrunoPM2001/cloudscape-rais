@@ -14,6 +14,8 @@ import { useCollection } from "@cloudscape-design/collection-hooks";
 import queryString from "query-string";
 import axiosBase from "../../../../../api/axios";
 import NotificationContext from "../../../../../providers/notificationProvider";
+import ModalEliminarFiliacion from "../../components/modalEliminarFiliacion";
+import ModalEliminarPublicacion from "../../components/modalEliminarPublicacion";
 
 const stringOperators = [":", "!:", "=", "!=", "^", "!^"];
 
@@ -69,12 +71,14 @@ const columnDefinitions = [
     header: "Título",
     cell: (item) => item.titulo,
     sortingField: "titulo",
+    minWidth: 400,
   },
   {
     id: "revista",
     header: "Revista",
     cell: (item) => item.revista,
     sortingField: "revista",
+    minWidth: 200,
   },
   {
     id: "año_publicacion",
@@ -93,6 +97,27 @@ const columnDefinitions = [
     header: "Observaciones",
     cell: (item) => item.observaciones_usuario,
     sortingField: "observaciones_usuario",
+    minWidth: 200,
+  },
+  {
+    id: "filiacion",
+    header: "Filiación UNMSM",
+    cell: (item) => (
+      <Badge
+        color={
+          item.filiacion == "No"
+            ? "red"
+            : item.filiacion == "Si"
+            ? "blue"
+            : item.filiacion == "Sin Especificar"
+            ? "grey"
+            : "grey"
+        }
+      >
+        {item.filiacion}
+      </Badge>
+    ),
+    sortingField: "filiacion",
   },
   {
     id: "estado",
@@ -133,6 +158,7 @@ const columnDisplay = [
   { id: "año_publicacion", visible: true },
   { id: "puntaje", visible: true },
   { id: "observaciones_usuario", visible: true },
+  { id: "filiacion", visible: true },
   { id: "estado", visible: true },
 ];
 
@@ -144,6 +170,7 @@ export default () => {
   const [loading, setLoading] = useState(true);
   const [loadingBtn, setLoadingBtn] = useState(false);
   const [distributions, setDistribution] = useState([]);
+  const [modal, setModal] = useState("");
   const {
     items,
     actions,
@@ -202,125 +229,139 @@ export default () => {
     window.open(url, "_blank");
     setLoadingBtn(false);
   };
-
-  const eliminar = async () => {
-    setLoadingBtn(true);
-    const res = await axiosBase.delete(
-      "investigador/publicaciones/utils/eliminarPublicacion",
-      {
-        params: {
-          id: collectionProps.selectedItems[0].id,
-        },
-      }
-    );
-    const data = res.data;
-    pushNotification(data.detail, data.message, notifications.length + 1);
-    setLoadingBtn(false);
-    getData();
-  };
-
   //  Effects
   useEffect(() => {
     getData();
   }, []);
 
   return (
-    <Table
-      {...collectionProps}
-      trackBy="id"
-      items={items}
-      columnDefinitions={columnDefinitions}
-      columnDisplay={columnDisplay}
-      loading={loading}
-      loadingText="Cargando datos"
-      resizableColumns
-      enableKeyboardNavigation
-      selectionType="single"
-      onRowClick={({ detail }) => actions.setSelectedItems([detail.item])}
-      header={
-        <Header
-          actions={
-            <SpaceBetween direction="horizontal" size="s">
-              <ButtonDropdown
-                loading={loadingBtn}
-                disabled={collectionProps.selectedItems.length == 0}
-                onItemClick={async ({ detail }) => {
-                  if (detail.id == "action_1") {
+    <>
+      <Table
+        {...collectionProps}
+        trackBy="id"
+        items={items}
+        columnDefinitions={columnDefinitions}
+        columnDisplay={columnDisplay}
+        loading={loading}
+        loadingText="Cargando datos"
+        resizableColumns
+        enableKeyboardNavigation
+        selectionType="single"
+        wrapLines
+        onRowClick={({ detail }) => actions.setSelectedItems([detail.item])}
+        header={
+          <Header
+            actions={
+              <SpaceBetween direction="horizontal" size="s">
+                <ButtonDropdown
+                  loading={loadingBtn}
+                  disabled={collectionProps.selectedItems.length == 0}
+                  onItemClick={async ({ detail }) => {
+                    if (detail.id == "action_1") {
+                      const query = queryString.stringify({
+                        publicacion_id: collectionProps.selectedItems[0].id,
+                        tipo: "articulo",
+                      });
+                      window.location.href =
+                        "registrar/paso" +
+                        collectionProps.selectedItems[0].step +
+                        "?" +
+                        query;
+                    } else if (detail.id == "action_2") {
+                      setModal("eliminarPublicacion");
+                    } else if (detail.id == "action_3") {
+                      reporte();
+                    } else if (detail.id == "action_4") {
+                      console.log("Eliminar Filiacion", detail.id);
+                      setModal("eliminarFiliacion");
+                    }
+                  }}
+                  items={[
+                    {
+                      text: "Editar",
+                      id: "action_1",
+                      disabled:
+                        collectionProps.selectedItems[0]?.estado !=
+                          "Observado" &&
+                        collectionProps.selectedItems[0]?.estado != "En proceso"
+                          ? true
+                          : false,
+                    },
+                    {
+                      text: "Eliminar",
+                      id: "action_2",
+                      disabled:
+                        collectionProps.selectedItems[0]?.estado != "En proceso"
+                          ? true
+                          : false,
+                    },
+                    {
+                      text: "Eliminar Filiación",
+                      id: "action_4",
+                      disabled:
+                        collectionProps.selectedItems[0]?.estado !=
+                          "En proceso" &&
+                        collectionProps.selectedItems[0]?.filiacion != "No"
+                          ? true
+                          : false,
+                    },
+                    {
+                      text: "Reporte",
+                      id: "action_3",
+                    },
+                  ]}
+                >
+                  Acciones para publicaciones
+                </ButtonDropdown>
+                <Button
+                  loading={loadingBtn}
+                  variant="primary"
+                  onClick={() => {
                     const query = queryString.stringify({
-                      publicacion_id: collectionProps.selectedItems[0].id,
                       tipo: "articulo",
                     });
-                    window.location.href =
-                      "registrar/paso" +
-                      collectionProps.selectedItems[0].step +
-                      "?" +
-                      query;
-                  } else if (detail.id == "action_2") {
-                    eliminar();
-                  } else if (detail.id == "action_3") {
-                    reporte();
-                  }
-                }}
-                items={[
-                  {
-                    text: "Editar",
-                    id: "action_1",
-                    disabled:
-                      collectionProps.selectedItems[0]?.estado != "Observado" &&
-                      collectionProps.selectedItems[0]?.estado != "En proceso"
-                        ? true
-                        : false,
-                  },
-                  {
-                    text: "Eliminar",
-                    id: "action_2",
-                    disabled:
-                      collectionProps.selectedItems[0]?.estado != "En proceso"
-                        ? true
-                        : false,
-                  },
-                  {
-                    text: "Reporte",
-                    id: "action_3",
-                  },
-                ]}
-              >
-                Acciones para publicaciones
-              </ButtonDropdown>
-              <Button
-                loading={loadingBtn}
-                variant="primary"
-                onClick={() => {
-                  const query = queryString.stringify({
-                    tipo: "articulo",
-                  });
-                  window.location.href = "registrar/paso1?" + query;
-                }}
-              >
-                Registrar
-              </Button>
+                    window.location.href = "registrar/paso1?" + query;
+                  }}
+                >
+                  Registrar
+                </Button>
+              </SpaceBetween>
+            }
+          >
+            Publicaciones ({distributions.length})
+          </Header>
+        }
+        filter={
+          <PropertyFilter
+            {...propertyFilterProps}
+            filteringPlaceholder="Buscar artículo"
+            countText={`${filteredItemsCount} coincidencias`}
+            expandToViewport
+          />
+        }
+        pagination={<Pagination {...paginationProps} />}
+        empty={
+          <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
+            <SpaceBetween size="m">
+              <b>No hay registros...</b>
             </SpaceBetween>
-          }
-        >
-          Publicaciones ({distributions.length})
-        </Header>
-      }
-      filter={
-        <PropertyFilter
-          {...propertyFilterProps}
-          filteringPlaceholder="Buscar artículo"
-          countText={`${filteredItemsCount} coincidencias`}
-          expandToViewport
+          </Box>
+        }
+      />
+
+      {modal === "eliminarPublicacion" ? (
+        <ModalEliminarPublicacion
+          close={() => setModal("")}
+          reload={getData}
+          id={collectionProps.selectedItems[0].id}
         />
-      }
-      pagination={<Pagination {...paginationProps} />}
-      empty={
-        <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
-          <SpaceBetween size="m">
-            <b>No hay registros...</b>
-          </SpaceBetween>
-        </Box>
-      }
-    />
+      ) : modal === "eliminarFiliacion" ? (
+        <ModalEliminarFiliacion
+          close={() => setModal("")}
+          reload={getData}
+          id={collectionProps.selectedItems[0].id}
+        />
+      ) : null}
+    </>
   );
 };
