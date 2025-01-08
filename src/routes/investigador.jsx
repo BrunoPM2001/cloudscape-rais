@@ -2,6 +2,15 @@ import { Suspense, lazy } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { NotificationProvider } from "../providers/notificationProvider.jsx";
 
+const Registro_pmulti_3 = lazy(() =>
+  import("../pages/investigador/convocatorias/pmulti/step3.jsx")
+);
+const Registro_pmulti_2 = lazy(() =>
+  import("../pages/investigador/convocatorias/pmulti/step2.jsx")
+);
+const Registro_pmulti_1 = lazy(() =>
+  import("../pages/investigador/convocatorias/pmulti/step1.jsx")
+);
 const Registro_pconfigi_8 = lazy(() =>
   import("../pages/investigador/convocatorias/pconfigi/step8.jsx")
 );
@@ -206,50 +215,32 @@ const Registrar_proyecto_paso7 = lazy(() =>
 );
 
 const Registrar_picv_paso0 = lazy(() =>
-  import(
-    "../pages/investigador/convocatorias/picv/paso0.jsx"
-  )
+  import("../pages/investigador/convocatorias/picv/paso0.jsx")
 );
 
 const Verificar_requisitos_picv = lazy(() =>
-  import(
-    "../pages/investigador/convocatorias/picv/verificar.jsx"
-  )
+  import("../pages/investigador/convocatorias/picv/verificar.jsx")
 );
 const Registrar_picv_paso1 = lazy(() =>
-  import(
-    "../pages/investigador/convocatorias/picv/layout1.jsx"
-  )
+  import("../pages/investigador/convocatorias/picv/layout1.jsx")
 );
 const Registrar_picv_paso2 = lazy(() =>
-  import(
-    "../pages/investigador/convocatorias/picv/layout2.jsx"
-  )
+  import("../pages/investigador/convocatorias/picv/layout2.jsx")
 );
 const Registrar_picv_paso3 = lazy(() =>
-  import(
-    "../pages/investigador/convocatorias/picv/layout3.jsx"
-  )
+  import("../pages/investigador/convocatorias/picv/layout3.jsx")
 );
 const Registrar_picv_paso4 = lazy(() =>
-  import(
-    "../pages/investigador/convocatorias/picv/layout4.jsx"
-  )
+  import("../pages/investigador/convocatorias/picv/layout4.jsx")
 );
 const Registrar_picv_paso5 = lazy(() =>
-  import(
-    "../pages/investigador/convocatorias/picv/layout5.jsx"
-  )
+  import("../pages/investigador/convocatorias/picv/layout5.jsx")
 );
 const Registrar_picv_paso6 = lazy(() =>
-  import(
-    "../pages/investigador/convocatorias/picv/layout6.jsx"
-  )
+  import("../pages/investigador/convocatorias/picv/layout6.jsx")
 );
 const Registrar_picv_paso7 = lazy(() =>
-  import(
-    "../pages/investigador/convocatorias/picv/layout7.jsx"
-  )
+  import("../pages/investigador/convocatorias/picv/layout7.jsx")
 );
 
 const Proyectos_con_financiamiento = lazy(() =>
@@ -562,6 +553,23 @@ const routes = createBrowserRouter(
     {
       path: "convocatoria",
       children: [
+        {
+          path: "pmulti",
+          children: [
+            {
+              path: "paso1",
+              element: <Registro_pmulti_1 />,
+            },
+            {
+              path: "paso2",
+              element: <Registro_pmulti_2 />,
+            },
+            {
+              path: "paso3",
+              element: <Registro_pmulti_3 />,
+            },
+          ],
+        },
         {
           path: "pconfigi",
           children: [
