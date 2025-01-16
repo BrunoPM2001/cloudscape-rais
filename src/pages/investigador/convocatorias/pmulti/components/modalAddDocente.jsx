@@ -50,7 +50,7 @@ export default ({ close, reload, id }) => {
 
   //  Hooks
   const { loading, options, setOptions, value, setValue, setAvoidSelect } =
-    useAutosuggest("investigador/convocatorias/pmulti/listadoCorresponsables");
+    useAutosuggest("investigador/convocatorias/pmulti/listadoDocentes");
   const { formValues, formErrors, handleChange, validateForm } =
     useFormValidation(initialForm, formRules);
 
@@ -63,7 +63,7 @@ export default ({ close, reload, id }) => {
       formulario.append("investigador_id", form.investigador_id);
       formulario.append("grupo_id", form.grupo_id);
       formulario.append("grupo_integrante_id", form.grupo_integrante_id);
-      formulario.append("proyecto_integrante_tipo_id", 57);
+      formulario.append("proyecto_integrante_tipo_id", 58);
       formulario.append("file", formValues.file[0]);
       const res = await axiosBase.post(
         "investigador/convocatorias/pmulti/agregarIntegrante",

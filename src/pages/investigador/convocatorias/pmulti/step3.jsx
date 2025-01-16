@@ -18,6 +18,7 @@ import { useLocation } from "react-router-dom";
 import { useCollection } from "@cloudscape-design/collection-hooks";
 import ModalAddCoResponsable from "./components/modalAddCoResponsable";
 import ModalDeleteIntegrante from "./components/modalDeleteIntegrante";
+import ModalAddDocente from "./components/modalAddDocente.jsx";
 
 const breadcrumbs = [
   {
@@ -265,12 +266,20 @@ export default function Registro_pmulti_3() {
                                   onItemClick={({ detail }) => {
                                     if (detail.id == "action_2_1") {
                                       setType("addCo");
+                                    } else if (detail.id == "action_2_2") {
+                                      setType("addDo");
                                     }
                                   }}
                                   items={[
                                     {
                                       text: "Co responsable",
                                       id: "action_2_1",
+                                      disabled:
+                                        data.filter(
+                                          (item) =>
+                                            item.tipo_integrante ==
+                                            "Co responsable"
+                                        ).length == 1,
                                     },
                                     {
                                       text: "Miembro docente",
@@ -313,6 +322,12 @@ export default function Registro_pmulti_3() {
                       />
                       {type == "addCo" ? (
                         <ModalAddCoResponsable
+                          close={() => setType("")}
+                          reload={getData}
+                          id={id}
+                        />
+                      ) : type == "addDo" ? (
+                        <ModalAddDocente
                           close={() => setType("")}
                           reload={getData}
                           id={id}
