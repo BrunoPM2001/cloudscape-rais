@@ -19,6 +19,8 @@ import { useCollection } from "@cloudscape-design/collection-hooks";
 import ModalAddCoResponsable from "./components/modalAddCoResponsable";
 import ModalDeleteIntegrante from "./components/modalDeleteIntegrante";
 import ModalAddDocente from "./components/modalAddDocente.jsx";
+import ModalAddTesista from "./components/modalAddTesista.jsx";
+import ModalAddExterno from "./components/modalAddExterno.jsx";
 
 const breadcrumbs = [
   {
@@ -57,16 +59,18 @@ const columnDefinitions = [
   {
     id: "url",
     header: "Carta compromiso",
-    cell: (item) => (
-      <Box textAlign="center">
-        <Button
-          iconName="download"
-          variant="inline-icon"
-          href={item.url}
-          target="_blank"
-        />
-      </Box>
-    ),
+    cell: (item) =>
+      item.tipo_integrante != "Tesista" &&
+      item.tipo_integrante != "Miembro externo" && (
+        <Box textAlign="center">
+          <Button
+            iconName="download"
+            variant="inline-icon"
+            href={item.url}
+            target="_blank"
+          />
+        </Box>
+      ),
     minWidth: 95,
   },
   {
@@ -92,7 +96,14 @@ const columnDisplay = [
   { id: "titulo_tesis", visible: true },
 ];
 
-const CORESPONSABLE_MIN = 1;
+const FACULTADES_MIN = 3;
+const GRUPOS_MIN = 3;
+const TESISTA_PRE_MIN = 1;
+const TESISTA_POS_MIN = 1;
+
+const CORRESPONSAL_MIN = 1;
+const DOCENTE_MIN = 2;
+const TESISTA_MIN = 2;
 
 export default function Registro_pmulti_3() {
   //  Url
@@ -137,7 +148,7 @@ export default function Registro_pmulti_3() {
   };
 
   const handleNavigate = (index) => {
-    if (index < 4) {
+    if (index < 3) {
       const query = queryString.stringify({
         id,
       });
@@ -145,13 +156,79 @@ export default function Registro_pmulti_3() {
     } else {
       let tempErrors = [...errors];
       if (
-        data.filter((item) => item.tipo_integrante == "Autor Corresponsal")
-          .length < CORESPONSABLE_MIN
+        data.filter((item) => item.tipo_integrante == "Co responsable").length <
+        CORRESPONSAL_MIN
+      ) {
+        tempErrors.push(
+          "Necesita registrar al menos " + CORRESPONSAL_MIN + " corresponsable"
+        );
+      }
+
+      if (
+        data.filter((item) => item.tipo_integrante == "Miembro docente")
+          .length < DOCENTE_MIN
+      ) {
+        tempErrors.push(
+          "Necesita registrar al menos " + DOCENTE_MIN + " miembros docentes"
+        );
+      }
+
+      if (
+        data.filter((item) => item.tipo_integrante == "Tesista").length <
+        TESISTA_MIN
+      ) {
+        tempErrors.push(
+          "Necesita registrar al menos " + TESISTA_MIN + " tesistas"
+        );
+      }
+
+      if (
+        new Set(
+          data
+            .map((item) => item.facultad)
+            .filter((facultad) => facultad != null)
+        ).size < FACULTADES_MIN
+      ) {
+        tempErrors.push(
+          "Es obligatorio que exista un mínimo de " +
+            FACULTADES_MIN +
+            " facultades distintas dentro de los integrantes"
+        );
+      }
+
+      if (
+        new Set(
+          data
+            .map((item) => item.grupo_nombre_corto)
+            .filter((grupo_nombre_corto) => grupo_nombre_corto != null)
+        ).size < GRUPOS_MIN
+      ) {
+        tempErrors.push(
+          "Es obligatorio que exista un mínimo de " +
+            GRUPOS_MIN +
+            " grupos distintos dentro de los integrantes"
+        );
+      }
+
+      if (
+        data.filter((item) => item.tipo == "Estudiante pregrado").length <
+        TESISTA_PRE_MIN
       ) {
         tempErrors.push(
           "Necesita registrar al menos " +
-            CORESPONSABLE_MIN +
-            " autor corresponsal"
+            TESISTA_PRE_MIN +
+            " tesista de pregrado"
+        );
+      }
+
+      if (
+        data.filter((item) => item.tipo == "Estudiante posgrado").length <
+        TESISTA_POS_MIN
+      ) {
+        tempErrors.push(
+          "Necesita registrar al menos " +
+            TESISTA_POS_MIN +
+            " tesista de posgrado"
         );
       }
 
@@ -254,8 +331,7 @@ export default function Registro_pmulti_3() {
                                       id: "action_1_2",
                                       disabled:
                                         collectionProps.selectedItems[0]
-                                          ?.tipo_integrante ==
-                                        "Autor Corresponsal",
+                                          ?.tipo_integrante == "Responsable",
                                     },
                                   ]}
                                 >
@@ -268,6 +344,10 @@ export default function Registro_pmulti_3() {
                                       setType("addCo");
                                     } else if (detail.id == "action_2_2") {
                                       setType("addDo");
+                                    } else if (detail.id == "action_2_3") {
+                                      setType("addTe");
+                                    } else if (detail.id == "action_2_4") {
+                                      setType("addEx");
                                     }
                                   }}
                                   items={[
@@ -328,6 +408,18 @@ export default function Registro_pmulti_3() {
                         />
                       ) : type == "addDo" ? (
                         <ModalAddDocente
+                          close={() => setType("")}
+                          reload={getData}
+                          id={id}
+                        />
+                      ) : type == "addTe" ? (
+                        <ModalAddTesista
+                          close={() => setType("")}
+                          reload={getData}
+                          id={id}
+                        />
+                      ) : type == "addEx" ? (
+                        <ModalAddExterno
                           close={() => setType("")}
                           reload={getData}
                           id={id}

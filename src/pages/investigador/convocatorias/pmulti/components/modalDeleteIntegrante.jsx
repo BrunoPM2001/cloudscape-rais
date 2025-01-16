@@ -19,7 +19,7 @@ export default ({ id, close, reload }) => {
   const eliminarIntegrante = async () => {
     setLoadingDelete(true);
     const res = await axiosBase.delete(
-      "investigador/convocatorias/psinfipu/eliminarIntegrante",
+      "investigador/convocatorias/pmulti/eliminarIntegrante",
       {
         params: {
           id,
