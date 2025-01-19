@@ -2,6 +2,15 @@ import { Suspense, lazy } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { NotificationProvider } from "../providers/notificationProvider.jsx";
 
+const Registro_pmulti_6 = lazy(() =>
+  import("../pages/investigador/convocatorias/pmulti/step6.jsx")
+);
+const Registro_pmulti_5 = lazy(() =>
+  import("../pages/investigador/convocatorias/pmulti/step5.jsx")
+);
+const Registro_pmulti_4 = lazy(() =>
+  import("../pages/investigador/convocatorias/pmulti/step4.jsx")
+);
 const Registro_pmulti_3 = lazy(() =>
   import("../pages/investigador/convocatorias/pmulti/step3.jsx")
 );
@@ -567,6 +576,18 @@ const routes = createBrowserRouter(
             {
               path: "paso3",
               element: <Registro_pmulti_3 />,
+            },
+            {
+              path: "paso4",
+              element: <Registro_pmulti_4 />,
+            },
+            {
+              path: "paso5",
+              element: <Registro_pmulti_5 />,
+            },
+            {
+              path: "paso6",
+              element: <Registro_pmulti_6 />,
             },
           ],
         },

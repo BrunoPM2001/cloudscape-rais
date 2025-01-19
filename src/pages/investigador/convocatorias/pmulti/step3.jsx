@@ -237,7 +237,7 @@ export default function Registro_pmulti_3() {
         const query = queryString.stringify({
           id,
         });
-        window.location.href = "paso5?" + query;
+        window.location.href = "paso4?" + query;
       }
     }
   };

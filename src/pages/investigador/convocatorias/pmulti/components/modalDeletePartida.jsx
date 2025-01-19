@@ -5,10 +5,10 @@ import {
   Button,
 } from "@cloudscape-design/components";
 import { useContext, useState } from "react";
-import NotificationContext from "../../../../../providers/notificationProvider";
 import axiosBase from "../../../../../api/axios";
+import NotificationContext from "../../../../../providers/notificationProvider";
 
-export default ({ id, close, reload }) => {
+export default ({ id, visible, setVisible, reload }) => {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
 
@@ -16,37 +16,37 @@ export default ({ id, close, reload }) => {
   const [loadingDelete, setLoadingDelete] = useState(false);
 
   //  Functions
-  const eliminarActividad = async () => {
+  const eliminarPartida = async () => {
     setLoadingDelete(true);
     const res = await axiosBase.delete(
-      "investigador/convocatorias/pmulti/eliminarActividad",
+      "investigador/convocatorias/eliminarPartida",
       {
         params: {
-          id,
+          id: id,
         },
       }
     );
     const data = res.data;
     setLoadingDelete(false);
-    close();
+    setVisible(false);
     reload();
     pushNotification(data.detail, data.message, notifications.length + 1);
   };
 
   return (
     <Modal
-      onDismiss={close}
-      visible
+      onDismiss={() => setVisible(false)}
+      visible={visible}
       size="medium"
       footer={
         <Box float="right">
           <SpaceBetween direction="horizontal" size="xs">
-            <Button variant="normal" onClick={close}>
+            <Button variant="normal" onClick={() => setVisible(false)}>
               Cancelar
             </Button>
             <Button
               variant="primary"
-              onClick={eliminarActividad}
+              onClick={eliminarPartida}
               loading={loadingDelete}
             >
               Eliminar
@@ -54,9 +54,10 @@ export default ({ id, close, reload }) => {
           </SpaceBetween>
         </Box>
       }
-      header="Eliminar actividad del proyecto"
+      header="Eliminar partida del proyecto"
     >
-      ¿Estás seguro de eliminar esta actividad del calendario?
+      ¿Estás seguro de eliminar esta partida del presupuesto? La acción no se
+      puede deshacer
     </Modal>
   );
 };

@@ -9,6 +9,7 @@ import {
   Input,
   ColumnLayout,
   Select,
+  Textarea,
 } from "@cloudscape-design/components";
 import { useContext, useState } from "react";
 import NotificationContext from "../../../../../providers/notificationProvider";
@@ -17,6 +18,7 @@ import axiosBase from "../../../../../api/axios";
 
 const initialForm = {
   actividad: "",
+  justificacion: "",
   responsable: null,
   fecha_inicio: "",
   fecha_fin: "",
@@ -24,6 +26,7 @@ const initialForm = {
 
 const formRules = {
   actividad: { required: true },
+  justificacion: { required: true },
   responsable: { required: true },
   fecha_inicio: { required: true },
   fecha_fin: { required: true },
@@ -45,7 +48,7 @@ export default ({ id, close, reload, integrantes }) => {
     if (validateForm()) {
       setLoadingCreate(true);
       const res = await axiosBase.post(
-        "investigador/convocatorias/psinfinv/addActividad",
+        "investigador/convocatorias/pmulti/addActividad",
         { ...formValues, id }
       );
       const data = res.data;
@@ -86,6 +89,19 @@ export default ({ id, close, reload, integrantes }) => {
               placeholder="Escriba el nombre de la actividad"
               value={formValues.actividad}
               onChange={({ detail }) => handleChange("actividad", detail.value)}
+            />
+          </FormField>
+          <FormField
+            label="Justificación"
+            stretch
+            errorText={formErrors.justificacion}
+          >
+            <Textarea
+              placeholder="Escriba la justificación de la actividad"
+              value={formValues.justificacion}
+              onChange={({ detail }) =>
+                handleChange("justificacion", detail.value)
+              }
             />
           </FormField>
           <FormField label="Responsable">
