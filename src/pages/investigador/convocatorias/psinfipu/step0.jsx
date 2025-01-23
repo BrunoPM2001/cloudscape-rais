@@ -4,8 +4,6 @@ import {
   Button,
   ButtonDropdown,
   Header,
-  Pagination,
-  PropertyFilter,
   SpaceBetween,
   Table,
   Tabs,

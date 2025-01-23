@@ -1,10 +1,8 @@
 import {
   Alert,
-  Badge,
   Box,
   Button,
   ButtonDropdown,
-  ColumnLayout,
   Header,
   SpaceBetween,
   Spinner,
@@ -16,9 +14,9 @@ import { useCollection } from "@cloudscape-design/collection-hooks";
 import { useLocation } from "react-router-dom";
 import BaseLayout from "../../components/baseLayout";
 import axiosBase from "../../../../api/axios";
-import ModalAddPartida from "./components/modalAddPartida";
-import ModalDeletePartida from "./components/modalDeletePartida";
 import queryString from "query-string";
+import ModalAddDoc from "./components/modalAddDoc";
+import ModalDeleteDoc from "./components/modalDeleteDoc";
 
 const breadcrumbs = [
   {
@@ -35,105 +33,72 @@ const breadcrumbs = [
 
 const columnDefinitions = [
   {
-    id: "partida",
-    header: "Partida",
-    cell: (item) => item.partida,
+    id: "comentario",
+    header: "Comentario",
+    cell: (item) => item.comentario,
   },
   {
-    id: "justificacion",
-    header: "Justificación",
-    cell: (item) => item.justificacion,
-  },
-  {
-    id: "tipo",
-    header: "Tipo",
-    cell: (item) => item.tipo,
-  },
-  {
-    id: "monto",
-    header: "Monto",
-    cell: (item) => item.monto,
+    id: "url",
+    header: "Carta compromiso",
+    cell: (item) => (
+      <Box textAlign="center">
+        <Button
+          iconName="download"
+          variant="inline-icon"
+          href={item.url}
+          target="_blank"
+        />
+      </Box>
+    ),
+    minWidth: 95,
   },
 ];
-
-const MAX = 500000;
 
 const columnDisplay = [
-  { id: "partida", visible: true },
-  { id: "justificacion", visible: true },
-  { id: "tipo", visible: true },
-  { id: "monto", visible: true },
+  { id: "comentario", visible: true },
+  { id: "url", visible: true },
 ];
 
-export default function Registro_pmulti_6() {
+export default function Registro_pmulti_7() {
   //  Url
   const location = useLocation();
   const { id } = queryString.parse(location.search);
 
   //  States
   const [loading, setLoading] = useState(true);
-  const [data, setData] = useState({
-    presupuesto: [],
-    partidas: [],
-    montos: {},
-  });
+  const [data, setData] = useState([]);
   const [type, setType] = useState("");
   const [errors, setErrors] = useState([]);
-  const [alert, setAlert] = useState([]);
 
   //  Hooks
-  const { items, collectionProps, actions } = useCollection(data.presupuesto, {
+  const { items, collectionProps, actions } = useCollection(data, {
     selection: {},
   });
   //  Functions
   const getData = async () => {
     setLoading(true);
     const res = await axiosBase.get(
-      "investigador/convocatorias/pmulti/verificar6",
+      "investigador/convocatorias/pmulti/verificar7",
       {
         params: {
           id,
         },
       }
     );
-    const data = res.data;
-    setData(data);
-    setErrors([]);
+    const info = res.data;
+    if (!info.estado) {
+      setErrors(info.errores);
+    } else {
+      setData(info.docs);
+    }
     setLoading(false);
   };
 
   const handleNavigate = (index) => {
-    if (index < 6) {
-      const query = queryString.stringify({
-        id,
-      });
-      window.location.href = "paso" + (index + 1) + "?" + query;
-    } else {
-      let tempErrors = [...errors];
-      const totalMonto = items.reduce(
-        (sum, item) => sum + parseFloat(item.monto),
-        0
-      );
-
-      if (totalMonto < 250000) {
-        tempErrors.push(
-          "El monto total minimo para postular a esta convocatoria es de S/. 250,000.00"
-        );
-      }
-      if (totalMonto > MAX) {
-        tempErrors.push(
-          "El monto total máximo para postular a esta convocatoria es de S/. 500,000.00"
-        );
-      }
-
-      setAlert(tempErrors);
-      if (tempErrors.length == 0) {
-        const query = queryString.stringify({
-          id,
-        });
-        window.location.href = "paso7?" + query;
-      }
-    }
+    const query = queryString.stringify({
+      id,
+    });
+    window.location.href = "paso" + (index + 1) + "?" + query;
   };
 
   useEffect(() => {
@@ -161,7 +126,7 @@ export default function Registro_pmulti_6() {
               onNavigate={({ detail }) =>
                 handleNavigate(detail.requestedStepIndex)
               }
-              activeStepIndex={5}
+              activeStepIndex={6}
               onCancel={() => {
                 window.location.href = "../";
               }}
@@ -189,20 +154,13 @@ export default function Registro_pmulti_6() {
                 {
                   title: "Presupuesto",
                   description: "Montos y partidas",
+                },
+                {
+                  title: "Colaboración externa",
+                  description:
+                    "Documento de compromiso del Cooperante Internacional",
                   content: (
                     <SpaceBetween size="m">
-                      {alert.length > 0 && (
-                        <Alert
-                          type="warning"
-                          header="Tiene que cumplir los siguientes requisitos"
-                          dismissible
-                          onDismiss={() => setAlert([])}
-                        >
-                          {alert.map((item, index) => {
-                            return <li key={index}>{item}</li>;
-                          })}
-                        </Alert>
-                      )}
                       <Table
                         {...collectionProps}
                         trackBy="id"
@@ -217,17 +175,6 @@ export default function Registro_pmulti_6() {
                         header={
                           <Header
                             variant="h3"
-                            description={
-                              "Saldo disponible S./ " +
-                              (MAX -
-                                Number(
-                                  items.reduce(
-                                    (sum, item) =>
-                                      sum + Number(item.monto) || 0,
-                                    0
-                                  )
-                                ))
-                            }
                             actions={
                               <SpaceBetween size="xs" direction="horizontal">
                                 <ButtonDropdown
@@ -238,24 +185,12 @@ export default function Registro_pmulti_6() {
                                   onItemClick={({ detail }) => {
                                     if (detail.id == "action_1_1") {
                                       setType("delete");
-                                    } else if (detail.id == "action_1_2") {
-                                      setType("update");
                                     }
                                   }}
                                   items={[
                                     {
                                       text: "Eliminar",
                                       id: "action_1_1",
-                                      disabled:
-                                        collectionProps.selectedItems[0]
-                                          ?.partida_id == 61,
-                                    },
-                                    {
-                                      text: "Editar",
-                                      id: "action_1_2",
-                                      disabled:
-                                        collectionProps.selectedItems[0]
-                                          ?.partida_id == 61,
                                     },
                                   ]}
                                 >
@@ -272,7 +207,7 @@ export default function Registro_pmulti_6() {
                               </SpaceBetween>
                             }
                           >
-                            Partidas
+                            Documentos
                           </Header>
                         }
                         empty={
@@ -286,68 +221,16 @@ export default function Registro_pmulti_6() {
                             </SpaceBetween>
                           </Box>
                         }
-                        footer={
-                          <ColumnLayout columns={3} variant="text-grid">
-                            <div>
-                              <Box variant="awsui-key-label">
-                                Bienes ({data.info.bienes_cantidad})
-                              </Box>
-                              <SpaceBetween direction="horizontal" size="xxs">
-                                <Badge color="green">
-                                  S/. {data.info.bienes_monto}
-                                </Badge>
-                                <Badge color="blue">
-                                  {data.info.bienes_porcentaje + "%"}
-                                </Badge>
-                              </SpaceBetween>
-                            </div>
-                            <div>
-                              <Box variant="awsui-key-label">
-                                Servicios ({data.info.servicios_cantidad})
-                              </Box>
-                              <SpaceBetween direction="horizontal" size="xxs">
-                                <Badge color="green">
-                                  S/. {data.info.servicios_monto}
-                                </Badge>
-                                <Badge color="blue">
-                                  {data.info.servicios_porcentaje + "%"}
-                                </Badge>
-                              </SpaceBetween>
-                            </div>
-                            <div>
-                              <Box variant="awsui-key-label">
-                                Otros ({data.info.otros_cantidad})
-                              </Box>
-                              <SpaceBetween direction="horizontal" size="xxs">
-                                <Badge color="green">
-                                  S/. {data.info.otros_monto}
-                                </Badge>
-                                <Badge color="blue">
-                                  {data.info.otros_porcentaje + "%"}
-                                </Badge>
-                              </SpaceBetween>
-                            </div>
-                          </ColumnLayout>
-                        }
                       />
                       {type == "add" ? (
-                        <ModalAddPartida
+                        <ModalAddDoc
                           close={() => setType("")}
                           reload={getData}
                           id={id}
-                          options={data.partidas}
-                          presupuesto={data.presupuesto}
-                          limit={parseFloat(
-                            MAX -
-                              items.reduce(
-                                (acc, curr) => acc + Number(curr.monto),
-                                0
-                              )
-                          ).toFixed(2)}
                         />
                       ) : (
                         type == "delete" && (
-                          <ModalDeletePartida
+                          <ModalDeleteDoc
                             close={() => setType("")}
                             reload={getData}
                             id={collectionProps.selectedItems[0].id}
@@ -356,11 +239,6 @@ export default function Registro_pmulti_6() {
                       )}
                     </SpaceBetween>
                   ),
-                },
-                {
-                  title: "Colaboración externa",
-                  description:
-                    "Documento de compromiso del Cooperante Internacional",
                 },
                 {
                   title: "Instrucciones finales",

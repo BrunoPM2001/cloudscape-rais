@@ -7,7 +7,6 @@ import {
   SpaceBetween,
   Table,
   Tabs,
-  Alert,
 } from "@cloudscape-design/components";
 import BaseLayout from "../../components/baseLayout";
 import { useState, useEffect } from "react";
@@ -25,7 +24,7 @@ const breadcrumbs = [
     text: "Convocatorias",
   },
   {
-    text: "Programa de Proyectos de Investigación para Grupos de Investigación (PCONFIGI)",
+    text: "Proyecto multidisciplinario",
   },
 ];
 
@@ -79,10 +78,9 @@ const columnDisplay = [
   { id: "estado", visible: true },
 ];
 
-export default function Registro_psinfipu_0() {
+export default function Registro_pmulti_0() {
+  //  States
   const [loading, setLoading] = useState(true);
-  const [loadingReporte, setLoadingReporte] = useState(false);
-  const [validationErrors, setValidationErrors] = useState([]);
   const [distributions, setDistribution] = useState([]);
   const [type, setType] = useState("");
   const { items, actions, collectionProps } = useCollection(distributions, {
@@ -94,54 +92,15 @@ export default function Registro_psinfipu_0() {
   const getData = async () => {
     setLoading(true);
     const res = await axiosBase.get(
-      "investigador/convocatorias/pconfigi/listado"
+      "investigador/convocatorias/pmulti/listado"
     );
     const data = res.data;
     setDistribution(data);
     setLoading(false);
   };
 
-  const getValidacion = async () => {
-    setLoading(true);
-    try {
-      const res = await axiosBase.get(
-        "investigador/convocatorias/pconfigi/validarDatos"
-      );
-      const data = res.data;
-
-      if (data.errores && Array.isArray(data.errores)) {
-        setValidationErrors(data.errores); // Guardar los errores en el estado
-      } else {
-        setValidationErrors([]); // Limpiar en caso de que no haya errores
-      }
-    } catch (error) {
-      console.error("Error al validar datos:", error);
-      setValidationErrors([]);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const reporte = async () => {
-    setLoadingReporte(true);
-    const res = await axiosBase.get(
-      "investigador/convocatorias/pconfigi/reporte",
-      {
-        params: {
-          id: collectionProps.selectedItems[0].id,
-        },
-        responseType: "blob",
-      }
-    );
-    const blob = await res.data;
-    const url = URL.createObjectURL(blob);
-    window.open(url, "_blank");
-    setLoadingReporte(false);
-  };
-
   //  Effects
   useEffect(() => {
-    getValidacion();
     getData();
   }, []);
 
@@ -157,30 +116,9 @@ export default function Registro_psinfipu_0() {
         tabs={[
           {
             id: "listado",
-            label: "Listado - PCONFIGI",
+            label: "Listado",
             content: (
-              <SpaceBetween size="l">
-                {validationErrors.length > 0 && (
-                  <Alert
-                    type="warning"
-                    header="No puede postular a otra convocatoria por los siguientes motivos:"
-                  >
-                    {validationErrors.map((error, index) => (
-                      <li key={index} style={{ marginBottom: "8px" }}>
-                        {error.isHtml ? (
-                          <span
-                            dangerouslySetInnerHTML={{
-                              __html: error.message,
-                            }}
-                          />
-                        ) : (
-                          <span>{error.message}</span>
-                        )}
-                      </li>
-                    ))}
-                  </Alert>
-                )}
-
+              <>
                 <Table
                   {...collectionProps}
                   trackBy="id"
@@ -198,20 +136,6 @@ export default function Registro_psinfipu_0() {
                     <Header
                       actions={
                         <SpaceBetween size="xs" direction="horizontal">
-                          <Button
-                            loading={loadingReporte}
-                            onClick={reporte}
-                            iconAlign="right"
-                            iconName="external"
-                            target="_blank"
-                            disabled={
-                              !collectionProps.selectedItems.length ||
-                              collectionProps.selectedItems[0].estado !=
-                                "Enviado"
-                            }
-                          >
-                            Reporte
-                          </Button>
                           <ButtonDropdown
                             disabled={
                               !collectionProps.selectedItems.length ||
@@ -224,8 +148,7 @@ export default function Registro_psinfipu_0() {
                                 const query = queryString.stringify({
                                   id: collectionProps.selectedItems[0]["id"],
                                 });
-                                window.location.href =
-                                  "pconfigi/paso1?" + query;
+                                window.location.href = "pmulti/paso1?" + query;
                               } else if (detail.id == "action_1_2") {
                                 setType("delete");
                               }
@@ -246,9 +169,9 @@ export default function Registro_psinfipu_0() {
                           <Button
                             variant="primary"
                             onClick={() => {
-                              window.location.href = "pconfigi/paso1";
+                              window.location.href = "pmulti/paso1";
                             }}
-                            disabled={validationErrors.length > 0 || loading}
+                            disabled={distributions.length > 0 || loading}
                           >
                             Registrar
                           </Button>
@@ -277,7 +200,7 @@ export default function Registro_psinfipu_0() {
                     reload={getData}
                   />
                 )}
-              </SpaceBetween>
+              </>
             ),
           },
         ]}

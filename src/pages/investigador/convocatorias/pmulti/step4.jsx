@@ -239,7 +239,7 @@ export default function Registro_pmulti_4() {
                 },
                 {
                   title: "Integrantes",
-                  description: "Deben ser integrantes registrados del GI",
+                  description: "Deben ser integrantes registrados de GI",
                 },
                 {
                   title: "Descripción del proyecto",
@@ -525,16 +525,17 @@ export default function Registro_pmulti_4() {
                   ),
                 },
                 {
-                  title: "Responsable del proyecto",
-                  description: "Datos del responsable",
-                },
-                {
-                  title: "Integrantes",
-                  description: "Listado de las actividades del taller",
-                },
-                {
                   title: "Calendario",
                   description: "Listado de actividades junto al responsable",
+                },
+                {
+                  title: "Presupuesto",
+                  description: "Montos y partidas",
+                },
+                {
+                  title: "Colaboración externa",
+                  description:
+                    "Documento de compromiso del Cooperante Internacional",
                 },
                 {
                   title: "Instrucciones finales",

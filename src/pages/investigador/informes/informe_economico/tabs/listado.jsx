@@ -61,31 +61,35 @@ const columnDefinitions = [
     header: "ID",
     cell: (item) => item.id,
     sortingField: "id",
-    isRowHeader: true,
+    minWidth: 20,
   },
   {
     id: "periodo",
     header: "Periodo",
     cell: (item) => item.periodo,
     sortingField: "periodo",
+    minWidth: 50,
   },
   {
     id: "codigo_proyecto",
     header: "Código",
     cell: (item) => item.codigo_proyecto,
     sortingField: "codigo_proyecto",
+    minWidth: 150,
   },
   {
     id: "tipo_proyecto",
     header: "Tipo",
     cell: (item) => item.tipo_proyecto,
     sortingField: "tipo_proyecto",
+    minWidth: 180,
   },
   {
     id: "titulo",
     header: "Título",
     cell: (item) => item.titulo,
     sortingField: "titulo",
+    minWidth: 450,
   },
   {
     id: "estado",
@@ -104,6 +108,7 @@ const columnDefinitions = [
       </Badge>
     ),
     sortingField: "estado",
+    minWidth: 150,
   },
 ];
 
@@ -175,7 +180,7 @@ export default () => {
       columnDisplay={columnDisplay}
       loading={loading}
       loadingText="Cargando datos"
-      resizableColumns
+      wrapLines
       enableKeyboardNavigation
       selectionType="single"
       onRowClick={({ detail }) => actions.setSelectedItems([detail.item])}

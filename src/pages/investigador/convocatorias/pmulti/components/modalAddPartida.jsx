@@ -27,7 +27,7 @@ export default ({ id, close, reload, limit, options }) => {
   const formRules = {
     tipo: { required: true },
     partida: { required: true },
-    monto: { required: true, lessThan: limit },
+    monto: { required: true, lessThan: Number(limit) },
     justificacion: { required: true },
   };
 
@@ -42,16 +42,14 @@ export default ({ id, close, reload, limit, options }) => {
     useFormValidation(initialForm, formRules);
 
   //  Functions
-
   const agregarPartida = async () => {
     if (validateForm()) {
       setLoadingCreate(true);
       const res = await axiosBase.post(
-        "investigador/convocatorias/agregarPartida",
+        "investigador/convocatorias/pmulti/agregarPartida",
         {
-          partida_id: formValues.partida.value,
-          proyecto_id: id,
-          monto: formValues.monto,
+          ...formValues,
+          id,
         }
       );
       const data = res.data;
@@ -112,7 +110,10 @@ export default ({ id, close, reload, limit, options }) => {
           <FormField label="Partida" stretch errorText={formErrors.partida}>
             <Select
               placeholder="Escoja una opción"
-              options={options}
+              disabled={!formValues.tipo}
+              options={options.filter(
+                (item) => item.tipo == formValues.tipo?.value
+              )}
               selectedOption={formValues.partida}
               onChange={({ detail }) =>
                 handleChange("partida", detail.selectedOption)

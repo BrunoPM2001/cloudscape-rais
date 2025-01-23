@@ -66,7 +66,7 @@ export default function Proyecto_detalle() {
             text: "Proyecto",
           },
         ]);
-      } else if (tipo == "PSINFINV" || tipo == "PSINFIPU") {
+      } else if (tipo == "PSINFINV" || tipo == "PSINFIPU" || tipo == "PICV") {
         setItems([
           {
             id: "action_3",

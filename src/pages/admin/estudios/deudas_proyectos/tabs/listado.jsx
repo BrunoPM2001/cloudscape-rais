@@ -48,6 +48,12 @@ const FILTER_PROPS = [
     operators: stringOperators,
   },
   {
+    propertyLabel: "Responsable",
+    key: "responsable",
+    groupValuesLabel: "Responsable",
+    operators: stringOperators,
+  },
+  {
     propertyLabel: "Deuda",
     key: "deuda",
     groupValuesLabel: "Deudas",

@@ -2,6 +2,18 @@ import { Suspense, lazy } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { NotificationProvider } from "../providers/notificationProvider.jsx";
 
+const Reporte_constancias = lazy(() =>
+  import("../pages/investigador/constancias/reporte_constancias/index.jsx")
+);
+const Registro_pmulti_0 = lazy(() =>
+  import("../pages/investigador/convocatorias/pmulti/step0.jsx")
+);
+const Registro_pmulti_8 = lazy(() =>
+  import("../pages/investigador/convocatorias/pmulti/step8.jsx")
+);
+const Registro_pmulti_7 = lazy(() =>
+  import("../pages/investigador/convocatorias/pmulti/step7.jsx")
+);
 const Registro_pmulti_6 = lazy(() =>
   import("../pages/investigador/convocatorias/pmulti/step6.jsx")
 );
@@ -560,11 +572,19 @@ const routes = createBrowserRouter(
       ],
     },
     {
+      path: "constancias",
+      element: <Reporte_constancias />,
+    },
+    {
       path: "convocatoria",
       children: [
         {
           path: "pmulti",
           children: [
+            {
+              path: "",
+              element: <Registro_pmulti_0 />,
+            },
             {
               path: "paso1",
               element: <Registro_pmulti_1 />,
@@ -588,6 +608,14 @@ const routes = createBrowserRouter(
             {
               path: "paso6",
               element: <Registro_pmulti_6 />,
+            },
+            {
+              path: "paso7",
+              element: <Registro_pmulti_7 />,
+            },
+            {
+              path: "paso8",
+              element: <Registro_pmulti_8 />,
             },
           ],
         },

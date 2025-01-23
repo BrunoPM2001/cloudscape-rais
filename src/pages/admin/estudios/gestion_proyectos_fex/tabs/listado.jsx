@@ -11,6 +11,7 @@ import {
 import { useState, useEffect } from "react";
 import { useCollection } from "@cloudscape-design/collection-hooks";
 import axiosBase from "../../../../../api/axios";
+import queryString from "query-string";
 
 const stringOperators = [":", "!:", "=", "!=", "^", "!^"];
 
@@ -120,18 +121,21 @@ const columnDefinitions = [
     header: "Título",
     cell: (item) => item.titulo,
     sortingField: "titulo",
+    minWidth: 250,
   },
   {
     id: "responsable",
     header: "Responsable",
     cell: (item) => item.responsable,
     sortingField: "responsable",
+    minWidth: 200,
   },
   {
     id: "facultad",
     header: "Facultad",
     cell: (item) => item.facultad,
     sortingField: "facultad",
+    minWidth: 200,
   },
   {
     id: "periodo",
@@ -323,18 +327,34 @@ export default () => {
       columnDisplay={columnDisplay}
       loading={loading}
       loadingText="Cargando datos"
-      resizableColumns
+      wrapLines
+      selectionType="single"
+      onRowClick={({ detail }) => actions.setSelectedItems([detail.item])}
       enableKeyboardNavigation
       header={
         <Header
           counter={"(" + distributions.length + ")"}
           actions={
-            <Button
-              variant="primary"
-              onClick={() => (window.location.href = "proyectos_fex/paso_1")}
-            >
-              Nuevo
-            </Button>
+            <SpaceBetween size="xs" direction="horizontal">
+              <Button
+                onClick={() => {
+                  const query = queryString.stringify({
+                    id: collectionProps.selectedItems[0]["id"],
+                  });
+                  window.location.href = "proyectos_fex/detalle?" + query;
+                }}
+                disabled={loading || !collectionProps.selectedItems.length}
+              >
+                Editar
+              </Button>
+
+              <Button
+                variant="primary"
+                onClick={() => (window.location.href = "proyectos_fex/paso_1")}
+              >
+                Nuevo
+              </Button>
+            </SpaceBetween>
           }
         >
           Proyectos FEX

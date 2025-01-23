@@ -91,7 +91,10 @@ export default function Registro_pconfigi_5() {
     selection: {},
   });
   const formatNumber = (number) => {
-    return number.toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    return number.toLocaleString("es-PE", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
   };
   //  Functions
   const getData = async () => {
@@ -123,12 +126,16 @@ export default function Registro_pconfigi_5() {
         .reduce((sum, item) => sum + parseFloat(item.monto), 0); // Convertir monto a número
 
       if (totalMonto < 16000) {
-        tempErrors.push("El monto total minimo para postular a esta convocatoria es de S/. 16,000.00");
+        tempErrors.push(
+          "El monto total minimo para postular a esta convocatoria es de S/. 16,000.00"
+        );
       }
       if (totalMonto > 32000) {
-        tempErrors.push("El monto total máximo para postular a esta convocatoria es de S/. 32,000.00");
+        tempErrors.push(
+          "El monto total máximo para postular a esta convocatoria es de S/. 32,000.00"
+        );
       }
-     
+
       setAlert(tempErrors);
       if (tempErrors.length == 0 && excedidos.length == 0) {
         const query = queryString.stringify({
@@ -145,22 +152,23 @@ export default function Registro_pconfigi_5() {
     servicioTerceros: 8000,
     movilidadLocal: 800,
     serviciosDiversos: 10000,
+    consultoriaEspecializada: 4000,
     asesoriaEspecializada: 4000,
     materialesInsumos: 32000,
     utilesLimpieza: 800,
-    equiposBienes: 32000
+    equiposBienes: 32000,
   };
-
 
   const categories = {
     pasajesViaticos: [66, 68, 38, 39, 63, 62, 67, 69],
     servicioTerceros: [70, 71, 43, 41, 44, 57, 46, 47, 48, 45, 52],
     movilidadLocal: [40, 53],
     serviciosDiversos: [49, 73],
-    asesoriaEspecializada: [78, 50, 74, 55, 56, 79],
+    consultoriaEspecializada: [78, 50, 74, 55, 56],
+    asesoriaEspecializada: [79],
     materialesInsumos: [4, 5, 9, 16, 22, 13, 14, 23],
     utilesLimpieza: [6, 7],
-    equiposBienes: [26, 27, 76, 35]
+    equiposBienes: [26, 27, 76, 35],
   };
 
   const categoryNames = {
@@ -168,10 +176,11 @@ export default function Registro_pconfigi_5() {
     servicioTerceros: "Servicios de Terceros",
     movilidadLocal: "Movilidad Local",
     serviciosDiversos: "Servicios Diversos",
+    consultoriaEspecializada: "Consultoria Especializada",
     asesoriaEspecializada: "Asesoría Especializada",
     materialesInsumos: "Materiales e Insumos",
     utilesLimpieza: "Útiles de Limpieza",
-    equiposBienes: "Equipos y Bienes"
+    equiposBienes: "Equipos y Bienes",
   };
 
   // Función para calcular y verificar los montos
@@ -179,7 +188,7 @@ export default function Registro_pconfigi_5() {
     let total = 0;
 
     // Sumar los montos de las partidas que pertenecen a la categoría
-    data.presupuesto.forEach(partida => {
+    data.presupuesto.forEach((partida) => {
       if (partidaIds.includes(partida.partida_id)) {
         total += parseFloat(partida.monto);
       }
@@ -188,19 +197,20 @@ export default function Registro_pconfigi_5() {
     // Verificar si excede el límite
     if (total > limits[category]) {
       excedidos.push(
-        `Excedió el presupuesto para ${categoryNames[category]}. Total: S/. ${formatNumber(total)}, Límite: S/. ${formatNumber(limits[category])}`
+        `Excedió el presupuesto para ${
+          categoryNames[category]
+        }. Total: S/. ${formatNumber(total)}, Límite: S/. ${formatNumber(
+          limits[category]
+        )}`
       );
     }
   });
 
-
   console.log(excedidos);
-
 
   useEffect(() => {
     getData();
   }, []);
-
 
   return (
     <BaseLayout
@@ -250,7 +260,7 @@ export default function Registro_pconfigi_5() {
                   description: "Montos y partidas",
                   content: (
                     <SpaceBetween size="m">
-                      {excedidos.length > 0 &&  alertPresupuesto && (
+                      {excedidos.length > 0 && alertPresupuesto && (
                         <Alert
                           type="warning"
                           header="Tiene que cumplir los siguientes requisitos"
@@ -272,13 +282,15 @@ export default function Registro_pconfigi_5() {
                         >
                           <ul>
                             <li>
-                              a)El incentivo a los investigadores será incluido en el presupuesto del proyecto
-                              posterior a la evaluación y según el orden de mérito obtenido.
+                              a)El incentivo a los investigadores será incluido
+                              en el presupuesto del proyecto posterior a la
+                              evaluación y según el orden de mérito obtenido.
                             </li>
                             <li>
-                              b) El incentivo económico asignado a los investigadores será de acuerdo con el
-                              orden de mérito del proyecto, sin superar el límite establecido de 8,000 soles,
-                              según tabla.
+                              b) El incentivo económico asignado a los
+                              investigadores será de acuerdo con el orden de
+                              mérito del proyecto, sin superar el límite
+                              establecido de 8,000 soles, según tabla.
                               <ul>
                                 <li>Tercio superior (Incentivo S/8000)</li>
                                 <li>Tercio medio (Incentivo S/6000)</li>
@@ -286,10 +298,9 @@ export default function Registro_pconfigi_5() {
                               </ul>
                             </li>
                           </ul>
-
                         </Alert>
                       )}
-                      {alert.length > 0 &&  (
+                      {alert.length > 0 && (
                         <Alert
                           type="warning"
                           header="Tiene que cumplir los siguientes requisitos"
@@ -339,7 +350,6 @@ export default function Registro_pconfigi_5() {
                                 <ButtonDropdown
                                   disabled={
                                     collectionProps.selectedItems.length == 0
-
                                   }
                                   variant="normal"
                                   onItemClick={({ detail }) => {
@@ -353,14 +363,16 @@ export default function Registro_pconfigi_5() {
                                     {
                                       text: "Eliminar",
                                       id: "action_1_1",
-                                      disabled: collectionProps.selectedItems[0]
-                                        ?.partida_id == 61,
+                                      disabled:
+                                        collectionProps.selectedItems[0]
+                                          ?.partida_id == 61,
                                     },
                                     {
                                       text: "Editar",
                                       id: "action_1_2",
-                                      disabled: collectionProps.selectedItems[0]
-                                        ?.partida_id == 61,
+                                      disabled:
+                                        collectionProps.selectedItems[0]
+                                          ?.partida_id == 61,
                                     },
                                   ]}
                                 >
@@ -442,10 +454,10 @@ export default function Registro_pconfigi_5() {
                           presupuesto={data.presupuesto}
                           limit={parseFloat(
                             32000 -
-                            items.reduce(
-                              (acc, curr) => acc + Number(curr.monto),
-                              0
-                            )
+                              items.reduce(
+                                (acc, curr) => acc + Number(curr.monto),
+                                0
+                              )
                           ).toFixed(2)}
                         />
                       ) : type == "update" ? (
@@ -456,11 +468,11 @@ export default function Registro_pconfigi_5() {
                           options={data.partidas}
                           limit={parseFloat(
                             32000 -
-                            items.reduce(
-                              (acc, curr) => acc + Number(curr.monto),
-                              0
-                            ) +
-                            Number(collectionProps.selectedItems[0].monto)
+                              items.reduce(
+                                (acc, curr) => acc + Number(curr.monto),
+                                0
+                              ) +
+                              Number(collectionProps.selectedItems[0].monto)
                           ).toFixed(2)}
                         />
                       ) : type == "info" ? (

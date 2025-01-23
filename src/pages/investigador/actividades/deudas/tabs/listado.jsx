@@ -156,7 +156,7 @@ export default () => {
       columnDisplay={columnDisplay}
       loading={loading}
       loadingText="Cargando datos"
-      resizableColumns
+      wrapLines
       enableKeyboardNavigation
       header={<Header>Deudas ({distributions.length})</Header>}
       filter={

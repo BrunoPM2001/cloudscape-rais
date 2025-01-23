@@ -5,10 +5,10 @@ import {
   Button,
 } from "@cloudscape-design/components";
 import { useContext, useState } from "react";
-import axiosBase from "../../../../../api/axios";
 import NotificationContext from "../../../../../providers/notificationProvider";
+import axiosBase from "../../../../../api/axios";
 
-export default ({ id, visible, setVisible, reload }) => {
+export default ({ id, close, reload }) => {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
 
@@ -16,37 +16,37 @@ export default ({ id, visible, setVisible, reload }) => {
   const [loadingDelete, setLoadingDelete] = useState(false);
 
   //  Functions
-  const eliminarPartida = async () => {
+  const eliminarDoc = async () => {
     setLoadingDelete(true);
     const res = await axiosBase.delete(
-      "investigador/convocatorias/pmulti/eliminarPartida",
+      "investigador/convocatorias/pmulti/eliminarDoc",
       {
         params: {
-          id: id,
+          id,
         },
       }
     );
     const data = res.data;
     setLoadingDelete(false);
-    setVisible(false);
+    close();
     reload();
     pushNotification(data.detail, data.message, notifications.length + 1);
   };
 
   return (
     <Modal
-      onDismiss={() => setVisible(false)}
-      visible={visible}
+      onDismiss={close}
+      visible
       size="medium"
       footer={
         <Box float="right">
           <SpaceBetween direction="horizontal" size="xs">
-            <Button variant="normal" onClick={() => setVisible(false)}>
+            <Button variant="normal" onClick={close}>
               Cancelar
             </Button>
             <Button
               variant="primary"
-              onClick={eliminarPartida}
+              onClick={eliminarDoc}
               loading={loadingDelete}
             >
               Eliminar
@@ -54,10 +54,9 @@ export default ({ id, visible, setVisible, reload }) => {
           </SpaceBetween>
         </Box>
       }
-      header="Eliminar partida del proyecto"
+      header="Eliminar documento del proyecto"
     >
-      ¿Estás seguro de eliminar esta partida del presupuesto? La acción no se
-      puede deshacer
+      ¿Estás seguro de eliminar este documento del proyecto?
     </Modal>
   );
 };

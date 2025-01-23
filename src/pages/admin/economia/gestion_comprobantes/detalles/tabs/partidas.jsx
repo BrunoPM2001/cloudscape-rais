@@ -88,6 +88,25 @@ export default ({ id }) => {
       }
     );
     const data = res.data;
+    const totales = data.reduce(
+      (acumulador, item) => ({
+        monto: acumulador.monto + Number(item.monto),
+        monto_rendido_enviado:
+          acumulador.monto_rendido_enviado + Number(item.monto_rendido_enviado),
+        monto_rendido: acumulador.monto_rendido + Number(item.monto_rendido),
+        saldo_rendicion:
+          acumulador.saldo_rendicion + Number(item.saldo_rendicion),
+        monto_excedido: acumulador.monto_excedido + Number(item.monto_excedido),
+      }),
+      {
+        monto: 0.0,
+        monto_rendido_enviado: 0.0,
+        monto_rendido: 0.0,
+        saldo_rendicion: 0.0,
+        monto_excedido: 0.0,
+      }
+    );
+    data.push(totales);
     setDistribution(data);
     setLoading(false);
   };
@@ -122,7 +141,6 @@ export default ({ id }) => {
         columnDisplay={columnDisplay}
         loading={loading}
         loadingText="Cargando datos"
-        resizableColumns
         wrapLines
         header={
           <Header

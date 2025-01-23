@@ -8,6 +8,8 @@ import {
   Pagination,
   FormField,
   Select,
+  Link,
+  Alert,
 } from "@cloudscape-design/components";
 import { useCollection } from "@cloudscape-design/collection-hooks";
 import { useEffect, useState } from "react";
@@ -51,53 +53,75 @@ const FILTER_PROPS = [
 
 const columnDefinitions = [
   {
-    id: "condicion",
-    header: "Condicion",
-    cell: (item) => item.condicion,
-    sortingField: "condicion",
-    isRowHeader: true,
-  },
-  {
     id: "cargo",
     header: "Cargo",
     cell: (item) => item.cargo,
     sortingField: "cargo",
+    minWidth: 150,
+  },
+  {
+    id: "condicion",
+    header: "Condicion",
+    cell: (item) => item.condicion,
+    sortingField: "condicion",
+    minWidth: 150,
   },
   {
     id: "doc_numero",
     header: "Documento de identidad",
     cell: (item) => item.doc_numero,
     sortingField: "doc_numero",
+    minWidth: 150,
   },
   {
     id: "nombres",
     header: "Nombres",
     cell: (item) => item.nombres,
     sortingField: "nombres",
+    minWidth: 220,
   },
   {
     id: "codigo_orcid",
     header: "Código orcid",
-    cell: (item) => item.codigo_orcid,
+    cell: (item) => (
+      <Link href={`https://orcid.org/${item.codigo_orcid}`} target="_blank">
+        {item.codigo_orcid}
+      </Link>
+    ),
     sortingField: "codigo_orcid",
+    minWidth: 200,
   },
   {
     id: "google_scholar",
     header: "Google Scholar",
-    cell: (item) => item.google_scholar,
+    cell: (item) => (
+      <Link href={item.google_scholar} target="_blank">
+        {item.google_scholar}
+      </Link>
+    ),
     sortingField: "google_scholar",
+    minWidth: 300,
   },
   {
     id: "cti_vitae",
     header: "CTI Vitae",
-    cell: (item) => item.cti_vitae,
+    cell: (item) => (
+      <Link
+        href={`https://ctivitae.concytec.gob.pe/appDirectorioCTI/VerDatosInvestigador.do?id_investigador=${item.cti_vitae}`}
+        target="_blank"
+      >
+        {item.cti_vitae}
+      </Link>
+    ),
     sortingField: "cti_vitae",
+    minWidth: 150,
   },
   {
     id: "tipo",
     header: "Tipo",
     cell: (item) => item.tipo,
     sortingField: "tipo",
+    minWidth: 200,
   },
   {
     id: "facultad",
@@ -116,6 +140,7 @@ const columnDefinitions = [
     header: "Proyectos en ejecución",
     cell: (item) => item.proyectos,
     sortingField: "proyectos",
+    minWidth: 150,
   },
   {
     id: "fecha_inclusion",
@@ -132,8 +157,8 @@ const columnDefinitions = [
 ];
 
 const columnDisplay = [
-  { id: "condicion", visible: true },
   { id: "cargo", visible: true },
+  { id: "condicion", visible: true },
   { id: "doc_numero", visible: true },
   { id: "nombres", visible: true },
   { id: "codigo_orcid", visible: true },
@@ -151,7 +176,6 @@ export default ({ grupo_estado }) => {
   //  Data state
   const [incluirVisible, setIncluirVisible] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [selectedItems, setSelectedItems] = useState([]);
   const [distributions, setDistribution] = useState([]);
   const {
     items,
@@ -179,11 +203,11 @@ export default ({ grupo_estado }) => {
       ),
     },
     pagination: { pageSize: 10 },
-    sorting: { defaultState: { sortingColumn: columnDefinitions[0] } },
+    sorting: {},
     selection: {},
   });
-  const [enableBtn, setEnableBtn] = useState(false);
   const [typeModal, setTypeModal] = useState("");
+  const [coordinador, setCoordinador] = useState(null);
   const [tipoMiembros, setTipoMiembros] = useState({
     label: "Integrantes",
     value: 1,
@@ -205,6 +229,15 @@ export default ({ grupo_estado }) => {
     const data = await res.data;
     setDistribution(data.data);
     setLoading(false);
+
+    //  Filtro de data
+    const result = data.data.some(
+      (item) =>
+        item.cargo == "Coordinador" &&
+        item.nombres == localStorage.getItem("User")
+    );
+    console.log(data.data);
+    setCoordinador(result ? true : false);
   };
 
   //  Effects
@@ -212,16 +245,17 @@ export default ({ grupo_estado }) => {
     getData();
   }, [tipoMiembros]);
 
-  useEffect(() => {
-    if (selectedItems.length > 0) {
-      setEnableBtn(true);
-    } else {
-      setEnableBtn(false);
-    }
-  }, [selectedItems]);
-
   return (
-    <>
+    <SpaceBetween size="l">
+      {!coordinador && !loading && (
+        <Alert header="Información Importante">
+          LOS GRUPOS DE INVESTIGACION DE LA UNIVERSIDAD NACIONAL MAYOR DE SAN
+          MARCOS" (RR.N° 014914-2024-R/UNMSM) en su subtítulo VII. Aspectos
+          específicos en su punto 3 La inclusión o exclusión de miembros del GI.
+          Inciso a , c y d, especifica que la inclusión debe ser solicitado por
+          el Coordinador del GI
+        </Alert>
+      )}
       <Table
         {...collectionProps}
         trackBy="id"
@@ -230,21 +264,10 @@ export default ({ grupo_estado }) => {
         columnDisplay={columnDisplay}
         loading={loading}
         loadingText="Cargando datos"
-        resizableColumns
         enableKeyboardNavigation
         selectionType="single"
-        selectedItems={selectedItems}
-        onSelectionChange={({ detail }) =>
-          setSelectedItems(detail.selectedItems)
-        }
-        ariaLabels={{
-          selectionGroupLabel: "Items selection",
-          allItemsSelectionLabel: ({ selectedItems }) =>
-            `${selectedItems.length} ${
-              selectedItems.length === 1 ? "item" : "items"
-            } selected`,
-          itemSelectionLabel: ({ selectedItems }, item) => item.name,
-        }}
+        onRowClick={({ detail }) => actions.setSelectedItems([detail.item])}
+        wrapLines
         empty={
           <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
             <SpaceBetween size="m">
@@ -282,7 +305,12 @@ export default ({ grupo_estado }) => {
             actions={
               <SpaceBetween direction="horizontal" size="xs">
                 <ButtonDropdown
-                  disabled={loading || grupo_estado < 0}
+                  disabled={
+                    loading ||
+                    !collectionProps.selectedItems ||
+                    grupo_estado < 0 ||
+                    !coordinador
+                  }
                   expandableGroups
                   items={[
                     {
@@ -320,7 +348,12 @@ export default ({ grupo_estado }) => {
                   Acciones para el grupo
                 </ButtonDropdown>
                 <ButtonDropdown
-                  disabled={!enableBtn || grupo_estado < 0}
+                  disabled={
+                    loading ||
+                    !collectionProps.selectedItems.length ||
+                    grupo_estado < 0 ||
+                    !coordinador
+                  }
                   variant="primary"
                   items={[
                     {
@@ -378,15 +411,15 @@ export default ({ grupo_estado }) => {
             visible={incluirVisible}
             setVisible={setIncluirVisible}
             reload={getData}
-            item={selectedItems}
+            item={collectionProps.selectedItems}
           />
         ) : (
           <ModalInformacionMiembro
             visible={incluirVisible}
             setVisible={setIncluirVisible}
-            id={selectedItems[0].id}
+            id={collectionProps.selectedItems[0].id}
           />
         ))}
-    </>
+    </SpaceBetween>
   );
 };

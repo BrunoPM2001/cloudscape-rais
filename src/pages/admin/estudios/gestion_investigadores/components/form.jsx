@@ -498,14 +498,12 @@ export default function Formulario({
               </Link>
             }
             stretch
-            errorText={formErrors.enlace_cti}
+            errorText={formErrors.cti_vitae}
           >
             <Input
               placeholder="Url de cti"
-              value={formValues.enlace_cti}
-              onChange={({ detail }) =>
-                handleChange("enlace_cti", detail.value)
-              }
+              value={formValues.cti_vitae}
+              onChange={({ detail }) => handleChange("cti_vitae", detail.value)}
             />
           </FormField>
           <FormField

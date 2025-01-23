@@ -48,6 +48,7 @@ export default function Geco_detalle_proyecto() {
       header="Detalles"
       helpInfo="Información sobre la páginal actual para poder mostrarla al público
       en general."
+      contentType="table"
     >
       <SpaceBetween size="l">
         <Detalles id={id} />

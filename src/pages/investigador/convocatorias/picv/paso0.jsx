@@ -118,15 +118,12 @@ export default function Registro_psinfipu_0() {
 
   const reporte = async () => {
     setLoadingReporte(true);
-    const res = await axiosBase.get(
-      "investigador/convocatorias/picv/reporte?" + query,
-      {
-        params: {
-          proyecto_id,
-        },
-        responseType: "blob",
-      }
-    );
+    const res = await axiosBase.get("investigador/convocatorias/picv/reporte", {
+      params: {
+        proyecto_id,
+      },
+      responseType: "blob",
+    });
     const blob = await res.data;
     const url = URL.createObjectURL(blob);
     window.open(url, "_blank");

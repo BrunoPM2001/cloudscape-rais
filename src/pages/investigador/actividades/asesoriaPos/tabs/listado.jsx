@@ -8,7 +8,7 @@ import {
   SpaceBetween,
   Table,
 } from "@cloudscape-design/components";
-import { useState, useEffect } from "react";
+import { useState, useEffect, act } from "react";
 import { useCollection } from "@cloudscape-design/collection-hooks";
 import queryString from "query-string";
 import axiosBase from "../../../../../api/axios";
@@ -146,6 +146,7 @@ export default () => {
   const [distributions, setDistribution] = useState([]);
   const {
     items,
+    actions,
     filteredItemsCount,
     collectionProps,
     paginationProps,
@@ -198,9 +199,10 @@ export default () => {
       columnDisplay={columnDisplay}
       loading={loading}
       loadingText="Cargando datos"
-      resizableColumns
+      wrapLines
       enableKeyboardNavigation
       selectionType="single"
+      onRowClick={({ detail }) => actions.setSelectedItems([detail.item])}
       header={
         <Header
           actions={

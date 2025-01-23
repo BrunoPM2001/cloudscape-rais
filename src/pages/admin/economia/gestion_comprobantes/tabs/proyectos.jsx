@@ -68,12 +68,14 @@ const columnDefinitions = [
     header: "Responsable",
     cell: (item) => item.responsable,
     sortingField: "responsable",
+    minWidth: 300,
   },
   {
     id: "facultad",
     header: "Facultad",
     cell: (item) => item.facultad,
     sortingField: "facultad",
+    minWidth: 200,
   },
   {
     id: "tipo_proyecto",
@@ -132,6 +134,7 @@ export default () => {
   const [distributions, setDistribution] = useState([]);
   const {
     items,
+    actions,
     filteredItemsCount,
     collectionProps,
     paginationProps,
@@ -184,8 +187,9 @@ export default () => {
       columnDisplay={columnDisplay}
       loading={loading}
       loadingText="Cargando datos"
-      resizableColumns
+      wrapLines
       enableKeyboardNavigation
+      onRowClick={({ detail }) => actions.setSelectedItems([detail.item])}
       selectionType="single"
       header={
         <Header
@@ -201,7 +205,7 @@ export default () => {
                 window.location.href = "gestion_comprobantes/detalle?" + query;
               }}
             >
-              Ver detalle
+              Ver detalles
             </Button>
           }
         >

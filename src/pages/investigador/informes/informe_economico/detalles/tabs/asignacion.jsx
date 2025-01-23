@@ -105,7 +105,7 @@ export default ({ data, loading }) => {
         columnDisplay={columnDisplay}
         loading={loading}
         loadingText="Cargando datos"
-        resizableColumns
+        wrapLines
         header={
           <Header
             counter={"(" + data.length + ")"}

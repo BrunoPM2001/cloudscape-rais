@@ -231,7 +231,7 @@ export default ({ data, loading, reload }) => {
             </Alert>
           ) : (
             <Alert type="warning" header="Aún no puede presentar su informe">
-              Necesita rendir el 100% de su presupuesto para poder registrar su
+              Necesita rendir el 70% de su presupuesto para poder registrar su
               informe
             </Alert>
           )}

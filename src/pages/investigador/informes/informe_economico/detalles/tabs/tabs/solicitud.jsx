@@ -30,6 +30,7 @@ const columnDefinitions = [
     header: "Partida",
     cell: (item) => item.partida,
     sortingField: "partida",
+    minWidth: 200,
   },
   {
     id: "monto",
@@ -128,7 +129,7 @@ export default ({ data, loading, reload, disponible }) => {
         columnDisplay={columnDisplay}
         loading={loading}
         loadingText="Cargando datos"
-        resizableColumns
+        wrapLines
         expandedItems={[
           { tipo: "Bienes" },
           { tipo: "Servicios" },

@@ -51,6 +51,12 @@ const FILTER_PROPS = [
     operators: stringOperators,
   },
   {
+    propertyLabel: "Filiación UNMSM",
+    key: "filiacion",
+    groupValuesLabel: "filiacion",
+    operators: stringOperators,
+  },
+  {
     propertyLabel: "Estado",
     key: "estado",
     groupValuesLabel: "Estados",
@@ -272,7 +278,6 @@ export default () => {
                     } else if (detail.id == "action_3") {
                       reporte();
                     } else if (detail.id == "action_4") {
-                      console.log("Eliminar Filiacion", detail.id);
                       setModal("eliminarFiliacion");
                     }
                   }}
@@ -355,13 +360,15 @@ export default () => {
           reload={getData}
           id={collectionProps.selectedItems[0].id}
         />
-      ) : modal === "eliminarFiliacion" ? (
-        <ModalEliminarFiliacion
-          close={() => setModal("")}
-          reload={getData}
-          id={collectionProps.selectedItems[0].id}
-        />
-      ) : null}
+      ) : (
+        modal === "eliminarFiliacion" && (
+          <ModalEliminarFiliacion
+            close={() => setModal("")}
+            reload={getData}
+            id={collectionProps.selectedItems[0].id}
+          />
+        )
+      )}
     </>
   );
 };

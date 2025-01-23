@@ -137,11 +137,31 @@ const navItems = [
       },
     ],
   },
+  // {
+  //   type: "section",
+  //   text: "Constancias",
+  //   defaultExpanded: false,
+  //   items: [
+  //     {
+  //       type: "link",
+  //       text: "Reporte de constancias",
+  //       href: "/investigador/constancias",
+  //     },
+  //   ],
+  // },
   {
     type: "section",
     text: "Convocatorias",
     defaultExpanded: false,
     items: [
+      {
+        type: "link",
+        text: "Proyecto multidisciplinario",
+        info: <Badge color="red">Cerrada</Badge>,
+        // info: <Badge color="green">Activa</Badge>,
+        // href: "/investigador/convocatoria/picv",
+        href: "#",
+      },
       {
         type: "link",
         text: "Programa para la Inducción en Investigación Científica en Verano",

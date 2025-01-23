@@ -282,7 +282,7 @@ export default function Registro_pmulti_3() {
                 },
                 {
                   title: "Integrantes",
-                  description: "Deben ser integrantes registrados del GI",
+                  description: "Deben ser integrantes registrados de GI",
                   content: (
                     <SpaceBetween size="m">
                       {alert.length > 0 && (
@@ -437,8 +437,21 @@ export default function Registro_pmulti_3() {
                   ),
                 },
                 {
+                  title: "Descripción del proyecto",
+                  description: "Listado de detalles a completar",
+                },
+                {
                   title: "Calendario",
                   description: "Listado de actividades junto al responsable",
+                },
+                {
+                  title: "Presupuesto",
+                  description: "Montos y partidas",
+                },
+                {
+                  title: "Colaboración externa",
+                  description:
+                    "Documento de compromiso del Cooperante Internacional",
                 },
                 {
                   title: "Instrucciones finales",

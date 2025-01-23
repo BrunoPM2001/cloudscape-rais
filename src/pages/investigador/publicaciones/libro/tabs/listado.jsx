@@ -55,6 +55,12 @@ const FILTER_PROPS = [
     operators: stringOperators,
   },
   {
+    propertyLabel: "Filiación UNMSM",
+    key: "filiacion",
+    groupValuesLabel: "filiacion",
+    operators: stringOperators,
+  },
+  {
     propertyLabel: "Estado",
     key: "estado",
     groupValuesLabel: "Estados",
@@ -107,6 +113,26 @@ const columnDefinitions = [
     sortingField: "observaciones_usuario",
   },
   {
+    id: "filiacion",
+    header: "Filiación UNMSM",
+    cell: (item) => (
+      <Badge
+        color={
+          item.filiacion == "No"
+            ? "red"
+            : item.filiacion == "Si"
+            ? "blue"
+            : item.filiacion == "Sin Especificar"
+            ? "grey"
+            : "grey"
+        }
+      >
+        {item.filiacion}
+      </Badge>
+    ),
+    sortingField: "filiacion",
+  },
+  {
     id: "estado",
     header: "Estado",
     cell: (item) => (
@@ -146,6 +172,7 @@ const columnDisplay = [
   { id: "año_publicacion", visible: true },
   { id: "puntaje", visible: true },
   { id: "observaciones_usuario", visible: true },
+  { id: "filiacion", visible: true },
   { id: "estado", visible: true },
 ];
 

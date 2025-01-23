@@ -73,6 +73,7 @@ const columnDefinitions = [
     header: "Título",
     cell: (item) => item.titulo,
     sortingField: "titulo",
+    minWidth: 200,
   },
   {
     id: "tipo_proyecto",
@@ -146,6 +147,7 @@ export default () => {
   const [distributions, setDistribution] = useState([]);
   const {
     items,
+    actions,
     filteredItemsCount,
     collectionProps,
     paginationProps,
@@ -198,7 +200,8 @@ export default () => {
       columnDisplay={columnDisplay}
       loading={loading}
       loadingText="Cargando datos"
-      resizableColumns
+      wrapLines
+      onRowClick={({ detail }) => actions.setSelectedItems([detail.item])}
       enableKeyboardNavigation
       selectionType="single"
       header={
