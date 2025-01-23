@@ -6,6 +6,7 @@ import queryString from "query-string";
 import axiosBase from "../../../../../api/axios";
 import BaseLayout from "../../../components/baseLayout";
 import Miembros from "./tabs/miembros";
+import Proyectos from "./tabs/proyectos";
 
 const breadcrumbs = [
   {
@@ -40,11 +41,11 @@ export default function Detalle_grupo_invest() {
     //     label: "Lineas",
     //     content: <Lineas />,
     //   },
-    //   {
-    //     id: "proyectos",
-    //     label: "Proyectos",
-    //     content: <Proyectos />,
-    //   },
+    {
+      id: "proyectos",
+      label: "Proyectos",
+      content: <Proyectos />,
+    },
     //   {
     //     id: "publicaciones",
     //     label: "Publicaciones",
