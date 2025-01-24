@@ -74,36 +74,42 @@ const columnDefinitions = [
     id: "tipo_proyecto",
     header: "Tipo",
     cell: (item) => item.tipo_proyecto,
+    sortingField: "tipo_proyecto",
     minWidth: 120,
   },
   {
     id: "codigo_proyecto",
     header: "Código",
     cell: (item) => item.codigo_proyecto,
+    sortingField: "codigo_proyecto",
     minWidth: 120,
   },
   {
     id: "titulo",
     header: "Título",
     cell: (item) => item.titulo,
+    sortingField: "titulo",
     minWidth: 250,
   },
   {
     id: "responsable",
     header: "Responsable",
     cell: (item) => item.responsable,
+    sortingField: "responsable",
     minWidth: 200,
   },
   {
     id: "periodo",
     header: "Periodo",
     cell: (item) => item.periodo,
+    sortingField: "periodo",
     minWidth: 100,
   },
   {
     id: "resolucion_rectoral",
     header: "R.R.",
     cell: (item) => item.resolucion_rectoral,
+    sortingField: "resolucion_rectoral",
     minWidth: 100,
   },
   {
@@ -124,6 +130,7 @@ const columnDefinitions = [
         </Badge>
       </Box>
     ),
+    sortingField: "autorizacion_grupo",
     minWidth: 100,
   },
   {
@@ -160,6 +167,7 @@ const columnDefinitions = [
         {item.estado}
       </Badge>
     ),
+    sortingField: "estado",
   },
 ];
 

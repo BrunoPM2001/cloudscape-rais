@@ -93,27 +93,24 @@ export default function Paso4({ info, loading }) {
                 items={[
                   {
                     id: "action_1",
-                    text: "Convenio, contrato o lo que haga sus veces",
+                    text: "Docente",
                   },
                   {
                     id: "action_2",
-                    text: "Proyecto propuesto (última versión aprobada)",
+                    text: "Tesista",
                   },
                   {
                     id: "action_3",
-                    text: "Resolución rectoral (RR)",
+                    text: "Externo",
                   },
                 ]}
                 onItemClick={({ detail }) => {
                   if (detail.id == "action_1") {
-                    setDoc_tipo("D01");
-                    setType("add");
+                    setType("addDo");
                   } else if (detail.id == "action_2") {
-                    setDoc_tipo("D04");
-                    setType("add");
+                    setType("addTe");
                   } else if (detail.id == "action_3") {
-                    setDoc_tipo("D12");
-                    setType("add");
+                    setType("addEx");
                   }
                 }}
               >
