@@ -1,16 +1,11 @@
 import {
-  Badge,
-  Box,
   Button,
   ColumnLayout,
   Container,
   DatePicker,
-  FileUpload,
   FormField,
-  Grid,
   Header,
   Input,
-  Link,
   Select,
   SpaceBetween,
   Spinner,
@@ -20,36 +15,6 @@ import { useFormValidation } from "../../../../../hooks/useFormValidation";
 import { useContext, useEffect, useState } from "react";
 import axiosBase from "../../../../../api/axios";
 import NotificationContext from "../../../../../providers/notificationProvider";
-
-const gridDefinition = [
-  {
-    colspan: {
-      default: 12,
-      l: 3,
-      m: 3,
-      s: 3,
-      xs: 3,
-    },
-  },
-  {
-    colspan: {
-      default: 12,
-      l: 3,
-      m: 3,
-      s: 3,
-      xs: 3,
-    },
-  },
-  {
-    colspan: {
-      default: 12,
-      l: 6,
-      m: 6,
-      s: 6,
-      xs: 6,
-    },
-  },
-];
 
 const initialForm = {
   estado: { value: null, label: "Ninguna" },
@@ -80,7 +45,7 @@ const opt_estado = [
   { value: 9, label: "Duplicado" },
 ];
 
-export default ({ id, reload }) => {
+export default ({ id }) => {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
 
@@ -102,8 +67,12 @@ export default ({ id, reload }) => {
       },
     });
     const data = res.data;
+    setFormValues({
+      ...data,
+      estado: opt_estado.find((opt) => opt.value == data.estado),
+      resolucion_fecha: data.resolucion_fecha ?? "",
+    });
     setLoading(false);
-    reload();
   };
 
   // const reporte = async () => {
@@ -120,38 +89,27 @@ export default ({ id, reload }) => {
   //   window.open(url, "_blank");
   // };
 
-  // const update = async () => {
-  //   console.log(changes);
-  //   if (changes <= 1) {
-  //     if (validateForm()) {
-  //       setUpdating(true);
-  //       const form = new FormData();
-  //       form.append("id", id);
-  //       form.append("validado", formValues.validado?.value ?? null);
-  //       form.append("categoria_id", formValues.categoria_id?.value ?? null);
-  //       form.append("comentario", formValues.comentario);
-  //       form.append("observaciones_usuario", formValues.observaciones_usuario);
-  //       form.append("resolucion", formValues.resolucion);
-  //       form.append("estado", formValues.estado?.value);
-  //       form.append("file", formValues.file[0]);
-  //       form.append("file_comentario", formValues.file_comentario[0]);
-  //       const res = await axiosBase.post(
-  //         "admin/estudios/publicaciones/updateDetalle",
-  //         form
-  //       );
-  //       const data = res.data;
-  //       pushNotification(data.detail, data.message, notifications.length + 1);
-  //       setUpdating(false);
-  //       getData();
-  //     }
-  //   } else {
-  //     pushNotification(
-  //       "No ha guardado los cambios hechos en la pestaña de Detalles",
-  //       "warning",
-  //       notifications.length + 1
-  //     );
-  //   }
-  // };
+  const update = async () => {
+    if (validateForm()) {
+      setUpdating(true);
+      const res = await axiosBase.put(
+        "admin/estudios/proyectosFEX/updateDetalle",
+        {
+          id,
+          codigo_proyecto: formValues.codigo_proyecto,
+          estado: formValues.estado.value,
+          resolucion_rectoral: formValues.resolucion_rectoral,
+          resolucion_fecha: formValues.resolucion_fecha,
+          comentario: formValues.comentario,
+          observaciones_admin: formValues.observaciones_admin,
+        }
+      );
+      const data = res.data;
+      pushNotification(data.detail, data.message, notifications.length + 1);
+      setUpdating(false);
+      getData();
+    }
+  };
 
   useEffect(() => {
     getData();
@@ -166,14 +124,14 @@ export default ({ id, reload }) => {
               {/* <Button loading={loadingBtn} onClick={reporte} disabled={loading}>
                 Reporte
               </Button> */}
-              {/* <Button
+              <Button
                 variant="primary"
                 loading={updating}
                 onClick={update}
                 disabled={loading}
               >
                 Guardar
-              </Button> */}
+              </Button>
             </SpaceBetween>
           }
         >

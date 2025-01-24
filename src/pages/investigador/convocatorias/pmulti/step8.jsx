@@ -97,9 +97,11 @@ export default function Registro_pmulti_8() {
       const info = res.data;
       pushNotification(info.detail, info.message, notifications.length + 1);
       setLoadingBtn(false);
-      setTimeout(() => {
-        window.location.href = "/investigador/convocatoria/pmulti";
-      }, 5000);
+      if (info.message == "info") {
+        setTimeout(() => {
+          window.location.href = "/investigador/convocatoria/pmulti";
+        }, 5000);
+      }
     } else {
       pushNotification(
         "Necesita aceptar los términos",

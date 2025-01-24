@@ -5,9 +5,10 @@ import queryString from "query-string";
 import BaseLayout from "../../../components/baseLayout";
 import axiosBase from "../../../../../api/axios";
 import Detalles from "./detalles";
-// import Proyectos from "./tabs/proyectos";
-// import Autores from "./tabs/autores";
-// import Info from "./tabs/info";
+import Paso1 from "./tabs/paso1";
+import Paso2 from "./tabs/paso2";
+import Paso3 from "./tabs/paso3";
+import Paso4 from "./tabs/paso4";
 
 const breadcrumbs = [
   {
@@ -31,71 +32,57 @@ const breadcrumbs = [
 export default function Detalle_proyectoFEX() {
   //  State
   const [info, setInfo] = useState({
-    proyectos: [],
-    autores: [],
+    paso1: null,
+    paso2: null,
+    paso3: [],
+    paso4: [],
   });
-  const [detalles, setDetalles] = useState({});
   const [loading, setLoading] = useState(true);
-  const [changes, setChanges] = useState(0);
 
   //  Url
   const location = useLocation();
   const { id } = queryString.parse(location.search);
 
   //  Functions
-  // const getData = async () => {
-  //   setLoading(true);
-  //   const res = await axiosBase.get("admin/estudios/publicaciones/getTabs", {
-  //     params: {
-  //       id,
-  //     },
-  //   });
-  //   const data = res.data;
-  //   setDetalles(data.detalle);
-  //   setInfo(data);
-  //   setChanges(0);
-  //   setLoading(false);
-  // };
+  const getData = async () => {
+    setLoading(true);
+    const res = await axiosBase.get("admin/estudios/proyectosFEX/pasos", {
+      params: {
+        id,
+      },
+    });
+    const data = res.data;
+    setInfo(data);
+    setLoading(false);
+  };
 
-  // useEffect(() => {
-  //   getData();
-  // }, []);
+  useEffect(() => {
+    getData();
+  }, []);
 
   //  Tabs
-  // const tabs = [
-  //   {
-  //     id: "detalles",
-  //     label: "Detalles",
-  //     content: (
-  //       <Info
-  //         data={detalles}
-  //         setData={setDetalles}
-  //         loading={loading}
-  //         tipo={info?.tipo}
-  //         reload={getData}
-  //       />
-  //     ),
-  //   },
-  //   {
-  //     id: "proyectos",
-  //     label: "Proyectos",
-  //     content: (
-  //       <Proyectos data={info.proyectos} loading={loading} reload={getData} />
-  //     ),
-  //   },
-  //   {
-  //     id: "autores",
-  //     label: "Autores",
-  //     content: (
-  //       <Autores
-  //         data={info.autores}
-  //         loading={loading}
-  //         tipo={info?.tipo}
-  //         reload={getData}
-  //       />
-  //     ),
-  //   },
-  // ];
+  const tabs = [
+    {
+      id: "paso1",
+      label: "Paso 1",
+      content: <Paso1 data={info.paso1} loading={loading} reload={getData} />,
+    },
+    {
+      id: "paso2",
+      label: "Paso 2",
+      content: <Paso2 data={info.paso2} loading={loading} reload={getData} />,
+    },
+    {
+      id: "paso3",
+      label: "Paso 3",
+      content: <Paso3 info={info.paso3} loading={loading} reload={getData} />,
+    },
+    {
+      id: "paso4",
+      label: "Paso 4",
+      content: <Paso4 info={info.paso4} loading={loading} reload={getData} />,
+    },
+  ];
 
   return (
     <BaseLayout
@@ -105,8 +92,8 @@ export default function Detalle_proyectoFEX() {
       en general."
     >
       <SpaceBetween size="l">
-        <Detalles id={id} changes={changes} />
-        {/* <Tabs tabs={tabs} /> */}
+        <Detalles id={id} />
+        <Tabs tabs={tabs} />
       </SpaceBetween>
     </BaseLayout>
   );
