@@ -75,19 +75,19 @@ export default ({ id }) => {
     setLoading(false);
   };
 
-  // const reporte = async () => {
-  //   setLoadingBtn(true);
-  //   const res = await axiosBase.get("admin/estudios/proyectosFEX/reporte", {
-  //     params: {
-  //       id,
-  //     },
-  //     responseType: "blob",
-  //   });
-  //   setLoadingBtn(false);
-  //   const blob = res.data;
-  //   const url = URL.createObjectURL(blob);
-  //   window.open(url, "_blank");
-  // };
+  const reporte = async () => {
+    setLoadingBtn(true);
+    const res = await axiosBase.get("admin/estudios/proyectosFEX/reporte", {
+      params: {
+        id,
+      },
+      responseType: "blob",
+    });
+    setLoadingBtn(false);
+    const blob = res.data;
+    const url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
+  };
 
   const update = async () => {
     if (validateForm()) {
@@ -121,9 +121,9 @@ export default ({ id }) => {
         <Header
           actions={
             <SpaceBetween size="xs" direction="horizontal">
-              {/* <Button loading={loadingBtn} onClick={reporte} disabled={loading}>
+              <Button loading={loadingBtn} onClick={reporte} disabled={loading}>
                 Reporte
-              </Button> */}
+              </Button>
               <Button
                 variant="primary"
                 loading={updating}
