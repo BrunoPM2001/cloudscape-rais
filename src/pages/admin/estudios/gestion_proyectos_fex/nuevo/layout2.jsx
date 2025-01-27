@@ -116,7 +116,7 @@ export default function Registrar_proyecto_fex_2() {
     if (data.extras) {
       handleChange("resumen", data.extras.resumen);
       handleChange("objetivos", data.extras.objetivos);
-      handleChange("años", data.extras.duracion_annio);
+      handleChange("años", data.extras.duracion_anio);
       handleChange("meses", data.extras.duracion_mes);
       handleChange("dias", data.extras.duracion_dia);
     }

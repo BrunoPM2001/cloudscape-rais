@@ -1,13 +1,13 @@
 import { Box, Spinner } from "@cloudscape-design/components";
 import Psinfinv from "../proyectos/psinfinv";
 import Psinfipu from "../proyectos/psinfipu";
+import Pconfigi from "../proyectos/pconfigi";
 
 const rowT = {
   border: "1px solid #ddd",
   textAlign: "left",
   padding: "8px",
 };
-
 
 export default ({ loading, data }) => {
   return (
@@ -26,13 +26,13 @@ export default ({ loading, data }) => {
           </>
         ) : (
           <>
-
             {data.proyecto.tipo_proyecto === "PSINFINV" ? (
               <Psinfinv data={data} />
             ) : data.proyecto.tipo_proyecto === "PSINFIPU" ? (
               <Psinfipu data={data} />
+            ) : data.proyecto.tipo_proyecto === "PCONFIGI" ? (
+              <Pconfigi data={data} />
             ) : (
-              // <ComponentePorDefecto data={data} />
               <p>Proyecto no reconocido</p>
             )}
             {/* <Psinfinv data={data} /> Uso del componente importado */}
@@ -43,7 +43,7 @@ export default ({ loading, data }) => {
                 marginBottom: "15px",
               }}
             > */}
-              {/* <Box variant="h3">I. Presupuesto</Box>
+            {/* <Box variant="h3">I. Presupuesto</Box>
               <table
                 style={{
                   width: "100%",
@@ -70,7 +70,6 @@ export default ({ loading, data }) => {
                 })}
               </table> */}
             {/* </div> */}
-
           </>
         )}
       </div>

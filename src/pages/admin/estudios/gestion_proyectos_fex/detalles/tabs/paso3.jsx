@@ -24,7 +24,7 @@ export default function Paso3({ info, loading, reload }) {
   const { id } = queryString.parse(location.search);
 
   //  Hooks
-  const { items, collectionProps } = useCollection(info, {
+  const { items, actions, collectionProps } = useCollection(info, {
     sorting: {},
     selection: {},
   });
@@ -96,6 +96,7 @@ export default function Paso3({ info, loading, reload }) {
         items={items}
         loading={loading}
         loadingText="Cargando datos"
+        onRowClick={({ detail }) => actions.setSelectedItems([detail.item])}
         wrapLines
         header={
           <Header

@@ -83,7 +83,7 @@ export default function Paso2({ data, loading, reload }) {
     if (data.extras) {
       handleChange("resumen", data.extras.resumen);
       handleChange("objetivos", data.extras.objetivos);
-      handleChange("años", data.extras.duracion_annio);
+      handleChange("años", data.extras.duracion_anio);
       handleChange("meses", data.extras.duracion_mes);
       handleChange("dias", data.extras.duracion_dia);
     }
