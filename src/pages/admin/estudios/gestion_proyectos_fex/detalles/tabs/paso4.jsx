@@ -5,11 +5,13 @@ import {
   SpaceBetween,
   Table,
 } from "@cloudscape-design/components";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import queryString from "query-string";
 import { useCollection } from "@cloudscape-design/collection-hooks";
 import ModalAgregarDocente from "./components/modalAgregarDocente";
+import ModalEliminarMiembro from "./components/modalEliminarMiembro";
+import ModalAgregarTesista from "./components/modalAgregarTesista";
 
 export default function Paso4({ info, loading, reload }) {
   //  States
@@ -38,9 +40,9 @@ export default function Paso4({ info, loading, reload }) {
             isRowHeader: true,
           },
           {
-            id: "nombres",
+            id: "nombre",
             header: "Nombres",
-            cell: (item) => item.nombres,
+            cell: (item) => item.nombre,
           },
           {
             id: "doc_numero",
@@ -55,7 +57,7 @@ export default function Paso4({ info, loading, reload }) {
         ]}
         columnDisplay={[
           { id: "tipo_integrante", visible: true },
-          { id: "nombres", visible: true },
+          { id: "nombre", visible: true },
           { id: "doc_numero", visible: true },
           { id: "facultad", visible: true },
         ]}
@@ -74,18 +76,12 @@ export default function Paso4({ info, loading, reload }) {
                   disabled={collectionProps.selectedItems.length == 0}
                   items={[
                     {
-                      id: "action_4",
-                      text: "Editar",
-                    },
-                    {
                       id: "action_5",
                       text: "Eliminar",
                     },
                   ]}
                   onItemClick={({ detail }) => {
-                    if (detail.id == "action_4") {
-                      setType("update");
-                    } else if (detail.id == "action_5") {
+                    if (detail.id == "action_5") {
                       setType("delete");
                     }
                   }}
@@ -103,18 +99,12 @@ export default function Paso4({ info, loading, reload }) {
                       id: "action_2",
                       text: "Tesista",
                     },
-                    {
-                      id: "action_3",
-                      text: "Externo",
-                    },
                   ]}
                   onItemClick={({ detail }) => {
                     if (detail.id == "action_1") {
                       setType("addDo");
                     } else if (detail.id == "action_2") {
                       setType("addTe");
-                    } else if (detail.id == "action_3") {
-                      setType("addEx");
                     }
                   }}
                   disabled={loading}
@@ -135,8 +125,26 @@ export default function Paso4({ info, loading, reload }) {
           </Box>
         }
       />
-      {type == "addDo" && (
-        <ModalAgregarDocente close={() => setType("")} reload={reload} />
+      {type == "addDo" ? (
+        <ModalAgregarDocente
+          id={id}
+          close={() => setType("")}
+          reload={reload}
+        />
+      ) : type == "addTe" ? (
+        <ModalAgregarTesista
+          id={id}
+          close={() => setType("")}
+          reload={reload}
+        />
+      ) : (
+        type == "delete" && (
+          <ModalEliminarMiembro
+            id={collectionProps.selectedItems[0].id}
+            close={() => setType("")}
+            reload={reload}
+          />
+        )
       )}
     </>
   );

@@ -10,11 +10,11 @@ import {
   Select,
   SpaceBetween,
 } from "@cloudscape-design/components";
-import { useFormValidation } from "../../../../../../../hooks/useFormValidation";
+import { useFormValidation } from "../../../../../../hooks/useFormValidation";
 import { useContext, useEffect, useState } from "react";
-import NotificationContext from "../../../../../../../providers/notificationProvider";
-import { useAutosuggest } from "../../../../../../../hooks/useAutosuggest";
-import axiosBase from "../../../../../../../api/axios";
+import axiosBase from "../../../../../../api/axios";
+import NotificationContext from "../../../../../../providers/notificationProvider";
+import { useAutosuggest } from "../../../../../../hooks/useAutosuggest";
 
 const initialForm = {
   nombres: "",

@@ -13,7 +13,7 @@ import {
   SpaceBetween,
   Textarea,
 } from "@cloudscape-design/components";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import queryString from "query-string";
 import NotificationContext from "../../../../../../providers/notificationProvider";
@@ -74,6 +74,7 @@ export default ({ visible, setVisible, reload }) => {
 
   //  States
   const [loadingCreate, setLoadingCreate] = useState(false);
+  const [paises, setPaises] = useState([]);
 
   //  Hooks
   const {
@@ -129,6 +130,16 @@ export default ({ visible, setVisible, reload }) => {
       pushNotification(data.detail, data.message, notifications.length + 1);
     }
   };
+
+  const getData = async () => {
+    const res = await axiosBase.get("investigador/grupo/solicitar/getPaises");
+    const data = res.data;
+    setPaises(data);
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   return (
     <Modal
@@ -241,17 +252,8 @@ export default ({ visible, setVisible, reload }) => {
                 onChange={({ detail }) =>
                   handleChange("pais", detail.selectedOption)
                 }
-                options={[
-                  // TODO - LISTA DE PAISES ESTÁTICA O DESDE EL BACKEND
-                  {
-                    label: "Perú",
-                    value: "M",
-                  },
-                  {
-                    label: "Argentina",
-                    value: "F",
-                  },
-                ]}
+                statusType={paises.length ? "finished" : "loading"}
+                options={paises}
               />
             </FormField>
             <FormField

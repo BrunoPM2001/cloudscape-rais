@@ -19,7 +19,7 @@ export default ({ id, reload, close }) => {
   const eliminar = async () => {
     setDeleting(true);
     const res = await axiosBase.delete(
-      "admin/estudios/proyectosFEX/deleteDoc",
+      "admin/estudios/proyectosFEX/eliminarMiembro",
       {
         params: {
           id,
@@ -38,7 +38,7 @@ export default ({ id, reload, close }) => {
       visible
       onDismiss={close}
       size="medium"
-      header="Eliminar documento"
+      header="Eliminar integrante"
       footer={
         <Box float="right">
           <SpaceBetween direction="horizontal" size="xs">
@@ -50,7 +50,7 @@ export default ({ id, reload, close }) => {
         </Box>
       }
     >
-      ¿Está seguro de eliminar este documento?
+      ¿Está seguro de eliminar a esta persona del proyecto?
     </Modal>
   );
 };

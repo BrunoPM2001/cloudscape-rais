@@ -1,12 +1,20 @@
 import {
   Box,
   Button,
+  FormField,
+  Header,
+  Input,
   Modal,
   SpaceBetween,
 } from "@cloudscape-design/components";
+import { useFormValidation } from "../../../../../../hooks/useFormValidation";
 import { useContext, useState } from "react";
-import axiosBase from "../../../../../../../api/axios";
-import NotificationContext from "../../../../../../../providers/notificationProvider";
+import axiosBase from "../../../../../../api/axios";
+import NotificationContext from "../../../../../../providers/notificationProvider";
+
+const formRules = {
+  nombre: { required: true },
+};
 
 export default ({ id, reload, close }) => {
   //  Context

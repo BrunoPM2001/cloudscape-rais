@@ -2,6 +2,7 @@ import {
   Badge,
   Box,
   Button,
+  ButtonDropdown,
   Header,
   Pagination,
   PropertyFilter,
@@ -273,6 +274,7 @@ const columnDisplay = [
 export default () => {
   //  Data states
   const [loading, setLoading] = useState(true);
+  const [loadingBtn, setLoadingBtn] = useState(false);
   const [distributions, setDistribution] = useState([]);
   const {
     items,
@@ -313,6 +315,20 @@ export default () => {
     setLoading(false);
   };
 
+  const reporte = async () => {
+    setLoadingBtn(true);
+    const res = await axiosBase.get("admin/estudios/proyectosFEX/reporte", {
+      params: {
+        id: collectionProps.selectedItems[0].id,
+      },
+      responseType: "blob",
+    });
+    setLoadingBtn(false);
+    const blob = res.data;
+    const url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
+  };
+
   //  Effects
   useEffect(() => {
     getData();
@@ -336,17 +352,32 @@ export default () => {
           counter={"(" + distributions.length + ")"}
           actions={
             <SpaceBetween size="xs" direction="horizontal">
-              <Button
-                onClick={() => {
+              <ButtonDropdown
+                items={[
+                  {
+                    id: "action_1",
+                    text: "Editar",
+                  },
+                  {
+                    id: "action_2",
+                    text: "Reporte",
+                  },
+                ]}
+                onItemClick={({ detail }) => {
                   const query = queryString.stringify({
                     id: collectionProps.selectedItems[0]["id"],
                   });
-                  window.location.href = "proyectos_fex/detalle?" + query;
+                  if (detail.id == "action_1") {
+                    window.location.href = "proyectos_fex/detalle?" + query;
+                  } else if (detail.id == "action_2") {
+                    reporte();
+                  }
                 }}
+                loading={loadingBtn}
                 disabled={loading || !collectionProps.selectedItems.length}
               >
-                Editar
-              </Button>
+                Acciones
+              </ButtonDropdown>
 
               <Button
                 variant="primary"

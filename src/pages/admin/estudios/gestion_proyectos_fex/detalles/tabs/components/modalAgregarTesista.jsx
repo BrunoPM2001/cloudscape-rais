@@ -7,29 +7,19 @@ import {
   FormField,
   Input,
   Modal,
-  Select,
   SpaceBetween,
 } from "@cloudscape-design/components";
 import { useFormValidation } from "../../../../../../../hooks/useFormValidation";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
+import axiosBase from "../../../../../../../api/axios";
 import NotificationContext from "../../../../../../../providers/notificationProvider";
 import { useAutosuggest } from "../../../../../../../hooks/useAutosuggest";
-import axiosBase from "../../../../../../../api/axios";
 
 const initialForm = {
   nombres: "",
   codigo: "",
   doc_numero: "",
-  categoria: "",
-  dependencia: "",
   facultad: "",
-  condicion: null,
-  cti_vitae: "",
-  especialidad: "",
-  titulo_profesional: "",
-  grado: null,
-  instituto: null,
-  codigo_orcid: "",
   email3: "",
   telefono_casa: "",
   telefono_trabajo: "",
@@ -37,17 +27,9 @@ const initialForm = {
 };
 
 const formRules = {
-  condicion: { required: true },
+  doc_numero: { required: true },
   email3: { required: true },
 };
-
-const opt_grados = [
-  { value: "Bachiller" },
-  { value: "Maestro" },
-  { value: "Doctor" },
-  { value: "Msci" },
-  { value: "Phd" },
-];
 
 export default ({ id, close, reload }) => {
   //  Context
@@ -56,28 +38,18 @@ export default ({ id, close, reload }) => {
   //  States
   const [creating, setCreating] = useState(false);
   const [enableCreate, setEnableCreate] = useState(false);
-  const [institutos, setInstitutos] = useState([]);
 
   //  Hooks
   const { loading, options, setOptions, value, setValue, setAvoidSelect } =
-    useAutosuggest("admin/estudios/proyectosFEX/searchDocenteRrhh");
+    useAutosuggest("admin/estudios/proyectosFEX/searchEstudiante");
   const { formValues, formErrors, handleChange, validateForm, setFormValues } =
     useFormValidation(initialForm, formRules);
-
-  //  Functions
-  const getData = async () => {
-    const res = await axiosBase.get(
-      "admin/estudios/proyectosFEX/getInstitutos"
-    );
-    const data = res.data;
-    setInstitutos(data);
-  };
 
   const agregar = async () => {
     if (validateForm()) {
       setCreating(true);
       const res = await axiosBase.post(
-        "admin/estudios/proyectosFEX/agregarDocente",
+        "admin/estudios/proyectosFEX/agregarEstudiante",
         {
           ...formValues,
           id,
@@ -91,16 +63,12 @@ export default ({ id, close, reload }) => {
     }
   };
 
-  useEffect(() => {
-    getData();
-  }, []);
-
   return (
     <Modal
       visible
       onDismiss={close}
       size="medium"
-      header="Agregar miembro docente"
+      header="Agregar miembro tesista"
       footer={
         <Box float="right">
           <SpaceBetween direction="horizontal" size="xs">
@@ -120,7 +88,7 @@ export default ({ id, close, reload }) => {
       }
     >
       <SpaceBetween size="m">
-        <FormField label="Buscar docente investigador" stretch>
+        <FormField label="Buscar estudiante" stretch>
           <Autosuggest
             onChange={({ detail }) => {
               setOptions([]);
@@ -132,14 +100,7 @@ export default ({ id, close, reload }) => {
             onSelect={({ detail }) => {
               if (detail.selectedOption.id != undefined) {
                 const { value, ...rest } = detail.selectedOption;
-                setFormValues({
-                  ...rest,
-                  condicion: null,
-                  grado: opt_grados.find((opt) => opt.value == rest.grado),
-                  instituto: institutos.find(
-                    (opt) => opt.value == rest.instituto_id
-                  ),
-                });
+                setFormValues(rest);
                 setEnableCreate(true);
                 setAvoidSelect(false);
               }
@@ -147,7 +108,7 @@ export default ({ id, close, reload }) => {
             value={value}
             options={options}
             loadingText="Cargando data"
-            placeholder="Dni, código o nombres de docente"
+            placeholder="Dni, código o nombres del estudiante"
             statusType={loading ? "loading" : "finished"}
             empty="No se encontraron resultados"
           />
@@ -158,120 +119,44 @@ export default ({ id, close, reload }) => {
               <ColumnLayout columns={2}>
                 <div>
                   <Box variant="awsui-key-label">Apellidos y nombres</Box>
-                  <div>{formValues?.nombres}</div>
+                  <div>
+                    {`${formValues?.apellido1} ${formValues?.apellido2}, ${formValues.nombres}`}{" "}
+                  </div>
                 </div>
                 <div>
-                  <Box variant="awsui-key-label">Código docente</Box>
+                  <Box variant="awsui-key-label">Código de estudiante</Box>
                   <div>{formValues?.codigo}</div>
-                </div>
-                <div>
-                  <Box variant="awsui-key-label">N° de documento</Box>
-                  <div>{formValues?.doc_numero}</div>
-                </div>
-                <div>
-                  <Box variant="awsui-key-label">Categoria / Clase</Box>
-                  <div>{formValues?.categoria}</div>
-                </div>
-                <div>
-                  <Box variant="awsui-key-label">Dependencia</Box>
-                  <div>{formValues?.dependencia}</div>
                 </div>
                 <div>
                   <Box variant="awsui-key-label">Facultad</Box>
                   <div>{formValues?.facultad}</div>
                 </div>
+                <div>
+                  <Box variant="awsui-key-label">Programa</Box>
+                  <div>{formValues?.programa}</div>
+                </div>
+                <div>
+                  <Box variant="awsui-key-label">Permanencia</Box>
+                  <div>{formValues?.permanencia}</div>
+                </div>
+                <div>
+                  <Box variant="awsui-key-label">
+                    Último periodo matriculado
+                  </Box>
+                  <div>{formValues?.ultimo_periodo_matriculado}</div>
+                </div>
               </ColumnLayout>
             </Alert>
-            <FormField
-              label="Condición"
-              errorText={formErrors.condicion}
-              stretch
-            >
-              <Select
-                selectedOption={formValues.condicion}
-                onChange={({ detail }) =>
-                  handleChange("condicion", detail.selectedOption)
-                }
-                placeholder="Escoja una opción"
-                options={[
-                  { value: 45, label: "Investigador principal" },
-                  { value: 46, label: "Co-Investigador" },
-                  { value: 48, label: "Otros" },
-                  { value: 49, label: "Cordinador administrativo" },
-                  { value: 91, label: "Responsable Técnico" },
-                ]}
-              />
-            </FormField>
-            <ColumnLayout columns={2}>
+            <ColumnLayout columns={3}>
               <FormField
-                label="Cti vitae"
-                errorText={formErrors.cti_vitae}
+                label="N° de documento"
+                errorText={formErrors.doc_numero}
                 stretch
               >
                 <Input
-                  value={formValues.cti_vitae}
+                  value={formValues.doc_numero}
                   onChange={({ detail }) =>
-                    handleChange("cti_vitae", detail.value)
-                  }
-                />
-              </FormField>
-              <FormField
-                label="Especialidad"
-                errorText={formErrors.especialidad}
-                stretch
-              >
-                <Input
-                  value={formValues.especialidad}
-                  onChange={({ detail }) =>
-                    handleChange("especialidad", detail.value)
-                  }
-                />
-              </FormField>
-              <FormField
-                label="Título profesional"
-                errorText={formErrors.titulo_profesional}
-                stretch
-              >
-                <Input
-                  value={formValues.titulo_profesional}
-                  onChange={({ detail }) =>
-                    handleChange("titulo_profesional", detail.value)
-                  }
-                />
-              </FormField>
-              <FormField label="Grado" errorText={formErrors.grado} stretch>
-                <Select
-                  selectedOption={formValues.grado}
-                  onChange={({ detail }) =>
-                    handleChange("grado", detail.selectedOption)
-                  }
-                  placeholder="Escoja una opción"
-                  options={opt_grados}
-                />
-              </FormField>
-              <FormField
-                label="Instituto"
-                errorText={formErrors.instituto}
-                stretch
-              >
-                <Select
-                  selectedOption={formValues.instituto}
-                  onChange={({ detail }) =>
-                    handleChange("instituto", detail.selectedOption)
-                  }
-                  placeholder="Escoja una opción"
-                  options={institutos}
-                />
-              </FormField>
-              <FormField
-                label="Código orcid"
-                errorText={formErrors.codigo_orcid}
-                stretch
-              >
-                <Input
-                  value={formValues.codigo_orcid}
-                  onChange={({ detail }) =>
-                    handleChange("codigo_orcid", detail.value)
+                    handleChange("doc_numero", detail.value)
                   }
                 />
               </FormField>
@@ -287,6 +172,8 @@ export default ({ id, close, reload }) => {
                   }
                 />
               </FormField>
+            </ColumnLayout>
+            <ColumnLayout columns={3} minColumnWidth={150}>
               <FormField
                 label="Teléfono de casa"
                 errorText={formErrors.telefono_casa}
