@@ -232,8 +232,7 @@ const navItems = [
       {
         type: "link",
         text: "Monitoreo",
-        info: <Badge color="grey">En desarrollo</Badge>,
-        href: "#",
+        href: "/investigador/informes/monitoreo",
       },
       {
         type: "link",

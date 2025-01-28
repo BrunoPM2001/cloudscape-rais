@@ -345,12 +345,10 @@ export default function Registro_pconfigi_3() {
                                   placeholder="Escriba las palabras clave"
                                   value={formValues.palabras_clave_input}
                                   onChange={({ detail }) => {
-                                    if (!/.*\s.*/.test(detail.value)) {
-                                      handleChange(
-                                        "palabras_clave_input",
-                                        detail.value
-                                      );
-                                    }
+                                    handleChange(
+                                      "palabras_clave_input",
+                                      detail.value
+                                    );
                                   }}
                                   onKeyDown={({ detail }) => {
                                     if (

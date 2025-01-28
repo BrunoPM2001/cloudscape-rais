@@ -2,6 +2,12 @@ import { Suspense, lazy } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { NotificationProvider } from "../providers/notificationProvider.jsx";
 
+const Monitoreo_detalle = lazy(() =>
+  import("../pages/investigador/informes/monitoreo/detalles/index.jsx")
+);
+const Monitoreo = lazy(() =>
+  import("../pages/investigador/informes/monitoreo/index.jsx")
+);
 const Reporte_constancias = lazy(() =>
   import("../pages/investigador/constancias/reporte_constancias/index.jsx")
 );
@@ -857,6 +863,19 @@ const routes = createBrowserRouter(
             {
               path: "presentar",
               element: <Presentar_informe />,
+            },
+          ],
+        },
+        {
+          path: "monitoreo",
+          children: [
+            {
+              path: "",
+              element: <Monitoreo />,
+            },
+            {
+              path: "detalle",
+              element: <Monitoreo_detalle />,
             },
           ],
         },
