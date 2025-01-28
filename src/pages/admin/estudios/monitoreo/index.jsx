@@ -37,6 +37,7 @@ export default function Monitoreo() {
       helpInfo="Información sobre la páginal actual para poder mostrarla al público
       en general."
       disableOverlap
+      contentType="table"
     >
       <SpaceBetween size="l">
         <Tabs tabs={tabs} ariaLabel="Opciones de monitoreo" />

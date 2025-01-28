@@ -31,27 +31,27 @@ const FILTER_PROPS = [
     operators: stringOperators,
   },
   {
-    propertyLabel: "Estado meta",
+    propertyLabel: "Estado",
+    key: "estado",
+    groupValuesLabel: "Estados",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "Estado de meta",
     key: "estado_meta",
     groupValuesLabel: "Estados de meta",
     operators: stringOperators,
   },
   {
-    propertyLabel: "Tipo de proyecto",
+    propertyLabel: "Tipo",
     key: "tipo_proyecto",
-    groupValuesLabel: "Tipos de proyecto",
+    groupValuesLabel: "Tipos",
     operators: stringOperators,
   },
   {
     propertyLabel: "Periodo",
     key: "periodo",
     groupValuesLabel: "Periodos",
-    operators: stringOperators,
-  },
-  {
-    propertyLabel: "Estado",
-    key: "estado",
-    groupValuesLabel: "Estados",
     operators: stringOperators,
   },
 ];
@@ -62,37 +62,21 @@ const columnDefinitions = [
     header: "ID",
     cell: (item) => item.id,
     sortingField: "id",
-    isRowHeader: true,
+    minWidth: 20,
   },
   {
     id: "codigo_proyecto",
     header: "Código",
     cell: (item) => item.codigo_proyecto,
     sortingField: "codigo_proyecto",
+    minWidth: 150,
   },
   {
     id: "titulo",
     header: "Título",
     cell: (item) => item.titulo,
     sortingField: "titulo",
-  },
-  {
-    id: "estado_meta",
-    header: "Estado de meta",
-    cell: (item) => item.estado_meta,
-    sortingField: "estado_meta",
-  },
-  {
-    id: "tipo_proyecto",
-    header: "Tipo de proyecto",
-    cell: (item) => item.tipo_proyecto,
-    sortingField: "tipo_proyecto",
-  },
-  {
-    id: "periodo",
-    header: "Periodo",
-    cell: (item) => item.periodo,
-    sortingField: "periodo",
+    minWidth: 450,
   },
   {
     id: "estado",
@@ -100,53 +84,95 @@ const columnDefinitions = [
     cell: (item) => (
       <Badge
         color={
-          item.estado == -1
+          item.estado == "Eliminado"
             ? "red"
-            : item.estado == 1
+            : item.estado == "No aprobado"
             ? "grey"
-            : item.estado == 2
-            ? "grey"
-            : item.estado == 4
+            : item.estado == "Aprobado"
             ? "green"
-            : item.estado == 5
-            ? "blue"
-            : item.estado == 6
+            : item.estado == "Observado"
             ? "grey"
+            : item.estado == "En evaluación"
+            ? "blue"
+            : item.estado == "Enviado"
+            ? "blue"
+            : item.estado == "En proceso"
+            ? "grey"
+            : item.estado == "Anulado"
+            ? "red"
+            : item.estado == "Sustentado"
+            ? "blue"
+            : item.estado == "En ejecución"
+            ? "blue"
+            : item.estado == "Ejecutado"
+            ? "green"
+            : item.estado == "Concluido"
+            ? "green"
             : "red"
         }
       >
-        {item.estado == -1
-          ? "Eliminado"
-          : item.estado == 1
-          ? "Reconocido"
-          : item.estado == 2
-          ? "Observado"
-          : item.estado == 4
-          ? "Registrado"
-          : item.estado == 5
-          ? "Enviado"
-          : item.estado == 6
-          ? "En proceso"
-          : "Error"}
+        {item.estado}
       </Badge>
     ),
     sortingField: "estado",
+    minWidth: 150,
+  },
+  {
+    id: "estado_meta",
+    header: "Estado de meta",
+    cell: (item) => (
+      <Badge
+        color={
+          item.estado_meta == "Por presentar"
+            ? "grey"
+            : item.estado_meta == "No aprobado"
+            ? "red"
+            : item.estado_meta == "Aprobado"
+            ? "green"
+            : item.estado_meta == "Observado"
+            ? "severity-medium"
+            : item.estado_meta == "Enviado"
+            ? "blue"
+            : item.estado_meta == "En proceso"
+            ? "severity-low"
+            : "red"
+        }
+      >
+        {item.estado_meta}
+      </Badge>
+    ),
+    sortingField: "estado_meta",
+    minWidth: 150,
+  },
+  {
+    id: "tipo_proyecto",
+    header: "Tipo",
+    cell: (item) => item.tipo_proyecto,
+    sortingField: "tipo_proyecto",
+    minWidth: 180,
+  },
+  {
+    id: "periodo",
+    header: "Periodo",
+    cell: (item) => item.periodo,
+    sortingField: "periodo",
+    minWidth: 50,
   },
 ];
 
 const columnDisplay = [
+  { id: "id", visible: true },
   { id: "codigo_proyecto", visible: true },
   { id: "titulo", visible: true },
+  { id: "estado", visible: true },
   { id: "estado_meta", visible: true },
   { id: "tipo_proyecto", visible: true },
   { id: "periodo", visible: true },
-  { id: "estado", visible: true },
 ];
 
 export default () => {
   //  Data states
   const [loading, setLoading] = useState(true);
-  const [selectedItems, setSelectedItems] = useState([]);
   const [distributions, setDistribution] = useState([]);
   const {
     items,
@@ -174,49 +200,26 @@ export default () => {
       ),
     },
     pagination: { pageSize: 10 },
-    sorting: { defaultState: { sortingColumn: columnDefinitions[0] } },
+    sorting: {},
     selection: {},
   });
-  const [periodoOption, setPeriodoOption] = useState({
-    value: "2024",
-  });
-  const [tipoOption, setTipoOption] = useState({
-    value: "PCONFIGI",
-  });
-  const [estadoOption, setEstadoOption] = useState({
-    value: "5",
-  });
-  const [enableBtn, setEnableBtn] = useState(true);
 
   //  Functions
   const getData = async () => {
     setLoading(true);
     const res = await axiosBase.get(
-      "admin/estudios/monitoreo/listadoProyectos/" +
-        periodoOption.value +
-        "/" +
-        tipoOption.value +
-        "/" +
-        estadoOption.value
+      "admin/estudios/monitoreo/listadoProyectos"
     );
 
-    const data = await res.data;
-    setDistribution(data.data);
+    const data = res.data;
+    setDistribution(data);
     setLoading(false);
   };
 
   //  Effects
   useEffect(() => {
     getData();
-  }, [periodoOption, tipoOption, estadoOption]);
-
-  useEffect(() => {
-    if (selectedItems.length > 0) {
-      setEnableBtn(true);
-    } else {
-      setEnableBtn(false);
-    }
-  }, [selectedItems]);
+  }, []);
 
   return (
     <Table
@@ -227,20 +230,19 @@ export default () => {
       columnDisplay={columnDisplay}
       loading={loading}
       loadingText="Cargando datos"
-      resizableColumns
+      wrapLines
       enableKeyboardNavigation
       selectionType="single"
-      selectedItems={selectedItems}
-      onSelectionChange={({ detail }) => setSelectedItems(detail.selectedItems)}
+      onRowClick={({ detail }) => actions.setSelectedItems([detail.item])}
       header={
         <Header
           actions={
             <Button
-              disabled={!enableBtn}
+              disabled={loading || !collectionProps.selectedItems.length}
               variant="primary"
               onClick={() => {
                 const query = queryString.stringify({
-                  id: selectedItems[0]["id"],
+                  id: collectionProps.selectedItems[0]["id"],
                 });
                 window.location.href = "monitoreo/detalle?" + query;
               }}
@@ -259,61 +261,6 @@ export default () => {
           countText={`${filteredItemsCount} coincidencias`}
           expandToViewport
           virtualScroll
-          customControl={
-            <SpaceBetween direction="horizontal" size="m">
-              <FormField label="Año:">
-                <Select
-                  disabled={loading}
-                  expandToViewport
-                  selectedOption={periodoOption}
-                  onChange={({ detail }) =>
-                    setPeriodoOption(detail.selectedOption)
-                  }
-                  options={[
-                    { value: "2024" },
-                    { value: "2023" },
-                    { value: "2022" },
-                    { value: "2021" },
-                    { value: "2020" },
-                    { value: "2019" },
-                    { value: "2018" },
-                  ]}
-                />
-              </FormField>
-              <FormField label="Tipo de proyecto:">
-                <Select
-                  disabled={loading}
-                  expandToViewport
-                  selectedOption={tipoOption}
-                  onChange={({ detail }) =>
-                    setTipoOption(detail.selectedOption)
-                  }
-                  options={[
-                    { value: "PCONFIGI" },
-                    { value: "ECI" },
-                    { value: "PINVEST" },
-                  ]}
-                />
-              </FormField>
-              <FormField label="Estado de meta:">
-                <Select
-                  disabled={loading}
-                  expandToViewport
-                  selectedOption={estadoOption}
-                  onChange={({ detail }) =>
-                    setEstadoOption(detail.selectedOption)
-                  }
-                  options={[
-                    { value: "5" },
-                    { value: "4" },
-                    { value: "3" },
-                    { value: "2" },
-                    { value: "1" },
-                  ]}
-                />
-              </FormField>
-            </SpaceBetween>
-          }
         />
       }
       pagination={<Pagination {...paginationProps} />}

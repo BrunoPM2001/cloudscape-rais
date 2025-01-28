@@ -1,6 +1,8 @@
 import {
+  Badge,
   Box,
   Button,
+  ButtonDropdown,
   Container,
   Grid,
   Header,
@@ -9,93 +11,96 @@ import {
 } from "@cloudscape-design/components";
 import { useState, useEffect } from "react";
 import axiosBase from "../../../../../api/axios";
+import { useCollection } from "@cloudscape-design/collection-hooks";
+import ModalAddPeriodo from "../components/modalAddPeriodo";
+import ModalAddProyecto from "../components/modalAddProyecto";
+import ModalAddMeta from "../components/modalAddMeta";
+import ModalDeleteMeta from "../components/modalDeleteMeta";
+import ModalEditMeta from "../components/modalEditMeta";
 
 export default () => {
   //  Data states
-  const [loadingPeriodo, setLoadingPeriodo] = useState(true);
-  const [loadingTipoProyecto, setLoadingTipoProyecto] = useState(false);
-  const [loadingPublicaciones, setLoadingPublicaciones] = useState(false);
-  const [metasPeriodo, setMetasPeriodo] = useState([]);
-  const [metasTipoProyecto, setMetasTipoProyecto] = useState([]);
-  const [metasPublicaciones, setMetasPublicaciones] = useState([]);
-  const [selectedPeriodos, setSelectedPeriodos] = useState([]);
-  const [selectedTipoProyecto, setSelectedTipoProyecto] = useState([]);
-  const [selectedPublicaciones, setSelectedPublicaciones] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState([]);
+  const [periodos, setPeriodos] = useState([]);
+  const [tiposProyectos, setTiposProyectos] = useState([]);
+  const [tiposPublicaciones, setTiposPublicaciones] = useState([]);
+  const [type, setType] = useState("");
+
+  //  Hooks
+  const {
+    items: items1,
+    actions: actions1,
+    collectionProps: collectionProps1,
+  } = useCollection(periodos, {
+    sorting: {},
+    selection: {},
+  });
+  const {
+    items: items2,
+    actions: actions2,
+    collectionProps: collectionProps2,
+  } = useCollection(tiposProyectos, {
+    sorting: {},
+    selection: {},
+  });
+  const {
+    items: items3,
+    actions: actions3,
+    collectionProps: collectionProps3,
+  } = useCollection(tiposPublicaciones, {
+    sorting: {},
+    selection: {},
+  });
 
   //  Functions
-  const getPeriodos = async () => {
-    setLoadingPeriodo(true);
-    const res = await axiosBase.get("admin/estudios/monitoreo/listadoPeriodos");
-    const data = await res.data;
-    setMetasPeriodo(data.data);
-    setLoadingPeriodo(false);
-  };
-
-  const getTiposProyecto = async () => {
-    setLoadingTipoProyecto(true);
-    const res = await axiosBase.get(
-      "admin/estudios/monitoreo/listadoTipoProyectos/" + selectedPeriodos[0].id
-    );
-    const data = await res.data;
-    setMetasTipoProyecto(data.data);
-    setLoadingTipoProyecto(false);
-  };
-
-  const getPublicaciones = async () => {
-    setLoadingPublicaciones(true);
-    const res = await axiosBase.get(
-      "admin/estudios/monitoreo/listadoPublicaciones/" +
-        selectedTipoProyecto[0].id
-    );
-    const data = await res.data;
-    setMetasPublicaciones(data.data);
-    setLoadingPublicaciones(false);
+  const getData = async () => {
+    setLoading(true);
+    const res = await axiosBase.get("admin/estudios/monitoreo/listadoMetas");
+    const data = res.data;
+    setData(data);
+    setPeriodos(data.periodos);
+    setTiposProyectos([]);
+    setTiposPublicaciones([]);
+    setLoading(false);
   };
 
   //  Effects
   useEffect(() => {
-    getPeriodos();
+    getData();
   }, []);
-
-  useEffect(() => {
-    getTiposProyecto();
-  }, [selectedPeriodos]);
-
-  useEffect(() => {
-    getPublicaciones();
-  }, [selectedTipoProyecto]);
 
   return (
     <Grid
       gridDefinition={[
         {
           colspan: {
-            l: 6,
+            default: 12,
+            l: 4,
             m: 6,
             s: 6,
-            xs: 12,
           },
         },
         {
           colspan: {
-            l: 6,
+            default: 12,
+            l: 4,
             m: 6,
             s: 6,
-            xs: 12,
           },
         },
         {
           colspan: {
-            l: 12,
-            m: 12,
-            s: 12,
-            xs: 12,
+            default: 12,
+            l: 4,
           },
         },
       ]}
     >
       <Container fitHeight>
         <Table
+          {...collectionProps1}
+          trackBy="id"
           variant="embedded"
           columnDefinitions={[
             {
@@ -106,7 +111,11 @@ export default () => {
             {
               id: "estado",
               header: "Estado",
-              cell: (item) => item.estado,
+              cell: (item) => (
+                <Badge color={item.estado == "Válido" ? "green" : "red"}>
+                  {item.estado}
+                </Badge>
+              ),
             },
             {
               id: "descripcion",
@@ -119,18 +128,18 @@ export default () => {
             { id: "estado", visible: true },
             { id: "descripcion", visible: false },
           ]}
-          trackBy="id"
           enableKeyboardNavigation
-          items={metasPeriodo}
           loadingText="Cargando datos"
-          loading={loadingPeriodo}
-          resizableColumns
+          items={items1}
+          loading={loading}
+          wrapLines
           selectionType="single"
-          selectedItems={selectedPeriodos}
-          onSelectionChange={({ detail }) =>
-            setSelectedPeriodos(detail.selectedItems)
-          }
-          onRowClick={({ detail }) => setSelectedPeriodos([detail.item])}
+          onRowClick={({ detail }) => {
+            actions1.setSelectedItems([detail.item]);
+            setTiposProyectos(
+              data.tipos.filter((opt) => opt.meta_periodo_id == detail.item.id)
+            );
+          }}
           empty={
             <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
               <SpaceBetween size="m">
@@ -144,7 +153,8 @@ export default () => {
               actions={
                 <Button
                   variant="primary"
-                  onClick={() => console.log("clicked")}
+                  disabled={loading}
+                  onClick={() => setType("addPeriodo")}
                 >
                   Agregar periodo
                 </Button>
@@ -157,6 +167,7 @@ export default () => {
       </Container>
       <Container fitHeight>
         <Table
+          {...collectionProps2}
           variant="embedded"
           columnDefinitions={[
             {
@@ -167,7 +178,11 @@ export default () => {
             {
               id: "estado",
               header: "Estado",
-              cell: (item) => item.estado,
+              cell: (item) => (
+                <Badge color={item.estado == "Válido" ? "green" : "red"}>
+                  {item.estado}
+                </Badge>
+              ),
             },
           ]}
           columnDisplay={[
@@ -176,16 +191,19 @@ export default () => {
           ]}
           trackBy="id"
           enableKeyboardNavigation
-          items={metasTipoProyecto}
           loadingText="Cargando datos"
-          loading={loadingTipoProyecto}
-          resizableColumns
+          items={items2}
+          loading={loading}
+          wrapLines
           selectionType="single"
-          selectedItems={selectedTipoProyecto}
-          onSelectionChange={({ detail }) =>
-            setSelectedTipoProyecto(detail.selectedItems)
-          }
-          onRowClick={({ detail }) => setSelectedTipoProyecto([detail.item])}
+          onRowClick={({ detail }) => {
+            actions2.setSelectedItems([detail.item]);
+            setTiposPublicaciones(
+              data.publicaciones.filter(
+                (opt) => opt.meta_tipo_proyecto_id == detail.item.id
+              )
+            );
+          }}
           empty={
             <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
               <SpaceBetween size="m">
@@ -199,7 +217,8 @@ export default () => {
               actions={
                 <Button
                   variant="primary"
-                  onClick={() => console.log("clicked")}
+                  disabled={loading || !collectionProps1.selectedItems.length}
+                  onClick={() => setType("addProyecto")}
                 >
                   Agregar proyecto
                 </Button>
@@ -210,61 +229,123 @@ export default () => {
           }
         />
       </Container>
-      <Table
-        columnDefinitions={[
-          {
-            id: "tipo_publicacion",
-            header: "Tipo de publicacion",
-            cell: (item) => item.tipo_publicacion,
-          },
-          {
-            id: "cantidad",
-            header: "Cantidad",
-            cell: (item) => item.cantidad,
-          },
-          {
-            id: "estado",
-            header: "Estado",
-            cell: (item) => item.estado,
-          },
-        ]}
-        columnDisplay={[
-          { id: "tipo_publicacion", visible: true },
-          { id: "cantidad", visible: true },
-          { id: "estado", visible: true },
-        ]}
-        trackBy="id"
-        enableKeyboardNavigation
-        items={metasPublicaciones}
-        loadingText="Cargando datos"
-        loading={loadingPublicaciones}
-        resizableColumns
-        selectionType="single"
-        selectedItems={selectedPublicaciones}
-        onSelectionChange={({ detail }) =>
-          setSelectedPublicaciones(detail.selectedItems)
-        }
-        onRowClick={({ detail }) => setSelectedPublicaciones([detail.item])}
-        empty={
-          <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
-            <SpaceBetween size="m">
-              <b>No hay registros...</b>
-            </SpaceBetween>
-          </Box>
-        }
-        header={
-          <Header
-            variant="h3"
-            actions={
-              <Button variant="primary" onClick={() => console.log("clicked")}>
-                Agregar meta
-              </Button>
-            }
-          >
-            Publicaciones
-          </Header>
-        }
-      />
+      <Container fitHeight>
+        <Table
+          {...collectionProps3}
+          variant="embedded"
+          columnDefinitions={[
+            {
+              id: "tipo_publicacion",
+              header: "Tipo de publicacion",
+              cell: (item) => item.tipo_publicacion,
+            },
+            {
+              id: "cantidad",
+              header: "Cantidad",
+              cell: (item) => item.cantidad,
+            },
+            {
+              id: "estado",
+              header: "Estado",
+              cell: (item) => (
+                <Badge color={item.estado == "Válido" ? "green" : "red"}>
+                  {item.estado}
+                </Badge>
+              ),
+            },
+          ]}
+          columnDisplay={[
+            { id: "tipo_publicacion", visible: true },
+            { id: "cantidad", visible: true },
+            { id: "estado", visible: true },
+          ]}
+          trackBy="id"
+          enableKeyboardNavigation
+          items={items3}
+          loadingText="Cargando datos"
+          loading={loading}
+          wrapLines
+          selectionType="single"
+          onRowClick={({ detail }) => actions3.setSelectedItems([detail.item])}
+          empty={
+            <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
+              <SpaceBetween size="m">
+                <b>No hay registros...</b>
+              </SpaceBetween>
+            </Box>
+          }
+          header={
+            <Header
+              variant="h3"
+              actions={
+                <SpaceBetween size="xs" direction="horizontal">
+                  <ButtonDropdown
+                    items={[
+                      {
+                        id: "action_1",
+                        text: "Editar",
+                      },
+                      {
+                        id: "action_2",
+                        text: "Eliminar",
+                      },
+                    ]}
+                    onItemClick={({ detail }) => {
+                      if (detail.id == "action_1") {
+                        setType("editMeta");
+                      } else if (detail.id == "action_2") {
+                        setType("deleteMeta");
+                      }
+                    }}
+                    disabled={loading || !collectionProps3.selectedItems.length}
+                    expandToViewport
+                  >
+                    Acciones
+                  </ButtonDropdown>
+                  <Button
+                    variant="primary"
+                    disabled={loading || !collectionProps2.selectedItems.length}
+                    onClick={() => setType("addMeta")}
+                  >
+                    Agregar meta
+                  </Button>
+                </SpaceBetween>
+              }
+            >
+              Publicaciones
+            </Header>
+          }
+        />
+      </Container>
+      {type == "addPeriodo" ? (
+        <ModalAddPeriodo close={() => setType("")} reload={getData} />
+      ) : type == "addProyecto" ? (
+        <ModalAddProyecto
+          close={() => setType("")}
+          reload={getData}
+          id={collectionProps1?.selectedItems[0].id}
+        />
+      ) : type == "addMeta" ? (
+        <ModalAddMeta
+          close={() => setType("")}
+          reload={getData}
+          id={collectionProps2?.selectedItems[0].id}
+        />
+      ) : type == "editMeta" ? (
+        <ModalEditMeta
+          close={() => setType("")}
+          reload={getData}
+          item={collectionProps3?.selectedItems[0]}
+        />
+      ) : (
+        type == "deleteMeta" && (
+          <ModalDeleteMeta
+            close={() => setType("")}
+            reload={getData}
+            id={collectionProps3.selectedItems[0].id}
+          />
+        )
+      )}
     </Grid>
   );
 };

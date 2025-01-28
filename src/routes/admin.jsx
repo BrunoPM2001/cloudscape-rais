@@ -2,6 +2,9 @@ import { Suspense, lazy } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { NotificationProvider } from "../providers/notificationProvider";
 
+const Monitoreo_detalles = lazy(() =>
+  import("../pages/admin/estudios/monitoreo/detalles/index.jsx")
+);
 const Registrar_proyecto_fex_4 = lazy(() =>
   import("../pages/admin/estudios/gestion_proyectos_fex/nuevo/layout4.jsx")
 );
@@ -113,9 +116,6 @@ const Informes_tecnicos = lazy(() =>
 );
 const Monitoreo = lazy(() =>
   import("../pages/admin/estudios/monitoreo/index.jsx")
-);
-const Detalle_monitoreo = lazy(() =>
-  import("../pages/admin/estudios/monitoreo/detalles/index.jsx")
 );
 const Deudas_proyectos = lazy(() =>
   import("../pages/admin/estudios/deudas_proyectos/index.jsx")
@@ -308,7 +308,7 @@ const routes = createBrowserRouter(
             },
             {
               path: "detalle",
-              element: <Detalle_monitoreo />,
+              element: <Monitoreo_detalles />,
             },
           ],
         },

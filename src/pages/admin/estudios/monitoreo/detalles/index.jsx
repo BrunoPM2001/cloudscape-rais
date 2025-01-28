@@ -1,12 +1,22 @@
-import { SpaceBetween, Tabs } from "@cloudscape-design/components";
-import Publicaciones from "./tabs/publicaciones";
-import Extras from "./tabs/extras";
-import Detalles from "./detalles";
+import {
+  Button,
+  Form,
+  FormField,
+  Grid,
+  SpaceBetween,
+  Tabs,
+  Textarea,
+} from "@cloudscape-design/components";
 import { useLocation } from "react-router-dom";
-import { useEffect, useState } from "react";
-import queryString from "query-string";
+import { useContext, useEffect, useState } from "react";
 import BaseLayout from "../../../components/baseLayout";
 import axiosBase from "../../../../../api/axios";
+import queryString from "query-string";
+import Detalle from "./detalle";
+import Metas from "./metas";
+import Publicaciones from "./tabs/publicaciones";
+import { useFormValidation } from "../../../../../hooks/useFormValidation";
+import NotificationContext from "../../../../../providers/notificationProvider";
 
 const breadcrumbs = [
   {
@@ -15,7 +25,6 @@ const breadcrumbs = [
   },
   {
     text: "Estudios",
-    href: "#",
   },
   {
     text: "Monitoreo",
@@ -23,43 +32,107 @@ const breadcrumbs = [
   },
   {
     text: "Detalle",
-    href: "#",
   },
 ];
 
-export default function Detalle_monitoreo() {
-  //  State
+const gridDefinition = [
+  {
+    colspan: {
+      default: 12,
+      l: 7,
+      m: 7,
+      s: 7,
+    },
+  },
+  {
+    colspan: {
+      default: 12,
+      l: 5,
+      m: 5,
+      s: 5,
+    },
+  },
+];
+
+const initialForm = {
+  descripcion: "",
+};
+
+export default function Monitoreo_detalles() {
+  //  Context
+  const { notifications, pushNotification } = useContext(NotificationContext);
+
+  //  States
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(true);
+  const [loadingBtn, setLoadingBtn] = useState(false);
+
+  //  Url
+  const location = useLocation();
+  const { id } = queryString.parse(location.search);
+
+  //  Hooks
+  const { formValues, formErrors, handleChange, validateForm, setFormValues } =
+    useFormValidation(initialForm, {});
+
+  //  Functions
+  const getData = async () => {
+    setLoading(true);
+    const res = await axiosBase.get("admin/estudios/monitoreo/detalles", {
+      params: {
+        id,
+      },
+    });
+    const data = res.data;
+    handleChange("descripcion", res.data.datos.descripcion);
+    setData(data);
+    setLoading(false);
+  };
+
+  const remitir = async () => {
+    setLoadingBtn(true);
+    const res = await axiosBase.post(
+      "investigador/informes/monitoreo/remitir",
+      {
+        proyecto_id: id,
+        descripcion: formValues.descripcion,
+      }
+    );
+    const data = res.data;
+    pushNotification(data.detail, data.message, notifications.length + 1);
+    setLoadingBtn(false);
+    getData();
+  };
+
+  const reporte = async () => {
+    setLoadingBtn(true);
+    const res = await axiosBase.get("admin/estudios/monitoreo/reporte", {
+      params: {
+        id,
+      },
+      responseType: "blob",
+    });
+    setLoadingBtn(false);
+    const blob = await res.data;
+    const url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
+  };
 
   //  Tabs
   const tabs = [
     {
       id: "publicaciones",
       label: "Publicaciones",
-      content: <Publicaciones />,
-    },
-    {
-      id: "extras",
-      label: "Extras",
-      content: <Extras data={data} loading={loading} />,
+      content: (
+        <Publicaciones
+          data={data.publicaciones ?? []}
+          loading={loading}
+          reload={getData}
+          disabledBtn={data?.datos?.estado_meta == "Enviado"}
+        />
+      ),
     },
   ];
-
-  //  Url
-  const location = useLocation();
-  const { id } = queryString.parse(location.search);
-
-  //  Functions
-  const getData = async () => {
-    setLoading(true);
-    const res = await axiosBase.get(
-      "admin/estudios/monitoreo/detalleProyecto/" + id
-    );
-    const data = await res.data;
-    setData(data.data[0]);
-    setLoading(false);
-  };
 
   useEffect(() => {
     getData();
@@ -68,13 +141,48 @@ export default function Detalle_monitoreo() {
   return (
     <BaseLayout
       breadcrumbs={breadcrumbs}
-      header="Detalle de proyecto con metas:"
-      helpInfo="Información sobre la páginal actual para poder mostrarla al público
-      en general."
+      header="Detalle"
+      helpInfo="Resumen general del informe económico de un proyecto."
     >
-      <SpaceBetween size="l">
-        <Detalles data={data} loading={loading} id={id} />
-        <Tabs tabs={tabs} ariaLabel="Opciones de proyecto con metas" />
+      <SpaceBetween size="m">
+        <Grid gridDefinition={gridDefinition}>
+          <Detalle loading={loading} data={data.datos} />
+          <Metas loading={loading} data={data.metas} />
+        </Grid>
+        <Tabs tabs={tabs} />
+        <Form
+          actions={
+            <>
+              {data?.datos?.estado_meta == "Por presentar" ? (
+                <Button
+                  variant="primary"
+                  onClick={remitir}
+                  loading={loadingBtn}
+                >
+                  Remitir monitoreo
+                </Button>
+              ) : (
+                data?.datos?.estado_meta == "Enviado" && (
+                  <Button onClick={reporte} loading={loadingBtn}>
+                    Reporte
+                  </Button>
+                )
+              )}
+            </>
+          }
+        >
+          <FormField label="Descripción o comentarios del monitoreo" stretch>
+            <Textarea
+              readOnly={data?.datos?.estado_meta == "Enviado"}
+              value={formValues.descripcion}
+              disabled={loading}
+              loading={loadingBtn}
+              onChange={({ detail }) =>
+                handleChange("descripcion", detail.value)
+              }
+            />
+          </FormField>
+        </Form>
       </SpaceBetween>
     </BaseLayout>
   );
