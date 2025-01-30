@@ -113,24 +113,21 @@ const columnDefinitions = [
     cell: (item) => item.id,
     sortingField: "id",
     isRowHeader: true,
+    maxWidth: 100,
   },
   {
     id: "codigo_registro",
     header: "Código de registro",
     cell: (item) => item.codigo_registro,
     sortingField: "codigo_registro",
-  },
-  {
-    id: "codigo_proyecto",
-    header: "Código",
-    cell: (item) => item.codigo_proyecto,
-    sortingField: "codigo_proyecto",
+    minWidth: 130,
   },
   {
     id: "tipo",
     header: "Tipo",
     cell: (item) => item.tipo,
     sortingField: "tipo",
+    minWidth: 120,
   },
   {
     id: "tipo_patente",
@@ -139,17 +136,17 @@ const columnDefinitions = [
     sortingField: "tipo_patente",
   },
   {
-    id: "isbn",
-    header: "Isbn",
-    cell: (item) => item.isbn,
-    sortingField: "isbn",
-  },
-  {
     id: "titulo",
     header: "Título",
     cell: (item) => item.titulo,
     minWidth: 400,
     sortingField: "titulo",
+  },
+  {
+    id: "isbn",
+    header: "Isbn",
+    cell: (item) => item.isbn,
+    sortingField: "isbn",
   },
   {
     id: "issn",
@@ -333,7 +330,6 @@ export default () => {
         columnDisplay={columnDisplay}
         loading={loadingData}
         loadingText="Cargando datos"
-        resizableColumns
         enableKeyboardNavigation
         selectionType="single"
         onRowClick={({ detail }) => actions.setSelectedItems([detail.item])}

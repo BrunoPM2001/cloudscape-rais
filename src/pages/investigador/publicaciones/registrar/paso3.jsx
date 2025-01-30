@@ -128,8 +128,8 @@ export default function ({
         { text: "Asesor / co-asesor externo", id: "action_2_3" },
       ]);
     } else if (tipo == "tesis_asesoria") {
-      setOptAutor([{ value: "Tesista" }]);
       setTipoAutor([
+        { text: "Asesor / co-asesor docente UNMSM", id: "action_2_1" },
         { text: "Agregar autor estudiante UNMSM", id: "action_2_2" },
       ]);
     }
@@ -188,9 +188,15 @@ export default function ({
                   variant="primary"
                   onItemClick={({ detail }) => {
                     if (detail.id == "action_2_1") {
+                      if (tipo == "tesis_asesoria") {
+                        setOptAutor([{ value: "Asesor" }]);
+                      }
                       setTypeModal("add_docente");
                       setVisible(true);
                     } else if (detail.id == "action_2_2") {
+                      if (tipo == "tesis_asesoria") {
+                        setOptAutor([{ value: "Tesista" }]);
+                      }
                       setTypeModal("add_estudiante");
                       setVisible(true);
                     } else if (detail.id == "action_2_3") {

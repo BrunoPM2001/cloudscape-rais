@@ -250,7 +250,6 @@ export default () => {
         columnDisplay={columnDisplay}
         loading={loading}
         loadingText="Cargando datos"
-        resizableColumns
         enableKeyboardNavigation
         selectionType="single"
         wrapLines

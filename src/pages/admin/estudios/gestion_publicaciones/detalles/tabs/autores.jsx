@@ -306,8 +306,14 @@ export default function ({ data, loading, tipo, reload }) {
                   variant="primary"
                   onItemClick={({ detail }) => {
                     if (detail.id == "action_2_1") {
+                      if (tipo == "tesis-asesoria") {
+                        setOptAutor([{ value: "Asesor" }]);
+                      }
                       setType("add_docente");
                     } else if (detail.id == "action_2_2") {
+                      if (tipo == "tesis-asesoria") {
+                        setOptAutor([{ value: "Tesista" }]);
+                      }
                       setType("add_estudiante");
                     } else if (detail.id == "action_2_3") {
                       setType("add_externo");

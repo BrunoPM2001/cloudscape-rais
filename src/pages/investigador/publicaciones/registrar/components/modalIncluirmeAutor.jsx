@@ -13,12 +13,17 @@ import {
   Table,
   TokenGroup,
 } from "@cloudscape-design/components";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axiosBase from "../../../../../api/axios";
+import NotificationContext from "../../../../../providers/notificationProvider";
 
 export default ({ id, close }) => {
+  //  Context
+  const { notifications, pushNotification } = useContext(NotificationContext);
+
   //  States
   const [loadingData, setLoadingData] = useState(true);
+  const [loadingBtn, setLoadingBtn] = useState(false);
   const [data, setData] = useState({});
 
   //  Functions
@@ -36,6 +41,20 @@ export default ({ id, close }) => {
     setLoadingData(false);
   };
 
+  const solicitar = async () => {
+    setLoadingBtn(true);
+    const res = await axiosBase.post(
+      "investigador/publicaciones/utils/solicitarInclusion",
+      {
+        id,
+      }
+    );
+    const data = res.data;
+    setLoadingBtn(false);
+    close();
+    pushNotification(data.detail, data.message, notifications.length + 1);
+  };
+
   useEffect(() => {
     getData();
   }, []);
@@ -48,9 +67,19 @@ export default ({ id, close }) => {
       header={<Header>Solicitar ser incluído como autor</Header>}
       footer={
         <Box float="right">
-          <Button variant="normal" onClick={close}>
-            Cerrar
-          </Button>
+          <SpaceBetween size="xs" direction="horizontal">
+            <Button variant="normal" onClick={close}>
+              Cerrar
+            </Button>
+            <Button
+              variant="primary"
+              onClick={solicitar}
+              disabled={loadingData}
+              loading={loadingBtn}
+            >
+              Solicitar inclusión
+            </Button>
+          </SpaceBetween>
         </Box>
       }
     >
