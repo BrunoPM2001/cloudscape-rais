@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  ButtonDropdown,
   ColumnLayout,
   Container,
   Header,
@@ -35,6 +36,20 @@ export default ({ data, loading, proyecto_id, reload }) => {
     window.open(url, "_blank");
   };
 
+  const exportPdf = async () => {
+    setLoadingReporte(true);
+    const res = await axiosBase.get("admin/estudios/proyectosGrupo/reporte", {
+      params: {
+        proyecto_id,
+      },
+      responseType: "blob",
+    });
+    setLoadingReporte(false);
+    const blob = res.data;
+    const url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
+  };
+
   return (
     <Container
       header={
@@ -42,13 +57,29 @@ export default ({ data, loading, proyecto_id, reload }) => {
           variant="h2"
           actions={
             <SpaceBetween size="s" direction="horizontal">
-              <Button
+              <ButtonDropdown
+                items={[
+                  {
+                    id: "action_1",
+                    text: "Word",
+                  },
+                  {
+                    id: "action_2",
+                    text: "Pdf",
+                  },
+                ]}
+                onItemClick={({ detail }) => {
+                  if (detail.id == "action_1") {
+                    exportWord();
+                  } else if (detail.id == "action_2") {
+                    exportPdf();
+                  }
+                }}
                 disabled={loading}
                 loading={loadingReporte}
-                onClick={exportWord}
               >
-                Exportar descripción a word
-              </Button>
+                Exportar descripción
+              </ButtonDropdown>
               <Button
                 variant="primary"
                 disabled={loading}

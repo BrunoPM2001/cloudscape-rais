@@ -405,7 +405,7 @@ export default () => {
                         collectionProps.selectedItems[0].tipo_proyecto,
                       tipo_informe: selectedItems[0]["informe"],
                     });
-                    window.location.href = "informes_tecnicos/detalle?" + query;
+                    window.open("informes_tecnicos/detalle?" + query, "_blank");
                   }}
                 >
                   Editar informe

@@ -48,7 +48,7 @@ const initialForm = {
 };
 
 const formRules = {
-  doi: { required: true, regex: /^10/ },
+  doi: { required: true, regex: /^\s*10/ },
   art_tipo: { required: true },
   titulo: { required: true },
   palabras_clave: { required: true, noEmpty: true },
@@ -209,6 +209,10 @@ export default forwardRef(function (props, ref) {
                     <Box variant="small">Colocar solo el código, ejemplo: </Box>{" "}
                     <Box variant="small" color="text-status-info">
                       10.47366/sabia.v5n1a3
+                    </Box>{" "}
+                    <Box variant="small">
+                      En caso de no contar con DOI escriba 10 seguido de la URL
+                      de la publicación
                     </Box>
                   </>
                 }
