@@ -100,7 +100,7 @@ export default ({ id, changes, reload }) => {
   //  Functions
   const getData = async () => {
     setLoading(true);
-    const res = await axiosBase.get("admin/estudios/publicaciones/detalle", {
+    const res = await axiosBase.get("admin/estudios/patentes/detalle", {
       params: {
         id,
       },

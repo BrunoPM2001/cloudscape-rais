@@ -406,7 +406,8 @@ export default () => {
                       });
                       //  Redirigir a patentes
                       if (
-                        collectionProps.selectedItems[0]["tipo"] == "Patente"
+                        collectionProps.selectedItems[0]["tipo"] ==
+                        "Propiedad intelectual"
                       ) {
                         window.location.href =
                           "gestion_publicaciones/patente?" + query;
