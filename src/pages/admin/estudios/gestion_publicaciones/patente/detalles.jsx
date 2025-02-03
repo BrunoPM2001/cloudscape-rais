@@ -4,6 +4,7 @@ import {
   Button,
   ColumnLayout,
   Container,
+  DatePicker,
   FileUpload,
   FormField,
   Grid,
@@ -20,57 +21,25 @@ import { useContext, useEffect, useState } from "react";
 import axiosBase from "../../../../../api/axios";
 import NotificationContext from "../../../../../providers/notificationProvider";
 
-const gridDefinition = [
-  {
-    colspan: {
-      default: 12,
-      l: 3,
-      m: 3,
-      s: 3,
-      xs: 3,
-    },
-  },
-  {
-    colspan: {
-      default: 12,
-      l: 3,
-      m: 3,
-      s: 3,
-      xs: 3,
-    },
-  },
-  {
-    colspan: {
-      default: 12,
-      l: 6,
-      m: 6,
-      s: 6,
-      xs: 6,
-    },
-  },
-];
-
 const initialForm = {
-  validado: null,
-  categoria_id: null,
+  nro_registro: "",
+  estado: null,
+  titulo: "",
+  tipo: null,
+  nro_expediente: "",
+  fecha_presentacion: "",
+  oficina_presentacion: "",
+  enlace: "",
+  url: "",
   comentario: "",
   observaciones_usuario: "",
-  resolucion: "",
-  fecha_inscripcion: { value: 1, label: "Sí" },
-  estado: { value: null, label: "Ninguna" },
   file: [],
-  file_comentario: [],
 };
 
 const formRules = {
   validado: { required: true },
   estado: { required: true },
 };
-
-const opt_validado = [
-  { value: 0, label: "No" },
-  { value: 1, label: "Sí" },
-];
 
 const opt_estado = [
   { value: -1, label: "Eliminado" },
@@ -83,7 +52,13 @@ const opt_estado = [
   { value: 9, label: "Duplicado" },
 ];
 
-export default ({ id, changes, reload }) => {
+const opt_tipo = [
+  { value: "Patente de invención" },
+  { value: "Modelo de utilidad" },
+  { value: "Certificado de obtentor" },
+];
+
+export default ({ id }) => {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
 
@@ -91,7 +66,6 @@ export default ({ id, changes, reload }) => {
   const [loading, setLoading] = useState(true);
   const [loadingBtn, setLoadingBtn] = useState(false);
   const [updating, setUpdating] = useState(false);
-  const [opt_categoria, setOpt_categoria] = useState(true);
 
   //  Hooks
   const { formValues, formErrors, handleChange, validateForm, setFormValues } =
@@ -106,31 +80,23 @@ export default ({ id, changes, reload }) => {
       },
     });
     const data = res.data;
-    setOpt_categoria(data.categorias);
     setFormValues({
-      ...data.data,
-      comentario: data.data.comentario ?? "",
-      observaciones_usuario: data.data.observaciones_usuario ?? "",
-      resolucion: data.data.resolucion ?? "",
-      codigo_registro: data.data.codigo_registro ?? "No tiene código",
-      validado: opt_validado.find((opt) => opt.value == data.data.validado),
-      estado: opt_estado.find((opt) => opt.value == data.data.estado),
-      categoria_id:
-        data.categorias.find((opt) => opt.value == data.data.categoria_id) ||
-        null,
+      ...data,
+      comentario: data.comentario ?? "",
+      observaciones_usuario: data.observaciones_usuario ?? "",
+      fecha_presentacion: data.fecha_presentacion ?? "",
+      tipo: opt_tipo.find((opt) => opt.value == data.tipo),
+      estado: opt_estado.find((opt) => opt.value == data.estado),
       file: [],
-      file_comentario: [],
     });
     setLoading(false);
-    reload();
   };
 
   const reporte = async () => {
     setLoadingBtn(true);
-    const res = await axiosBase.get("admin/estudios/publicaciones/reporte", {
+    const res = await axiosBase.get("admin/estudios/patentes/reporte", {
       params: {
-        id: id,
-        tipo: formValues.tipo_publicacion,
+        id,
       },
       responseType: "blob",
     });
@@ -141,35 +107,35 @@ export default ({ id, changes, reload }) => {
   };
 
   const update = async () => {
-    console.log(changes);
-    if (changes <= 1) {
-      if (validateForm()) {
-        setUpdating(true);
-        const form = new FormData();
-        form.append("id", id);
-        form.append("validado", formValues.validado?.value ?? null);
-        form.append("categoria_id", formValues.categoria_id?.value ?? null);
-        form.append("comentario", formValues.comentario);
-        form.append("observaciones_usuario", formValues.observaciones_usuario);
-        form.append("resolucion", formValues.resolucion);
-        form.append("estado", formValues.estado?.value);
-        form.append("file", formValues.file[0]);
-        form.append("file_comentario", formValues.file_comentario[0]);
-        const res = await axiosBase.post(
-          "admin/estudios/publicaciones/updateDetalle",
-          form
-        );
-        const data = res.data;
-        pushNotification(data.detail, data.message, notifications.length + 1);
-        setUpdating(false);
-        getData();
-      }
-    } else {
-      pushNotification(
-        "No ha guardado los cambios hechos en la pestaña de Detalles",
-        "warning",
-        notifications.length + 1
+    if (validateForm()) {
+      setUpdating(true);
+      const form = new FormData();
+      form.append("id", id);
+      form.append("nro_registro", formValues.nro_registro ?? "");
+      form.append("estado", formValues.estado.value);
+      form.append("titulo", formValues.titulo ?? "");
+      form.append("tipo", formValues.tipo.value);
+      form.append("nro_expediente", formValues.nro_expediente ?? "");
+      form.append("fecha_presentacion", formValues.fecha_presentacion ?? "");
+      form.append(
+        "oficina_presentacion",
+        formValues.oficina_presentacion ?? ""
       );
+      form.append("enlace", formValues.enlace ?? "");
+      form.append("comentario", formValues.comentario ?? "");
+      form.append(
+        "observaciones_usuario",
+        formValues.observaciones_usuario ?? ""
+      );
+      form.append("file", formValues.file[0]);
+      const res = await axiosBase.post(
+        "admin/estudios/patentes/updateDetalle",
+        form
+      );
+      const data = res.data;
+      pushNotification(data.detail, data.message, notifications.length + 1);
+      setUpdating(false);
+      getData();
     }
   };
 
@@ -197,7 +163,7 @@ export default ({ id, changes, reload }) => {
           {!loading && (
             <SpaceBetween size="xxs" alignItems="center" direction="horizontal">
               <Box variant="h2">Datos generales</Box>
-              <Badge color="green">{formValues.tipo}</Badge>
+              <Badge color="green">Propiedad intelectual</Badge>
               <Badge color="blue">{formValues.id}</Badge>
               <Badge color="grey">{formValues.estado_text}</Badge>
             </SpaceBetween>
@@ -211,9 +177,90 @@ export default ({ id, changes, reload }) => {
         </>
       ) : (
         <SpaceBetween size="m">
-          <FormField label="N° de registro">
-            <Input value={formValues.codigo_registro} disabled />
-          </FormField>
+          <ColumnLayout columns={2}>
+            <FormField
+              label="N° de registro"
+              errorText={formErrors.nro_registro}
+              stretch
+            >
+              <Input
+                value={formValues.nro_registro}
+                onChange={({ detail }) =>
+                  handleChange("nro_registro", detail.value)
+                }
+              />
+            </FormField>
+            <FormField label="Estado" errorText={formErrors.estado} stretch>
+              <Select
+                placeholder="Escoja una opción"
+                options={opt_estado}
+                selectedOption={formValues.estado}
+                onChange={({ detail }) =>
+                  handleChange("estado", detail.selectedOption)
+                }
+              />
+            </FormField>
+
+            <FormField label="Título" errorText={formErrors.titulo} stretch>
+              <Input
+                value={formValues.titulo}
+                onChange={({ detail }) => handleChange("titulo", detail.value)}
+              />
+            </FormField>
+            <FormField label="Tipo" errorText={formErrors.tipo} stretch>
+              <Select
+                placeholder="Escoja una opción"
+                options={opt_tipo}
+                selectedOption={formValues.tipo}
+                onChange={({ detail }) =>
+                  handleChange("tipo", detail.selectedOption)
+                }
+              />
+            </FormField>
+            <FormField
+              label="Número de expediente"
+              errorText={formErrors.nro_expediente}
+              stretch
+            >
+              <Input
+                value={formValues.nro_expediente}
+                onChange={({ detail }) =>
+                  handleChange("nro_expediente", detail.value)
+                }
+              />
+            </FormField>
+            <FormField
+              label="Fecha presentacion"
+              errorText={formErrors.fecha_presentacion}
+              stretch
+            >
+              <DatePicker
+                placeholder="YYYY/MM/DD"
+                value={formValues.fecha_presentacion}
+                onChange={({ detail }) =>
+                  handleChange("fecha_presentacion", detail.value)
+                }
+              />
+            </FormField>
+            <FormField
+              label="Oficina de presentación"
+              errorText={formErrors.oficina_presentacion}
+              stretch
+            >
+              <Input
+                value={formValues.oficina_presentacion}
+                onChange={({ detail }) =>
+                  handleChange("oficina_presentacion", detail.value)
+                }
+              />
+            </FormField>
+            <FormField label="Enlace" errorText={formErrors.enlace} stretch>
+              <Input
+                value={formValues.enlace}
+                onChange={({ detail }) => handleChange("enlace", detail.value)}
+              />
+            </FormField>
+          </ColumnLayout>
           <Grid
             gridDefinition={[
               {
@@ -248,13 +295,13 @@ export default ({ id, changes, reload }) => {
               />
             </FormField>
             <FormField
-              label="Anexo comentario"
+              label="Certificado emitido"
               description={
-                formValues.file_id_2 ? (
+                formValues.url ? (
                   <>
                     Puede{" "}
                     <Link
-                      href={formValues.url_2}
+                      href={formValues.url}
                       variant="primary"
                       fontSize="body-s"
                       external
@@ -270,9 +317,9 @@ export default ({ id, changes, reload }) => {
               stretch
             >
               <FileUpload
-                value={formValues.file_comentario}
+                value={formValues.file}
                 onChange={({ detail }) => {
-                  handleChange("file_comentario", detail.value);
+                  handleChange("file", detail.value);
                 }}
                 showFileLastModified
                 showFileSize
@@ -301,76 +348,6 @@ export default ({ id, changes, reload }) => {
               }
             />
           </FormField>
-          <ColumnLayout columns={2}>
-            <FormField label="Título">
-              <Input value={formValues.titulo} disabled />
-            </FormField>
-            <FormField label="Fecha de envío de publicación">
-              <Input value={formValues.fecha_inscripcion} disabled />
-            </FormField>
-            <FormField label="Resolución">
-              <Input
-                placeholder="N° de resolución"
-                value={formValues.resolucion}
-                onChange={({ detail }) =>
-                  handleChange("resolucion", detail.value)
-                }
-              />
-            </FormField>
-            <FormField
-              label="Anexo"
-              description={
-                formValues.file_id_1 ? (
-                  <>
-                    Puede{" "}
-                    <Link
-                      href={formValues.url_1}
-                      variant="primary"
-                      fontSize="body-s"
-                      external
-                      target="_blank"
-                    >
-                      descargar el anexo
-                    </Link>
-                  </>
-                ) : (
-                  "No se ha cargado un anexo"
-                )
-              }
-            >
-              <FileUpload
-                value={formValues.file}
-                onChange={({ detail }) => {
-                  handleChange("file", detail.value);
-                }}
-                showFileLastModified
-                showFileSize
-                showFileThumbnail
-                constraintText="El archivo cargado no debe superar los 6 MB"
-                i18nStrings={{
-                  uploadButtonText: (e) =>
-                    e ? "Cargar archivos" : "Cargar archivo",
-                  dropzoneText: (e) =>
-                    e
-                      ? "Arrastre los archivos para cargarlos"
-                      : "Arrastre el archivo para cargarlo",
-                  removeFileAriaLabel: (e) => `Eliminar archivo ${e + 1}`,
-                  errorIconAriaLabel: "Error",
-                }}
-                accept=".pdf"
-              />
-            </FormField>
-            <FormField label="Estado">
-              <Select
-                placeholder="Escoja una opción"
-                options={opt_estado}
-                selectedOption={formValues.estado}
-                onChange={({ detail }) =>
-                  handleChange("estado", detail.selectedOption)
-                }
-              />
-            </FormField>
-          </ColumnLayout>
         </SpaceBetween>
       )}
     </Container>

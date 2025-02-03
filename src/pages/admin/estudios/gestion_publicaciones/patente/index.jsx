@@ -5,6 +5,8 @@ import queryString from "query-string";
 import BaseLayout from "../../../components/baseLayout";
 import axiosBase from "../../../../../api/axios";
 import Detalles from "./detalles";
+import Titulares from "./tabs/titulares";
+import Autores from "./tabs/autores";
 
 const breadcrumbs = [
   {
@@ -28,12 +30,10 @@ const breadcrumbs = [
 export default function Detalle_patente() {
   //  State
   const [info, setInfo] = useState({
-    proyectos: [],
+    titulares: [],
     autores: [],
   });
-  const [detalles, setDetalles] = useState({});
   const [loading, setLoading] = useState(true);
-  const [changes, setChanges] = useState(0);
 
   //  Url
   const location = useLocation();
@@ -42,15 +42,13 @@ export default function Detalle_patente() {
   //  Functions
   const getData = async () => {
     setLoading(true);
-    const res = await axiosBase.get("admin/estudios/publicaciones/getTabs", {
+    const res = await axiosBase.get("admin/estudios/patentes/getTabs", {
       params: {
         id,
       },
     });
     const data = res.data;
-    setDetalles(data.detalle);
     setInfo(data);
-    setChanges(0);
     setLoading(false);
   };
 
@@ -58,45 +56,23 @@ export default function Detalle_patente() {
     getData();
   }, []);
 
-  useEffect(() => {
-    setChanges((prev) => prev + 1);
-  }, [detalles]);
-
   //  Tabs
-  // const tabs = [
-  //   {
-  //     id: "detalles",
-  //     label: "Detalles",
-  //     content: (
-  //       <Info
-  //         data={detalles}
-  //         setData={setDetalles}
-  //         loading={loading}
-  //         tipo={info?.tipo}
-  //         reload={getData}
-  //       />
-  //     ),
-  //   },
-  //   {
-  //     id: "proyectos",
-  //     label: "Proyectos",
-  //     content: (
-  //       <Proyectos data={info.proyectos} loading={loading} reload={getData} />
-  //     ),
-  //   },
-  //   {
-  //     id: "autores",
-  //     label: "Autores",
-  //     content: (
-  //       <Autores
-  //         data={info.autores}
-  //         loading={loading}
-  //         tipo={info?.tipo}
-  //         reload={getData}
-  //       />
-  //     ),
-  //   },
-  // ];
+  const tabs = [
+    {
+      id: "titulares",
+      label: "Manejo de titulares",
+      content: (
+        <Titulares loading={loading} data={info.titulares} reload={getData} />
+      ),
+    },
+    {
+      id: "autores",
+      label: "Autores",
+      content: (
+        <Autores data={info.autores} loading={loading} reload={getData} />
+      ),
+    },
+  ];
 
   return (
     <BaseLayout
@@ -106,8 +82,8 @@ export default function Detalle_patente() {
       en general."
     >
       <SpaceBetween size="l">
-        <Detalles id={id} changes={changes} reload={getData} />
-        {/* <Tabs tabs={tabs} /> */}
+        <Detalles id={id} reload={getData} />
+        <Tabs tabs={tabs} />
       </SpaceBetween>
     </BaseLayout>
   );
