@@ -9,12 +9,14 @@ import {
   SpaceBetween,
   Table,
   Button,
+  ButtonDropdown,
 } from "@cloudscape-design/components";
 import { useState, useEffect } from "react";
 import { useCollection } from "@cloudscape-design/collection-hooks";
 import axiosBase from "../../../../../api/axios";
 import queryString from "query-string";
 import ModalAudit from "../components/modalAudit";
+import ModalEliminarInforme from "../components/modalEliminarInforme";
 
 const stringOperators = [":", "!:", "=", "!=", "^", "!^"];
 
@@ -41,6 +43,18 @@ const FILTER_PROPS = [
     propertyLabel: "Título",
     key: "titulo",
     groupValuesLabel: "Títulos",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "Deuda",
+    key: "deuda",
+    groupValuesLabel: "Deudas",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "Tipo de deuda",
+    key: "tipo_deuda",
+    groupValuesLabel: "Tipos de deuda",
     operators: stringOperators,
   },
   {
@@ -103,6 +117,24 @@ const columnDefinitions = [
     minWidth: 250,
   },
   {
+    id: "deuda",
+    header: "Deuda",
+    cell: (item) => (
+      <Badge color={item.deuda == "Sí" || item.deuda == "SI" ? "red" : "green"}>
+        {item.deuda}
+      </Badge>
+    ),
+    sortingField: "deuda",
+    minWidth: 150,
+  },
+  {
+    id: "tipo_deuda",
+    header: "Tipo de deuda",
+    cell: (item) => item.tipo_deuda,
+    sortingField: "tipo_deuda",
+    minWidth: 150,
+  },
+  {
     id: "cantidad_informes",
     header: "N° informes",
     cell: (item) => item.cantidad_informes,
@@ -158,6 +190,8 @@ const columnDisplay = [
   { id: "tipo_proyecto", visible: true },
   { id: "codigo_proyecto", visible: true },
   { id: "titulo", visible: true },
+  { id: "deuda", visible: true },
+  { id: "tipo_deuda", visible: true },
   { id: "cantidad_informes", visible: true },
   { id: "responsable", visible: true },
   { id: "facultad", visible: true },
@@ -228,8 +262,13 @@ export default () => {
   const getInformes = async () => {
     setLoadingInformes(true);
     const res = await axiosBase.get(
-      "admin/estudios/informesTecnicos/informes/" +
-        collectionProps.selectedItems[0]?.id
+      "admin/estudios/informesTecnicos/informes",
+      {
+        params: {
+          proyecto_id: collectionProps.selectedItems[0]?.id,
+          tabla: selectedOption.value,
+        },
+      }
     );
     const data = res.data;
     setInformes(data);
@@ -270,9 +309,10 @@ export default () => {
                   disabled={loading}
                   expandToViewport
                   selectedOption={selectedOption}
-                  onChange={({ detail }) =>
-                    setSelectedOption(detail.selectedOption)
-                  }
+                  onChange={({ detail }) => {
+                    setSelectedOption(detail.selectedOption);
+                    setSelectedItems([]);
+                  }}
                   options={[
                     { value: "nuevos", label: "Nuevos (2017 en adelante)" },
                     {
@@ -390,11 +430,35 @@ export default () => {
             actions={
               <SpaceBetween size="xs" direction="horizontal">
                 <Button
-                  disabled={selectedItems.length == 0}
-                  onClick={() => setModal("audit")}
+                  disabled={
+                    selectedOption.value != "antiguos" ||
+                    !collectionProps.selectedItems.length
+                  }
                 >
-                  Ver auditoría
+                  Presentar informe
                 </Button>
+                <ButtonDropdown
+                  items={[
+                    {
+                      id: "action_3_1",
+                      text: "Auditoría",
+                    },
+                    {
+                      id: "action_3_2",
+                      text: "Eliminar",
+                    },
+                  ]}
+                  onItemClick={({ detail }) => {
+                    if (detail.id == "action_3_1") {
+                      setModal("audit");
+                    } else if (detail.id == "action_3_2") {
+                      setModal("delete");
+                    }
+                  }}
+                  disabled={!selectedItems.length}
+                >
+                  Acciones
+                </ButtonDropdown>
                 <Button
                   variant="primary"
                   disabled={selectedItems.length == 0}
@@ -417,8 +481,17 @@ export default () => {
           </Header>
         }
       />
-      {modal == "audit" && (
+      {modal == "audit" ? (
         <ModalAudit close={() => setModal("")} id={selectedItems[0].id} />
+      ) : (
+        modal == "delete" && (
+          <ModalEliminarInforme
+            id={selectedItems[0].id}
+            tabla={selectedOption.value}
+            close={() => setModal("")}
+            reload={getData}
+          />
+        )
       )}
     </SpaceBetween>
   );

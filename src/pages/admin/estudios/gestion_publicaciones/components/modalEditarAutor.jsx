@@ -46,7 +46,7 @@ export default ({ item, reload, close, optAutor }) => {
   const { formValues, formErrors, handleChange, validateForm } =
     useFormValidation(
       {
-        autor: item.autor,
+        autor: item.autor ?? "",
         filiacion: optFiliacion.find((opt) => opt.label == item.filiacion),
         filiacion_unica: optFiliacion.find(
           (opt) => opt.label == item.filiacion_unica

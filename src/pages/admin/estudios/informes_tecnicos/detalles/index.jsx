@@ -137,6 +137,7 @@ export default function Detalle_informe_tecnico() {
   const updateInforme = async () => {
     setUpdating(true);
     let formData = new FormData();
+    formData.append("tipo_proyecto", tipo_proyecto);
     formData.append("informe_tecnico_id", id);
     formData.append("estado", formValues.estado.value);
     formData.append("fecha_presentacion", formValues.fecha_presentacion);
@@ -165,6 +166,18 @@ export default function Detalle_informe_tecnico() {
     formData.append("infinal9", formValues.infinal9);
     formData.append("infinal10", formValues.infinal10);
     formData.append("infinal11", formValues.infinal11);
+    formData.append("file1", formValues.file1[0]);
+    formData.append("file2", formValues.file2[0]);
+    formData.append("file3", formValues.file3[0]);
+    formData.append("file4", formValues.file4[0]);
+    formData.append("file5", formValues.file5[0]);
+    formData.append("file6", formValues.file6[0]);
+    formData.append("file7", formValues.file7[0]);
+    formData.append("file8", formValues.file8[0]);
+    formData.append("file9", formValues.file9[0]);
+    formData.append("file10", formValues.file10[0]);
+    formData.append("file11", formValues.file11[0]);
+    formData.append("file12", formValues.file12[0]);
     formData.append("estado_trabajo", formValues.estado_trabajo?.value ?? null);
     const res = await axiosBase.post(
       "admin/estudios/informesTecnicos/updateInforme",
@@ -211,6 +224,7 @@ export default function Detalle_informe_tecnico() {
               loading={loading}
               files={urls}
               actividades={actividades}
+              reload={getData}
             />
           </>
         )}

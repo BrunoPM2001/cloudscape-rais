@@ -272,6 +272,12 @@ export default function ({ data, loading, tipo, reload }) {
                   variant="normal"
                   onItemClick={({ detail }) => {
                     if (detail.id == "action_1_1") {
+                      if (tipo == "tesis-asesoria") {
+                        setOptAutor([
+                          { value: "Asesor" },
+                          { value: "Tesista" },
+                        ]);
+                      }
                       setType("edit");
                     } else if (detail.id == "action_1_2") {
                       setType("delete");

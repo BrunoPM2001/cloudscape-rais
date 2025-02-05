@@ -22,6 +22,7 @@ export default ({
   handleChange,
   files,
   actividades,
+  reload,
 }) => {
   return (
     <>
@@ -130,6 +131,7 @@ export default ({
           handleChange={handleChange}
           actividades={actividades}
           files={files}
+          reload={reload}
         />
       ) : tipo_proyecto == "PSINFINV" ? (
         <Psinfinv_tabs

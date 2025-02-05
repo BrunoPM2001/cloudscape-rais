@@ -1,0 +1,59 @@
+import {
+  Modal,
+  Box,
+  SpaceBetween,
+  Button,
+} from "@cloudscape-design/components";
+import { useContext, useState } from "react";
+import axiosBase from "../../../../../api/axios";
+import NotificationContext from "../../../../../providers/notificationProvider";
+
+export default ({ id, tabla, close, reload }) => {
+  //  Context
+  const { notifications, pushNotification } = useContext(NotificationContext);
+
+  //  States
+  const [loading, setLoading] = useState(false);
+
+  //  Functions
+  const eliminar = async () => {
+    setLoading(true);
+    const res = await axiosBase.delete(
+      "admin/estudios/informesTecnicos/eliminarInforme",
+      {
+        params: {
+          id,
+          tabla,
+        },
+      }
+    );
+    const data = res.data;
+    setLoading(false);
+    close();
+    reload();
+    pushNotification(data.detail, data.message, notifications.length + 1);
+  };
+
+  return (
+    <Modal
+      visible
+      size="medium"
+      onDismiss={close}
+      footer={
+        <Box float="right">
+          <SpaceBetween direction="horizontal" size="xs">
+            <Button variant="normal" onClick={close}>
+              Cancelar
+            </Button>
+            <Button variant="primary" onClick={eliminar} loading={loading}>
+              Eliminar informe
+            </Button>
+          </SpaceBetween>
+        </Box>
+      }
+      header="Eliminar informe"
+    >
+      ¿Estás seguro de eliminar este informe? La acción no se puede deshacer
+    </Modal>
+  );
+};

@@ -13,7 +13,13 @@ import Aplicacion from "./aplicacion";
 import Publicacion from "./publicacion";
 import Calendario from "./calendario";
 
-export default function Pmulti_tabs({ formValues, handleChange, actividades }) {
+export default function Pmulti_tabs({
+  formValues,
+  handleChange,
+  actividades,
+  files,
+  reload,
+}) {
   const tabs = [
     {
       id: "resumen",
@@ -102,7 +108,9 @@ export default function Pmulti_tabs({ formValues, handleChange, actividades }) {
       content: (
         <Anexos
           value1={formValues?.file1} //  CATEGORIA = informe-PMULTI-INFORME
+          value2={formValues?.file10}
           handleChange={handleChange}
+          files={files}
         />
       ),
     },
@@ -126,7 +134,7 @@ export default function Pmulti_tabs({ formValues, handleChange, actividades }) {
     {
       id: "calendario",
       label: "Calendario",
-      content: <Calendario data={actividades} />,
+      content: <Calendario data={actividades} files={files} reload={reload} />,
     },
     //  TODO - Implementar las últimas dos tabs (flojera)
   ];
