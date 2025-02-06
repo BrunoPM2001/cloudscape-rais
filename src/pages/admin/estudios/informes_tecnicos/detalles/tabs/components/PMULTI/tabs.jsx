@@ -108,7 +108,6 @@ export default function Pmulti_tabs({
       content: (
         <Anexos
           value1={formValues?.file1} //  CATEGORIA = informe-PMULTI-INFORME
-          value2={formValues?.file10}
           handleChange={handleChange}
           files={files}
         />

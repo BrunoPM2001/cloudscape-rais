@@ -72,9 +72,9 @@ const FILTER_PROPS = [
     operators: stringOperators,
   },
   {
-    propertyLabel: "Financiamiento FEX",
+    propertyLabel: "Aporte externo",
     key: "financiamiento_fuente_externa",
-    groupValuesLabel: "Cantidad FEX",
+    groupValuesLabel: "Aportes externo",
     operators: stringOperators,
   },
   {
@@ -99,6 +99,18 @@ const FILTER_PROPS = [
     propertyLabel: "Estado",
     key: "estado",
     groupValuesLabel: "Estados",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "Registrado",
+    key: "registrado",
+    groupValuesLabel: "Registrado",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "Actualizado",
+    key: "actualizado",
+    groupValuesLabel: "Actualizado",
     operators: stringOperators,
   },
 ];
@@ -164,7 +176,7 @@ const columnDefinitions = [
   },
   {
     id: "financiamiento_fuente_externa",
-    header: "Financiamiento FEX",
+    header: "Aporte externo",
     cell: (item) => item.financiamiento_fuente_externa,
     sortingField: "financiamiento_fuente_externa",
   },
@@ -252,6 +264,18 @@ const columnDefinitions = [
     ),
     sortingField: "estado",
   },
+  {
+    id: "registrado",
+    header: "Registrado",
+    cell: (item) => item.registrado,
+    sortingField: "registrado",
+  },
+  {
+    id: "actualizado",
+    header: "Actualizado",
+    cell: (item) => item.actualizado,
+    sortingField: "actualizado",
+  },
 ];
 
 const columnDisplay = [
@@ -269,6 +293,8 @@ const columnDisplay = [
   { id: "participacion_unmsm", visible: true },
   { id: "fuente_fin", visible: true },
   { id: "estado", visible: true },
+  { id: "registrado", visible: true },
+  { id: "actualizado", visible: true },
 ];
 
 export default () => {

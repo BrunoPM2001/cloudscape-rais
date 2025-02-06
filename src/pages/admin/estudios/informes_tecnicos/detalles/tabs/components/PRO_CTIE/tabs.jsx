@@ -113,6 +113,7 @@ export default function Pconfigi_tabs({
       content: (
         <Anexos
           value1={formValues?.file1} //   CATEGORIA = informe-PCONFIGI-INFORME
+          value2={formValues?.file2}
           handleChange={handleChange}
           files={files}
         />

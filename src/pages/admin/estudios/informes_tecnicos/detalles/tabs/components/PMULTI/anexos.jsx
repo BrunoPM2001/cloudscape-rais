@@ -1,5 +1,4 @@
 import {
-  ColumnLayout,
   Container,
   FileUpload,
   FormField,
@@ -29,69 +28,35 @@ const propsEnlaces = {
   target: "_blank",
 };
 
-export default ({ value1, value2, handleChange, files }) => {
+export default ({ value1, handleChange, files }) => {
   return (
     <Container>
-      <ColumnLayout columns={2}>
-        <FormField
-          label="Archivo digital"
-          stretch
-          description={
-            files["informe-PMULTI-INFORME"] && (
-              <>
-                Ya ha cargado un{" "}
-                <Link
-                  {...propsEnlaces}
-                  href={files["informe-PMULTI-INFORME"]?.url}
-                >
-                  archivo
-                </Link>{" "}
-                el {files["informe-PMULTI-INFORME"]?.fecha}
-              </>
-            )
-          }
-        >
-          <FileUpload
-            {...propsRepetidas}
-            value={value1}
-            onChange={({ detail }) => {
-              handleChange("file1", detail.value);
-            }}
-          />
-        </FormField>
-        <FormField
-          label="Reporte de viabilidad"
-          info={
-            <Link
-              variant="info"
-              href="/minio/templates/Modelo_Reporte_Viabilidad.xlsx"
-            >
-              Descargar modelo
-            </Link>
-          }
-          constraintText="Remitir el formulario con los campos completados (ver modelo) a la Dirección de Promoción DGITT-VRIP dp.vrip@unmsm.edu.pe"
-          description={
-            files["viabilidad"] && (
-              <>
-                Ya ha cargado un{" "}
-                <Link {...propsEnlaces} href={files["viabilidad"].url}>
-                  archivo
-                </Link>{" "}
-                el {files["viabilidad"].fecha}
-              </>
-            )
-          }
-          stretch
-        >
-          <FileUpload
-            {...propsRepetidas}
-            value={value2}
-            onChange={({ detail }) => {
-              handleChange("file10", detail.value);
-            }}
-          />
-        </FormField>
-      </ColumnLayout>
+      <FormField
+        label="Archivo digital"
+        stretch
+        description={
+          files["informe-PMULTI-INFORME"] && (
+            <>
+              Ya ha cargado un{" "}
+              <Link
+                {...propsEnlaces}
+                href={files["informe-PMULTI-INFORME"]?.url}
+              >
+                archivo
+              </Link>{" "}
+              el {files["informe-PMULTI-INFORME"]?.fecha}
+            </>
+          )
+        }
+      >
+        <FileUpload
+          {...propsRepetidas}
+          value={value1}
+          onChange={({ detail }) => {
+            handleChange("file1", detail.value);
+          }}
+        />
+      </FormField>
     </Container>
   );
 };

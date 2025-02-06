@@ -570,66 +570,32 @@ export default () => {
                   "Archivos adjuntos (ninguno debe superar los 6 MB)",
                 content: (
                   <Container>
-                    <ColumnLayout columns={2}>
-                      <FormField
-                        label="Adjuntar archivo digital"
-                        description={
-                          files["informe-PMULTI-INFORME"] && (
-                            <>
-                              Ya ha cargado un{" "}
-                              <Link
-                                {...propsEnlaces}
-                                href={files["informe-PMULTI-INFORME"]}
-                              >
-                                archivo.
-                              </Link>
-                            </>
-                          )
-                        }
-                        stretch
-                        errorText={formErrors.file1}
-                      >
-                        <FileUpload
-                          {...propsRepetidas}
-                          value={formValues.file1}
-                          onChange={({ detail }) => {
-                            handleChange("file1", detail.value);
-                          }}
-                        />
-                      </FormField>
-                      <FormField
-                        label="Reporte de Viabilidad"
-                        info={
-                          <Link
-                            variant="info"
-                            href="/minio/templates/Modelo_Reporte_Viabilidad.xlsx"
-                          >
-                            Descargar modelo
-                          </Link>
-                        }
-                        constraintText="Remitir el formulario con los campos completados (ver modelo) a la Dirección de Promoción DGITT-VRIP dp.vrip@unmsm.edu.pe"
-                        description={
-                          files.viabilidad && (
-                            <>
-                              Ya ha cargado un{" "}
-                              <Link {...propsEnlaces} href={files.viabilidad}>
-                                archivo.
-                              </Link>
-                            </>
-                          )
-                        }
-                        stretch
-                        errorText={formErrors.file10}
-                      >
-                        <FileUpload
-                          {...propsRepetidas}
-                          value={formValues.file10}
-                          onChange={({ detail }) => {
-                            handleChange("file10", detail.value);
-                          }}
-                        />
-                      </FormField>
-                    </ColumnLayout>
+                    <FormField
+                      label="Adjuntar archivo digital"
+                      description={
+                        files["informe-PMULTI-INFORME"] && (
+                          <>
+                            Ya ha cargado un{" "}
+                            <Link
+                              {...propsEnlaces}
+                              href={files["informe-PMULTI-INFORME"]}
+                            >
+                              archivo.
+                            </Link>
+                          </>
+                        )
+                      }
+                      stretch
+                      errorText={formErrors.file1}
+                    >
+                      <FileUpload
+                        {...propsRepetidas}
+                        value={formValues.file1}
+                        onChange={({ detail }) => {
+                          handleChange("file1", detail.value);
+                        }}
+                      />
+                    </FormField>
                   </Container>
                 ),
                 isOptional: true,

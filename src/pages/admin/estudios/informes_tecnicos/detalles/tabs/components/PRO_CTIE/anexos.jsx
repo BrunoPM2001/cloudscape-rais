@@ -29,35 +29,69 @@ const propsEnlaces = {
   target: "_blank",
 };
 
-export default ({ value1, handleChange, files }) => {
+export default ({ value1, value2, handleChange, files }) => {
   return (
     <Container>
-      <FormField
-        label="Archivo digital"
-        stretch
-        description={
-          files["informe-PRO-CTIE-INFORME"] && (
-            <>
-              Ya ha cargado un{" "}
-              <Link
-                {...propsEnlaces}
-                href={files["informe-PRO-CTIE-INFORME"].url}
-              >
-                archivo
-              </Link>{" "}
-              el {files["informe-PRO-CTIE-INFORME"].fecha}
-            </>
-          )
-        }
-      >
-        <FileUpload
-          {...propsRepetidas}
-          value={value1}
-          onChange={({ detail }) => {
-            handleChange("file1", detail.value);
-          }}
-        />
-      </FormField>
+      <ColumnLayout columns={2}>
+        <FormField
+          label="Archivo digital"
+          stretch
+          description={
+            files["informe-PRO-CTIE-INFORME"] && (
+              <>
+                Ya ha cargado un{" "}
+                <Link
+                  {...propsEnlaces}
+                  href={files["informe-PRO-CTIE-INFORME"].url}
+                >
+                  archivo
+                </Link>{" "}
+                el {files["informe-PRO-CTIE-INFORME"].fecha}
+              </>
+            )
+          }
+        >
+          <FileUpload
+            {...propsRepetidas}
+            value={value1}
+            onChange={({ detail }) => {
+              handleChange("file1", detail.value);
+            }}
+          />
+        </FormField>
+        <FormField
+          label="Reporte de viabilidad"
+          info={
+            <Link
+              variant="info"
+              href="/minio/templates/Modelo_Reporte_Viabilidad.xlsx"
+            >
+              Descargar modelo
+            </Link>
+          }
+          constraintText="Remitir el formulario con los campos completados (ver modelo) a la Dirección de Promoción DGITT-VRIP dp.vrip@unmsm.edu.pe"
+          description={
+            files["viabilidad"] && (
+              <>
+                Ya ha cargado un{" "}
+                <Link {...propsEnlaces} href={files["viabilidad"].url}>
+                  archivo
+                </Link>{" "}
+                el {files["viabilidad"].fecha}
+              </>
+            )
+          }
+          stretch
+        >
+          <FileUpload
+            {...propsRepetidas}
+            value={value2}
+            onChange={({ detail }) => {
+              handleChange("file2", detail.value);
+            }}
+          />
+        </FormField>
+      </ColumnLayout>
     </Container>
   );
 };
