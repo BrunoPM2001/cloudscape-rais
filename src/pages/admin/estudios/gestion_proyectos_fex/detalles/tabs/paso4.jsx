@@ -12,6 +12,10 @@ import { useCollection } from "@cloudscape-design/collection-hooks";
 import ModalAgregarDocente from "./components/modalAgregarDocente";
 import ModalEliminarMiembro from "./components/modalEliminarMiembro";
 import ModalAgregarTesista from "./components/modalAgregarTesista";
+import ModalAgregarExterno from "./components/modalAgregarExterno";
+import ModalEditarDocente from "./components/modalEditarDocente";
+import ModalEditarTesista from "./components/modalEditarTesista";
+import ModalEditarExterno from "./components/modalEditarExterno";
 
 export default function Paso4({ info, loading, reload }) {
   //  States
@@ -76,12 +80,30 @@ export default function Paso4({ info, loading, reload }) {
                   disabled={collectionProps.selectedItems.length == 0}
                   items={[
                     {
+                      id: "action_4",
+                      text: "Editar",
+                    },
+                    {
                       id: "action_5",
                       text: "Eliminar",
                     },
                   ]}
                   onItemClick={({ detail }) => {
-                    if (detail.id == "action_5") {
+                    if (detail.id == "action_4") {
+                      if (
+                        collectionProps.selectedItems[0].tipo_integrante ==
+                        "Tesista"
+                      ) {
+                        setType("editTe");
+                      } else if (
+                        collectionProps.selectedItems[0].tipo_integrante ==
+                        "Externo"
+                      ) {
+                        setType("editExterno");
+                      } else {
+                        setType("editDo");
+                      }
+                    } else if (detail.id == "action_5") {
                       setType("delete");
                     }
                   }}
@@ -99,12 +121,18 @@ export default function Paso4({ info, loading, reload }) {
                       id: "action_2",
                       text: "Tesista",
                     },
+                    {
+                      id: "action_3",
+                      text: "Externo",
+                    },
                   ]}
                   onItemClick={({ detail }) => {
                     if (detail.id == "action_1") {
                       setType("addDo");
                     } else if (detail.id == "action_2") {
                       setType("addTe");
+                    } else if (detail.id == "action_3") {
+                      setType("addExterno");
                     }
                   }}
                   disabled={loading}
@@ -134,6 +162,30 @@ export default function Paso4({ info, loading, reload }) {
       ) : type == "addTe" ? (
         <ModalAgregarTesista
           id={id}
+          close={() => setType("")}
+          reload={reload}
+        />
+      ) : type == "addExterno" ? (
+        <ModalAgregarExterno
+          close={() => setType("")}
+          id={id}
+          reload={reload}
+        />
+      ) : type == "editDo" ? (
+        <ModalEditarDocente
+          id={collectionProps.selectedItems[0].id}
+          close={() => setType("")}
+          reload={reload}
+        />
+      ) : type == "editTe" ? (
+        <ModalEditarTesista
+          id={collectionProps.selectedItems[0].id}
+          close={() => setType("")}
+          reload={reload}
+        />
+      ) : type == "editExterno" ? (
+        <ModalEditarExterno
+          id={collectionProps.selectedItems[0].id}
           close={() => setType("")}
           reload={reload}
         />

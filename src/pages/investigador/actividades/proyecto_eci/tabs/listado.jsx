@@ -104,6 +104,8 @@ const columnDefinitions = [
             ? "grey"
             : item.estado == "Aprobado"
             ? "green"
+            : item.estado == "Observado"
+            ? "grey"
             : item.estado == "En evaluación"
             ? "blue"
             : item.estado == "Enviado"

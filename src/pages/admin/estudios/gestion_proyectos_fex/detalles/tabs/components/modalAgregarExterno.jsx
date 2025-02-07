@@ -12,10 +12,10 @@ import {
   Textarea,
 } from "@cloudscape-design/components";
 import { useContext, useEffect, useState } from "react";
-import { useFormValidation } from "../../../../../../hooks/useFormValidation";
-import axiosBase from "../../../../../../api/axios";
-import NotificationContext from "../../../../../../providers/notificationProvider";
-import { useAutosuggest } from "../../../../../../hooks/useAutosuggest";
+import NotificationContext from "../../../../../../../providers/notificationProvider";
+import { useAutosuggest } from "../../../../../../../hooks/useAutosuggest";
+import { useFormValidation } from "../../../../../../../hooks/useFormValidation";
+import axiosBase from "../../../../../../../api/axios";
 
 const initialForm = {
   codigo_orcid: "",
@@ -64,7 +64,7 @@ const formRules = {
   observacion: { required: false },
 };
 
-export default ({ close, proyecto_id, reload }) => {
+export default ({ close, id, reload }) => {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
 
@@ -77,7 +77,7 @@ export default ({ close, proyecto_id, reload }) => {
 
   //  Hooks
   const { loading, options, setOptions, value, setValue, setAvoidSelect } =
-    useAutosuggest("investigador/actividades/fex/searchExterno");
+    useAutosuggest("admin/estudios/proyectosFEX/searchExterno");
   const { formValues, formErrors, handleChange, validateForm } =
     useFormValidation(initialForm, formRules);
 
@@ -87,7 +87,7 @@ export default ({ close, proyecto_id, reload }) => {
       if (validateForm()) {
         setLoadingCreate(true);
         const form = new FormData();
-        form.append("proyecto_id", proyecto_id);
+        form.append("id", id);
         form.append("codigo_orcid", formValues.codigo_orcid);
         form.append("apellido1", formValues.apellido1);
         form.append("apellido2", formValues.apellido2);
@@ -110,7 +110,7 @@ export default ({ close, proyecto_id, reload }) => {
         form.append("observacion", formValues.observacion);
         form.append("tipo", "Nuevo");
         const res = await axiosBase.post(
-          "investigador/actividades/fex/agregarExterno",
+          "admin/estudios/proyectosFEX/agregarExterno",
           form
         );
         const data = res.data;
@@ -122,11 +122,11 @@ export default ({ close, proyecto_id, reload }) => {
     } else {
       setLoadingCreate(true);
       const form1 = new FormData();
-      form1.append("proyecto_id", proyecto_id);
+      form1.append("id", id);
       form1.append("tipo", "Antiguo");
       form1.append("investigador_id", form.investigador_id);
       const res = await axiosBase.post(
-        "investigador/actividades/fex/agregarExterno",
+        "admin/estudios/proyectosFEX/agregarExterno",
         form1
       );
       const data = res.data;
@@ -138,7 +138,7 @@ export default ({ close, proyecto_id, reload }) => {
   };
 
   const getPaises = async () => {
-    const res = await axiosBase.get("investigador/grupo/solicitar/getPaises");
+    const res = await axiosBase.get("admin/estudios/publicaciones/getPaises");
     const data = res.data;
     setPaises(data);
   };

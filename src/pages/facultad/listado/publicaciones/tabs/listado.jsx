@@ -168,6 +168,8 @@ export default () => {
   const [loading, setLoading] = useState(true);
   const [loadingReport, setLoadingReport] = useState(false);
   const [distributions, setDistribution] = useState([]);
+  const [modalExcel, setModalExcel] = useState("");
+  const [general, setGeneral] = useState([]);
   const {
     items,
     actions,
@@ -205,6 +207,17 @@ export default () => {
     setLoading(false);
   };
 
+  const reporteExcel = async () => {
+    setLoadingReport(true);
+    const res = await axiosBase.get("facultad/reportes/excelPublicaciones", {
+      responseType: "blob",
+    });
+    const blob = await res.data;
+    const url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
+    setLoadingReport(false);
+  };
+
   const reporte = async () => {
     setLoadingReport(true);
     const res = await axiosBase.get("facultad/listado/publicaciones/reporte", {
@@ -225,52 +238,63 @@ export default () => {
   }, []);
 
   return (
-    <Table
-      {...collectionProps}
-      trackBy="id"
-      items={items}
-      columnDefinitions={columnDefinitions}
-      columnDisplay={columnDisplay}
-      loading={loading}
-      loadingText="Cargando datos"
-      selectionType="single"
-      onRowClick={({ detail }) => actions.setSelectedItems([detail.item])}
-      enableKeyboardNavigation
-      wrapLines
-      header={
-        <Header
-          counter={"(" + distributions.length + ")"}
-          actions={
-            <Button
-              variant="primary"
-              disabled={loading}
-              loading={loadingReport}
-              onClick={reporte}
-            >
-              Reporte
-            </Button>
-          }
-        >
-          Publicaciones
-        </Header>
-      }
-      filter={
-        <PropertyFilter
-          {...propertyFilterProps}
-          filteringPlaceholder="Buscar publicaciones..."
-          countText={`${filteredItemsCount} coincidencias`}
-          expandToViewport
-          virtualScroll
-        />
-      }
-      pagination={<Pagination {...paginationProps} />}
-      empty={
-        <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
-          <SpaceBetween size="m">
-            <b>No hay registros...</b>
-          </SpaceBetween>
-        </Box>
-      }
-    />
+    <>
+      <Table
+        {...collectionProps}
+        trackBy="id"
+        items={items}
+        columnDefinitions={columnDefinitions}
+        columnDisplay={columnDisplay}
+        loading={loading}
+        loadingText="Cargando datos"
+        selectionType="single"
+        onRowClick={({ detail }) => actions.setSelectedItems([detail.item])}
+        enableKeyboardNavigation
+        wrapLines
+        header={
+          <Header
+            counter={"(" + distributions.length + ")"}
+            actions={
+              <SpaceBetween direction="horizontal" size="xs">
+                <Button
+                  disabled={loading}
+                  loading={loadingReport}
+                  onClick={reporteExcel}
+                >
+                  Excel
+                </Button>
+                <Button
+                  variant="primary"
+                  disabled={loading}
+                  loading={loadingReport}
+                  onClick={reporte}
+                >
+                  Reporte
+                </Button>
+              </SpaceBetween>
+            }
+          >
+            Publicaciones
+          </Header>
+        }
+        filter={
+          <PropertyFilter
+            {...propertyFilterProps}
+            filteringPlaceholder="Buscar publicaciones..."
+            countText={`${filteredItemsCount} coincidencias`}
+            expandToViewport
+            virtualScroll
+          />
+        }
+        pagination={<Pagination {...paginationProps} />}
+        empty={
+          <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
+            <SpaceBetween size="m">
+              <b>No hay registros...</b>
+            </SpaceBetween>
+          </Box>
+        }
+      />
+    </>
   );
 };

@@ -1,4 +1,4 @@
-import { SpaceBetween } from "@cloudscape-design/components";
+import { Alert, SpaceBetween } from "@cloudscape-design/components";
 import BaseLayout from "../../components/baseLayout.jsx";
 import Detalles from "./detalles.jsx";
 import { useEffect, useState } from "react";
@@ -90,6 +90,17 @@ export default function Proyecto_detalle() {
       en general."
     >
       <SpaceBetween size="l">
+        {data.detalles?.estado == 2 && (
+          <Alert type="warning" header="Observación">
+            <div
+              style={{
+                whiteSpace: "pre-wrap",
+              }}
+            >
+              {data.detalles.observaciones_admin}
+            </div>
+          </Alert>
+        )}
         <Detalles
           loading={loading}
           data={data.detalles}

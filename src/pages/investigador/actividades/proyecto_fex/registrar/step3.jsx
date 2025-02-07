@@ -1,4 +1,5 @@
 import {
+  Alert,
   Box,
   Button,
   ButtonDropdown,
@@ -19,14 +20,14 @@ import ModalEliminar from "./components/modalEliminar";
 
 const breadcrumbs = [
   {
-    text: "Admin",
-    href: "/admin",
+    text: "Investigador",
+    href: "/investigador",
   },
   {
-    text: "Estudios",
+    text: "Actividades",
   },
   {
-    text: "Gestión de proyectos FEX",
+    text: "Proyectos FEX",
   },
   {
     text: "Registrar",
@@ -37,7 +38,9 @@ const breadcrumbs = [
 export default function Registrar_proyecto_fex_3() {
   //  States
   const [loadingData, setLoadingData] = useState(true);
-  const [data, setData] = useState([]);
+  const [data, setData] = useState({
+    documentos: [],
+  });
   const [type, setType] = useState("");
   const [doc_tipo, setDoc_tipo] = useState("");
 
@@ -46,7 +49,7 @@ export default function Registrar_proyecto_fex_3() {
   const { id } = queryString.parse(location.search);
 
   //  Hooks
-  const { items, collectionProps } = useCollection(data, {
+  const { items, collectionProps } = useCollection(data.documentos, {
     sorting: {},
     selection: {},
   });
@@ -99,151 +102,167 @@ export default function Registrar_proyecto_fex_3() {
             title: "Documentos",
             description: "Convenios, contratos, presupuesto o resoluciones",
             content: (
-              <Table
-                {...collectionProps}
-                trackBy="id"
-                columnDefinitions={[
-                  {
-                    id: "doc_tipo",
-                    header: "Tipo de documento",
-                    cell: (item) => {
-                      switch (item.doc_tipo) {
-                        case "D01":
-                          return "Convenio, contrato o lo que haga sus veces";
-                        case "D04":
-                          return "Proyecto propuesto (última versión aprobada)";
-                        case "D12":
-                          return "Resolución rectoral (RR)";
-                        default:
-                          return "Tipo de documento desconocido";
-                      }
+              <SpaceBetween size="m">
+                {data.proyecto?.estado == 2 && (
+                  <Alert type="warning" header="Observación">
+                    <div
+                      style={{
+                        whiteSpace: "pre-wrap",
+                      }}
+                    >
+                      {data.proyecto.observaciones_admin}
+                    </div>
+                  </Alert>
+                )}
+                <Table
+                  {...collectionProps}
+                  trackBy="id"
+                  columnDefinitions={[
+                    {
+                      id: "doc_tipo",
+                      header: "Tipo de documento",
+                      cell: (item) => {
+                        switch (item.doc_tipo) {
+                          case "D01":
+                            return "Convenio, contrato o lo que haga sus veces";
+                          case "D04":
+                            return "Proyecto propuesto (última versión aprobada)";
+                          case "D12":
+                            return "Resolución rectoral (RR)";
+                          default:
+                            return "Tipo de documento desconocido";
+                        }
+                      },
+                      isRowHeader: true,
+                      minWidth: 200,
                     },
-                    isRowHeader: true,
-                    minWidth: 200,
-                  },
-                  {
-                    id: "nombre",
-                    header: "Nombre",
-                    cell: (item) => item.nombre,
-                    minWidth: 200,
-                  },
-                  {
-                    id: "comentario",
-                    header: "Comentario",
-                    cell: (item) => item.comentario,
-                    minWidth: 200,
-                  },
-                  {
-                    id: "fecha",
-                    header: "Fecha",
-                    cell: (item) => item.fecha,
-                    minWidth: 115,
-                  },
-                  {
-                    id: "url",
-                    header: "Archivo",
-                    cell: (item) => (
-                      <Button
-                        iconName="download"
-                        variant="inline-icon"
-                        href={item.url}
-                        target="_blank"
-                      />
-                    ),
-                    minWidth: 95,
-                  },
-                ]}
-                columnDisplay={[
-                  { id: "doc_tipo", visible: true },
-                  { id: "nombre", visible: true },
-                  { id: "comentario", visible: true },
-                  { id: "fecha", visible: true },
-                  { id: "url", visible: true },
-                ]}
-                selectionType="single"
-                items={items}
-                loading={loadingData}
-                loadingText="Cargando datos"
-                wrapLines
-                header={
-                  <Header
-                    variant="h3"
-                    actions={
-                      <SpaceBetween size="xs" direction="horizontal">
-                        <ButtonDropdown
-                          disabled={collectionProps.selectedItems.length == 0}
-                          items={[
-                            {
-                              id: "action_4",
-                              text: "Editar",
-                            },
-                            {
-                              id: "action_5",
-                              text: "Eliminar",
-                            },
-                          ]}
-                          onItemClick={({ detail }) => {
-                            if (detail.id == "action_4") {
-                              setType("update");
-                            } else if (detail.id == "action_5") {
-                              setType("delete");
-                            }
-                          }}
-                        >
-                          Acciones
-                        </ButtonDropdown>
-                        <ButtonDropdown
-                          items={[
-                            {
-                              id: "action_1",
-                              text: "Convenio, contrato o lo que haga sus veces",
-                            },
-                            {
-                              id: "action_2",
-                              text: "Proyecto propuesto (última versión aprobada)",
-                            },
-                            {
-                              id: "action_3",
-                              text: "Resolución rectoral (RR)",
-                            },
-                          ]}
-                          onItemClick={({ detail }) => {
-                            if (detail.id == "action_1") {
-                              setDoc_tipo("D01");
-                              setType("add");
-                            } else if (detail.id == "action_2") {
-                              setDoc_tipo("D04");
-                              setType("add");
-                            } else if (detail.id == "action_3") {
-                              setDoc_tipo("D12");
-                              setType("add");
-                            }
-                          }}
-                        >
-                          Agregar doc
-                        </ButtonDropdown>
+                    {
+                      id: "nombre",
+                      header: "Nombre",
+                      cell: (item) => item.nombre,
+                      minWidth: 200,
+                    },
+                    {
+                      id: "comentario",
+                      header: "Comentario",
+                      cell: (item) => item.comentario,
+                      minWidth: 200,
+                    },
+                    {
+                      id: "fecha",
+                      header: "Fecha",
+                      cell: (item) => item.fecha,
+                      minWidth: 115,
+                    },
+                    {
+                      id: "url",
+                      header: "Archivo",
+                      cell: (item) => (
+                        <Button
+                          iconName="download"
+                          variant="inline-icon"
+                          href={item.url}
+                          target="_blank"
+                        />
+                      ),
+                      minWidth: 95,
+                    },
+                  ]}
+                  columnDisplay={[
+                    { id: "doc_tipo", visible: true },
+                    { id: "nombre", visible: true },
+                    { id: "comentario", visible: true },
+                    { id: "fecha", visible: true },
+                    { id: "url", visible: true },
+                  ]}
+                  selectionType="single"
+                  items={items}
+                  loading={loadingData}
+                  loadingText="Cargando datos"
+                  wrapLines
+                  header={
+                    <Header
+                      variant="h3"
+                      actions={
+                        <SpaceBetween size="xs" direction="horizontal">
+                          <ButtonDropdown
+                            disabled={collectionProps.selectedItems.length == 0}
+                            items={[
+                              {
+                                id: "action_4",
+                                text: "Editar",
+                              },
+                              {
+                                id: "action_5",
+                                text: "Eliminar",
+                              },
+                            ]}
+                            onItemClick={({ detail }) => {
+                              if (detail.id == "action_4") {
+                                setType("update");
+                              } else if (detail.id == "action_5") {
+                                setType("delete");
+                              }
+                            }}
+                          >
+                            Acciones
+                          </ButtonDropdown>
+                          <ButtonDropdown
+                            items={[
+                              {
+                                id: "action_1",
+                                text: "Convenio, contrato o lo que haga sus veces",
+                              },
+                              {
+                                id: "action_2",
+                                text: "Proyecto propuesto (última versión aprobada)",
+                              },
+                              {
+                                id: "action_3",
+                                text: "Resolución rectoral (RR)",
+                              },
+                            ]}
+                            onItemClick={({ detail }) => {
+                              if (detail.id == "action_1") {
+                                setDoc_tipo("D01");
+                                setType("add");
+                              } else if (detail.id == "action_2") {
+                                setDoc_tipo("D04");
+                                setType("add");
+                              } else if (detail.id == "action_3") {
+                                setDoc_tipo("D12");
+                                setType("add");
+                              }
+                            }}
+                          >
+                            Agregar doc
+                          </ButtonDropdown>
+                        </SpaceBetween>
+                      }
+                    >
+                      Documentos cargados
+                    </Header>
+                  }
+                  empty={
+                    <Box
+                      margin={{ vertical: "xs" }}
+                      textAlign="center"
+                      color="inherit"
+                    >
+                      <SpaceBetween size="m">
+                        <b>No hay registros...</b>
                       </SpaceBetween>
-                    }
-                  >
-                    Documentos cargados
-                  </Header>
-                }
-                empty={
-                  <Box
-                    margin={{ vertical: "xs" }}
-                    textAlign="center"
-                    color="inherit"
-                  >
-                    <SpaceBetween size="m">
-                      <b>No hay registros...</b>
-                    </SpaceBetween>
-                  </Box>
-                }
-              />
+                    </Box>
+                  }
+                />
+              </SpaceBetween>
             ),
           },
           {
             title: "Integrantes",
+          },
+          {
+            title: "Envío de propuesta",
           },
         ]}
       />

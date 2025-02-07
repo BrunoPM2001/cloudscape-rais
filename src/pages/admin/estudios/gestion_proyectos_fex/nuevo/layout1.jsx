@@ -34,6 +34,7 @@ const breadcrumbs = [
 
 const initialForm = {
   titulo: "",
+  periodo: "",
   linea_investigacion_id: null,
   ocde_1: null,
   ocde_2: null,
@@ -53,6 +54,7 @@ const initialForm = {
 
 const formRules = {
   titulo: { required: true },
+  periodo: { required: true },
   moneda_tipo: { required: true },
   aporte_unmsm: { required: true, regex: /^(0|[1-9]\d*)(\.\d+)?$/ },
   aporte_no_unmsm: { required: true, regex: /^(0|[1-9]\d*)(\.\d+)?$/ },
@@ -141,6 +143,7 @@ export default function Registrar_proyecto_fex_1() {
     setOcde(data.ocde);
     setPaises(data.paises);
     handleChange("titulo", data.proyecto.titulo);
+    handleChange("periodo", data.proyecto.periodo);
     handleChange(
       "linea_investigacion_id",
       data.lineas.find(
@@ -222,19 +225,53 @@ export default function Registrar_proyecto_fex_1() {
                   <SpaceBetween size="m">
                     <Container>
                       <SpaceBetween size="s">
-                        <FormField
-                          label="Título"
-                          errorText={formErrors.titulo}
-                          stretch
+                        <Grid
+                          gridDefinition={[
+                            {
+                              colspan: {
+                                default: 12,
+                                l: 9,
+                                m: 9,
+                                s: 9,
+                              },
+                            },
+                            {
+                              colspan: {
+                                default: 12,
+                                l: 3,
+                                m: 3,
+                                s: 3,
+                              },
+                            },
+                          ]}
                         >
-                          <Input
-                            placeholder="Escriba el título del proyecto"
-                            value={formValues.titulo}
-                            onChange={({ detail }) =>
-                              handleChange("titulo", detail.value)
-                            }
-                          />
-                        </FormField>
+                          <FormField
+                            label="Título"
+                            errorText={formErrors.titulo}
+                            stretch
+                          >
+                            <Input
+                              placeholder="Escriba el título del proyecto"
+                              value={formValues.titulo}
+                              onChange={({ detail }) =>
+                                handleChange("titulo", detail.value)
+                              }
+                            />
+                          </FormField>
+                          <FormField
+                            label="Periodo"
+                            errorText={formErrors.periodo}
+                            stretch
+                          >
+                            <Input
+                              type="number"
+                              value={formValues.periodo}
+                              onChange={({ detail }) =>
+                                handleChange("periodo", detail.value)
+                              }
+                            />
+                          </FormField>
+                        </Grid>
                         <FormField
                           label="Línea de investigación UNMSM"
                           errorText={formErrors.linea_investigacion_id}

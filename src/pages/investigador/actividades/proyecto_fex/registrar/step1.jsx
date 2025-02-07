@@ -1,4 +1,5 @@
 import {
+  Alert,
   ColumnLayout,
   Container,
   FormField,
@@ -188,6 +189,9 @@ export default function Registrar_proyecto_fex_1() {
         (opt) => opt.value == data.extras?.participacion_unmsm
       )
     );
+
+    handleChange("estado", data.proyecto.estado);
+    handleChange("observaciones_admin", data.proyecto.observaciones_admin);
     setLoadingData(false);
   };
 
@@ -224,6 +228,17 @@ export default function Registrar_proyecto_fex_1() {
                   </Container>
                 ) : (
                   <SpaceBetween size="m">
+                    {formValues?.estado == 2 && (
+                      <Alert type="warning" header="Observación">
+                        <div
+                          style={{
+                            whiteSpace: "pre-wrap",
+                          }}
+                        >
+                          {formValues.observaciones_admin}
+                        </div>
+                      </Alert>
+                    )}
                     <Container>
                       <SpaceBetween size="s">
                         <Grid
@@ -562,6 +577,9 @@ export default function Registrar_proyecto_fex_1() {
           },
           {
             title: "Integrantes",
+          },
+          {
+            title: "Envío de propuesta",
           },
         ]}
       />

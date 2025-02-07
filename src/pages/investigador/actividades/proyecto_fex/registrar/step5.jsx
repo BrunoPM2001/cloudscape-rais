@@ -1,7 +1,9 @@
 import {
   Alert,
   Button,
+  Container,
   SpaceBetween,
+  Spinner,
   Wizard,
 } from "@cloudscape-design/components";
 import { useContext, useEffect, useState } from "react";
@@ -13,14 +15,14 @@ import NotificationContext from "../../../../../providers/notificationProvider";
 
 const breadcrumbs = [
   {
-    text: "Admin",
-    href: "/admin",
+    text: "Investigador",
+    href: "/investigador",
   },
   {
-    text: "Estudios",
+    text: "Actividades",
   },
   {
-    text: "Gestión de proyectos FEX",
+    text: "Proyectos FEX",
   },
   {
     text: "Registrar",
@@ -37,10 +39,10 @@ export default function Registrar_proyecto_fex_5() {
   const { notifications, pushNotification } = useContext(NotificationContext);
 
   //  States
-  const [loading, setLoading] = useState(true);
+  const [loadingData, setLoadingData] = useState(true);
+  const [data, setData] = useState(false);
   const [loadingBtn, setLoadingBtn] = useState(false);
   const [loadingReporte, setLoadingReporte] = useState(false);
-  const [errors, setErrors] = useState([]);
 
   const handleNavigate = (index) => {
     const query = queryString.stringify({
@@ -76,6 +78,22 @@ export default function Registrar_proyecto_fex_5() {
     }, 5000);
   };
 
+  const getData = async () => {
+    setLoadingData(true);
+    const res = await axiosBase.get("investigador/actividades/fex/datosPaso5", {
+      params: {
+        id,
+      },
+    });
+    const data = res.data;
+    setData(data);
+    setLoadingData(false);
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
+
   return (
     <BaseLayout
       breadcrumbs={breadcrumbs}
@@ -107,23 +125,42 @@ export default function Registrar_proyecto_fex_5() {
           {
             title: "Envío de propuesta",
             content: (
-              <SpaceBetween size="m">
-                <Alert
-                  header="Declaración jurada"
-                  action={
-                    <Button
-                      variant="primary"
-                      loading={loadingReporte}
-                      onClick={reporte}
+              <>
+                {loadingData ? (
+                  <Container>
+                    <Spinner /> Cargando datos
+                  </Container>
+                ) : (
+                  <SpaceBetween size="m">
+                    {data?.estado == 2 && (
+                      <Alert type="warning" header="Observación">
+                        <div
+                          style={{
+                            whiteSpace: "pre-wrap",
+                          }}
+                        >
+                          {data.observaciones_admin}
+                        </div>
+                      </Alert>
+                    )}
+                    <Alert
+                      header="Declaración jurada"
+                      action={
+                        <Button
+                          variant="primary"
+                          loading={loadingReporte}
+                          onClick={reporte}
+                        >
+                          Reporte
+                        </Button>
+                      }
                     >
-                      Reporte
-                    </Button>
-                  }
-                >
-                  Declaro bajo juramento que toda la información consignada en
-                  este formulario es verídica
-                </Alert>
-              </SpaceBetween>
+                      Declaro bajo juramento que toda la información consignada
+                      en este formulario es verídica
+                    </Alert>
+                  </SpaceBetween>
+                )}
+              </>
             ),
           },
         ]}

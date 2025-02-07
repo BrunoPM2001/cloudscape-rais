@@ -24,14 +24,14 @@ import Resumen from "./tabs/resumen";
 
 const breadcrumbs = [
   {
-    text: "Admin",
-    href: "/admin",
+    text: "Investigador",
+    href: "/investigador",
   },
   {
-    text: "Estudios",
+    text: "Actividades",
   },
   {
-    text: "Gestión de proyectos FEX",
+    text: "Proyectos FEX",
   },
   {
     text: "Registrar",
@@ -113,6 +113,8 @@ export default function Registrar_proyecto_fex_2() {
     handleChange("fecha_inicio", data.proyecto.fecha_inicio);
     handleChange("fecha_fin", data.proyecto.fecha_fin);
     handleChange("palabras_clave", data.proyecto.palabras_clave);
+    handleChange("estado", data.proyecto.estado);
+    handleChange("observaciones_admin", data.proyecto.observaciones_admin);
     if (data.extras) {
       handleChange("resumen", data.extras.resumen);
       handleChange("objetivos", data.extras.objetivos);
@@ -192,6 +194,17 @@ export default function Registrar_proyecto_fex_2() {
                   </Container>
                 ) : (
                   <SpaceBetween size="m">
+                    {formValues?.estado == 2 && (
+                      <Alert type="warning" header="Observación">
+                        <div
+                          style={{
+                            whiteSpace: "pre-wrap",
+                          }}
+                        >
+                          {formValues.observaciones_admin}
+                        </div>
+                      </Alert>
+                    )}
                     {alert && (
                       <Alert
                         type="error"
@@ -349,6 +362,9 @@ export default function Registrar_proyecto_fex_2() {
           },
           {
             title: "Integrantes",
+          },
+          {
+            title: "Envío de propuesta",
           },
         ]}
       />

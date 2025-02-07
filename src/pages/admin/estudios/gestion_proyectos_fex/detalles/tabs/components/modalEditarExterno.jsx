@@ -1,6 +1,5 @@
 import {
   Alert,
-  Autosuggest,
   Box,
   Button,
   ColumnLayout,
@@ -9,13 +8,13 @@ import {
   Modal,
   Select,
   SpaceBetween,
+  Spinner,
   Textarea,
 } from "@cloudscape-design/components";
 import { useContext, useEffect, useState } from "react";
-import { useFormValidation } from "../../../../../../hooks/useFormValidation";
-import axiosBase from "../../../../../../api/axios";
-import NotificationContext from "../../../../../../providers/notificationProvider";
-import { useAutosuggest } from "../../../../../../hooks/useAutosuggest";
+import NotificationContext from "../../../../../../../providers/notificationProvider";
+import { useFormValidation } from "../../../../../../../hooks/useFormValidation";
+import axiosBase from "../../../../../../../api/axios";
 
 const initialForm = {
   codigo_orcid: "",
@@ -64,70 +63,56 @@ const formRules = {
   observacion: { required: false },
 };
 
-export default ({ close, proyecto_id, reload }) => {
+const opt_sexo = [
+  {
+    label: "Masculino",
+    value: "M",
+  },
+  {
+    label: "Femenino",
+    value: "F",
+  },
+];
+
+export default ({ close, id, reload }) => {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
 
   //  States
   const [loadingCreate, setLoadingCreate] = useState(false);
-  const [enableCreate, setEnableCreate] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [paises, setPaises] = useState([]);
-  const [form, setForm] = useState({});
-  const [nuevo, setNuevo] = useState(false);
 
   //  Hooks
-  const { loading, options, setOptions, value, setValue, setAvoidSelect } =
-    useAutosuggest("investigador/actividades/fex/searchExterno");
-  const { formValues, formErrors, handleChange, validateForm } =
+  const { formValues, formErrors, handleChange, validateForm, setFormValues } =
     useFormValidation(initialForm, formRules);
 
   //  Functions
-  const agregarMiembro = async () => {
-    if (nuevo) {
-      if (validateForm()) {
-        setLoadingCreate(true);
-        const form = new FormData();
-        form.append("proyecto_id", proyecto_id);
-        form.append("codigo_orcid", formValues.codigo_orcid);
-        form.append("apellido1", formValues.apellido1);
-        form.append("apellido2", formValues.apellido2);
-        form.append("nombres", formValues.nombres);
-        form.append("sexo", formValues.sexo.value);
-        form.append("institucion", formValues.institucion);
-        form.append("pais", formValues.pais.value);
-        form.append("direccion1", formValues.direccion1);
-        form.append("doc_tipo", formValues.doc_tipo.value);
-        form.append("doc_numero", formValues.doc_numero);
-        form.append("telefono_movil", formValues.telefono_movil);
-        form.append("titulo_profesional", formValues.titulo_profesional);
-        form.append("grado", formValues.grado);
-        form.append("especialidad", formValues.especialidad);
-        form.append("researcher_id", formValues.researcher_id);
-        form.append("scopus_id", formValues.scopus_id);
-        form.append("link", formValues.link);
-        form.append("posicion_unmsm", formValues.posicion_unmsm);
-        form.append("biografia", formValues.biografia);
-        form.append("observacion", formValues.observacion);
-        form.append("tipo", "Nuevo");
-        const res = await axiosBase.post(
-          "investigador/actividades/fex/agregarExterno",
-          form
-        );
-        const data = res.data;
-        setLoadingCreate(false);
-        close();
-        reload();
-        pushNotification(data.detail, data.message, notifications.length + 1);
+  const getData = async () => {
+    setLoading(true);
+    const res = await axiosBase.get(
+      "admin/estudios/proyectosFEX/getEditExterno",
+      {
+        params: {
+          id,
+        },
       }
-    } else {
+    );
+    const data = res.data;
+    setFormValues({
+      ...data,
+      sexo: opt_sexo.find((opt) => opt.value == data.sexo),
+      pais: paises.find((opt) => opt.value == data.pais) ?? null,
+    });
+    setLoading(false);
+  };
+
+  const editar = async () => {
+    if (validateForm()) {
       setLoadingCreate(true);
-      const form1 = new FormData();
-      form1.append("proyecto_id", proyecto_id);
-      form1.append("tipo", "Antiguo");
-      form1.append("investigador_id", form.investigador_id);
       const res = await axiosBase.post(
-        "investigador/actividades/fex/agregarExterno",
-        form1
+        "admin/estudios/proyectosFEX/editarExterno",
+        formValues
       );
       const data = res.data;
       setLoadingCreate(false);
@@ -138,12 +123,13 @@ export default ({ close, proyecto_id, reload }) => {
   };
 
   const getPaises = async () => {
-    const res = await axiosBase.get("investigador/grupo/solicitar/getPaises");
+    const res = await axiosBase.get("admin/estudios/publicaciones/getPaises");
     const data = res.data;
     setPaises(data);
   };
 
   useEffect(() => {
+    getData();
     getPaises();
   }, []);
 
@@ -158,58 +144,20 @@ export default ({ close, proyecto_id, reload }) => {
             <Button variant="normal" onClick={close}>
               Cancelar
             </Button>
-            <Button
-              variant="primary"
-              disabled={!enableCreate}
-              onClick={agregarMiembro}
-              loading={loadingCreate}
-            >
-              Agregar
+            <Button variant="primary" onClick={editar} loading={loadingCreate}>
+              Editar
             </Button>
           </SpaceBetween>
         </Box>
       }
-      header="Agregar externo"
+      header="Editar externo"
     >
       <SpaceBetween size="s">
-        <Alert>
-          En caso no encuentre los datos de su externo presione la opción de
-          "Utilizar: ..."
-        </Alert>
-        <FormField label="Buscar externo registrado" stretch>
-          <Autosuggest
-            onChange={({ detail }) => {
-              setOptions([]);
-              setValue(detail.value);
-              if (detail.value == "") {
-                setForm({});
-                setEnableCreate(false);
-                setNuevo(false);
-              }
-            }}
-            onSelect={({ detail }) => {
-              if (detail.selectedOption != undefined) {
-                const { value, ...rest } = detail.selectedOption;
-                setForm(rest);
-                setEnableCreate(true);
-                setAvoidSelect(false);
-                setNuevo(false);
-              } else {
-                handleChange("doc_numero", detail.value);
-                setAvoidSelect(false);
-                setEnableCreate(true);
-                setNuevo(true);
-              }
-            }}
-            value={value}
-            options={options}
-            loadingText="Cargando data"
-            placeholder="Buscar con DNI"
-            statusType={loading ? "loading" : "finished"}
-            empty="No se encontraron resultados"
-          />
-        </FormField>
-        {nuevo ? (
+        {loading ? (
+          <SpaceBetween size="xs" direction="horizontal">
+            <Spinner /> Cargando información
+          </SpaceBetween>
+        ) : (
           <>
             <FormField
               label="Código ORCID"
@@ -266,16 +214,7 @@ export default ({ close, proyecto_id, reload }) => {
                   onChange={({ detail }) =>
                     handleChange("sexo", detail.selectedOption)
                   }
-                  options={[
-                    {
-                      label: "Masculino",
-                      value: "M",
-                    },
-                    {
-                      label: "Femenino",
-                      value: "F",
-                    },
-                  ]}
+                  options={opt_sexo}
                 />
               </FormField>
               <FormField
@@ -467,35 +406,6 @@ export default ({ close, proyecto_id, reload }) => {
                 }
               />
             </FormField>
-          </>
-        ) : (
-          <>
-            {enableCreate && (
-              <Alert>
-                <ColumnLayout columns={2} variant="text-grid">
-                  <SpaceBetween size="xxs">
-                    <div>
-                      <Box variant="awsui-key-label">Apellido paterno:</Box>
-                      <>{form.apellido1}</>
-                    </div>
-                    <div>
-                      <Box variant="awsui-key-label">Apellido materno:</Box>
-                      <>{form.apellido2}</>
-                    </div>
-                  </SpaceBetween>
-                  <SpaceBetween size="xxs">
-                    <div>
-                      <Box variant="awsui-key-label">Nombres:</Box>
-                      <>{form.nombres}</>
-                    </div>
-                    <div>
-                      <Box variant="awsui-key-label">N° de documento:</Box>
-                      <>{form.doc_numero}</>
-                    </div>
-                  </SpaceBetween>
-                </ColumnLayout>
-              </Alert>
-            )}
           </>
         )}
       </SpaceBetween>

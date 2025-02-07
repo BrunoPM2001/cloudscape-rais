@@ -105,6 +105,8 @@ const columnDefinitions = [
             ? "grey"
             : item.estado == "Aprobado"
             ? "green"
+            : item.estado == "Observado"
+            ? "grey"
             : item.estado == "En evaluación"
             ? "blue"
             : item.estado == "Enviado"
@@ -221,7 +223,8 @@ export default () => {
               <Button
                 disabled={
                   collectionProps.selectedItems.length == 0 ||
-                  collectionProps.selectedItems[0]?.estado != "En proceso"
+                  (collectionProps.selectedItems[0]?.estado != "En proceso" &&
+                    collectionProps.selectedItems[0]?.estado != "Observado")
                 }
                 onClick={() => {
                   const query = queryString.stringify({
