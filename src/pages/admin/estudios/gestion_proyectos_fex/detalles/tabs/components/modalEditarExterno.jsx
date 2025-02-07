@@ -1,5 +1,4 @@
 import {
-  Alert,
   Box,
   Button,
   ColumnLayout,
@@ -74,6 +73,21 @@ const opt_sexo = [
   },
 ];
 
+const opt_documento = [
+  {
+    label: "DNI",
+    value: "DNI",
+  },
+  {
+    label: "Carné de extranjería",
+    value: "CEX",
+  },
+  {
+    label: "Pasaporte",
+    value: "PASAPORTE",
+  },
+];
+
 export default ({ close, id, reload }) => {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
@@ -99,10 +113,12 @@ export default ({ close, id, reload }) => {
       }
     );
     const data = res.data;
+    setPaises(data.paises);
     setFormValues({
-      ...data,
-      sexo: opt_sexo.find((opt) => opt.value == data.sexo),
-      pais: paises.find((opt) => opt.value == data.pais) ?? null,
+      ...data.externo,
+      sexo: opt_sexo.find((opt) => opt.value == data.externo.sexo),
+      pais: data.paises.find((opt) => opt.value == data.externo.pais),
+      doc_tipo: opt_documento.find((opt) => opt.value == data.externo.doc_tipo),
     });
     setLoading(false);
   };
@@ -110,7 +126,7 @@ export default ({ close, id, reload }) => {
   const editar = async () => {
     if (validateForm()) {
       setLoadingCreate(true);
-      const res = await axiosBase.post(
+      const res = await axiosBase.put(
         "admin/estudios/proyectosFEX/editarExterno",
         formValues
       );
@@ -122,15 +138,8 @@ export default ({ close, id, reload }) => {
     }
   };
 
-  const getPaises = async () => {
-    const res = await axiosBase.get("admin/estudios/publicaciones/getPaises");
-    const data = res.data;
-    setPaises(data);
-  };
-
   useEffect(() => {
     getData();
-    getPaises();
   }, []);
 
   return (
@@ -265,20 +274,7 @@ export default ({ close, id, reload }) => {
                   onChange={({ detail }) =>
                     handleChange("doc_tipo", detail.selectedOption)
                   }
-                  options={[
-                    {
-                      label: "DNI",
-                      value: "DNI",
-                    },
-                    {
-                      label: "Carné de extranjería",
-                      value: "CEX",
-                    },
-                    {
-                      label: "Pasaporte",
-                      value: "PASAPORTE",
-                    },
-                  ]}
+                  options={opt_documento}
                 />
               </FormField>
               <FormField

@@ -98,7 +98,7 @@ const columnDisplay = [
 
 const FACULTADES_MIN = 3;
 const GRUPOS_MIN = 3;
-const TESISTA_PRE_MIN = 1;
+const TESISTA_PRE_MIN = 2;
 const TESISTA_POS_MIN = 1;
 
 const CORRESPONSAL_MIN = 1;
