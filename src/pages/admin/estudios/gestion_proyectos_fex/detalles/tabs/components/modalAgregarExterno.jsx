@@ -59,7 +59,6 @@ const formRules = {
   researcher_id: { required: false },
   scopus_id: { required: false },
   link: { required: false },
-  posicion_unmsm: { required: true },
   biografia: { required: false },
   observacion: { required: false },
 };
