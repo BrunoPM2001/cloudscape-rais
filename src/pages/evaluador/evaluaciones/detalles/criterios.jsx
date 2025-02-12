@@ -99,6 +99,7 @@ export default ({
                     autoFocus={true}
                     type="number"
                     inputMode="decimal"
+                    step="0.1"
                     value={currentValue ?? item.puntaje}
                     onChange={(event) => setValue(event.detail.value)}
                   />

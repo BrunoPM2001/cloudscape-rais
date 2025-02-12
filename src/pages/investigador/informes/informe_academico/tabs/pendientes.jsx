@@ -116,6 +116,7 @@ const columnDisplay = [
 export default () => {
   //  Data states
   const [loading, setLoading] = useState(true);
+  const [loadingBtn, setLoadingBtn] = useState(false);
   const [distributions, setDistribution] = useState([]);
   const {
     items,
@@ -158,6 +159,25 @@ export default () => {
     setLoading(false);
   };
 
+  const descargar = async () => {
+    setLoadingBtn(true);
+    const res = await axiosBase.get(
+      "investigador/informes/informe_academico/reporte",
+      {
+        params: {
+          informe_tecnico_id: collectionProps.selectedItems[0].id,
+          tipo_proyecto: collectionProps.selectedItems[0].tipo_proyecto,
+          tipo_informe: collectionProps.selectedItems[0].informe,
+        },
+        responseType: "blob",
+      }
+    );
+    const blob = await res.data;
+    const url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
+    setLoadingBtn(false);
+  };
+
   //  Effects
   useEffect(() => {
     getData();
@@ -179,25 +199,37 @@ export default () => {
       header={
         <Header
           actions={
-            <Button
-              variant="primary"
-              disabled={
-                collectionProps.selectedItems.length == 0 ||
-                collectionProps.selectedItems[0].estado == "Presentado"
-              }
-              onClick={() => {
-                const query = queryString.stringify({
-                  proyecto_id: collectionProps.selectedItems[0]?.proyecto_id,
-                  id: collectionProps.selectedItems[0]?.id,
-                  tipo_proyecto:
-                    collectionProps.selectedItems[0]?.tipo_proyecto,
-                  informe: collectionProps.selectedItems[0]?.informe,
-                });
-                window.location.href = "informeAcademico/presentar?" + query;
-              }}
-            >
-              Editar
-            </Button>
+            <SpaceBetween size="xs" direction="horizontal">
+              <Button
+                disabled={
+                  collectionProps.selectedItems.length == 0 ||
+                  !collectionProps.selectedItems[0].id
+                }
+                loading={loadingBtn}
+                onClick={descargar}
+              >
+                Reporte
+              </Button>
+              <Button
+                variant="primary"
+                disabled={
+                  collectionProps.selectedItems.length == 0 ||
+                  collectionProps.selectedItems[0].estado == "Presentado"
+                }
+                onClick={() => {
+                  const query = queryString.stringify({
+                    proyecto_id: collectionProps.selectedItems[0]?.proyecto_id,
+                    id: collectionProps.selectedItems[0]?.id,
+                    tipo_proyecto:
+                      collectionProps.selectedItems[0]?.tipo_proyecto,
+                    informe: collectionProps.selectedItems[0]?.informe,
+                  });
+                  window.location.href = "informeAcademico/presentar?" + query;
+                }}
+              >
+                Editar
+              </Button>
+            </SpaceBetween>
           }
         >
           Proyectos ({distributions.length})

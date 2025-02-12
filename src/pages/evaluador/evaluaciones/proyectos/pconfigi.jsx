@@ -1,4 +1,4 @@
-import { Button } from "@cloudscape-design/components";
+import { Button, SpaceBetween, Box } from "@cloudscape-design/components";
 
 const rowT = {
   border: "1px solid #ddd",
@@ -53,31 +53,32 @@ const styles = {
 const Pconfigi = ({ data }) => {
   const rows = [
     { label: "Título", value: data.proyecto?.titulo || "No disponible" },
-    {
-      label: "Grupo de Investigación",
-      value: data.proyecto?.grupo || "No disponible",
-    },
-    { label: "Área académica", value: data.proyecto?.area || "No disponible" },
-    {
-      label: "Unidad de investigación",
-      value: data.proyecto?.facultad || "No disponible",
-    },
-    { label: "Facultad", value: data.proyecto?.facultad || "No disponible" },
-    {
-      label: "Línea de investigación",
-      value: data.proyecto?.linea_investigacion || "No disponible",
-    },
-    {
-      label: "Tipo de investigación",
-      value: data.detalles["tipo_investigacion"] ?? "No disponible",
-    },
-    {
-      label: "Localización",
-      value: data.proyecto?.localizacion || "No disponible",
-    },
-    { label: "Línea OCDE", value: data.proyecto?.ocde || "No disponible" },
-    { label: "Objetivo ODS", value: data.proyecto?.objetivo_ods || "-" },
   ];
+
+  const resumenPresupuesto = {
+    Bienes: { cantidad: 0, monto: 0 },
+    Servicios: { cantidad: 0, monto: 0 },
+    Otros: { cantidad: 0, monto: 0 },
+  };
+
+  data.presupuesto.forEach((item) => {
+    if (resumenPresupuesto[item.tipo]) {
+      resumenPresupuesto[item.tipo].cantidad += 1;
+      resumenPresupuesto[item.tipo].monto += Number(item.monto); // Asegurar que es número
+    }
+  });
+
+  const montoTotal = Object.values(resumenPresupuesto).reduce(
+    (acc, curr) => acc + curr.monto,
+    0
+  );
+
+  Object.keys(resumenPresupuesto).forEach((tipo) => {
+    resumenPresupuesto[tipo].porcentaje =
+      montoTotal > 0
+        ? ((resumenPresupuesto[tipo].monto / montoTotal) * 100).toFixed(2)
+        : "0.00";
+  });
 
   return (
     <div>
@@ -191,9 +192,29 @@ const Pconfigi = ({ data }) => {
           <>No se cargó ningún archivo</>
         )}
       </div>
-      
       <h2>
-        <b>G. Referencias Bibliograficas </b>
+        <b>G. Colaboración Externa</b>
+      </h2>
+
+      <div>
+        {data.proyectoDoc.categoria == "documento" ? (
+          <Button
+            ariaLabel="Archivo de Colaboracion Externa"
+            href={data.proyectoDoc.documento}
+            iconAlign="right"
+            iconName="external"
+            variant="primary"
+            fontSize="body-s"
+            target="_blank"
+          >
+            Descargar archivo
+          </Button>
+        ) : (
+          <>No se cargó ningún archivo</>
+        )}
+      </div>
+      <h2>
+        <b>H. Referencias Bibliograficas </b>
       </h2>
       <div
         style={justifyText}
@@ -202,7 +223,7 @@ const Pconfigi = ({ data }) => {
         }}
       ></div>
       <h2>
-        <b>G. Contribución e Impacto </b>
+        <b>I. Contribución e Impacto </b>
       </h2>
       <div
         style={justifyText}
@@ -212,7 +233,7 @@ const Pconfigi = ({ data }) => {
       ></div>
       <div style={styles.container}>
         <h2>
-          <b>H. Calendarios Actividades</b>
+          <b>J. Calendarios Actividades</b>
         </h2>
         <table style={styles.table}>
           <thead>
@@ -238,44 +259,10 @@ const Pconfigi = ({ data }) => {
           </tbody>
         </table>
       </div>
-      <div style={styles.container}>
-        <h2>
-          <b>J. Integrantes</b>
-        </h2>
-        <table style={styles.table}>
-          <thead>
-            <tr>
-              <th style={styles.rowT}>Tipo Integrante</th>
-              <th style={styles.rowT}>Apellidos y Nombres</th>
-              <th style={styles.rowT}>Tipo</th>
-              <th style={styles.rowT}>Facultad</th>
-              <th style={styles.rowT}>Tipo integrante en el grupo</th>
-              <th style={styles.rowT}>Tipo Tesis</th>
-              <th style={styles.rowT}>Titulo Tesis</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.integrantes.map((item, index) => (
-              <tr
-                key={index}
-                style={index % 2 === 0 ? styles.rowEven : styles.rowOdd}
-              >
-                <td style={styles.td}>{item.tipo_integrante}</td>
-                <td style={styles.td}>{item.integrante}</td>
-                <td style={styles.td}>{item.tipo}</td>
-                <td style={styles.td}>{item.facultad}</td>
-                <td style={styles.td}>{item.tipo_integrante_grupo}</td>
-                <td style={styles.td}>{item.tipo_tesis}</td>
-                <td style={styles.td}>{item.titulo_tesis}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
 
       <div style={styles.container}>
         <h2>
-          <b>I. Presupuesto</b>
+          <b>K. Presupuesto</b>
         </h2>
         <table style={styles.table}>
           <thead>
@@ -285,7 +272,6 @@ const Pconfigi = ({ data }) => {
               <th style={rowT}>Partida</th>
               <th style={rowT}>Justificación</th>
               <th style={rowT}>Monto S/.</th>
-              
             </tr>
           </thead>
           <tbody>
@@ -297,10 +283,75 @@ const Pconfigi = ({ data }) => {
                   <td style={rowT}>{item.partida}</td>
                   <td style={rowT}>{item.justificacion}</td>
                   <td style={rowT}>{item.monto}</td>
-                  
                 </tr>
               );
             })}
+          </tbody>
+        </table>
+        <br />
+        <table style={styles.table}>
+          <thead>
+            <tr>
+              <th style={rowT}>Bienes</th>
+              <th style={rowT}>Servicios</th>
+              <th style={rowT}>Otros</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style={rowT}>
+                Cantidad: {resumenPresupuesto.Bienes.cantidad}
+              </td>
+              <td style={rowT}>
+                Cantidad: {resumenPresupuesto.Servicios.cantidad}
+              </td>
+              <td style={rowT}>
+                Cantidad: {resumenPresupuesto.Otros.cantidad}
+              </td>
+            </tr>
+            <tr>
+              <td style={rowT}>
+                Monto: S/{" "}
+                {resumenPresupuesto.Bienes.monto.toLocaleString("es-PE", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
+              </td>
+              <td style={rowT}>
+                Monto: S/{" "}
+                {resumenPresupuesto.Servicios.monto.toLocaleString("es-PE", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
+              </td>
+              <td style={rowT}>
+                Monto: S/{" "}
+                {resumenPresupuesto.Otros.monto.toLocaleString("es-PE", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
+              </td>
+            </tr>
+            <tr>
+              <td style={rowT}>
+                Porcentaje: {resumenPresupuesto.Bienes.porcentaje}%
+              </td>
+              <td style={rowT}>
+                Porcentaje: {resumenPresupuesto.Servicios.porcentaje}%
+              </td>
+              <td style={rowT}>
+                Porcentaje: {resumenPresupuesto.Otros.porcentaje}%
+              </td>
+            </tr>
+            <tr>
+              <td style={{ ...rowT, fontWeight: "bold" }} colSpan="3">
+                Monto Total: S/{" "}
+                {montoTotal.toLocaleString("es-PE", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>

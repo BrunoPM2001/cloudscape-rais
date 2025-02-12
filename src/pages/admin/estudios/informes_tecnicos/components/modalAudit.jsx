@@ -62,10 +62,16 @@ export default ({ close, id }) => {
             header: "Nombre",
             cell: (item) => item.nombres + " " + item.apellidos,
           },
+          {
+            id: "accion",
+            header: "Acción",
+            cell: (item) => item.accion,
+          },
         ]}
         columnDisplay={[
           { id: "fecha", visible: true },
           { id: "nombre", visible: true },
+          { id: "accion", visible: true },
         ]}
         empty={
           <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
