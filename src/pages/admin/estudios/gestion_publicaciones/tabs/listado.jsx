@@ -9,6 +9,7 @@ import {
   PropertyFilter,
   SpaceBetween,
   Table,
+  CollectionPreferences,
 } from "@cloudscape-design/components";
 import { useState, useEffect } from "react";
 import { useCollection } from "@cloudscape-design/collection-hooks";
@@ -246,6 +247,16 @@ export default () => {
   const [form, setForm] = useState({});
   const [distributions, setDistribution] = useState([]);
   const [type, setType] = useState("");
+  const [preferences, setPreferences] = useState({
+    pageSize: 10,
+    contentDisplay: columnDisplay,
+    stripedRows: false,
+    contentDensity: "comfortable",
+    stickyColumns: {
+      first: 0,
+      last: 0,
+    },
+  });
 
   //  Hooks
   const {
@@ -273,7 +284,7 @@ export default () => {
         </Box>
       ),
     },
-    pagination: { pageSize: 10 },
+    pagination: { pageSize: preferences.pageSize },
     sorting: {},
     selection: {},
   });
@@ -327,10 +338,13 @@ export default () => {
         trackBy="id"
         items={items}
         columnDefinitions={columnDefinitions}
-        columnDisplay={columnDisplay}
+        columnDisplay={preferences.contentDisplay}
         loading={loadingData}
         loadingText="Cargando datos"
         enableKeyboardNavigation
+        stripedRows={preferences.stripedRows}
+        contentDensity={preferences.contentDensity}
+        stickyColumns={preferences.stickyColumns}
         selectionType="single"
         onRowClick={({ detail }) => actions.setSelectedItems([detail.item])}
         wrapLines
@@ -473,6 +487,52 @@ export default () => {
               <b>No hay registros...</b>
             </SpaceBetween>
           </Box>
+        }
+        preferences={
+          <CollectionPreferences
+            title="Preferencias de tabla"
+            confirmLabel="Confirmar"
+            cancelLabel="Cancelar"
+            preferences={preferences}
+            onConfirm={({ detail }) => setPreferences(detail)}
+            stripedRowsPreference
+            contentDensityPreference
+            contentDisplayPreference={{
+              options: columnDefinitions.map((item) => ({
+                id: item.id,
+                label: item.header,
+              })),
+            }}
+            pageSizePreference={{
+              options: [
+                { value: 10, label: "10 filas" },
+                { value: 20, label: "20 filas" },
+                { value: 25, label: "25 filas" },
+                { value: 50, label: "50 filas" },
+              ],
+            }}
+            stickyColumnsPreference={{
+              firstColumns: {
+                title: "Fijar primera(s) columna(s)",
+                description:
+                  "Mantén visible las primeras columnas al deslizar el contenido de la tabla de forma horizontal.",
+                options: [
+                  { label: "Ninguna", value: 0 },
+                  { label: "Primera columna", value: 1 },
+                  { label: "Primeras 2 columnas", value: 2 },
+                ],
+              },
+              lastColumns: {
+                title: "Fijar última columna",
+                description:
+                  "Mantén visible la última columna al deslizar el contenido de la tabla de forma horizontal.",
+                options: [
+                  { label: "Ninguna", value: 0 },
+                  { label: "Última columna", value: 1 },
+                ],
+              },
+            }}
+          />
         }
       />
       {type == "audit" && (

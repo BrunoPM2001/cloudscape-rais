@@ -30,6 +30,7 @@ export default function Informes_tecnicos() {
       header="Informes técnicos:"
       helpInfo="Solo se listan los proyectos que tengan como mínimo un informe técnico."
       disableOverlap
+      contentType="table"
     >
       <Tabs tabs={tabs} ariaLabel="Opciones de informes técnicos" />
     </BaseLayout>

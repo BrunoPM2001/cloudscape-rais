@@ -119,9 +119,34 @@ const navItems = [
         href: "/investigador/publicaciones/patente",
       },
       {
-        type: "link",
+        type: "expandable-link-group",
         text: "Listado de revistas y editoriales reconocidas",
-        info: <Badge color="grey">En desarrollo</Badge>,
+        items: [
+          {
+            type: "link",
+            text: "Revistas Scielo",
+            href: "https://vrip.unmsm.edu.pe/Documentos/2022/Listado_Revistas/Revistas_Scielo.pdf",
+            external: true,
+          },
+          {
+            type: "link",
+            text: "Revistas Scopus",
+            href: "https://vrip.unmsm.edu.pe/Documentos/2022/Listado_Revistas/Revistas_Scopus.pdf",
+            external: true,
+          },
+          {
+            type: "link",
+            text: "Revistas WOS - JCR",
+            href: "https://vrip.unmsm.edu.pe/Documentos/2022/Listado_Revistas/Revistas_WOS-JCR.pdf",
+            external: true,
+          },
+          {
+            type: "link",
+            text: "Revistas WOS - ESCI",
+            href: "https://vrip.unmsm.edu.pe/Documentos/2022/Listado_Revistas/Revistas_WOS-ESCI.pdf",
+            external: true,
+          },
+        ],
       },
     ],
   },

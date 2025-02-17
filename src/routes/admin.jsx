@@ -2,6 +2,11 @@ import { Suspense, lazy } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { NotificationProvider } from "../providers/notificationProvider";
 
+const Detalle_informe_tecnico_antiguo = lazy(() =>
+  import(
+    "../pages/admin/estudios/informes_tecnicos/detalles_antiguos/index.jsx"
+  )
+);
 const Monitoreo_detalles = lazy(() =>
   import("../pages/admin/estudios/monitoreo/detalles/index.jsx")
 );
@@ -296,6 +301,10 @@ const routes = createBrowserRouter(
             {
               path: "detalle",
               element: <Detalle_informe_tecnico />,
+            },
+            {
+              path: "detalleAntiguo",
+              element: <Detalle_informe_tecnico_antiguo />,
             },
           ],
         },

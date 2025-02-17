@@ -434,6 +434,17 @@ export default () => {
                     selectedOption.value != "antiguos" ||
                     !collectionProps.selectedItems.length
                   }
+                  onClick={() => {
+                    const query = queryString.stringify({
+                      proyecto_id: collectionProps.selectedItems[0].id,
+                      tipo_proyecto:
+                        collectionProps.selectedItems[0].tipo_proyecto,
+                    });
+                    window.open(
+                      "informes_tecnicos/detalleAntiguo?" + query,
+                      "_blank"
+                    );
+                  }}
                 >
                   Presentar informe
                 </Button>

@@ -195,7 +195,7 @@ export default function Detalle_informe_tecnico() {
   return (
     <BaseLayout
       breadcrumbs={breadcrumbs}
-      header="Detalle del informe:"
+      header="Detalle del informe"
       helpInfo="Información sobre la páginal actual para poder mostrarla al público
       en general."
     >

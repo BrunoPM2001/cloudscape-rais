@@ -76,6 +76,18 @@ const FILTER_PROPS = [
     groupValuesLabel: "N° de documento",
     operators: stringOperators,
   },
+  {
+    propertyLabel: "Fecha de creación",
+    key: "created_at",
+    groupValuesLabel: "Fechas de creación",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "Fecha de actualización",
+    key: "updated_at",
+    groupValuesLabel: "Fechas de actualización",
+    operators: stringOperators,
+  },
 ];
 
 const columnDefinitions = [
@@ -194,6 +206,13 @@ const columnDefinitions = [
     sortingField: "created_at",
     minWidth: 120,
   },
+  {
+    id: "updated_at",
+    header: "Fecha de actualización",
+    cell: (item) => item.updated_at,
+    sortingField: "updated_at",
+    minWidth: 120,
+  },
 ];
 
 const columnDisplay = [
@@ -211,12 +230,12 @@ const columnDisplay = [
   { id: "telefono_movil", visible: true },
   { id: "email3", visible: true },
   { id: "created_at", visible: true },
+  { id: "updated_at", visible: true },
 ];
 
 export default () => {
   //  Data states
   const [loading, setLoading] = useState(true);
-  const [visible, setVisible] = useState(false);
   const [distributions, setDistribution] = useState([]);
   const {
     items,
