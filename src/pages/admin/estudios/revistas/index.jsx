@@ -1,4 +1,4 @@
-import { SpaceBetween, Tabs } from "@cloudscape-design/components";
+import { Tabs } from "@cloudscape-design/components";
 import Listado from "./tabs/listado";
 import Bd_indizacion from "./tabs/bd_indizacion";
 import Bd_wos from "./tabs/bd_wos";
@@ -39,14 +39,13 @@ export default function Revistas() {
   return (
     <BaseLayout
       breadcrumbs={breadcrumbs}
-      header="Revistas:"
+      header="Revistas"
       helpInfo="Información sobre la páginal actual para poder mostrarla al público
       en general."
       disableOverlap
+      contentType="table"
     >
-      <SpaceBetween size="l">
-        <Tabs tabs={tabs} ariaLabel="Opciones de revistas" />
-      </SpaceBetween>
+      <Tabs tabs={tabs} ariaLabel="Opciones de revistas" />
     </BaseLayout>
   );
 }

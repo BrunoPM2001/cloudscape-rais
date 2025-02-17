@@ -133,7 +133,7 @@ export default ({ id, reload, close }) => {
               onChange={({ detail }) => {
                 handleChange("condicion", detail.selectedOption);
               }}
-              options={[{ value: "Autor" }, { value: "Inventor" }]}
+              options={[{ value: "Inventor" }]}
             />
           </FormField>
         </SpaceBetween>

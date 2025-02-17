@@ -112,18 +112,34 @@ export default function ({ data, setData, reload }) {
     useAutosuggest("admin/estudios/publicaciones/searchRevista");
 
   const getData = async () => {
-    setRevistasIndexadas(data.revistas);
+    setRevistasIndexadas(
+      data.revistas.map((item) => ({
+        ...item,
+        value: String(item.value),
+      }))
+    );
     setFormValues({
       ...initialForm,
       ...data.data,
       art_tipo: { value: data.data.art_tipo },
       palabras_clave: data.palabras_clave,
-      indexada: data.indexada,
-      wos: data.indexada_wos,
+      indexada: data.indexada.map((item) => ({
+        ...item,
+        value: String(item.value),
+      })),
+      wos: data.indexada_wos.map((item) => ({
+        ...item,
+        value: String(item.value),
+      })),
     });
     setValue(data.data.publicacion_nombre);
     setAvoidSelect(false);
-    setWos(data.wos);
+    setWos(
+      data.wos.map((item) => ({
+        ...item,
+        value: String(item.value),
+      }))
+    );
   };
 
   const agregarRevista = async () => {

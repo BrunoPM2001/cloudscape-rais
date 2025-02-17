@@ -55,6 +55,11 @@ export default ({ data, close }) => {
             header: "Filiación UNMSM",
             cell: (item) => (item.filiacion == 0 ? "No" : "Sí"),
           },
+          {
+            id: "filiacion_unica",
+            header: "Filiación única con UNMSM",
+            cell: (item) => (item.filiacion_unica == 0 ? "No" : "Sí"),
+          },
         ]}
         columnDisplay={[
           { id: "titulo", visible: true },
@@ -62,6 +67,7 @@ export default ({ data, close }) => {
           { id: "codigo_registro", visible: true },
           { id: "indexada", visible: true },
           { id: "filiacion", visible: true },
+          { id: "filiacion_unica", visible: true },
         ]}
         items={data}
         empty={

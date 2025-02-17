@@ -175,7 +175,7 @@ export default ({ id, visible, setVisible, reload, optAutor }) => {
               />
             </FormField>
             <FormField
-              label="Filiación única"
+              label="Filiación única con UNMSM"
               info={
                 <Popover
                   header="Descripción"

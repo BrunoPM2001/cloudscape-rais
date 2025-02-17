@@ -3,6 +3,7 @@ import {
   Form,
   FormField,
   Grid,
+  Select,
   SpaceBetween,
   Tabs,
   Textarea,
@@ -56,7 +57,17 @@ const gridDefinition = [
 
 const initialForm = {
   descripcion: "",
+  estado: null,
+  observacion: "",
 };
+
+const opt_estado = [
+  { value: 0, label: "No aprobado" },
+  { value: 1, label: "Aprobado" },
+  { value: 2, label: "Observado" },
+  { value: 5, label: "Enviado" },
+  { value: 6, label: "En proceso" },
+];
 
 export default function Monitoreo_detalles() {
   //  Context
@@ -85,6 +96,11 @@ export default function Monitoreo_detalles() {
     });
     const data = res.data;
     handleChange("descripcion", res.data.datos.descripcion);
+    handleChange("observacion", res.data.datos.observacion);
+    handleChange(
+      "estado",
+      opt_estado.find((opt) => opt.label == res.data.datos.estado_meta)
+    );
     setData(data);
     setLoading(false);
   };
@@ -116,6 +132,19 @@ export default function Monitoreo_detalles() {
     const blob = await res.data;
     const url = URL.createObjectURL(blob);
     window.open(url, "_blank");
+  };
+
+  const guardar = async () => {
+    setLoadingBtn(true);
+    const res = await axiosBase.put("admin/estudios/monitoreo/guardar", {
+      proyecto_id: id,
+      observacion: formValues.observacion,
+      estado: formValues.estado.value,
+    });
+    const data = res.data;
+    pushNotification(data.detail, data.message, notifications.length + 1);
+    setLoadingBtn(false);
+    getData();
   };
 
   //  Tabs
@@ -162,26 +191,60 @@ export default function Monitoreo_detalles() {
                   Remitir monitoreo
                 </Button>
               ) : (
-                data?.datos?.estado_meta == "Enviado" && (
-                  <Button onClick={reporte} loading={loadingBtn}>
-                    Reporte
-                  </Button>
+                data?.datos?.estado_meta != "Por presentar" && (
+                  <SpaceBetween size="xs" direction="horizontal">
+                    <Button onClick={reporte} loading={loadingBtn}>
+                      Reporte
+                    </Button>
+                    <Button
+                      variant="primary"
+                      onClick={guardar}
+                      loading={loadingBtn}
+                    >
+                      Guardar monitoreo
+                    </Button>
+                  </SpaceBetween>
                 )
               )}
             </>
           }
         >
-          <FormField label="Descripción o comentarios del monitoreo" stretch>
-            <Textarea
-              readOnly={data?.datos?.estado_meta == "Enviado"}
-              value={formValues.descripcion}
-              disabled={loading}
-              loading={loadingBtn}
-              onChange={({ detail }) =>
-                handleChange("descripcion", detail.value)
-              }
-            />
-          </FormField>
+          <SpaceBetween size="m">
+            <FormField label="Descripción o comentarios del monitoreo" stretch>
+              <Textarea
+                readOnly={data?.datos?.estado_meta == "Enviado"}
+                value={formValues.descripcion}
+                disabled={loading}
+                loading={loadingBtn}
+                onChange={({ detail }) =>
+                  handleChange("descripcion", detail.value)
+                }
+              />
+            </FormField>
+            {data?.datos?.estado_meta != "Por presentar" && (
+              <FormField label="Evaluación del monitoreo" stretch>
+                <Select
+                  placeholder="Escoja una opción"
+                  selectedOption={formValues.estado}
+                  onChange={({ detail }) =>
+                    handleChange("estado", detail.selectedOption)
+                  }
+                  options={opt_estado}
+                />
+              </FormField>
+            )}
+            {formValues.estado?.label == "Observado" && (
+              <FormField label="Observación" stretch>
+                <Textarea
+                  value={formValues.observacion}
+                  loading={loadingBtn}
+                  onChange={({ detail }) =>
+                    handleChange("observacion", detail.value)
+                  }
+                />
+              </FormField>
+            )}
+          </SpaceBetween>
         </Form>
       </SpaceBetween>
     </BaseLayout>

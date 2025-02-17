@@ -189,7 +189,7 @@ export default ({ item, reload, close, optAutor }) => {
             />
           </FormField>
           <FormField
-            label="Filiación única"
+            label="Filiación única con UNMSM"
             info={
               <Popover
                 header="Descripción"

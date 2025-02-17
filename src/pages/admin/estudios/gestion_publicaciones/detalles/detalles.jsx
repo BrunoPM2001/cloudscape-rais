@@ -106,7 +106,7 @@ export default ({ id, changes, reload }) => {
       },
     });
     const data = res.data;
-    setOpt_categoria(data.categorias);
+    setOpt_categoria([{ value: null, label: "Ninguna" }, ...data.categorias]);
     setFormValues({
       ...data.data,
       comentario: data.data.comentario ?? "",
@@ -115,9 +115,10 @@ export default ({ id, changes, reload }) => {
       codigo_registro: data.data.codigo_registro ?? "No tiene código",
       validado: opt_validado.find((opt) => opt.value == data.data.validado),
       estado: opt_estado.find((opt) => opt.value == data.data.estado),
-      categoria_id:
-        data.categorias.find((opt) => opt.value == data.data.categoria_id) ||
-        null,
+      categoria_id: [
+        { value: null, label: "Ninguna" },
+        ...data.categorias,
+      ].find((opt) => opt.value == data.data.categoria_id),
       file: [],
       file_comentario: [],
     });

@@ -10,6 +10,8 @@ import {
 import { useState, useEffect } from "react";
 import { useCollection } from "@cloudscape-design/collection-hooks";
 import axiosBase from "../../../../../api/axios";
+import ModalAddRevista from "../components/modalAddRevista";
+import ModalUpdateRevista from "../components/modalUpdateRevista";
 
 const stringOperators = [":", "!:", "=", "!=", "^", "!^"];
 
@@ -130,7 +132,6 @@ const columnDisplay = [
 export default () => {
   //  Data states
   const [loading, setLoading] = useState(true);
-  const [selectedItems, setSelectedItems] = useState([]);
   const [distributions, setDistribution] = useState([]);
   const {
     items,
@@ -158,17 +159,17 @@ export default () => {
       ),
     },
     pagination: { pageSize: 10 },
-    sorting: { defaultState: { sortingColumn: columnDefinitions[0] } },
+    sorting: {},
     selection: {},
   });
-  const [enableBtn, setEnableBtn] = useState(true);
+  const [modal, setModal] = useState("");
 
   //  Functions
   const getData = async () => {
     setLoading(true);
     const res = await axiosBase.get("admin/estudios/revistas/listado");
-    const data = await res.data;
-    setDistribution(data.data);
+    const data = res.data;
+    setDistribution(data);
     setLoading(false);
   };
 
@@ -177,71 +178,72 @@ export default () => {
     getData();
   }, []);
 
-  useEffect(() => {
-    if (selectedItems.length > 0) {
-      setEnableBtn(true);
-    } else {
-      setEnableBtn(false);
-    }
-  }, [selectedItems]);
-
   return (
-    <Table
-      {...collectionProps}
-      trackBy="id"
-      items={items}
-      columnDefinitions={columnDefinitions}
-      columnDisplay={columnDisplay}
-      loading={loading}
-      loadingText="Cargando datos"
-      resizableColumns
-      enableKeyboardNavigation
-      selectionType="single"
-      selectedItems={selectedItems}
-      onSelectionChange={({ detail }) => setSelectedItems(detail.selectedItems)}
-      header={
-        <Header
-          actions={
-            <SpaceBetween direction="horizontal" size="s">
-              <Button
-                disabled={!enableBtn}
-                variant="normal"
-                onClick={() => {
-                  console.log("Editar");
-                }}
-              >
-                Editar
-              </Button>
-              <Button
-                variant="primary"
-                onClick={() => {
-                  console.log("Editar");
-                }}
-              >
-                Nuevo
-              </Button>
+    <>
+      <Table
+        {...collectionProps}
+        trackBy="id"
+        items={items}
+        columnDefinitions={columnDefinitions}
+        columnDisplay={columnDisplay}
+        loading={loading}
+        loadingText="Cargando datos"
+        resizableColumns
+        enableKeyboardNavigation
+        selectionType="single"
+        onRowClick={({ detail }) => actions.setSelectedItems([detail.item])}
+        header={
+          <Header
+            actions={
+              <SpaceBetween direction="horizontal" size="s">
+                <Button
+                  disabled={!collectionProps.selectedItems.length}
+                  variant="normal"
+                  onClick={() => setModal("update")}
+                >
+                  Editar
+                </Button>
+                <Button
+                  variant="primary"
+                  onClick={() => setModal("add")}
+                  disabled={loading}
+                >
+                  Nuevo
+                </Button>
+              </SpaceBetween>
+            }
+          >
+            Revistas
+          </Header>
+        }
+        filter={
+          <PropertyFilter
+            {...propertyFilterProps}
+            filteringPlaceholder="Buscar revista"
+            countText={`${filteredItemsCount} coincidencias`}
+            expandToViewport
+          />
+        }
+        pagination={<Pagination {...paginationProps} />}
+        empty={
+          <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
+            <SpaceBetween size="m">
+              <b>No hay registros...</b>
             </SpaceBetween>
-          }
-        >
-          Revistas
-        </Header>
-      }
-      filter={
-        <PropertyFilter
-          {...propertyFilterProps}
-          filteringPlaceholder="Buscar revista"
-          countText={`${filteredItemsCount} coincidencias`}
-          expandToViewport
-        />
-      }
-      pagination={<Pagination {...paginationProps} />}
-      empty={
-        <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
-          <SpaceBetween size="m">
-            <b>No hay registros...</b>
-          </SpaceBetween>
-        </Box>
-      }
-    />
+          </Box>
+        }
+      />
+      {modal == "add" ? (
+        <ModalAddRevista close={() => setModal("")} reload={getData} />
+      ) : (
+        modal == "update" && (
+          <ModalUpdateRevista
+            item={collectionProps.selectedItems[0]}
+            close={() => setModal("")}
+            reload={getData}
+          />
+        )
+      )}
+    </>
   );
 };
