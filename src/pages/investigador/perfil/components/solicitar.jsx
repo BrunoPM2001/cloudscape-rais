@@ -30,10 +30,6 @@ export default ({ data }) => {
               Todas las publicaciones deben tener Filiación UNMSM. En caso
               contrario su solicitud será OBSERVADA.
             </li>
-            <li>
-              Debe eliminar sus publicaciones sin Filiación UNMSM de su perfil
-              RAIS.
-            </li>
           </ul>
           <li>
             <Link

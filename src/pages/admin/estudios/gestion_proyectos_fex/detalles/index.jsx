@@ -87,7 +87,7 @@ export default function Detalle_proyectoFEX() {
   return (
     <BaseLayout
       breadcrumbs={breadcrumbs}
-      header="Detalle de la publicación"
+      header="Detalle del proyecto"
       helpInfo="Información sobre la páginal actual para poder mostrarla al público
       en general."
     >

@@ -28,6 +28,12 @@ const FILTER_PROPS = [
     operators: stringOperators,
   },
   {
+    propertyLabel: "Año de publicación",
+    key: "periodo",
+    groupValuesLabel: "Años",
+    operators: stringOperators,
+  },
+  {
     propertyLabel: "Código de registro",
     key: "codigo_registro",
     groupValuesLabel: "Códigos de registro",
@@ -174,6 +180,12 @@ const columnDefinitions = [
     sortingField: "fecha_publicacion",
   },
   {
+    id: "periodo",
+    header: "Año de publicación",
+    cell: (item) => item.periodo,
+    sortingField: "periodo",
+  },
+  {
     id: "created_at",
     header: "Fecha de creación",
     cell: (item) => item.created_at,
@@ -234,6 +246,7 @@ const columnDisplay = [
   { id: "editorial", visible: true },
   { id: "evento_nombre", visible: true },
   { id: "fecha_publicacion", visible: true },
+  { id: "periodo", visible: true },
   { id: "created_at", visible: true },
   { id: "updated_at", visible: true },
   { id: "estado", visible: true },
