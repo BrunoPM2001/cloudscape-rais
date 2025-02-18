@@ -73,6 +73,13 @@ export default function Proyecto_detalle() {
             text: "Proyecto",
           },
         ]);
+      } else if (tipo == "PFEX") {
+        setItems([
+          {
+            id: "action_4",
+            text: "Proyecto",
+          },
+        ]);
       }
     }
   };

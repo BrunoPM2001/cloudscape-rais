@@ -90,6 +90,7 @@ export default function Detalle_proyectoFEX() {
       header="Detalle del proyecto"
       helpInfo="Información sobre la páginal actual para poder mostrarla al público
       en general."
+      contentType="table"
     >
       <SpaceBetween size="l">
         <Detalles id={id} />

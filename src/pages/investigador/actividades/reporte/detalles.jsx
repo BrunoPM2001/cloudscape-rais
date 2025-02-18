@@ -64,6 +64,8 @@ export default ({ data, loading, id, items, antiguo }) => {
                   reporte("reporteConFin");
                 } else if (detail.id == "action_3") {
                   reporte("reporteSinFin");
+                } else if (detail.id == "action_4") {
+                  reporte("reporteFex");
                 }
               }}
             >

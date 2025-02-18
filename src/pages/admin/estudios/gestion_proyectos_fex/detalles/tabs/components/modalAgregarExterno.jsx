@@ -36,6 +36,8 @@ const initialForm = {
   scopus_id: "",
   link: "",
   posicion_unmsm: "",
+  cti_vitae: "",
+  google_scholar: "",
   biografia: "",
   observacion: "",
   file: [],
@@ -58,6 +60,8 @@ const formRules = {
   especialidad: { required: false },
   researcher_id: { required: false },
   scopus_id: { required: false },
+  cti_vitae: { required: true },
+  google_scholar: { required: true },
   link: { required: false },
   biografia: { required: false },
   observacion: { required: false },
@@ -103,6 +107,8 @@ export default ({ close, id, reload }) => {
         form.append("especialidad", formValues.especialidad);
         form.append("researcher_id", formValues.researcher_id);
         form.append("scopus_id", formValues.scopus_id);
+        form.append("cti_vitae", formValues.cti_vitae);
+        form.append("google_scholar", formValues.google_scholar);
         form.append("link", formValues.link);
         form.append("posicion_unmsm", formValues.posicion_unmsm);
         form.append("biografia", formValues.biografia);
@@ -420,6 +426,30 @@ export default ({ close, id, reload }) => {
                   value={formValues.scopus_id}
                   onChange={({ detail }) =>
                     handleChange("scopus_id", detail.value)
+                  }
+                />
+              </FormField>
+              <FormField
+                label="CTI Vitae"
+                stretch
+                errorText={formErrors.cti_vitae}
+              >
+                <Input
+                  value={formValues.cti_vitae}
+                  onChange={({ detail }) =>
+                    handleChange("cti_vitae", detail.value)
+                  }
+                />
+              </FormField>
+              <FormField
+                label="Google scholar"
+                stretch
+                errorText={formErrors.google_scholar}
+              >
+                <Input
+                  value={formValues.google_scholar}
+                  onChange={({ detail }) =>
+                    handleChange("google_scholar", detail.value)
                   }
                 />
               </FormField>

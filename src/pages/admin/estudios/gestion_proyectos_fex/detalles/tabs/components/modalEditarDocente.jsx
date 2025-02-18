@@ -146,7 +146,7 @@ export default ({ id, close, reload }) => {
                 <Box variant="awsui-key-label">Apellidos y nombres</Box>
                 <div>{`${formValues?.apellido1} ${formValues?.apellido2}, ${formValues?.nombres}`}</div>
               </div>
-              <ColumnLayout columns={2}>
+              <ColumnLayout columns={2} disableGutters>
                 <div>
                   <Box variant="awsui-key-label">Código docente</Box>
                   <div>{formValues?.codigo}</div>
@@ -154,6 +154,14 @@ export default ({ id, close, reload }) => {
                 <div>
                   <Box variant="awsui-key-label">N° de documento</Box>
                   <div>{formValues?.doc_numero}</div>
+                </div>
+                <div>
+                  <Box variant="awsui-key-label">Dependencia</Box>
+                  <div>{formValues?.dependencia}</div>
+                </div>
+                <div>
+                  <Box variant="awsui-key-label">Facultad</Box>
+                  <div>{formValues?.facultad}</div>
                 </div>
               </ColumnLayout>
             </Alert>

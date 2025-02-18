@@ -29,20 +29,19 @@ const formRules = {
   estado: { required: true },
 };
 
-const opt_validado = [
-  { value: 0, label: "No" },
-  { value: 1, label: "Sí" },
-];
-
 const opt_estado = [
   { value: -1, label: "Eliminado" },
-  { value: 1, label: "Registrado" },
+  { value: 0, label: "No aprobado" },
+  { value: 1, label: "Aprobado" },
   { value: 2, label: "Observado" },
+  { value: 3, label: "En evaluación" },
   { value: 5, label: "Enviado" },
   { value: 6, label: "En proceso" },
   { value: 7, label: "Anulado" },
-  { value: 8, label: "No registrado" },
-  { value: 9, label: "Duplicado" },
+  { value: 8, label: "Sustentado" },
+  { value: 9, label: "En ejecución" },
+  { value: 10, label: "Ejecutado" },
+  { value: 11, label: "Concluido" },
 ];
 
 export default ({ id }) => {
