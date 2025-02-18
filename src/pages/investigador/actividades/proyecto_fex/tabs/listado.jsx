@@ -2,6 +2,7 @@ import {
   Badge,
   Box,
   Button,
+  ButtonDropdown,
   Header,
   Pagination,
   PropertyFilter,
@@ -146,6 +147,7 @@ const columnDisplay = [
 export default () => {
   //  Data states
   const [loading, setLoading] = useState(true);
+  const [loadingBtn, setLoadingBtn] = useState(false);
   const [distributions, setDistribution] = useState([]);
   const {
     items,
@@ -186,6 +188,19 @@ export default () => {
     setLoading(false);
   };
 
+  const reporte = async () => {
+    setLoadingBtn(true);
+    const res = await axiosBase.get("investigador/actividades/reporteFex", {
+      params: {
+        id: collectionProps.selectedItems[0].id,
+      },
+      responseType: "blob",
+    });
+    const blob = await res.data;
+    const url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
+  };
+
   //  Effects
   useEffect(() => {
     getData();
@@ -208,33 +223,50 @@ export default () => {
         <Header
           actions={
             <SpaceBetween size="xs" direction="horizontal">
-              <Button
-                disabled={collectionProps.selectedItems.length == 0}
-                onClick={() => {
-                  const query = queryString.stringify({
-                    proyecto_id: collectionProps.selectedItems[0]["id"],
-                    antiguo: collectionProps.selectedItems[0]["antiguo"],
-                  });
-                  window.location.href = "proyectoDetalle?" + query;
+              <ButtonDropdown
+                items={[
+                  {
+                    id: "action_1",
+                    text: "Ver detalles",
+                    disabled:
+                      collectionProps.selectedItems[0]?.estado == "En proceso",
+                  },
+                  {
+                    id: "action_2",
+                    text: "Editar",
+                    disabled:
+                      collectionProps.selectedItems[0]?.estado !=
+                        "En proceso" &&
+                      collectionProps.selectedItems[0]?.estado != "Observado",
+                  },
+                  {
+                    id: "action_3",
+                    text: "Reporte",
+                    disabled:
+                      collectionProps.selectedItems[0]?.estado == "En proceso",
+                  },
+                ]}
+                onItemClick={({ detail }) => {
+                  if (detail.id == "action_1") {
+                    const query = queryString.stringify({
+                      proyecto_id: collectionProps.selectedItems[0]["id"],
+                      antiguo: collectionProps.selectedItems[0]["antiguo"],
+                    });
+                    window.location.href = "proyectoDetalle?" + query;
+                  } else if (detail.id == "action_2") {
+                    const query = queryString.stringify({
+                      id: collectionProps.selectedItems[0]["id"],
+                    });
+                    window.location.href = "proyectosFex/paso1?" + query;
+                  } else if (detail.id == "action_3") {
+                    reporte();
+                  }
                 }}
+                loading={loadingBtn}
+                disabled={!collectionProps.selectedItems.length}
               >
-                Ver detalles
-              </Button>
-              <Button
-                disabled={
-                  collectionProps.selectedItems.length == 0 ||
-                  (collectionProps.selectedItems[0]?.estado != "En proceso" &&
-                    collectionProps.selectedItems[0]?.estado != "Observado")
-                }
-                onClick={() => {
-                  const query = queryString.stringify({
-                    id: collectionProps.selectedItems[0]["id"],
-                  });
-                  window.location.href = "proyectosFex/paso1?" + query;
-                }}
-              >
-                Editar
-              </Button>
+                Acciones
+              </ButtonDropdown>
               <Button
                 onClick={() => {
                   window.location.href = "proyectosFex/paso1";

@@ -175,7 +175,7 @@ export default function Registrar_proyecto_fex_2() {
       <Wizard
         onNavigate={({ detail }) => handleNavigate(detail)}
         activeStepIndex={1}
-        isLoadingNextStep={loading}
+        isLoadingNextStep={loading || loadingData}
         onCancel={() => {
           window.location.href = "../proyectosFex";
         }}
