@@ -2,6 +2,7 @@ import { SpaceBetween, Tabs } from "@cloudscape-design/components";
 import BaseLayout from "../../components/baseLayout";
 import Listado_convocatorias from "./tabs/listado_convocatorias.jsx";
 import Listado_evaluaciones from "./tabs/listado_evaluaciones.jsx";
+import GrupoPartidas from "./tabs/grupoPartidas.jsx";
 
 const breadcrumbs = [
   {
@@ -26,6 +27,11 @@ const tabs = [
     id: "listado_evaluaciones",
     label: "Lista de evaluaciones",
     content: <Listado_evaluaciones />,
+  },
+  {
+    id: "grupoPartidas",
+    label: "Grupo de partidas",
+    content: <GrupoPartidas />,
   },
 ];
 

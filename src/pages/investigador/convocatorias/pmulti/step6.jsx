@@ -11,7 +11,7 @@ import {
   Table,
   Wizard,
 } from "@cloudscape-design/components";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useCollection } from "@cloudscape-design/collection-hooks";
 import { useLocation } from "react-router-dom";
 import BaseLayout from "../../components/baseLayout";
@@ -20,6 +20,7 @@ import ModalAddPartida from "./components/modalAddPartida";
 import ModalDeletePartida from "./components/modalDeletePartida";
 import queryString from "query-string";
 import ModalEditPartida from "./components/modalEditPartida";
+import NotificationContext from "../../../../providers/notificationProvider";
 
 const breadcrumbs = [
   {
@@ -67,12 +68,16 @@ const columnDisplay = [
 ];
 
 export default function Registro_pmulti_6() {
+  //  Context
+  const { notifications, pushNotification } = useContext(NotificationContext);
+
   //  Url
   const location = useLocation();
   const { id } = queryString.parse(location.search);
 
   //  States
   const [loading, setLoading] = useState(true);
+  const [loadingBtn, setLoadingBtn] = useState(false);
   const [data, setData] = useState({
     presupuesto: [],
     partidas: [],
@@ -103,6 +108,27 @@ export default function Registro_pmulti_6() {
     setLoading(false);
   };
 
+  const validarPresupuesto = async () => {
+    setLoadingBtn(true);
+    const res = await axiosBase.get(
+      "investigador/convocatorias/pmulti/validarPresupuesto",
+      {
+        params: {
+          id,
+        },
+      }
+    );
+    const data = res.data;
+    pushNotification(data.detail, data.message, notifications.length + 1);
+    if (data.message != "warning") {
+      const query = queryString.stringify({
+        id,
+      });
+      window.location.href = "paso7?" + query;
+    }
+    setLoadingBtn(false);
+  };
+
   const handleNavigate = (index) => {
     if (index < 6) {
       const query = queryString.stringify({
@@ -129,10 +155,7 @@ export default function Registro_pmulti_6() {
 
       setAlert(tempErrors);
       if (tempErrors.length == 0) {
-        const query = queryString.stringify({
-          id,
-        });
-        window.location.href = "paso7?" + query;
+        validarPresupuesto();
       }
     }
   };
@@ -163,6 +186,7 @@ export default function Registro_pmulti_6() {
                 handleNavigate(detail.requestedStepIndex)
               }
               activeStepIndex={5}
+              isLoadingNextStep={loadingBtn}
               onCancel={() => {
                 window.location.href = "../";
               }}

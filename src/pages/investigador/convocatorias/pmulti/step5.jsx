@@ -38,27 +38,31 @@ const columnDefinitions = [
     id: "actividad",
     header: "Actividad",
     cell: (item) => item.actividad,
+    minWidth: 150,
   },
   {
     id: "justificacion",
     header: "Justificación",
     cell: (item) => item.justificacion,
-    maxWidth: 300,
+    minWidth: 200,
   },
   {
     id: "responsable",
     header: "Responsable",
     cell: (item) => item.responsable,
+    minWidth: 150,
   },
   {
     id: "fecha_inicio",
     header: "Fecha de inicio",
     cell: (item) => item.fecha_inicio,
+    minWidth: 120,
   },
   {
     id: "fecha_fin",
     header: "Fecha de fin",
     cell: (item) => item.fecha_fin,
+    minWidth: 120,
   },
 ];
 
