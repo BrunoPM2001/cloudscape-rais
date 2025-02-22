@@ -114,7 +114,7 @@ export default function ({
         { text: "Estudiante", id: "action_2_2" },
         { text: "Externo", id: "action_2_3" },
       ]);
-    } else if (["libro", "capitulo_libro", "evento"].includes(tipo)) {
+    } else if (["libro", "capitulo", "evento"].includes(tipo)) {
       setOptAutor([{ value: "Autor" }]);
       setTipoAutor([
         { text: "Docente", id: "action_2_1" },

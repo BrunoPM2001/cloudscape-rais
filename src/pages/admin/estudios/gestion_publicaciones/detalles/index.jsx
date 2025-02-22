@@ -107,6 +107,7 @@ export default function Detalle_publicacion() {
       header="Detalle de la publicación"
       helpInfo="Información sobre la páginal actual para poder mostrarla al público
       en general."
+      contentType="table"
     >
       <SpaceBetween size="l">
         <Detalles id={id} changes={changes} reload={getData} />

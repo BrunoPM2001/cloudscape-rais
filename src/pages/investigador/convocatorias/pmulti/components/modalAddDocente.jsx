@@ -39,7 +39,7 @@ const propsRepetidas = {
   accept: ".pdf",
 };
 
-export default ({ close, reload, id }) => {
+export default ({ close, reload, id, reset }) => {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
 
@@ -71,6 +71,7 @@ export default ({ close, reload, id }) => {
       );
       const data = res.data;
       setLoadingCreate(false);
+      reset();
       pushNotification(data.detail, data.message, notifications.length + 1);
       reload();
       close();

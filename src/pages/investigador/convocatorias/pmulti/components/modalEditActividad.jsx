@@ -24,7 +24,7 @@ const formRules = {
   fecha_fin: { required: true },
 };
 
-export default ({ item, close, reload, integrantes }) => {
+export default ({ item, close, reload, integrantes, reset }) => {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
 
@@ -54,6 +54,7 @@ export default ({ item, close, reload, integrantes }) => {
       const data = res.data;
       setLoadingCreate(false);
       close();
+      reset();
       reload();
       pushNotification(data.detail, data.message, notifications.length + 1);
     }

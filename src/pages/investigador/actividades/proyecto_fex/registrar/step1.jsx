@@ -128,7 +128,8 @@ export default function Registrar_proyecto_fex_1() {
         const query = queryString.stringify({
           id: data.id,
         });
-        window.location.href = "paso2?" + query;
+        window.location.href =
+          "paso" + Number(detail.requestedStepIndex + 1) + "?" + query;
       }
     }
   };
@@ -215,6 +216,10 @@ export default function Registrar_proyecto_fex_1() {
         isLoadingNextStep={loading}
         onCancel={() => {
           window.location.href = "../proyectosFex";
+        }}
+        allowSkipTo={formValues?.estado == 2}
+        i18nStrings={{
+          optional: "",
         }}
         steps={[
           {
@@ -571,12 +576,15 @@ export default function Registrar_proyecto_fex_1() {
           },
           {
             title: "Descripción del proyecto",
+            isOptional: formValues?.estado == 2,
           },
           {
             title: "Documentos",
+            isOptional: formValues?.estado == 2,
           },
           {
             title: "Integrantes",
+            isOptional: formValues?.estado == 2,
           },
           {
             title: "Envío de propuesta",

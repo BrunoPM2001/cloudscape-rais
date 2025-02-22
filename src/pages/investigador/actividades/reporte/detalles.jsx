@@ -91,40 +91,34 @@ export default ({ data, loading, id, items, antiguo }) => {
               ) : (
                 <Badge
                   color={
-                    data.estado == -1
+                    data.estado == "Eliminado"
                       ? "red"
-                      : data.estado == 0
+                      : data.estado == "No aprobado"
                       ? "grey"
-                      : data.estado == 1
+                      : data.estado == "Aprobado"
                       ? "green"
-                      : data.estado == 2
-                      ? "grey"
-                      : data.estado == 3
-                      ? "grey"
-                      : data.estado == 5
+                      : data.estado == "Observado"
+                      ? "red"
+                      : data.estado == "En evaluación"
                       ? "blue"
-                      : data.estado == 5
+                      : data.estado == "Enviado"
                       ? "blue"
-                      : data.estado == 6
-                      ? "grey"
+                      : data.estado == "En proceso"
+                      ? "severity-low"
+                      : data.estado == "Anulado"
+                      ? "red"
+                      : data.estado == "Sustentado"
+                      ? "blue"
+                      : data.estado == "En ejecución"
+                      ? "blue"
+                      : data.estado == "Ejecutado"
+                      ? "green"
+                      : data.estado == "Concluido"
+                      ? "green"
                       : "red"
                   }
                 >
-                  {data.estado == -1
-                    ? "Eliminado"
-                    : data.estado == 0
-                    ? "No aprobado"
-                    : data.estado == 1
-                    ? "Aprobado"
-                    : data.estado == 2
-                    ? "Observado"
-                    : data.estado == 3
-                    ? "En evaluación"
-                    : data.estado == 5
-                    ? "Enviado"
-                    : data.estado == 6
-                    ? "En proceso"
-                    : "Error"}
+                  {data.estado}
                 </Badge>
               )}
             </div>

@@ -48,7 +48,7 @@ export default function Registrar_proyecto_fex_5() {
     const query = queryString.stringify({
       id,
     });
-    window.location.href = "paso" + (index + 1) + "?" + query;
+    window.location.href = "paso" + Number(index + 1) + "?" + query;
   };
 
   const reporte = async () => {
@@ -108,6 +108,10 @@ export default function Registrar_proyecto_fex_5() {
         isLoadingNextStep={loadingBtn}
         onCancel={() => {
           window.location.href = "../proyectosFex";
+        }}
+        allowSkipTo={data?.estado == 2}
+        i18nStrings={{
+          optional: "",
         }}
         steps={[
           {

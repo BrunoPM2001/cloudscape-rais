@@ -1,98 +1,58 @@
 import {
-  Alert,
-  Autosuggest,
-  Box,
-  Button,
-  ColumnLayout,
-  FormField,
-  Input,
   Modal,
-  Select,
+  FormField,
+  Box,
   SpaceBetween,
-  Textarea,
+  Button,
+  Autosuggest,
+  Alert,
+  Select,
+  Input,
+  ColumnLayout,
 } from "@cloudscape-design/components";
 import { useContext, useEffect, useState } from "react";
-import { useFormValidation } from "../../../../../../hooks/useFormValidation";
-import axiosBase from "../../../../../../api/axios";
-import NotificationContext from "../../../../../../providers/notificationProvider";
-import { useAutosuggest } from "../../../../../../hooks/useAutosuggest";
+import NotificationContext from "../../../../../providers/notificationProvider";
+import { useAutosuggest } from "../../../../../hooks/useAutosuggest";
+import axiosBase from "../../../../../api/axios";
+import { useFormValidation } from "../../../../../hooks/useFormValidation";
 
 const initialForm = {
-  condicion: null,
-  codigo_orcid: "",
   apellido1: "",
   apellido2: "",
   nombres: "",
   sexo: null,
   institucion: "",
   pais: null,
-  direccion1: "",
+  email1: "",
   doc_tipo: null,
   doc_numero: "",
-  telefono_movil: "",
-  titulo_profesional: "",
-  grado: "",
-  especialidad: "",
-  researcher_id: "",
-  scopus_id: "",
-  link: "",
-  posicion_unmsm: "",
-  cti_vitae: "",
-  google_scholar: "",
-  biografia: "",
-  observacion: "",
-  file: [],
 };
 
 const formRules = {
-  condicion: { required: true },
-  codigo_orcid: { required: true, regex: /^(\d{4}-){3}\d{3}[\dX]$/ },
   apellido1: { required: true },
   apellido2: { required: true },
   nombres: { required: true },
   sexo: { required: true },
   institucion: { required: false },
   pais: { required: true },
-  direccion1: { required: true },
   doc_tipo: { required: true },
   doc_numero: { required: true },
-  telefono_movil: { required: false },
-  titulo_profesional: { required: true },
-  grado: { required: true },
-  especialidad: { required: false },
-  researcher_id: { required: false },
-  scopus_id: { required: false },
-  cti_vitae: { required: true },
-  google_scholar: { required: true },
-  link: { required: false },
-  posicion_unmsm: { required: true },
-  biografia: { required: false },
-  observacion: { required: false },
 };
 
-const opt_condicion = [
-  { value: 44, label: "Coordinador general" },
-  { value: 45, label: "Investigador principal" },
-  { value: 46, label: "Co-Investigador" },
-  { value: 48, label: "Otros" },
-  { value: 49, label: "Cordinador administrativo" },
-  { value: 91, label: "Responsable Técnico" },
-];
-
-export default ({ close, proyecto_id, reload }) => {
+export default ({ close, reload, id, reset }) => {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
 
   //  States
-  const [loadingCreate, setLoadingCreate] = useState(false);
   const [enableCreate, setEnableCreate] = useState(false);
+  const [loadingCreate, setLoadingCreate] = useState(false);
   const [paises, setPaises] = useState([]);
   const [form, setForm] = useState({});
   const [nuevo, setNuevo] = useState(false);
 
   //  Hooks
   const { loading, options, setOptions, value, setValue, setAvoidSelect } =
-    useAutosuggest("investigador/actividades/fex/searchExterno");
+    useAutosuggest("investigador/convocatorias/pmulti/listadoGestor");
   const { formValues, formErrors, handleChange, validateForm } =
     useFormValidation(initialForm, formRules);
 
@@ -102,55 +62,42 @@ export default ({ close, proyecto_id, reload }) => {
       if (validateForm()) {
         setLoadingCreate(true);
         const form = new FormData();
-        form.append("proyecto_id", proyecto_id);
-        form.append("condicion", formValues.condicion.value);
-        form.append("responsabilidad", formValues.responsabilidad);
-        form.append("codigo_orcid", formValues.codigo_orcid);
+        form.append("proyecto_id", id);
         form.append("apellido1", formValues.apellido1);
         form.append("apellido2", formValues.apellido2);
         form.append("nombres", formValues.nombres);
         form.append("sexo", formValues.sexo.value);
         form.append("institucion", formValues.institucion);
         form.append("pais", formValues.pais.value);
-        form.append("direccion1", formValues.direccion1);
+        form.append("email1", formValues.email1);
         form.append("doc_tipo", formValues.doc_tipo.value);
         form.append("doc_numero", formValues.doc_numero);
-        form.append("telefono_movil", formValues.telefono_movil);
-        form.append("titulo_profesional", formValues.titulo_profesional);
-        form.append("grado", formValues.grado);
-        form.append("especialidad", formValues.especialidad);
-        form.append("researcher_id", formValues.researcher_id);
-        form.append("scopus_id", formValues.scopus_id);
-        form.append("cti_vitae", formValues.cti_vitae);
-        form.append("google_scholar", formValues.google_scholar);
-        form.append("link", formValues.link);
-        form.append("posicion_unmsm", formValues.posicion_unmsm);
-        form.append("biografia", formValues.biografia);
-        form.append("observacion", formValues.observacion);
         form.append("tipo", "Nuevo");
         const res = await axiosBase.post(
-          "investigador/actividades/fex/agregarExterno",
+          "investigador/convocatorias/pmulti/agregarGestor",
           form
         );
         const data = res.data;
         setLoadingCreate(false);
         close();
+        reset();
         reload();
         pushNotification(data.detail, data.message, notifications.length + 1);
       }
     } else {
       setLoadingCreate(true);
       const form1 = new FormData();
-      form1.append("proyecto_id", proyecto_id);
+      form1.append("proyecto_id", id);
       form1.append("tipo", "Antiguo");
       form1.append("investigador_id", form.investigador_id);
       const res = await axiosBase.post(
-        "investigador/actividades/fex/agregarExterno",
+        "investigador/convocatorias/pmulti/agregarGestor",
         form1
       );
       const data = res.data;
       setLoadingCreate(false);
       close();
+      reset();
       reload();
       pushNotification(data.detail, data.message, notifications.length + 1);
     }
@@ -170,7 +117,7 @@ export default ({ close, proyecto_id, reload }) => {
     <Modal
       onDismiss={close}
       visible
-      size="large"
+      size="medium"
       footer={
         <Box float="right">
           <SpaceBetween direction="horizontal" size="xs">
@@ -178,24 +125,32 @@ export default ({ close, proyecto_id, reload }) => {
               Cancelar
             </Button>
             <Button
-              variant="primary"
               disabled={!enableCreate}
+              variant="primary"
               onClick={agregarMiembro}
               loading={loadingCreate}
             >
-              Agregar
+              Incluir miembro
             </Button>
           </SpaceBetween>
         </Box>
       }
-      header="Agregar externo"
+      header="Incluir integrante al proyecto"
     >
-      <SpaceBetween size="s">
+      <SpaceBetween size="m">
+        <Alert header="Acerca de este integrante">
+          <li>
+            Corresponde al perfil <strong>Externo</strong>
+          </li>
+          <li>
+            Está bajo las condiciones de <strong>Externo</strong>
+          </li>
+        </Alert>
         <Alert>
           En caso no encuentre los datos de su externo presione la opción de
           "Utilizar: ..."
         </Alert>
-        <FormField label="Buscar externo registrado" stretch>
+        <FormField label="Buscar investigador" stretch>
           <Autosuggest
             onChange={({ detail }) => {
               setOptions([]);
@@ -214,7 +169,6 @@ export default ({ close, proyecto_id, reload }) => {
                 setAvoidSelect(false);
                 setNuevo(false);
               } else {
-                handleChange("doc_numero", detail.value);
                 setAvoidSelect(false);
                 setEnableCreate(true);
                 setNuevo(true);
@@ -223,59 +177,13 @@ export default ({ close, proyecto_id, reload }) => {
             value={value}
             options={options}
             loadingText="Cargando data"
-            placeholder="Buscar con DNI"
+            placeholder="Nombre del gestor"
             statusType={loading ? "loading" : "finished"}
             empty="No se encontraron resultados"
           />
         </FormField>
-        {enableCreate && (
-          <>
-            <FormField
-              label="Condición"
-              errorText={formErrors.condicion}
-              stretch
-            >
-              <Select
-                placeholder="Escoja una opción"
-                selectedOption={formValues.condicion}
-                onChange={({ detail }) =>
-                  handleChange("condicion", detail.selectedOption)
-                }
-                options={opt_condicion}
-              />
-            </FormField>
-            {formValues?.condicion?.value == 48 && (
-              <FormField
-                label="Otra condición"
-                stretch
-                errorText={formErrors.responsabilidad}
-              >
-                <Input
-                  value={formValues.responsabilidad}
-                  onChange={({ detail }) =>
-                    handleChange("responsabilidad", detail.value)
-                  }
-                />
-              </FormField>
-            )}
-          </>
-        )}
         {nuevo ? (
           <>
-            <FormField
-              label="Código ORCID"
-              constraintText="Ejemplo: 0123-0123-0123-0123"
-              stretch
-              errorText={formErrors.codigo_orcid}
-            >
-              <Input
-                placeholder="Escriba el código orcid del integrante"
-                value={formValues.codigo_orcid}
-                onChange={({ detail }) =>
-                  handleChange("codigo_orcid", detail.value)
-                }
-              />
-            </FormField>
             <ColumnLayout columns={3}>
               <FormField
                 label="Apellido paterno"
@@ -357,12 +265,12 @@ export default ({ close, proyecto_id, reload }) => {
               <FormField
                 label="Correo principal"
                 stretch
-                errorText={formErrors.direccion1}
+                errorText={formErrors.email1}
               >
                 <Input
-                  value={formValues.direccion1}
+                  value={formValues.email1}
                   onChange={({ detail }) =>
-                    handleChange("direccion1", detail.value)
+                    handleChange("email1", detail.value)
                   }
                 />
               </FormField>
@@ -405,143 +313,7 @@ export default ({ close, proyecto_id, reload }) => {
                   }
                 />
               </FormField>
-              <FormField
-                label="N° celular"
-                stretch
-                errorText={formErrors.telefono_movil}
-              >
-                <Input
-                  value={formValues.telefono_movil}
-                  onChange={({ detail }) =>
-                    handleChange("telefono_movil", detail.value)
-                  }
-                />
-              </FormField>
-              <FormField
-                label="Título profesional"
-                stretch
-                errorText={formErrors.titulo_profesional}
-              >
-                <Input
-                  value={formValues.titulo_profesional}
-                  onChange={({ detail }) =>
-                    handleChange("titulo_profesional", detail.value)
-                  }
-                />
-              </FormField>
-              <FormField
-                label="Grado académico"
-                stretch
-                errorText={formErrors.grado}
-              >
-                <Input
-                  value={formValues.grado}
-                  onChange={({ detail }) => handleChange("grado", detail.value)}
-                />
-              </FormField>
-              <FormField
-                label="Especialidad"
-                stretch
-                errorText={formErrors.especialidad}
-              >
-                <Input
-                  value={formValues.especialidad}
-                  onChange={({ detail }) =>
-                    handleChange("especialidad", detail.value)
-                  }
-                />
-              </FormField>
-              <FormField
-                label="Researcher ID"
-                stretch
-                errorText={formErrors.researcher_id}
-              >
-                <Input
-                  value={formValues.researcher_id}
-                  onChange={({ detail }) =>
-                    handleChange("researcher_id", detail.value)
-                  }
-                />
-              </FormField>
-              <FormField
-                label="Scopus ID"
-                stretch
-                errorText={formErrors.scopus_id}
-              >
-                <Input
-                  value={formValues.scopus_id}
-                  onChange={({ detail }) =>
-                    handleChange("scopus_id", detail.value)
-                  }
-                />
-              </FormField>
-              <FormField
-                label="CTI Vitae"
-                stretch
-                errorText={formErrors.cti_vitae}
-              >
-                <Input
-                  value={formValues.cti_vitae}
-                  onChange={({ detail }) =>
-                    handleChange("cti_vitae", detail.value)
-                  }
-                />
-              </FormField>
-              <FormField
-                label="Google scholar"
-                stretch
-                errorText={formErrors.google_scholar}
-              >
-                <Input
-                  value={formValues.google_scholar}
-                  onChange={({ detail }) =>
-                    handleChange("google_scholar", detail.value)
-                  }
-                />
-              </FormField>
-              <FormField label="Sitio web" stretch errorText={formErrors.link}>
-                <Input
-                  value={formValues.link}
-                  onChange={({ detail }) => handleChange("link", detail.value)}
-                />
-              </FormField>
-              <FormField
-                label="Posición en la UNMSM"
-                stretch
-                errorText={formErrors.posicion_unmsm}
-              >
-                <Input
-                  value={formValues.posicion_unmsm}
-                  onChange={({ detail }) =>
-                    handleChange("posicion_unmsm", detail.value)
-                  }
-                />
-              </FormField>
             </ColumnLayout>
-            <FormField
-              label="Perfil de investigador"
-              stretch
-              errorText={formErrors.biografia}
-            >
-              <Textarea
-                value={formValues.biografia}
-                onChange={({ detail }) =>
-                  handleChange("biografia", detail.value)
-                }
-              />
-            </FormField>
-            <FormField
-              label="Observación / Comentario"
-              stretch
-              errorText={formErrors.observacion}
-            >
-              <Textarea
-                value={formValues.observacion}
-                onChange={({ detail }) =>
-                  handleChange("observacion", detail.value)
-                }
-              />
-            </FormField>
           </>
         ) : (
           <>

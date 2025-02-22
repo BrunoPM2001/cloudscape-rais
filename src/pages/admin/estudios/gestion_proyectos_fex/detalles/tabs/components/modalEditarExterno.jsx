@@ -16,6 +16,8 @@ import { useFormValidation } from "../../../../../../../hooks/useFormValidation"
 import axiosBase from "../../../../../../../api/axios";
 
 const initialForm = {
+  condicion: null,
+  responsabilidad: "",
   codigo_orcid: "",
   apellido1: "",
   apellido2: "",
@@ -40,6 +42,7 @@ const initialForm = {
 };
 
 const formRules = {
+  condicion: { required: true },
   codigo_orcid: { required: true, regex: /^(\d{4}-){3}\d{3}[\dX]$/ },
   apellido1: { required: true },
   apellido2: { required: true },
@@ -88,6 +91,16 @@ const opt_documento = [
   },
 ];
 
+const opt_condicion = [
+  { value: 44, label: "Coordinador general" },
+  { value: 45, label: "Investigador principal" },
+  { value: 46, label: "Co-Investigador" },
+  { value: 48, label: "Otros" },
+  { value: 49, label: "Cordinador administrativo" },
+  { value: 91, label: "Responsable Técnico" },
+  { value: 90, label: "Externo" },
+];
+
 export default ({ close, id, reload }) => {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
@@ -116,6 +129,9 @@ export default ({ close, id, reload }) => {
     setPaises(data.paises);
     setFormValues({
       ...data.externo,
+      condicion: opt_condicion.find(
+        (opt) => opt.value == data.externo.condicion
+      ),
       sexo: opt_sexo.find((opt) => opt.value == data.externo.sexo),
       pais: data.paises.find((opt) => opt.value == data.externo.pais),
       doc_tipo: opt_documento.find((opt) => opt.value == data.externo.doc_tipo),
@@ -168,6 +184,34 @@ export default ({ close, id, reload }) => {
           </SpaceBetween>
         ) : (
           <>
+            <FormField
+              label="Condición"
+              errorText={formErrors.condicion}
+              stretch
+            >
+              <Select
+                placeholder="Escoja una opción"
+                selectedOption={formValues.condicion}
+                onChange={({ detail }) =>
+                  handleChange("condicion", detail.selectedOption)
+                }
+                options={opt_condicion}
+              />
+            </FormField>
+            {formValues?.condicion?.value == 48 && (
+              <FormField
+                label="Otra condición"
+                stretch
+                errorText={formErrors.responsabilidad}
+              >
+                <Input
+                  value={formValues.responsabilidad}
+                  onChange={({ detail }) =>
+                    handleChange("responsabilidad", detail.value)
+                  }
+                />
+              </FormField>
+            )}
             <FormField
               label="Código ORCID"
               constraintText="Ejemplo: 0123-0123-0123-0123"

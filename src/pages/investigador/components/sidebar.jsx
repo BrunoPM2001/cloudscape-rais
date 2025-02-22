@@ -182,10 +182,10 @@ const navItems = [
       {
         type: "link",
         text: "Proyecto multidisciplinario",
-        info: <Badge color="red">Cerrada</Badge>,
-        // info: <Badge color="green">Activa</Badge>,
-        // href: "/investigador/convocatoria/picv",
-        href: "#",
+        // info: <Badge color="red">Cerrada</Badge>,
+        info: <Badge color="green">Activa</Badge>,
+        href: "/investigador/convocatoria/pmulti",
+        // href: "#",
       },
       {
         type: "link",

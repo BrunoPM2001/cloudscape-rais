@@ -5,6 +5,7 @@ import {
   Button,
   ColumnLayout,
   FormField,
+  Input,
   Modal,
   Select,
   SpaceBetween,
@@ -17,6 +18,7 @@ import NotificationContext from "../../../../../../providers/notificationProvide
 
 const initialForm = {
   condicion: null,
+  responsabilidad: "",
 };
 
 const formRules = {
@@ -56,6 +58,7 @@ export default ({ close, proyecto_id, reload }) => {
           proyecto_id: proyecto_id,
           investigador_id: form.investigador_id,
           condicion: formValues.condicion.value,
+          responsabilidad: formValues.responsabilidad,
         }
       );
       const data = res.data;
@@ -167,6 +170,20 @@ export default ({ close, proyecto_id, reload }) => {
                 options={opts}
               />
             </FormField>
+            {formValues?.condicion?.value == 48 && (
+              <FormField
+                label="Otra condición"
+                stretch
+                errorText={formErrors.responsabilidad}
+              >
+                <Input
+                  value={formValues.responsabilidad}
+                  onChange={({ detail }) =>
+                    handleChange("responsabilidad", detail.value)
+                  }
+                />
+              </FormField>
+            )}
           </SpaceBetween>
         )}
       </SpaceBetween>

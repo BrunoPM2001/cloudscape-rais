@@ -24,6 +24,7 @@ const initialForm = {
   dependencia: "",
   facultad: "",
   condicion: null,
+  responsabilidad: "",
   cti_vitae: "",
   especialidad: "",
   titulo_profesional: "",
@@ -47,6 +48,15 @@ const opt_grados = [
   { value: "Doctor" },
   { value: "Msci" },
   { value: "Phd" },
+];
+
+const opt_condicion = [
+  { value: 44, label: "Coordinador general" },
+  { value: 45, label: "Investigador principal" },
+  { value: 46, label: "Co-Investigador" },
+  { value: 48, label: "Otros" },
+  { value: 49, label: "Cordinador administrativo" },
+  { value: 91, label: "Responsable Técnico" },
 ];
 
 export default ({ id, close, reload }) => {
@@ -193,15 +203,23 @@ export default ({ id, close, reload }) => {
                   handleChange("condicion", detail.selectedOption)
                 }
                 placeholder="Escoja una opción"
-                options={[
-                  { value: 45, label: "Investigador principal" },
-                  { value: 46, label: "Co-Investigador" },
-                  { value: 48, label: "Otros" },
-                  { value: 49, label: "Cordinador administrativo" },
-                  { value: 91, label: "Responsable Técnico" },
-                ]}
+                options={opt_condicion}
               />
             </FormField>
+            {formValues?.condicion?.value == 48 && (
+              <FormField
+                label="Otra condición"
+                stretch
+                errorText={formErrors.responsabilidad}
+              >
+                <Input
+                  value={formValues.responsabilidad}
+                  onChange={({ detail }) =>
+                    handleChange("responsabilidad", detail.value)
+                  }
+                />
+              </FormField>
+            )}
             <ColumnLayout columns={2}>
               <FormField
                 label="Cti vitae"

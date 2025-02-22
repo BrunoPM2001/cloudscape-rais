@@ -169,7 +169,7 @@ const columnDefinitions = [
           item.estado == "No tiene informe"
             ? "grey"
             : item.estado == "En proceso"
-            ? "blue"
+            ? "severity-low"
             : item.estado == "Aprobado"
             ? "green"
             : item.estado == "Presentado"

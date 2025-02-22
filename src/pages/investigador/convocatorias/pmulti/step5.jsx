@@ -279,12 +279,14 @@ export default function Registro_pmulti_5() {
                           reload={getData}
                           close={() => setType("")}
                           integrantes={integrantes}
+                          reset={() => setAlert([])}
                         />
                       ) : type == "delete" ? (
                         <ModalDeleteActividad
                           id={collectionProps.selectedItems[0].id}
                           reload={getData}
                           close={() => setType("")}
+                          reset={() => setAlert([])}
                         />
                       ) : (
                         type == "edit" && (
@@ -293,6 +295,7 @@ export default function Registro_pmulti_5() {
                             reload={getData}
                             close={() => setType("")}
                             integrantes={integrantes}
+                            reset={() => setAlert([])}
                           />
                         )
                       )}

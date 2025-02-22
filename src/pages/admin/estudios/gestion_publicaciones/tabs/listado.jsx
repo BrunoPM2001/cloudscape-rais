@@ -212,7 +212,7 @@ const columnDefinitions = [
             : item.estado == "Enviado"
             ? "blue"
             : item.estado == "En proceso"
-            ? "grey"
+            ? "severity-low"
             : item.estado == "Anulado"
             ? "red"
             : item.estado == "No registrado"

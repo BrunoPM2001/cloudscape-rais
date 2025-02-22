@@ -25,7 +25,13 @@ const formRules = {
   titulo: { required: true },
 };
 
-export default ({ close, reload, id }) => {
+const opt_grado = [
+  { value: "Licenciatura o Segunda Especialidad" },
+  { value: "Maestría" },
+  { value: "Doctorado" },
+];
+
+export default ({ close, reload, id, reset }) => {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
 
@@ -60,6 +66,7 @@ export default ({ close, reload, id }) => {
       );
       const data = res.data;
       setLoadingCreate(false);
+      reset();
       pushNotification(data.detail, data.message, notifications.length + 1);
       reload();
       close();
@@ -132,11 +139,11 @@ export default ({ close, reload, id }) => {
               handleChange("tipo", detail.selectedOption);
             }}
             placeholder="Escoja una opción"
-            options={[
-              { value: "Licenciatura o Segunda Especialidad" },
-              { value: "Maestría" },
-              { value: "Doctorado" },
-            ]}
+            options={
+              form?.tipo_programa
+                ? [opt_grado.find((opt) => opt.value == form.tipo_programa)]
+                : opt_grado
+            }
           />
         </FormField>
         <FormField

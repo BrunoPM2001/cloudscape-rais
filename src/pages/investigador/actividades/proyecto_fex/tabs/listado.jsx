@@ -199,6 +199,7 @@ export default () => {
     const blob = await res.data;
     const url = URL.createObjectURL(blob);
     window.open(url, "_blank");
+    setLoadingBtn(false);
   };
 
   //  Effects

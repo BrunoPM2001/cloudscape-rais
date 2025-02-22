@@ -18,6 +18,7 @@ import { useFormValidation } from "../../../../../../../hooks/useFormValidation"
 import axiosBase from "../../../../../../../api/axios";
 
 const initialForm = {
+  condicion: null,
   codigo_orcid: "",
   apellido1: "",
   apellido2: "",
@@ -44,6 +45,7 @@ const initialForm = {
 };
 
 const formRules = {
+  condicion: { required: true },
   codigo_orcid: { required: true, regex: /^(\d{4}-){3}\d{3}[\dX]$/ },
   apellido1: { required: true },
   apellido2: { required: true },
@@ -66,6 +68,16 @@ const formRules = {
   biografia: { required: false },
   observacion: { required: false },
 };
+
+const opt_condicion = [
+  { value: 44, label: "Coordinador general" },
+  { value: 45, label: "Investigador principal" },
+  { value: 46, label: "Co-Investigador" },
+  { value: 48, label: "Otros" },
+  { value: 49, label: "Cordinador administrativo" },
+  { value: 91, label: "Responsable Técnico" },
+  { value: 90, label: "Externo" },
+];
 
 export default ({ close, id, reload }) => {
   //  Context
@@ -91,6 +103,8 @@ export default ({ close, id, reload }) => {
         setLoadingCreate(true);
         const form = new FormData();
         form.append("id", id);
+        form.append("condicion", formValues.condicion.value);
+        form.append("responsabilidad", formValues.responsabilidad);
         form.append("codigo_orcid", formValues.codigo_orcid);
         form.append("apellido1", formValues.apellido1);
         form.append("apellido2", formValues.apellido2);
@@ -214,6 +228,38 @@ export default ({ close, id, reload }) => {
             empty="No se encontraron resultados"
           />
         </FormField>
+        {enableCreate && (
+          <>
+            <FormField
+              label="Condición"
+              errorText={formErrors.condicion}
+              stretch
+            >
+              <Select
+                placeholder="Escoja una opción"
+                selectedOption={formValues.condicion}
+                onChange={({ detail }) =>
+                  handleChange("condicion", detail.selectedOption)
+                }
+                options={opt_condicion}
+              />
+            </FormField>
+            {formValues?.condicion.value == 48 && (
+              <FormField
+                label="Otra condición"
+                stretch
+                errorText={formErrors.responsabilidad}
+              >
+                <Input
+                  value={formValues.responsabilidad}
+                  onChange={({ detail }) =>
+                    handleChange("responsabilidad", detail.value)
+                  }
+                />
+              </FormField>
+            )}
+          </>
+        )}
         {nuevo ? (
           <>
             <FormField

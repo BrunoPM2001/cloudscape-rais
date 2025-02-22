@@ -20,7 +20,7 @@ import ModalAddCoResponsable from "./components/modalAddCoResponsable";
 import ModalDeleteIntegrante from "./components/modalDeleteIntegrante";
 import ModalAddDocente from "./components/modalAddDocente.jsx";
 import ModalAddTesista from "./components/modalAddTesista.jsx";
-import ModalAddExterno from "./components/modalAddExterno.jsx";
+import ModalAddGestor from "./components/modalAddGestor.jsx";
 
 const breadcrumbs = [
   {
@@ -103,7 +103,8 @@ const TESISTA_POS_MIN = 1;
 
 const CORRESPONSAL_MIN = 1;
 const DOCENTE_MIN = 2;
-const TESISTA_MIN = 2;
+const TESISTA_MIN = 3;
+const GESTOR_ADMIN = 1;
 
 export default function Registro_pmulti_3() {
   //  Url
@@ -229,6 +230,17 @@ export default function Registro_pmulti_3() {
           "Necesita registrar al menos " +
             TESISTA_POS_MIN +
             " tesista de posgrado"
+        );
+      }
+
+      if (
+        data.filter((item) => item.tipo_integrante == "Gestor Administrativo")
+          .length < GESTOR_ADMIN
+      ) {
+        tempErrors.push(
+          "Necesita registrar al menos " +
+            GESTOR_ADMIN +
+            " gestor administrativo"
         );
       }
 
@@ -370,12 +382,8 @@ export default function Registro_pmulti_3() {
                                       id: "action_2_3",
                                     },
                                     {
-                                      text: "Miembro externo",
+                                      text: "Gestor administrativo",
                                       id: "action_2_4",
-                                    },
-                                    {
-                                      text: "Miembro externo internacional",
-                                      id: "action_2_5",
                                     },
                                   ]}
                                 >
@@ -405,24 +413,28 @@ export default function Registro_pmulti_3() {
                           close={() => setType("")}
                           reload={getData}
                           id={id}
+                          reset={() => setAlert([])}
                         />
                       ) : type == "addDo" ? (
                         <ModalAddDocente
                           close={() => setType("")}
                           reload={getData}
                           id={id}
+                          reset={() => setAlert([])}
                         />
                       ) : type == "addTe" ? (
                         <ModalAddTesista
                           close={() => setType("")}
                           reload={getData}
                           id={id}
+                          reset={() => setAlert([])}
                         />
                       ) : type == "addEx" ? (
-                        <ModalAddExterno
+                        <ModalAddGestor
                           close={() => setType("")}
                           reload={getData}
                           id={id}
+                          reset={() => setAlert([])}
                         />
                       ) : (
                         type == "delete" && (
@@ -430,6 +442,7 @@ export default function Registro_pmulti_3() {
                             close={() => setType("")}
                             reload={getData}
                             id={collectionProps.selectedItems[0].id}
+                            reset={() => setAlert([])}
                           />
                         )
                       )}

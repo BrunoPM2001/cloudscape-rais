@@ -67,7 +67,7 @@ export default function Detalle_patente() {
     },
     {
       id: "autores",
-      label: "Autores",
+      label: "Inventores",
       content: (
         <Autores data={info.autores} loading={loading} reload={getData} />
       ),

@@ -190,11 +190,15 @@ export default ({ data, loading, grupo_id, reload }) => {
             )}
           </div>
           <div>
-            <Box variant="awsui-key-label">Resolución actual</Box>
+            <Box variant="awsui-key-label">
+              Resolución de la directiva actual
+            </Box>
             {loading ? <Spinner /> : <div>{data.resolucion_rectoral}</div>}
           </div>
           <div>
-            <Box variant="awsui-key-label">Fecha de resolución actual</Box>
+            <Box variant="awsui-key-label">
+              Fecha de resolución de la directiva actual
+            </Box>
             {loading ? <Spinner /> : <div>{data.resolucion_fecha}</div>}
           </div>
         </SpaceBetween>

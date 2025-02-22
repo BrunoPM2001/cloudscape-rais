@@ -8,7 +8,7 @@ import { useContext, useState } from "react";
 import NotificationContext from "../../../../../providers/notificationProvider";
 import axiosBase from "../../../../../api/axios";
 
-export default ({ id, close, reload }) => {
+export default ({ id, close, reload, reset }) => {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
 
@@ -29,6 +29,7 @@ export default ({ id, close, reload }) => {
     const data = res.data;
     setLoadingDelete(false);
     close();
+    reset();
     reload();
     pushNotification(data.detail, data.message, notifications.length + 1);
   };

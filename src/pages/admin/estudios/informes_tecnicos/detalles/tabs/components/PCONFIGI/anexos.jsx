@@ -60,7 +60,7 @@ export default ({ value1, value2, handleChange, files }) => {
           />
         </FormField>
         <FormField
-          label="Reporte de viabilidad"
+          label="Reporte de viabilidad (Obligatorio a partir del 2022)"
           info={
             <Link
               variant="info"

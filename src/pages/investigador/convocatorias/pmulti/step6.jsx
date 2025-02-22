@@ -19,6 +19,7 @@ import axiosBase from "../../../../api/axios";
 import ModalAddPartida from "./components/modalAddPartida";
 import ModalDeletePartida from "./components/modalDeletePartida";
 import queryString from "query-string";
+import ModalEditPartida from "./components/modalEditPartida";
 
 const breadcrumbs = [
   {
@@ -188,7 +189,8 @@ export default function Registro_pmulti_6() {
                 },
                 {
                   title: "Presupuesto",
-                  description: "Montos y partidas",
+                  description:
+                    "Montos y partidas (Monto disponible entre: S/250,000 y S/500,000)",
                   content: (
                     <SpaceBetween size="m">
                       {alert.length > 0 && (
@@ -266,6 +268,17 @@ export default function Registro_pmulti_6() {
                                   onClick={() => {
                                     setType("add");
                                   }}
+                                  disabled={
+                                    MAX -
+                                      Number(
+                                        items.reduce(
+                                          (sum, item) =>
+                                            sum + Number(item.monto) || 0,
+                                          0
+                                        )
+                                      ) ==
+                                    0
+                                  }
                                 >
                                   Añadir
                                 </Button>
@@ -344,6 +357,22 @@ export default function Registro_pmulti_6() {
                                 0
                               )
                           ).toFixed(2)}
+                        />
+                      ) : type == "update" ? (
+                        <ModalEditPartida
+                          close={() => setType("")}
+                          reload={getData}
+                          id={collectionProps.selectedItems[0].id}
+                          limit={parseFloat(
+                            MAX -
+                              items.reduce(
+                                (acc, curr) => acc + Number(curr.monto),
+                                0
+                              ) +
+                              Number(collectionProps.selectedItems[0].monto)
+                          ).toFixed(2)}
+                          item={collectionProps.selectedItems[0]}
+                          options={data.partidas}
                         />
                       ) : (
                         type == "delete" && (

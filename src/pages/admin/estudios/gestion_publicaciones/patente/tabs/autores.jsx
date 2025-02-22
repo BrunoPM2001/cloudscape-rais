@@ -195,7 +195,7 @@ export default function ({ data, loading, reload }) {
               </SpaceBetween>
             }
           >
-            Autores/Inventores
+            Inventores
           </Header>
         }
         pagination={<Pagination {...paginationProps} />}

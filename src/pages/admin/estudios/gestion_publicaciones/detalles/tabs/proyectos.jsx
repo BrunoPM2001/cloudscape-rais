@@ -81,7 +81,7 @@ export default function ({ loading, data, reload }) {
         columnDisplay={columnDisplay}
         loading={loading}
         loadingText="Cargando datos"
-        resizableColumns
+        wrapLines
         enableKeyboardNavigation
         selectionType="single"
         variant="embedded"

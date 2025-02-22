@@ -50,7 +50,7 @@ export default ({ close, proyecto_id, reload }) => {
       visible
       size="medium"
       onDismiss={close}
-      header="Agregar documento"
+      header="Agregar tesista"
       footer={
         <Box float="right">
           <SpaceBetween direction="horizontal" size="xs">

@@ -37,11 +37,10 @@ const initialForm = {
   infinal9: "",
   infinal10: "",
   file1: [],
+  file2: [],
 };
 
-const formRules = {
-  file1: { isFile: true, maxSize: 6 * 1024 * 1024 },
-};
+const formRules = {};
 
 const propsRepetidas = {
   showFileLastModified: true,
@@ -526,7 +525,7 @@ export default () => {
                         />
                       </FormField>
                       <FormField
-                        label="Reporte de Viabilidad"
+                        label="Reporte de Viabilidad (Obligatorio a partir del 2022)"
                         info={
                           <Link
                             variant="info"
