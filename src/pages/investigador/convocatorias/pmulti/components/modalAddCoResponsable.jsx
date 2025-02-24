@@ -143,7 +143,7 @@ export default ({ close, reload, id, reset }) => {
             <>
               Puede descargar el formato de la carta compromiso en{" "}
               <Link
-                href="/minio/templates/formato-adhesion-gi-estudiante.docx"
+                href="/minio/templates/MODELO_DE_CARTA_DE_COMPROMISO_DEL_INVESTIGADOR.docx"
                 external="true"
                 variant="primary"
                 fontSize="body-s"

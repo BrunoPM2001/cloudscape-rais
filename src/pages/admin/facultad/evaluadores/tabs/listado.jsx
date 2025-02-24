@@ -107,6 +107,7 @@ const columnDefinitions = [
         </SpaceBetween>
       );
     },
+    minWidth: 150,
   },
 ];
 
@@ -123,10 +124,11 @@ const columnDisplay = [
 export default () => {
   //  Data states
   const [loading, setLoading] = useState(true);
-  const [visible, setVisible] = useState(false);
+  const [modal, setModal] = useState("");
   const [distributions, setDistribution] = useState([]);
   const {
     items,
+    actions,
     filteredItemsCount,
     collectionProps,
     paginationProps,
@@ -181,21 +183,36 @@ export default () => {
         loadingText="Cargando datos"
         resizableColumns
         enableKeyboardNavigation
-        selectionType="single"
+        selectionType="multi"
+        onRowClick={({ detail }) => {
+          const isSelected = collectionProps.selectedItems.some(
+            (item) => item.id === detail.item.id
+          );
+
+          actions.setSelectedItems(
+            isSelected
+              ? collectionProps.selectedItems.filter(
+                  (item) => item.id !== detail.item.id
+                )
+              : [...collectionProps.selectedItems, detail.item]
+          );
+        }}
         header={
           <Header
             counter={
               collectionProps.selectedItems.length
-                ? "(" + distributions.length + "/" + items.length + ")"
+                ? "(" +
+                  collectionProps.selectedItems.length +
+                  "/" +
+                  items.length +
+                  ")"
                 : "(" + distributions.length + ")"
             }
             actions={
               <Button
-                disabled={collectionProps.selectedItems.length == 0}
                 variant="primary"
-                onClick={() => {
-                  setVisible(true);
-                }}
+                onClick={() => setModal("evaluador")}
+                disabled={collectionProps.selectedItems.length == 0}
               >
                 Elegir evaluadores
               </Button>
@@ -221,10 +238,10 @@ export default () => {
           </Box>
         }
       />
-      {visible && (
+      {modal == "evaluador" && (
         <ModalEvaluadores
-          proyecto_id={collectionProps.selectedItems[0].id}
-          close={() => setVisible(false)}
+          items={collectionProps.selectedItems}
+          close={() => setModal("")}
           reload={getData}
         />
       )}

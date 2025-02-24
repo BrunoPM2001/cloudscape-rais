@@ -12,7 +12,7 @@ import NotificationContext from "../../../../../providers/notificationProvider";
 import axiosBase from "../../../../../api/axios";
 import EvaluadorName from "./evaluadorName";
 
-export default ({ close, reload, proyecto_id }) => {
+export default ({ close, reload, items }) => {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
 
@@ -28,7 +28,7 @@ export default ({ close, reload, proyecto_id }) => {
       "admin/facultad/evaluadores/evaluadoresProyecto",
       {
         params: {
-          proyecto_id,
+          proyecto_id: items[0].id,
         },
       }
     );
@@ -42,7 +42,7 @@ export default ({ close, reload, proyecto_id }) => {
     const res = await axiosBase.put(
       "admin/facultad/evaluadores/updateEvaluadores",
       {
-        proyecto_id,
+        proyectos: items,
         evaluadores: data,
       }
     );
@@ -55,7 +55,11 @@ export default ({ close, reload, proyecto_id }) => {
 
   //  Effects
   useEffect(() => {
-    getData();
+    if (items.length == 1) {
+      getData();
+    } else {
+      setLoadingData(false);
+    }
   }, []);
 
   return (
@@ -98,15 +102,15 @@ export default ({ close, reload, proyecto_id }) => {
           addButtonText="Agregar evaluador"
           definition={[
             {
-              // label: "Evaluador",
+              label: "Evaluador",
               control: (item, index) => (
-                <FormField label={"Evaluador " + (index + 1)}>
-                  <EvaluadorName
-                    index={index}
-                    value={data[index].evaluador}
-                    setValue={setData}
-                  />
-                </FormField>
+                // <FormField label={"Evaluador " + (index + 1)}>
+                <EvaluadorName
+                  index={index}
+                  value={data[index].evaluador}
+                  setValue={setData}
+                />
+                // </FormField>
               ),
             },
           ]}

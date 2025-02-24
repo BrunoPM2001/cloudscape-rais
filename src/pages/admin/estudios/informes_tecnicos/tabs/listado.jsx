@@ -410,7 +410,7 @@ export default () => {
         items={informes}
         loadingText="Cargando datos"
         loading={loadingInformes}
-        resizableColumns
+        wrapLines
         selectionType="single"
         selectedItems={selectedItems}
         onSelectionChange={({ detail }) =>

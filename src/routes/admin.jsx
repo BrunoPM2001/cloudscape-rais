@@ -192,6 +192,16 @@ const routes = createBrowserRouter(
       element: <Admin_main />,
     },
     {
+      path: "perfil",
+      children: [
+        {
+          path: "change_pass",
+          lazy: () =>
+            import("../pages/admin/perfil/cambiar_password/index.jsx"),
+        },
+      ],
+    },
+    {
       path: "estudios",
       children: [
         {

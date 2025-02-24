@@ -118,7 +118,7 @@ const columnDisplay = [
 export default () => {
   //  Data states
   const [loading, setLoading] = useState(true);
-  const [visible, setVisible] = useState(false);
+  const [modal, setModal] = useState("");
   const [distributions, setDistribution] = useState([]);
   const {
     items,
@@ -145,7 +145,7 @@ export default () => {
       ),
     },
     pagination: { pageSize: 10 },
-    sorting: { defaultState: { sortingColumn: columnDefinitions[0] } },
+    sorting: {},
     selection: {},
   });
 
@@ -200,7 +200,7 @@ export default () => {
                 <Button
                   variant="primary"
                   onClick={() => {
-                    setVisible(true);
+                    setModal("evaluador");
                   }}
                 >
                   Nuevo evaluador
@@ -228,8 +228,8 @@ export default () => {
           </Box>
         }
       />
-      {visible && (
-        <ModalEvaluador close={() => setVisible(false)} reload={getData} />
+      {modal == "evaluador" && (
+        <ModalEvaluador close={() => setModal("")} reload={getData} />
       )}
     </>
   );
