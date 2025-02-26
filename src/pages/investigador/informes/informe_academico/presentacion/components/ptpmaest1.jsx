@@ -101,10 +101,10 @@ export default () => {
     setMiembros(data.miembros);
     setFiles(data.archivos);
     if (data.informe) {
-      handleChange("infinal7", data.informe.infinal7 ?? "");
-      handleChange("infinal3", data.informe.infinal3 ?? "");
       handleChange("infinal1", data.informe.infinal1 ?? "");
       handleChange("infinal2", data.informe.infinal2 ?? "");
+      handleChange("infinal3", data.informe.infinal3 ?? "");
+      handleChange("infinal7", data.informe.infinal7 ?? "");
       handleChange("estado", data.informe.estado);
       handleChange("observaciones", data.informe.observaciones);
       handleChange("id", data.informe.id);
@@ -119,10 +119,10 @@ export default () => {
     form.append("proyecto_id", proyecto_id);
     form.append("tipo_proyecto", tipo_proyecto);
     form.append("informe", informe);
-    form.append("infinal7", formValues.infinal7);
-    form.append("infinal3", formValues.infinal3);
     form.append("infinal1", formValues.infinal1);
     form.append("infinal2", formValues.infinal2);
+    form.append("infinal3", formValues.infinal3);
+    form.append("infinal7", formValues.infinal7);
     form.append("file1", formValues.file1[0]);
     const res = await axiosBase.post(
       "investigador/informes/informe_academico/sendData",
@@ -143,10 +143,10 @@ export default () => {
     form.append("proyecto_id", proyecto_id);
     form.append("tipo_proyecto", tipo_proyecto);
     form.append("informe", informe);
-    form.append("infinal7", formValues.infinal7);
-    form.append("infinal3", formValues.infinal3);
     form.append("infinal1", formValues.infinal1);
     form.append("infinal2", formValues.infinal2);
+    form.append("infinal3", formValues.infinal3);
+    form.append("infinal7", formValues.infinal7);
     form.append("file1", formValues.file1[0]);
     const res1 = await axiosBase.post(
       "investigador/informes/informe_academico/sendData",
@@ -390,12 +390,12 @@ export default () => {
                     <FormField
                       label="Medios probatorios"
                       description={
-                        files["informe-PTPDOCTO-INFORME-AVANCE"] && (
+                        files["informe-PTPMAEST-INFORME-AVANCE"] && (
                           <>
                             Ya ha cargado un{" "}
                             <Link
                               {...propsEnlaces}
-                              href={files["informe-PTPDOCTO-INFORME-AVANCE"]}
+                              href={files["informe-PTPMAEST-INFORME-AVANCE"]}
                             >
                               archivo.
                             </Link>

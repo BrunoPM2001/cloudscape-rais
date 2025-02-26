@@ -2,6 +2,7 @@ import {
   Alert,
   Box,
   Button,
+  ColumnLayout,
   Container,
   FileUpload,
   FormField,
@@ -29,10 +30,12 @@ const initialForm = {
   infinal3: "",
   infinal2: "",
   file1: [],
+  file2: [],
 };
 
 const formRules = {
   file1: { isFile: true, maxSize: 6 * 1024 * 1024 },
+  file2: { isFile: true, maxSize: 6 * 1024 * 1024 },
 };
 
 const propsRepetidas = {
@@ -101,8 +104,6 @@ export default () => {
     setMiembros(data.miembros);
     setFiles(data.archivos);
     if (data.informe) {
-      handleChange("infinal7", data.informe.infinal7 ?? "");
-      handleChange("infinal3", data.informe.infinal3 ?? "");
       handleChange("infinal1", data.informe.infinal1 ?? "");
       handleChange("infinal2", data.informe.infinal2 ?? "");
       handleChange("estado", data.informe.estado);
@@ -117,13 +118,12 @@ export default () => {
     const form = new FormData();
     form.append("id", id);
     form.append("proyecto_id", proyecto_id);
-    form.append("tipo_proyecto", tipo_proyecto);
     form.append("informe", informe);
-    form.append("infinal7", formValues.infinal7);
-    form.append("infinal3", formValues.infinal3);
+    form.append("tipo_proyecto", tipo_proyecto);
     form.append("infinal1", formValues.infinal1);
     form.append("infinal2", formValues.infinal2);
     form.append("file1", formValues.file1[0]);
+    form.append("file2", formValues.file2[0]);
     const res = await axiosBase.post(
       "investigador/informes/informe_academico/sendData",
       form
@@ -141,13 +141,12 @@ export default () => {
     const form = new FormData();
     form.append("id", id);
     form.append("proyecto_id", proyecto_id);
-    form.append("tipo_proyecto", tipo_proyecto);
     form.append("informe", informe);
-    form.append("infinal7", formValues.infinal7);
-    form.append("infinal3", formValues.infinal3);
+    form.append("tipo_proyecto", tipo_proyecto);
     form.append("infinal1", formValues.infinal1);
     form.append("infinal2", formValues.infinal2);
     form.append("file1", formValues.file1[0]);
+    form.append("file2", formValues.file2[0]);
     const res1 = await axiosBase.post(
       "investigador/informes/informe_academico/sendData",
       form
@@ -250,6 +249,7 @@ export default () => {
               </Alert>
             </Box>
           )}
+
           <Wizard
             onNavigate={({ detail }) => setStep(detail.requestedStepIndex)}
             activeStepIndex={step}
@@ -364,66 +364,78 @@ export default () => {
                 ),
               },
               {
-                title: "Porcentaje estimado de avance académico",
+                title: "Entregables",
                 content: (
-                  <FormField label="Porcentaje estimado de avance" stretch>
-                    <Input
-                      value={formValues.infinal7}
-                      onChange={({ detail }) =>
-                        handleChange("infinal7", detail.value)
-                      }
-                    />
-                  </FormField>
+                  <Container>
+                    <ColumnLayout columns={2}>
+                      <FormField
+                        label="Tesis concluida y aprobada"
+                        description={
+                          files["informe-PTPMAEST-INFORME-FINAL-tesis"] && (
+                            <>
+                              Ya ha cargado un{" "}
+                              <Link
+                                {...propsEnlaces}
+                                href={
+                                  files["informe-PTPMAEST-INFORME-FINAL-tesis"]
+                                }
+                              >
+                                archivo.
+                              </Link>
+                            </>
+                          )
+                        }
+                        errorText={formErrors.file1}
+                        stretch
+                      >
+                        <FileUpload
+                          {...propsRepetidas}
+                          value={formValues.file1}
+                          onChange={({ detail }) => {
+                            handleChange("file1", detail.value);
+                          }}
+                        />
+                      </FormField>
+                      <FormField
+                        label="Acta de sustentación"
+                        description={
+                          files["informe-PTPMAEST-INFORME-FINAL-acta"] && (
+                            <>
+                              Ya ha cargado un{" "}
+                              <Link
+                                {...propsEnlaces}
+                                href={
+                                  files["informe-PTPMAEST-INFORME-FINAL-acta"]
+                                }
+                              >
+                                archivo.
+                              </Link>
+                            </>
+                          )
+                        }
+                        errorText={formErrors.file2}
+                        stretch
+                      >
+                        <FileUpload
+                          {...propsRepetidas}
+                          value={formValues.file2}
+                          onChange={({ detail }) => {
+                            handleChange("file2", detail.value);
+                          }}
+                        />
+                      </FormField>
+                    </ColumnLayout>
+                  </Container>
                 ),
                 isOptional: true,
               },
               {
-                title: "Descripción de actividades realizadas",
-                content: (
-                  <SpaceBetween size="m">
-                    <Tiptap
-                      value={formValues.infinal1}
-                      handleChange={handleChange}
-                      name="infinal1"
-                      limitWords={200}
-                    />
-                    <FormField
-                      label="Medios probatorios"
-                      description={
-                        files["informe-PTPDOCTO-INFORME-AVANCE"] && (
-                          <>
-                            Ya ha cargado un{" "}
-                            <Link
-                              {...propsEnlaces}
-                              href={files["informe-PTPDOCTO-INFORME-AVANCE"]}
-                            >
-                              archivo.
-                            </Link>
-                          </>
-                        )
-                      }
-                      stretch
-                      errorText={formErrors.file1}
-                    >
-                      <FileUpload
-                        {...propsRepetidas}
-                        value={formValues.file1}
-                        onChange={({ detail }) => {
-                          handleChange("file1", detail.value);
-                        }}
-                      />
-                    </FormField>
-                  </SpaceBetween>
-                ),
-                isOptional: true,
-              },
-              {
-                title: "Evaluación global de ejecución académica",
+                title: "Resultados indirectos",
                 content: (
                   <Tiptap
-                    value={formValues.infinal3}
+                    value={formValues.infinal1}
                     handleChange={handleChange}
-                    name="infinal3"
+                    name="infinal1"
                     limitWords={200}
                   />
                 ),
@@ -436,7 +448,7 @@ export default () => {
                     value={formValues.infinal2}
                     handleChange={handleChange}
                     name="infinal2"
-                    limitWords={600}
+                    limitWords={200}
                   />
                 ),
                 isOptional: true,

@@ -9,6 +9,7 @@ import Pmulti_tabs from "./components/PMULTI/tabs";
 import Psinfinv_tabs from "./components/PSINFINV/tabs";
 import Psinfipu_tabs from "./components/PSINFIPU/tabs";
 import Ptpbachiller_tabs from "./components/PTPBACHILLER/tabs";
+import Picv_tabs from "./components/PICV/tabs";
 import { Ptpdocto_tabs, Ptpdocto_final_tabs } from "./components/PTPDOCTO/tabs";
 import { Ptpgrado_tabs, Ptpgrado_final_tabs } from "./components/PTPGRADO/tabs";
 import { Ptpmaest_final_tabs, Ptpmaest_tabs } from "./components/PTPMAEST/tabs";
@@ -34,7 +35,15 @@ export default ({
           handleChange={handleChange}
         />
       ) : tipo_proyecto == "PTPDOCTO" &&
-        tipo_informe != "Informe académico final" ? (
+        tipo_informe == "Informe académico de avance" ? (
+        <Ptpdocto_tabs
+          proyecto={proyecto}
+          miembros={miembros}
+          formValues={formValues}
+          handleChange={handleChange}
+        />
+      ) : tipo_proyecto == "PTPDOCTO" &&
+        tipo_informe == "Segundo informe académico de avance" ? (
         <Ptpdocto_tabs
           proyecto={proyecto}
           miembros={miembros}
@@ -57,6 +66,7 @@ export default ({
           miembros={miembros}
           formValues={formValues}
           handleChange={handleChange}
+          files={files}
         />
       ) : tipo_proyecto == "PTPMAEST" &&
         tipo_informe == "Informe académico final" ? (
@@ -65,6 +75,7 @@ export default ({
           miembros={miembros}
           formValues={formValues}
           handleChange={handleChange}
+          files={files}
         />
       ) : tipo_proyecto == "PTPGRADO" &&
         tipo_informe != "Informe académico final" ? (
@@ -73,6 +84,7 @@ export default ({
           miembros={miembros}
           formValues={formValues}
           handleChange={handleChange}
+          files={files}
         />
       ) : tipo_proyecto == "PTPGRADO" &&
         tipo_informe == "Informe académico final" ? (
@@ -81,6 +93,7 @@ export default ({
           miembros={miembros}
           formValues={formValues}
           handleChange={handleChange}
+          files={files}
         />
       ) : tipo_proyecto == "ECI" ? (
         <Eci_tabs
@@ -92,6 +105,14 @@ export default ({
         />
       ) : tipo_proyecto == "PRO-CTIE" ? (
         <Pro_ctie_tabs
+          proyecto={proyecto}
+          miembros={miembros}
+          formValues={formValues}
+          handleChange={handleChange}
+          files={files}
+        />
+      ) : tipo_proyecto == "PICV" ? (
+        <Picv_tabs
           proyecto={proyecto}
           miembros={miembros}
           formValues={formValues}

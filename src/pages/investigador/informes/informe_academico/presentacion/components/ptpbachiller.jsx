@@ -17,7 +17,7 @@ import { useContext, useEffect, useState } from "react";
 import Tiptap from "../../../../components/tiptap";
 import { useFormValidation } from "../../../../../../hooks/useFormValidation";
 import axiosBase from "../../../../../../api/axios";
-import { useLocation } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 import queryString from "query-string";
 import NotificationContext from "../../../../../../providers/notificationProvider";
 
@@ -80,6 +80,7 @@ export default () => {
 
   //  Url
   const location = useLocation();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { id, proyecto_id, tipo_proyecto, informe } = queryString.parse(
     location.search
   );
@@ -145,14 +146,30 @@ export default () => {
     const data = res.data;
     setLoadingSave(false);
     pushNotification(data.detail, data.message, notifications.length + 1);
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set("id", data.id);
+    setSearchParams(newParams);
   };
 
   const presentar = async () => {
     setLoadingSave(true);
+    const form = new FormData();
+    form.append("id", id);
+    form.append("proyecto_id", proyecto_id);
+    form.append("tipo_proyecto", tipo_proyecto);
+    form.append("estado_trabajo", formValues.estado_trabajo.value);
+    form.append("infinal10", formValues.infinal10);
+    form.append("infinal9", formValues.infinal9);
+    form.append("file1", formValues.file1[0]);
+    const res1 = await axiosBase.post(
+      "investigador/informes/informe_academico/sendData",
+      form
+    );
+    const info = res1.data;
     const res = await axiosBase.put(
       "investigador/informes/informe_academico/presentar",
       {
-        id,
+        id: info.id,
         proyecto_id,
         tipo_proyecto,
       }

@@ -6,7 +6,6 @@ export default ({ value, handleChange }) => {
       <FormField label="Porcentaje estimado de avance" stretch>
         <Input
           value={value}
-          type="number"
           onChange={({ detail }) => handleChange("infinal7", detail.value)}
         />
       </FormField>

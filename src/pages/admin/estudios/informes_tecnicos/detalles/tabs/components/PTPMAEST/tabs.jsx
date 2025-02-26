@@ -7,7 +7,13 @@ import Anexos from "./anexos";
 import Resultados from "./resultados";
 import Info from "./info";
 
-const Ptpmaest_tabs = ({ proyecto, miembros, formValues, handleChange }) => {
+const Ptpmaest_tabs = ({
+  proyecto,
+  miembros,
+  formValues,
+  handleChange,
+  files,
+}) => {
   const tabs = [
     {
       id: "info",
@@ -29,8 +35,10 @@ const Ptpmaest_tabs = ({ proyecto, miembros, formValues, handleChange }) => {
       label: "Descripción de actividades realizadas",
       content: (
         <Descripcion_actividades
-          value={formValues?.infinal1}
+          value1={formValues?.infinal1}
+          file1={formValues?.file1}
           handleChange={handleChange}
+          files={files}
         />
       ),
     },
@@ -64,6 +72,7 @@ const Ptpmaest_final_tabs = ({
   miembros,
   formValues,
   handleChange,
+  files,
 }) => {
   const tabs = [
     {
@@ -79,6 +88,7 @@ const Ptpmaest_final_tabs = ({
           value1={formValues?.file1} //  CATEGORIA = informe-PTPMAEST-INFORME-FINAL-tesis
           value2={formValues?.file2} //  CATEGORIA = informe-PTPMAEST-INFORME-FINAL-acta
           handleChange={handleChange}
+          files={files}
         />
       ),
     },

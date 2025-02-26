@@ -30,15 +30,15 @@ const FILTER_PROPS = [
     operators: stringOperators,
   },
   {
-    propertyLabel: "Tipo de proyecto",
-    key: "tipo_proyecto",
-    groupValuesLabel: "Tipos de proyecto",
+    propertyLabel: "Evaluado",
+    key: "evaluado",
+    groupValuesLabel: "Evaluado",
     operators: stringOperators,
   },
   {
-    propertyLabel: "Periodo",
-    key: "periodo",
-    groupValuesLabel: "Periodos",
+    propertyLabel: "Ficha",
+    key: "ficha",
+    groupValuesLabel: "Ficha",
     operators: stringOperators,
   },
   {

@@ -15,6 +15,11 @@ import Ptpdocto1 from "./components/ptpdocto1";
 import Ptpdocto2 from "./components/ptpdocto2";
 import Ptpdocto3 from "./components/ptpdocto3";
 import Proctie from "./components/proctie";
+import Ptpmaest1 from "./components/ptpmaest1";
+import Ptpmaest2 from "./components/ptpmaest2";
+import Ptpgrado1 from "./components/ptpgrado1";
+import Ptpgrado2 from "./components/ptpgrado2";
+import Picv from "./components/picv";
 
 const breadcrumbs = [
   {
@@ -73,8 +78,26 @@ export default function Presentar_informe() {
             informe == "Informe académico final" && <Ptpdocto3 />
           )}
         </>
+      ) : tipo_proyecto == "PTPMAEST" ? (
+        <>
+          {informe == "Informe académico de avance" ? (
+            <Ptpmaest1 />
+          ) : (
+            informe == "Informe académico final" && <Ptpmaest2 />
+          )}
+        </>
+      ) : tipo_proyecto == "PTPGRADO" ? (
+        <>
+          {informe == "Informe académico de avance" ? (
+            <Ptpgrado1 />
+          ) : (
+            informe == "Informe académico final" && <Ptpgrado2 />
+          )}
+        </>
       ) : tipo_proyecto == "PMULTI" ? (
         <Pmulti />
+      ) : tipo_proyecto == "PICV" ? (
+        <Picv />
       ) : (
         tipo_proyecto == "PRO-CTIE" && <Proctie />
       )}

@@ -9,7 +9,6 @@ export default ({ value, handleChange }) => {
       >
         <Input
           value={value}
-          type="number"
           onChange={({ detail }) => handleChange("infinal7", detail.value)}
         />
       </FormField>

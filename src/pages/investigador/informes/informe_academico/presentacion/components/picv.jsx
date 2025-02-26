@@ -2,6 +2,7 @@ import {
   Alert,
   Box,
   Button,
+  ColumnLayout,
   Container,
   FileUpload,
   FormField,
@@ -17,18 +18,15 @@ import { useContext, useEffect, useState } from "react";
 import Tiptap from "../../../../components/tiptap";
 import { useFormValidation } from "../../../../../../hooks/useFormValidation";
 import axiosBase from "../../../../../../api/axios";
-import { useLocation, useSearchParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import queryString from "query-string";
 import NotificationContext from "../../../../../../providers/notificationProvider";
 
 const initialForm = {
   id: null,
   estado: 0,
-  infinal7: "",
-  infinal1: "",
-  infinal3: "",
-  infinal2: "",
   file1: [],
+  file2: [], // Agregado para evitar el error
 };
 
 const formRules = {
@@ -64,7 +62,6 @@ export default () => {
 
   //  Url
   const location = useLocation();
-  const [searchParams, setSearchParams] = useSearchParams();
   const { id, proyecto_id, tipo_proyecto, informe } = queryString.parse(
     location.search
   );
@@ -92,7 +89,6 @@ export default () => {
           id,
           proyecto_id,
           tipo_proyecto,
-          informe,
         },
       }
     );
@@ -101,10 +97,7 @@ export default () => {
     setMiembros(data.miembros);
     setFiles(data.archivos);
     if (data.informe) {
-      handleChange("infinal7", data.informe.infinal7 ?? "");
-      handleChange("infinal3", data.informe.infinal3 ?? "");
-      handleChange("infinal1", data.informe.infinal1 ?? "");
-      handleChange("infinal2", data.informe.infinal2 ?? "");
+     
       handleChange("estado", data.informe.estado);
       handleChange("observaciones", data.informe.observaciones);
       handleChange("id", data.informe.id);
@@ -118,11 +111,6 @@ export default () => {
     form.append("id", id);
     form.append("proyecto_id", proyecto_id);
     form.append("tipo_proyecto", tipo_proyecto);
-    form.append("informe", informe);
-    form.append("infinal7", formValues.infinal7);
-    form.append("infinal3", formValues.infinal3);
-    form.append("infinal1", formValues.infinal1);
-    form.append("infinal2", formValues.infinal2);
     form.append("file1", formValues.file1[0]);
     const res = await axiosBase.post(
       "investigador/informes/informe_academico/sendData",
@@ -131,35 +119,16 @@ export default () => {
     const data = res.data;
     setLoadingSave(false);
     pushNotification(data.detail, data.message, notifications.length + 1);
-    const newParams = new URLSearchParams(searchParams);
-    newParams.set("id", data.id);
-    setSearchParams(newParams);
   };
 
   const presentar = async () => {
     setLoadingSave(true);
-    const form = new FormData();
-    form.append("id", id);
-    form.append("proyecto_id", proyecto_id);
-    form.append("tipo_proyecto", tipo_proyecto);
-    form.append("informe", informe);
-    form.append("infinal7", formValues.infinal7);
-    form.append("infinal3", formValues.infinal3);
-    form.append("infinal1", formValues.infinal1);
-    form.append("infinal2", formValues.infinal2);
-    form.append("file1", formValues.file1[0]);
-    const res1 = await axiosBase.post(
-      "investigador/informes/informe_academico/sendData",
-      form
-    );
-    const info = res1.data;
     const res = await axiosBase.put(
       "investigador/informes/informe_academico/presentar",
       {
-        id: info.id,
+        id,
         proyecto_id,
         tipo_proyecto,
-        informe,
       }
     );
     const data = res.data;
@@ -272,7 +241,7 @@ export default () => {
               {
                 title: "Información",
                 description:
-                  "Programa de equipamiento científico para investigación de la UNMSM",
+                  "Programa para la Inducción en Investigación Científica  en el Verano 2025 (PICV-UNMSM)",
                 content: (
                   <SpaceBetween size="l">
                     <Container>
@@ -335,6 +304,16 @@ export default () => {
                           </Box>
                           {loading ? <Spinner /> : <Box>{proyecto.linea}</Box>}
                         </div>
+                        <div>
+                          <Box variant="awsui-key-label">
+                            Tipo de investigación
+                          </Box>
+                          {loading ? (
+                            <Spinner />
+                          ) : (
+                            <Box>{proyecto.tipo_investigacion}</Box>
+                          )}
+                        </div>
                       </SpaceBetween>
                     </Container>
                     <Table
@@ -364,82 +343,49 @@ export default () => {
                 ),
               },
               {
-                title: "Porcentaje estimado de avance académico",
+                title: "Reporte Final",
+                description:
+                  "Archivos adjuntos (ninguno debe superar los 6 MB)",
                 content: (
-                  <FormField label="Porcentaje estimado de avance" stretch>
-                    <Input
-                      value={formValues.infinal7}
-                      onChange={({ detail }) =>
-                        handleChange("infinal7", detail.value)
-                      }
-                    />
-                  </FormField>
+                  <Container>
+                    <ColumnLayout columns={1}>
+                      
+                      <FormField
+                        label="Reporte Final"
+                        info={
+                          <Link
+                            variant="info"
+                            href="/minio/templates/Modelo_Reporte_Viabilidad.xlsx"
+                          >
+                            Descargar modelo
+                          </Link>
+                        }
+                        constraintText="Remitir el formulario con los campos completados (ver modelo) a la Dirección de Promoción DGITT-VRIP dp.vrip@unmsm.edu.pe"
+                        description={
+                          files["informe-PICV-INFORME"] && (
+                            <>
+                              Ya ha cargado un{" "}
+                              <Link {...propsEnlaces} href={files["informe-PICV-INFORME"]}>
+                                archivo.
+                              </Link>
+                            </>
+                          )
+                        }
+                        stretch
+                        errorText={formErrors.file1}
+                      >
+                        <FileUpload
+                          {...propsRepetidas}
+                          value={formValues.file1}
+                          onChange={({ detail }) => {
+                            handleChange("file1", detail.value);
+                          }}
+                        />
+                      </FormField>
+                    </ColumnLayout>
+                  </Container>
                 ),
-                isOptional: true,
-              },
-              {
-                title: "Descripción de actividades realizadas",
-                content: (
-                  <SpaceBetween size="m">
-                    <Tiptap
-                      value={formValues.infinal1}
-                      handleChange={handleChange}
-                      name="infinal1"
-                      limitWords={200}
-                    />
-                    <FormField
-                      label="Medios probatorios"
-                      description={
-                        files["informe-PTPDOCTO-INFORME-AVANCE"] && (
-                          <>
-                            Ya ha cargado un{" "}
-                            <Link
-                              {...propsEnlaces}
-                              href={files["informe-PTPDOCTO-INFORME-AVANCE"]}
-                            >
-                              archivo.
-                            </Link>
-                          </>
-                        )
-                      }
-                      stretch
-                      errorText={formErrors.file1}
-                    >
-                      <FileUpload
-                        {...propsRepetidas}
-                        value={formValues.file1}
-                        onChange={({ detail }) => {
-                          handleChange("file1", detail.value);
-                        }}
-                      />
-                    </FormField>
-                  </SpaceBetween>
-                ),
-                isOptional: true,
-              },
-              {
-                title: "Evaluación global de ejecución académica",
-                content: (
-                  <Tiptap
-                    value={formValues.infinal3}
-                    handleChange={handleChange}
-                    name="infinal3"
-                    limitWords={200}
-                  />
-                ),
-                isOptional: true,
-              },
-              {
-                title: "Problemas identificados",
-                content: (
-                  <Tiptap
-                    value={formValues.infinal2}
-                    handleChange={handleChange}
-                    name="infinal2"
-                    limitWords={600}
-                  />
-                ),
-                isOptional: true,
+                isOptional: false,
               },
             ]}
           />

@@ -9,7 +9,13 @@ import Describir from "./describir";
 import Otros from "./otros";
 import Info from "./info";
 
-const Ptpgrado_tabs = ({ proyecto, miembros, formValues, handleChange }) => {
+const Ptpgrado_tabs = ({
+  proyecto,
+  miembros,
+  formValues,
+  handleChange,
+  files,
+}) => {
   const tabs = [
     {
       id: "info",
@@ -63,6 +69,7 @@ const Ptpgrado_tabs = ({ proyecto, miembros, formValues, handleChange }) => {
         <Medios_probatorios
           value1={formValues?.file1} //  CATEGORIA = informe-PTPGRADO-INFORME-AVANCE
           handleChange={handleChange}
+          file={files["informe-PTPGRADO-INFORME-AVANCE"]}
         />
       ),
     },
@@ -86,6 +93,7 @@ const Ptpgrado_final_tabs = ({
   miembros,
   formValues,
   handleChange,
+  files,
 }) => {
   const tabs = [
     {
@@ -114,6 +122,7 @@ const Ptpgrado_final_tabs = ({
         <Medios_probatorios
           value1={formValues?.file1} //  CATEGORIA = informe-PTPGRADO-INFORME-FINAL
           handleChange={handleChange}
+          file={files["informe-PTPGRADO-INFORME-FINAL"]}
         />
       ),
     },

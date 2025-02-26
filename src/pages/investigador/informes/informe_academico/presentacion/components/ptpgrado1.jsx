@@ -101,6 +101,7 @@ export default () => {
     setMiembros(data.miembros);
     setFiles(data.archivos);
     if (data.informe) {
+      handleChange("infinal6", data.informe.infinal6 ?? "");
       handleChange("infinal7", data.informe.infinal7 ?? "");
       handleChange("infinal3", data.informe.infinal3 ?? "");
       handleChange("infinal1", data.informe.infinal1 ?? "");
@@ -119,6 +120,7 @@ export default () => {
     form.append("proyecto_id", proyecto_id);
     form.append("tipo_proyecto", tipo_proyecto);
     form.append("informe", informe);
+    form.append("infinal6", formValues.infinal6);
     form.append("infinal7", formValues.infinal7);
     form.append("infinal3", formValues.infinal3);
     form.append("infinal1", formValues.infinal1);
@@ -143,6 +145,7 @@ export default () => {
     form.append("proyecto_id", proyecto_id);
     form.append("tipo_proyecto", tipo_proyecto);
     form.append("informe", informe);
+    form.append("infinal6", formValues.infinal6);
     form.append("infinal7", formValues.infinal7);
     form.append("infinal3", formValues.infinal3);
     form.append("infinal1", formValues.infinal1);
@@ -364,9 +367,39 @@ export default () => {
                 ),
               },
               {
-                title: "Porcentaje estimado de avance académico",
+                title: "Reporte de n° de meses de avance",
                 content: (
-                  <FormField label="Porcentaje estimado de avance" stretch>
+                  <FormField label="Reporte de n° de meses de avance" stretch>
+                    <Input
+                      value={formValues.infinal6}
+                      type="number"
+                      onChange={({ detail }) =>
+                        handleChange("infinal6", detail.value)
+                      }
+                    />
+                  </FormField>
+                ),
+                isOptional: true,
+              },
+              {
+                title: "Descripción de actividades realizadas",
+                content: (
+                  <Tiptap
+                    value={formValues.infinal1}
+                    handleChange={handleChange}
+                    name="infinal1"
+                    limitWords={200}
+                  />
+                ),
+                isOptional: true,
+              },
+              {
+                title: "Porcentaje estimado de avance",
+                content: (
+                  <FormField
+                    label="Porcentaje estimado de avance técnico académico"
+                    stretch
+                  >
                     <Input
                       value={formValues.infinal7}
                       onChange={({ detail }) =>
@@ -378,24 +411,30 @@ export default () => {
                 isOptional: true,
               },
               {
-                title: "Descripción de actividades realizadas",
+                title: "Evaluación global de ejecución académica",
                 content: (
-                  <SpaceBetween size="m">
-                    <Tiptap
-                      value={formValues.infinal1}
-                      handleChange={handleChange}
-                      name="infinal1"
-                      limitWords={200}
-                    />
+                  <Tiptap
+                    value={formValues.infinal3}
+                    handleChange={handleChange}
+                    name="infinal3"
+                    limitWords={200}
+                  />
+                ),
+                isOptional: true,
+              },
+              {
+                title: "Medios probatorios",
+                content: (
+                  <Container>
                     <FormField
                       label="Medios probatorios"
                       description={
-                        files["informe-PTPDOCTO-INFORME-AVANCE"] && (
+                        files["informe-PTPGRADO-INFORME-AVANCE"] && (
                           <>
                             Ya ha cargado un{" "}
                             <Link
                               {...propsEnlaces}
-                              href={files["informe-PTPDOCTO-INFORME-AVANCE"]}
+                              href={files["informe-PTPGRADO-INFORME-AVANCE"]}
                             >
                               archivo.
                             </Link>
@@ -413,19 +452,7 @@ export default () => {
                         }}
                       />
                     </FormField>
-                  </SpaceBetween>
-                ),
-                isOptional: true,
-              },
-              {
-                title: "Evaluación global de ejecución académica",
-                content: (
-                  <Tiptap
-                    value={formValues.infinal3}
-                    handleChange={handleChange}
-                    name="infinal3"
-                    limitWords={200}
-                  />
+                  </Container>
                 ),
                 isOptional: true,
               },

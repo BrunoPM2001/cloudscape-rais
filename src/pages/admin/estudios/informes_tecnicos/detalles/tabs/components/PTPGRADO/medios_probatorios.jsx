@@ -2,14 +2,33 @@ import {
   Container,
   FileUpload,
   FormField,
+  Link,
 } from "@cloudscape-design/components";
 
-export default ({ value1, handleChange }) => {
+const propsEnlaces = {
+  external: "true",
+  variant: "primary",
+  fontSize: "body-s",
+  target: "_blank",
+};
+
+export default ({ value1, handleChange, file }) => {
   return (
     <Container>
       <FormField
         label="Adjuntar archivo digital de los medios probatorios"
         stretch
+        description={
+          file && (
+            <>
+              Ya ha cargado un{" "}
+              <Link {...propsEnlaces} href={file.url}>
+                archivo
+              </Link>{" "}
+              el {file.fecha}
+            </>
+          )
+        }
       >
         <FileUpload
           value={value1}

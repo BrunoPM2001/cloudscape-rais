@@ -1,11 +1,10 @@
 import {
+  ColumnLayout,
   Container,
   FileUpload,
   FormField,
   Link,
-  SpaceBetween,
 } from "@cloudscape-design/components";
-import Tiptap from "../../../../../../components/tiptap";
 
 const propsRepetidas = {
   showFileLastModified: true,
@@ -30,44 +29,43 @@ const propsEnlaces = {
   target: "_blank",
 };
 
-export default ({ value1, file1, handleChange, files }) => {
+export default ({ value1, handleChange, files }) => {
   return (
     <Container>
-      <SpaceBetween>
+      <ColumnLayout columns={1}>
         <FormField
-          label="Descripción de actividades realizadas"
-          description="Máximo 200 palabras"
-          stretch
-        >
-          <Tiptap value={value1} handleChange={handleChange} name="infinal1" />
-        </FormField>
-        <FormField
-          label="Medios probatorios"
-          stretch
+          label="Reporte Final"
+          info={
+            <Link
+              variant="info"
+              href="/minio/templates/Modelo_Reporte_Viabilidad.xlsx"
+            >
+              Descargar modelo
+            </Link>
+          }
+          constraintText="Remitir el formulario con los campos completados (ver modelo) a la Dirección de Promoción DGITT-VRIP dp.vrip@unmsm.edu.pe"
           description={
-            files["informe-PTPMAEST-INFORME-AVANCE"] && (
+            files["informe-PICV-INFORME"] && (
               <>
                 Ya ha cargado un{" "}
-                <Link
-                  {...propsEnlaces}
-                  href={files["informe-PTPMAEST-INFORME-AVANCE"].url}
-                >
+                <Link {...propsEnlaces} href={files["informe-PICV-INFORME"].url}>
                   archivo
                 </Link>{" "}
-                el {files["informe-PTPMAEST-INFORME-AVANCE"].fecha}
+                el {files["informe-PICV-INFORME"].fecha}
               </>
             )
           }
+          stretch
         >
           <FileUpload
             {...propsRepetidas}
-            value={file1}
+            value={value1}
             onChange={({ detail }) => {
               handleChange("file1", detail.value);
             }}
           />
         </FormField>
-      </SpaceBetween>
+      </ColumnLayout>
     </Container>
   );
 };

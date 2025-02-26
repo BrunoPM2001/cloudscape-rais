@@ -24,10 +24,11 @@ import NotificationContext from "../../../../../../providers/notificationProvide
 const initialForm = {
   id: null,
   estado: 0,
-  infinal7: "",
   infinal1: "",
-  infinal3: "",
   infinal2: "",
+  infinal3: "",
+  infinal4: "",
+  infinal5: "",
   file1: [],
 };
 
@@ -101,10 +102,11 @@ export default () => {
     setMiembros(data.miembros);
     setFiles(data.archivos);
     if (data.informe) {
-      handleChange("infinal7", data.informe.infinal7 ?? "");
-      handleChange("infinal3", data.informe.infinal3 ?? "");
       handleChange("infinal1", data.informe.infinal1 ?? "");
       handleChange("infinal2", data.informe.infinal2 ?? "");
+      handleChange("infinal3", data.informe.infinal3 ?? "");
+      handleChange("infinal4", data.informe.infinal4 ?? "");
+      handleChange("infinal5", data.informe.infinal5 ?? "");
       handleChange("estado", data.informe.estado);
       handleChange("observaciones", data.informe.observaciones);
       handleChange("id", data.informe.id);
@@ -119,10 +121,11 @@ export default () => {
     form.append("proyecto_id", proyecto_id);
     form.append("tipo_proyecto", tipo_proyecto);
     form.append("informe", informe);
-    form.append("infinal7", formValues.infinal7);
-    form.append("infinal3", formValues.infinal3);
     form.append("infinal1", formValues.infinal1);
     form.append("infinal2", formValues.infinal2);
+    form.append("infinal3", formValues.infinal3);
+    form.append("infinal4", formValues.infinal4);
+    form.append("infinal5", formValues.infinal5);
     form.append("file1", formValues.file1[0]);
     const res = await axiosBase.post(
       "investigador/informes/informe_academico/sendData",
@@ -143,10 +146,11 @@ export default () => {
     form.append("proyecto_id", proyecto_id);
     form.append("tipo_proyecto", tipo_proyecto);
     form.append("informe", informe);
-    form.append("infinal7", formValues.infinal7);
-    form.append("infinal3", formValues.infinal3);
     form.append("infinal1", formValues.infinal1);
     form.append("infinal2", formValues.infinal2);
+    form.append("infinal3", formValues.infinal3);
+    form.append("infinal4", formValues.infinal4);
+    form.append("infinal5", formValues.infinal5);
     form.append("file1", formValues.file1[0]);
     const res1 = await axiosBase.post(
       "investigador/informes/informe_academico/sendData",
@@ -364,38 +368,42 @@ export default () => {
                 ),
               },
               {
-                title: "Porcentaje estimado de avance académico",
+                title: "Describir situación",
                 content: (
-                  <FormField label="Porcentaje estimado de avance" stretch>
-                    <Input
-                      value={formValues.infinal7}
-                      onChange={({ detail }) =>
-                        handleChange("infinal7", detail.value)
-                      }
-                    />
-                  </FormField>
+                  <Tiptap
+                    value={formValues.infinal1}
+                    handleChange={handleChange}
+                    name="infinal1"
+                    limitWords={600}
+                  />
                 ),
                 isOptional: true,
               },
               {
-                title: "Descripción de actividades realizadas",
+                title: "Otros productos de investigación",
                 content: (
-                  <SpaceBetween size="m">
-                    <Tiptap
-                      value={formValues.infinal1}
-                      handleChange={handleChange}
-                      name="infinal1"
-                      limitWords={200}
-                    />
+                  <Tiptap
+                    value={formValues.infinal2}
+                    handleChange={handleChange}
+                    name="infinal2"
+                    limitWords={600}
+                  />
+                ),
+                isOptional: true,
+              },
+              {
+                title: "Medios probatorios",
+                content: (
+                  <Container>
                     <FormField
                       label="Medios probatorios"
                       description={
-                        files["informe-PTPDOCTO-INFORME-AVANCE"] && (
+                        files["informe-PTPGRADO-INFORME-FINAL"] && (
                           <>
                             Ya ha cargado un{" "}
                             <Link
                               {...propsEnlaces}
-                              href={files["informe-PTPDOCTO-INFORME-AVANCE"]}
+                              href={files["informe-PTPGRADO-INFORME-FINAL"]}
                             >
                               archivo.
                             </Link>
@@ -413,30 +421,43 @@ export default () => {
                         }}
                       />
                     </FormField>
-                  </SpaceBetween>
+                  </Container>
                 ),
                 isOptional: true,
               },
               {
-                title: "Evaluación global de ejecución académica",
+                title: "Descripción del problema",
                 content: (
                   <Tiptap
                     value={formValues.infinal3}
                     handleChange={handleChange}
                     name="infinal3"
-                    limitWords={200}
+                    limitWords={2000}
                   />
                 ),
                 isOptional: true,
               },
               {
-                title: "Problemas identificados",
+                title: "Acciones tomadas",
                 content: (
                   <Tiptap
-                    value={formValues.infinal2}
+                    value={formValues.infinal4}
                     handleChange={handleChange}
-                    name="infinal2"
-                    limitWords={600}
+                    name="infinal4"
+                    limitWords={2000}
+                  />
+                ),
+                isOptional: true,
+              },
+
+              {
+                title: "Sugerencias",
+                content: (
+                  <Tiptap
+                    value={formValues.infinal5}
+                    handleChange={handleChange}
+                    name="infinal5"
+                    limitWords={2000}
                   />
                 ),
                 isOptional: true,

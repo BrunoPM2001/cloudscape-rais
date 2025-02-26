@@ -18,7 +18,7 @@ import { useContext, useEffect, useState } from "react";
 import Tiptap from "../../../../components/tiptap";
 import { useFormValidation } from "../../../../../../hooks/useFormValidation";
 import axiosBase from "../../../../../../api/axios";
-import { useLocation } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 import queryString from "query-string";
 import NotificationContext from "../../../../../../providers/notificationProvider";
 
@@ -67,6 +67,7 @@ export default () => {
 
   //  Url
   const location = useLocation();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { id, proyecto_id, tipo_proyecto, informe } = queryString.parse(
     location.search
   );
@@ -103,8 +104,6 @@ export default () => {
     setMiembros(data.miembros);
     setFiles(data.archivos);
     if (data.informe) {
-      handleChange("infinal7", data.informe.infinal7 ?? "");
-      handleChange("infinal3", data.informe.infinal3 ?? "");
       handleChange("infinal1", data.informe.infinal1 ?? "");
       handleChange("infinal2", data.informe.infinal2 ?? "");
       handleChange("estado", data.informe.estado);
@@ -120,8 +119,7 @@ export default () => {
     form.append("id", id);
     form.append("proyecto_id", proyecto_id);
     form.append("tipo_proyecto", tipo_proyecto);
-    form.append("infinal7", formValues.infinal7);
-    form.append("infinal3", formValues.infinal3);
+    form.append("informe", informe);
     form.append("infinal1", formValues.infinal1);
     form.append("infinal2", formValues.infinal2);
     form.append("file1", formValues.file1[0]);
@@ -133,16 +131,34 @@ export default () => {
     const data = res.data;
     setLoadingSave(false);
     pushNotification(data.detail, data.message, notifications.length + 1);
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set("id", data.id);
+    setSearchParams(newParams);
   };
 
   const presentar = async () => {
     setLoadingSave(true);
+    const form = new FormData();
+    form.append("id", id);
+    form.append("proyecto_id", proyecto_id);
+    form.append("tipo_proyecto", tipo_proyecto);
+    form.append("informe", informe);
+    form.append("infinal1", formValues.infinal1);
+    form.append("infinal2", formValues.infinal2);
+    form.append("file1", formValues.file1[0]);
+    form.append("file2", formValues.file2[0]);
+    const res1 = await axiosBase.post(
+      "investigador/informes/informe_academico/sendData",
+      form
+    );
+    const info = res1.data;
     const res = await axiosBase.put(
       "investigador/informes/informe_academico/presentar",
       {
-        id,
+        id: info.id,
         proyecto_id,
         tipo_proyecto,
+        informe,
       }
     );
     const data = res.data;

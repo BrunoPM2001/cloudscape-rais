@@ -186,7 +186,7 @@ export default () => {
   return (
     <Table
       {...collectionProps}
-      trackBy="proyecto_id"
+      trackBy="id"
       items={items}
       columnDefinitions={columnDefinitions}
       columnDisplay={columnDisplay}
@@ -219,7 +219,7 @@ export default () => {
                 onClick={() => {
                   const query = queryString.stringify({
                     proyecto_id: collectionProps.selectedItems[0]?.proyecto_id,
-                    id: collectionProps.selectedItems[0]?.id,
+                    id: collectionProps.selectedItems[0]?.informe_id,
                     tipo_proyecto:
                       collectionProps.selectedItems[0]?.tipo_proyecto,
                     informe: collectionProps.selectedItems[0]?.informe,
