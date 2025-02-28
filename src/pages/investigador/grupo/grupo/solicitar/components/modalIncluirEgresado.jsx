@@ -75,6 +75,7 @@ export default ({ close, reload, grupo_id }) => {
       formData.append("tipo_registro", "egresado");
       formData.append("sum_id", form.id);
       formData.append("investigador_id", form.investigador_id);
+      formData.append("tipo", form.tipo);
       formData.append("grupo_id", grupo_id);
       formData.append("condicion", "Adherente");
       formData.append("file", formValues.file[0]);
