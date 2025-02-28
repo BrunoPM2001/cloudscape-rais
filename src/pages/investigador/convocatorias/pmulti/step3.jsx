@@ -384,6 +384,12 @@ export default function Registro_pmulti_3() {
                                     {
                                       text: "Gestor administrativo",
                                       id: "action_2_4",
+                                      disabled:
+                                        data.filter(
+                                          (item) =>
+                                            item.tipo_integrante ==
+                                            "Gestor Administrativo"
+                                        ).length == 1,
                                     },
                                   ]}
                                 >

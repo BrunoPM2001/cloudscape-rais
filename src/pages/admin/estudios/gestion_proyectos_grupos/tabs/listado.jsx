@@ -332,6 +332,18 @@ export default () => {
                 } else if (
                   collectionProps.selectedItems[0][
                     "tipo_proyecto"
+                  ].toLowerCase() == "ptpbachiller"
+                ) {
+                  window.location.href =
+                    "proyectos_grupos/detalle/" +
+                    collectionProps.selectedItems[0][
+                      "tipo_proyecto"
+                    ].toLowerCase() +
+                    "?" +
+                    query;
+                } else if (
+                  collectionProps.selectedItems[0][
+                    "tipo_proyecto"
                   ].toLowerCase() == "picv"
                 ) {
                   window.location.href =

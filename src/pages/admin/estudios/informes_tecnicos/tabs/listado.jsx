@@ -206,6 +206,7 @@ export default () => {
   const [informes, setInformes] = useState([]);
   const [distributions, setDistribution] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
+  const [loadingBtn, setLoadingBtn] = useState(false);
   const [modal, setModal] = useState("");
   const {
     items,
@@ -260,6 +261,7 @@ export default () => {
   };
 
   const getInformes = async () => {
+    setSelectedItems([]);
     setLoadingInformes(true);
     const res = await axiosBase.get(
       "admin/estudios/informesTecnicos/informes",
@@ -273,6 +275,22 @@ export default () => {
     const data = res.data;
     setInformes(data);
     setLoadingInformes(false);
+  };
+
+  const reporte = async () => {
+    setLoadingBtn(true);
+    const res = await axiosBase.get("admin/estudios/informesTecnicos/reporte", {
+      params: {
+        informe_tecnico_id: selectedItems[0].id,
+        tipo_informe: selectedItems[0].informe,
+        tipo_proyecto: collectionProps.selectedItems[0].tipo_proyecto,
+      },
+      responseType: "blob",
+    });
+    setLoadingBtn(false);
+    const blob = await res.data;
+    const url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
   };
 
   //  Effects
@@ -456,6 +474,10 @@ export default () => {
                     },
                     {
                       id: "action_3_2",
+                      text: "Reporte",
+                    },
+                    {
+                      id: "action_3_3",
                       text: "Eliminar",
                     },
                   ]}
@@ -463,10 +485,13 @@ export default () => {
                     if (detail.id == "action_3_1") {
                       setModal("audit");
                     } else if (detail.id == "action_3_2") {
+                      reporte();
+                    } else if (detail.id == "action_3_3") {
                       setModal("delete");
                     }
                   }}
                   disabled={!selectedItems.length}
+                  loading={loadingBtn}
                 >
                   Acciones
                 </ButtonDropdown>
