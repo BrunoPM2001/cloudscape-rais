@@ -58,7 +58,7 @@ const columnDefinitions = [
   },
 ];
 
-const MAX = 500000;
+const MAX = 480000;
 
 const columnDisplay = [
   { id: "partida", visible: true },
@@ -142,7 +142,7 @@ export default function Registro_pmulti_6() {
         0
       );
 
-      if (totalMonto < 250000) {
+      if (totalMonto < 230000) {
         tempErrors.push(
           "El monto total minimo para postular a esta convocatoria es de S/. 250,000.00"
         );
@@ -214,7 +214,7 @@ export default function Registro_pmulti_6() {
                 {
                   title: "Presupuesto",
                   description:
-                    "Montos y partidas (Monto disponible entre: S/250,000 y S/500,000)",
+                    "Montos y partidas (Monto disponible entre: S/230,000 y S/480,000)",
                   content: (
                     <SpaceBetween size="m">
                       {alert.length > 0 && (
