@@ -2,7 +2,6 @@ import {
   Container,
   ColumnLayout,
   SpaceBetween,
-  Header,
   Box,
 } from "@cloudscape-design/components";
 

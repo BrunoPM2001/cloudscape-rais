@@ -2,6 +2,21 @@ import { Suspense, lazy } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { NotificationProvider } from "../providers/notificationProvider";
 
+const Detalle_proyecto_ptpgrado = lazy(() =>
+  import(
+    "../pages/admin/estudios/gestion_proyectos_grupos/detalle/ptpgrado/index.jsx"
+  )
+);
+const Detalle_proyecto_ptpmaest = lazy(() =>
+  import(
+    "../pages/admin/estudios/gestion_proyectos_grupos/detalle/ptpmaest/index.jsx"
+  )
+);
+const Detalle_proyecto_ptpdocto = lazy(() =>
+  import(
+    "../pages/admin/estudios/gestion_proyectos_grupos/detalle/ptpdocto/index.jsx"
+  )
+);
 const Detalle_proyecto_ptpbachiller = lazy(() =>
   import(
     "../pages/admin/estudios/gestion_proyectos_grupos/detalle/ptpbachiller/index.jsx"
@@ -276,6 +291,18 @@ const routes = createBrowserRouter(
                 {
                   path: "ptpbachiller",
                   element: <Detalle_proyecto_ptpbachiller />,
+                },
+                {
+                  path: "ptpdocto",
+                  element: <Detalle_proyecto_ptpdocto />,
+                },
+                {
+                  path: "ptpmaest",
+                  element: <Detalle_proyecto_ptpmaest />,
+                },
+                {
+                  path: "ptpgrado",
+                  element: <Detalle_proyecto_ptpgrado />,
                 },
               ],
             },

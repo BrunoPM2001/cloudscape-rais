@@ -35,7 +35,9 @@ export default ({ data, loading, grupo_id, reload }) => {
               <Header
                 variant="h3"
                 actions={
-                  <Button onClick={() => setModal("edit")}>Editar</Button>
+                  <Button onClick={() => setModal("edit")} disabled={loading}>
+                    Editar
+                  </Button>
                 }
               >
                 Ambientes físicos

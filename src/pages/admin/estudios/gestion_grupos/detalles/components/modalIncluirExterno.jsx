@@ -47,7 +47,6 @@ const initialForm = {
 const formRules = {
   codigo_orcid: { required: true, regex: /^(\d{4}-){3}\d{3}[\dX]$/ },
   apellido1: { required: true },
-  apellido2: { required: true },
   nombres: { required: true },
   sexo: { required: true },
   institucion: { required: false },
@@ -103,7 +102,7 @@ export default ({ close, reload }) => {
       form.append("sexo", formValues.sexo.value);
       form.append("institucion", formValues.institucion);
       form.append("pais", formValues.pais.value);
-      form.append("direccion1", formValues.direccion1);
+      form.append("email1", formValues.email1);
       form.append("doc_tipo", formValues.doc_tipo.value);
       form.append("doc_numero", formValues.doc_numero);
       form.append("telefono_movil", formValues.telefono_movil);
@@ -147,10 +146,12 @@ export default ({ close, reload }) => {
       if (data.message == "error") {
         setAlert("No se encontró infomación de este orcid");
       } else {
-        const info = data.data;
+        const info = data.detail;
         handleChange("nombres", info.nombres);
         handleChange("apellido1", info.apellido1);
         handleChange("apellido2", info.apellido2);
+        handleChange("institucion", info.institucion);
+        handleChange("email1", info.email);
         handleChange("titulo_profesional", info.titulo_profesional);
         handleChange(
           "pais",

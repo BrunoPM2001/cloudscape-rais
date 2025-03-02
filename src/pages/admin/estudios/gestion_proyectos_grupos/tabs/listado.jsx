@@ -344,6 +344,42 @@ export default () => {
                 } else if (
                   collectionProps.selectedItems[0][
                     "tipo_proyecto"
+                  ].toLowerCase() == "ptpdocto"
+                ) {
+                  window.location.href =
+                    "proyectos_grupos/detalle/" +
+                    collectionProps.selectedItems[0][
+                      "tipo_proyecto"
+                    ].toLowerCase() +
+                    "?" +
+                    query;
+                } else if (
+                  collectionProps.selectedItems[0][
+                    "tipo_proyecto"
+                  ].toLowerCase() == "ptpmaest"
+                ) {
+                  window.location.href =
+                    "proyectos_grupos/detalle/" +
+                    collectionProps.selectedItems[0][
+                      "tipo_proyecto"
+                    ].toLowerCase() +
+                    "?" +
+                    query;
+                } else if (
+                  collectionProps.selectedItems[0][
+                    "tipo_proyecto"
+                  ].toLowerCase() == "ptpgrado"
+                ) {
+                  window.location.href =
+                    "proyectos_grupos/detalle/" +
+                    collectionProps.selectedItems[0][
+                      "tipo_proyecto"
+                    ].toLowerCase() +
+                    "?" +
+                    query;
+                } else if (
+                  collectionProps.selectedItems[0][
+                    "tipo_proyecto"
                   ].toLowerCase() == "picv"
                 ) {
                   window.location.href =
