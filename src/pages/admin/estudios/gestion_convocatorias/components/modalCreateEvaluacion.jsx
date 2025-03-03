@@ -35,7 +35,7 @@ const tipo_proyectos = [
   { value: "GRUPO" },
 ];
 
-const periodos = [{ value: "2023" }, { value: "2024" }];
+const periodos = [{ value: "2023" }, { value: "2024" }, { value: "2025" }];
 
 const initialForm = {
   tipo: null,
@@ -146,7 +146,7 @@ export default ({ visible, setVisible, reload }) => {
             </FormField>
             <FormField label="Año" errorText={formErrors.periodo} stretch>
               <Input
-                disabled
+                // disabled
                 value={formValues.periodo}
                 onChange={({ detail }) => handleChange("periodo", detail.value)}
               />

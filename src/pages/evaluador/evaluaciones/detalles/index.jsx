@@ -33,6 +33,10 @@ const initialForm = {
   comentario: "",
 };
 
+const formRules = {
+  comentario: { required: true },
+};
+
 export default function Evaluador_proyecto() {
   //  States
   const [data, setData] = useState([]);
@@ -45,10 +49,8 @@ export default function Evaluador_proyecto() {
   const { proyecto_id } = queryString.parse(location.search);
 
   //  Hooks
-  const { formValues, formErrors, handleChange } = useFormValidation(
-    initialForm,
-    {}
-  );
+  const { formValues, formErrors, handleChange, validateForm } =
+    useFormValidation(initialForm, formRules);
 
   //  Functions
   const getData = async () => {
@@ -63,7 +65,9 @@ export default function Evaluador_proyecto() {
     const data = res.data;
     setData(data);
     setLoading(false);
-    handleChange("comentario", data.comentario.comentario);
+    if (data.cerrado) {
+      handleChange("comentario", data.comentario.comentario);
+    }
   };
 
   const getMoreData = async () => {
@@ -104,6 +108,7 @@ export default function Evaluador_proyecto() {
           proyecto_id={proyecto_id}
           reload={getData}
           comentario={formValues.comentario}
+          validateForm={validateForm}
           puntaje_total={data.total}
         />
         <Container>

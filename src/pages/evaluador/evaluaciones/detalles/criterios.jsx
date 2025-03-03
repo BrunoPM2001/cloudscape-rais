@@ -23,6 +23,7 @@ export default ({
   proyecto_id,
   reload,
   comentario,
+  validateForm,
   puntaje_total,
 }) => {
   //  Context
@@ -155,24 +156,24 @@ export default ({
         loading={loading}
         loadingText="Cargando data"
         submitEdit={async (item, column, newValue) => {
-          if (item.puntaje_max < newValue) {
-            pushNotification(
-              "El puntaje no debe ser menor al puntaje máximo.",
-              "error",
-              notifications.length + 1
-            );
-          } else if (0 > newValue) {
-            pushNotification(
-              "El valor no puede ser inferior a 0",
-              "error",
-              notifications.length + 1
-            );
-          } else {
-            if (column.id == "puntaje") {
-              await updateItem({ ...item, puntaje: newValue });
+          if (column.id == "puntaje") {
+            if (item.puntaje_max < newValue) {
+              pushNotification(
+                "El puntaje no debe ser menor al puntaje máximo.",
+                "error",
+                notifications.length + 1
+              );
+            } else if (0 > newValue) {
+              pushNotification(
+                "El valor no puede ser inferior a 0",
+                "error",
+                notifications.length + 1
+              );
             } else {
-              await updateItem({ ...item, comentario: newValue });
+              await updateItem({ ...item, puntaje: newValue });
             }
+          } else {
+            await updateItem({ ...item, comentario: newValue });
           }
         }}
         empty={
@@ -223,7 +224,18 @@ export default ({
               ) : (
                 <Button
                   loading={loadingBtn}
-                  onClick={() => setType("finalizar")}
+                  onClick={() => {
+                    if (validateForm()) {
+                      setType("finalizar");
+                    } else {
+                      pushNotification(
+                        "Necesita colocar un comentario debajo de los criterios de evaluación",
+                        "warning",
+                        notifications.length + 1,
+                        false
+                      );
+                    }
+                  }}
                 >
                   Finalizar evaluación
                 </Button>
