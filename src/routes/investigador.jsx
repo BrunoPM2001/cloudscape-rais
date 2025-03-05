@@ -2,6 +2,30 @@ import { Suspense, lazy } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { NotificationProvider } from "../providers/notificationProvider.jsx";
 
+const Registro_eci_7 = lazy(() =>
+  import("../pages/investigador/convocatorias/eci/step7.jsx")
+);
+const Registro_eci_6 = lazy(() =>
+  import("../pages/investigador/convocatorias/eci/step6.jsx")
+);
+const Registro_eci_5 = lazy(() =>
+  import("../pages/investigador/convocatorias/eci/step5.jsx")
+);
+const Registro_eci_4 = lazy(() =>
+  import("../pages/investigador/convocatorias/eci/step4.jsx")
+);
+const Registro_eci_3 = lazy(() =>
+  import("../pages/investigador/convocatorias/eci/step3.jsx")
+);
+const Registro_eci_2 = lazy(() =>
+  import("../pages/investigador/convocatorias/eci/step2.jsx")
+);
+const Registro_eci_1 = lazy(() =>
+  import("../pages/investigador/convocatorias/eci/step1.jsx")
+);
+const Registro_eci_0 = lazy(() =>
+  import("../pages/investigador/convocatorias/eci/step0.jsx")
+);
 const Monitoreo_detalle = lazy(() =>
   import("../pages/investigador/informes/monitoreo/detalles/index.jsx")
 );
@@ -584,6 +608,43 @@ const routes = createBrowserRouter(
     {
       path: "convocatoria",
       children: [
+        {
+          path: "eci",
+          children: [
+            {
+              path: "",
+              element: <Registro_eci_0 />,
+            },
+            {
+              path: "paso1",
+              element: <Registro_eci_1 />,
+            },
+            {
+              path: "paso2",
+              element: <Registro_eci_2 />,
+            },
+            {
+              path: "paso3",
+              element: <Registro_eci_3 />,
+            },
+            {
+              path: "paso4",
+              element: <Registro_eci_4 />,
+            },
+            {
+              path: "paso5",
+              element: <Registro_eci_5 />,
+            },
+            {
+              path: "paso6",
+              element: <Registro_eci_6 />,
+            },
+            {
+              path: "paso7",
+              element: <Registro_eci_7 />,
+            },
+          ],
+        },
         {
           path: "pmulti",
           children: [
