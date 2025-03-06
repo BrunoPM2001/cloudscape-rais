@@ -236,25 +236,23 @@ export default function Registro_eci_2() {
                   ),
                 },
                 {
-                  title: "Integrantes",
-                  description: "Deben ser integrantes registrados de GI",
-                },
-                {
-                  title: "Descripción del proyecto",
-                  description: "Listado de detalles a completar",
-                },
-                {
-                  title: "Calendario",
-                  description: "Listado de actividades junto al responsable",
+                  title: "Equipamiento",
+                  description:
+                    "Datos de equipamiento y documentos relacionados",
                 },
                 {
                   title: "Presupuesto",
                   description: "Montos y partidas",
                 },
                 {
-                  title: "Colaboración externa",
+                  title: "Impacto",
                   description:
-                    "Documento de compromiso del Cooperante Internacional",
+                    "Impacto de la propuesta y documentos relacionados",
+                },
+                {
+                  title: "Administración de equipamiento solicitado",
+                  description:
+                    "Administración de equipamiento solicitado y documentos relacionados",
                 },
                 {
                   title: "Instrucciones finales",

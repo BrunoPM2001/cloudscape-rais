@@ -24,7 +24,7 @@ const breadcrumbs = [
     text: "Convocatorias",
   },
   {
-    text: "Proyecto de equipamiento científico",
+    text: "Proyecto pconfigi innova",
   },
 ];
 
@@ -78,7 +78,7 @@ const columnDisplay = [
   { id: "estado", visible: true },
 ];
 
-export default function Registro_eci_0() {
+export default function Registro_pconfigi_inv_0() {
   //  States
   const [loading, setLoading] = useState(true);
   const [loadingReporte, setLoadingReporte] = useState(false);
@@ -92,7 +92,9 @@ export default function Registro_eci_0() {
   //  Functions
   const getData = async () => {
     setLoading(true);
-    const res = await axiosBase.get("investigador/convocatorias/eci/listado");
+    const res = await axiosBase.get(
+      "investigador/convocatorias/pconfigi_inv/listado"
+    );
     const data = res.data;
     setDistribution(data);
     setLoading(false);
@@ -100,12 +102,15 @@ export default function Registro_eci_0() {
 
   const reporte = async () => {
     setLoadingReporte(true);
-    const res = await axiosBase.get("investigador/convocatorias/eci/reporte", {
-      params: {
-        id: collectionProps.selectedItems[0].id,
-      },
-      responseType: "blob",
-    });
+    const res = await axiosBase.get(
+      "investigador/convocatorias/pconfigi_inv/reporte",
+      {
+        params: {
+          id: collectionProps.selectedItems[0].id,
+        },
+        responseType: "blob",
+      }
+    );
     const blob = await res.data;
     const url = URL.createObjectURL(blob);
     window.open(url, "_blank");
@@ -157,7 +162,8 @@ export default function Registro_eci_0() {
                                 const query = queryString.stringify({
                                   id: collectionProps.selectedItems[0]["id"],
                                 });
-                                window.location.href = "eci/paso1?" + query;
+                                window.location.href =
+                                  "pconfigi_inv/paso1?" + query;
                               } else if (detail.id == "action_1_2") {
                                 setType("delete");
                               } else if (detail.id == "action_1_3") {
@@ -194,7 +200,7 @@ export default function Registro_eci_0() {
                           <Button
                             variant="primary"
                             onClick={() => {
-                              window.location.href = "eci/paso1";
+                              window.location.href = "pconfigi_inv/paso1";
                             }}
                             disabled={distributions.length > 0 || loading}
                           >

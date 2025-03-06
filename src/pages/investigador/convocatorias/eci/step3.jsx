@@ -393,21 +393,18 @@ export default function Registro_eci_3() {
                   ),
                 },
                 {
-                  title: "Descripción del proyecto",
-                  description: "Listado de detalles a completar",
-                },
-                {
-                  title: "Calendario",
-                  description: "Listado de actividades junto al responsable",
-                },
-                {
                   title: "Presupuesto",
                   description: "Montos y partidas",
                 },
                 {
-                  title: "Colaboración externa",
+                  title: "Impacto",
                   description:
-                    "Documento de compromiso del Cooperante Internacional",
+                    "Impacto de la propuesta y documentos relacionados",
+                },
+                {
+                  title: "Administración de equipamiento solicitado",
+                  description:
+                    "Administración de equipamiento solicitado y documentos relacionados",
                 },
                 {
                   title: "Instrucciones finales",

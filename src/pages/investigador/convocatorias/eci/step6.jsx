@@ -451,23 +451,6 @@ export default function Registro_eci_6() {
                   ),
                 },
                 {
-                  title: "Descripción del proyecto",
-                  description: "Listado de detalles a completar",
-                },
-                {
-                  title: "Calendario",
-                  description: "Listado de actividades junto al responsable",
-                },
-                {
-                  title: "Presupuesto",
-                  description: "Montos y partidas",
-                },
-                {
-                  title: "Colaboración externa",
-                  description:
-                    "Documento de compromiso del Cooperante Internacional",
-                },
-                {
                   title: "Instrucciones finales",
                   description: "Reporte y envío de la propuesta",
                 },

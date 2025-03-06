@@ -2,6 +2,30 @@ import { Suspense, lazy } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { NotificationProvider } from "../providers/notificationProvider.jsx";
 
+const Registro_pconfigi_inv_7 = lazy(() =>
+  import("../pages/investigador/convocatorias/pconfigi_inv/step7.jsx")
+);
+const Registro_pconfigi_inv_6 = lazy(() =>
+  import("../pages/investigador/convocatorias/pconfigi_inv/step6.jsx")
+);
+const Registro_pconfigi_inv_5 = lazy(() =>
+  import("../pages/investigador/convocatorias/pconfigi_inv/step5.jsx")
+);
+const Registro_pconfigi_inv_4 = lazy(() =>
+  import("../pages/investigador/convocatorias/pconfigi_inv/step4.jsx")
+);
+const Registro_pconfigi_inv_3 = lazy(() =>
+  import("../pages/investigador/convocatorias/pconfigi_inv/step3.jsx")
+);
+const Registro_pconfigi_inv_2 = lazy(() =>
+  import("../pages/investigador/convocatorias/pconfigi_inv/step2.jsx")
+);
+const Registro_pconfigi_inv_1 = lazy(() =>
+  import("../pages/investigador/convocatorias/pconfigi_inv/step1.jsx")
+);
+const Registro_pconfigi_inv_0 = lazy(() =>
+  import("../pages/investigador/convocatorias/pconfigi_inv/step0.jsx")
+);
 const Registro_eci_7 = lazy(() =>
   import("../pages/investigador/convocatorias/eci/step7.jsx")
 );
@@ -608,6 +632,43 @@ const routes = createBrowserRouter(
     {
       path: "convocatoria",
       children: [
+        {
+          path: "pconfigi_inv",
+          children: [
+            {
+              path: "",
+              element: <Registro_pconfigi_inv_0 />,
+            },
+            {
+              path: "paso1",
+              element: <Registro_pconfigi_inv_1 />,
+            },
+            {
+              path: "paso2",
+              element: <Registro_pconfigi_inv_2 />,
+            },
+            {
+              path: "paso3",
+              element: <Registro_pconfigi_inv_3 />,
+            },
+            {
+              path: "paso4",
+              element: <Registro_pconfigi_inv_4 />,
+            },
+            {
+              path: "paso5",
+              element: <Registro_pconfigi_inv_5 />,
+            },
+            {
+              path: "paso6",
+              element: <Registro_pconfigi_inv_6 />,
+            },
+            {
+              path: "paso7",
+              element: <Registro_pconfigi_inv_7 />,
+            },
+          ],
+        },
         {
           path: "eci",
           children: [

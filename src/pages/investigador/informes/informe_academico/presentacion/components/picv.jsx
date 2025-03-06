@@ -7,7 +7,6 @@ import {
   FileUpload,
   FormField,
   Header,
-  Input,
   Link,
   SpaceBetween,
   Spinner,
@@ -15,7 +14,6 @@ import {
   Wizard,
 } from "@cloudscape-design/components";
 import { useContext, useEffect, useState } from "react";
-import Tiptap from "../../../../components/tiptap";
 import { useFormValidation } from "../../../../../../hooks/useFormValidation";
 import axiosBase from "../../../../../../api/axios";
 import { useLocation } from "react-router-dom";
@@ -97,7 +95,6 @@ export default () => {
     setMiembros(data.miembros);
     setFiles(data.archivos);
     if (data.informe) {
-     
       handleChange("estado", data.informe.estado);
       handleChange("observaciones", data.informe.observaciones);
       handleChange("id", data.informe.id);
@@ -349,13 +346,12 @@ export default () => {
                 content: (
                   <Container>
                     <ColumnLayout columns={1}>
-                      
                       <FormField
                         label="Reporte Final"
                         info={
                           <Link
                             variant="info"
-                            href="/minio/templates/Modelo_Reporte_Viabilidad.xlsx"
+                            href="/minio/templates/anexo_picv.docx"
                           >
                             Descargar modelo
                           </Link>
@@ -365,7 +361,10 @@ export default () => {
                           files["informe-PICV-INFORME"] && (
                             <>
                               Ya ha cargado un{" "}
-                              <Link {...propsEnlaces} href={files["informe-PICV-INFORME"]}>
+                              <Link
+                                {...propsEnlaces}
+                                href={files["informe-PICV-INFORME"]}
+                              >
                                 archivo.
                               </Link>
                             </>

@@ -11,7 +11,7 @@ import {
   Table,
   Wizard,
 } from "@cloudscape-design/components";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useCollection } from "@cloudscape-design/collection-hooks";
 import { useLocation } from "react-router-dom";
 import BaseLayout from "../../components/baseLayout";
@@ -20,6 +20,7 @@ import ModalAddPartida from "./components/modalAddPartida";
 import ModalDeletePartida from "./components/modalDeletePartida";
 import queryString from "query-string";
 import ModalEditPartida from "./components/modalEditPartida";
+import NotificationContext from "../../../../providers/notificationProvider";
 
 const breadcrumbs = [
   {
@@ -30,7 +31,7 @@ const breadcrumbs = [
     text: "Convocatorias",
   },
   {
-    text: "Proyecto de equipamiento científico",
+    text: "Proyecto pconfigi innova",
   },
 ];
 
@@ -52,19 +53,25 @@ const columnDefinitions = [
   },
 ];
 
+const MAX = 48000;
+
 const columnDisplay = [
   { id: "partida", visible: true },
   { id: "tipo", visible: true },
   { id: "monto", visible: true },
 ];
 
-export default function Registro_eci_4() {
+export default function Registro_pconfigi_inv_5() {
+  //  Context
+  const { notifications, pushNotification } = useContext(NotificationContext);
+
   //  Url
   const location = useLocation();
   const { id } = queryString.parse(location.search);
 
   //  States
   const [loading, setLoading] = useState(true);
+  const [loadingBtn, setLoadingBtn] = useState(false);
   const [data, setData] = useState({
     presupuesto: [],
     partidas: [],
@@ -82,7 +89,7 @@ export default function Registro_eci_4() {
   const getData = async () => {
     setLoading(true);
     const res = await axiosBase.get(
-      "investigador/convocatorias/eci/verificar4",
+      "investigador/convocatorias/pconfigi_inv/verificar5",
       {
         params: {
           id,
@@ -95,11 +102,32 @@ export default function Registro_eci_4() {
     setLoading(false);
   };
 
-  const handleNavigate = (index) => {
+  const validarPresupuesto = async () => {
+    // setLoadingBtn(true);
+    // const res = await axiosBase.get(
+    //   "investigador/convocatorias/pconfigi_inv/validarPresupuesto",
+    //   {
+    //     params: {
+    //       id,
+    //     },
+    //   }
+    // );
+    // const data = res.data;
+    // pushNotification(data.detail, data.message, notifications.length + 1);
+    // if (data.message != "warning") {
     const query = queryString.stringify({
       id,
     });
-    if (index < 3) {
+    window.location.href = "paso6?" + query;
+    // }
+    // setLoadingBtn(false);
+  };
+
+  const handleNavigate = (index) => {
+    if (index < 5) {
+      const query = queryString.stringify({
+        id,
+      });
       window.location.href = "paso" + (index + 1) + "?" + query;
     } else {
       let tempErrors = [...errors];
@@ -108,13 +136,20 @@ export default function Registro_eci_4() {
         0
       );
 
-      if (totalMonto == 0) {
-        tempErrors.push("Necesita agregar al menos una partida");
+      if (
+        data.presupuesto.filter((item) => item.tipo == "Bienes").length == 0
+      ) {
+        tempErrors.push("Debe tener al menos un bien en su presupuesto");
+      }
+      if (totalMonto > MAX) {
+        tempErrors.push(
+          "El monto total máximo para postular a esta convocatoria es de S/. 500,000.00"
+        );
       }
 
       setAlert(tempErrors);
       if (tempErrors.length == 0) {
-        window.location.href = "paso5?" + query;
+        validarPresupuesto();
       }
     }
   };
@@ -144,23 +179,27 @@ export default function Registro_eci_4() {
               onNavigate={({ detail }) =>
                 handleNavigate(detail.requestedStepIndex)
               }
-              activeStepIndex={3}
+              activeStepIndex={4}
+              isLoadingNextStep={loadingBtn}
               onCancel={() => {
                 window.location.href = "../";
               }}
               steps={[
                 {
-                  title: "Información del grupo de investigación",
+                  title: "Información general",
                   description: "Información general",
                 },
                 {
-                  title: "Datos generales",
-                  description: "Datos del proyecto",
+                  title: "Carta de vinculación",
+                  description: "Documento cargado por el responsable",
                 },
                 {
-                  title: "Equipamiento",
-                  description:
-                    "Datos de equipamiento y documentos relacionados",
+                  title: "Descripción del proyecto",
+                  description: "Listado de detalles a completar",
+                },
+                {
+                  title: "Calendario",
+                  description: "Listado de actividades junto al responsable",
                 },
                 {
                   title: "Presupuesto",
@@ -193,6 +232,17 @@ export default function Registro_eci_4() {
                         header={
                           <Header
                             variant="h3"
+                            description={
+                              "Saldo disponible S./ " +
+                              (MAX -
+                                Number(
+                                  items.reduce(
+                                    (sum, item) =>
+                                      sum + Number(item.monto) || 0,
+                                    0
+                                  )
+                                ))
+                            }
                             actions={
                               <SpaceBetween size="xs" direction="horizontal">
                                 <ButtonDropdown
@@ -231,6 +281,17 @@ export default function Registro_eci_4() {
                                   onClick={() => {
                                     setType("add");
                                   }}
+                                  disabled={
+                                    MAX -
+                                      Number(
+                                        items.reduce(
+                                          (sum, item) =>
+                                            sum + Number(item.monto) || 0,
+                                          0
+                                        )
+                                      ) ==
+                                    0
+                                  }
                                 >
                                   Añadir
                                 </Button>
@@ -302,12 +363,27 @@ export default function Registro_eci_4() {
                           id={id}
                           options={data.partidas}
                           presupuesto={data.presupuesto}
+                          limit={parseFloat(
+                            MAX -
+                              items.reduce(
+                                (acc, curr) => acc + Number(curr.monto),
+                                0
+                              )
+                          ).toFixed(2)}
                         />
                       ) : type == "update" ? (
                         <ModalEditPartida
                           close={() => setType("")}
                           reload={getData}
                           id={collectionProps.selectedItems[0].id}
+                          limit={parseFloat(
+                            MAX -
+                              items.reduce(
+                                (acc, curr) => acc + Number(curr.monto),
+                                0
+                              ) +
+                              Number(collectionProps.selectedItems[0].monto)
+                          ).toFixed(2)}
                           item={collectionProps.selectedItems[0]}
                           options={data.partidas}
                         />
@@ -324,14 +400,8 @@ export default function Registro_eci_4() {
                   ),
                 },
                 {
-                  title: "Impacto",
-                  description:
-                    "Impacto de la propuesta y documentos relacionados",
-                },
-                {
-                  title: "Administración de equipamiento solicitado",
-                  description:
-                    "Administración de equipamiento solicitado y documentos relacionados",
+                  title: "Integrantes",
+                  description: "Deben ser integrantes registrados de GI",
                 },
                 {
                   title: "Instrucciones finales",

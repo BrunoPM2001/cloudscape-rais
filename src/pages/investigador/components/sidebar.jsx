@@ -179,14 +179,22 @@ const navItems = [
     text: "Convocatorias",
     defaultExpanded: false,
     items: [
-      {
-        type: "link",
-        text: "Proyecto equipo científico",
-        // info: <Badge color="red">Cerrada</Badge>,
-        // href: "#",
-        info: <Badge color="green">Activa</Badge>,
-        href: "/investigador/convocatoria/eci",
-      },
+      // {
+      //   type: "link",
+      //   text: "Proyecto innova para grupos",
+      //   // info: <Badge color="red">Cerrada</Badge>,
+      //   // href: "#",
+      //   info: <Badge color="green">Activa</Badge>,
+      //   href: "/investigador/convocatoria/pconfigi_inv",
+      // },
+      // {
+      //   type: "link",
+      //   text: "Proyecto equipo científico",
+      //   // info: <Badge color="red">Cerrada</Badge>,
+      //   // href: "#",
+      //   info: <Badge color="green">Activa</Badge>,
+      //   href: "/investigador/convocatoria/eci",
+      // },
       {
         type: "link",
         text: "Proyecto multidisciplinario",

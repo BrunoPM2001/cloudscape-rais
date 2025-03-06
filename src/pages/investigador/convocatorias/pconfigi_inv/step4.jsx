@@ -1,25 +1,24 @@
 import {
   Alert,
-  Badge,
   Box,
   Button,
   ButtonDropdown,
-  ColumnLayout,
   Header,
+  Pagination,
   SpaceBetween,
   Spinner,
   Table,
   Wizard,
 } from "@cloudscape-design/components";
+import BaseLayout from "../../components/baseLayout.jsx";
 import { useEffect, useState } from "react";
-import { useCollection } from "@cloudscape-design/collection-hooks";
-import { useLocation } from "react-router-dom";
-import BaseLayout from "../../components/baseLayout";
-import axiosBase from "../../../../api/axios";
-import ModalAddPartida from "./components/modalAddPartida";
-import ModalDeletePartida from "./components/modalDeletePartida";
+import axiosBase from "../../../../api/axios.js";
 import queryString from "query-string";
-import ModalEditPartida from "./components/modalEditPartida";
+import { useLocation } from "react-router-dom";
+import { useCollection } from "@cloudscape-design/collection-hooks";
+import ModalAddActividad from "./components/modalAddActividad.jsx";
+import ModalDeleteActividad from "./components/modalDeleteActividad.jsx";
+import ModalEditActividad from "./components/modalEditActividad.jsx";
 
 const breadcrumbs = [
   {
@@ -30,90 +29,99 @@ const breadcrumbs = [
     text: "Convocatorias",
   },
   {
-    text: "Proyecto de equipamiento científico",
+    text: "Proyecto pconfigi innova",
   },
 ];
 
 const columnDefinitions = [
   {
-    id: "partida",
-    header: "Partida",
-    cell: (item) => item.partida,
+    id: "actividad",
+    header: "Actividad",
+    cell: (item) => item.actividad,
+    minWidth: 150,
   },
   {
-    id: "tipo",
-    header: "Tipo",
-    cell: (item) => item.tipo,
+    id: "fecha_inicio",
+    header: "Fecha de inicio",
+    cell: (item) => item.fecha_inicio,
+    minWidth: 120,
   },
   {
-    id: "monto",
-    header: "Monto",
-    cell: (item) => item.monto,
+    id: "fecha_fin",
+    header: "Fecha de fin",
+    cell: (item) => item.fecha_fin,
+    minWidth: 120,
   },
 ];
 
 const columnDisplay = [
-  { id: "partida", visible: true },
-  { id: "tipo", visible: true },
-  { id: "monto", visible: true },
+  { id: "actividad", visible: true },
+  { id: "fecha_inicio", visible: true },
+  { id: "fecha_fin", visible: true },
 ];
 
-export default function Registro_eci_4() {
+const MIN_ACTIVIDADES = 3;
+
+export default function Registro_pconfigi_inv_4() {
   //  Url
   const location = useLocation();
   const { id } = queryString.parse(location.search);
 
   //  States
   const [loading, setLoading] = useState(true);
-  const [data, setData] = useState({
-    presupuesto: [],
-    partidas: [],
-    montos: {},
-  });
-  const [type, setType] = useState("");
   const [errors, setErrors] = useState([]);
+  const [data, setData] = useState([]);
+  const [type, setType] = useState("");
   const [alert, setAlert] = useState([]);
 
   //  Hooks
-  const { items, collectionProps, actions } = useCollection(data.presupuesto, {
-    selection: {},
-  });
+  const { items, actions, collectionProps, paginationProps } = useCollection(
+    data,
+    {
+      pagination: { pageSize: 10 },
+      sorting: {},
+      selection: {},
+    }
+  );
+
   //  Functions
   const getData = async () => {
     setLoading(true);
     const res = await axiosBase.get(
-      "investigador/convocatorias/eci/verificar4",
+      "investigador/convocatorias/pconfigi_inv/verificar4",
       {
         params: {
           id,
         },
       }
     );
-    const data = res.data;
-    setData(data);
-    setErrors([]);
+    const info = res.data;
+    if (!info.estado) {
+      setErrors(info.errores);
+    } else {
+      setData(info.actividades);
+    }
     setLoading(false);
   };
 
   const handleNavigate = (index) => {
-    const query = queryString.stringify({
-      id,
-    });
-    if (index < 3) {
+    if (index < 4) {
+      const query = queryString.stringify({
+        id,
+      });
       window.location.href = "paso" + (index + 1) + "?" + query;
     } else {
       let tempErrors = [...errors];
-      const totalMonto = items.reduce(
-        (sum, item) => sum + parseFloat(item.monto),
-        0
-      );
-
-      if (totalMonto == 0) {
-        tempErrors.push("Necesita agregar al menos una partida");
+      if (data.length < MIN_ACTIVIDADES) {
+        tempErrors.push(
+          "Necesita registrar al menos " + MIN_ACTIVIDADES + " actividades"
+        );
       }
-
       setAlert(tempErrors);
       if (tempErrors.length == 0) {
+        const query = queryString.stringify({
+          id,
+        });
         window.location.href = "paso5?" + query;
       }
     }
@@ -146,25 +154,24 @@ export default function Registro_eci_4() {
               }
               activeStepIndex={3}
               onCancel={() => {
-                window.location.href = "../";
+                window.location.href = "../" + tipo;
               }}
               steps={[
                 {
-                  title: "Información del grupo de investigación",
+                  title: "Información general",
                   description: "Información general",
                 },
                 {
-                  title: "Datos generales",
-                  description: "Datos del proyecto",
+                  title: "Carta de vinculación",
+                  description: "Documento cargado por el responsable",
                 },
                 {
-                  title: "Equipamiento",
-                  description:
-                    "Datos de equipamiento y documentos relacionados",
+                  title: "Descripción del proyecto",
+                  description: "Listado de detalles a completar",
                 },
                 {
-                  title: "Presupuesto",
-                  description: "Montos y partidas",
+                  title: "Calendario",
+                  description: "Listado de actividades junto al responsable",
                   content: (
                     <SpaceBetween size="m">
                       {alert.length > 0 && (
@@ -182,64 +189,62 @@ export default function Registro_eci_4() {
                       <Table
                         {...collectionProps}
                         trackBy="id"
+                        items={items}
                         columnDefinitions={columnDefinitions}
                         columnDisplay={columnDisplay}
-                        wrapLines
-                        items={items}
+                        enableKeyboardNavigation
                         selectionType="single"
                         onRowClick={({ detail }) =>
                           actions.setSelectedItems([detail.item])
                         }
+                        wrapLines
                         header={
                           <Header
-                            variant="h3"
+                            counter={"(" + data.length + ")"}
                             actions={
-                              <SpaceBetween size="xs" direction="horizontal">
+                              <SpaceBetween direction="horizontal" size="xs">
                                 <ButtonDropdown
                                   disabled={
-                                    collectionProps.selectedItems.length == 0
+                                    collectionProps.selectedItems.length > 0
+                                      ? false
+                                      : true
                                   }
                                   variant="normal"
                                   onItemClick={({ detail }) => {
                                     if (detail.id == "action_1_1") {
                                       setType("delete");
                                     } else if (detail.id == "action_1_2") {
-                                      setType("update");
+                                      setType("edit");
                                     }
                                   }}
                                   items={[
                                     {
                                       text: "Eliminar",
                                       id: "action_1_1",
-                                      disabled:
-                                        collectionProps.selectedItems[0]
-                                          ?.partida_id == 61,
                                     },
                                     {
                                       text: "Editar",
                                       id: "action_1_2",
-                                      disabled:
-                                        collectionProps.selectedItems[0]
-                                          ?.partida_id == 61,
                                     },
                                   ]}
                                 >
                                   Acciones
                                 </ButtonDropdown>
                                 <Button
-                                  variant="primary"
                                   onClick={() => {
                                     setType("add");
                                   }}
+                                  variant="primary"
                                 >
-                                  Añadir
+                                  Agregar actividad
                                 </Button>
                               </SpaceBetween>
                             }
                           >
-                            Partidas
+                            Calendario de actividades
                           </Header>
                         }
+                        pagination={<Pagination {...paginationProps} />}
                         empty={
                           <Box
                             margin={{ vertical: "xs" }}
@@ -251,72 +256,28 @@ export default function Registro_eci_4() {
                             </SpaceBetween>
                           </Box>
                         }
-                        footer={
-                          <ColumnLayout columns={3} variant="text-grid">
-                            <div>
-                              <Box variant="awsui-key-label">
-                                Bienes ({data.info.bienes_cantidad})
-                              </Box>
-                              <SpaceBetween direction="horizontal" size="xxs">
-                                <Badge color="green">
-                                  S/. {data.info.bienes_monto}
-                                </Badge>
-                                <Badge color="blue">
-                                  {data.info.bienes_porcentaje + "%"}
-                                </Badge>
-                              </SpaceBetween>
-                            </div>
-                            <div>
-                              <Box variant="awsui-key-label">
-                                Servicios ({data.info.servicios_cantidad})
-                              </Box>
-                              <SpaceBetween direction="horizontal" size="xxs">
-                                <Badge color="green">
-                                  S/. {data.info.servicios_monto}
-                                </Badge>
-                                <Badge color="blue">
-                                  {data.info.servicios_porcentaje + "%"}
-                                </Badge>
-                              </SpaceBetween>
-                            </div>
-                            <div>
-                              <Box variant="awsui-key-label">
-                                Otros ({data.info.otros_cantidad})
-                              </Box>
-                              <SpaceBetween direction="horizontal" size="xxs">
-                                <Badge color="green">
-                                  S/. {data.info.otros_monto}
-                                </Badge>
-                                <Badge color="blue">
-                                  {data.info.otros_porcentaje + "%"}
-                                </Badge>
-                              </SpaceBetween>
-                            </div>
-                          </ColumnLayout>
-                        }
                       />
                       {type == "add" ? (
-                        <ModalAddPartida
-                          close={() => setType("")}
-                          reload={getData}
+                        <ModalAddActividad
                           id={id}
-                          options={data.partidas}
-                          presupuesto={data.presupuesto}
-                        />
-                      ) : type == "update" ? (
-                        <ModalEditPartida
-                          close={() => setType("")}
                           reload={getData}
+                          close={() => setType("")}
+                          reset={() => setAlert([])}
+                        />
+                      ) : type == "delete" ? (
+                        <ModalDeleteActividad
                           id={collectionProps.selectedItems[0].id}
-                          item={collectionProps.selectedItems[0]}
-                          options={data.partidas}
+                          reload={getData}
+                          close={() => setType("")}
+                          reset={() => setAlert([])}
                         />
                       ) : (
-                        type == "delete" && (
-                          <ModalDeletePartida
-                            close={() => setType("")}
+                        type == "edit" && (
+                          <ModalEditActividad
+                            item={collectionProps.selectedItems[0]}
                             reload={getData}
-                            id={collectionProps.selectedItems[0].id}
+                            close={() => setType("")}
+                            reset={() => setAlert([])}
                           />
                         )
                       )}
@@ -324,14 +285,12 @@ export default function Registro_eci_4() {
                   ),
                 },
                 {
-                  title: "Impacto",
-                  description:
-                    "Impacto de la propuesta y documentos relacionados",
+                  title: "Presupuesto",
+                  description: "Montos y partidas",
                 },
                 {
-                  title: "Administración de equipamiento solicitado",
-                  description:
-                    "Administración de equipamiento solicitado y documentos relacionados",
+                  title: "Integrantes",
+                  description: "Deben ser integrantes registrados de GI",
                 },
                 {
                   title: "Instrucciones finales",
