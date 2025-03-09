@@ -15,7 +15,7 @@ import { useFormValidation } from "../../../../../hooks/useFormValidation";
 import axiosBase from "../../../../../api/axios";
 import NotificationContext from "../../../../../providers/notificationProvider";
 
-export default ({ id, close, reload, options }) => {
+export default ({ id, close, reload, options, limit }) => {
   //  Const
   const initialForm = {
     tipo: null,
@@ -26,7 +26,7 @@ export default ({ id, close, reload, options }) => {
   const formRules = {
     tipo: { required: true },
     partida: { required: true },
-    monto: { required: true },
+    monto: { required: true, lessThan: Number(limit) },
   };
 
   //  Context
@@ -83,6 +83,7 @@ export default ({ id, close, reload, options }) => {
     >
       <Form>
         <SpaceBetween size="s">
+          <Alert header={`Saldo disponible: S/. ${limit}`} />
           <FormField
             label="Tipo de partida"
             stretch
@@ -111,6 +112,7 @@ export default ({ id, close, reload, options }) => {
               options={options.filter(
                 (item) => item.tipo == formValues.tipo?.value
               )}
+              empty="No hay partidas disponibles"
               selectedOption={formValues.partida}
               onChange={({ detail }) =>
                 handleChange("partida", detail.selectedOption)

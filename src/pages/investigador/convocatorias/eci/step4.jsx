@@ -58,6 +58,8 @@ const columnDisplay = [
   { id: "monto", visible: true },
 ];
 
+const MAX = 42800;
+
 export default function Registro_eci_4() {
   //  Url
   const location = useLocation();
@@ -110,6 +112,12 @@ export default function Registro_eci_4() {
 
       if (totalMonto == 0) {
         tempErrors.push("Necesita agregar al menos una partida");
+      }
+
+      if (totalMonto > MAX) {
+        tempErrors.push(
+          "El monto total máximo para postular a esta convocatoria es de S/. 42,800.00"
+        );
       }
 
       setAlert(tempErrors);
@@ -193,6 +201,19 @@ export default function Registro_eci_4() {
                         header={
                           <Header
                             variant="h3"
+                            description={
+                              "Saldo disponible S./ " +
+                              (
+                                MAX -
+                                Number(
+                                  items.reduce(
+                                    (sum, item) =>
+                                      sum + Number(item.monto) || 0,
+                                    0
+                                  )
+                                )
+                              ).toFixed(2)
+                            }
                             actions={
                               <SpaceBetween size="xs" direction="horizontal">
                                 <ButtonDropdown
@@ -231,6 +252,17 @@ export default function Registro_eci_4() {
                                   onClick={() => {
                                     setType("add");
                                   }}
+                                  disabled={
+                                    MAX -
+                                      Number(
+                                        items.reduce(
+                                          (sum, item) =>
+                                            sum + Number(item.monto) || 0,
+                                          0
+                                        )
+                                      ) ==
+                                    0
+                                  }
                                 >
                                   Añadir
                                 </Button>
@@ -302,6 +334,13 @@ export default function Registro_eci_4() {
                           id={id}
                           options={data.partidas}
                           presupuesto={data.presupuesto}
+                          limit={parseFloat(
+                            MAX -
+                              items.reduce(
+                                (acc, curr) => acc + Number(curr.monto),
+                                0
+                              )
+                          ).toFixed(2)}
                         />
                       ) : type == "update" ? (
                         <ModalEditPartida
@@ -310,6 +349,14 @@ export default function Registro_eci_4() {
                           id={collectionProps.selectedItems[0].id}
                           item={collectionProps.selectedItems[0]}
                           options={data.partidas}
+                          limit={parseFloat(
+                            MAX -
+                              items.reduce(
+                                (acc, curr) => acc + Number(curr.monto),
+                                0
+                              ) +
+                              Number(collectionProps.selectedItems[0].monto)
+                          ).toFixed(2)}
                         />
                       ) : (
                         type == "delete" && (

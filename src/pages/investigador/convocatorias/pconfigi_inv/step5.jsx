@@ -20,7 +20,6 @@ import ModalAddPartida from "./components/modalAddPartida";
 import ModalDeletePartida from "./components/modalDeletePartida";
 import queryString from "query-string";
 import ModalEditPartida from "./components/modalEditPartida";
-import NotificationContext from "../../../../providers/notificationProvider";
 
 const breadcrumbs = [
   {
@@ -62,9 +61,6 @@ const columnDisplay = [
 ];
 
 export default function Registro_pconfigi_inv_5() {
-  //  Context
-  const { notifications, pushNotification } = useContext(NotificationContext);
-
   //  Url
   const location = useLocation();
   const { id } = queryString.parse(location.search);
@@ -234,14 +230,16 @@ export default function Registro_pconfigi_inv_5() {
                             variant="h3"
                             description={
                               "Saldo disponible S./ " +
-                              (MAX -
+                              (
+                                MAX -
                                 Number(
                                   items.reduce(
                                     (sum, item) =>
                                       sum + Number(item.monto) || 0,
                                     0
                                   )
-                                ))
+                                )
+                              ).toFixed(2)
                             }
                             actions={
                               <SpaceBetween size="xs" direction="horizontal">

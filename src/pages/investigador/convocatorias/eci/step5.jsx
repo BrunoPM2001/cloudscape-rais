@@ -100,6 +100,7 @@ export default function Registro_eci_5() {
   const { notifications, pushNotification } = useContext(NotificationContext);
 
   //  States
+  const [notReload, setNotReload] = useState(true);
   const [loading, setLoading] = useState(true);
   const [loadingForm, setLoadingForm] = useState(false);
   const [errors, setErrors] = useState([]);
@@ -134,10 +135,13 @@ export default function Registro_eci_5() {
     if (!info.estado) {
       setErrors(info.errores);
     } else {
-      handleChange(
-        "impacto_propuesta",
-        info.data.descripcion?.impacto_propuesta
-      );
+      if (notReload) {
+        setNotReload(false);
+        handleChange(
+          "impacto_propuesta",
+          info.data.descripcion?.impacto_propuesta
+        );
+      }
       setData(info.data.documentos);
     }
     setLoading(false);
@@ -377,19 +381,31 @@ export default function Registro_eci_5() {
                           <>
                             <li>
                               Formato para autorización{" "}
-                              <Link {...propsEnlaces} href="#" external>
+                              <Link
+                                {...propsEnlaces}
+                                href="/minio/templates/Eci_autorización_instalación_equipo.docx"
+                                external
+                              >
                                 aquí.
                               </Link>
                             </li>
                             <li>
                               Formato para descripción del ambiente{" "}
-                              <Link {...propsEnlaces} href="#" external>
+                              <Link
+                                {...propsEnlaces}
+                                href="/minio/templates/Eci_descripción_ambiente_instalado.docx"
+                                external
+                              >
                                 aquí.
                               </Link>
                             </li>
                             <li>
                               Formato para control de uso{" "}
-                              <Link {...propsEnlaces} href="#" external>
+                              <Link
+                                {...propsEnlaces}
+                                href="/minio/templates/Eci_modelo_formato_uso_equipo.docx"
+                                external
+                              >
                                 aquí.
                               </Link>
                             </li>
