@@ -14,7 +14,7 @@ import { useContext, useState } from "react";
 import axiosBase from "../../../../../api/axios";
 import NotificationContext from "../../../../../providers/notificationProvider";
 
-export default ({ close, reload, item, options }) => {
+export default ({ close, reload, item, options, limit }) => {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
   //  States
@@ -32,7 +32,7 @@ export default ({ close, reload, item, options }) => {
   const formRules = {
     tipo: { required: true },
     partida: { required: true },
-    monto: { required: true },
+    monto: { required: true, lessThan: Number(limit) },
   };
 
   //  Hooks
@@ -75,6 +75,9 @@ export default ({ close, reload, item, options }) => {
       }
     >
       <SpaceBetween size="s">
+        <Alert
+          header={`Tiene disponible S/ ${limit} para asignar a esta partida`}
+        />
         <FormField label="Tipo" errorText={formErrors.tipo} stretch>
           <Select
             placeholder="Escoja una opción"
@@ -92,6 +95,7 @@ export default ({ close, reload, item, options }) => {
             options={options.filter(
               (item) => item.tipo == formValues.tipo?.value
             )}
+            empty="No hay partidas disponibles"
             selectedOption={formValues.partida}
             onChange={({ detail }) =>
               handleChange("partida", detail.selectedOption)

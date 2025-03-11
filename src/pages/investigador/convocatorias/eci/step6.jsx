@@ -100,6 +100,7 @@ export default function Registro_eci_6() {
   const { notifications, pushNotification } = useContext(NotificationContext);
 
   //  States
+  const [notReload, setNotReload] = useState(true);
   const [loading, setLoading] = useState(true);
   const [loadingForm, setLoadingForm] = useState(false);
   const [errors, setErrors] = useState([]);
@@ -134,7 +135,10 @@ export default function Registro_eci_6() {
     if (!info.estado) {
       setErrors(info.errores);
     } else {
-      handleChange("plan_manejo", info.data.descripcion?.plan_manejo);
+      if (notReload) {
+        setNotReload(false);
+        handleChange("plan_manejo", info.data.descripcion?.plan_manejo);
+      }
       setData(info.data.documentos);
     }
     setLoading(false);

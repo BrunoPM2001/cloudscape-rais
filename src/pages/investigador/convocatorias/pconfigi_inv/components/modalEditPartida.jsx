@@ -94,6 +94,7 @@ export default ({ close, reload, item, options, limit }) => {
             options={options.filter(
               (item) => item.tipo == formValues.tipo?.value
             )}
+            empty="No hay partidas disponibles"
             selectedOption={formValues.partida}
             onChange={({ detail }) =>
               handleChange("partida", detail.selectedOption)

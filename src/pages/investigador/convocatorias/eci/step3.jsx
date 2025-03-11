@@ -101,6 +101,7 @@ export default function Registro_eci_3() {
   const { notifications, pushNotification } = useContext(NotificationContext);
 
   //  States
+  const [notReload, setNotReload] = useState(true);
   const [loading, setLoading] = useState(true);
   const [loadingForm, setLoadingForm] = useState(false);
   const [errors, setErrors] = useState([]);
@@ -135,8 +136,11 @@ export default function Registro_eci_3() {
     if (!info.estado) {
       setErrors(info.errores);
     } else {
-      handleChange("nombre_equipo", info.data.descripcion?.nombre_equipo);
-      handleChange("desc_equipo", info.data.descripcion?.desc_equipo);
+      if (notReload) {
+        setNotReload(false);
+        handleChange("nombre_equipo", info.data.descripcion?.nombre_equipo);
+        handleChange("desc_equipo", info.data.descripcion?.desc_equipo);
+      }
       setData(info.data.documentos);
     }
     setLoading(false);
@@ -296,7 +300,11 @@ export default function Registro_eci_3() {
                             description={
                               <>
                                 Formato para las especificaciones técnicas{" "}
-                                <Link {...propsEnlaces} href="#" external>
+                                <Link
+                                  {...propsEnlaces}
+                                  href="/minio/templates/Eci_formato_especificaciones_tecnicas.docx"
+                                  external
+                                >
                                   aquí.
                                 </Link>
                               </>
