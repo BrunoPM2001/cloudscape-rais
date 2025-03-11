@@ -169,7 +169,7 @@ const columnDefinitions = [
           item.estado == "No tiene informe"
             ? "grey"
             : item.estado == "En proceso"
-            ? "severity-low"
+            ? "blue"
             : item.estado == "Aprobado"
             ? "green"
             : item.estado == "Presentado"
@@ -206,7 +206,8 @@ export default () => {
   const [informes, setInformes] = useState([]);
   const [distributions, setDistribution] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
-  const [loadingBtn, setLoadingBtn] = useState(false);
+  const [appliedFilters, setAppliedFilters] = useState({});
+  const [loadingReport, setLoadingReport] = useState(false);
   const [modal, setModal] = useState("");
   const {
     items,
@@ -261,7 +262,6 @@ export default () => {
   };
 
   const getInformes = async () => {
-    setSelectedItems([]);
     setLoadingInformes(true);
     const res = await axiosBase.get(
       "admin/estudios/informesTecnicos/informes",
@@ -277,20 +277,39 @@ export default () => {
     setLoadingInformes(false);
   };
 
-  const reporte = async () => {
-    setLoadingBtn(true);
-    const res = await axiosBase.get("admin/estudios/informesTecnicos/reporte", {
-      params: {
-        informe_tecnico_id: selectedItems[0].id,
-        tipo_informe: selectedItems[0].informe,
-        tipo_proyecto: collectionProps.selectedItems[0].tipo_proyecto,
-      },
-      responseType: "blob",
-    });
-    setLoadingBtn(false);
+  const onFilterChangeWrapper = (event) => {
+    // Llama a la función interna para que el filtrado siga funcionando
+    if (propertyFilterProps.onChange) {
+      propertyFilterProps.onChange(event);
+    }
+    // Verifica si existen tokens en el detalle del evento
+    const { tokens } = event.detail;
+    const nuevosFiltros = {};
+    if (tokens && Array.isArray(tokens) && tokens.length > 0) {
+      tokens.forEach((token) => {
+        // token: { propertyKey, operator, value }
+        nuevosFiltros[token.propertyKey] = token.value;
+      });
+    }
+    setAppliedFilters(nuevosFiltros);
+  };
+
+  const reporteExcel = async () => {
+    setLoadingReport(true);
+    const queryObject = { ...appliedFilters, tabla: selectedOption.value };
+    const query = queryString.stringify(queryObject);
+    console.log(query);
+    // // Envío la petición GET, agregando el query string a la URL
+    const res = await axiosBase.get(
+      `admin/estudios/informesTecnicos/excel?${query}`,
+      {
+        responseType: "blob",
+      }
+    );
     const blob = await res.data;
     const url = URL.createObjectURL(blob);
     window.open(url, "_blank");
+    setLoadingReport(false);
   };
 
   //  Effects
@@ -322,24 +341,36 @@ export default () => {
         header={
           <Header
             actions={
-              <FormField label="Proyectos:" stretch>
-                <Select
-                  disabled={loading}
-                  expandToViewport
-                  selectedOption={selectedOption}
-                  onChange={({ detail }) => {
-                    setSelectedOption(detail.selectedOption);
-                    setSelectedItems([]);
-                  }}
-                  options={[
-                    { value: "nuevos", label: "Nuevos (2017 en adelante)" },
-                    {
-                      value: "antiguos",
-                      label: "Antiguos (2016 y anteriores)",
-                    },
-                  ]}
-                />
-              </FormField>
+              <SpaceBetween direction="horizontal" size="m">
+                <FormField label="Reporte" stretch>
+                  <Button
+                    // disabled={loading}
+                    // loading={loadingReport}
+                    onClick={reporteExcel}
+                  >
+                    Excel
+                  </Button>
+                </FormField>
+
+                <FormField label="Proyectos" stretch>
+                  <Select
+                    disabled={loading}
+                    expandToViewport
+                    selectedOption={selectedOption}
+                    onChange={({ detail }) => {
+                      setSelectedOption(detail.selectedOption);
+                      setSelectedItems([]);
+                    }}
+                    options={[
+                      { value: "nuevos", label: "Nuevos (2017 en adelante)" },
+                      {
+                        value: "antiguos",
+                        label: "Antiguos (2016 y anteriores)",
+                      },
+                    ]}
+                  />
+                </FormField>
+              </SpaceBetween>
             }
           >
             Listado de proyectos
@@ -349,6 +380,7 @@ export default () => {
           <PropertyFilter
             {...propertyFilterProps}
             filteringPlaceholder="Buscar grupo"
+            onChange={onFilterChangeWrapper}
             countText={`${filteredItemsCount} coincidencias`}
             expandToViewport
             virtualScroll
@@ -428,7 +460,7 @@ export default () => {
         items={informes}
         loadingText="Cargando datos"
         loading={loadingInformes}
-        wrapLines
+        resizableColumns
         selectionType="single"
         selectedItems={selectedItems}
         onSelectionChange={({ detail }) =>
@@ -452,17 +484,6 @@ export default () => {
                     selectedOption.value != "antiguos" ||
                     !collectionProps.selectedItems.length
                   }
-                  onClick={() => {
-                    const query = queryString.stringify({
-                      proyecto_id: collectionProps.selectedItems[0].id,
-                      tipo_proyecto:
-                        collectionProps.selectedItems[0].tipo_proyecto,
-                    });
-                    window.open(
-                      "informes_tecnicos/detalleAntiguo?" + query,
-                      "_blank"
-                    );
-                  }}
                 >
                   Presentar informe
                 </Button>
@@ -474,10 +495,6 @@ export default () => {
                     },
                     {
                       id: "action_3_2",
-                      text: "Reporte",
-                    },
-                    {
-                      id: "action_3_3",
                       text: "Eliminar",
                     },
                   ]}
@@ -485,13 +502,10 @@ export default () => {
                     if (detail.id == "action_3_1") {
                       setModal("audit");
                     } else if (detail.id == "action_3_2") {
-                      reporte();
-                    } else if (detail.id == "action_3_3") {
                       setModal("delete");
                     }
                   }}
                   disabled={!selectedItems.length}
-                  loading={loadingBtn}
                 >
                   Acciones
                 </ButtonDropdown>

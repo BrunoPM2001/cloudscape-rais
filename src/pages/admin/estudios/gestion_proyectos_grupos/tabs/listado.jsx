@@ -161,13 +161,13 @@ const columnDefinitions = [
             : item.estado == "Aprobado"
             ? "green"
             : item.estado == "Observado"
-            ? "red"
+            ? "grey"
             : item.estado == "En evaluación"
             ? "blue"
             : item.estado == "Enviado"
             ? "blue"
             : item.estado == "En proceso"
-            ? "severity-low"
+            ? "grey"
             : item.estado == "Anulado"
             ? "red"
             : item.estado == "Sustentado"
@@ -207,6 +207,8 @@ export default () => {
   //  Data states
   const [loading, setLoading] = useState(true);
   const [distributions, setDistribution] = useState([]);
+  const [loadingReport, setLoadingReport] = useState(false);
+  const [appliedFilters, setAppliedFilters] = useState({});
   const {
     items,
     actions,
@@ -239,6 +241,45 @@ export default () => {
   const [selectedOption, setSelectedOption] = useState({
     value: "2025",
   });
+
+  const onFilterChangeWrapper = (event) => {
+    // Llama a la función interna para que el filtrado siga funcionando
+    if (propertyFilterProps.onChange) {
+      propertyFilterProps.onChange(event);
+    }
+
+    // Verifica si existen tokens en el detalle del evento
+    const { tokens } = event.detail;
+    const nuevosFiltros = {};
+    if (tokens && Array.isArray(tokens) && tokens.length > 0) {
+      tokens.forEach((token) => {
+        // token: { propertyKey, operator, value }
+        nuevosFiltros[token.propertyKey] = token.value;
+      });
+    }
+    setAppliedFilters(nuevosFiltros);
+  };
+
+  const reporteExcel = async () => {
+    setLoadingReport(true);
+    const currentFilter = propertyFilterProps.filteringText || "";
+    // const query = queryString.stringify({ filter: currentFilter, year: selectedOption.value });
+    // console.log(query);
+    const queryObject = { ...appliedFilters, year: selectedOption.value };
+    const query = queryString.stringify(queryObject);
+    console.log(query);
+    // Envío la petición GET, agregando el query string a la URL
+    const res = await axiosBase.get(
+      `admin/estudios/proyectosGrupo/excel?${query}`,
+      {
+        responseType: "blob",
+      }
+    );
+    const blob = await res.data;
+    const url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
+    setLoadingReport(false);
+  };
 
   //  Functions
   const getData = async () => {
@@ -274,129 +315,90 @@ export default () => {
         <Header
           counter={"(" + distributions.length + ")"}
           actions={
-            <Button
-              disabled={!collectionProps.selectedItems.length}
-              variant="primary"
-              onClick={() => {
-                const query = queryString.stringify({
-                  id: collectionProps.selectedItems[0]["id"],
-                });
-                if (
-                  collectionProps.selectedItems[0][
-                    "tipo_proyecto"
-                  ].toLowerCase() == "eci"
-                ) {
-                  window.location.href =
-                    "proyectos_grupos/detalle/" +
+            <SpaceBetween direction="horizontal" size="xs">
+              <Button
+                // disabled={loading}
+                // loading={loadingReport}
+                onClick={reporteExcel}
+              >
+                Excel
+              </Button>
+              <Button
+                disabled={!collectionProps.selectedItems.length}
+                variant="primary"
+                onClick={() => {
+                  const query = queryString.stringify({
+                    id: collectionProps.selectedItems[0]["id"],
+                  });
+                  if (
                     collectionProps.selectedItems[0][
                       "tipo_proyecto"
-                    ].toLowerCase() +
-                    "?" +
-                    query;
-                } else if (
-                  collectionProps.selectedItems[0][
-                    "tipo_proyecto"
-                  ].toLowerCase() == "psinfinv"
-                ) {
-                  window.location.href =
-                    "proyectos_grupos/detalle/" +
+                    ].toLowerCase() == "eci"
+                  ) {
+                    window.location.href =
+                      "proyectos_grupos/detalle/" +
+                      collectionProps.selectedItems[0][
+                        "tipo_proyecto"
+                      ].toLowerCase() +
+                      "?" +
+                      query;
+                  } else if (
                     collectionProps.selectedItems[0][
                       "tipo_proyecto"
-                    ].toLowerCase() +
-                    "?" +
-                    query;
-                } else if (
-                  collectionProps.selectedItems[0][
-                    "tipo_proyecto"
-                  ].toLowerCase() == "pinvpos"
-                ) {
-                  window.location.href =
-                    "proyectos_grupos/detalle/" +
+                    ].toLowerCase() == "psinfinv"
+                  ) {
+                    window.location.href =
+                      "proyectos_grupos/detalle/" +
+                      collectionProps.selectedItems[0][
+                        "tipo_proyecto"
+                      ].toLowerCase() +
+                      "?" +
+                      query;
+                  } else if (
                     collectionProps.selectedItems[0][
                       "tipo_proyecto"
-                    ].toLowerCase() +
-                    "?" +
-                    query;
-                } else if (
-                  collectionProps.selectedItems[0][
-                    "tipo_proyecto"
-                  ].toLowerCase() == "psinfipu"
-                ) {
-                  window.location.href =
-                    "proyectos_grupos/detalle/" +
+                    ].toLowerCase() == "pinvpos"
+                  ) {
+                    window.location.href =
+                      "proyectos_grupos/detalle/" +
+                      collectionProps.selectedItems[0][
+                        "tipo_proyecto"
+                      ].toLowerCase() +
+                      "?" +
+                      query;
+                  } else if (
                     collectionProps.selectedItems[0][
                       "tipo_proyecto"
-                    ].toLowerCase() +
-                    "?" +
-                    query;
-                } else if (
-                  collectionProps.selectedItems[0][
-                    "tipo_proyecto"
-                  ].toLowerCase() == "ptpbachiller"
-                ) {
-                  window.location.href =
-                    "proyectos_grupos/detalle/" +
+                    ].toLowerCase() == "psinfipu"
+                  ) {
+                    window.location.href =
+                      "proyectos_grupos/detalle/" +
+                      collectionProps.selectedItems[0][
+                        "tipo_proyecto"
+                      ].toLowerCase() +
+                      "?" +
+                      query;
+                  } else if (
                     collectionProps.selectedItems[0][
                       "tipo_proyecto"
-                    ].toLowerCase() +
-                    "?" +
-                    query;
-                } else if (
-                  collectionProps.selectedItems[0][
-                    "tipo_proyecto"
-                  ].toLowerCase() == "ptpdocto"
-                ) {
-                  window.location.href =
-                    "proyectos_grupos/detalle/" +
-                    collectionProps.selectedItems[0][
-                      "tipo_proyecto"
-                    ].toLowerCase() +
-                    "?" +
-                    query;
-                } else if (
-                  collectionProps.selectedItems[0][
-                    "tipo_proyecto"
-                  ].toLowerCase() == "ptpmaest"
-                ) {
-                  window.location.href =
-                    "proyectos_grupos/detalle/" +
-                    collectionProps.selectedItems[0][
-                      "tipo_proyecto"
-                    ].toLowerCase() +
-                    "?" +
-                    query;
-                } else if (
-                  collectionProps.selectedItems[0][
-                    "tipo_proyecto"
-                  ].toLowerCase() == "ptpgrado"
-                ) {
-                  window.location.href =
-                    "proyectos_grupos/detalle/" +
-                    collectionProps.selectedItems[0][
-                      "tipo_proyecto"
-                    ].toLowerCase() +
-                    "?" +
-                    query;
-                } else if (
-                  collectionProps.selectedItems[0][
-                    "tipo_proyecto"
-                  ].toLowerCase() == "picv"
-                ) {
-                  window.location.href =
-                    "proyectos_grupos/detalle/" +
-                    collectionProps.selectedItems[0][
-                      "tipo_proyecto"
-                    ].toLowerCase() +
-                    "?" +
-                    query;
-                } else {
-                  window.location.href =
-                    "proyectos_grupos/detalle/pconfigi" + "?" + query;
-                }
-              }}
-            >
-              Visualizar
-            </Button>
+                    ].toLowerCase() == "picv"
+                  ) {
+                    window.location.href =
+                      "proyectos_grupos/detalle/" +
+                      collectionProps.selectedItems[0][
+                        "tipo_proyecto"
+                      ].toLowerCase() +
+                      "?" +
+                      query;
+                  } else {
+                    window.location.href =
+                      "proyectos_grupos/detalle/pconfigi" + "?" + query;
+                  }
+                }}
+              >
+                Visualizar
+              </Button>
+            </SpaceBetween>
           }
         >
           Proyectos de grupos de investigación
@@ -409,6 +411,7 @@ export default () => {
           countText={`${filteredItemsCount} coincidencias`}
           expandToViewport
           virtualScroll
+          onChange={onFilterChangeWrapper}
           customControl={
             <FormField label="Año:">
               <Select

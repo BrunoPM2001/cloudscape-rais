@@ -2,11 +2,9 @@ import {
   Badge,
   Box,
   Button,
-  FormField,
   Header,
   Pagination,
   PropertyFilter,
-  Select,
   SpaceBetween,
   Table,
 } from "@cloudscape-design/components";
@@ -174,6 +172,8 @@ export default () => {
   //  Data states
   const [loading, setLoading] = useState(true);
   const [distributions, setDistribution] = useState([]);
+  const [appliedFilters, setAppliedFilters] = useState({});
+  const [loadingReport, setLoadingReport] = useState(false);
   const {
     items,
     actions,
@@ -203,6 +203,38 @@ export default () => {
     sorting: {},
     selection: {},
   });
+
+  const onFilterChangeWrapper = (event) => {
+    // Llama a la función interna para que el filtrado siga funcionando
+    if (propertyFilterProps.onChange) {
+      propertyFilterProps.onChange(event);
+    }
+    // Verifica si existen tokens en el detalle del evento
+    const { tokens } = event.detail;
+    const nuevosFiltros = {};
+    if (tokens && Array.isArray(tokens) && tokens.length > 0) {
+      tokens.forEach((token) => {
+        // token: { propertyKey, operator, value }
+        nuevosFiltros[token.propertyKey] = token.value;
+      });
+    }
+    setAppliedFilters(nuevosFiltros);
+  };
+
+  const reporteExcel = async () => {
+    setLoadingReport(true);
+    const queryObject = { ...appliedFilters };
+    const query = queryString.stringify(queryObject);
+    console.log(query);
+    // Envío la petición GET, agregando el query string a la URL
+    const res = await axiosBase.get(`admin/estudios/monitoreo/excel?${query}`, {
+      responseType: "blob",
+    });
+    const blob = await res.data;
+    const url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
+    setLoadingReport(false);
+  };
 
   //  Functions
   const getData = async () => {
@@ -237,18 +269,27 @@ export default () => {
       header={
         <Header
           actions={
-            <Button
-              disabled={loading || !collectionProps.selectedItems.length}
-              variant="primary"
-              onClick={() => {
-                const query = queryString.stringify({
-                  id: collectionProps.selectedItems[0]["id"],
-                });
-                window.location.href = "monitoreo/detalle?" + query;
-              }}
-            >
-              Visualizar
-            </Button>
+            <SpaceBetween direction="horizontal" size="m">
+              <Button
+                disabled={loadingReport}
+                variant="primary"
+                onClick={reporteExcel}
+              >
+                Exportar Excel
+              </Button>
+              <Button
+                disabled={loading || !collectionProps.selectedItems.length}
+                variant="primary"
+                onClick={() => {
+                  const query = queryString.stringify({
+                    id: collectionProps.selectedItems[0]["id"],
+                  });
+                  window.location.href = "monitoreo/detalle?" + query;
+                }}
+              >
+                Visualizar
+              </Button>
+            </SpaceBetween>
           }
         >
           Proyectos
@@ -259,6 +300,7 @@ export default () => {
           {...propertyFilterProps}
           filteringPlaceholder="Buscar proyecto"
           countText={`${filteredItemsCount} coincidencias`}
+          onChange={onFilterChangeWrapper}
           expandToViewport
           virtualScroll
         />
