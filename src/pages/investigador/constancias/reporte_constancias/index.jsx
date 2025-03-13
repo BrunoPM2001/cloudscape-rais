@@ -122,10 +122,12 @@ export default function Reporte_constancias() {
       } else if (formValues.reporte.value == 11) {
         tipoConst = "getConstanciaTesisAsesoria";
       }
-      const res = await axiosBase.get("investigador/constancias/" + tipoConst);
+      const res = await axiosBase.get("investigador/constancias/" + tipoConst, {
+        responseType: "blob",
+      });
       setLoadingReporte(false);
-      const data = res.data;
-      const url = "http://localhost:9000/repo/" + data;
+      const blob = await res.data;
+      const url = URL.createObjectURL(blob);
       window.open(url, "_blank");
     }
   };

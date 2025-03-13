@@ -116,6 +116,13 @@ export default ({
           </div>
         </SpaceBetween>
       </ColumnLayout>
+      <ColumnLayout columns={1}>
+        <SpaceBetween size="m">
+          <FormField label="Descripción de compra" stretch>
+            <Textarea disabled={true} value={item.descripcion_compra} />
+          </FormField>
+        </SpaceBetween>
+      </ColumnLayout>
       <FormField
         label="Cumple con los requisitos"
         stretch

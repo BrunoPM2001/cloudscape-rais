@@ -25,7 +25,7 @@ const formRules = {
   file: { required: true, isFile: true, maxSize: 6 * 1024 * 1024 },
 };
 
-export default ({ data, antiguo }) => {
+export default ({ data, antiguo, proyectos }) => {
   //  States
   const [loading, setLoading] = useState(false);
   const [loadingData, setLoadingData] = useState(false);
@@ -83,12 +83,64 @@ export default ({ data, antiguo }) => {
 
   return (
     <Container>
+      {proyectos.length > 0 && (
+        <SpaceBetween size="m">
+          <Header variant="h3">
+            2. Actividades de Investigación Registradas en el RAIS
+            <ColumnLayout columns={1}>
+              <Table
+                wrapLines
+                columnDefinitions={[
+                  {
+                    id: "periodo",
+                    header: "Periodo",
+                    cell: (item) => item.periodo, // ✅ CORRECTO
+                    isRowHeader: true,
+                  },
+                  {
+                    id: "categoria",
+                    header: "Tipo de actividad",
+                    cell: (item) => item.categoria, // ✅ CORRECTO
+                  },
+                  {
+                    id: "sub_categoria",
+                    header: "Sub tipo",
+                    cell: (item) => item.sub_categoria,
+                  },
+                  {
+                    id: "tipo_proyecto",
+                    header: "Programa",
+                    cell: (item) => item.tipo_proyecto,
+                  },
+                  {
+                    id: "codigo_proyecto",
+                    header: "Código",
+                    cell: (item) => item.codigo_proyecto,
+                  },
+                  {
+                    id: "name",
+                    header: "Condición",
+                    cell: (item) => item.name || "Sin condición",
+                  },
+                ]}
+                items={proyectos || []} // Asegura que la tabla no falle si proyectos es undefined
+                empty={
+                  <Box
+                    margin={{ vertical: "xs" }}
+                    textAlign="center"
+                    color="inherit"
+                  >
+                    <SpaceBetween size="m">
+                      <b>No hay registros...</b>
+                    </SpaceBetween>
+                  </Box>
+                }
+              />
+            </ColumnLayout>
+          </Header>
+        </SpaceBetween>
+      )}
       <SpaceBetween size="m">
-        <Alert type="warning" header="Sobre los documentos cargados">
-          Recuerde que en caso de no coincidir el tipo de actividad con el
-          documento cargado se rechazará su solicitud, las publicaciones
-          cargadas solo deben ser de San Marcos.
-        </Alert>
         <Header
           variant="h3"
           description="
@@ -103,7 +155,9 @@ export default ({ data, antiguo }) => {
             </Button>
           }
         >
-          Actividades extras
+          {proyectos.length > 0
+            ? "3. Actividades Extras (Opcional)"
+            : "2. Actividades Extras (Obligatorio)"}
         </Header>
         <ColumnLayout columns={2}>
           <FormField label="Tipo de actividad" errorText={formErrors.opcion}>

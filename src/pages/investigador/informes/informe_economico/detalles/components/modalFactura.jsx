@@ -13,6 +13,7 @@ import {
   Select,
   SpaceBetween,
   Spinner,
+  Textarea,
 } from "@cloudscape-design/components";
 import { useContext, useEffect, useState } from "react";
 import NotificationContext from "../../../../../../providers/notificationProvider";
@@ -27,6 +28,7 @@ const initialForm = {
   numero: "",
   fecha: "",
   retencion: null,
+  descripcion_compra: "",
   partidas: [{}],
   file: [],
 };
@@ -37,6 +39,7 @@ const formRules = {
   numero: { required: true },
   fecha: { required: true },
   retencion: { required: true },
+  descripcion_compra: { required: true },
   partidas: { required: true, noEmpty: true },
   file: { required: true, isFile: true, maxSize: 4 * 1024 * 1024 },
 };
@@ -152,6 +155,7 @@ export default ({
       formData.append("ruc", formValues.ruc);
       formData.append("numero", formValues.numero);
       formData.append("fecha", formValues.fecha);
+      formData.append("descripcion_compra", formValues.descripcion_compra);
       formData.append("retencion", formValues.retencion.value);
       formData.append("partidas", JSON.stringify(formValues.partidas));
       formData.append("file", formValues.file[0]);
@@ -330,6 +334,24 @@ export default ({
                 ]}
               />
             </FormField>
+            <ColumnLayout columns={1}>
+              <SpaceBetween size="m">
+                <FormField
+                  label="Descripción de compra"
+                  stretch
+                  errorText={formErrors.descripcion_compra}
+                >
+                  <Textarea
+                    disabled={justview}
+                    placeholder="Ingrese la descripción de compra"
+                    value={formValues.descripcion_compra}
+                    onChange={({ detail }) =>
+                      handleChange("descripcion_compra", detail.value)
+                    }
+                  />
+                </FormField>
+              </SpaceBetween>
+            </ColumnLayout>
             {!justview && (
               <FormField
                 label="Archivo"

@@ -8,7 +8,7 @@ import {
 
 export default ({ data }) => {
   return (
-    <Container header={<Header variant="h3">Datos del investigador</Header>}>
+    <Container header={<Header variant="h3">1. Datos del investigador</Header>}>
       <ColumnLayout columns={3} variant="text-grid">
         <SpaceBetween size="s">
           <div>

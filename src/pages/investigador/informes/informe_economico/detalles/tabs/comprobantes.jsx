@@ -81,6 +81,8 @@ const columnDefinitions = [
             ? "grey"
             : item.estado == "Enviado"
             ? "blue"
+            : item.estado == "Aprobado V.B"
+            ? "severity-low"
             : "red"
         }
       >

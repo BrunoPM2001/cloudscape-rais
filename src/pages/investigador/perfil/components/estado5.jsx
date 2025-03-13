@@ -15,19 +15,18 @@ export default ({ data, reload }) => {
         <Header
           variant="h3"
           description="Puede solicitar una nueva constancia a 2 meses del vencimiento de su constancia vigente."
-          actions={
-            <Button variant="primary" onClick={() => setModal("solicitar")}>
-              Solicitar renovación
-            </Button>
-          }
         >
           Solicitar CDI
         </Header>
         <Solicitar data={data.solicitar} />
+        <Button variant="primary" onClick={() => setModal("solicitar")}>
+          Solicitar renovación
+        </Button>
       </SpaceBetween>
       {modal == "solicitar" && (
         <ModalSolicitud
           data={data.solicitar.rrhh}
+          proyectos={data.solicitar.req3}
           actividades={data.solicitar.actividades_extra}
           close={() => setModal("")}
           reload={reload}

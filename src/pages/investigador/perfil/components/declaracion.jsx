@@ -1,14 +1,12 @@
 import {
-  Modal,
   Box,
-  Button,
   SpaceBetween,
   Checkbox,
   Header,
   Container,
 } from "@cloudscape-design/components";
 
-export default ({ data, check, setCheck }) => {
+export default ({ data, check, setCheck, proyectos }) => {
   //  Functions
   const obtenerFechaActual = () => {
     const meses = [
@@ -35,7 +33,13 @@ export default ({ data, check, setCheck }) => {
   };
 
   return (
-    <Container header={<Header variant="h3">Declaración jurada</Header>}>
+    <Container
+      header={
+        <Header variant="h3">
+          {proyectos > 0 ? "4. Declaración Jurada" : "3. Declaración Jurada"}
+        </Header>
+      }
+    >
       <SpaceBetween size="xs">
         <div>
           Quien suscribe, identificado/a con DNI N° {data.doc_numero}, docente

@@ -12,6 +12,7 @@ import {
   Modal,
   SpaceBetween,
   Spinner,
+  Textarea,
 } from "@cloudscape-design/components";
 import { useContext, useEffect, useState } from "react";
 import NotificationContext from "../../../../../../providers/notificationProvider";
@@ -25,6 +26,7 @@ const initialForm = {
   ruc: "",
   numero: "",
   fecha: "",
+  descripcion_compra: "",
   partidas: [{}],
   file: [],
 };
@@ -34,6 +36,7 @@ const formRules = {
   ruc: { required: true, regex: /^(10|15|17|20)\d{9}$/ },
   numero: { required: true },
   fecha: { required: true },
+  descripcion_compra: { required: true },
   partidas: { required: true, noEmpty: true },
   file: { required: true, isFile: true, maxSize: 4 * 1024 * 1024 },
 };
@@ -147,6 +150,7 @@ export default ({
       formData.append("geco_documento_id", item?.id ?? "");
       formData.append("razon_social", formValues.razon_social);
       formData.append("ruc", formValues.ruc);
+      formData.append("descripcion_compra", formValues.descripcion_compra);
       formData.append("numero", formValues.numero);
       formData.append("fecha", formValues.fecha);
       formData.append("partidas", JSON.stringify(formValues.partidas));
@@ -302,6 +306,25 @@ export default ({
                 </FormField>
               </SpaceBetween>
             </ColumnLayout>
+            <ColumnLayout columns={1}>
+              <SpaceBetween size="m">
+                <FormField
+                  label="Descripción de compra"
+                  stretch
+                  errorText={formErrors.descripcion_compra}
+                >
+                  <Textarea
+                    disabled={justview}
+                    placeholder="Ingrese la descripción de compra"
+                    value={formValues.descripcion_compra}
+                    onChange={({ detail }) =>
+                      handleChange("descripcion_compra", detail.value)
+                    }
+                  />
+                </FormField>
+              </SpaceBetween>
+            </ColumnLayout>
+
             {!justview && (
               <FormField
                 label="Archivo"

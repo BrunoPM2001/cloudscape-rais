@@ -10,7 +10,7 @@ import DatosSolicitud from "./datosSolicitud";
 import ActividadesSolicitud from "./actividadesSolicitud";
 import Declaracion from "./declaracion";
 
-export default ({ data, close, reload, actividades }) => {
+export default ({ data, close, reload, actividades, proyectos }) => {
   //  States
   const [check, setCheck] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -35,7 +35,9 @@ export default ({ data, close, reload, actividades }) => {
             variant="primary"
             onClick={presentar}
             loading={loading}
-            disabled={!check}
+            disabled={
+              !check || (proyectos.length === 0 && actividades.length === 0)
+            }
           >
             Presentar solicitud
           </Button>
@@ -45,8 +47,17 @@ export default ({ data, close, reload, actividades }) => {
     >
       <SpaceBetween size="m">
         <DatosSolicitud data={data} />
-        <ActividadesSolicitud data={actividades} antiguo={data.antiguedad} />
-        <Declaracion data={data} check={check} setCheck={setCheck} />
+        <ActividadesSolicitud
+          data={actividades}
+          antiguo={data.antiguedad}
+          proyectos={proyectos}
+        />
+        <Declaracion
+          data={data}
+          check={check}
+          setCheck={setCheck}
+          proyectos={proyectos.length}
+        />
       </SpaceBetween>
     </Modal>
   );

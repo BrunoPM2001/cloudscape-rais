@@ -133,12 +133,12 @@ export default function Reporte_constancias() {
     } else if (form.tipo == 11) {
       tipoConst = "getConstanciaTesisAsesoria";
     }
-    const res = await axiosBase.get(
-      "admin/constancias/" + tipoConst + "/" + form.investigador_id,
-      {
-        responseType: "blob",
-      }
-    );
+    const res = await axiosBase.get("admin/constancias/" + tipoConst, {
+      params: {
+        investigador_id: form.investigador_id,
+      },
+      responseType: "blob",
+    });
     setLoadingReporte(false);
     const blob = await res.data;
     const url = URL.createObjectURL(blob);

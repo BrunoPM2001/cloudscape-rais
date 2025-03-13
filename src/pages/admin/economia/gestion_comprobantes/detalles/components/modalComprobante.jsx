@@ -40,6 +40,10 @@ const optsEstado = [
     value: 5,
     label: "Anulado",
   },
+  {
+    value: 6,
+    label: "Aprobado V.B",
+  },
 ];
 
 export default ({ close, item, reload }) => {
@@ -149,6 +153,8 @@ export default ({ close, item, reload }) => {
                   ? "blue"
                   : item.estado == 5
                   ? "red"
+                  : item.estado == 6
+                  ? "severity-low"
                   : "red"
               }
             >
@@ -162,6 +168,8 @@ export default ({ close, item, reload }) => {
                 ? "Enviado"
                 : item.estado == 5
                 ? "Anulado"
+                : item.estado == 6
+                ? "Aprobado V.B"
                 : "Error"}
             </Badge>
           }
