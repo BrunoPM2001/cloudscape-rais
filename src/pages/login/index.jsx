@@ -21,6 +21,7 @@ const userTypeRoutes = {
   Usuario_investigador: "/investigador",
   Usuario_evaluador: "/evaluador",
   Usuario_facultad: "/facultad",
+  Usuario_secretaria: "/secretaria",
 };
 
 export default function Login() {

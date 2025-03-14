@@ -5,6 +5,7 @@ import AdminRoutes from "./routes/admin";
 import InvestigadorRoutes from "./routes/investigador";
 import EvaluadorRoutes from "./routes/evaluador";
 import FacultadRoutes from "./routes/facultad";
+import SecretariaRoutes from "./routes/secretaria";
 
 //  Login page
 const Login = lazy(() => import("./pages/login/index"));
@@ -33,6 +34,7 @@ export default function App() {
       <InvestigadorRoutes />
       <EvaluadorRoutes />
       <FacultadRoutes />
+      <SecretariaRoutes />
     </>
   );
 }

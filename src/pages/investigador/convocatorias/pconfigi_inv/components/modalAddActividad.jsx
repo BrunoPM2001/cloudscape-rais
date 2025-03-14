@@ -8,8 +8,6 @@ import {
   FormField,
   Input,
   ColumnLayout,
-  Select,
-  Textarea,
 } from "@cloudscape-design/components";
 import { useContext, useState } from "react";
 import NotificationContext from "../../../../../providers/notificationProvider";

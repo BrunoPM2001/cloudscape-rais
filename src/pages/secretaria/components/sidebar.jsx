@@ -4,13 +4,13 @@ import { useLocation } from "react-router-dom";
 const navItems = [
   {
     type: "section",
-    text: "Evaluaciones",
+    text: "Constancias",
     defaultExpanded: false,
     items: [
       {
         type: "link",
-        text: "Evaluar",
-        href: "/evaluador",
+        text: "Listado",
+        href: "/secretaria",
       },
     ],
   },
@@ -21,10 +21,10 @@ export default function Sidebar({ activeHref = "#" }) {
   return (
     <SideNavigation
       header={{
-        text: "Evaluador",
-        href: "/evaluador",
+        text: "Facultad",
+        href: "/facultad",
       }}
-      activeHref={location.pathname}
+      activeHref={"/secretaria" + location.pathname}
       items={navItems}
     />
   );

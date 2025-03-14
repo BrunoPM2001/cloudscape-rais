@@ -8,11 +8,12 @@ import {
   Select,
   SpaceBetween,
 } from "@cloudscape-design/components";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import axiosBase from "../../../../api/axios";
 import BaseLayout from "../../components/baseLayout.jsx";
 import { useAutosuggest } from "../../../../hooks/useAutosuggest.js";
 import { useFormValidation } from "../../../../hooks/useFormValidation.js";
+import NotificationContext from "../../../../providers/notificationProvider.jsx";
 
 const breadcrumbs = [
   {
@@ -35,67 +36,72 @@ const formRules = {
   reporte: { required: true },
 };
 
+const opt_constancias = [
+  {
+    label: "Estudios de Investigación",
+    value: "1",
+  },
+  {
+    label: "Grupos de Investigación",
+    value: "2",
+  },
+  {
+    label: "Registro de Publicaciones",
+    value: "3",
+  },
+  {
+    label: "Puntaje de Publicaciones",
+    value: "4",
+  },
+  {
+    label: "Proyectos Multidisciplinarios",
+    value: "5",
+  },
+  {
+    label: "Capitulo de Libro",
+    value: "6",
+  },
+  {
+    label: "Proyectos Equipamiento Científico",
+    value: "7",
+  },
+  {
+    label: "Evaluador de Proyectos",
+    value: "8",
+  },
+  {
+    label: "Eventos UNMSM",
+    value: "9",
+  },
+  {
+    label: "No adeudar Informes",
+    value: "10",
+  },
+  {
+    label: "Asesor de Tésis",
+    value: "11",
+  },
+  {
+    label: "Participante Tesista",
+    value: "12",
+  },
+  {
+    label: "Asesor de Grupo",
+    value: "13",
+  },
+  {
+    label: "Miembro de Grupo",
+    value: "14",
+  },
+];
+
 export default function Reporte_constancias() {
+  //  Context
+  const { notifications, pushNotification } = useContext(NotificationContext);
+
   //  States
-  const [opt_constancias, setOpt_constancias] = useState([
-    {
-      label: "Estudios de Investigación",
-      value: "1",
-    },
-    {
-      label: "Grupos de Investigación",
-      value: "2",
-    },
-    {
-      label: "Registro de Publicaciones",
-      value: "3",
-    },
-    {
-      label: "Puntaje de Publicaciones",
-      value: "4",
-    },
-    {
-      label: "Proyectos Multidisciplinarios",
-      value: "5",
-    },
-    {
-      label: "Capitulo de Libro",
-      value: "6",
-    },
-    {
-      label: "Proyectos Equipamiento Científico",
-      value: "7",
-    },
-    {
-      label: "Evaluador de Proyectos",
-      value: "8",
-    },
-    {
-      label: "Eventos UNMSM",
-      value: "9",
-    },
-    {
-      label: "No adeudar Informes",
-      value: "10",
-    },
-    {
-      label: "Asesor de Tésis",
-      value: "11",
-    },
-    {
-      label: "Participante Tesista",
-      value: "12",
-    },
-    {
-      label: "Asesor de Grupo",
-      value: "13",
-    },
-    {
-      label: "Miembro de Grupo",
-      value: "14",
-    },
-  ]);
   const [loadingReporte, setLoadingReporte] = useState(false);
+  const [previsualizar, setPrevisualizar] = useState(false);
 
   //  Hooks
   const { formValues, formErrors, handleChange, validateForm } =
@@ -125,10 +131,27 @@ export default function Reporte_constancias() {
       const res = await axiosBase.get("investigador/constancias/" + tipoConst, {
         responseType: "blob",
       });
+      setPrevisualizar(true);
       setLoadingReporte(false);
       const blob = await res.data;
       const url = URL.createObjectURL(blob);
       window.open(url, "_blank");
+    }
+  };
+
+  const solicitar = async () => {
+    if (validateForm()) {
+      setLoadingReporte(true);
+      const res = await axiosBase.post(
+        "investigador/constancias/solicitarConstancia",
+        {
+          tipo: formValues.reporte.value,
+          tipo_desc: formValues.reporte.label,
+        }
+      );
+      setLoadingReporte(false);
+      const data = res.data;
+      pushNotification(data.detail, data.message, notifications.length + 1);
     }
   };
 
@@ -144,11 +167,19 @@ export default function Reporte_constancias() {
           actions={
             <SpaceBetween direction="horizontal" size="xs">
               <Button
-                variant="primary"
+                variant="normal"
                 loading={loadingReporte}
                 onClick={reporte}
               >
-                Generar reporte
+                Previsualizar
+              </Button>
+              <Button
+                variant="primary"
+                loading={loadingReporte}
+                onClick={solicitar}
+                disabled={!previsualizar}
+              >
+                Solicitar constancia
               </Button>
             </SpaceBetween>
           }
@@ -162,9 +193,10 @@ export default function Reporte_constancias() {
             <Select
               placeholder="Escoga un tipo de constancia"
               selectedOption={formValues.reporte}
-              onChange={({ detail }) =>
-                handleChange("reporte", detail.selectedOption)
-              }
+              onChange={({ detail }) => {
+                setPrevisualizar(false);
+                handleChange("reporte", detail.selectedOption);
+              }}
               options={opt_constancias}
             />
           </FormField>
