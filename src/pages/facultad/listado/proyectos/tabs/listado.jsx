@@ -8,9 +8,10 @@ import {
   Badge,
   Button,
 } from "@cloudscape-design/components";
-import { useState, useEffect, act } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useCollection } from "@cloudscape-design/collection-hooks";
 import axiosBase from "../../../../../api/axios";
+import NotificationContext from "../../../../../providers/notificationProvider";
 
 const stringOperators = [":", "!:", "=", "!=", "^", "!^"];
 
@@ -188,7 +189,11 @@ const columnDisplay = [
 ];
 
 export default () => {
+  //  Context
+  const { notifications, pushNotification } = useContext(NotificationContext);
+
   const [loading, setLoading] = useState(true);
+  const [loadingReport, setLoadingReport] = useState(false);
   const [distributions, setDistribution] = useState([]);
   const {
     items,
@@ -197,6 +202,7 @@ export default () => {
     collectionProps,
     paginationProps,
     propertyFilterProps,
+    allPageItems,
   } = useCollection(distributions, {
     propertyFiltering: {
       filteringProperties: FILTER_PROPS,
@@ -225,6 +231,38 @@ export default () => {
     const res = await axiosBase.get("facultad/listado/proyectos/listado");
     setDistribution(res.data);
     setLoading(false);
+  };
+
+  const exportExcel = async () => {
+    if (allPageItems.length > 15000) {
+      pushNotification(
+        "La cantidad de items a exportar es demasiada, redúzcala a menos de 15000",
+        "warning",
+        notifications.length + 1
+      );
+    } else {
+      const visibleColumns = columnDisplay
+        .filter((item) => item.visible)
+        .map((item) => item.id);
+      const filteredItems = allPageItems.map((item) =>
+        Object.fromEntries(
+          Object.entries(item).filter(([key]) => visibleColumns.includes(key))
+        )
+      );
+
+      setLoadingReport(true);
+      const res = await axiosBase.post(
+        "facultad/reportes/excel",
+        filteredItems,
+        {
+          responseType: "blob",
+        }
+      );
+      const blob = await res.data;
+      const url = URL.createObjectURL(blob);
+      window.open(url, "_blank");
+      setLoadingReport(false);
+    }
   };
 
   useEffect(() => {
@@ -258,8 +296,13 @@ export default () => {
           counter={"(" + distributions.length + ")"}
           actions={
             <SpaceBetween direction="horizontal" size="xs">
-              <Button disabled={loading} variant="primary">
-                Reporte
+              <Button
+                disabled={loading}
+                variant="primary"
+                onClick={exportExcel}
+                loading={loadingReport}
+              >
+                Exportar a excel
               </Button>
             </SpaceBetween>
           }

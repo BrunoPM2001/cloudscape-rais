@@ -2,6 +2,7 @@ import {
   Badge,
   Box,
   Button,
+  CollectionPreferences,
   FormField,
   Header,
   Pagination,
@@ -10,10 +11,11 @@ import {
   SpaceBetween,
   Table,
 } from "@cloudscape-design/components";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useCollection } from "@cloudscape-design/collection-hooks";
 import queryString from "query-string";
 import axiosBase from "../../../../../api/axios";
+import NotificationContext from "../../../../../providers/notificationProvider";
 
 const stringOperators = [":", "!:", "=", "!=", "^", "!^"];
 
@@ -204,11 +206,24 @@ const columnDisplay = [
 ];
 
 export default () => {
+  //  Context
+  const { notifications, pushNotification } = useContext(NotificationContext);
+
   //  Data states
   const [loading, setLoading] = useState(true);
   const [distributions, setDistribution] = useState([]);
   const [loadingReport, setLoadingReport] = useState(false);
-  const [appliedFilters, setAppliedFilters] = useState({});
+  const [preferences, setPreferences] = useState({
+    pageSize: 10,
+    contentDisplay: columnDisplay,
+    stripedRows: false,
+    contentDensity: "comfortable",
+    stickyColumns: {
+      first: 0,
+      last: 0,
+    },
+  });
+
   const {
     items,
     actions,
@@ -216,6 +231,7 @@ export default () => {
     collectionProps,
     paginationProps,
     propertyFilterProps,
+    allPageItems,
   } = useCollection(distributions, {
     propertyFiltering: {
       filteringProperties: FILTER_PROPS,
@@ -242,35 +258,20 @@ export default () => {
     value: "2025",
   });
 
-  const onFilterChangeWrapper = (event) => {
-    // Llama a la función interna para que el filtrado siga funcionando
-    if (propertyFilterProps.onChange) {
-      propertyFilterProps.onChange(event);
-    }
-
-    // Verifica si existen tokens en el detalle del evento
-    const { tokens } = event.detail;
-    const nuevosFiltros = {};
-    if (tokens && Array.isArray(tokens) && tokens.length > 0) {
-      tokens.forEach((token) => {
-        // token: { propertyKey, operator, value }
-        nuevosFiltros[token.propertyKey] = token.value;
-      });
-    }
-    setAppliedFilters(nuevosFiltros);
-  };
-
   const reporteExcel = async () => {
+    const visibleColumns = preferences.contentDisplay
+      .filter((item) => item.visible)
+      .map((item) => item.id);
+    const filteredItems = allPageItems.map((item) =>
+      Object.fromEntries(
+        Object.entries(item).filter(([key]) => visibleColumns.includes(key))
+      )
+    );
+
     setLoadingReport(true);
-    const currentFilter = propertyFilterProps.filteringText || "";
-    // const query = queryString.stringify({ filter: currentFilter, year: selectedOption.value });
-    // console.log(query);
-    const queryObject = { ...appliedFilters, year: selectedOption.value };
-    const query = queryString.stringify(queryObject);
-    console.log(query);
-    // Envío la petición GET, agregando el query string a la URL
-    const res = await axiosBase.get(
-      `admin/estudios/proyectosGrupo/excel?${query}`,
+    const res = await axiosBase.post(
+      "admin/estudios/proyectosGrupo/excel",
+      filteredItems,
       {
         responseType: "blob",
       }
@@ -303,11 +304,14 @@ export default () => {
       trackBy="id"
       items={items}
       columnDefinitions={columnDefinitions}
-      columnDisplay={columnDisplay}
+      columnDisplay={preferences.contentDisplay}
       loading={loading}
       loadingText="Cargando datos"
       resizableColumns
       enableKeyboardNavigation
+      stripedRows={preferences.stripedRows}
+      contentDensity={preferences.contentDensity}
+      stickyColumns={preferences.stickyColumns}
       selectionType="single"
       wrapLines
       onRowClick={({ detail }) => actions.setSelectedItems([detail.item])}
@@ -317,8 +321,8 @@ export default () => {
           actions={
             <SpaceBetween direction="horizontal" size="xs">
               <Button
-                // disabled={loading}
-                // loading={loadingReport}
+                disabled={loading}
+                loading={loadingReport}
                 onClick={reporteExcel}
               >
                 Excel
@@ -411,7 +415,6 @@ export default () => {
           countText={`${filteredItemsCount} coincidencias`}
           expandToViewport
           virtualScroll
-          onChange={onFilterChangeWrapper}
           customControl={
             <FormField label="Año:">
               <Select
@@ -444,6 +447,52 @@ export default () => {
             <b>No hay registros...</b>
           </SpaceBetween>
         </Box>
+      }
+      preferences={
+        <CollectionPreferences
+          title="Preferencias de tabla"
+          confirmLabel="Confirmar"
+          cancelLabel="Cancelar"
+          preferences={preferences}
+          onConfirm={({ detail }) => setPreferences(detail)}
+          stripedRowsPreference
+          contentDensityPreference
+          contentDisplayPreference={{
+            options: columnDefinitions.map((item) => ({
+              id: item.id,
+              label: item.header,
+            })),
+          }}
+          pageSizePreference={{
+            options: [
+              { value: 10, label: "10 filas" },
+              { value: 20, label: "20 filas" },
+              { value: 25, label: "25 filas" },
+              { value: 50, label: "50 filas" },
+            ],
+          }}
+          stickyColumnsPreference={{
+            firstColumns: {
+              title: "Fijar primera(s) columna(s)",
+              description:
+                "Mantén visible las primeras columnas al deslizar el contenido de la tabla de forma horizontal.",
+              options: [
+                { label: "Ninguna", value: 0 },
+                { label: "Primera columna", value: 1 },
+                { label: "Primeras 2 columnas", value: 2 },
+              ],
+            },
+            lastColumns: {
+              title: "Fijar última columna",
+              description:
+                "Mantén visible la última columna al deslizar el contenido de la tabla de forma horizontal.",
+              options: [
+                { label: "Ninguna", value: 0 },
+                { label: "Última columna", value: 1 },
+              ],
+            },
+          }}
+        />
       }
     />
   );

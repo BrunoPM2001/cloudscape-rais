@@ -1,17 +1,17 @@
 import { Tabs } from "@cloudscape-design/components";
-import BaseLayout from "../../components/baseLayout";
-import Listado from "./tabs/listado";
+import BaseLayout from "../../components/baseLayout.jsx";
+import Listado from "./tabs/listado.jsx";
 
 const breadcrumbs = [
   {
-    text: "Facultad",
-    href: "/facultad",
+    text: "Admin",
+    href: "/admin",
   },
   {
-    text: "Facultad",
+    text: "Constancias",
   },
   {
-    text: "Grupos de Investigación",
+    text: "Lista de deudores",
   },
 ];
 
@@ -23,17 +23,17 @@ const tabs = [
   },
 ];
 
-export default function Grupos() {
+export default function Reporte_deudores() {
   return (
     <BaseLayout
       breadcrumbs={breadcrumbs}
-      header="Listado de Grupos de Investigación"
+      header="Reporte por investigador:"
       helpInfo="Información sobre la páginal actual para poder mostrarla al público
       en general."
       disableOverlap
       contentType="table"
     >
-      <Tabs tabs={tabs} />
+      <Tabs tabs={tabs} ariaLabel="Opciones de proyectos de grupos" />
     </BaseLayout>
   );
 }

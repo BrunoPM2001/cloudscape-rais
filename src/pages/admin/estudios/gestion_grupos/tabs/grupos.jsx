@@ -2,16 +2,18 @@ import {
   Badge,
   Box,
   Button,
+  CollectionPreferences,
   Header,
   Pagination,
   PropertyFilter,
   SpaceBetween,
   Table,
 } from "@cloudscape-design/components";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useCollection } from "@cloudscape-design/collection-hooks";
 import queryString from "query-string";
 import axiosBase from "../../../../../api/axios";
+import NotificationContext from "../../../../../providers/notificationProvider";
 
 const stringOperators = [":", "!:", "=", "!=", "^", "!^"];
 
@@ -177,9 +179,23 @@ const columnDisplay = [
 ];
 
 export default () => {
+  //  Context
+  const { notifications, pushNotification } = useContext(NotificationContext);
+
   //  Data states
   const [loading, setLoading] = useState(true);
   const [distributions, setDistribution] = useState([]);
+  const [loadingReport, setLoadingReport] = useState(false);
+  const [preferences, setPreferences] = useState({
+    pageSize: 10,
+    contentDisplay: columnDisplay,
+    stripedRows: false,
+    contentDensity: "comfortable",
+    stickyColumns: {
+      first: 0,
+      last: 0,
+    },
+  });
   const {
     items,
     actions,
@@ -187,6 +203,7 @@ export default () => {
     collectionProps,
     paginationProps,
     propertyFilterProps,
+    allPageItems,
   } = useCollection(distributions, {
     propertyFiltering: {
       filteringProperties: FILTER_PROPS,
@@ -224,6 +241,38 @@ export default () => {
     setLoading(false);
   };
 
+  const reporteExcel = async () => {
+    if (allPageItems.length > 15000) {
+      pushNotification(
+        "La cantidad de items a exportar es demasiada, redúzcala a menos de 15000",
+        "warning",
+        notifications.length + 1
+      );
+    } else {
+      const visibleColumns = preferences.contentDisplay
+        .filter((item) => item.visible)
+        .map((item) => item.id);
+      const filteredItems = allPageItems.map((item) =>
+        Object.fromEntries(
+          Object.entries(item).filter(([key]) => visibleColumns.includes(key))
+        )
+      );
+
+      setLoadingReport(true);
+      const res = await axiosBase.post(
+        "admin/estudios/grupos/excel",
+        filteredItems,
+        {
+          responseType: "blob",
+        }
+      );
+      const blob = await res.data;
+      const url = URL.createObjectURL(blob);
+      window.open(url, "_blank");
+      setLoadingReport(false);
+    }
+  };
+
   //  Effects
   useEffect(() => {
     getData();
@@ -235,29 +284,41 @@ export default () => {
       trackBy="id"
       items={items}
       columnDefinitions={columnDefinitions}
-      columnDisplay={columnDisplay}
+      columnDisplay={preferences.contentDisplay}
       loading={loading}
       loadingText="Cargando datos"
       wrapLines
       enableKeyboardNavigation
+      stripedRows={preferences.stripedRows}
+      contentDensity={preferences.contentDensity}
+      stickyColumns={preferences.stickyColumns}
       selectionType="single"
       onRowClick={({ detail }) => actions.setSelectedItems([detail.item])}
       header={
         <Header
           counter={"(" + distributions.length + ")"}
           actions={
-            <Button
-              disabled={collectionProps.selectedItems.length == 0}
-              variant="primary"
-              onClick={() => {
-                const query = queryString.stringify({
-                  id: collectionProps.selectedItems[0]["id"],
-                });
-                window.location.href = "grupos/detalle?" + query;
-              }}
-            >
-              Visualizar
-            </Button>
+            <SpaceBetween size="xs" direction="horizontal">
+              <Button
+                onClick={reporteExcel}
+                disabled={loading}
+                loading={loadingReport}
+              >
+                Excel
+              </Button>
+              <Button
+                disabled={collectionProps.selectedItems.length == 0}
+                variant="primary"
+                onClick={() => {
+                  const query = queryString.stringify({
+                    id: collectionProps.selectedItems[0]["id"],
+                  });
+                  window.location.href = "grupos/detalle?" + query;
+                }}
+              >
+                Visualizar
+              </Button>
+            </SpaceBetween>
           }
         >
           Grupos de investigación
@@ -279,6 +340,52 @@ export default () => {
             <b>No hay registros...</b>
           </SpaceBetween>
         </Box>
+      }
+      preferences={
+        <CollectionPreferences
+          title="Preferencias de tabla"
+          confirmLabel="Confirmar"
+          cancelLabel="Cancelar"
+          preferences={preferences}
+          onConfirm={({ detail }) => setPreferences(detail)}
+          stripedRowsPreference
+          contentDensityPreference
+          contentDisplayPreference={{
+            options: columnDefinitions.map((item) => ({
+              id: item.id,
+              label: item.header,
+            })),
+          }}
+          pageSizePreference={{
+            options: [
+              { value: 10, label: "10 filas" },
+              { value: 20, label: "20 filas" },
+              { value: 25, label: "25 filas" },
+              { value: 50, label: "50 filas" },
+            ],
+          }}
+          stickyColumnsPreference={{
+            firstColumns: {
+              title: "Fijar primera(s) columna(s)",
+              description:
+                "Mantén visible las primeras columnas al deslizar el contenido de la tabla de forma horizontal.",
+              options: [
+                { label: "Ninguna", value: 0 },
+                { label: "Primera columna", value: 1 },
+                { label: "Primeras 2 columnas", value: 2 },
+              ],
+            },
+            lastColumns: {
+              title: "Fijar última columna",
+              description:
+                "Mantén visible la última columna al deslizar el contenido de la tabla de forma horizontal.",
+              options: [
+                { label: "Ninguna", value: 0 },
+                { label: "Última columna", value: 1 },
+              ],
+            },
+          }}
+        />
       }
     />
   );

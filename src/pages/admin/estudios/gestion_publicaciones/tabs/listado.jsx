@@ -10,13 +10,15 @@ import {
   SpaceBetween,
   Table,
   CollectionPreferences,
+  Button,
 } from "@cloudscape-design/components";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useCollection } from "@cloudscape-design/collection-hooks";
 import axiosBase from "../../../../../api/axios";
 import { useAutosuggest } from "../../../../../hooks/useAutosuggest";
 import queryString from "query-string";
 import ModalAudit from "../components/modalAudit";
+import NotificationContext from "../../../../../providers/notificationProvider";
 
 const stringOperators = [":", "!:", "=", "!=", "^", "!^"];
 
@@ -282,9 +284,13 @@ const columnDisplay = [
 ];
 
 export default () => {
+  //  Context
+  const { notifications, pushNotification } = useContext(NotificationContext);
+
   //  States
   const [loadingBtn, setLoadingBtn] = useState(false);
   const [loadingData, setLoadingData] = useState(true);
+  const [loadingReport, setLoadingReport] = useState(false);
   const [form, setForm] = useState({});
   const [distributions, setDistribution] = useState([]);
   const [type, setType] = useState("");
@@ -307,6 +313,7 @@ export default () => {
     collectionProps,
     paginationProps,
     propertyFilterProps,
+    allPageItems,
   } = useCollection(distributions, {
     propertyFiltering: {
       filteringProperties: FILTER_PROPS,
@@ -360,6 +367,38 @@ export default () => {
     window.open(url, "_blank");
   };
 
+  const reporteExcel = async () => {
+    if (allPageItems.length > 15000) {
+      pushNotification(
+        "La cantidad de items a exportar es demasiada, redúzcala a menos de 15000",
+        "warning",
+        notifications.length + 1
+      );
+    } else {
+      const visibleColumns = preferences.contentDisplay
+        .filter((item) => item.visible)
+        .map((item) => item.id);
+      const filteredItems = allPageItems.map((item) =>
+        Object.fromEntries(
+          Object.entries(item).filter(([key]) => visibleColumns.includes(key))
+        )
+      );
+
+      setLoadingReport(true);
+      const res = await axiosBase.post(
+        "admin/estudios/publicaciones/excel",
+        filteredItems,
+        {
+          responseType: "blob",
+        }
+      );
+      const blob = await res.data;
+      const url = URL.createObjectURL(blob);
+      window.open(url, "_blank");
+      setLoadingReport(false);
+    }
+  };
+
   //  Effects
   useEffect(() => {
     getData();
@@ -394,48 +433,14 @@ export default () => {
             counter={"(" + distributions.length + ")"}
             actions={
               <SpaceBetween direction="horizontal" size="xs">
-                <ButtonDropdown
-                  items={[
-                    {
-                      text: "Artículo de revista",
-                      id: "articulo",
-                      disabled: false,
-                    },
-                    {
-                      text: "Capítulo de libro",
-                      id: "capitulo",
-                      disabled: false,
-                    },
-                    {
-                      text: "Libro",
-                      id: "libro",
-                      disabled: false,
-                    },
-                    {
-                      text: "Evento científico",
-                      id: "evento",
-                      disabled: false,
-                    },
-                    {
-                      text: "Tesis propia",
-                      id: "tesis",
-                      disabled: false,
-                    },
-                    {
-                      text: "Tesis asesoría",
-                      id: "tesis-asesoria",
-                      disabled: false,
-                    },
-                  ]}
-                  onItemClick={({ detail }) => {
-                    window.location.href =
-                      "gestion_publicaciones/nuevo?tipo=" + detail.id;
-                  }}
+                <Button
+                  onClick={reporteExcel}
+                  disabled={loadingData}
+                  loading={loadingReport}
                 >
-                  Nuevo
-                </ButtonDropdown>
+                  Excel
+                </Button>
                 <ButtonDropdown
-                  variant="primary"
                   disabled={!collectionProps.selectedItems.length}
                   items={[
                     {
@@ -479,6 +484,47 @@ export default () => {
                   loading={loadingBtn}
                 >
                   Acciones
+                </ButtonDropdown>
+                <ButtonDropdown
+                  variant="primary"
+                  items={[
+                    {
+                      text: "Artículo de revista",
+                      id: "articulo",
+                      disabled: false,
+                    },
+                    {
+                      text: "Capítulo de libro",
+                      id: "capitulo",
+                      disabled: false,
+                    },
+                    {
+                      text: "Libro",
+                      id: "libro",
+                      disabled: false,
+                    },
+                    {
+                      text: "Evento científico",
+                      id: "evento",
+                      disabled: false,
+                    },
+                    {
+                      text: "Tesis propia",
+                      id: "tesis",
+                      disabled: false,
+                    },
+                    {
+                      text: "Tesis asesoría",
+                      id: "tesis-asesoria",
+                      disabled: false,
+                    },
+                  ]}
+                  onItemClick={({ detail }) => {
+                    window.location.href =
+                      "gestion_publicaciones/nuevo?tipo=" + detail.id;
+                  }}
+                >
+                  Nuevo
                 </ButtonDropdown>
               </SpaceBetween>
             }

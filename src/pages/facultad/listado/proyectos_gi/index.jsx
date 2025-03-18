@@ -1,7 +1,7 @@
 import { Tabs } from "@cloudscape-design/components";
 import BaseLayout from "../../components/baseLayout";
 // import ListadoInvestigador from "./tabs/listado";
- import Listado from "./tabs/listado";
+import Listado from "./tabs/listado";
 
 const breadcrumbs = [
   {
@@ -32,6 +32,7 @@ export default function Proyectos() {
       helpInfo="Información sobre la páginal actual para poder mostrarla al público
       en general."
       disableOverlap
+      contentType="table"
     >
       <Tabs tabs={tabs} />
     </BaseLayout>

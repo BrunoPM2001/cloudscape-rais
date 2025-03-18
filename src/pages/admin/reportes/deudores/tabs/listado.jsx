@@ -3,9 +3,11 @@ import {
   Box,
   Button,
   CollectionPreferences,
+  FormField,
   Header,
   Pagination,
   PropertyFilter,
+  Select,
   SpaceBetween,
   Table,
 } from "@cloudscape-design/components";
@@ -25,45 +27,87 @@ const FILTER_PROPS = [
     operators: stringOperators,
   },
   {
-    propertyLabel: "Nombre de grupo",
-    key: "grupo_nombre",
-    groupValuesLabel: "Nombres de grupo",
+    propertyLabel: "Código de docente",
+    key: "codigo",
+    groupValuesLabel: "Códigos de docente",
     operators: stringOperators,
   },
   {
-    propertyLabel: "Nombre corto",
-    key: "grupo_nombre_corto",
-    groupValuesLabel: "Nombres cortos",
+    propertyLabel: "N° documento",
+    key: "doc_numero",
+    groupValuesLabel: "N° documentos",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "Nombres",
+    key: "nombres",
+    groupValuesLabel: "Nombres",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "Facultad de investigador",
+    key: "facultad_investigador",
+    groupValuesLabel: "Facultades de investigador",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "Tipo de docente",
+    key: "tipo",
+    groupValuesLabel: "Tipos de docente",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "Licencia",
+    key: "licencia_tipo",
+    groupValuesLabel: "Licencias",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "Condición",
+    key: "condicion",
+    groupValuesLabel: "Condiciones",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "Tipo de proyecto",
+    key: "tipo_proyecto",
+    groupValuesLabel: "Tipos de proyecto",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "Código de proyecto",
+    key: "codigo_proyecto",
+    groupValuesLabel: "Códigos de proyecto",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "Título",
+    key: "titulo",
+    groupValuesLabel: "Títulos",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "Facultad de proyecto",
+    key: "facultad_proyecto",
+    groupValuesLabel: "Facultades de proyecto",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "Periodo",
+    key: "periodo",
+    groupValuesLabel: "Periodos",
     operators: stringOperators,
   },
   {
     propertyLabel: "Categoría",
-    key: "grupo_categoria",
+    key: "categoria",
     groupValuesLabel: "Categorías",
     operators: stringOperators,
   },
   {
-    propertyLabel: "Facultad",
-    key: "facultad",
-    groupValuesLabel: "Facultades",
-    operators: stringOperators,
-  },
-  {
-    propertyLabel: "Coordinador",
-    key: "coordinador",
-    groupValuesLabel: "Coordinadores",
-    operators: stringOperators,
-  },
-  {
-    propertyLabel: "Integrantes",
-    key: "cantidad_integrantes",
-    groupValuesLabel: "Cantidades",
-    operators: stringOperators,
-  },
-  {
-    propertyLabel: "Estado",
-    key: "estado",
-    groupValuesLabel: "Estados",
+    propertyLabel: "Detalle",
+    key: "detalle",
+    groupValuesLabel: "Detalles",
     operators: stringOperators,
   },
 ];
@@ -77,94 +121,121 @@ const columnDefinitions = [
     isRowHeader: true,
   },
   {
-    id: "grupo_nombre",
-    header: "Nombre de grupo",
-    cell: (item) => item.grupo_nombre,
-    sortingField: "grupo_nombre",
-    minWidth: 250,
+    id: "codigo",
+    header: "Código de docente",
+    cell: (item) => item.codigo,
+    sortingField: "codigo",
+    minWidth: 150,
   },
   {
-    id: "grupo_nombre_corto",
-    header: "Nombre corto",
-    cell: (item) => item.grupo_nombre_corto,
-    sortingField: "grupo_nombre_corto",
+    id: "doc_numero",
+    header: "N° documento",
+    cell: (item) => item.doc_numero,
+    sortingField: "doc_numero",
+    minWidth: 150,
   },
   {
-    id: "grupo_categoria",
-    header: "Categoría",
-    cell: (item) => item.grupo_categoria,
-    sortingField: "grupo_categoria",
+    id: "nombres",
+    header: "Nombres",
+    cell: (item) => item.nombres,
+    sortingField: "nombres",
+    minWidth: 150,
   },
   {
-    id: "facultad",
-    header: "Facultad",
-    cell: (item) => item.facultad,
-    sortingField: "facultad",
+    id: "facultad_investigador",
+    header: "Facultad de investigador",
+    cell: (item) => item.facultad_investigador,
+    sortingField: "facultad_investigador",
     minWidth: 200,
   },
   {
-    id: "coordinador",
-    header: "Coordinador",
-    cell: (item) => item.coordinador,
-    sortingField: "coordinador",
-    minWidth: 250,
+    id: "tipo",
+    header: "Tipo",
+    cell: (item) => item.tipo,
+    sortingField: "tipo",
+    minWidth: 150,
   },
   {
-    id: "cantidad_integrantes",
-    header: "Integrantes",
-    cell: (item) => item.cantidad_integrantes,
-    sortingField: "coordinador",
+    id: "licencia_tipo",
+    header: "Licencia",
+    cell: (item) => item.licencia_tipo,
+    sortingField: "licencia_tipo",
+    minWidth: 150,
   },
   {
-    id: "estado",
-    header: "Estado",
-    cell: (item) => (
-      <Badge
-        color={
-          item.estado == "Eliminado"
-            ? "red"
-            : item.estado == "No aprobado"
-            ? "grey"
-            : item.estado == "Observado"
-            ? "red"
-            : item.estado == "Enviado"
-            ? "green"
-            : item.estado == "En proceso"
-            ? "blue"
-            : "red"
-        }
-      >
-        {item.estado}
-      </Badge>
-    ),
-    sortingField: "estado",
+    id: "condicion",
+    header: "Condición",
+    cell: (item) => item.condicion,
+    sortingField: "condicion",
+    minWidth: 150,
+  },
+  {
+    id: "tipo_proyecto",
+    header: "Tipo de proyecto",
+    cell: (item) => item.tipo_proyecto,
+    sortingField: "tipo_proyecto",
+    minWidth: 120,
+  },
+  {
+    id: "codigo_proyecto",
+    header: "Código de proyecto",
+    cell: (item) => item.codigo_proyecto,
+    sortingField: "codigo_proyecto",
+    minWidth: 150,
+  },
+  {
+    id: "titulo",
+    header: "Título",
+    cell: (item) => item.titulo,
+    sortingField: "titulo",
+    minWidth: 300,
+  },
+  {
+    id: "facultad_proyecto",
+    header: "Facultad de proyecto",
+    cell: (item) => item.facultad_proyecto,
+    sortingField: "facultad_proyecto",
+    minWidth: 200,
+  },
+  {
+    id: "periodo",
+    header: "Periodo",
+    cell: (item) => item.periodo,
+    sortingField: "periodo",
+    minWidth: 120,
+  },
+  {
+    id: "categoria",
+    header: "Categoría",
+    cell: (item) => item.categoria,
+    sortingField: "categoria",
     minWidth: 140,
   },
   {
-    id: "created_at",
-    header: "Fecha de creación",
-    cell: (item) => item.created_at,
-    minWidth: 130,
-  },
-  {
-    id: "updated_at",
-    header: "Fecha de actualización",
-    cell: (item) => item.updated_at,
-    minWidth: 130,
+    id: "detalle",
+    header: "Detalle",
+    cell: (item) => item.detalle,
+    sortingField: "detalle",
+    minWidth: 150,
   },
 ];
 
 const columnDisplay = [
   { id: "id", visible: true },
-  { id: "grupo_nombre", visible: true },
-  { id: "grupo_nombre_corto", visible: true },
-  { id: "grupo_categoria", visible: true },
-  { id: "facultad", visible: true },
-  { id: "coordinador", visible: true },
-  { id: "cantidad_integrantes", visible: true },
-  { id: "estado", visible: true },
-  { id: "created_at", visible: true },
-  { id: "updated_at", visible: true },
+  { id: "codigo", visible: true },
+  { id: "doc_numero", visible: true },
+  { id: "nombres", visible: true },
+  { id: "facultad_investigador", visible: true },
+  { id: "tipo", visible: true },
+  { id: "licencia_tipo", visible: true },
+  { id: "condicion", visible: true },
+  { id: "tipo_proyecto", visible: true },
+  { id: "codigo_proyecto", visible: true },
+  { id: "titulo", visible: true },
+  { id: "facultad_proyecto", visible: true },
+  { id: "periodo", visible: true },
+  { id: "categoria", visible: true },
+  { id: "detalle", visible: true },
 ];
 
 export default () => {
@@ -185,6 +256,7 @@ export default () => {
       last: 0,
     },
   });
+
   const {
     items,
     actions,
@@ -212,23 +284,9 @@ export default () => {
       ),
     },
     pagination: { pageSize: 10 },
-    sorting: {
-      defaultState: {
-        sortingColumn: columnDefinitions[0],
-        isDescending: true,
-      },
-    },
+    sorting: {},
     selection: {},
   });
-
-  //  Functions
-  const getData = async () => {
-    setLoading(true);
-    const res = await axiosBase.get("admin/estudios/grupos/listadoSolicitudes");
-    const data = res.data;
-    setDistribution(data);
-    setLoading(false);
-  };
 
   const reporteExcel = async () => {
     if (allPageItems.length > 15000) {
@@ -249,7 +307,7 @@ export default () => {
 
       setLoadingReport(true);
       const res = await axiosBase.post(
-        "admin/estudios/grupos/excel",
+        "admin/reportes/listadoDeudoresExcel",
         filteredItems,
         {
           responseType: "blob",
@@ -262,7 +320,16 @@ export default () => {
     }
   };
 
-  //  Effects
+  //  Functions
+  const getData = async () => {
+    setLoading(true);
+    setDistribution([]);
+    const res = await axiosBase.get("admin/reportes/listadoDeudores");
+    const data = res.data;
+    setDistribution(data);
+    setLoading(false);
+  };
+
   useEffect(() => {
     getData();
   }, []);
@@ -276,47 +343,35 @@ export default () => {
       columnDisplay={preferences.contentDisplay}
       loading={loading}
       loadingText="Cargando datos"
-      wrapLines
+      resizableColumns
       enableKeyboardNavigation
       stripedRows={preferences.stripedRows}
       contentDensity={preferences.contentDensity}
       stickyColumns={preferences.stickyColumns}
       selectionType="single"
+      wrapLines
       onRowClick={({ detail }) => actions.setSelectedItems([detail.item])}
       header={
         <Header
           counter={"(" + distributions.length + ")"}
           actions={
-            <SpaceBetween size="xs" direction="horizontal">
-              <Button
-                onClick={reporteExcel}
-                disabled={loading}
-                loading={loadingReport}
-              >
-                Excel
-              </Button>
-              <Button
-                disabled={collectionProps.selectedItems.length == 0}
-                variant="primary"
-                onClick={() => {
-                  const query = queryString.stringify({
-                    id: collectionProps.selectedItems[0]["id"],
-                  });
-                  window.location.href = "grupos/detalle?" + query;
-                }}
-              >
-                Visualizar
-              </Button>
-            </SpaceBetween>
+            <Button
+              variant="primary"
+              loading={loadingReport}
+              onClick={reporteExcel}
+              disabled={loading}
+            >
+              Exportar en excel
+            </Button>
           }
         >
-          Solicitudes de grupos de investigación
+          Deuda de investigadores
         </Header>
       }
       filter={
         <PropertyFilter
           {...propertyFilterProps}
-          filteringPlaceholder="Buscar solicitud"
+          filteringPlaceholder="Buscar investigador"
           countText={`${filteredItemsCount} coincidencias`}
           expandToViewport
           virtualScroll
