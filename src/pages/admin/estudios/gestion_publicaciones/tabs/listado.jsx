@@ -76,6 +76,18 @@ const FILTER_PROPS = [
     operators: stringOperators,
   },
   {
+    propertyLabel: "Presentador",
+    key: "presentador",
+    groupValuesLabel: "Presentadores",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "Facultad",
+    key: "facultad",
+    groupValuesLabel: "Facultades",
+    operators: stringOperators,
+  },
+  {
     propertyLabel: "Título",
     key: "titulo",
     groupValuesLabel: "Títulos",
@@ -148,6 +160,20 @@ const columnDefinitions = [
     cell: (item) => item.titulo,
     minWidth: 400,
     sortingField: "titulo",
+  },
+  {
+    id: "presentador",
+    header: "Presentador",
+    cell: (item) => item.presentador,
+    minWidth: 200,
+    sortingField: "presentador",
+  },
+  {
+    id: "facultad",
+    header: "Facultad",
+    cell: (item) => item.facultad,
+    minWidth: 200,
+    sortingField: "facultad",
   },
   {
     id: "isbn",
@@ -241,6 +267,8 @@ const columnDisplay = [
   { id: "tipo", visible: true },
   { id: "tipo_patente", visible: true },
   { id: "titulo", visible: true },
+  { id: "presentador", visible: true },
+  { id: "facultad", visible: true },
   { id: "isbn", visible: true },
   { id: "issn", visible: true },
   { id: "editorial", visible: true },

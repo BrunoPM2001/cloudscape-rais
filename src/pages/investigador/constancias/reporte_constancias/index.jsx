@@ -42,7 +42,7 @@ const opt_constancias = [
     value: "1",
   },
   {
-    label: "Grupos de Investigación",
+    label: "Grupo de Investigación",
     value: "2",
   },
   {

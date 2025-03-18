@@ -146,6 +146,12 @@ const navItems = [
             href: "https://vrip.unmsm.edu.pe/Documentos/2022/Listado_Revistas/Revistas_WOS-ESCI.pdf",
             external: true,
           },
+          {
+            type: "link",
+            text: "Editoriales reconocidas",
+            href: "https://rais.unmsm.edu.pe/minio/repo/RAIS_Lista-Editoriales-academicas-reconocidas(enero.2025).pdf",
+            external: true,
+          },
         ],
       },
     ],
