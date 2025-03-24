@@ -36,10 +36,7 @@ export default ({ value1, handleChange, files }) => {
         <FormField
           label="Reporte Final"
           info={
-            <Link
-              variant="info"
-              href="/minio/templates/Modelo_Reporte_Viabilidad.xlsx"
-            >
+            <Link variant="info" href="/minio/templates/anexo_picv.docx">
               Descargar modelo
             </Link>
           }
@@ -48,7 +45,10 @@ export default ({ value1, handleChange, files }) => {
             files["informe-PICV-INFORME"] && (
               <>
                 Ya ha cargado un{" "}
-                <Link {...propsEnlaces} href={files["informe-PICV-INFORME"].url}>
+                <Link
+                  {...propsEnlaces}
+                  href={files["informe-PICV-INFORME"].url}
+                >
                   archivo
                 </Link>{" "}
                 el {files["informe-PICV-INFORME"].fecha}

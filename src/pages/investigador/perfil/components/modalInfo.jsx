@@ -35,10 +35,6 @@ export default ({ close }) => {
               contrario su solicitud será OBSERVADA.
             </li>
             <li>
-              Debe eliminar sus publicaciones sin Filiación UNMSM de su perfil
-              RAIS.
-            </li>
-            <li>
               Recuerde que necesita tener al menos una publicación con filiación
               UNMSM para ser calificado como Docente Investigador
             </li>

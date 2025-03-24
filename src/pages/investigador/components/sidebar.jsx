@@ -149,7 +149,7 @@ const navItems = [
           {
             type: "link",
             text: "Editoriales reconocidas",
-            href: "https://rais.unmsm.edu.pe/minio/repo/RAIS_Lista-Editoriales-academicas-reconocidas(enero.2025).pdf",
+            href: "https://rais.unmsm.edu.pe/minio/constancias/repo/RAIS_Lista-Editoriales-academicas-reconocidas(enero.2025).pdf",
             external: true,
           },
         ],

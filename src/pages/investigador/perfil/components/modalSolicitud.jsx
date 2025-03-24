@@ -10,11 +10,13 @@ import DatosSolicitud from "./datosSolicitud";
 import ActividadesSolicitud from "./actividadesSolicitud";
 import Declaracion from "./declaracion";
 
-export default ({ data, close, reload, actividades, proyectos }) => {
+export default ({ data, close, reload, actividades = [], proyectos = [] }) => {
   //  States
   const [check, setCheck] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  console.log("actividades", actividades.length);
+  console.log("proyectos", proyectos.length);
   //  Functions
   const presentar = async () => {
     setLoading(true);
@@ -36,7 +38,9 @@ export default ({ data, close, reload, actividades, proyectos }) => {
             onClick={presentar}
             loading={loading}
             disabled={
-              !check || (proyectos.length === 0 && actividades.length === 0)
+              !check ||
+              ((proyectos?.length || 0) === 0 &&
+                (actividades?.length || 0) === 0)
             }
           >
             Presentar solicitud

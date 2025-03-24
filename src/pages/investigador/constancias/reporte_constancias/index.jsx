@@ -53,10 +53,10 @@ const opt_constancias = [
     label: "Puntaje de Publicaciones",
     value: "4",
   },
-  {
-    label: "Proyectos Multidisciplinarios",
-    value: "5",
-  },
+  // {
+  //   label: "Proyectos Multidisciplinarios",
+  //   value: "5",
+  // },
   {
     label: "Capitulo de Libro",
     value: "6",
@@ -65,14 +65,14 @@ const opt_constancias = [
     label: "Proyectos Equipamiento Científico",
     value: "7",
   },
-  {
-    label: "Evaluador de Proyectos",
-    value: "8",
-  },
-  {
-    label: "Eventos UNMSM",
-    value: "9",
-  },
+  // {
+  //   label: "Evaluador de Proyectos",
+  //   value: "8",
+  // },
+  // {
+  //   label: "Eventos UNMSM",
+  //   value: "9",
+  // },
   {
     label: "No adeudar Informes",
     value: "10",
@@ -81,18 +81,18 @@ const opt_constancias = [
     label: "Asesor de Tésis",
     value: "11",
   },
-  {
-    label: "Participante Tesista",
-    value: "12",
-  },
-  {
-    label: "Asesor de Grupo",
-    value: "13",
-  },
-  {
-    label: "Miembro de Grupo",
-    value: "14",
-  },
+  // {
+  //   label: "Participante Tesista",
+  //   value: "12",
+  // },
+  // {
+  //   label: "Asesor de Grupo",
+  //   value: "13",
+  // },
+  // {
+  //   label: "Miembro de Grupo",
+  //   value: "14",
+  // },
 ];
 
 export default function Reporte_constancias() {

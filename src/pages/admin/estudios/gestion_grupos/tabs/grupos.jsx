@@ -122,10 +122,50 @@ const columnDefinitions = [
     sortingField: "coordinador",
   },
   {
+    id: "cantidad_titulares",
+    header: "Titulares",
+    cell: (item) => item.cantidad_titulares,
+    sortingField: "coordinador",
+  },
+  {
+    id: "cantidad_adherentes",
+    header: "Adherentes",
+    cell: (item) => item.cantidad_adherentes,
+    sortingField: "coordinador",
+  },
+  {
     id: "resolucion_rectoral",
     header: "R.R.",
     cell: (item) => item.resolucion_rectoral,
     sortingField: "resolucion_rectoral",
+    minWidth: 150,
+  },
+  {
+    id: "resolucion_rectoral_creacion",
+    header: "Fecha de creación",
+    cell: (item) => item.resolucion_creacion,
+    sortingField: "resolucion_creacion",
+    minWidth: 150,
+  },
+  {
+    id: "resolucion_fecha",
+    header: "Fecha de resolución",
+    cell: (item) => item.resolucion_fecha,
+    sortingField: "resolucion_fecha",
+    minWidth: 150,
+  },
+  {
+    id: "observaciones",
+    header: "Observaciones",
+    cell: (item) => item.observaciones,
+    sortingField: "observaciones",
+    minWidth: 200,
+  },
+  {
+    id: "resolucion_creacion_fecha",
+    header: "Fecha de creación",
+    cell: (item) => item.resolucion_creacion_fecha,
+    sortingField: "resolucion_creacion_fecha",
     minWidth: 150,
   },
   {
@@ -150,6 +190,7 @@ const columnDefinitions = [
     ),
     sortingField: "estado",
   },
+
   {
     id: "created_at",
     header: "Fecha de creación",
@@ -242,21 +283,14 @@ export default () => {
   };
 
   const reporteExcel = async () => {
-    if (allPageItems.length > 15000) {
+    if (allPageItems.length > 80000) {
       pushNotification(
         "La cantidad de items a exportar es demasiada, redúzcala a menos de 15000",
         "warning",
         notifications.length + 1
       );
     } else {
-      const visibleColumns = preferences.contentDisplay
-        .filter((item) => item.visible)
-        .map((item) => item.id);
-      const filteredItems = allPageItems.map((item) =>
-        Object.fromEntries(
-          Object.entries(item).filter(([key]) => visibleColumns.includes(key))
-        )
-      );
+      const filteredItems = allPageItems.map((item) => ({ ...item }));
 
       setLoadingReport(true);
       const res = await axiosBase.post(
