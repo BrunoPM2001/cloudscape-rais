@@ -211,13 +211,13 @@ const columnDefinitions = [
             : item.estado == "Aprobado"
             ? "green"
             : item.estado == "Observado"
-            ? "red"
+            ? "grey"
             : item.estado == "En evaluación"
             ? "blue"
             : item.estado == "Enviado"
             ? "blue"
             : item.estado == "En proceso"
-            ? "severity-low"
+            ? "grey"
             : item.estado == "Anulado"
             ? "red"
             : item.estado == "Sustentado"
@@ -273,6 +273,7 @@ export default () => {
   //  Data states
   const [loading, setLoading] = useState(true);
   const [loadingBtn, setLoadingBtn] = useState(false);
+  const [loadingReport, setLoadingReport] = useState(false);
   const [distributions, setDistribution] = useState([]);
   const {
     items,
@@ -281,6 +282,7 @@ export default () => {
     collectionProps,
     paginationProps,
     propertyFilterProps,
+    allPageItems,
   } = useCollection(distributions, {
     propertyFiltering: {
       filteringProperties: FILTER_PROPS,
@@ -315,7 +317,7 @@ export default () => {
 
   const reporte = async () => {
     setLoadingBtn(true);
-    const res = await axiosBase.get("admin/estudios/proyectosFEX/reporte", {
+    const res = await axiosBase.get("admin/estudios/proyectosFEX/excel", {
       params: {
         id: collectionProps.selectedItems[0].id,
       },
@@ -325,6 +327,31 @@ export default () => {
     const blob = res.data;
     const url = URL.createObjectURL(blob);
     window.open(url, "_blank");
+  };
+
+  const reporteExcel = async () => {
+    if (allPageItems.length > 15000) {
+      pushNotification(
+        "La cantidad de items a exportar es demasiada, redúzcala a menos de 15000",
+        "warning",
+        notifications.length + 1
+      );
+    } else {
+      const filteredItems = allPageItems.map((item) => ({ ...item }));
+
+      setLoadingReport(true);
+      const res = await axiosBase.post(
+        "admin/estudios/proyectosFEX/excel",
+        filteredItems,
+        {
+          responseType: "blob",
+        }
+      );
+      const blob = await res.data;
+      const url = URL.createObjectURL(blob);
+      window.open(url, "_blank");
+      setLoadingReport(false);
+    }
   };
 
   //  Effects
@@ -350,6 +377,13 @@ export default () => {
           counter={"(" + distributions.length + ")"}
           actions={
             <SpaceBetween size="xs" direction="horizontal">
+              <Button
+                onClick={reporteExcel}
+                disabled={loading}
+                loading={loadingReport}
+              >
+                Excel
+              </Button>
               <ButtonDropdown
                 items={[
                   {

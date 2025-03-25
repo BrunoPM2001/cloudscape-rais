@@ -8,14 +8,15 @@ import {
   PropertyFilter,
   SpaceBetween,
   Table,
+  Link,
 } from "@cloudscape-design/components";
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import { useCollection } from "@cloudscape-design/collection-hooks";
 import queryString from "query-string";
 import axiosBase from "../../../../../api/axios";
-import NotificationContext from "../../../../../providers/notificationProvider";
 import ModalEliminarFiliacion from "../../components/modalEliminarFiliacion";
 import ModalEliminarPublicacion from "../../components/modalEliminarPublicacion";
+import ModalInformacion from "../../components/modalInformacion";
 
 const stringOperators = [":", "!:", "=", "!=", "^", "!^"];
 
@@ -57,6 +58,12 @@ const FILTER_PROPS = [
     operators: stringOperators,
   },
   {
+    propertyLabel: "Filiación única UNMSM",
+    key: "filiacion_unica",
+    groupValuesLabel: "filiacion_unica",
+    operators: stringOperators,
+  },
+  {
     propertyLabel: "Estado",
     key: "estado",
     groupValuesLabel: "Estados",
@@ -70,14 +77,14 @@ const columnDefinitions = [
     header: "ID",
     cell: (item) => item.id,
     sortingField: "id",
-    isRowHeader: true,
+    minWidth: 50,
   },
   {
     id: "titulo",
     header: "Título",
     cell: (item) => item.titulo,
     sortingField: "titulo",
-    minWidth: 400,
+    minWidth: 500,
   },
   {
     id: "revista",
@@ -103,7 +110,7 @@ const columnDefinitions = [
     header: "Observaciones",
     cell: (item) => item.observaciones_usuario,
     sortingField: "observaciones_usuario",
-    minWidth: 200,
+    minWidth: 400,
   },
   {
     id: "filiacion",
@@ -124,6 +131,28 @@ const columnDefinitions = [
       </Badge>
     ),
     sortingField: "filiacion",
+    minWidth: 150,
+  },
+  {
+    id: "filiacion_unica",
+    header: "Filiación única UNMSM",
+    cell: (item) => (
+      <Badge
+        color={
+          item.filiacion_unica == "No"
+            ? "red"
+            : item.filiacion_unica == "Si"
+            ? "blue"
+            : item.filiacion_unica == "Sin Especificar"
+            ? "grey"
+            : "grey"
+        }
+      >
+        {item.filiacion_unica}
+      </Badge>
+    ),
+    sortingField: "filiacion",
+    minWidth: 150,
   },
   {
     id: "estado",
@@ -165,13 +194,11 @@ const columnDisplay = [
   { id: "puntaje", visible: true },
   { id: "observaciones_usuario", visible: true },
   { id: "filiacion", visible: true },
+  { id: "filiacion_unica", visible: true },
   { id: "estado", visible: true },
 ];
 
 export default () => {
-  //  Context
-  const { notifications, pushNotification } = useContext(NotificationContext);
-
   //  Data states
   const [loading, setLoading] = useState(true);
   const [loadingBtn, setLoadingBtn] = useState(false);
@@ -277,6 +304,7 @@ export default () => {
                     } else if (detail.id == "action_3") {
                       reporte();
                     } else if (detail.id == "action_4") {
+                      console.log("Eliminar Filiacion", detail.id);
                       setModal("eliminarFiliacion");
                     }
                   }}
@@ -296,16 +324,6 @@ export default () => {
                       id: "action_2",
                       disabled:
                         collectionProps.selectedItems[0]?.estado != "En proceso"
-                          ? true
-                          : false,
-                    },
-                    {
-                      text: "Eliminar Filiación",
-                      id: "action_4",
-                      disabled:
-                        collectionProps.selectedItems[0]?.estado !=
-                          "En proceso" &&
-                        collectionProps.selectedItems[0]?.filiacion != "No"
                           ? true
                           : false,
                     },
@@ -333,6 +351,11 @@ export default () => {
             }
           >
             Publicaciones ({distributions.length})
+            <Badge color="severity-medium">
+              <Link variant="info" external onClick={() => setModal("info")}>
+                Ver Información Importante
+              </Link>
+            </Badge>
           </Header>
         }
         filter={
@@ -359,14 +382,14 @@ export default () => {
           reload={getData}
           id={collectionProps.selectedItems[0].id}
         />
+      ) : modal === "eliminarFiliacion" ? (
+        <ModalEliminarFiliacion
+          close={() => setModal("")}
+          reload={getData}
+          id={collectionProps.selectedItems[0].id}
+        />
       ) : (
-        modal === "eliminarFiliacion" && (
-          <ModalEliminarFiliacion
-            close={() => setModal("")}
-            reload={getData}
-            id={collectionProps.selectedItems[0].id}
-          />
-        )
+        modal === "info" && <ModalInformacion close={() => setModal("")} />
       )}
     </>
   );

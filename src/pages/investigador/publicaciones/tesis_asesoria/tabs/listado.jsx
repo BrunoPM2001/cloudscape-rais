@@ -8,12 +8,14 @@ import {
   PropertyFilter,
   SpaceBetween,
   Table,
+  Link,
 } from "@cloudscape-design/components";
 import { useState, useEffect, useContext } from "react";
 import { useCollection } from "@cloudscape-design/collection-hooks";
 import queryString from "query-string";
 import axiosBase from "../../../../../api/axios";
 import NotificationContext from "../../../../../providers/notificationProvider";
+import ModalInformacion from "../../components/modalInformacion";
 
 const stringOperators = [":", "!:", "=", "!=", "^", "!^"];
 
@@ -55,6 +57,12 @@ const FILTER_PROPS = [
     operators: stringOperators,
   },
   {
+    propertyLabel: "Filiación única UNMSM",
+    key: "filiacion_unica",
+    groupValuesLabel: "filiacion_unica",
+    operators: stringOperators,
+  },
+  {
     propertyLabel: "Estado",
     key: "estado",
     groupValuesLabel: "Estados",
@@ -75,12 +83,14 @@ const columnDefinitions = [
     header: "Título",
     cell: (item) => item.titulo,
     sortingField: "titulo",
+    minWidth: 400,
   },
   {
     id: "año_publicacion",
     header: "Año de publicación",
     cell: (item) => item.año_publicacion,
     sortingField: "año_publicacion",
+    minWidth: 30,
   },
   {
     id: "puntaje",
@@ -113,6 +123,28 @@ const columnDefinitions = [
       </Badge>
     ),
     sortingField: "filiacion",
+    minWidth: 150,
+  },
+  {
+    id: "filiacion_unica",
+    header: "Filiación única UNMSM",
+    cell: (item) => (
+      <Badge
+        color={
+          item.filiacion_unica == "No"
+            ? "red"
+            : item.filiacion_unica == "Si"
+            ? "blue"
+            : item.filiacion_unica == "Sin Especificar"
+            ? "grey"
+            : "grey"
+        }
+      >
+        {item.filiacion_unica}
+      </Badge>
+    ),
+    sortingField: "filiacion_unica",
+    minWidth: 150,
   },
   {
     id: "estado",
@@ -143,6 +175,7 @@ const columnDefinitions = [
       </Badge>
     ),
     sortingField: "estado",
+    minWidth: 150,
   },
 ];
 
@@ -153,6 +186,7 @@ const columnDisplay = [
   { id: "puntaje", visible: true },
   { id: "observaciones_usuario", visible: true },
   { id: "filiacion", visible: true },
+  { id: "filiacion_unica", visible: true },
   { id: "estado", visible: true },
 ];
 
@@ -163,6 +197,7 @@ export default () => {
   //  Data states
   const [loading, setLoading] = useState(true);
   const [loadingBtn, setLoadingBtn] = useState(false);
+  const [modal, setModal] = useState("");
   const [distributions, setDistribution] = useState([]);
   const {
     items,
@@ -245,106 +280,117 @@ export default () => {
   }, []);
 
   return (
-    <Table
-      {...collectionProps}
-      trackBy="id"
-      items={items}
-      columnDefinitions={columnDefinitions}
-      columnDisplay={columnDisplay}
-      loading={loading}
-      loadingText="Cargando datos"
-      wrapLines
-      enableKeyboardNavigation
-      selectionType="single"
-      onRowClick={({ detail }) => actions.setSelectedItems([detail.item])}
-      header={
-        <Header
-          actions={
-            <SpaceBetween direction="horizontal" size="s">
-              <ButtonDropdown
-                loading={loadingBtn}
-                disabled={collectionProps.selectedItems.length == 0}
-                onItemClick={async ({ detail }) => {
-                  if (detail.id == "action_1") {
+    <>
+      <Table
+        {...collectionProps}
+        trackBy="id"
+        items={items}
+        columnDefinitions={columnDefinitions}
+        columnDisplay={columnDisplay}
+        loading={loading}
+        loadingText="Cargando datos"
+        wrapLines
+        enableKeyboardNavigation
+        selectionType="single"
+        onRowClick={({ detail }) => actions.setSelectedItems([detail.item])}
+        header={
+          <Header
+            actions={
+              <SpaceBetween direction="horizontal" size="s">
+                <ButtonDropdown
+                  loading={loadingBtn}
+                  disabled={collectionProps.selectedItems.length == 0}
+                  onItemClick={async ({ detail }) => {
+                    if (detail.id == "action_1") {
+                      const query = queryString.stringify({
+                        publicacion_id: collectionProps.selectedItems[0].id,
+                        tipo: "tesis_asesoria",
+                      });
+                      window.location.href =
+                        "registrar/paso" +
+                        collectionProps.selectedItems[0].step +
+                        "?" +
+                        query;
+                    } else if (detail.id == "action_2") {
+                      eliminar();
+                    } else if (detail.id == "action_3") {
+                      reporte();
+                    }
+                  }}
+                  items={[
+                    {
+                      text: "Editar",
+                      id: "action_1",
+                      disabled:
+                        collectionProps.selectedItems[0]?.estado !=
+                          "Observado" &&
+                        collectionProps.selectedItems[0]?.estado != "En proceso"
+                          ? true
+                          : false,
+                    },
+                    {
+                      text: "Eliminar",
+                      id: "action_2",
+                      disabled:
+                        collectionProps.selectedItems[0]?.estado != "En proceso"
+                          ? true
+                          : false,
+                    },
+                    {
+                      text: "Reporte",
+                      id: "action_3",
+                      disabled:
+                        collectionProps.selectedItems[0]?.estado ==
+                          "En proceso" ||
+                        collectionProps.selectedItems[0]?.estado == "Observado",
+                    },
+                  ]}
+                >
+                  Acciones para publicaciones
+                </ButtonDropdown>
+                <Button
+                  loading={loadingBtn}
+                  variant="primary"
+                  onClick={() => {
                     const query = queryString.stringify({
-                      publicacion_id: collectionProps.selectedItems[0].id,
                       tipo: "tesis_asesoria",
                     });
-                    window.location.href =
-                      "registrar/paso" +
-                      collectionProps.selectedItems[0].step +
-                      "?" +
-                      query;
-                  } else if (detail.id == "action_2") {
-                    eliminar();
-                  } else if (detail.id == "action_3") {
-                    reporte();
-                  }
-                }}
-                items={[
-                  {
-                    text: "Editar",
-                    id: "action_1",
-                    disabled:
-                      collectionProps.selectedItems[0]?.estado != "Observado" &&
-                      collectionProps.selectedItems[0]?.estado != "En proceso"
-                        ? true
-                        : false,
-                  },
-                  {
-                    text: "Eliminar",
-                    id: "action_2",
-                    disabled:
-                      collectionProps.selectedItems[0]?.estado != "En proceso"
-                        ? true
-                        : false,
-                  },
-                  {
-                    text: "Reporte",
-                    id: "action_3",
-                    disabled:
-                      collectionProps.selectedItems[0]?.estado ==
-                        "En proceso" ||
-                      collectionProps.selectedItems[0]?.estado == "Observado",
-                  },
-                ]}
-              >
-                Acciones para publicaciones
-              </ButtonDropdown>
-              <Button
-                loading={loadingBtn}
-                variant="primary"
-                onClick={() => {
-                  const query = queryString.stringify({
-                    tipo: "tesis_asesoria",
-                  });
-                  window.location.href = "registrar/paso1?" + query;
-                }}
-              >
-                Registrar
-              </Button>
+                    window.location.href = "registrar/paso1?" + query;
+                  }}
+                >
+                  Registrar
+                </Button>
+              </SpaceBetween>
+            }
+          >
+            Publicaciones ({distributions.length})
+            <Badge color="severity-medium">
+              <Link variant="info" external onClick={() => setModal("info")}>
+                Ver Información Importante
+              </Link>
+            </Badge>
+          </Header>
+        }
+        filter={
+          <PropertyFilter
+            {...propertyFilterProps}
+            filteringPlaceholder="Buscar artículo"
+            countText={`${filteredItemsCount} coincidencias`}
+            expandToViewport
+          />
+        }
+        pagination={<Pagination {...paginationProps} />}
+        empty={
+          <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
+            <SpaceBetween size="m">
+              <b>No hay registros...</b>
             </SpaceBetween>
-          }
-        >
-          Publicaciones ({distributions.length})
-        </Header>
-      }
-      filter={
-        <PropertyFilter
-          {...propertyFilterProps}
-          filteringPlaceholder="Buscar artículo"
-          countText={`${filteredItemsCount} coincidencias`}
-          expandToViewport
-        />
-      }
-      pagination={<Pagination {...paginationProps} />}
-      empty={
-        <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
-          <SpaceBetween size="m">
-            <b>No hay registros...</b>
-          </SpaceBetween>
-        </Box>
-      }
-    />
+          </Box>
+        }
+      />
+      {modal === "info" ? (
+        <ModalInformacion close={() => setModal("")} />
+      ) : null}
+    </>
   );
 };
