@@ -384,19 +384,31 @@ export default function Registro_eci_6() {
                           <>
                             <li>
                               Formato para uso en investigación{" "}
-                              <Link {...propsEnlaces} href="#" external>
+                              <Link
+                                {...propsEnlaces}
+                                href="/minio/templates/4_Uso_investigacion.docx"
+                                external
+                              >
                                 aquí.
                               </Link>
                             </li>
                             <li>
                               Formato para plan de uso compartido{" "}
-                              <Link {...propsEnlaces} href="#" external>
+                              <Link
+                                {...propsEnlaces}
+                                href="/minio/templates/6_Plan_uso_compartido.docx"
+                                external
+                              >
                                 aquí.
                               </Link>
                             </li>
                             <li>
                               Formato para uso en desarrollo de tesis{" "}
-                              <Link {...propsEnlaces} href="#" external>
+                              <Link
+                                {...propsEnlaces}
+                                href="/minio/templates/5_Uso_desarrollo_tesis.docx"
+                                external
+                              >
                                 aquí.
                               </Link>
                             </li>

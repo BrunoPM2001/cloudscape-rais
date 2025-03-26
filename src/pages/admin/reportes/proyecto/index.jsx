@@ -113,16 +113,22 @@ export default function Reporte_proyecto() {
                   }}
                   options={[
                     {
-                      value: "CON-CON",
-                    },
-                    {
                       value: "PCONFIGI",
                     },
                     {
-                      value: "FEX",
+                      value: "PRO-CTIE",
+                    },
+                    {
+                      value: "PCONFIGI-INV",
                     },
                     {
                       value: "ECI",
+                    },
+                    {
+                      value: "CON-CON",
+                    },
+                    {
+                      value: "FEX",
                     },
                     {
                       value: "EVENTO",

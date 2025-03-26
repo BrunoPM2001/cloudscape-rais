@@ -199,6 +199,42 @@ const columnDefinitions = [
     sortingField: "fuente_fin",
   },
   {
+    id: "fecha_inicio",
+    header: "Fecha inicio",
+    cell: (item) => item.fecha_inicio,
+    sortingField: "fecha_inicio",
+  },
+  {
+    id: "fecha_fin",
+    header: "Fecha fin",
+    cell: (item) => item.fecha_fin,
+    sortingField: "fecha_fin",
+  },
+  {
+    id: "resolucion_rectoral",
+    header: "Resolución rectoral",
+    cell: (item) => item.resolucion_rectoral,
+    sortingField: "resolucion_rectoral",
+  },
+  {
+    id: "resolucion_fecha",
+    header: "Resolución fecha",
+    cell: (item) => item.resolucion_fecha,
+    sortingField: "resolucion_fecha",
+  },
+  {
+    id: "entidad_asociada",
+    header: "Entidad asociada",
+    cell: (item) => item.entidad_asociada,
+    sortingField: "entidad_asociada",
+  },
+  {
+    id: "pais",
+    header: "País",
+    cell: (item) => item.pais,
+    sortingField: "pais",
+  },
+  {
     id: "estado",
     header: "Estado",
     cell: (item) => (
