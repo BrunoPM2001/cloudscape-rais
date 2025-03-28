@@ -9,6 +9,7 @@ import Calendario from "../tabs/calendario";
 import Presupuesto from "../tabs/presupuesto";
 import axiosBase from "../../../../../../api/axios";
 import BaseLayout from "../../../../components/baseLayout";
+import Responsable from "./responsable";
 
 const breadcrumbs = [
   {
@@ -40,6 +41,11 @@ export default function Detalle_proyecto_pconfigi() {
       id: "integrantes",
       label: "Integrantes",
       content: <Integrantes data={data.miembros} loading={loading} />,
+    },
+    {
+      id: "responsable",
+      label: "Responsable",
+      content: <Responsable data={data.responsable} loading={loading} />,
     },
     {
       id: "descripcion",

@@ -313,6 +313,7 @@ export default () => {
       contentDensity={preferences.contentDensity}
       stickyColumns={preferences.stickyColumns}
       selectionType="single"
+      stickyHeader
       wrapLines
       onRowClick={({ detail }) => actions.setSelectedItems([detail.item])}
       header={
