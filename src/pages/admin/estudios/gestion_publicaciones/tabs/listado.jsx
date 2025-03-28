@@ -11,6 +11,7 @@ import {
   Table,
   CollectionPreferences,
   Button,
+  Link,
 } from "@cloudscape-design/components";
 import { useState, useEffect, useContext } from "react";
 import { useCollection } from "@cloudscape-design/collection-hooks";
@@ -54,6 +55,18 @@ const FILTER_PROPS = [
     operators: stringOperators,
   },
   {
+    propertyLabel: "Facultad",
+    key: "facultad",
+    groupValuesLabel: "Facultades",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "Área",
+    key: "area",
+    groupValuesLabel: "Áreas",
+    operators: stringOperators,
+  },
+  {
     propertyLabel: "Isbn",
     key: "isbn",
     groupValuesLabel: "Isbns",
@@ -63,6 +76,12 @@ const FILTER_PROPS = [
     propertyLabel: "Issn",
     key: "issn",
     groupValuesLabel: "Issns",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "Revista",
+    key: "revista",
+    groupValuesLabel: "Revistas",
     operators: stringOperators,
   },
   {
@@ -93,6 +112,12 @@ const FILTER_PROPS = [
     propertyLabel: "Título",
     key: "titulo",
     groupValuesLabel: "Títulos",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "Doi",
+    key: "doi",
+    groupValuesLabel: "Doi",
     operators: stringOperators,
   },
   {
@@ -178,6 +203,31 @@ const columnDefinitions = [
     sortingField: "facultad",
   },
   {
+    id: "area",
+    header: "Área",
+    cell: (item) => item.area,
+    minWidth: 200,
+    sortingField: "area",
+  },
+  {
+    id: "doi",
+    header: "DOI",
+    cell: (item) => item.doi,
+    minWidth: 200,
+    sortingField: "doi",
+  },
+  {
+    id: "url",
+    header: "Url",
+    cell: (item) => (
+      <Link href={item.url} target="_blank">
+        {item.url}
+      </Link>
+    ),
+    minWidth: 200,
+    sortingField: "url",
+  },
+  {
     id: "isbn",
     header: "Isbn",
     cell: (item) => item.isbn,
@@ -188,6 +238,12 @@ const columnDefinitions = [
     header: "Issn",
     cell: (item) => item.issn,
     sortingField: "issn",
+  },
+  {
+    id: "revista",
+    header: "Revista",
+    cell: (item) => item.revista,
+    sortingField: "revista",
   },
   {
     id: "editorial",
@@ -271,8 +327,12 @@ const columnDisplay = [
   { id: "titulo", visible: true },
   { id: "presentador", visible: true },
   { id: "facultad", visible: true },
+  { id: "area", visible: true },
+  { id: "doi", visible: true },
+  { id: "url", visible: true },
   { id: "isbn", visible: true },
   { id: "issn", visible: true },
+  { id: "revista", visible: true },
   { id: "editorial", visible: true },
   { id: "evento_nombre", visible: true },
   { id: "fecha_publicacion", visible: true },
