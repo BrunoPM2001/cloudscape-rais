@@ -20,6 +20,7 @@ import ModalAddPartida from "./components/modalAddPartida";
 import ModalDeletePartida from "./components/modalDeletePartida";
 import queryString from "query-string";
 import ModalEditPartida from "./components/modalEditPartida";
+import NotificationContext from "../../../../providers/notificationProvider";
 
 const breadcrumbs = [
   {
@@ -52,7 +53,8 @@ const columnDefinitions = [
   },
 ];
 
-const MAX = 48000;
+const MAX = 60000;
+const MIN = 25000;
 
 const columnDisplay = [
   { id: "partida", visible: true },
@@ -61,6 +63,9 @@ const columnDisplay = [
 ];
 
 export default function Registro_pconfigi_inv_5() {
+  //  Context
+  const { notifications, pushNotification } = useContext(NotificationContext);
+
   //  Url
   const location = useLocation();
   const { id } = queryString.parse(location.search);
@@ -99,24 +104,24 @@ export default function Registro_pconfigi_inv_5() {
   };
 
   const validarPresupuesto = async () => {
-    // setLoadingBtn(true);
-    // const res = await axiosBase.get(
-    //   "investigador/convocatorias/pconfigi_inv/validarPresupuesto",
-    //   {
-    //     params: {
-    //       id,
-    //     },
-    //   }
-    // );
-    // const data = res.data;
-    // pushNotification(data.detail, data.message, notifications.length + 1);
-    // if (data.message != "warning") {
-    const query = queryString.stringify({
-      id,
-    });
-    window.location.href = "paso6?" + query;
-    // }
-    // setLoadingBtn(false);
+    setLoadingBtn(true);
+    const res = await axiosBase.get(
+      "investigador/convocatorias/pconfigi_inv/validarPresupuesto",
+      {
+        params: {
+          id,
+        },
+      }
+    );
+    const data = res.data;
+    pushNotification(data.detail, data.message, notifications.length + 1);
+    if (data.message != "warning") {
+      const query = queryString.stringify({
+        id,
+      });
+      window.location.href = "paso6?" + query;
+    }
+    setLoadingBtn(false);
   };
 
   const handleNavigate = (index) => {
@@ -139,7 +144,12 @@ export default function Registro_pconfigi_inv_5() {
       }
       if (totalMonto > MAX) {
         tempErrors.push(
-          "El monto total máximo para postular a esta convocatoria es de S/. 500,000.00"
+          "El monto total máximo para postular a esta convocatoria es de S/. 60,000.00"
+        );
+      }
+      if (totalMonto < MIN) {
+        tempErrors.push(
+          "El monto total mínimo para postular a esta convocatoria es de S/. 25,000.00"
         );
       }
 
