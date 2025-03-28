@@ -113,6 +113,7 @@ export default function Pconfigi_inv_tabs({
       content: (
         <Anexos
           value1={formValues?.file1} //  CATEGORIA = informe-PCONFIGI-INV-INFORME
+          value2={formValues?.file2} //  CATEGORIA = viabilidad
           handleChange={handleChange}
           files={files}
         />

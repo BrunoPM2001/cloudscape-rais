@@ -2,6 +2,11 @@ import { Suspense, lazy } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { NotificationProvider } from "../providers/notificationProvider";
 
+const Presentar_informe_tecnico_antiguo = lazy(() =>
+  import(
+    "../pages/admin/estudios/informes_tecnicos/presentar_antiguo/index.jsx"
+  )
+);
 const Reporte_deudores = lazy(() =>
   import("../pages/admin/reportes/deudores/index.jsx")
 );
@@ -354,6 +359,10 @@ const routes = createBrowserRouter(
             {
               path: "detalleAntiguo",
               element: <Detalle_informe_tecnico_antiguo />,
+            },
+            {
+              path: "presentarAntiguo",
+              element: <Presentar_informe_tecnico_antiguo />,
             },
           ],
         },

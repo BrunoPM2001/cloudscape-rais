@@ -198,6 +198,7 @@ export default function Detalle_informe_tecnico() {
       header="Detalle del informe"
       helpInfo="Información sobre la páginal actual para poder mostrarla al público
       en general."
+      contentType="table"
     >
       <SpaceBetween size="l">
         {loading ? (

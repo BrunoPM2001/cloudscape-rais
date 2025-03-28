@@ -51,18 +51,15 @@ export default function Reporte_proyecto() {
 
   const reporte = async () => {
     setLoading(true);
-    const res = await axiosBase.get(
-      "admin/reportes/proyecto/" +
-        form.facultad +
-        "/" +
-        form.tipo_proyecto +
-        "/" +
-        form.periodo,
-      {
-        responseType: "blob",
-      }
-    );
-    setLoading(false);
+    const res = await axiosBase.get("admin/reportes/proyecto", {
+      params: {
+        facultad: form.facultad,
+        tipo_proyecto: form.tipo_proyecto,
+        periodo: form.periodo,
+      },
+      responseType: "blob",
+    });
+
     const blob = await res.data;
     const url = URL.createObjectURL(blob);
     window.open(url, "_blank");
