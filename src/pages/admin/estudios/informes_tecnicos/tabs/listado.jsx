@@ -98,6 +98,62 @@ const columnDefinitions = [
     isRowHeader: true,
   },
   {
+    id: "informe_id",
+    header: "N° de informes",
+    cell: (item) => item.informe_id,
+    sortingField: "informes.length",
+    minWidth: 150,
+  },
+  {
+    id: "fecha_envio",
+    header: "Fecha de envío",
+    cell: (item) => item.fecha_envio,
+    sortingField: "fecha_envio",
+    minWidth: 150,
+  },
+  {
+    id: "fecha_registro_dgitt",
+    header: "Fecha de registro DGITT",
+    cell: (item) => item.fecha_registro_dgitt,
+    sortingField: "fecha_registro_dgitt",
+    minWidth: 150,
+  },
+  {
+    id: "created_at",
+    header: "Fecha de creación",
+    cell: (item) => item.created_at,
+    sortingField: "created_at",
+    minWidth: 150,
+  },
+  {
+    id: "updated_at",
+    header: "Fecha de modificación",
+    cell: (item) => item.updated_at,
+    sortingField: "updated_at",
+    minWidth: 150,
+  },
+  {
+    id: "tipo_informe",
+    header: "Tipo de informe",
+    cell: (item) => item.tipo_informe,
+    sortingField: "tipo_informe",
+    minWidth: 150,
+  },
+  {
+    id: "observaciones_investigador",
+    header: "Observaciones del investigador",
+    cell: (item) => item.observaciones_investigador,
+    sortingField: "observaciones_investigador",
+    minWidth: 250,
+  },
+  {
+    id: "observaciones_admin",
+    header: "Observaciones del administrador",
+    cell: (item) => item.observaciones_admin,
+    sortingField: "observaciones_admin",
+    minWidth: 250,
+  },
+  {
     id: "tipo_proyecto",
     header: "Tipo de proyecto",
     cell: (item) => item.tipo_proyecto,
@@ -216,6 +272,7 @@ export default () => {
     collectionProps,
     paginationProps,
     propertyFilterProps,
+    allPageItems,
   } = useCollection(distributions, {
     propertyFiltering: {
       filteringProperties: FILTER_PROPS,
@@ -277,39 +334,29 @@ export default () => {
     setLoadingInformes(false);
   };
 
-  const onFilterChangeWrapper = (event) => {
-    // Llama a la función interna para que el filtrado siga funcionando
-    if (propertyFilterProps.onChange) {
-      propertyFilterProps.onChange(event);
-    }
-    // Verifica si existen tokens en el detalle del evento
-    const { tokens } = event.detail;
-    const nuevosFiltros = {};
-    if (tokens && Array.isArray(tokens) && tokens.length > 0) {
-      tokens.forEach((token) => {
-        // token: { propertyKey, operator, value }
-        nuevosFiltros[token.propertyKey] = token.value;
-      });
-    }
-    setAppliedFilters(nuevosFiltros);
-  };
-
   const reporteExcel = async () => {
-    setLoadingReport(true);
-    const queryObject = { ...appliedFilters, tabla: selectedOption.value };
-    const query = queryString.stringify(queryObject);
-    console.log(query);
-    // // Envío la petición GET, agregando el query string a la URL
-    const res = await axiosBase.get(
-      `admin/estudios/informesTecnicos/excel?${query}`,
-      {
-        responseType: "blob",
-      }
-    );
-    const blob = await res.data;
-    const url = URL.createObjectURL(blob);
-    window.open(url, "_blank");
-    setLoadingReport(false);
+    if (allPageItems.length > 15000) {
+      pushNotification(
+        "La cantidad de items a exportar es demasiada, redúzcala a menos de 15000",
+        "warning",
+        notifications.length + 1
+      );
+    } else {
+      const filteredItems = allPageItems.map((item) => ({ ...item }));
+
+      setLoadingReport(true);
+      const res = await axiosBase.post(
+        "admin/estudios/informesTecnicos/excel",
+        filteredItems,
+        {
+          responseType: "blob",
+        }
+      );
+      const blob = await res.data;
+      const url = URL.createObjectURL(blob);
+      window.open(url, "_blank");
+      setLoadingReport(false);
+    }
   };
 
   //  Effects
@@ -340,12 +387,13 @@ export default () => {
         wrapLines
         header={
           <Header
+            counter={"(" + distributions.length + ")"}
             actions={
               <SpaceBetween direction="horizontal" size="m">
                 <FormField label="Reporte" stretch>
                   <Button
-                    // disabled={loading}
-                    // loading={loadingReport}
+                    disabled={loading}
+                    loading={loadingReport}
                     onClick={reporteExcel}
                   >
                     Excel
@@ -380,7 +428,6 @@ export default () => {
           <PropertyFilter
             {...propertyFilterProps}
             filteringPlaceholder="Buscar grupo"
-            onChange={onFilterChangeWrapper}
             countText={`${filteredItemsCount} coincidencias`}
             expandToViewport
             virtualScroll

@@ -159,6 +159,9 @@ export default function Reporte_proyecto() {
                   }}
                   options={[
                     {
+                      value: "2025",
+                    },
+                    {
                       value: "2024",
                     },
                     {

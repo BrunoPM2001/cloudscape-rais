@@ -73,10 +73,10 @@ const opt_constancias = [
   //   label: "Eventos UNMSM",
   //   value: "9",
   // },
-  {
-    label: "No adeudar Informes",
-    value: "10",
-  },
+  // {
+  //   label: "No adeudar Informes",
+  //   value: "10",
+  // },
   {
     label: "Asesor de Tésis",
     value: "11",

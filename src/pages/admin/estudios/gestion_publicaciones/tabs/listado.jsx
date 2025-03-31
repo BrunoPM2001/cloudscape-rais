@@ -459,6 +459,18 @@ export default () => {
     }
   };
 
+  const reporteExcelFull = async () => {
+    setLoadingReport(true);
+    const res = await axiosBase.get("allPublicaciones", {
+      baseURL: "/api_heavy/",
+      responseType: "blob",
+    });
+    const blob = res.data;
+    const url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
+    setLoadingReport(false);
+  };
+
   //  Effects
   useEffect(() => {
     getData();
@@ -493,13 +505,29 @@ export default () => {
             counter={"(" + distributions.length + ")"}
             actions={
               <SpaceBetween direction="horizontal" size="xs">
-                <Button
-                  onClick={reporteExcel}
+                <ButtonDropdown
                   disabled={loadingData}
                   loading={loadingReport}
+                  items={[
+                    {
+                      id: "action_2_1",
+                      text: "Excel con filtros",
+                    },
+                    {
+                      id: "action_2_2",
+                      text: "Excel completo",
+                    },
+                  ]}
+                  onItemClick={({ detail }) => {
+                    if (detail.id == "action_2_1") {
+                      reporteExcel();
+                    } else if (detail.id == "action_2_2") {
+                      reporteExcelFull();
+                    }
+                  }}
                 >
-                  Excel
-                </Button>
+                  Exportar
+                </ButtonDropdown>
                 <ButtonDropdown
                   disabled={!collectionProps.selectedItems.length}
                   items={[
