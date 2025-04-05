@@ -16,7 +16,7 @@ export default function ({ data, loading }) {
           variant="h2"
           info={
             <>
-              {data && (
+              {data && !loading && (
                 <Badge
                   color={
                     data.estado_meta == "Por presentar"

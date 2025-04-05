@@ -1,4 +1,5 @@
 import {
+  Alert,
   Button,
   Form,
   FormField,
@@ -55,6 +56,7 @@ const gridDefinition = [
 ];
 
 const initialForm = {
+  id: null,
   descripcion: "",
 };
 
@@ -88,6 +90,7 @@ export default function Monitoreo_detalle() {
     );
     const data = res.data;
     handleChange("descripcion", res.data.datos.descripcion);
+    handleChange("id", res.data.datos.id);
     setData(data);
     setLoading(false);
   };
@@ -121,6 +124,21 @@ export default function Monitoreo_detalle() {
     window.open(url, "_blank");
   };
 
+  const actualizar = async () => {
+    setLoadingBtn(true);
+    const res = await axiosBase.put(
+      "investigador/informes/monitoreo/actualizar",
+      {
+        id: formValues.id,
+        descripcion: formValues.descripcion,
+      }
+    );
+    const data = res.data;
+    pushNotification(data.detail, data.message, notifications.length + 1);
+    setLoadingBtn(false);
+    getData();
+  };
+
   //  Tabs
   const tabs = [
     {
@@ -148,6 +166,11 @@ export default function Monitoreo_detalle() {
       helpInfo="Resumen general del informe económico de un proyecto."
     >
       <SpaceBetween size="m">
+        {data?.datos?.estado_meta == "Observado" && !loading && (
+          <Alert type="error" header="Observación">
+            {data?.datos?.observacion}
+          </Alert>
+        )}
         <Grid gridDefinition={gridDefinition}>
           <Detalle loading={loading} data={data.datos} />
           <Metas loading={loading} data={data.metas} />
@@ -166,11 +189,24 @@ export default function Monitoreo_detalle() {
                 >
                   Remitir monitoreo
                 </Button>
+              ) : data?.datos?.estado_meta == "Enviado" ? (
+                <Button onClick={reporte} loading={loadingBtn}>
+                  Reporte
+                </Button>
               ) : (
-                data?.datos?.estado_meta == "Enviado" && (
-                  <Button onClick={reporte} loading={loadingBtn}>
-                    Reporte
-                  </Button>
+                data?.datos?.estado_meta == "Observado" && (
+                  <SpaceBetween size="xs" direction="horizontal">
+                    <Button onClick={reporte} loading={loadingBtn}>
+                      Reporte
+                    </Button>
+                    <Button
+                      variant="primary"
+                      onClick={actualizar}
+                      loading={loadingBtn}
+                    >
+                      Actualizar
+                    </Button>
+                  </SpaceBetween>
                 )
               )}
             </>
