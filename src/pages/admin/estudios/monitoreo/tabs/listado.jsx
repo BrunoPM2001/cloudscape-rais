@@ -17,6 +17,12 @@ const stringOperators = [":", "!:", "=", "!=", "^", "!^"];
 
 const FILTER_PROPS = [
   {
+    propertyLabel: "Id proyecto",
+    key: "id",
+    groupValuesLabel: "Ids",
+    operators: stringOperators,
+  },
+  {
     propertyLabel: "Código",
     key: "codigo_proyecto",
     groupValuesLabel: "Códigos",
@@ -26,6 +32,12 @@ const FILTER_PROPS = [
     propertyLabel: "Título",
     key: "titulo",
     groupValuesLabel: "Títulos",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "Responsable",
+    key: "responsable",
+    groupValuesLabel: "Responsables",
     operators: stringOperators,
   },
   {
@@ -57,7 +69,7 @@ const FILTER_PROPS = [
 const columnDefinitions = [
   {
     id: "id",
-    header: "ID",
+    header: "ID proyecto",
     cell: (item) => item.id,
     sortingField: "id",
     minWidth: 20,
@@ -75,6 +87,13 @@ const columnDefinitions = [
     cell: (item) => item.titulo,
     sortingField: "titulo",
     minWidth: 450,
+  },
+  {
+    id: "responsable",
+    header: "Responsable",
+    cell: (item) => item.responsable,
+    sortingField: "responsable",
+    minWidth: 225,
   },
   {
     id: "estado",
@@ -162,6 +181,7 @@ const columnDisplay = [
   { id: "id", visible: true },
   { id: "codigo_proyecto", visible: true },
   { id: "titulo", visible: true },
+  { id: "responsable", visible: true },
   { id: "estado", visible: true },
   { id: "estado_meta", visible: true },
   { id: "tipo_proyecto", visible: true },
@@ -272,7 +292,7 @@ export default () => {
             <SpaceBetween direction="horizontal" size="m">
               <Button
                 disabled={loadingReport}
-                variant="primary"
+                variant="normal"
                 onClick={reporteExcel}
               >
                 Exportar Excel
@@ -284,7 +304,7 @@ export default () => {
                   const query = queryString.stringify({
                     id: collectionProps.selectedItems[0]["id"],
                   });
-                  window.location.href = "monitoreo/detalle?" + query;
+                  window.open("monitoreo/detalle?" + query, "_blank");
                 }}
               >
                 Visualizar

@@ -302,7 +302,7 @@ export default () => {
                   const query = queryString.stringify({
                     id: collectionProps.selectedItems[0]["id"],
                   });
-                  window.location.href = "grupos/detalle?" + query;
+                  window.open("grupos/detalle?" + query, "_blank");
                 }}
               >
                 Visualizar

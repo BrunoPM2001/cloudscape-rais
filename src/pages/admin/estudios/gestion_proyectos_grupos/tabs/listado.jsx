@@ -340,64 +340,76 @@ export default () => {
                       "tipo_proyecto"
                     ].toLowerCase() == "eci"
                   ) {
-                    window.location.href =
+                    window.open(
                       "proyectos_grupos/detalle/" +
-                      collectionProps.selectedItems[0][
-                        "tipo_proyecto"
-                      ].toLowerCase() +
-                      "?" +
-                      query;
+                        collectionProps.selectedItems[0][
+                          "tipo_proyecto"
+                        ].toLowerCase() +
+                        "?" +
+                        query,
+                      "_blank"
+                    );
                   } else if (
                     collectionProps.selectedItems[0][
                       "tipo_proyecto"
                     ].toLowerCase() == "psinfinv"
                   ) {
-                    window.location.href =
+                    window.open(
                       "proyectos_grupos/detalle/" +
-                      collectionProps.selectedItems[0][
-                        "tipo_proyecto"
-                      ].toLowerCase() +
-                      "?" +
-                      query;
+                        collectionProps.selectedItems[0][
+                          "tipo_proyecto"
+                        ].toLowerCase() +
+                        "?" +
+                        query,
+                      "_blank"
+                    );
                   } else if (
                     collectionProps.selectedItems[0][
                       "tipo_proyecto"
                     ].toLowerCase() == "pinvpos"
                   ) {
-                    window.location.href =
+                    window.open(
                       "proyectos_grupos/detalle/" +
-                      collectionProps.selectedItems[0][
-                        "tipo_proyecto"
-                      ].toLowerCase() +
-                      "?" +
-                      query;
+                        collectionProps.selectedItems[0][
+                          "tipo_proyecto"
+                        ].toLowerCase() +
+                        "?" +
+                        query,
+                      "_blank"
+                    );
                   } else if (
                     collectionProps.selectedItems[0][
                       "tipo_proyecto"
                     ].toLowerCase() == "psinfipu"
                   ) {
-                    window.location.href =
+                    window.open(
                       "proyectos_grupos/detalle/" +
-                      collectionProps.selectedItems[0][
-                        "tipo_proyecto"
-                      ].toLowerCase() +
-                      "?" +
-                      query;
+                        collectionProps.selectedItems[0][
+                          "tipo_proyecto"
+                        ].toLowerCase() +
+                        "?" +
+                        query,
+                      "_blank"
+                    );
                   } else if (
                     collectionProps.selectedItems[0][
                       "tipo_proyecto"
                     ].toLowerCase() == "picv"
                   ) {
-                    window.location.href =
+                    window.open(
                       "proyectos_grupos/detalle/" +
-                      collectionProps.selectedItems[0][
-                        "tipo_proyecto"
-                      ].toLowerCase() +
-                      "?" +
-                      query;
+                        collectionProps.selectedItems[0][
+                          "tipo_proyecto"
+                        ].toLowerCase() +
+                        "?" +
+                        query,
+                      "_blank"
+                    );
                   } else {
-                    window.location.href =
-                      "proyectos_grupos/detalle/pconfigi" + "?" + query;
+                    window.open(
+                      "proyectos_grupos/detalle/pconfigi" + "?" + query,
+                      "_blank"
+                    );
                   }
                 }}
               >

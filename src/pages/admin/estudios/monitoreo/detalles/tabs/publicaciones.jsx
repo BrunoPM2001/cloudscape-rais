@@ -96,7 +96,20 @@ export default ({ data, loading, reload, disabledBtn }) => {
   });
 
   //  Functions
-  const reporte = async () => {};
+  const reporte = async () => {
+    setLoadingBtn(true);
+    const res = await axiosBase.get("admin/estudios/publicaciones/reporte", {
+      params: {
+        id: collectionProps.selectedItems[0].publicacion_id,
+        tipo: collectionProps.selectedItems[0].tipo_publicacion,
+      },
+      responseType: "blob",
+    });
+    setLoadingBtn(false);
+    const blob = res.data;
+    const url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
+  };
 
   return (
     <>
@@ -130,6 +143,7 @@ export default ({ data, loading, reload, disabledBtn }) => {
                   ]}
                   onItemClick={({ detail }) => {
                     if (detail.id == "action_21") {
+                      reporte();
                     } else if (detail.id == "action_22") {
                       setType("delete");
                     }
@@ -191,7 +205,7 @@ export default ({ data, loading, reload, disabledBtn }) => {
               </SpaceBetween>
             }
           >
-            Listado de publicaciones asociadas
+            Publicaciones asociadas al proyecto
           </Header>
         }
         empty={

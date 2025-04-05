@@ -161,6 +161,8 @@ export default function Monitoreo_detalle() {
                   variant="primary"
                   onClick={remitir}
                   loading={loadingBtn}
+                  disabled={data.publicaciones.length == 0}
+                  disabledReason="Necesita asociar al menos una publicación"
                 >
                   Remitir monitoreo
                 </Button>

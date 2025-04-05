@@ -10,7 +10,7 @@ export default function ({ data, loading }) {
   return (
     <Container header={<Header variant="h2">Metas</Header>} fitHeight={true}>
       <Table
-        trackBy="id"
+        trackBy="tipo_publicacion"
         columnDefinitions={[
           {
             id: "tipo_publicacion",

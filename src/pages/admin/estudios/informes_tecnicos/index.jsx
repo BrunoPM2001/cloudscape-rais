@@ -27,7 +27,7 @@ export default function Informes_tecnicos() {
   return (
     <BaseLayout
       breadcrumbs={breadcrumbs}
-      header="Informes técnicos:"
+      header="Informes técnicos"
       helpInfo="Solo se listan los proyectos que tengan como mínimo un informe técnico."
       disableOverlap
       contentType="table"

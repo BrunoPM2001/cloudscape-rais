@@ -33,7 +33,7 @@ export default function Gestion_grupos() {
   return (
     <BaseLayout
       breadcrumbs={breadcrumbs}
-      header="Grupos de investigación:"
+      header="Grupos de investigación"
       helpInfo="Información sobre la páginal actual para poder mostrarla al público
       en general."
       disableOverlap

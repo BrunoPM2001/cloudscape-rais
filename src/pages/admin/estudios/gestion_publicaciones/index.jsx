@@ -27,7 +27,7 @@ export default function Gestion_publicacion() {
   return (
     <BaseLayout
       breadcrumbs={breadcrumbs}
-      header="Publicaciones:"
+      header="Publicaciones"
       helpInfo="Información sobre la páginal actual para poder mostrarla al público
       en general."
       disableOverlap

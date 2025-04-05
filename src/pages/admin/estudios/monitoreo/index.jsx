@@ -33,7 +33,7 @@ export default function Monitoreo() {
   return (
     <BaseLayout
       breadcrumbs={breadcrumbs}
-      header="Monitoreo:"
+      header="Monitoreo"
       helpInfo="Información sobre la páginal actual para poder mostrarla al público
       en general."
       disableOverlap

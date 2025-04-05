@@ -27,7 +27,7 @@ export default function Gestion_proyectos_grupos() {
   return (
     <BaseLayout
       breadcrumbs={breadcrumbs}
-      header="Proyectos de grupos:"
+      header="Proyectos de grupos"
       helpInfo="Información sobre la páginal actual para poder mostrarla al público
       en general."
       disableOverlap

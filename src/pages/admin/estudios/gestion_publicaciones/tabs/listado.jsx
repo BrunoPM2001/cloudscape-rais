@@ -557,11 +557,15 @@ export default () => {
                         collectionProps.selectedItems[0]["tipo"] ==
                         "Propiedad intelectual"
                       ) {
-                        window.location.href =
-                          "gestion_publicaciones/patente?" + query;
+                        window.open(
+                          "gestion_publicaciones/patente?" + query,
+                          "_blank"
+                        );
                       } else {
-                        window.location.href =
-                          "gestion_publicaciones/detalle?" + query;
+                        window.open(
+                          "gestion_publicaciones/detalle?" + query,
+                          "_blank"
+                        );
                       }
                     } else if (detail.id == "action_1_2") {
                       reporte();

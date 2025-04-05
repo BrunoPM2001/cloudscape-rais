@@ -95,6 +95,7 @@ export default function Monitoreo_detalles() {
       },
     });
     const data = res.data;
+    handleChange("id", res.data.datos.id);
     handleChange("descripcion", res.data.datos.descripcion);
     handleChange("observacion", res.data.datos.observacion);
     handleChange(
@@ -137,8 +138,10 @@ export default function Monitoreo_detalles() {
   const guardar = async () => {
     setLoadingBtn(true);
     const res = await axiosBase.put("admin/estudios/monitoreo/guardar", {
+      id: formValues.id,
       proyecto_id: id,
       observacion: formValues.observacion,
+      descripcion: formValues.descripcion,
       estado: formValues.estado.value,
     });
     const data = res.data;
