@@ -291,9 +291,10 @@ export default () => {
           actions={
             <SpaceBetween direction="horizontal" size="m">
               <Button
-                disabled={loadingReport}
+                disabled={loading}
                 variant="normal"
                 onClick={reporteExcel}
+                loading={loadingReport}
               >
                 Exportar Excel
               </Button>

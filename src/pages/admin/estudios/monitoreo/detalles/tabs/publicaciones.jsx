@@ -149,6 +149,7 @@ export default ({ data, loading, reload, disabledBtn }) => {
                     }
                   }}
                   disabled={loading || !collectionProps.selectedItems.length}
+                  loading={loadingBtn}
                 >
                   Acciones
                 </ButtonDropdown>
