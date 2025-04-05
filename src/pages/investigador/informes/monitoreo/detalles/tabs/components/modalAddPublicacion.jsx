@@ -26,12 +26,18 @@ const columnDefinitions = [
     header: "Año",
     cell: (item) => item.periodo,
   },
+  {
+    id: "proyectos_asociados",
+    header: "Cantidad de proyectos asociados",
+    cell: (item) => item.proyectos_asociados,
+  },
 ];
 
 const columnDisplay = [
   { id: "id", visible: true },
   { id: "titulo", visible: true },
   { id: "periodo", visible: true },
+  { id: "proyectos_asociados", visible: true },
 ];
 
 export default ({ tipo_publicacion, id, close, reload }) => {
@@ -119,7 +125,12 @@ export default ({ tipo_publicacion, id, close, reload }) => {
         wrapLines
         variant="embedded"
         selectionType="single"
-        onRowClick={({ detail }) => actions.setSelectedItems([detail.item])}
+        isItemDisabled={(item) => item.proyectos_asociados > 0}
+        onRowClick={({ detail }) => {
+          if (detail.item.proyectos_asociados == 0) {
+            actions.setSelectedItems([detail.item]);
+          }
+        }}
         empty={
           <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
             <SpaceBetween size="m">

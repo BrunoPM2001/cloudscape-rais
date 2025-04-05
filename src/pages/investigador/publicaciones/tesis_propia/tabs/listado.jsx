@@ -353,13 +353,13 @@ export default () => {
                 </Button>
               </SpaceBetween>
             }
-          >
-            Publicaciones ({distributions.length})
-            <Badge color="severity-medium">
-              <Link variant="info" external onClick={() => setModal("info")}>
+            info={
+              <Link variant="info" onClick={() => setModal("info")}>
                 Ver Información Importante
               </Link>
-            </Badge>
+            }
+          >
+            Publicaciones ({distributions.length})
           </Header>
         }
         filter={

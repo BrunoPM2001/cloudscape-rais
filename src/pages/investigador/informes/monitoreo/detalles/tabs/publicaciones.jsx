@@ -99,18 +99,19 @@ export default ({ data, loading, reload, disabledBtn }) => {
   const reporte = async () => {
     setLoadingBtn(true);
     const res = await axiosBase.get(
-      "investigador/informes/informe_economico/reportePresupuesto",
+      "investigador/publicaciones/utils/reporte",
       {
         params: {
-          id: id,
+          publicacion_id: collectionProps.selectedItems[0].publicacion_id,
+          tipo: collectionProps.selectedItems[0].tipo_publicacion,
         },
         responseType: "blob",
       }
     );
-    const blob = await res.data;
+    setLoadingBtn(false);
+    const blob = res.data;
     const url = URL.createObjectURL(blob);
     window.open(url, "_blank");
-    setLoadingBtn(false);
   };
 
   return (
@@ -145,11 +146,13 @@ export default ({ data, loading, reload, disabledBtn }) => {
                   ]}
                   onItemClick={({ detail }) => {
                     if (detail.id == "action_21") {
+                      reporte();
                     } else if (detail.id == "action_22") {
                       setType("delete");
                     }
                   }}
                   disabled={loading || !collectionProps.selectedItems.length}
+                  loading={loadingBtn}
                 >
                   Acciones
                 </ButtonDropdown>
