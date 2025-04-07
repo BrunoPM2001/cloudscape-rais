@@ -2,6 +2,11 @@ import { Suspense, lazy } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { NotificationProvider } from "../providers/notificationProvider";
 
+const Detalle_proyecto_pmulti = lazy(() =>
+  import(
+    "../pages/admin/estudios/gestion_proyectos_grupos/detalle/pmulti/index.jsx"
+  )
+);
 const Presentar_informe_tecnico_antiguo = lazy(() =>
   import(
     "../pages/admin/estudios/informes_tecnicos/presentar_antiguo/index.jsx"
@@ -311,6 +316,10 @@ const routes = createBrowserRouter(
                 {
                   path: "ptpgrado",
                   element: <Detalle_proyecto_ptpgrado />,
+                },
+                {
+                  path: "pmulti",
+                  element: <Detalle_proyecto_pmulti />,
                 },
               ],
             },

@@ -39,6 +39,7 @@ const initialForm = {
   scopus_id: "",
   link: "",
   posicion_unmsm: "",
+  resolucion: "",
   biografia: "",
   observacion: "",
   file: [],
@@ -62,6 +63,7 @@ const formRules = {
   scopus_id: { required: false },
   link: { required: false },
   posicion_unmsm: { required: true },
+  resolucion: { required: true },
   biografia: { required: false },
   observacion: { required: false },
   file: { required: true, isFile: true, maxSize: 2 * 1024 * 1024 },
@@ -113,13 +115,14 @@ export default ({ close, reload }) => {
       form.append("scopus_id", formValues.scopus_id);
       form.append("link", formValues.link);
       form.append("posicion_unmsm", formValues.posicion_unmsm);
+      form.append("resolucion", formValues.resolucion);
       form.append("biografia", formValues.biografia);
       form.append("observacion", formValues.observacion);
       form.append("file", formValues.file[0]);
       form.append("grupo_id", id);
-      form.append("tipo_registro", "externo");
+      form.append("tipo_registro", "externo_inter");
       form.append("condicion", "Adherente");
-      form.append("tipo", "Externo");
+      form.append("tipo", "Externo Internacional");
       const res = await axiosBase.post(
         "admin/estudios/grupos/agregarMiembro",
         form
@@ -423,6 +426,18 @@ export default ({ close, reload }) => {
               }
             />
           </FormField>
+          <FormField
+            label="Resolución rectoral"
+            stretch
+            errorText={formErrors.resolucion}
+          >
+            <Input
+              value={formValues.resolucion}
+              onChange={({ detail }) =>
+                handleChange("resolucion", detail.value)
+              }
+            />
+          </FormField>
         </ColumnLayout>
         <FormField
           label="Perfil de investigador"
@@ -444,24 +459,7 @@ export default ({ close, reload }) => {
             onChange={({ detail }) => handleChange("observacion", detail.value)}
           />
         </FormField>
-        <FormField
-          label="Formato de adhesión"
-          description={
-            <>
-              Puede descargar la plantilla de formato de adhesión en{" "}
-              <Link
-                href="/minio/templates/formato-adhesion-gi-externo.docx"
-                external="true"
-                variant="primary"
-                fontSize="body-s"
-                target="_blank"
-              >
-                este enlace.
-              </Link>
-            </>
-          }
-          errorText={formErrors.file}
-        >
+        <FormField label="Resolución" errorText={formErrors.file}>
           <FileUpload
             value={formValues.file}
             onChange={({ detail }) => handleChange("file", detail.value)}

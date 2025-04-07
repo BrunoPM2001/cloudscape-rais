@@ -384,7 +384,7 @@ export default ({ visible, setVisible, reload }) => {
               />
             </FormField>
             <FormField
-              label="Posición en la UNMSM"
+              label="Posición en la institución"
               stretch
               errorText={formErrors.posicion_unmsm}
             >

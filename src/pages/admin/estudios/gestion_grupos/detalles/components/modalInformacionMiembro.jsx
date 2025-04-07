@@ -13,8 +13,9 @@ import ProyectosIntegrante from "./tabs/proyectosIntegrante";
 import Incluido from "./tabs/incluido";
 import Informacion_adherente from "./tabs/informacion_adherente";
 import Excluido from "./tabs/excluido";
+import Informacion_externo from "./tabs/informacion_externo";
 
-export default ({ close, id, tipo }) => {
+export default ({ close, id, condicion, tipo }) => {
   //  States
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState({
@@ -45,7 +46,7 @@ export default ({ close, id, tipo }) => {
       onDismiss={close}
       header={
         <Header description="Información general del integrante y proyectos en los que ha participado siendo miembro del grupo">
-          {tipo.startsWith("Ex")
+          {condicion.startsWith("Ex")
             ? "Información del ex-integrante de grupo"
             : "Información del integrante de grupo"}
         </Header>
@@ -61,8 +62,13 @@ export default ({ close, id, tipo }) => {
               id: "info",
               label: "Información",
               content:
-                tipo == "Titular" ? (
+                condicion == "Titular" ? (
                   <Informacion_titular
+                    data={data.informacion}
+                    loading={loading}
+                  />
+                ) : tipo.startsWith("Externo") ? (
+                  <Informacion_externo
                     data={data.informacion}
                     loading={loading}
                   />
@@ -82,8 +88,8 @@ export default ({ close, id, tipo }) => {
             },
             {
               id: "inclusion",
-              label: tipo.startsWith("Ex") ? "Exclusión" : "Inclusión",
-              content: tipo.startsWith("Ex") ? (
+              label: condicion.startsWith("Ex") ? "Exclusión" : "Inclusión",
+              content: condicion.startsWith("Ex") ? (
                 <Excluido data={data.informacion} loading={loading} />
               ) : (
                 <Incluido data={data.informacion} loading={loading} />

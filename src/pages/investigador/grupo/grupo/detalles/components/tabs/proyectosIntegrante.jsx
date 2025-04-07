@@ -1,4 +1,4 @@
-import { Box, SpaceBetween, Table } from "@cloudscape-design/components";
+import { Badge, Box, SpaceBetween, Table } from "@cloudscape-design/components";
 
 const columnDefinitions = [
   {
@@ -21,6 +21,43 @@ const columnDefinitions = [
     header: "Periodo",
     cell: (item) => item.periodo,
   },
+  {
+    id: "estado",
+    header: "Estado",
+    cell: (item) => (
+      <Badge
+        color={
+          item.estado == "Eliminado"
+            ? "red"
+            : item.estado == "No aprobado"
+            ? "grey"
+            : item.estado == "Aprobado"
+            ? "green"
+            : item.estado == "Observado"
+            ? "red"
+            : item.estado == "En evaluación"
+            ? "blue"
+            : item.estado == "Enviado"
+            ? "blue"
+            : item.estado == "En proceso"
+            ? "severity-low"
+            : item.estado == "Anulado"
+            ? "red"
+            : item.estado == "Sustentado"
+            ? "blue"
+            : item.estado == "En ejecución"
+            ? "blue"
+            : item.estado == "Ejecutado"
+            ? "green"
+            : item.estado == "Concluido"
+            ? "green"
+            : "red"
+        }
+      >
+        {item.estado}
+      </Badge>
+    ),
+  },
 ];
 
 const columnDisplay = [
@@ -28,6 +65,7 @@ const columnDisplay = [
   { id: "titulo", visible: true },
   { id: "tipo_proyecto", visible: true },
   { id: "periodo", visible: true },
+  { id: "estado", visible: true },
 ];
 
 export default ({ data, loading }) => {

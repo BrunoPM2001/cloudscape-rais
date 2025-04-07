@@ -317,10 +317,10 @@ export default ({ grupo_estado }) => {
                       id: "action_1_2",
                       text: "Incluir adherente",
                       items: [
-                        // {
-                        //   id: "action_1_2_1",
-                        //   text: "Externo",
-                        // },
+                        {
+                          id: "action_1_2_1",
+                          text: "Externo",
+                        },
                         {
                           id: "action_1_2_2",
                           text: "Estudiante UNMSM",

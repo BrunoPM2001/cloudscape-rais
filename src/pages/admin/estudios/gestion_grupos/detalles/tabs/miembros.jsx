@@ -26,6 +26,7 @@ import ModalCambiarCondicion from "../components/modalCambiarCondicion";
 import ModalEditarTitular from "../components/modalEditarTitular";
 import ModalEditarAdherenteInterno from "../components/modalEditarAdherenteInterno";
 import ModalEditarAdherenteExterno from "../components/modalEditarAdherenteExterno";
+import ModalIncluirExternoInternacional from "../components/modalIncluirExternoInternacional";
 
 const stringOperators = [":", "!:", "=", "!=", "^", "!^"];
 
@@ -298,7 +299,11 @@ export default ({ grupo_estado }) => {
                       items: [
                         {
                           id: "action_1_2_1",
-                          text: "Externo",
+                          text: "Externo nacional",
+                        },
+                        {
+                          id: "action_1_2_1_2",
+                          text: "Externo internacional",
                         },
                         {
                           id: "action_1_2_2",
@@ -316,6 +321,8 @@ export default ({ grupo_estado }) => {
                       setModal("Titular");
                     } else if (detail.id == "action_1_2_1") {
                       setModal("Externo");
+                    } else if (detail.id == "action_1_2_1_2") {
+                      setModal("Externo_inter");
                     } else if (detail.id == "action_1_2_2") {
                       setModal("Estudiante");
                     } else if (detail.id == "action_1_2_3") {
@@ -396,6 +403,11 @@ export default ({ grupo_estado }) => {
         <ModalIncluirTitular close={() => setModal("")} reload={getData} />
       ) : modal == "Externo" ? (
         <ModalIncluirExterno close={() => setModal("")} reload={getData} />
+      ) : modal == "Externo_inter" ? (
+        <ModalIncluirExternoInternacional
+          close={() => setModal("")}
+          reload={getData}
+        />
       ) : modal == "Estudiante" ? (
         <ModalIncluirEstudiante close={() => setModal("")} reload={getData} />
       ) : modal == "Egresado" ? (
@@ -410,7 +422,8 @@ export default ({ grupo_estado }) => {
         <ModalInformacionMiembro
           close={() => setModal("")}
           id={collectionProps.selectedItems[0].id}
-          tipo={collectionProps.selectedItems[0].condicion}
+          condicion={collectionProps.selectedItems[0].condicion}
+          tipo={collectionProps.selectedItems[0].tipo}
         />
       ) : modal == "Condicion" ? (
         <ModalCambiarCondicion
