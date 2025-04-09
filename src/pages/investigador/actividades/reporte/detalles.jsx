@@ -19,7 +19,6 @@ export default ({ data, loading, id, items, antiguo }) => {
   const [loadingReporte, setLoadingReporte] = useState(false);
   const [modal, setModal] = useState("");
   const [loadingFormato, setLoadingFormato] = useState(false);
-  const [loadingFirma, setLoadingFirma] = useState(false);
 
   //  Functions
   const presupuesto = async () => {
@@ -69,23 +68,6 @@ export default ({ data, loading, id, items, antiguo }) => {
     const url = URL.createObjectURL(blob);
     window.open(url, "_blank");
     setLoadingFormato(false);
-  };
-
-  const djFirmada = async () => {
-    setLoadingFirma(true);
-    const res = await axiosBase.get(
-      "investigador/actividades/conFinanciamiento/djFirmada",
-      {
-        params: {
-          proyectoId: data.id,
-        },
-        responseType: "blob",
-      }
-    );
-    const blob = await res.data;
-    const url = URL.createObjectURL(blob);
-    window.open(url, "_blank");
-    setLoadingFirma(false);
   };
 
   return (
@@ -221,8 +203,9 @@ export default ({ data, loading, id, items, antiguo }) => {
                   <SpaceBetween direction="horizontal" size="xs">
                     <Button
                       variant="primary"
-                      loading={loadingFirma}
-                      onClick={() => djFirmada()}
+                      href={data.url}
+                      target="_blank"
+                      iconName="external"
                     >
                       Ver Dj Enviada
                     </Button>

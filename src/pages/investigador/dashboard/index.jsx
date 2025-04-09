@@ -85,11 +85,11 @@ export default function Investigador_main() {
     getData();
   }, []);
 
-  // useEffect(() => {
-  //   if (!loading && data.dj !== 1) {
-  //     setShowModalDj(true);
-  //   }
-  // }, [data, loading]);
+  useEffect(() => {
+    if (!loading && data.dj !== 1) {
+      setShowModalDj(true);
+    }
+  }, [data, loading]);
 
   return (
     <BaseLayout

@@ -30,6 +30,7 @@ export default function Proyectos_con_financiamiento() {
       header="Listado de proyectos"
       helpInfo="Información sobre la páginal actual para poder mostrarla al público
       en general."
+      disableOverlap
       contentType="table"
     >
       <SpaceBetween size="l">
