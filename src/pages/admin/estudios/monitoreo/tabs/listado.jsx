@@ -41,12 +41,6 @@ const FILTER_PROPS = [
     operators: stringOperators,
   },
   {
-    propertyLabel: "Estado",
-    key: "estado",
-    groupValuesLabel: "Estados",
-    operators: stringOperators,
-  },
-  {
     propertyLabel: "Estado de meta",
     key: "estado_meta",
     groupValuesLabel: "Estados de meta",
@@ -96,45 +90,6 @@ const columnDefinitions = [
     minWidth: 225,
   },
   {
-    id: "estado",
-    header: "Estado",
-    cell: (item) => (
-      <Badge
-        color={
-          item.estado == "Eliminado"
-            ? "red"
-            : item.estado == "No aprobado"
-            ? "grey"
-            : item.estado == "Aprobado"
-            ? "green"
-            : item.estado == "Observado"
-            ? "grey"
-            : item.estado == "En evaluación"
-            ? "blue"
-            : item.estado == "Enviado"
-            ? "blue"
-            : item.estado == "En proceso"
-            ? "grey"
-            : item.estado == "Anulado"
-            ? "red"
-            : item.estado == "Sustentado"
-            ? "blue"
-            : item.estado == "En ejecución"
-            ? "blue"
-            : item.estado == "Ejecutado"
-            ? "green"
-            : item.estado == "Concluido"
-            ? "green"
-            : "red"
-        }
-      >
-        {item.estado}
-      </Badge>
-    ),
-    sortingField: "estado",
-    minWidth: 150,
-  },
-  {
     id: "estado_meta",
     header: "Estado de meta",
     cell: (item) => (
@@ -182,7 +137,6 @@ const columnDisplay = [
   { id: "codigo_proyecto", visible: true },
   { id: "titulo", visible: true },
   { id: "responsable", visible: true },
-  { id: "estado", visible: true },
   { id: "estado_meta", visible: true },
   { id: "tipo_proyecto", visible: true },
   { id: "periodo", visible: true },

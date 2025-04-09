@@ -8,13 +8,18 @@ import {
   SpaceBetween,
   Spinner,
   StatusIndicator,
+  Button,
 } from "@cloudscape-design/components";
 import axiosBase from "../../../../api/axios";
+import ModalDj from "../proyectos_con_financiamiento/components/modalSubirDj";
 import { useState } from "react";
 
 export default ({ data, loading, id, items, antiguo }) => {
   //  States
   const [loadingReporte, setLoadingReporte] = useState(false);
+  const [modal, setModal] = useState("");
+  const [loadingFormato, setLoadingFormato] = useState(false);
+  const [loadingFirma, setLoadingFirma] = useState(false);
 
   //  Functions
   const presupuesto = async () => {
@@ -46,6 +51,41 @@ export default ({ data, loading, id, items, antiguo }) => {
     const url = URL.createObjectURL(blob);
     window.open(url, "_blank");
     setLoadingReporte(false);
+  };
+
+  const formatoDj = async () => {
+    setLoadingFormato(true);
+    const res = await axiosBase.get(
+      "investigador/actividades/conFinanciamiento/formatoDj",
+      {
+        params: {
+          proyectoId: data.id,
+        },
+        responseType: "blob",
+      }
+    );
+
+    const blob = await res.data;
+    const url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
+    setLoadingFormato(false);
+  };
+
+  const djFirmada = async () => {
+    setLoadingFirma(true);
+    const res = await axiosBase.get(
+      "investigador/actividades/conFinanciamiento/djFirmada",
+      {
+        params: {
+          proyectoId: data.id,
+        },
+        responseType: "blob",
+      }
+    );
+    const blob = await res.data;
+    const url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
+    setLoadingFirma(false);
   };
 
   return (
@@ -148,6 +188,48 @@ export default ({ data, loading, id, items, antiguo }) => {
               <Box variant="awsui-key-label">Facultad</Box>
               {loading ? <Spinner /> : <div>{data.facultad}</div>}
             </div>
+            {loading ? (
+              <Spinner />
+            ) : (
+              data.dj_aceptada == null && (
+                <div>
+                  <Box variant="awsui-key-label">Dj Subvencion Económica</Box>
+                  <SpaceBetween direction="horizontal" size="xs">
+                    <Button
+                      variant="primary"
+                      loading={loadingFormato}
+                      onClick={() => formatoDj()}
+                    >
+                      Descargar Formato
+                    </Button>
+                    <Button loading={loading} onClick={() => setModal("firma")}>
+                      Adjuntar DJ Firmada
+                    </Button>
+                  </SpaceBetween>
+                </div>
+              )
+            )}
+            {loading ? (
+              <Spinner />
+            ) : (
+              data.dj_aceptada == 1 && (
+                <div>
+                  <Box variant="awsui-key-label">Dj Firmada</Box>
+                  <StatusIndicator type="success">
+                    Dj cargada correctamente!
+                  </StatusIndicator>
+                  <SpaceBetween direction="horizontal" size="xs">
+                    <Button
+                      variant="primary"
+                      loading={loadingFirma}
+                      onClick={() => djFirmada()}
+                    >
+                      Ver Dj Enviada
+                    </Button>
+                  </SpaceBetween>
+                </div>
+              )
+            )}
           </SpaceBetween>
           <SpaceBetween size="s">
             <div>
@@ -237,6 +319,16 @@ export default ({ data, loading, id, items, antiguo }) => {
             {loading ? <Spinner /> : <div>{data.titulo}</div>}
           </div>
         </SpaceBetween>
+      )}
+
+      {modal === "firma" && (
+        <ModalDj
+          onClose={() => setModal("")}
+          proyecto_id={data.id}
+          reload={() => {
+            window.location.reload(); // esto es lo más directo si no tienes un sistema de estado
+          }}
+        />
       )}
     </Container>
   );

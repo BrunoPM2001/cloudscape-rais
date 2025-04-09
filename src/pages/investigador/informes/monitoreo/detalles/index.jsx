@@ -18,6 +18,7 @@ import Metas from "./metas";
 import Publicaciones from "./tabs/publicaciones";
 import { useFormValidation } from "../../../../../hooks/useFormValidation";
 import NotificationContext from "../../../../../providers/notificationProvider";
+import ModalObs from "./components/modalObs";
 
 const breadcrumbs = [
   {
@@ -68,6 +69,7 @@ export default function Monitoreo_detalle() {
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(true);
   const [loadingBtn, setLoadingBtn] = useState(false);
+  const [modal, setModal] = useState("");
 
   //  Url
   const location = useLocation();
@@ -96,18 +98,29 @@ export default function Monitoreo_detalle() {
   };
 
   const remitir = async () => {
-    setLoadingBtn(true);
-    const res = await axiosBase.post(
-      "investigador/informes/monitoreo/remitir",
-      {
-        proyecto_id: id,
-        descripcion: formValues.descripcion,
-      }
-    );
-    const data = res.data;
-    pushNotification(data.detail, data.message, notifications.length + 1);
-    setLoadingBtn(false);
-    getData();
+    if (
+      data.publicaciones.filter((item) => item.estado != "Registrado").length >
+      0
+    ) {
+      pushNotification(
+        "Para remitir el monitoreo todas las publicaciones asociadas tienen que estar en estado Registrado",
+        "warning",
+        notifications.length + 1
+      );
+    } else {
+      setLoadingBtn(true);
+      const res = await axiosBase.post(
+        "investigador/informes/monitoreo/remitir",
+        {
+          proyecto_id: id,
+          descripcion: formValues.descripcion,
+        }
+      );
+      const data = res.data;
+      pushNotification(data.detail, data.message, notifications.length + 1);
+      setLoadingBtn(false);
+      getData();
+    }
   };
 
   const reporte = async () => {
@@ -167,8 +180,16 @@ export default function Monitoreo_detalle() {
     >
       <SpaceBetween size="m">
         {data?.datos?.estado_meta == "Observado" && !loading && (
-          <Alert type="error" header="Observación">
-            {data?.datos?.observacion}
+          <Alert
+            type="error"
+            header="Observación"
+            action={
+              <Button variant="primary" onClick={() => setModal("obs")}>
+                Historial
+              </Button>
+            }
+          >
+            {data?.observacion?.observacion}
           </Alert>
         )}
         <Grid gridDefinition={gridDefinition}>
@@ -225,6 +246,9 @@ export default function Monitoreo_detalle() {
           </FormField>
         </Form>
       </SpaceBetween>
+      {modal == "obs" && (
+        <ModalObs id={formValues.id} close={() => setModal("")} />
+      )}
     </BaseLayout>
   );
 }

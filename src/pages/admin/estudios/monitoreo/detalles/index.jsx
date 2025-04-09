@@ -18,6 +18,7 @@ import Metas from "./metas";
 import Publicaciones from "./tabs/publicaciones";
 import { useFormValidation } from "../../../../../hooks/useFormValidation";
 import NotificationContext from "../../../../../providers/notificationProvider";
+import ModalObs from "../components/modalObs";
 
 const breadcrumbs = [
   {
@@ -58,13 +59,12 @@ const gridDefinition = [
 const initialForm = {
   descripcion: "",
   estado: null,
-  observacion: "",
 };
 
 const opt_estado = [
   { value: 0, label: "No aprobado" },
   { value: 1, label: "Aprobado" },
-  { value: 2, label: "Observado" },
+  { value: 2, label: "Observado", disabled: true },
   { value: 5, label: "Enviado" },
   { value: 6, label: "En proceso" },
 ];
@@ -77,6 +77,7 @@ export default function Monitoreo_detalles() {
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(true);
   const [loadingBtn, setLoadingBtn] = useState(false);
+  const [modal, setModal] = useState("");
 
   //  Url
   const location = useLocation();
@@ -97,28 +98,12 @@ export default function Monitoreo_detalles() {
     const data = res.data;
     handleChange("id", res.data.datos.id);
     handleChange("descripcion", res.data.datos.descripcion);
-    handleChange("observacion", res.data.datos.observacion);
     handleChange(
       "estado",
       opt_estado.find((opt) => opt.label == res.data.datos.estado_meta)
     );
     setData(data);
     setLoading(false);
-  };
-
-  const remitir = async () => {
-    setLoadingBtn(true);
-    const res = await axiosBase.post(
-      "investigador/informes/monitoreo/remitir",
-      {
-        proyecto_id: id,
-        descripcion: formValues.descripcion,
-      }
-    );
-    const data = res.data;
-    pushNotification(data.detail, data.message, notifications.length + 1);
-    setLoadingBtn(false);
-    getData();
   };
 
   const reporte = async () => {
@@ -136,18 +121,28 @@ export default function Monitoreo_detalles() {
   };
 
   const guardar = async () => {
-    setLoadingBtn(true);
-    const res = await axiosBase.put("admin/estudios/monitoreo/guardar", {
-      id: formValues.id,
-      proyecto_id: id,
-      observacion: formValues.observacion,
-      descripcion: formValues.descripcion,
-      estado: formValues.estado.value,
-    });
-    const data = res.data;
-    pushNotification(data.detail, data.message, notifications.length + 1);
-    setLoadingBtn(false);
-    getData();
+    if (
+      data.publicaciones.filter((item) => item.estado != "Registrado").length >
+      0
+    ) {
+      pushNotification(
+        "Para remitir el monitoreo todas las publicaciones asociadas tienen que estar en estado Registrado",
+        "warning",
+        notifications.length + 1
+      );
+    } else {
+      setLoadingBtn(true);
+      const res = await axiosBase.put("admin/estudios/monitoreo/guardar", {
+        id: formValues.id,
+        proyecto_id: id,
+        descripcion: formValues.descripcion,
+        estado: formValues.estado?.value,
+      });
+      const data = res.data;
+      pushNotification(data.detail, data.message, notifications.length + 1);
+      setLoadingBtn(false);
+      getData();
+    }
   };
 
   //  Tabs
@@ -160,7 +155,7 @@ export default function Monitoreo_detalles() {
           data={data.publicaciones ?? []}
           loading={loading}
           reload={getData}
-          disabledBtn={data?.datos?.estado_meta == "Enviado"}
+          disabledBtn={data?.datos?.estado_meta == "Aprobado"}
         />
       ),
     },
@@ -188,14 +183,19 @@ export default function Monitoreo_detalles() {
               {data?.datos?.estado_meta == "Por presentar" ? (
                 <Button
                   variant="primary"
-                  onClick={remitir}
+                  onClick={guardar}
                   loading={loadingBtn}
+                  disabled={data.publicaciones.length == 0}
+                  disabledReason="Necesita tener al menos una publicación asociada"
                 >
                   Remitir monitoreo
                 </Button>
               ) : (
                 data?.datos?.estado_meta != "Por presentar" && (
                   <SpaceBetween size="xs" direction="horizontal">
+                    <Button onClick={() => setModal("obs")}>
+                      Observaciones
+                    </Button>
                     <Button onClick={reporte} loading={loadingBtn}>
                       Reporte
                     </Button>
@@ -236,20 +236,17 @@ export default function Monitoreo_detalles() {
                 />
               </FormField>
             )}
-            {formValues.estado?.label == "Observado" && (
-              <FormField label="Observación" stretch>
-                <Textarea
-                  value={formValues.observacion}
-                  loading={loadingBtn}
-                  onChange={({ detail }) =>
-                    handleChange("observacion", detail.value)
-                  }
-                />
-              </FormField>
-            )}
           </SpaceBetween>
         </Form>
       </SpaceBetween>
+      {modal == "obs" && (
+        <ModalObs
+          id={formValues?.id}
+          close={() => setModal("")}
+          reload={getData}
+          estado={data?.datos?.estado_meta}
+        />
+      )}
     </BaseLayout>
   );
 }
