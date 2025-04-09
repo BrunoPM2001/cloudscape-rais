@@ -63,6 +63,7 @@ export default function Reporte_proyecto() {
     const blob = await res.data;
     const url = URL.createObjectURL(blob);
     window.open(url, "_blank");
+    setLoading(false);
   };
 
   return (

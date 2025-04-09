@@ -43,6 +43,18 @@ const FILTER_PROPS = [
     operators: stringOperators,
   },
   {
+    propertyLabel: "Código antiguo",
+    key: "cod_old",
+    groupValuesLabel: "Códigos antiguos",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "Calificación",
+    key: "calificacion",
+    groupValuesLabel: "Calificaciones",
+    operators: stringOperators,
+  },
+  {
     propertyLabel: "Tipo",
     key: "tipo",
     groupValuesLabel: "Tipos",
@@ -169,6 +181,13 @@ const columnDefinitions = [
     minWidth: 130,
   },
   {
+    id: "cod_old",
+    header: "Código antiguo",
+    cell: (item) => item.cod_old,
+    sortingField: "cod_old",
+    minWidth: 100,
+  },
+  {
     id: "tipo",
     header: "Tipo",
     cell: (item) => item.tipo,
@@ -187,6 +206,13 @@ const columnDefinitions = [
     cell: (item) => item.titulo,
     minWidth: 400,
     sortingField: "titulo",
+  },
+  {
+    id: "calificacion",
+    header: "Calificación",
+    cell: (item) => item.calificacion,
+    minWidth: 300,
+    sortingField: "calificacion",
   },
   {
     id: "presentador",
@@ -208,6 +234,18 @@ const columnDefinitions = [
     cell: (item) => item.area,
     minWidth: 200,
     sortingField: "area",
+  },
+  {
+    id: "filiacion",
+    header: "Filiación",
+    cell: (item) => item.filiacion,
+    sortingField: "filiacion",
+  },
+  {
+    id: "filiacion_unica",
+    header: "Filiación única",
+    cell: (item) => item.filiacion_unica,
+    sortingField: "filiacion_unica",
   },
   {
     id: "doi",
@@ -322,12 +360,16 @@ const columnDefinitions = [
 const columnDisplay = [
   { id: "id", visible: true },
   { id: "codigo_registro", visible: true },
+  { id: "cod_old", visible: true },
   { id: "tipo", visible: true },
   { id: "tipo_patente", visible: true },
   { id: "titulo", visible: true },
+  { id: "calificacion", visible: true },
   { id: "presentador", visible: true },
   { id: "facultad", visible: true },
   { id: "area", visible: true },
+  { id: "filiacion", visible: true },
+  { id: "filiacion_unica", visible: true },
   { id: "doi", visible: true },
   { id: "url", visible: true },
   { id: "isbn", visible: true },
