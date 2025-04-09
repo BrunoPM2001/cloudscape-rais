@@ -27,14 +27,14 @@ const optFiliacion = [
   },
 ];
 
-const formRules = {
-  autor: { required: true },
-  filiacion: { required: true },
-  filiacion_unica: { required: true },
-  categoria: { required: true },
-};
+export default ({ id, item, close, reload, optAutor, tipo }) => {
+  const formRules = {
+    autor: { required: true },
+    filiacion: { required: true },
+    filiacion_unica: { required: tipo != "tesis_asesoria" },
+    categoria: { required: true },
+  };
 
-export default ({ id, item, visible, setVisible, reload, optAutor }) => {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
 
@@ -66,13 +66,13 @@ export default ({ id, item, visible, setVisible, reload, optAutor }) => {
           id: item.id,
           autor: formValues.autor,
           filiacion: formValues.filiacion.value,
-          filiacion_unica: formValues.filiacion_unica.value,
+          filiacion_unica: formValues.filiacion_unica?.value,
           categoria: formValues.categoria.value,
         }
       );
       const data = res.data;
       setLoadingCreate(false);
-      setVisible(false);
+      close();
       reload();
       pushNotification(data.detail, data.message, notifications.length + 1);
     }
@@ -80,13 +80,13 @@ export default ({ id, item, visible, setVisible, reload, optAutor }) => {
 
   return (
     <Modal
-      onDismiss={() => setVisible(false)}
-      visible={visible}
+      visible
+      onDismiss={close}
       size="large"
       footer={
         <Box float="right">
           <SpaceBetween direction="horizontal" size="xs">
-            <Button variant="normal" onClick={() => setVisible(false)}>
+            <Button variant="normal" onClick={close}>
               Cancelar
             </Button>
             <Button
@@ -114,7 +114,7 @@ export default ({ id, item, visible, setVisible, reload, optAutor }) => {
               onChange={({ detail }) => handleChange("autor", detail.value)}
             />
           </FormField>
-          <ColumnLayout columns={3}>
+          <ColumnLayout columns={tipo != "tesis_asesoria" ? 3 : 2}>
             <FormField
               label="Filiación"
               info={
@@ -138,38 +138,31 @@ export default ({ id, item, visible, setVisible, reload, optAutor }) => {
                 options={optFiliacion}
               />
             </FormField>
-            <FormField
-              label="Filiación única con UNMSM"
-              info={
-                <Popover
-                  header="Descripción"
-                  content="En caso la publicación solo presente filiación con una institución"
-                  triggerType="custom"
-                >
-                  <Link variant="info">Info</Link>
-                </Popover>
-              }
-              stretch
-              errorText={formErrors.filiacion_unica}
-            >
-              <Select
-                placeholder="Escoja una opción"
-                selectedOption={formValues.filiacion_unica}
-                onChange={({ detail }) => {
-                  handleChange("filiacion_unica", detail.selectedOption);
-                }}
-                options={[
-                  {
-                    value: "1",
-                    label: "Sí",
-                  },
-                  {
-                    value: "0",
-                    label: "No",
-                  },
-                ]}
-              />
-            </FormField>
+            {tipo != "tesis_asesoria" && (
+              <FormField
+                label="Filiación única con UNMSM"
+                info={
+                  <Popover
+                    header="Descripción"
+                    content="En caso la publicación solo presente filiación con una institución"
+                    triggerType="custom"
+                  >
+                    <Link variant="info">Info</Link>
+                  </Popover>
+                }
+                stretch
+                errorText={formErrors.filiacion_unica}
+              >
+                <Select
+                  placeholder="Escoja una opción"
+                  selectedOption={formValues.filiacion_unica}
+                  onChange={({ detail }) => {
+                    handleChange("filiacion_unica", detail.selectedOption);
+                  }}
+                  options={optFiliacion}
+                />
+              </FormField>
+            )}
             <FormField
               label="Condición"
               stretch

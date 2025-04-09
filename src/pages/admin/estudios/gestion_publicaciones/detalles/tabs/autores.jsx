@@ -74,20 +74,20 @@ const columnDefinitions = [
   },
 ];
 
-const columnDisplay = [
-  { id: "presentado", visible: true },
-  { id: "categoria", visible: true },
-  { id: "autor", visible: true },
-  { id: "tipo", visible: true },
-  { id: "nombres", visible: true },
-  { id: "filiacion", visible: true },
-  { id: "filiacion_unica", visible: true },
-  { id: "puntaje", visible: true },
-  { id: "created_at", visible: true },
-  { id: "updated_at", visible: true },
-];
-
 export default function ({ data, loading, tipo, reload }) {
+  const columnDisplay = [
+    { id: "presentado", visible: true },
+    { id: "categoria", visible: true },
+    { id: "autor", visible: true },
+    { id: "tipo", visible: true },
+    { id: "nombres", visible: true },
+    { id: "filiacion", visible: true },
+    { id: "filiacion_unica", visible: tipo != "tesis-asesoria" },
+    { id: "puntaje", visible: true },
+    { id: "created_at", visible: true },
+    { id: "updated_at", visible: true },
+  ];
+
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
 
@@ -350,6 +350,7 @@ export default function ({ data, loading, tipo, reload }) {
           reload={reload}
           close={() => setType("")}
           optAutor={optAutor}
+          tipo={tipo}
         />
       ) : type == "add_estudiante" ? (
         <ModalAutorEstudiante
@@ -357,6 +358,7 @@ export default function ({ data, loading, tipo, reload }) {
           reload={reload}
           close={() => setType("")}
           optAutor={optAutor}
+          tipo={tipo}
         />
       ) : type == "add_externo" ? (
         <ModalAutorExterno
@@ -364,6 +366,7 @@ export default function ({ data, loading, tipo, reload }) {
           reload={reload}
           close={() => setType("")}
           optAutor={optAutor}
+          tipo={tipo}
         />
       ) : type == "edit" ? (
         <ModalEditarAutor
@@ -371,6 +374,7 @@ export default function ({ data, loading, tipo, reload }) {
           reload={reload}
           close={() => setType("")}
           optAutor={optAutor}
+          tipo={tipo}
         />
       ) : type == "delete" ? (
         <ModalEliminarAutor

@@ -54,16 +54,6 @@ const columnDefinitions = [
   },
 ];
 
-const columnDisplay = [
-  { id: "presentado", visible: true },
-  { id: "categoria", visible: true },
-  { id: "autor", visible: true },
-  { id: "tipo", visible: true },
-  { id: "nombres", visible: true },
-  { id: "filiacion", visible: true },
-  { id: "filiacion_unica", visible: true },
-];
-
 export default function ({
   publicacion_id,
   tipo,
@@ -71,6 +61,16 @@ export default function ({
   setLoading,
   setRequisitos,
 }) {
+  const columnDisplay = [
+    { id: "presentado", visible: true },
+    { id: "categoria", visible: true },
+    { id: "autor", visible: true },
+    { id: "tipo", visible: true },
+    { id: "nombres", visible: true },
+    { id: "filiacion", visible: true },
+    { id: "filiacion_unica", visible: tipo != "tesis_asesoria" },
+  ];
+
   //  State
   const [distributions, setDistribution] = useState([]);
   const [visible, setVisible] = useState(false);
@@ -223,51 +223,48 @@ export default function ({
           </Box>
         }
       />
-      {visible && typeModal == "add_docente" && (
+      {typeModal == "add_docente" ? (
         <ModalAutorDocente
           id={publicacion_id}
           reload={getData}
-          setVisible={setVisible}
-          visible={visible}
+          close={() => setTypeModal("")}
           optAutor={optAutor}
+          tipo={tipo}
         />
-      )}
-      {visible && typeModal == "add_estudiante" && (
+      ) : typeModal == "add_estudiante" ? (
         <ModalAutorEstudiante
           id={publicacion_id}
           reload={getData}
-          setVisible={setVisible}
-          visible={visible}
+          close={() => setTypeModal("")}
           optAutor={optAutor}
+          tipo={tipo}
         />
-      )}
-      {visible && typeModal == "add_externo" && (
+      ) : typeModal == "add_externo" ? (
         <ModalAutorExterno
           id={publicacion_id}
           reload={getData}
-          setVisible={setVisible}
-          visible={visible}
+          close={() => setTypeModal("")}
           optAutor={optAutor}
+          tipo={tipo}
         />
-      )}
-      {visible && typeModal == "edit" && (
+      ) : typeModal == "edit" ? (
         <ModalEditarAutor
           id={publicacion_id}
           item={collectionProps.selectedItems[0]}
           reload={getData}
-          setVisible={setVisible}
-          visible={visible}
+          close={() => setTypeModal("")}
           optAutor={optAutor}
+          tipo={tipo}
         />
-      )}
-      {visible && typeModal == "delete" && (
-        <ModalEliminarAutor
-          id={collectionProps.selectedItems[0].id}
-          publicacion_id={publicacion_id}
-          reload={getData}
-          setVisible={setVisible}
-          visible={visible}
-        />
+      ) : (
+        typeModal == "delete" && (
+          <ModalEliminarAutor
+            id={collectionProps.selectedItems[0].id}
+            publicacion_id={publicacion_id}
+            close={() => setTypeModal("")}
+            reload={getData}
+          />
+        )
       )}
     </Container>
   );

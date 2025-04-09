@@ -28,14 +28,14 @@ const optFiliacion = [
   },
 ];
 
-const formRules = {
-  autor: { required: true },
-  filiacion: { required: true },
-  filiacion_unica: { required: true },
-  categoria: { required: true },
-};
+export default ({ item, reload, close, optAutor, tipo }) => {
+  const formRules = {
+    autor: { required: true },
+    filiacion: { required: true },
+    filiacion_unica: { required: tipo != "tesis-asesoria" },
+    categoria: { required: true },
+  };
 
-export default ({ item, reload, close, optAutor }) => {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
 
@@ -68,7 +68,7 @@ export default ({ item, reload, close, optAutor }) => {
           id: item.id,
           autor: formValues.autor,
           filiacion: formValues.filiacion.value,
-          filiacion_unica: formValues.filiacion_unica.value,
+          filiacion_unica: formValues.filiacion_unica?.value,
           categoria: formValues.categoria.value,
         }
       );
@@ -116,7 +116,10 @@ export default ({ item, reload, close, optAutor }) => {
               onChange={({ detail }) => handleChange("autor", detail.value)}
             />
           </FormField>
-          <ColumnLayout columns={3} minColumnWidth={180}>
+          <ColumnLayout
+            columns={tipo != "tesis-asesoria" ? 3 : 2}
+            minColumnWidth={180}
+          >
             <FormField
               label="Filiación UNMSM"
               stretch
@@ -139,28 +142,30 @@ export default ({ item, reload, close, optAutor }) => {
                 options={optFiliacion}
               />
             </FormField>
-            <FormField
-              label="Filiación única con UNMSM"
-              info={
-                <Popover
-                  header="Descripción"
-                  content="En caso la publicación solo presente filiación con una institución"
-                >
-                  <Link variant="info">Info</Link>
-                </Popover>
-              }
-              stretch
-              errorText={formErrors.filiacion_unica}
-            >
-              <Select
-                placeholder="Escoja una opción"
-                selectedOption={formValues.filiacion_unica}
-                onChange={({ detail }) => {
-                  handleChange("filiacion_unica", detail.selectedOption);
-                }}
-                options={optFiliacion}
-              />
-            </FormField>
+            {tipo != "tesis-asesoria" && (
+              <FormField
+                label="Filiación única con UNMSM"
+                info={
+                  <Popover
+                    header="Descripción"
+                    content="En caso la publicación solo presente filiación con una institución"
+                  >
+                    <Link variant="info">Info</Link>
+                  </Popover>
+                }
+                stretch
+                errorText={formErrors.filiacion_unica}
+              >
+                <Select
+                  placeholder="Escoja una opción"
+                  selectedOption={formValues.filiacion_unica}
+                  onChange={({ detail }) => {
+                    handleChange("filiacion_unica", detail.selectedOption);
+                  }}
+                  options={optFiliacion}
+                />
+              </FormField>
+            )}
             <FormField
               label="Condición"
               stretch

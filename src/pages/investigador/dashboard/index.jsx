@@ -10,6 +10,7 @@ import Extras from "./widgets/extras.jsx";
 import Proyectos from "./widgets/proyectos.jsx";
 import BaseLayout from "../components/baseLayout.jsx";
 import axiosBase from "../../../api/axios.js";
+import ModalDj from "./components/modaDj.jsx";
 import { useEffect, useState } from "react";
 
 const breadcrumbs = [
@@ -67,7 +68,9 @@ export default function Investigador_main() {
     tipos_proyectos: [],
     alerta: false,
   });
+
   const [loading, setLoading] = useState(true);
+  const [showModalDj, setShowModalDj] = useState(false);
 
   //  Functions
   const getData = async () => {
@@ -82,12 +85,19 @@ export default function Investigador_main() {
     getData();
   }, []);
 
+  useEffect(() => {
+    if (!loading && data.dj !== 1) {
+      setShowModalDj(true);
+    }
+  }, [data, loading]);
+
   return (
     <BaseLayout
       breadcrumbs={breadcrumbs}
       header="Resumen"
       helpInfo="Información sobre la páginal actual para poder mostrarla al público
       en general."
+      contentType="table"
     >
       <SpaceBetween size="m">
         {data.alerta == 1 && (
@@ -106,6 +116,14 @@ export default function Investigador_main() {
             }
           />
         )}
+
+        {showModalDj && (
+          <ModalDj
+            onClose={() => setShowModalDj(false)}
+            proyecto_id={data.proyecto_id}
+          />
+        )}
+
         <Grid gridDefinition={gridDefinition}>
           <Cifras data={data.metricas} loading={loading} />
           <Extras data={data.detalles} loading={loading} />
