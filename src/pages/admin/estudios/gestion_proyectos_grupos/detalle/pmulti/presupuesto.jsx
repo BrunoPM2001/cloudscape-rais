@@ -12,29 +12,33 @@ export default ({ data, loading }) => {
     <Table
       columnDefinitions={[
         {
-          id: "codigo",
-          header: "Código",
-          cell: (item) => item.codigo,
-        },
-        {
           id: "partida",
           header: "Partida",
           cell: (item) => item.partida,
+          minWidth: 200,
+        },
+        {
+          id: "justificacion",
+          header: "Justificación",
+          cell: (item) => item.justificacion,
+          minWidth: 250,
         },
         {
           id: "tipo",
           header: "Tipo",
           cell: (item) => item.tipo,
+          minWidth: 120,
         },
         {
           id: "monto",
           header: "Monto",
           cell: (item) => item.monto,
+          minWidth: 150,
         },
       ]}
       columnDisplay={[
-        { id: "codigo", visible: true },
         { id: "partida", visible: true },
+        { id: "justificacion", visible: true },
         { id: "tipo", visible: true },
         { id: "monto", visible: true },
       ]}

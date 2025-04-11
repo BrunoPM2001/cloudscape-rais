@@ -3,14 +3,14 @@ import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import queryString from "query-string";
 import Detalles from "./detalles";
-import Integrantes from "../tabs/integrantes";
-import Descripcion from "../tabs/descripcion";
-import Calendario from "../tabs/calendario";
-import Presupuesto from "../tabs/presupuesto";
+import Integrantes from "./integrantes";
+import Descripcion from "./descripcion";
+import Calendario from "./calendario";
+import Presupuesto from "./presupuesto";
 import axiosBase from "../../../../../../api/axios";
 import BaseLayout from "../../../../components/baseLayout";
 import Documentos from "./documentos";
-import Grupos from "./grupos";
+import Responsable from "../pconfigi/responsable";
 
 const breadcrumbs = [
   {
@@ -33,7 +33,9 @@ const breadcrumbs = [
 
 export default function Detalle_proyecto_pmulti() {
   //  State
-  const [data, setData] = useState({});
+  const [data, setData] = useState({
+    miembros: [],
+  });
   const [loading, setLoading] = useState(true);
 
   //  Tabs
@@ -44,9 +46,9 @@ export default function Detalle_proyecto_pmulti() {
       content: <Integrantes data={data.miembros} loading={loading} />,
     },
     {
-      id: "detalles_grupos",
-      label: "Grupos",
-      content: <Grupos data={data.grupos} loading={loading} />,
+      id: "responsable",
+      label: "Responsable",
+      content: <Responsable data={data.responsable} loading={loading} />,
     },
     {
       id: "documentos",
@@ -104,11 +106,18 @@ export default function Detalle_proyecto_pmulti() {
       <SpaceBetween size="l">
         <Detalles
           data={data.detalle}
+          grupos={[
+            ...new Set(
+              data?.miembros
+                .map((item) => item.grupo_nombre_corto)
+                .filter((nombre) => nombre && nombre.trim() !== "")
+            ),
+          ]}
           loading={loading}
           proyecto_id={id}
           reload={getData}
         />
-        {/* <Tabs tabs={tabs} ariaLabel="Opciones de proyecto de grupo" /> */}
+        <Tabs tabs={tabs} ariaLabel="Opciones de proyecto de grupo" />
       </SpaceBetween>
     </BaseLayout>
   );
