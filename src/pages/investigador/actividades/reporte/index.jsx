@@ -98,9 +98,13 @@ export default function Proyecto_detalle() {
       contentType="table"
     >
       <SpaceBetween size="l">
-        {["Observado", "Anulado", "No registrado", "Observado"].includes(
-          data.detalles?.estado
-        ) && (
+        {[
+          "Observado",
+          "Anulado",
+          "No registrado",
+          "Observado",
+          "Duplicado",
+        ].includes(data.detalles?.estado) && (
           <Alert type="error" header="Observación">
             {data.detalles.observaciones_admin}
           </Alert>
