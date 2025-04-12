@@ -436,7 +436,7 @@ export default () => {
                     id: collectionProps.selectedItems[0]["id"],
                   });
                   if (detail.id == "action_1") {
-                    window.location.href = "proyectos_fex/detalle?" + query;
+                    window.open("proyectos_fex/detalle?" + query, "_blank");
                   } else if (detail.id == "action_2") {
                     reporte();
                   }
