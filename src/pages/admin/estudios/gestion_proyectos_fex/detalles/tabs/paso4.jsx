@@ -54,6 +54,11 @@ export default function Paso4({ info, loading, reload }) {
             cell: (item) => item.doc_numero,
           },
           {
+            id: "responsable",
+            header: "Responsable",
+            cell: (item) => item.responsable,
+          },
+          {
             id: "facultad",
             header: "Facultad",
             cell: (item) => item.facultad,
@@ -63,6 +68,7 @@ export default function Paso4({ info, loading, reload }) {
           { id: "tipo_integrante", visible: true },
           { id: "nombre", visible: true },
           { id: "doc_numero", visible: true },
+          { id: "responsable", visible: true },
           { id: "facultad", visible: true },
         ]}
         selectionType="single"

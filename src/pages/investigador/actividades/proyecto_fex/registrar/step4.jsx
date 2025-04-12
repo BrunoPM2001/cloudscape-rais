@@ -210,6 +210,7 @@ export default function Registrar_proyecto_fex_4() {
                                 text: "Externo",
                               },
                             ]}
+                            disabled={loadingData}
                             onItemClick={({ detail }) => {
                               if (detail.id == "action_1") {
                                 setModal("addDocente");

@@ -43,6 +43,7 @@ export default function Registrar_proyecto_fex_3() {
   });
   const [type, setType] = useState("");
   const [doc_tipo, setDoc_tipo] = useState("");
+  const [alert, setAlert] = useState([]);
 
   //  Url
   const location = useLocation();
@@ -59,8 +60,22 @@ export default function Registrar_proyecto_fex_3() {
     const query = queryString.stringify({
       id,
     });
-    window.location.href =
-      "paso" + Number(detail.requestedStepIndex + 1) + "?" + query;
+    if (detail.requestedStepIndex == 3) {
+      let tempErrors = [];
+      if (
+        data?.documentos.filter((item) => item.doc_tipo == "D01").length == 0 ||
+        data?.documentos.filter((item) => item.doc_tipo == "D04").length == 0 ||
+        data?.documentos.filter((item) => item.doc_tipo == "D12").length == 0
+      ) {
+        tempErrors.push("Necesita cargar todos los tipos de documentos");
+      }
+
+      setAlert(tempErrors);
+      if (tempErrors.length == 0) {
+        window.location.href =
+          "paso" + Number(detail.requestedStepIndex + 1) + "?" + query;
+      }
+    }
   };
 
   const getData = async () => {
@@ -91,6 +106,7 @@ export default function Registrar_proyecto_fex_3() {
         onCancel={() => {
           window.location.href = "../proyectosFex";
         }}
+        isLoadingNextStep={loadingData}
         allowSkipTo={data.proyecto?.estado == 2}
         i18nStrings={{
           optional: "",
@@ -116,6 +132,18 @@ export default function Registrar_proyecto_fex_3() {
                     >
                       {data.proyecto.observaciones_admin}
                     </div>
+                  </Alert>
+                )}
+                {alert.length > 0 && (
+                  <Alert
+                    type="warning"
+                    header="Tiene que cumplir los siguientes requisitos"
+                    dismissible
+                    onDismiss={() => setAlert([])}
+                  >
+                    {alert.map((item, index) => {
+                      return <li key={index}>{item}</li>;
+                    })}
                   </Alert>
                 )}
                 <Table

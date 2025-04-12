@@ -19,6 +19,7 @@ import { useAutosuggest } from "../../../../../../hooks/useAutosuggest";
 
 const initialForm = {
   condicion: null,
+  responsabilidad: null,
   codigo_orcid: "",
   apellido1: "",
   apellido2: "",
@@ -44,32 +45,6 @@ const initialForm = {
   file: [],
 };
 
-const formRules = {
-  condicion: { required: true },
-  codigo_orcid: { required: true, regex: /^(\d{4}-){3}\d{3}[\dX]$/ },
-  apellido1: { required: true },
-  apellido2: { required: true },
-  nombres: { required: true },
-  sexo: { required: true },
-  institucion: { required: false },
-  pais: { required: true },
-  direccion1: { required: true },
-  doc_tipo: { required: true },
-  doc_numero: { required: true },
-  telefono_movil: { required: false },
-  titulo_profesional: { required: true },
-  grado: { required: true },
-  especialidad: { required: false },
-  researcher_id: { required: false },
-  scopus_id: { required: false },
-  cti_vitae: { required: true },
-  google_scholar: { required: true },
-  link: { required: false },
-  posicion_unmsm: { required: true },
-  biografia: { required: false },
-  observacion: { required: false },
-};
-
 const opt_condicion = [
   { value: 44, label: "Coordinador general" },
   { value: 45, label: "Investigador principal" },
@@ -88,7 +63,34 @@ export default ({ close, proyecto_id, reload }) => {
   const [enableCreate, setEnableCreate] = useState(false);
   const [paises, setPaises] = useState([]);
   const [form, setForm] = useState({});
+  const [alert, setAlert] = useState("");
   const [nuevo, setNuevo] = useState(false);
+
+  const formRules = {
+    condicion: { required: true },
+    codigo_orcid: { required: nuevo, regex: /^(\d{4}-){3}\d{3}[\dX]$/ },
+    apellido1: { required: nuevo },
+    apellido2: { required: nuevo },
+    nombres: { required: nuevo },
+    sexo: { required: nuevo },
+    institucion: { required: false },
+    pais: { required: nuevo },
+    direccion1: { required: nuevo },
+    doc_tipo: { required: nuevo },
+    doc_numero: { required: nuevo },
+    telefono_movil: { required: false },
+    titulo_profesional: { required: nuevo },
+    grado: { required: nuevo },
+    especialidad: { required: false },
+    researcher_id: { required: false },
+    scopus_id: { required: false },
+    cti_vitae: { required: nuevo },
+    google_scholar: { required: nuevo },
+    link: { required: false },
+    posicion_unmsm: { required: nuevo },
+    biografia: { required: false },
+    observacion: { required: false },
+  };
 
   //  Hooks
   const { loading, options, setOptions, value, setValue, setAvoidSelect } =
@@ -139,20 +141,31 @@ export default ({ close, proyecto_id, reload }) => {
         pushNotification(data.detail, data.message, notifications.length + 1);
       }
     } else {
-      setLoadingCreate(true);
-      const form1 = new FormData();
-      form1.append("proyecto_id", proyecto_id);
-      form1.append("tipo", "Antiguo");
-      form1.append("investigador_id", form.investigador_id);
-      const res = await axiosBase.post(
-        "investigador/actividades/fex/agregarExterno",
-        form1
-      );
-      const data = res.data;
-      setLoadingCreate(false);
-      close();
-      reload();
-      pushNotification(data.detail, data.message, notifications.length + 1);
+      if (validateForm()) {
+        if (
+          formValues.condicion.value == "48" &&
+          (!formValues.responsabilidad || formValues.responsabilidad == "")
+        ) {
+          setAlert("Necesita escribir la condición");
+        } else {
+          setLoadingCreate(true);
+          const form1 = new FormData();
+          form1.append("proyecto_id", proyecto_id);
+          form1.append("tipo", "Antiguo");
+          form1.append("investigador_id", form.investigador_id);
+          form1.append("condicion", formValues.condicion.value);
+          form1.append("responsabilidad", formValues.responsabilidad);
+          const res = await axiosBase.post(
+            "investigador/actividades/fex/agregarExterno",
+            form1
+          );
+          const data = res.data;
+          setLoadingCreate(false);
+          close();
+          reload();
+          pushNotification(data.detail, data.message, notifications.length + 1);
+        }
+      }
     }
   };
 
@@ -191,6 +204,11 @@ export default ({ close, proyecto_id, reload }) => {
       header="Agregar externo"
     >
       <SpaceBetween size="s">
+        {alert != "" && (
+          <Alert type="warning" dismissible onDismiss={() => setAlert("")}>
+            {alert}
+          </Alert>
+        )}
         <Alert>
           En caso no encuentre los datos de su externo presione la opción de
           "Utilizar: ..."
