@@ -106,13 +106,6 @@ export default function Detalle_proyecto_pmulti() {
       <SpaceBetween size="l">
         <Detalles
           data={data.detalle}
-          grupos={[
-            ...new Set(
-              data?.miembros
-                .map((item) => item.grupo_nombre_corto)
-                .filter((nombre) => nombre && nombre.trim() !== "")
-            ),
-          ]}
           loading={loading}
           proyecto_id={id}
           reload={getData}

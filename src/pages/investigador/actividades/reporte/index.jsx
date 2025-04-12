@@ -98,15 +98,11 @@ export default function Proyecto_detalle() {
       contentType="table"
     >
       <SpaceBetween size="l">
-        {data.detalles?.estado == 2 && (
-          <Alert type="warning" header="Observación">
-            <div
-              style={{
-                whiteSpace: "pre-wrap",
-              }}
-            >
-              {data.detalles.observaciones_admin}
-            </div>
+        {["Observado", "Anulado", "No registrado", "Observado"].includes(
+          data.detalles?.estado
+        ) && (
+          <Alert type="error" header="Observación">
+            {data.detalles.observaciones_admin}
           </Alert>
         )}
         <Detalles

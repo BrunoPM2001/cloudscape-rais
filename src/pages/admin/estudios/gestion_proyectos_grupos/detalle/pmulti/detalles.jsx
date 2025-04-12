@@ -11,10 +11,10 @@ import {
   Table,
 } from "@cloudscape-design/components";
 import ModalEditarProyecto from "../components/modalEditarProyecto";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import axiosBase from "../../../../../../api/axios";
 
-export default ({ data, grupos, loading, proyecto_id, reload }) => {
+export default ({ data, loading, proyecto_id, reload }) => {
   //  States
   const [visible, setVisible] = useState(false);
   const [loadingReporte, setLoadingReporte] = useState(false);
@@ -50,19 +50,6 @@ export default ({ data, grupos, loading, proyecto_id, reload }) => {
     const url = URL.createObjectURL(blob);
     window.open(url, "_blank");
   };
-
-  const autorizadoMap = new Map(
-    (data?.grupos || []).map((item) => [
-      item.grupo_nombre_corto,
-      item.autorizado,
-    ])
-  );
-
-  // Mergeamos con los grupos
-  const gruposConAutorizado = grupos.map((grupo) => ({
-    grupo_nombre_corto: grupo,
-    autorizado: autorizadoMap.get(grupo) || " - ",
-  }));
 
   return (
     <Container
@@ -243,6 +230,11 @@ export default ({ data, grupos, loading, proyecto_id, reload }) => {
                   cell: (item) => item.grupo_nombre_corto,
                 },
                 {
+                  id: "grupo_categoria",
+                  header: "Categoría",
+                  cell: (item) => item.grupo_categoria,
+                },
+                {
                   id: "autorizado",
                   header: "Autorizado",
                   cell: (item) => (
@@ -262,9 +254,10 @@ export default ({ data, grupos, loading, proyecto_id, reload }) => {
               ]}
               columnDisplay={[
                 { id: "grupo_nombre_corto", visible: true },
+                { id: "grupo_categoria", visible: true },
                 { id: "autorizado", visible: true },
               ]}
-              items={gruposConAutorizado ?? []}
+              items={data?.grupos ?? []}
               loading={loading}
               loadingText="Cargando datos"
             />
