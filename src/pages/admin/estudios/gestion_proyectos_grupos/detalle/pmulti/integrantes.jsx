@@ -16,6 +16,11 @@ export default ({ data, loading }) => {
           cell: (item) => item.tipo_integrante,
         },
         {
+          id: "codigo",
+          header: "Código",
+          cell: (item) => item.codigo,
+        },
+        {
           id: "nombre",
           header: "Nombre",
           cell: (item) => item.nombre,
@@ -65,6 +70,7 @@ export default ({ data, loading }) => {
       ]}
       columnDisplay={[
         { id: "tipo_integrante", visible: true },
+        { id: "codigo", visible: true },
         { id: "nombre", visible: true },
         { id: "tipo", visible: true },
         { id: "facultad", visible: true },
