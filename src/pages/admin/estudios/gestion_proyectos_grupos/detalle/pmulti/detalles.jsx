@@ -100,7 +100,7 @@ export default ({ data, loading, proyecto_id, reload }) => {
           <Box variant="awsui-key-label">Título</Box>
           {loading ? <Spinner /> : <div>{data.titulo}</div>}
         </div>
-        <ColumnLayout columns={3} variant="text-grid">
+        <ColumnLayout columns={4} variant="text-grid">
           <SpaceBetween size="s">
             <div>
               <Box variant="awsui-key-label">Código</Box>
@@ -217,6 +217,28 @@ export default ({ data, loading, proyecto_id, reload }) => {
                     : data.observaciones_admin}
                 </StatusIndicator>
               )}
+            </div>
+          </SpaceBetween>
+          <SpaceBetween size="s">
+            <div>
+              <Box variant="awsui-key-label">Línea de investigación</Box>
+              {loading ? <Spinner /> : <div>{data.linea}</div>}
+            </div>
+            <div>
+              <Box variant="awsui-key-label">Área temática</Box>
+              {loading ? <Spinner /> : <div>{data.area_tematica}</div>}
+            </div>
+            <div>
+              <Box variant="awsui-key-label">Objetivo ods</Box>
+              {loading ? <Spinner /> : <div>{data.ods}</div>}
+            </div>
+            <div>
+              <Box variant="awsui-key-label">Área de conocimiento OCDE</Box>
+              {loading ? <Spinner /> : <div>{data.ocde}</div>}
+            </div>
+            <div>
+              <Box variant="awsui-key-label">Localización</Box>
+              {loading ? <Spinner /> : <div>{data.localizacion}</div>}
             </div>
           </SpaceBetween>
           <SpaceBetween size="s">
