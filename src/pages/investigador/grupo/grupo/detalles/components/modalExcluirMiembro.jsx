@@ -32,7 +32,7 @@ const formRules = {
   observacion_excluir: { required: false },
 };
 
-export default ({ visible, setVisible, item, reload }) => {
+export default ({ close, item, reload }) => {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
 
@@ -50,8 +50,8 @@ export default ({ visible, setVisible, item, reload }) => {
       const response = await axiosBase.put(
         "investigador/grupo/excluirMiembro",
         {
-          id: item[0].id,
-          condicion: item[0].condicion,
+          id: item.id,
+          condicion: item.condicion,
           fecha_exclusion: formValues.fecha_exclusion,
           resolucion_exclusion: formValues.resolucion_exclusion,
           resolucion_exclusion_fecha: formValues.resolucion_exclusion_fecha,
@@ -61,7 +61,7 @@ export default ({ visible, setVisible, item, reload }) => {
       );
       const data = await response.data;
       setLoading(false);
-      setVisible(false);
+      close();
       pushNotification(data.detail, data.message, notifications.length + 1);
       reload();
     }
@@ -69,19 +69,21 @@ export default ({ visible, setVisible, item, reload }) => {
 
   return (
     <Modal
-      onDismiss={() => setVisible(false)}
-      visible={visible}
+      visible
       size="large"
+      onDismiss={close}
       footer={
         <Box float="right">
           <SpaceBetween direction="horizontal" size="xs">
-            <Button variant="normal" onClick={() => setVisible(false)}>
+            <Button variant="normal" onClick={close}>
               Cancelar
             </Button>
             <Button
               variant="primary"
               loading={loading}
               onClick={excluirMiembro}
+              disabled={item.condicion == "Adherente" && item.tesista > 0}
+              disabledReason={`Este miembro participa como tesista en ${item.tesista} proyecto(s) por lo que no puede ser excluido`}
             >
               Excluir miembro
             </Button>

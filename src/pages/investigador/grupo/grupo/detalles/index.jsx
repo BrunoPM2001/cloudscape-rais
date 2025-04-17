@@ -85,6 +85,7 @@ export default function Detalle_grupo_invest() {
       header="Detalle del grupo de investigación:"
       helpInfo="Información sobre la páginal actual para poder mostrarla al público
       en general."
+      contentType="table"
     >
       <SpaceBetween size="l">
         <Detalles

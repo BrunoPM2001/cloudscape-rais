@@ -174,7 +174,6 @@ const columnDisplay = [
 
 export default ({ grupo_estado }) => {
   //  Data state
-  const [incluirVisible, setIncluirVisible] = useState(false);
   const [loading, setLoading] = useState(true);
   const [distributions, setDistribution] = useState([]);
   const {
@@ -206,7 +205,7 @@ export default ({ grupo_estado }) => {
     sorting: {},
     selection: {},
   });
-  const [typeModal, setTypeModal] = useState("");
+  const [modal, setModal] = useState("");
   const [coordinador, setCoordinador] = useState(null);
   const [tipoMiembros, setTipoMiembros] = useState({
     label: "Integrantes",
@@ -334,14 +333,11 @@ export default ({ grupo_estado }) => {
                   ]}
                   onItemClick={({ detail }) => {
                     if (detail.id == "action_1_2_1") {
-                      setIncluirVisible(true);
-                      setTypeModal("Externo");
+                      setModal("Externo");
                     } else if (detail.id == "action_1_2_2") {
-                      setIncluirVisible(true);
-                      setTypeModal("Estudiante");
+                      setModal("Estudiante");
                     } else if (detail.id == "action_1_2_3") {
-                      setIncluirVisible(true);
-                      setTypeModal("Egresado");
+                      setModal("Egresado");
                     }
                   }}
                 >
@@ -369,11 +365,9 @@ export default ({ grupo_estado }) => {
                   ]}
                   onItemClick={({ detail }) => {
                     if (detail.id == "action_2_1") {
-                      setIncluirVisible(true);
-                      setTypeModal("Excluir");
+                      setModal("Excluir");
                     } else if (detail.id == "action_2_2") {
-                      setIncluirVisible(true);
-                      setTypeModal("Visualizar");
+                      setModal("Visualizar");
                     }
                   }}
                 >
@@ -387,39 +381,26 @@ export default ({ grupo_estado }) => {
         }
         pagination={<Pagination {...paginationProps} />}
       />
-      {incluirVisible &&
-        (typeModal == "Externo" ? (
-          <ModalIncluirExterno
-            visible={incluirVisible}
-            setVisible={setIncluirVisible}
-            reload={getData}
-          />
-        ) : typeModal == "Estudiante" ? (
-          <ModalIncluirEstudiante
-            visible={incluirVisible}
-            setVisible={setIncluirVisible}
-            reload={getData}
-          />
-        ) : typeModal == "Egresado" ? (
-          <ModalIncluirEgresado
-            visible={incluirVisible}
-            setVisible={setIncluirVisible}
-            reload={getData}
-          />
-        ) : typeModal == "Excluir" ? (
-          <ModalExcluirMiembro
-            visible={incluirVisible}
-            setVisible={setIncluirVisible}
-            reload={getData}
-            item={collectionProps.selectedItems}
-          />
-        ) : (
+      {modal == "Externo" ? (
+        <ModalIncluirExterno close={() => setModal("")} reload={getData} />
+      ) : modal == "Estudiante" ? (
+        <ModalIncluirEstudiante close={() => setModal("")} reload={getData} />
+      ) : modal == "Egresado" ? (
+        <ModalIncluirEgresado close={() => setModal("")} reload={getData} />
+      ) : modal == "Excluir" ? (
+        <ModalExcluirMiembro
+          close={() => setModal("")}
+          reload={getData}
+          item={collectionProps.selectedItems[0]}
+        />
+      ) : (
+        modal == "Visualizar" && (
           <ModalInformacionMiembro
-            visible={incluirVisible}
-            setVisible={setIncluirVisible}
+            close={() => setModal("")}
             id={collectionProps.selectedItems[0].id}
           />
-        ))}
+        )
+      )}
     </SpaceBetween>
   );
 };

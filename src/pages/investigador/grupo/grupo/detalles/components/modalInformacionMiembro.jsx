@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import axiosBase from "../../../../../../api/axios";
 import ProyectosIntegrante from "./tabs/proyectosIntegrante";
 
-export default ({ visible, setVisible, id }) => {
+export default ({ close, id }) => {
   //  States
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState({
@@ -29,9 +29,9 @@ export default ({ visible, setVisible, id }) => {
 
   return (
     <Modal
-      onDismiss={() => setVisible(false)}
-      visible={visible}
+      visible
       size="large"
+      onDismiss={close}
       header={
         <Header description="Información general del integrante y proyectos en los que ha participado siendo miembro del grupo">
           Información del integrante de grupo
