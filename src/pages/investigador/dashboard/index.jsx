@@ -86,7 +86,7 @@ export default function Investigador_main() {
   }, []);
 
   useEffect(() => {
-    if (!loading && data.dj !== 1) {
+    if (!loading && data.dj) {
       setShowModalDj(true);
     }
   }, [data, loading]);

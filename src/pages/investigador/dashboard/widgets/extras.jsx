@@ -33,8 +33,20 @@ export default function ({ data, loading }) {
             </Popover>
           </div>
           <div>
-            <Box variant="awsui-key-label">Publicaciones</Box>
-            <StatusIndicator type="pending">Por revisar (2)</StatusIndicator>
+            <Box variant="awsui-key-label">Publicaciones pendientes</Box>
+            {loading ? (
+              <Spinner />
+            ) : (
+              <>
+                {data.publicacionesProceso == 0 ? (
+                  <StatusIndicator type="success">Ninguna</StatusIndicator>
+                ) : (
+                  <StatusIndicator type="pending">
+                    En proceso ({data.publicacionesProceso})
+                  </StatusIndicator>
+                )}
+              </>
+            )}
           </div>
           <div>
             <Box variant="awsui-key-label">Orcid</Box>
