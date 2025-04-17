@@ -5,6 +5,9 @@ import {
   ColumnLayout,
   Container,
   Header,
+  KeyValuePairs,
+  Link,
+  Popover,
   SpaceBetween,
   Spinner,
   StatusIndicator,
@@ -94,7 +97,7 @@ export default ({ data, loading, proyecto_id, reload }) => {
         </Header>
       }
     >
-      <ColumnLayout columns={3} variant="text-grid">
+      <ColumnLayout columns={4} variant="text-grid">
         <SpaceBetween size="s">
           <div>
             <Box variant="awsui-key-label">Título</Box>
@@ -187,6 +190,24 @@ export default ({ data, loading, proyecto_id, reload }) => {
         </SpaceBetween>
         <SpaceBetween size="s">
           <div>
+            <Box variant="awsui-key-label">Palabras clave</Box>
+            {loading ? <Spinner /> : <div>{data.palabras_clave}</div>}
+          </div>
+          <div>
+            <Box variant="awsui-key-label">Línea de investigación</Box>
+            {loading ? <Spinner /> : <div>{data.linea}</div>}
+          </div>
+          <div>
+            <Box variant="awsui-key-label">Área de conocimiento OCDE</Box>
+            {loading ? <Spinner /> : <div>{data.ocde}</div>}
+          </div>
+          <div>
+            <Box variant="awsui-key-label">Localización</Box>
+            {loading ? <Spinner /> : <div>{data.localizacion}</div>}
+          </div>
+        </SpaceBetween>
+        <SpaceBetween size="s">
+          <div>
             <Box variant="awsui-key-label">Comentarios</Box>
             {loading ? (
               <Spinner />
@@ -216,6 +237,55 @@ export default ({ data, loading, proyecto_id, reload }) => {
                   ? "Ninguna"
                   : data.observaciones_admin}
               </StatusIndicator>
+            )}
+          </div>
+          <div>
+            <Box variant="awsui-key-label">Declaración jurada</Box>
+            {loading ? (
+              <Spinner />
+            ) : (
+              <>
+                {data.dj ? (
+                  <Popover
+                    fixedWidth
+                    size="large"
+                    content={
+                      <KeyValuePairs
+                        columns={2}
+                        items={[
+                          {
+                            label: "Archivo",
+                            value: (
+                              <Box margin={{ top: "xs" }}>
+                                <Link external href={data.dj}>
+                                  Ver declaración
+                                </Link>
+                              </Box>
+                            ),
+                            info: (
+                              <Popover content="En caso no pueda ver el archivo trate de regenerarlo">
+                                <Link variant="info">Info</Link>
+                              </Popover>
+                            ),
+                          },
+                          {
+                            label: "Regenerar declaración",
+                            value: (
+                              <Box margin={{ top: "xs" }}>
+                                <Button variant="primary">Regenerar PDF</Button>
+                              </Box>
+                            ),
+                          },
+                        ]}
+                      />
+                    }
+                  >
+                    <StatusIndicator type="success">Aceptada</StatusIndicator>
+                  </Popover>
+                ) : (
+                  <StatusIndicator type="pending">Pendiente</StatusIndicator>
+                )}
+              </>
             )}
           </div>
         </SpaceBetween>

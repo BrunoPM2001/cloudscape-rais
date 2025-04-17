@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import queryString from "query-string";
 import Detalles from "./detalles";
-import Integrantes from "../tabs/integrantes";
+import Integrantes from "./integrantes";
 import Descripcion from "../tabs/descripcion";
 import Calendario from "../tabs/calendario";
 import Presupuesto from "../tabs/presupuesto";
@@ -93,6 +93,7 @@ export default function Detalle_proyecto_pconfigi() {
       breadcrumbs={breadcrumbs}
       header="Detalle del proyecto de grupo"
       helpInfo="Para registrar un proyecto al módulo de economía ingrese los datos de RR, fecha de RR y RD al editar un proyecto"
+      contentType="table"
     >
       <SpaceBetween size="l">
         <Detalles

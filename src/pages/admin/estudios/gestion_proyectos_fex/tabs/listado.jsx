@@ -353,7 +353,7 @@ export default () => {
 
   const reporte = async () => {
     setLoadingBtn(true);
-    const res = await axiosBase.get("admin/estudios/proyectosFEX/excel", {
+    const res = await axiosBase.get("admin/estudios/proyectosFEX/reporte", {
       params: {
         id: collectionProps.selectedItems[0].id,
       },

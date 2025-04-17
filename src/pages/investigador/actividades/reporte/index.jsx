@@ -106,7 +106,13 @@ export default function Proyecto_detalle() {
           "Duplicado",
         ].includes(data.detalles?.estado) && (
           <Alert type="error" header="Observación">
-            {data.detalles.observaciones_admin}
+            <div
+              style={{
+                whiteSpace: "pre-wrap",
+              }}
+            >
+              {data.detalles.observaciones_admin}
+            </div>
           </Alert>
         )}
         <Detalles
