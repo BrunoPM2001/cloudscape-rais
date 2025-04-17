@@ -1,4 +1,4 @@
-import { Button, SpaceBetween, Box } from "@cloudscape-design/components";
+import { Button } from "@cloudscape-design/components";
 
 const rowT = {
   border: "1px solid #ddd",
@@ -85,7 +85,9 @@ const Pmulti = ({ data }) => {
       <h1 style={{ textAlign: "center" }}>
         PROGRAMA DE PROYECTOS DE INVESTIGACIÓN MULTIDISCIPLINARIOS
       </h1>
-      <h1 style={{ textAlign: "center" }}>PARA GRUPOS DE INVESTIGACIÓN  (PMULTIS) 2025</h1>
+      <h1 style={{ textAlign: "center" }}>
+        PARA GRUPOS DE INVESTIGACIÓN (PMULTIS) 2025
+      </h1>
 
       <hr />
       <br />
@@ -130,7 +132,69 @@ const Pmulti = ({ data }) => {
         }}
       ></div>
       <h2>
-        <b>B. Objetivos</b>
+        <b>B. Palabras clave</b>
+      </h2>
+      <div
+        style={justifyText}
+        dangerouslySetInnerHTML={{
+          __html: data.proyecto.palabras_clave,
+        }}
+      ></div>
+      <h2>
+        <b>C. Estado del arte</b>
+      </h2>
+      <div
+        style={justifyText}
+        dangerouslySetInnerHTML={{
+          __html: data.detalles.estado_arte,
+        }}
+      ></div>
+      <div>
+        {data.estadoArte.nombre == "Estado del arte" ? (
+          <Button
+            ariaLabel="Archivo de estado del arte"
+            href={data.estadoArte.url}
+            iconAlign="right"
+            iconName="external"
+            variant="primary"
+            fontSize="body-s"
+            target="_blank"
+          >
+            Descargar archivo
+          </Button>
+        ) : (
+          <>No se cargó ningún archivo</>
+        )}
+      </div>
+      <h2>
+        <b>D. Planteamiento del problema</b>
+      </h2>
+      <div
+        style={justifyText}
+        dangerouslySetInnerHTML={{
+          __html: data.detalles.planteamiento_problema,
+        }}
+      ></div>
+      <h2>
+        <b>E. Justificación</b>
+      </h2>
+      <div
+        style={justifyText}
+        dangerouslySetInnerHTML={{
+          __html: data.detalles.justificacion,
+        }}
+      ></div>
+      <h2>
+        <b>F. Contribución e Impacto </b>
+      </h2>
+      <div
+        style={justifyText}
+        dangerouslySetInnerHTML={{
+          __html: data.detalles.contribucion_impacto,
+        }}
+      ></div>
+      <h2>
+        <b>G. Objetivos</b>
       </h2>
       <div
         style={justifyText}
@@ -140,17 +204,7 @@ const Pmulti = ({ data }) => {
       ></div>
 
       <h2>
-        <b>C. Justificación</b>
-      </h2>
-      <div
-        style={justifyText}
-        dangerouslySetInnerHTML={{
-          __html: data.detalles.justificacion,
-        }}
-      ></div>
-     
-      <h2>
-        <b>D. Metodología de Trabajo</b>
+        <b>H. Metodología de Trabajo</b>
       </h2>
       <div
         style={justifyText}
@@ -159,10 +213,10 @@ const Pmulti = ({ data }) => {
         }}
       ></div>
       <div>
-        {data.documentos.recurso == "METODOLOGIA_TRABAJO" ? (
+        {data.proyectoDoc.categoria == "anexo" ? (
           <Button
             ariaLabel="Archivo de metodología de trabajo"
-            href={data.documentos.METODOLOGIA_TRABAJO}
+            href={data.proyectoDoc.anexo}
             iconAlign="right"
             iconName="external"
             variant="primary"
@@ -176,28 +230,40 @@ const Pmulti = ({ data }) => {
         )}
       </div>
       <h2>
-        <b>E. Colaboración Externa</b>
+        <b>I. Colaboración Externa</b>
       </h2>
 
-      <div>
-        {data.proyectoDoc.categoria == "documento" ? (
-          <Button
-            ariaLabel="Archivo de Colaboracion Externa"
-            href={data.proyectoDoc.documento}
-            iconAlign="right"
-            iconName="external"
-            variant="primary"
-            fontSize="body-s"
-            target="_blank"
-          >
-            Descargar archivo
-          </Button>
-        ) : (
-          <>No se cargó ningún archivo</>
-        )}
-      </div>
+      {data.colaboracionExterna && data.colaboracionExterna.length > 0 ? (
+        <div style={styles.container}>
+          <table style={styles.table}>
+            <thead>
+              <tr>
+                <th style={styles.rowT}>Comentario</th>
+                <th style={styles.rowT}>Archivo</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.colaboracionExterna.map((doc, index) => (
+                <tr
+                  key={doc.id}
+                  style={index % 2 === 0 ? styles.rowEven : styles.rowOdd}
+                >
+                  <td style={styles.td}>{doc.comentario}</td>
+                  <td style={styles.td}>
+                    <a href={doc.url} target="_blank" rel="noopener noreferrer">
+                      Ver documento
+                    </a>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        <p>No se han registrado documentos de colaboración externa.</p>
+      )}
       <h2>
-        <b>F. Referencias Bibliograficas </b>
+        <b>J. Referencias Bibliograficas </b>
       </h2>
       <div
         style={justifyText}
@@ -205,18 +271,10 @@ const Pmulti = ({ data }) => {
           __html: data.detalles.referencias_bibliograficas,
         }}
       ></div>
-      <h2>
-        <b>G. Contribución e Impacto </b>
-      </h2>
-      <div
-        style={justifyText}
-        dangerouslySetInnerHTML={{
-          __html: data.detalles.contribucion_impacto,
-        }}
-      ></div>
+
       <div style={styles.container}>
         <h2>
-          <b>H. Calendarios Actividades</b>
+          <b>Calendarios Actividades</b>
         </h2>
         <table style={styles.table}>
           <thead>
@@ -245,7 +303,7 @@ const Pmulti = ({ data }) => {
 
       <div style={styles.container}>
         <h2>
-          <b>I. Presupuesto</b>
+          <b>Presupuesto</b>
         </h2>
         <table style={styles.table}>
           <thead>

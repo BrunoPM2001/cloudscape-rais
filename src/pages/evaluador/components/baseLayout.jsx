@@ -24,6 +24,7 @@ export default function BaseLayout({
   helpInfo,
   disableOverlap = false,
   withoutContentLayout,
+  contentType = "default",
 }) {
   //  Context
   const { notifications } = useContext(NotificationContext);
@@ -39,6 +40,7 @@ export default function BaseLayout({
         notifications={<Flashbar items={notifications} stackItems />}
         tools={<Helpbar>{helpInfo}</Helpbar>}
         headerSelector="#header"
+        contentType={contentType}
         content={
           withoutContentLayout ? (
             <>{children}</>

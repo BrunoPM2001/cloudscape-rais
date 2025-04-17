@@ -229,8 +229,8 @@ export default ({
                       setType("finalizar");
                     } else {
                       pushNotification(
-                        "Necesita colocar un comentario debajo de los criterios de evaluación",
-                        "warning",
+                        "Para completar el proceso de evaluación, debe registrar un comentario general que refleje su apreciación integral del proyecto.",
+                        "error",
                         notifications.length + 1,
                         false
                       );

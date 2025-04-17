@@ -61,6 +61,7 @@ const columnDefinitions = [
     cell: (item) => item.id,
     sortingField: "id",
     isRowHeader: true,
+    minWidth: 10,
   },
   {
     id: "tipo_proyecto",
@@ -187,9 +188,9 @@ export default () => {
       columnDisplay={columnDisplay}
       loading={loading}
       loadingText="Cargando datos"
-      resizableColumns
       enableKeyboardNavigation
       selectionType="single"
+      wrapLines
       onRowClick={({ detail }) => actions.setSelectedItems([detail.item])}
       header={
         <Header

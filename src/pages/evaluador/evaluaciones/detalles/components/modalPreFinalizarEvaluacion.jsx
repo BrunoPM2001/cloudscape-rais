@@ -12,6 +12,7 @@ import NotificationContext from "../../../../../providers/notificationProvider";
 
 export default ({ close, reload, proyecto_id, comentario }) => {
   //  Context
+  console.log(comentario);
   const { notifications, pushNotification } = useContext(NotificationContext);
 
   //  States
@@ -83,22 +84,41 @@ export default ({ close, reload, proyecto_id, comentario }) => {
       ) : (
         <SpaceBetween size="m">
           {!info.puntajesValidos && (
-            <Alert header="Puntajes no completados">
-              No ha colocado puntaje a todos los criterios por lo que se
-              colocará 0 de forma automática en esos casos
+            <Alert header="Puntajes pendientes" type="error">
+              Existen criterios de evaluación que no tienen un puntaje asignado.
+              De continuar con la finalización, dichos criterios serán
+              registrados automáticamente con un puntaje de <strong>0</strong>.
+              Le recomendamos revisar cuidadosamente todos los criterios antes
+              de enviar su evaluación.
             </Alert>
           )}
           {!info.comentariosValidos && (
             <Alert header="Comentarios obligatorios" type="warning">
-              Es obligatorio colocar un comentario a cada criterio evaluado, por
-              lo que no puede finalizar la evaluación sin completar eso
+              Para completar el proceso, es obligatorio registrar al menos un
+              comentario en cada uno de los criterios evaluados. Estos
+              comentarios constituyen un respaldo esencial de su valoración como
+              evaluador. Por favor, asegúrese de completar todos los campos
+              correspondientes antes de proceder.
             </Alert>
           )}
           {info.comentariosValidos && info.puntajesValidos && (
-            <Alert
-              header="No hay observaciones en esta evaluación"
-              type="success"
-            />
+            <Alert header="Evaluación lista para finalizar" type="success">
+              Todos los criterios cuentan con comentario y puntaje válido. Puede
+              proceder a finalizar la evaluación.
+              <br />
+              <br />
+              <strong>Importante:</strong> Una vez enviada la evaluación del
+              proyecto, no será posible modificarla. En caso de dudas sobre el
+              procedimiento, comuníquese con la Dirección General de
+              Investigación y Transferencia al correo{" "}
+              <a href="mailto:dgitt.vrip@unmsm.edu.pe">
+                dgitt.vrip@unmsm.edu.pe
+              </a>
+              .<br />
+              <br />
+              <strong>Nota:</strong> No olvide firmar su evaluación y enviarla
+              para concluir formalmente el proceso de evaluación.
+            </Alert>
           )}
         </SpaceBetween>
       )}
