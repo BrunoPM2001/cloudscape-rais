@@ -101,6 +101,7 @@ export default function Detalle_proyecto_ptpdocto() {
       breadcrumbs={breadcrumbs}
       header="Detalle del proyecto de grupo"
       helpInfo="Para registrar un proyecto al módulo de economía ingrese los datos de RR, fecha de RR y RD al editar un proyecto"
+      contentType="table"
     >
       <SpaceBetween size="l">
         <Detalles

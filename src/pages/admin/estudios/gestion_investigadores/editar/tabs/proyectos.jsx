@@ -22,7 +22,17 @@ const columnDefinitions = [
   {
     id: "titulo",
     header: "Título",
-    cell: (item) => item.titulo,
+    cell: (item) => (
+      <Link
+        href={`/admin/estudios/proyectos_grupos/detalle/${item.tipo_proyecto.toLowerCase()}?id=${
+          item.id
+        }`}
+        target="_blank"
+      >
+        {item.titulo}
+      </Link>
+    ),
+    minWidth: 500,
   },
   {
     id: "codigo_proyecto",
@@ -96,7 +106,6 @@ export default ({ loading, items }) => {
       columnDisplay={columnDisplay}
       loading={loading}
       loadingText="Cargando datos"
-      // resizableColumns
       wrapLines
       header={
         <Header

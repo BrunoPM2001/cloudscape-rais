@@ -1,7 +1,6 @@
 import {
   Badge,
   Box,
-  CollectionPreferences,
   Header,
   Link,
   Popover,
@@ -13,7 +12,14 @@ const columnDefinitions = [
   {
     id: "nombre",
     header: "Nombre",
-    cell: (item) => item.nombre,
+    cell: (item) => (
+      <Link
+        href={`/admin/estudios/grupos/detalle?id=${item.id}`}
+        target="_blank"
+      >
+        {item.nombre}
+      </Link>
+    ),
   },
   {
     id: "categoria",
@@ -79,7 +85,7 @@ export default ({ loading, items }) => {
       columnDisplay={columnDisplay}
       loading={loading}
       loadingText="Cargando datos"
-      resizableColumns
+      wrapLines
       header={
         <Header
           variant="h3"
@@ -87,7 +93,7 @@ export default ({ loading, items }) => {
           info={
             <Popover
               triggerType="custom"
-              content="Grupos en los que ha estado incluído y el actual (si es que estuviera en uno)"
+              content="Grupos en los que está incluído (si es que estuviera en uno)"
             >
               <Link>Info</Link>
             </Popover>

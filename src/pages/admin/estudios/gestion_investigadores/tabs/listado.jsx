@@ -108,6 +108,12 @@ const FILTER_PROPS = [
     groupValuesLabel: "Teléfonos móvil",
     operators: stringOperators,
   },
+  {
+    propertyLabel: "Correo institucional",
+    key: "email3",
+    groupValuesLabel: "Correos",
+    operators: stringOperators,
+  },
 ];
 
 const columnDefinitions = [
@@ -117,6 +123,7 @@ const columnDefinitions = [
     cell: (item) => item.id,
     sortingField: "id",
     isRowHeader: true,
+    minWidth: 80,
   },
   {
     id: "rrhh_status",
@@ -126,78 +133,98 @@ const columnDefinitions = [
       return <Badge color={config.color}>{config.text}</Badge>;
     },
     sortingField: "rrhh_status",
+    minWidth: 120,
   },
   {
     id: "puntaje",
     header: "Puntaje",
     cell: (item) => item.puntaje,
     sortingField: "puntaje",
+    minWidth: 100,
   },
   {
     id: "tipo",
     header: "Tipo",
     cell: (item) => item.tipo,
     sortingField: "tipo",
+    minWidth: 150,
   },
   {
     id: "facultad",
     header: "Facultad",
     cell: (item) => item.facultad,
     sortingField: "facultad",
+    minWidth: 200,
   },
   {
     id: "codigo",
     header: "Código",
     cell: (item) => item.codigo,
     sortingField: "codigo",
+    minWidth: 120,
   },
   {
     id: "codigo_orcid",
     header: "Orcid",
     cell: (item) => item.codigo_orcid,
     sortingField: "codigo_orcid",
+    minWidth: 150,
   },
   {
     id: "apellido1",
     header: "Ap. paterno",
     cell: (item) => item.apellido1,
     sortingField: "apellido1",
+    minWidth: 120,
   },
   {
     id: "apellido2",
     header: "Ap. materno",
     cell: (item) => item.apellido2,
     sortingField: "apellido2",
+    minWidth: 120,
   },
   {
     id: "nombres",
     header: "Nombre",
     cell: (item) => item.nombres,
     sortingField: "nombres",
+    minWidth: 150,
   },
   {
     id: "doc_tipo",
     header: "Tipo de doc.",
     cell: (item) => item.doc_tipo,
     sortingField: "doc_tipo",
+    minWidth: 120,
   },
   {
     id: "doc_numero",
     header: "N° de doc.",
     cell: (item) => item.doc_numero,
     sortingField: "doc_numero",
+    minWidth: 120,
   },
   {
     id: "fecha_nac",
     header: "Fecha de nac.",
     cell: (item) => item.fecha_nac,
     sortingField: "fecha_nac",
+    minWidth: 120,
   },
   {
     id: "telefono_movil",
     header: "Teléfono móvil",
     cell: (item) => item.telefono_movil,
     sortingField: "telefono_movil",
+    minWidth: 120,
+  },
+  {
+    id: "email3",
+    header: "Correo institucional",
+    cell: (item) => item.email3,
+    sortingField: "email3",
+    minWidth: 150,
   },
 ];
 
@@ -216,6 +243,7 @@ const columnDisplay = [
   { id: "doc_numero", visible: true },
   { id: "fecha_nac", visible: true },
   { id: "telefono_movil", visible: true },
+  { id: "email3", visible: true },
 ];
 
 export default () => {
@@ -275,7 +303,7 @@ export default () => {
       columnDisplay={columnDisplay}
       loading={loading}
       loadingText="Cargando datos"
-      resizableColumns
+      wrapLines
       enableKeyboardNavigation
       selectionType="single"
       onRowClick={({ detail }) => actions.setSelectedItems([detail.item])}

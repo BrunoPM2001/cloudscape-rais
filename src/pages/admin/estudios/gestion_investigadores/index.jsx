@@ -27,10 +27,11 @@ export default function Gestion_investigadores() {
   return (
     <BaseLayout
       breadcrumbs={breadcrumbs}
-      header="Gestión de investigadores:"
+      header="Gestión de investigadores"
       helpInfo="Información sobre la páginal actual para poder mostrarla al público
       en general."
       disableOverlap
+      contentType="table"
     >
       <SpaceBetween size="l">
         <Tabs tabs={tabs} ariaLabel="Opciones de usuarios investigadores" />

@@ -446,7 +446,17 @@ export default function Formulario({
       <SpaceBetween size="l">
         <Header variant="h3">Datos de investigador</Header>
         <ColumnLayout columns={4}>
-          <FormField label="Orcid" stretch errorText={formErrors.codigo_orcid}>
+          <FormField
+            label="Orcid"
+            errorText={formErrors.codigo_orcid}
+            info={
+              <Link
+                external
+                href={`https://orcid.org/${formValues.codigo_orcid}`}
+              />
+            }
+            stretch
+          >
             <Input
               placeholder="Escriba su código orcid"
               value={formValues.codigo_orcid}
@@ -478,8 +488,14 @@ export default function Formulario({
           </FormField>
           <FormField
             label="Scopus Author ID"
-            stretch
             errorText={formErrors.scopus_id}
+            info={
+              <Link
+                external
+                href={`https://www.scopus.com/authid/detail.uri?authorId=${formValues.scopus_id}`}
+              />
+            }
+            stretch
           >
             <Input
               placeholder="Escriba su scopus id"
@@ -508,8 +524,9 @@ export default function Formulario({
           </FormField>
           <FormField
             label="Google scholar"
-            stretch
             errorText={formErrors.google_scholar}
+            info={<Link external href={formValues.google_scholar} />}
+            stretch
           >
             <Input
               placeholder="Escriba su url de google scholar"

@@ -294,7 +294,7 @@ export default function Editar_investigador() {
   return (
     <BaseLayout
       breadcrumbs={breadcrumbs}
-      header="Editar investigador:"
+      header="Editar investigador"
       helpInfo="Información sobre la páginal actual para poder mostrarla al público
       en general."
     >
