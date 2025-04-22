@@ -53,7 +53,7 @@ const columnDefinitions = [
   },
 ];
 
-const MAX = 60000;
+const MAX = 51000;
 const MIN = 25000;
 
 const columnDisplay = [

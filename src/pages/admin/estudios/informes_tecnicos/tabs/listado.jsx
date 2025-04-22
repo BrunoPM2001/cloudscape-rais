@@ -453,11 +453,13 @@ export default () => {
             id: "informe",
             header: "Informe",
             cell: (item) => item.informe,
+            minWidth: 120,
           },
           {
             id: "fecha_envio",
             header: "Fecha de envío",
             cell: (item) => item.fecha_envio,
+            minWidth: 120,
           },
           {
             id: "estado",
@@ -483,16 +485,19 @@ export default () => {
                   : "En proceso"}
               </Badge>
             ),
+            minWidth: 120,
           },
           {
             id: "created_at",
             header: "Fecha de creación",
             cell: (item) => item.created_at,
+            minWidth: 120,
           },
           {
             id: "updated_at",
             header: "Fecha de actualización",
             cell: (item) => item.updated_at,
+            minWidth: 120,
           },
         ]}
         columnDisplay={[
@@ -507,7 +512,7 @@ export default () => {
         items={informes}
         loadingText="Cargando datos"
         loading={loadingInformes}
-        resizableColumns
+        wrapLines
         selectionType="single"
         selectedItems={selectedItems}
         onSelectionChange={({ detail }) =>
@@ -577,7 +582,18 @@ export default () => {
                         collectionProps.selectedItems[0].tipo_proyecto,
                       tipo_informe: selectedItems[0]["informe"],
                     });
-                    window.open("informes_tecnicos/detalle?" + query, "_blank");
+                    if (selectedOption.value == "nuevos") {
+                      window.open(
+                        "informes_tecnicos/detalle?" + query,
+                        "_blank"
+                      );
+                    }
+                    if (selectedOption.value == "antiguos") {
+                      window.open(
+                        "informes_tecnicos/detalleAntiguo?" + query,
+                        "_blank"
+                      );
+                    }
                   }}
                 >
                   Editar informe

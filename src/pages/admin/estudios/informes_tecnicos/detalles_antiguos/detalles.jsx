@@ -12,8 +12,6 @@ import {
   SpaceBetween,
   Textarea,
 } from "@cloudscape-design/components";
-import queryString from "query-string";
-import { useLocation } from "react-router-dom";
 
 const opts = [
   { value: 0, label: "En proceso" },
@@ -29,6 +27,7 @@ const opt_informe = [
 ];
 
 export default ({
+  tipo_proyecto,
   proyecto,
   formValues,
   formErrors,
@@ -36,10 +35,6 @@ export default ({
   updating,
   updateInforme,
 }) => {
-  //  Url
-  const location = useLocation();
-  const { tipo_proyecto } = queryString.parse(location.search);
-
   return (
     <Container
       header={

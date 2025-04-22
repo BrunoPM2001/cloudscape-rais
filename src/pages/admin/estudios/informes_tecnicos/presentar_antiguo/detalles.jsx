@@ -118,7 +118,11 @@ export default ({
               }
             />
           </FormField>
-          <FormField label="Fecha de registro DGITT" stretch>
+          <FormField
+            label="Fecha de registro DGITT"
+            errorText={formErrors.fecha_registro_csi}
+            stretch
+          >
             <DatePicker
               placeholder="YYYY-MM-DD"
               value={formValues.fecha_registro_csi ?? ""}
@@ -148,7 +152,7 @@ export default ({
             }
           />
         </FormField>
-        <FormField label="Archivo digital" stretch>
+        <FormField label="Archivo digital" errorText={formErrors.file1} stretch>
           <FileUpload
             {...propsRepetidas}
             value={formValues.file1}

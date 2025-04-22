@@ -11,6 +11,9 @@ import {
 import { useState } from "react";
 import axiosBase from "../../../../api/axios";
 import BaseLayout from "../../components/baseLayout";
+import Multiselect from "@cloudscape-design/components/multiselect";
+import Textarea from "@cloudscape-design/components/textarea";
+import ColumnLayout from "@cloudscape-design/components/column-layout";
 import { useAutosuggest } from "../../../../hooks/useAutosuggest";
 
 const breadcrumbs = [
@@ -32,13 +35,15 @@ export default function Reporte_grupo() {
     estado: null,
     facultad: null,
     grupo_id: null,
+    condiciones: [], // para Multiselect
+    detalle: "",
   });
 
   const [selectedOptions, setSelectedOptions] = useState({
     estado: null,
     facultad: null,
   });
-
+  const [selectedCondicion, setSelectedCondicion] = useState([]);
   const [loadingReport, setLoadingReport] = useState(false);
 
   //  Hooks
@@ -55,12 +60,15 @@ export default function Reporte_grupo() {
 
   const reporte = async () => {
     setLoadingReport(true);
+    const condicionesSeleccionadas = form.condiciones.map((c) => c.value);
     const res = await axiosBase.get("admin/reportes/grupo", {
       params: {
         ...form,
+        condiciones: condicionesSeleccionadas, // puedes cambiar el nombre si deseas
       },
       responseType: "blob",
     });
+    // console.log(condicionesSeleccionadas);
     setLoadingReport(false);
     const blob = await res.data;
     const url = URL.createObjectURL(blob);
@@ -73,6 +81,7 @@ export default function Reporte_grupo() {
       header="Reporte por estado y facultad:"
       helpInfo="Información sobre la páginal actual para poder mostrarla al público
       en general."
+      contentType="table"
     >
       <SpaceBetween size="l">
         <Container>
@@ -93,7 +102,7 @@ export default function Reporte_grupo() {
             }
             header={<Header variant="h2">Opciones del reporte</Header>}
           >
-            <SpaceBetween size="s">
+            <ColumnLayout columns={2} variant="text-grid">
               <FormField label="Estado" stretch>
                 <Select
                   controlId="estado"
@@ -171,6 +180,8 @@ export default function Reporte_grupo() {
                   ]}
                 />
               </FormField>
+            </ColumnLayout>
+            <ColumnLayout columns={2} variant="text-grid">
               <FormField label="Coordinador" stretch>
                 <Autosuggest
                   onChange={({ detail }) => {
@@ -201,7 +212,42 @@ export default function Reporte_grupo() {
                   empty="No se encontraron resultados"
                 />
               </FormField>
-            </SpaceBetween>
+              <FormField label="Condición en el Grupo" stretch>
+                <Multiselect
+                  selectedOptions={form.condiciones}
+                  onChange={({ detail }) =>
+                    setForm((prev) => ({
+                      ...prev,
+                      condiciones: detail.selectedOptions,
+                    }))
+                  }
+                  options={[
+                    { label: "Coordinador", value: "Coordinador" },
+                    { label: "Titulares", value: "Titular" },
+                    { label: "Adherentes Internos", value: "Adherente" },
+                    {
+                      label: "Adherentes Externos",
+                      value: "Colaborador Externo",
+                    },
+                  ]}
+                  placeholder="-- Todos --"
+                />
+              </FormField>
+            </ColumnLayout>
+            <ColumnLayout columns={2} variant="text-grid">
+              <FormField label="Descripción del Informe">
+                <Textarea
+                  onChange={({ detail }) =>
+                    setForm((prev) => ({
+                      ...prev,
+                      detalle: detail.value,
+                    }))
+                  }
+                  value={form.detalle}
+                  placeholder="Escriba la descripción del informe(Opcional)"
+                />
+              </FormField>
+            </ColumnLayout>
           </Form>
         </Container>
       </SpaceBetween>
