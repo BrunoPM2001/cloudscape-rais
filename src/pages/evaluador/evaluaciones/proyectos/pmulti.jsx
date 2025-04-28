@@ -213,10 +213,10 @@ const Pmulti = ({ data }) => {
         }}
       ></div>
       <div>
-        {data.proyectoDoc.categoria == "anexo" ? (
+        {data.metodologiaTrabajo.categoria == "anexo" ? (
           <Button
             ariaLabel="Archivo de metodología de trabajo"
-            href={data.proyectoDoc.anexo}
+            href={data.metodologiaTrabajo.url}
             iconAlign="right"
             iconName="external"
             variant="primary"

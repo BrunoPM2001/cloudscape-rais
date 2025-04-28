@@ -70,6 +70,20 @@ const columnDefinitions = [
     isRowHeader: true,
   },
   {
+    id: "evaluador_id",
+    header: "Evaluador ID",
+    cell: (item) => item.evaluador_id,
+    sortingField: "evaluador_id",
+    isRowHeader: true,
+  },
+  {
+    id: "proyecto_id",
+    header: "Proyecto ID",
+    cell: (item) => item.proyecto_id,
+    sortingField: "proyecto_id",
+    isRowHeader: true,
+  },
+  {
     id: "evaluador",
     header: "Evaluador",
     cell: (item) => item.evaluador,
@@ -86,6 +100,7 @@ const columnDefinitions = [
     header: "Título",
     cell: (item) => item.titulo,
     sortingField: "titulo",
+    minWidth: 300,
   },
   {
     id: "facultad",
@@ -133,6 +148,8 @@ const columnDefinitions = [
 
 const columnDisplay = [
   { id: "id", visible: true },
+  { id: "evaluador_id", visible: true },
+  { id: "proyecto_id", visible: true },
   { id: "evaluador", visible: true },
   { id: "tipo_proyecto", visible: true },
   { id: "titulo", visible: true },
@@ -213,6 +230,7 @@ export default () => {
   };
 
   const ver = async () => {
+    setLoadingFicha(true);
     const res = await axiosBase.get("admin/facultad/evaluaciones/verFicha", {
       params: {
         id: collectionProps.selectedItems[0].id,
@@ -243,7 +261,6 @@ export default () => {
       columnDisplay={columnDisplay}
       loading={loading}
       loadingText="Cargando datos"
-      resizableColumns
       enableKeyboardNavigation
       selectionType="single"
       onRowClick={({ detail }) => actions.setSelectedItems([detail.item])}

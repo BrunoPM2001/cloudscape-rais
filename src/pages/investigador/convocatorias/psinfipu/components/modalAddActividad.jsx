@@ -107,15 +107,16 @@ export default ({ id, close, reload, integrantes }) => {
               <DatePicker
                 placeholder="YYYY/MM/DD"
                 isDateEnabled={(date) => {
+                  const currentDate = new Date().setHours(0, 0, 0, 0);
                   if (formValues.fecha_fin != "") {
                     const newDate = new Date(formValues.fecha_fin);
-                    return date < newDate;
+                    return date < newDate && date >= currentDate;
                   } else {
-                    return true;
+                    return date >= currentDate;
                   }
                 }}
                 dateDisabledReason={() => {
-                  return "La fecha inicial no puede ser mayor a la fecha final";
+                  return "La fecha inicial no puede ser mayor a la fecha final y tampoco menor al día actual";
                 }}
                 value={formValues.fecha_inicio}
                 onChange={({ detail }) =>
@@ -131,15 +132,16 @@ export default ({ id, close, reload, integrantes }) => {
               <DatePicker
                 placeholder="YYYY/MM/DD"
                 isDateEnabled={(date) => {
+                  const currentDate = new Date().setHours(0, 0, 0, 0);
                   if (formValues.fecha_inicio != "") {
                     const newDate = new Date(formValues.fecha_inicio);
-                    return date > newDate;
+                    return date > newDate && date >= currentDate;
                   } else {
-                    return true;
+                    return date >= currentDate;
                   }
                 }}
                 dateDisabledReason={() => {
-                  return "La fecha final no puede ser menor a la fecha inicial";
+                  return "La fecha final no puede ser menor a la fecha inicial y tampoco menor al día actual";
                 }}
                 value={formValues.fecha_fin}
                 onChange={({ detail }) =>

@@ -30,6 +30,7 @@ export default function Proyectos_evaluados() {
       header="Proyectos evaluados"
       helpInfo="Información sobre la páginal actual para poder mostrarla al público
       en general."
+      contentType="table"
       disableOverlap
     >
       <Tabs tabs={tabs} />

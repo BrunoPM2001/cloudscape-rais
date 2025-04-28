@@ -118,6 +118,7 @@ export default function Proyecto_detalle() {
         <Detalles
           loading={loading}
           data={data.detalles}
+          responsable={data.responsable}
           id={proyecto_id}
           items={items}
           antiguo={antiguo}

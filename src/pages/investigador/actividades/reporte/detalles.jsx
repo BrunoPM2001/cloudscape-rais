@@ -14,7 +14,7 @@ import axiosBase from "../../../../api/axios";
 import ModalDj from "../proyectos_con_financiamiento/components/modalSubirDj";
 import { useState } from "react";
 
-export default ({ data, loading, id, items, antiguo }) => {
+export default ({ data, responsable, loading, id, items, antiguo }) => {
   //  States
   const [loadingReporte, setLoadingReporte] = useState(false);
   const [modal, setModal] = useState("");
@@ -173,7 +173,9 @@ export default ({ data, loading, id, items, antiguo }) => {
             {loading ? (
               <Spinner />
             ) : (
-              data.dj_aceptada == null && (
+              data.dj_aceptada == null &&
+              data.tipo_proyecto == "PCONFIGI" &&
+              responsable == 1 && (
                 <div>
                   <Box variant="awsui-key-label">Dj Subvencion Económica</Box>
                   <SpaceBetween direction="horizontal" size="xs">
