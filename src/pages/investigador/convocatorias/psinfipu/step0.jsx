@@ -1,4 +1,5 @@
 import {
+  Alert,
   Badge,
   Box,
   Button,
@@ -80,6 +81,7 @@ const columnDisplay = [
 export default function Registro_psinfipu_0() {
   const [loading, setLoading] = useState(true);
   const [distributions, setDistribution] = useState([]);
+  const [errores, setErrors] = useState([]);
   const { items, actions, collectionProps } = useCollection(distributions, {
     sorting: {},
     selection: {},
@@ -92,7 +94,8 @@ export default function Registro_psinfipu_0() {
       "investigador/convocatorias/psinfipu/listado"
     );
     const data = res.data;
-    setDistribution(data);
+    setDistribution(data.listado);
+    setErrors(data.errores);
     setLoading(false);
   };
 
@@ -115,79 +118,91 @@ export default function Registro_psinfipu_0() {
             id: "listado",
             label: "Listado",
             content: (
-              <Table
-                {...collectionProps}
-                trackBy="id"
-                items={items}
-                columnDefinitions={columnDefinitions}
-                columnDisplay={columnDisplay}
-                loading={loading}
-                loadingText="Cargando datos"
-                wrapLines
-                selectionType="single"
-                onRowClick={({ detail }) =>
-                  actions.setSelectedItems([detail.item])
-                }
-                header={
-                  <Header
-                    actions={
-                      <SpaceBetween size="xs" direction="horizontal">
-                        <ButtonDropdown
-                          disabled={
-                            !collectionProps.selectedItems.length ||
-                            collectionProps.selectedItems[0]?.estado !=
-                              "En proceso"
-                          }
-                          variant="normal"
-                          onItemClick={({ detail }) => {
-                            if (detail.id == "action_1_1") {
-                              const query = queryString.stringify({
-                                id: collectionProps.selectedItems[0]["id"],
-                              });
-                              window.location.href = "psinfipu/paso1?" + query;
-                            } else if (detail.id == "action_1_2") {
-                              setType("delete");
+              <SpaceBetween size="m">
+                {errores.length > 0 && (
+                  <Alert type="warning">
+                    No puede presentar una propuesta de proyecto porque:
+                    {errores.map((item) => (
+                      <li>{item}</li>
+                    ))}
+                  </Alert>
+                )}
+                <Table
+                  {...collectionProps}
+                  trackBy="id"
+                  items={items}
+                  columnDefinitions={columnDefinitions}
+                  columnDisplay={columnDisplay}
+                  loading={loading}
+                  loadingText="Cargando datos"
+                  wrapLines
+                  selectionType="single"
+                  onRowClick={({ detail }) =>
+                    actions.setSelectedItems([detail.item])
+                  }
+                  header={
+                    <Header
+                      actions={
+                        <SpaceBetween size="xs" direction="horizontal">
+                          <ButtonDropdown
+                            disabled={
+                              !collectionProps.selectedItems.length ||
+                              collectionProps.selectedItems[0]?.estado !=
+                                "En proceso"
                             }
-                          }}
-                          items={[
-                            {
-                              text: "Editar",
-                              id: "action_1_1",
-                            },
-                            {
-                              text: "Eliminar",
-                              id: "action_1_2",
-                            },
-                          ]}
-                        >
-                          Acciones
-                        </ButtonDropdown>
-                        <Button
-                          variant="primary"
-                          onClick={() => {
-                            window.location.href = "psinfipu/paso1";
-                          }}
-                        >
-                          Registrar
-                        </Button>
+                            variant="normal"
+                            onItemClick={({ detail }) => {
+                              if (detail.id == "action_1_1") {
+                                const query = queryString.stringify({
+                                  id: collectionProps.selectedItems[0]["id"],
+                                });
+                                window.location.href =
+                                  "psinfipu/paso1?" + query;
+                              } else if (detail.id == "action_1_2") {
+                                setType("delete");
+                              }
+                            }}
+                            items={[
+                              {
+                                text: "Editar",
+                                id: "action_1_1",
+                              },
+                              {
+                                text: "Eliminar",
+                                id: "action_1_2",
+                              },
+                            ]}
+                          >
+                            Acciones
+                          </ButtonDropdown>
+                          <Button
+                            variant="primary"
+                            onClick={() => {
+                              window.location.href = "psinfipu/paso1";
+                            }}
+                            disabled={loading || errores.length}
+                          >
+                            Registrar
+                          </Button>
+                        </SpaceBetween>
+                      }
+                    >
+                      Proyectos ({distributions.length})
+                    </Header>
+                  }
+                  empty={
+                    <Box
+                      margin={{ vertical: "xs" }}
+                      textAlign="center"
+                      color="inherit"
+                    >
+                      <SpaceBetween size="m">
+                        <b>No hay registros...</b>
                       </SpaceBetween>
-                    }
-                  >
-                    Proyectos ({distributions.length})
-                  </Header>
-                }
-                empty={
-                  <Box
-                    margin={{ vertical: "xs" }}
-                    textAlign="center"
-                    color="inherit"
-                  >
-                    <SpaceBetween size="m">
-                      <b>No hay registros...</b>
-                    </SpaceBetween>
-                  </Box>
-                }
-              />
+                    </Box>
+                  }
+                />
+              </SpaceBetween>
             ),
           },
         ]}

@@ -168,18 +168,18 @@ const navItems = [
       },
     ],
   },
-  // {
-  //   type: "section",
-  //   text: "Constancias",
-  //   defaultExpanded: false,
-  //   items: [
-  //     {
-  //       type: "link",
-  //       text: "Reporte de constancias",
-  //       href: "/investigador/constancias",
-  //     },
-  //   ],
-  // },
+  {
+    type: "section",
+    text: "Constancias",
+    defaultExpanded: false,
+    items: [
+      {
+        type: "link",
+        text: "Reporte de constancias",
+        href: "/investigador/constancias",
+      },
+    ],
+  },
   {
     type: "section",
     text: "Convocatorias",
