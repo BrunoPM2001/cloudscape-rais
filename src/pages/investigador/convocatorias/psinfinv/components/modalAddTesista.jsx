@@ -140,7 +140,11 @@ export default ({ close, reload, id }) => {
             onChange={({ detail }) =>
               handleChange("tipo_tesis", detail.selectedOption)
             }
-            options={optionsTesis}
+            options={
+              form?.tipo_programa
+                ? [optionsTesis.find((opt) => opt.value == form.tipo_programa)]
+                : optionsTesis
+            }
           />
         </FormField>
         <FormField

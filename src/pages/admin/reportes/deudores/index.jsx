@@ -27,7 +27,7 @@ export default function Reporte_deudores() {
   return (
     <BaseLayout
       breadcrumbs={breadcrumbs}
-      header="Reporte por investigador:"
+      header="Reporte por investigador"
       helpInfo="Información sobre la páginal actual para poder mostrarla al público
       en general."
       disableOverlap

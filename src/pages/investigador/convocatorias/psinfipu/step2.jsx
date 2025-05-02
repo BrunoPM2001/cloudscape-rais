@@ -46,7 +46,11 @@ const formRules = {
   file1: { isFile: true, maxSize: 6 * 1024 * 1024 },
   file2: { isFile: true, maxSize: 6 * 1024 * 1024 },
   editorial: { required: true },
-  editorial_url: { required: true },
+  editorial_url: {
+    required: true,
+    regex:
+      /^(https?:\/\/)?(([a-zA-Z0-9_-]+\.)+[a-zA-Z]{2,})(:\d{1,5})?(\/[^\s]*)?$/,
+  },
   tipo_publicacion: { required: true },
 };
 
