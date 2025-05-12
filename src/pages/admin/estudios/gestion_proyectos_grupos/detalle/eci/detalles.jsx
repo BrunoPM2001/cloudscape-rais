@@ -18,19 +18,16 @@ export default ({ data, loading, proyecto_id, reload }) => {
   const [loadingReporte, setLoadingReporte] = useState(false);
 
   //  Functions
-  const exportWord = async () => {
+  const exportPdf = async () => {
     setLoadingReporte(true);
-    const res = await axiosBase.get(
-      "admin/estudios/proyectosGrupo/exportToWord",
-      {
-        params: {
-          proyecto_id,
-        },
-        responseType: "blob",
-      }
-    );
+    const res = await axiosBase.get("admin/estudios/proyectosGrupo/reporte", {
+      params: {
+        proyecto_id,
+      },
+      responseType: "blob",
+    });
     setLoadingReporte(false);
-    const blob = res.data;
+    const blob = await res.data;
     const url = URL.createObjectURL(blob);
     window.open(url, "_blank");
   };
@@ -45,9 +42,9 @@ export default ({ data, loading, proyecto_id, reload }) => {
               <Button
                 disabled={loading}
                 loading={loadingReporte}
-                onClick={exportWord}
+                onClick={exportPdf}
               >
-                Exportar descripción a word
+                Exportar descripción
               </Button>
               <Button
                 variant="primary"
