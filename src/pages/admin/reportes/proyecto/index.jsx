@@ -114,6 +114,9 @@ export default function Reporte_proyecto() {
                       value: "PCONFIGI",
                     },
                     {
+                      value: "PMULTI",
+                    },
+                    {
                       value: "PRO-CTIE",
                     },
                     {
