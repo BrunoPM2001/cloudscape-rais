@@ -449,7 +449,7 @@ export default ({ close, reload, grupo_id }) => {
                 removeFileAriaLabel: (e) => `Eliminar archivo ${e + 1}`,
                 errorIconAriaLabel: "Error",
               }}
-              accept=".docx, .doc,  .pdf"
+              accept=".pdf"
             />
           </FormField>
         </SpaceBetween>
