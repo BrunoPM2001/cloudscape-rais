@@ -11,12 +11,13 @@ import {
   Button,
   ButtonDropdown,
 } from "@cloudscape-design/components";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useCollection } from "@cloudscape-design/collection-hooks";
 import axiosBase from "../../../../../api/axios";
 import queryString from "query-string";
 import ModalAudit from "../components/modalAudit";
 import ModalEliminarInforme from "../components/modalEliminarInforme";
+import NotificationContext from "../../../../../providers/notificationProvider";
 
 const stringOperators = [":", "!:", "=", "!=", "^", "!^"];
 
@@ -256,6 +257,8 @@ const columnDisplay = [
 ];
 
 export default () => {
+  const { notifications, pushNotification } = useContext(NotificationContext);
+
   //  Data states
   const [loading, setLoading] = useState(true);
   const [loadingInformes, setLoadingInformes] = useState(false);

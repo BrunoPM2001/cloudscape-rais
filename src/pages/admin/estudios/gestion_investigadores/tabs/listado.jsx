@@ -1,6 +1,7 @@
 import {
   Badge,
   Box,
+  Button,
   ButtonDropdown,
   Header,
   Pagination,
@@ -8,10 +9,11 @@ import {
   SpaceBetween,
   Table,
 } from "@cloudscape-design/components";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useCollection } from "@cloudscape-design/collection-hooks";
 import queryString from "query-string";
 import axiosBase from "../../../../../api/axios";
+import NotificationContext from "../../../../../providers/notificationProvider";
 
 //  For badge
 const estadoConfig = {
@@ -247,8 +249,11 @@ const columnDisplay = [
 ];
 
 export default () => {
+  const { notifications, pushNotification } = useContext(NotificationContext);
+
   //  Data states
   const [loading, setLoading] = useState(true);
+  const [loadingReport, setLoadingReport] = useState(false);
   const [distributions, setDistribution] = useState([]);
   const {
     items,
@@ -257,6 +262,7 @@ export default () => {
     collectionProps,
     paginationProps,
     propertyFilterProps,
+    allPageItems,
   } = useCollection(distributions, {
     propertyFiltering: {
       filteringProperties: FILTER_PROPS,
@@ -289,6 +295,45 @@ export default () => {
     setLoading(false);
   };
 
+  const reporteExcel = async () => {
+    if (allPageItems.length > 15000) {
+      pushNotification(
+        "La cantidad de items a exportar es demasiada, redúzcala a menos de 15000",
+        "warning",
+        notifications.length + 1
+      );
+    } else {
+      const filteredItems = allPageItems.map((item) => ({ ...item }));
+
+      setLoadingReport(true);
+      const res = await axiosBase.post(
+        "admin/estudios/informesTecnicos/excel",
+        filteredItems,
+        {
+          responseType: "blob",
+        }
+      );
+      const blob = await res.data;
+      const url = URL.createObjectURL(blob);
+      window.open(url, "_blank");
+      setLoadingReport(false);
+    }
+  };
+
+  const reporteExcelFull = async () => {
+    setLoadingReport(true);
+    const res = await axiosBase.get(
+      "admin/estudios/investigadores/excelComplete",
+      {
+        responseType: "blob",
+      }
+    );
+    const blob = res.data;
+    const url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
+    setLoadingReport(false);
+  };
+
   //  Effects
   useEffect(() => {
     getData();
@@ -312,6 +357,28 @@ export default () => {
           counter={"(" + distributions.length + ")"}
           actions={
             <SpaceBetween direction="horizontal" size="xs">
+              <ButtonDropdown
+                loading={loadingReport}
+                items={[
+                  {
+                    id: "action_9_1",
+                    text: "Excel con filtros",
+                  },
+                  {
+                    id: "action_9_2",
+                    text: "Excel completo",
+                  },
+                ]}
+                onItemClick={({ detail }) => {
+                  if (detail.id == "action_9_1") {
+                    reporteExcel();
+                  } else if (detail.id == "action_9_2") {
+                    reporteExcelFull();
+                  }
+                }}
+              >
+                Exportar
+              </ButtonDropdown>
               <ButtonDropdown
                 disabled={collectionProps.selectedItems.length == 0}
                 onItemClick={({ detail }) => {
@@ -342,7 +409,7 @@ export default () => {
                   },
                 ]}
               >
-                Acciones para un investigador
+                Acciones
               </ButtonDropdown>
               <ButtonDropdown
                 onItemClick={({ detail }) => {
@@ -384,7 +451,7 @@ export default () => {
                   },
                 ]}
               >
-                Agregar investigador
+                Agregar
               </ButtonDropdown>
             </SpaceBetween>
           }
