@@ -265,6 +265,7 @@ export default function Registro_psinfipu_2() {
                             <FormField
                               label="Tesis doctoral aprobada"
                               stretch
+                              errorText={formErrors.file1}
                               constraintText={
                                 data.archivos.doctorado != null ? (
                                   <>
@@ -307,6 +308,7 @@ export default function Registro_psinfipu_2() {
                             <FormField
                               label="Tesis de maestría aprobada"
                               stretch
+                              errorText={formErrors.file2}
                               constraintText={
                                 data.archivos.maestria != null ? (
                                   <>
