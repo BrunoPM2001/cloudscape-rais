@@ -97,6 +97,11 @@ const Detalle_proyecto_psinfinv = lazy(() =>
     "../pages/admin/estudios/gestion_proyectos_grupos/detalle/psinfinv/index.jsx"
   )
 );
+const Detalle_proyecto_pconfigi_inv = lazy(() =>
+  import(
+    "../pages/admin/estudios/gestion_proyectos_grupos/detalle/pconfigi_inv/index.jsx"
+  )
+);
 const Detalle_proyecto_pconfigi = lazy(() =>
   import(
     "../pages/admin/estudios/gestion_proyectos_grupos/detalle/pconfigi/index.jsx"
@@ -284,6 +289,10 @@ const routes = createBrowserRouter(
                 {
                   path: "pconfigi",
                   element: <Detalle_proyecto_pconfigi />,
+                },
+                {
+                  path: "pconfigi-inv",
+                  element: <Detalle_proyecto_pconfigi_inv />,
                 },
                 {
                   path: "psinfinv",

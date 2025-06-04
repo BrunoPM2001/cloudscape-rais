@@ -433,6 +433,21 @@ export default () => {
                         query,
                       "_blank"
                     );
+                  } else if (
+                    collectionProps.selectedItems[0][
+                      "tipo_proyecto"
+                    ].toLowerCase() == "pconfigi-inv"
+                  ) {
+                    console.log("gaaa");
+                    window.open(
+                      "proyectos_grupos/detalle/" +
+                        collectionProps.selectedItems[0][
+                          "tipo_proyecto"
+                        ].toLowerCase() +
+                        "?" +
+                        query,
+                      "_blank"
+                    );
                   } else {
                     window.open(
                       "proyectos_grupos/detalle/pconfigi" + "?" + query,
