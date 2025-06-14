@@ -242,9 +242,9 @@ const navItems = [
       {
         type: "link",
         text: "Proyecto de investigación sin financiamiento",
-        // href: "/investigador/convocatoria/psinfinv/paso1",
-        href: "#",
-        info: <Badge color="red">Cerrada</Badge>,
+        href: "/investigador/convocatoria/psinfinv/paso1",
+        // href: "#",
+        info: <Badge color="red">Abierta</Badge>,
       },
       {
         type: "link",
