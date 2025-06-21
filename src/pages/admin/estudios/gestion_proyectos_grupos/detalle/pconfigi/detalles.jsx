@@ -13,13 +13,18 @@ import {
   StatusIndicator,
 } from "@cloudscape-design/components";
 import ModalEditarProyecto from "../components/modalEditarProyecto";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import axiosBase from "../../../../../../api/axios";
+import NotificationContext from "../../../../../../providers/notificationProvider";
 
 export default ({ data, loading, proyecto_id, reload }) => {
+  //  Context
+  const { notifications, pushNotification } = useContext(NotificationContext);
+
   //  States
   const [visible, setVisible] = useState(false);
   const [loadingReporte, setLoadingReporte] = useState(false);
+  const [loadingRegeneracion, setLoadingRegeneracion] = useState(false);
 
   //  Functions
   const exportWord = async () => {
@@ -51,6 +56,21 @@ export default ({ data, loading, proyecto_id, reload }) => {
     const blob = await res.data;
     const url = URL.createObjectURL(blob);
     window.open(url, "_blank");
+  };
+
+  const generarDeclaracion = async () => {
+    setLoadingRegeneracion(true);
+    const res = await axiosBase.get(
+      "admin/estudios/proyectosGrupo/generarDeclaracion",
+      {
+        params: {
+          proyecto_id,
+        },
+      }
+    );
+    setLoadingRegeneracion(false);
+    const info = res.data;
+    pushNotification(info.detail, info.message, notifications.length + 1);
   };
 
   return (
@@ -272,7 +292,13 @@ export default ({ data, loading, proyecto_id, reload }) => {
                             label: "Regenerar declaración",
                             value: (
                               <Box margin={{ top: "xs" }}>
-                                <Button variant="primary">Regenerar PDF</Button>
+                                <Button
+                                  variant="primary"
+                                  loading={loadingRegeneracion}
+                                  onClick={generarDeclaracion}
+                                >
+                                  Regenerar PDF
+                                </Button>
                               </Box>
                             ),
                           },

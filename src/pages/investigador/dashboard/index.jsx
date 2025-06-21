@@ -64,6 +64,7 @@ export default function Investigador_main() {
   const [data, setData] = useState({
     detalles: null,
     metricas: null,
+    convocatorias: [],
     tipos_publicaciones: [],
     tipos_proyectos: [],
     alerta: false,
@@ -98,6 +99,7 @@ export default function Investigador_main() {
       helpInfo="Información sobre la páginal actual para poder mostrarla al público
       en general."
       contentType="table"
+      convocatorias={data.convocatorias}
     >
       <SpaceBetween size="m">
         {data.alerta == 1 && (

@@ -26,6 +26,7 @@ export default function BaseLayout({
   withoutContentLayout,
   actions,
   contentType = "default",
+  convocatorias,
 }) {
   //  Context
   const { notifications } = useContext(NotificationContext);
@@ -37,7 +38,7 @@ export default function BaseLayout({
       </HeaderPortal>
       <AppLayout
         headerVariant="high-contrast"
-        navigation={<Sidebar />}
+        navigation={<Sidebar data={convocatorias} />}
         notifications={<Flashbar items={notifications} stackItems />}
         tools={<Helpbar>{helpInfo}</Helpbar>}
         contentType={contentType}

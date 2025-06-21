@@ -633,7 +633,7 @@ const routes = createBrowserRouter(
       path: "convocatoria",
       children: [
         {
-          path: "pconfigi_inv",
+          path: "pconfigi-inv",
           children: [
             {
               path: "",
