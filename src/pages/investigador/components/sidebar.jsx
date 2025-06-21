@@ -1,7 +1,7 @@
 import { Badge, SideNavigation, Spinner } from "@cloudscape-design/components";
 import { useLocation } from "react-router-dom";
 
-export default function Sidebar({ activeHref = "#", data = [] }) {
+export default function Sidebar({ activeHref = "#", data = [], loading }) {
   const location = useLocation();
   const navItems = [
     {
@@ -186,32 +186,31 @@ export default function Sidebar({ activeHref = "#", data = [] }) {
       type: "section",
       text: "Convocatorias",
       defaultExpanded: false,
-      items:
-        data.length == 0
-          ? [
-              {
-                type: "link",
-                text: (
-                  <>
-                    Cargando datos <Spinner />
-                  </>
-                ),
-              },
-            ]
-          : data.map((item) => ({
+      items: loading
+        ? [
+            {
               type: "link",
-              text: item.descripcion ?? "",
-              href:
-                item.estado == "Abierta"
-                  ? "/investigador/convocatoria/" + item.tipo.toLowerCase()
-                  : "#",
-              info:
-                item.estado == "Abierta" ? (
-                  <Badge color="green">Abierta</Badge>
-                ) : (
-                  <Badge color="red">Cerrada</Badge>
-                ),
-            })),
+              text: (
+                <>
+                  Cargando datos <Spinner />
+                </>
+              ),
+            },
+          ]
+        : data.map((item) => ({
+            type: "link",
+            text: item.descripcion ?? "",
+            href:
+              item.estado == "Abierta"
+                ? "/investigador/convocatoria/" + item.tipo.toLowerCase()
+                : "#",
+            info:
+              item.estado == "Abierta" ? (
+                <Badge color="green">Abierta</Badge>
+              ) : (
+                <Badge color="red">Cerrada</Badge>
+              ),
+          })),
     },
     {
       type: "section",

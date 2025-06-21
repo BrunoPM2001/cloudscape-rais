@@ -12,7 +12,7 @@ import {
 import { useState, useEffect } from "react";
 import { useCollection } from "@cloudscape-design/collection-hooks";
 import axiosBase from "../../../../../api/axios";
-import { CreateModal, DeleteModal, EditModal } from "../components/modal";
+import { DeleteModal, EditModal } from "../components/modal";
 import ModalCreateConvocatoria from "../components/modalCreateConvocatoria";
 
 const stringOperators = [":", "!:", "=", "!=", "^", "!^"];
@@ -151,10 +151,7 @@ const columnDisplay = [
 export default () => {
   //  Data states
   const [loading, setLoading] = useState(true);
-  const [createVisible, setCreateVisible] = useState(false);
-  const [editVisible, setEditVisible] = useState(false);
-  const [deleteVisible, setDeleteVisible] = useState(false);
-  const [selectedItems, setSelectedItems] = useState([]);
+  const [modal, setModal] = useState("");
   const [distributions, setDistribution] = useState([]);
   const {
     items,
@@ -182,10 +179,9 @@ export default () => {
       ),
     },
     pagination: { pageSize: 10 },
-    sorting: { defaultState: { sortingColumn: columnDefinitions[0] } },
+    sorting: {},
     selection: {},
   });
-  const [enableBtn, setEnableBtn] = useState(true);
 
   //  Functions
   const getData = async () => {
@@ -203,14 +199,6 @@ export default () => {
     getData();
   }, []);
 
-  useEffect(() => {
-    if (selectedItems.length > 0) {
-      setEnableBtn(true);
-    } else {
-      setEnableBtn(false);
-    }
-  }, [selectedItems]);
-
   return (
     <>
       <Table
@@ -225,26 +213,22 @@ export default () => {
         resizableColumns
         enableKeyboardNavigation
         selectionType="single"
-        selectedItems={selectedItems}
-        onSelectionChange={({ detail }) =>
-          setSelectedItems(detail.selectedItems)
-        }
+        onRowClick={({ detail }) => {
+          if (detail.item.estado == 1) {
+            actions.setSelectedItems([detail.item]);
+          }
+        }}
         header={
           <Header
-            counter={
-              selectedItems.length
-                ? "(" + selectedItems.length + "/" + items.length + ")"
-                : "(" + items.length + ")"
-            }
             actions={
               <SpaceBetween size="s" direction="horizontal">
                 <ButtonDropdown
-                  disabled={!enableBtn}
+                  disabled={!collectionProps.selectedItems.length}
                   onItemClick={({ detail }) => {
                     if (detail.id == "action_1") {
-                      setEditVisible(true);
+                      setModal("edit");
                     } else if (detail.id == "action_2") {
-                      setDeleteVisible(true);
+                      setModal("delete");
                     }
                   }}
                   items={[
@@ -262,10 +246,7 @@ export default () => {
                 >
                   Acciones para convocatoria
                 </ButtonDropdown>
-                <Button
-                  variant="primary"
-                  onClick={() => setCreateVisible(true)}
-                >
+                <Button variant="primary" onClick={() => setModal("add")}>
                   Añadir convocatoria
                 </Button>
               </SpaceBetween>
@@ -291,28 +272,22 @@ export default () => {
           </Box>
         }
       />
-      {createVisible && (
-        <ModalCreateConvocatoria
-          visible={createVisible}
-          setVisible={setCreateVisible}
-          reload={getData}
-        />
-      )}
-      {editVisible && (
+      {modal == "add" ? (
+        <ModalCreateConvocatoria close={() => setModal("")} reload={getData} />
+      ) : modal == "edit" ? (
         <EditModal
-          visible={editVisible}
-          setVisible={setEditVisible}
-          item={selectedItems}
+          close={() => setModal("")}
+          id={collectionProps.selectedItems[0].id}
           reload={getData}
         />
-      )}
-      {deleteVisible && (
-        <DeleteModal
-          visible={deleteVisible}
-          setVisible={setDeleteVisible}
-          item={selectedItems}
-          reload={getData}
-        />
+      ) : (
+        modal == "delete" && (
+          <DeleteModal
+            close={() => setModal("")}
+            id={collectionProps.selectedItems[0].id}
+            reload={getData}
+          />
+        )
       )}
     </>
   );

@@ -75,7 +75,7 @@ const opt_convocatoria = [
   },
 ];
 
-export default ({ close, reload }) => {
+export default ({ close, reload, convocatoria }) => {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
 
@@ -87,11 +87,21 @@ export default ({ close, reload }) => {
     useFormValidation(initialForm, formRules);
 
   //  Functions
-  const createConvocatoria = async () => {
+  const getData = async () => {
+    setLoading(true);
+    const res = await axiosBase.get(
+      "admin/estudios/convocatorias/getOneConvocatoria/"
+    );
+    const data = await res.data;
+    setForm(data.data);
+    setLoading(false);
+  };
+
+  const editConvocatoria = async () => {
     if (validateForm()) {
       setCreating(true);
       const response = await axiosBase.post(
-        "admin/estudios/convocatorias/createConvocatoria",
+        "admin/estudios/convocatorias/updateConvocatoria",
         formValues
       );
       const data = await response.data;
@@ -104,19 +114,19 @@ export default ({ close, reload }) => {
 
   return (
     <Modal
+      onDismiss={close}
       visible
       size="medium"
-      onDismiss={close}
       footer={
         <Box float="right">
           <SpaceBetween direction="horizontal" size="xs">
-            <Button variant="normal" onClick={close}>
+            <Button variant="normal" onClick={() => setVisible(false)}>
               Cancelar
             </Button>
             <Button
               variant="primary"
               loading={creating}
-              onClick={createConvocatoria}
+              onClick={() => createConvocatoria()}
             >
               Crear convocatoria
             </Button>

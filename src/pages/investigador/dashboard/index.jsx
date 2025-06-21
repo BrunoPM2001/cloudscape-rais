@@ -100,6 +100,7 @@ export default function Investigador_main() {
       en general."
       contentType="table"
       convocatorias={data.convocatorias}
+      loading={loading}
     >
       <SpaceBetween size="m">
         {data.alerta == 1 && (
