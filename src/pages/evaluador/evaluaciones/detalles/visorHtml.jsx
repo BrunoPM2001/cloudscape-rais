@@ -3,14 +3,11 @@ import Psinfinv from "../proyectos/psinfinv";
 import Psinfipu from "../proyectos/psinfipu";
 import Pconfigi from "../proyectos/pconfigi";
 import Pmulti from "../proyectos/pmulti";
-
-const rowT = {
-  border: "1px solid #ddd",
-  textAlign: "left",
-  padding: "8px",
-};
+import Eci from "../proyectos/eci";
+import Pconfiginv from "../proyectos/pconfiginv";
 
 export default ({ loading, data }) => {
+  console.log(data);
   return (
     <Box>
       <div
@@ -35,6 +32,10 @@ export default ({ loading, data }) => {
               <Pconfigi data={data} />
             ) : data.proyecto.tipo_proyecto === "PMULTI" ? (
               <Pmulti data={data} />
+            ) : data.proyecto.tipo_proyecto === "ECI" ? (
+              <Eci data={data} />
+            ) : data.proyecto.tipo_proyecto === "PCONFIGI-INV" ? (
+              <Pconfiginv data={data} />
             ) : (
               <p>Proyecto no reconocido</p>
             )}

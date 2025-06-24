@@ -422,7 +422,7 @@ export default function Registro_eci_6() {
                             setAlert([]);
                           }}
                           tipo={9}
-                          categoria="sutento"
+                          categoria="sustento"
                           nombre="uso en investigación"
                           reload={getData}
                           id={id}
@@ -434,7 +434,7 @@ export default function Registro_eci_6() {
                             setAlert([]);
                           }}
                           tipo={11}
-                          categoria="sutento"
+                          categoria="sustento"
                           nombre="plan de uso compartido"
                           reload={getData}
                           id={id}
@@ -446,7 +446,7 @@ export default function Registro_eci_6() {
                             setAlert([]);
                           }}
                           tipo={8}
-                          categoria="sutento"
+                          categoria="sustento"
                           nombre="uso en desarrollo de tesis"
                           reload={getData}
                           id={id}

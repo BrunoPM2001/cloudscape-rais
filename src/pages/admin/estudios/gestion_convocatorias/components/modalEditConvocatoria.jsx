@@ -11,7 +11,7 @@ import {
   Container,
   Select,
 } from "@cloudscape-design/components";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axiosBase from "../../../../../api/axios";
 import NotificationContext from "../../../../../providers/notificationProvider";
 import { useFormValidation } from "../../../../../hooks/useFormValidation";
@@ -75,7 +75,7 @@ const opt_convocatoria = [
   },
 ];
 
-export default ({ close, reload, convocatoria }) => {
+export default ({ close, reload, id }) => {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
 
@@ -90,7 +90,12 @@ export default ({ close, reload, convocatoria }) => {
   const getData = async () => {
     setLoading(true);
     const res = await axiosBase.get(
-      "admin/estudios/convocatorias/getOneConvocatoria/"
+      "admin/estudios/convocatorias/getOneConvocatoria",
+      {
+        params: {
+          id,
+        },
+      }
     );
     const data = await res.data;
     setForm(data.data);
@@ -111,6 +116,10 @@ export default ({ close, reload, convocatoria }) => {
       reload();
     }
   };
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   return (
     <Modal
