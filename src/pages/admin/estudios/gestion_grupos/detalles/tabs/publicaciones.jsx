@@ -6,6 +6,7 @@ import {
   Header,
   Link,
   Pagination,
+  Badge,
 } from "@cloudscape-design/components";
 import { useCollection } from "@cloudscape-design/collection-hooks";
 import { useState, useEffect } from "react";
@@ -51,12 +52,43 @@ const columnDefinitions = [
     cell: (item) => item.tipo,
     sortingField: "tipo",
   },
+  {
+    id: "estado",
+    header: "Estado",
+    cell: (item) => (
+      <Badge
+        color={
+          item.estado == "Eliminado"
+            ? "red"
+            : item.estado == "Registrado"
+            ? "green"
+            : item.estado == "Observado"
+            ? "red"
+            : item.estado == "Enviado"
+            ? "blue"
+            : item.estado == "En proceso"
+            ? "severity-low"
+            : item.estado == "Anulado"
+            ? "red"
+            : item.estado == "No registrado"
+            ? "grey"
+            : item.estado == "Duplicado"
+            ? "red"
+            : "red"
+        }
+      >
+        {item.estado}
+      </Badge>
+    ),
+    sortingField: "estado",
+  },
 ];
 
 const columnDisplay = [
   { id: "titulo", visible: true },
   { id: "fecha_publicacion", visible: true },
   { id: "tipo", visible: true },
+  { id: "estado", visible: true },
 ];
 
 export default () => {
@@ -100,12 +132,14 @@ export default () => {
   //  Data
   useEffect(() => {
     const getData = async () => {
-      const res = await axiosBase.get(
-        "admin/estudios/grupos/publicaciones/" + id
-      );
-      const data = await res.data;
-      setDistribution(data.data);
-      setLoading(!loading);
+      const res = await axiosBase.get("admin/estudios/grupos/publicaciones", {
+        params: {
+          grupo_id: id,
+        },
+      });
+      const data = res.data;
+      setDistribution(data);
+      setLoading(false);
     };
     getData();
   }, []);

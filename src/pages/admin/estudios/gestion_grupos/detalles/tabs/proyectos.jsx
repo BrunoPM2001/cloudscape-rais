@@ -31,7 +31,11 @@ export default () => {
   //  Function
   const getData = async () => {
     setLoading(true);
-    const res = await axiosBase.get("admin/estudios/grupos/proyectos/" + id);
+    const res = await axiosBase.get("admin/estudios/grupos/proyectos", {
+      params: {
+        grupo_id: id,
+      },
+    });
     const data = res.data;
     setDistributions(data);
     setLoading(false);

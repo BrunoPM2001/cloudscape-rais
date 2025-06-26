@@ -35,11 +35,9 @@ const tipo_proyectos = [
   { value: "GRUPO" },
 ];
 
-const periodos = [{ value: "2023" }, { value: "2024" }, { value: "2025" }];
-
 const initialForm = {
   tipo: null,
-  periodo: "2024",
+  periodo: "2025",
   copiar: { value: "No" },
   proyecto_copia: null,
 };

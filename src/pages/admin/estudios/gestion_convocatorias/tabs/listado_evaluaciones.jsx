@@ -12,7 +12,6 @@ import { useState, useEffect } from "react";
 import { useCollection } from "@cloudscape-design/collection-hooks";
 import queryString from "query-string";
 import axiosBase from "../../../../../api/axios";
-import { AddCriterioModal } from "../components/modal";
 import ModalCreateEvaluacion from "../components/modalCreateEvaluacion";
 
 const stringOperators = [":", "!:", "=", "!=", "^", "!^"];
@@ -95,7 +94,6 @@ export default () => {
   //  Data states
   const [createVisible, setCreateVisible] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [selectedItems, setSelectedItems] = useState([]);
   const [distributions, setDistribution] = useState([]);
   const {
     items,
@@ -126,7 +124,6 @@ export default () => {
     sorting: { defaultState: { sortingColumn: columnDefinitions[0] } },
     selection: {},
   });
-  const [enableBtn, setEnableBtn] = useState(true);
 
   //  Functions
   const getData = async () => {
@@ -144,14 +141,6 @@ export default () => {
     getData();
   }, []);
 
-  useEffect(() => {
-    if (selectedItems.length > 0) {
-      setEnableBtn(true);
-    } else {
-      setEnableBtn(false);
-    }
-  }, [selectedItems]);
-
   return (
     <>
       <Table
@@ -165,26 +154,19 @@ export default () => {
         resizableColumns
         enableKeyboardNavigation
         selectionType="single"
-        selectedItems={selectedItems}
-        onSelectionChange={({ detail }) =>
-          setSelectedItems(detail.selectedItems)
-        }
+        onRowClick={({ detail }) => actions.setSelectedItems([detail.item])}
         header={
           <Header
-            counter={
-              selectedItems.length
-                ? "(" + selectedItems.length + "/" + items.length + ")"
-                : "(" + items.length + ")"
-            }
+            counter={"(" + distributions.length + ")"}
             actions={
               <SpaceBetween size="s" direction="horizontal">
                 <Button
                   variant="normal"
                   iconName="edit"
-                  disabled={!enableBtn}
+                  disabled={!collectionProps.selectedItems.length}
                   onClick={() => {
                     const query = queryString.stringify({
-                      id: selectedItems[0]["id"],
+                      id: collectionProps.selectedItems[0]["id"],
                     });
                     window.location.href = "convocatorias/detalle?" + query;
                   }}
@@ -195,6 +177,7 @@ export default () => {
                   variant="primary"
                   iconName="add-plus"
                   onClick={() => setCreateVisible(true)}
+                  disabled={loading}
                 >
                   Añadir criterio
                 </Button>

@@ -66,11 +66,11 @@ const formRules = {
 
 const opt_convocatoria = [
   {
-    text: "Sí",
+    label: "Sí",
     value: 1,
   },
   {
-    text: "No",
+    label: "No",
     value: 0,
   },
 ];
@@ -92,7 +92,19 @@ export default ({ close, reload }) => {
       setCreating(true);
       const response = await axiosBase.post(
         "admin/estudios/convocatorias/createConvocatoria",
-        formValues
+        {
+          tipo: formValues.tipo.value,
+          descripcion: formValues.descripcion,
+          periodo: formValues.periodo,
+          convocatoria: formValues.convocatoria.value,
+          fecha_inicio_registro: formValues.fecha_inicio_registro,
+          fecha_fin_registro: formValues.fecha_fin_registro,
+          fecha_corte_registro: formValues.fecha_corte_registro,
+          fecha_inicio_calendario: formValues.fecha_inicio_calendario,
+          fecha_fin_calendario: formValues.fecha_fin_calendario,
+          fecha_inicio_evaluacion: formValues.fecha_inicio_evaluacion,
+          fecha_fin_evaluacion: formValues.fecha_fin_evaluacion,
+        }
       );
       const data = await response.data;
       setCreating(false);
@@ -145,6 +157,7 @@ export default ({ close, reload }) => {
               </FormField>
               <FormField label="Año" errorText={formErrors.periodo} stretch>
                 <Input
+                  placeholder="Escriba el periodo de la convocatoria"
                   value={formValues.periodo}
                   onChange={({ detail }) =>
                     handleChange("periodo", detail.value)
@@ -157,6 +170,7 @@ export default ({ close, reload }) => {
                 stretch
               >
                 <Select
+                  placeholder="Escoja una opción"
                   options={opt_convocatoria}
                   selectedOption={formValues.convocatoria}
                   onChange={({ detail }) =>

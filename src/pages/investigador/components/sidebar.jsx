@@ -202,7 +202,9 @@ export default function Sidebar({ activeHref = "#", data = [], loading }) {
             text: item.descripcion ?? "",
             href:
               item.estado == "Abierta"
-                ? "/investigador/convocatoria/" + item.tipo.toLowerCase()
+                ? "/investigador/convocatoria/" +
+                  item.tipo.toLowerCase() +
+                  (item.tipo == "PSINFINV" ? "/paso1" : "")
                 : "#",
             info:
               item.estado == "Abierta" ? (

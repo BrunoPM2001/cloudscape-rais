@@ -77,6 +77,7 @@ export default ({ close, item, reload }) => {
         </div>
         <Alert header="Autorización">
           <Checkbox
+            disabled={loading}
             checked={formValues.check}
             description="Al marcar esto autoriza al responsable del proyecto el envío del mismo"
             onChange={({ detail }) => handleChange("check", detail.checked)}

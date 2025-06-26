@@ -222,11 +222,14 @@ export default ({ grupo_estado }) => {
   //  Functions
   const getData = async () => {
     setLoading(true);
-    const res = await axiosBase(
-      "admin/estudios/grupos/miembros/" + id + "/" + tipoMiembros.value
-    );
-    const data = await res.data;
-    setDistribution(data.data);
+    const res = await axiosBase("admin/estudios/grupos/miembros", {
+      params: {
+        grupo_id: id,
+        estado: tipoMiembros.value,
+      },
+    });
+    const data = res.data;
+    setDistribution(data);
     setLoading(false);
   };
 
