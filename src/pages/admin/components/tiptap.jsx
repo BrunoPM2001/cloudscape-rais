@@ -1,10 +1,12 @@
 import { useCallback } from "react";
 import classNames from "classnames";
 import { useEditor, EditorContent } from "@tiptap/react";
+import { Color } from "@tiptap/extension-color";
 import Document from "@tiptap/extension-document";
 import Paragraph from "@tiptap/extension-paragraph";
 import HardBreak from "@tiptap/extension-hard-break";
 import Text from "@tiptap/extension-text";
+import TextStyle from "@tiptap/extension-text-style";
 import Bold from "@tiptap/extension-bold";
 import Underline from "@tiptap/extension-underline";
 import Italic from "@tiptap/extension-italic";
@@ -36,6 +38,7 @@ export default ({ value, name, handleChange, limitWords }) => {
         }),
         Paragraph,
         Text,
+        TextStyle,
         Bold,
         Underline,
         Italic,
@@ -50,6 +53,7 @@ export default ({ value, name, handleChange, limitWords }) => {
             limit: limitWords,
           }
         ),
+        Color,
       ],
       content: value,
       onUpdate: ({ editor }) => {
@@ -153,6 +157,14 @@ export default ({ value, name, handleChange, limitWords }) => {
         >
           <QuoteIcon size={16} />
         </button>
+        <input
+          type="color"
+          onInput={(event) =>
+            editor.chain().focus().setColor(event.target.value).run()
+          }
+          value={editor.getAttributes("textStyle").color}
+          data-testid="setColor"
+        />
       </div>
       <EditorContent editor={editor} />
       {limitWords && (

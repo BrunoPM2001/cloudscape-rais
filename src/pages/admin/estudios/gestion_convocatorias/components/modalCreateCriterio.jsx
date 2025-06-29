@@ -7,7 +7,6 @@ import {
   Modal,
   Select,
   SpaceBetween,
-  Textarea,
 } from "@cloudscape-design/components";
 import { useFormValidation } from "../../../../../hooks/useFormValidation";
 import { useContext, useState } from "react";
@@ -15,12 +14,13 @@ import axiosBase from "../../../../../api/axios";
 import { useLocation } from "react-router-dom";
 import queryString from "query-string";
 import NotificationContext from "../../../../../providers/notificationProvider";
+import Tiptap from "../../../components/tiptap";
 
 const initialForm = {
   opcion: "",
   puntaje_max: "",
   nivel: { value: 1, label: "Criterio" },
-  periodo: "2024",
+  periodo: "2025",
   editable: { value: 1, label: "Sí" },
   otipo: { value: null, label: "Ninguna" },
   puntos_adicionales: "",
@@ -86,11 +86,11 @@ export default ({ close, reload }) => {
       header="Agregar criterio"
     >
       <FormField label="Opción" errorText={formErrors.opcion} stretch>
-        <Textarea
-          placeholder="Escriba el detalle de la opción"
-          rows={3}
+        <Tiptap
+          name="opcion"
           value={formValues.opcion}
-          onChange={({ detail }) => handleChange("opcion", detail.value)}
+          handleChange={handleChange}
+          limitWords={100}
         />
       </FormField>
       <ColumnLayout columns={2}>
@@ -143,12 +143,14 @@ export default ({ close, reload }) => {
         >
           <Select
             options={[
-              { value: "", label: "Ninguna" },
+              { value: "ninguna", label: "Ninguna" },
               { value: "regina", label: "Regina" },
               { value: "experiencia", label: "Experiencia" },
               { value: "catgi", label: "Categoría GI" },
               { value: "docnvos", label: "Docentes Nuevos" },
               { value: "sede", label: "Sede de Proyecto" },
+              { value: "presupuesto_eci", label: "Presupuesto ECI" },
+              { value: "experiencia_gi", label: "Experiencia de grupo" },
               {
                 value: "integrante_formacion_post",
                 label: "Integrante formación post",

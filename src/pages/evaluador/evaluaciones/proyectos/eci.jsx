@@ -365,38 +365,6 @@ const Eci = ({ data }) => {
           </tbody>
         </table>
       </div>
-      <h2>
-        <b>H. Formatos</b>
-      </h2>
-      <h3>Sustentos</h3>
-      {data.archivos_sustento.length > 0 ? (
-        <div style={styles.container}>
-          <table style={styles.table}>
-            <thead>
-              <tr>
-                <th style={styles.rowT}>Nombre</th>
-                <th style={styles.rowT}>Comentario</th>
-                <th style={styles.rowT}>Archivo</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.archivos_sustento.map((doc, index) => (
-                <tr key={index}>
-                  <td style={styles.td}>{doc.nombre}</td>
-                  <td style={styles.td}>{doc.comentario}</td>
-                  <td style={styles.td}>
-                    <a href={doc.url} target="_blank" rel="noopener noreferrer">
-                      Ver documento
-                    </a>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      ) : (
-        <p>No se han registrado documentos de colaboración externa.</p>
-      )}
     </div>
   );
 };

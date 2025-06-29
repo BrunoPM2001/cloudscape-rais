@@ -64,6 +64,7 @@ export default function Detalle_evaluacion() {
       header="Detalle del evaluación:"
       helpInfo="Información sobre la páginal actual para poder mostrarla al público
       en general."
+      contentType="table"
     >
       <SpaceBetween size="l">
         <Detalles data={data.evaluacion} loading={loading} reload={getData} />
