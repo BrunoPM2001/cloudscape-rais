@@ -54,6 +54,7 @@ export default ({ close, item, reload }) => {
   const [loading, setLoading] = useState(false);
   const [distributions, setDistribution] = useState([]);
   const [url, setUrl] = useState("");
+  const [datos, setDatos] = useState({});
 
   const { formValues, formErrors, handleChange, validateForm } =
     useFormValidation(initialForm, formRules);
@@ -72,6 +73,7 @@ export default ({ close, item, reload }) => {
     const data = res.data;
     setDistribution(data.partidas);
     setUrl(data.comprobante);
+    setDatos(data.datos);
     setLoading(false);
   };
 
@@ -204,6 +206,7 @@ export default ({ close, item, reload }) => {
       >
         <DatosComprobante
           item={item}
+          datos={datos}
           loading={loading}
           distributions={distributions}
           formValues={formValues}

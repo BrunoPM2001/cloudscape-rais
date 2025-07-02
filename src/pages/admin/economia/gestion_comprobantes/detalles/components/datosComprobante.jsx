@@ -49,6 +49,7 @@ const ObsTab = ({ obs }) => {
 
 export default ({
   item,
+  datos,
   loading,
   distributions,
   formValues,
@@ -95,26 +96,53 @@ export default ({
   return (
     <SpaceBetween size="m">
       <ColumnLayout columns={2}>
-        <SpaceBetween size="s">
-          <div>
-            <Box variant="awsui-key-label">Razón social</Box>
-            <div>{item.razon_social}</div>
-          </div>
-          <div>
-            <Box variant="awsui-key-label">Ruc del emisor</Box>
-            <div>{item.ruc}</div>
-          </div>
-        </SpaceBetween>
-        <SpaceBetween size="s">
-          <div>
-            <Box variant="awsui-key-label">Serie + N° comprobante</Box>
-            <div>{item.numero}</div>
-          </div>
-          <div>
-            <Box variant="awsui-key-label">Fecha</Box>
-            <div>{item.fecha}</div>
-          </div>
-        </SpaceBetween>
+        {datos.tipo == "OTROS" ? (
+          <>
+            <SpaceBetween size="s">
+              <div>
+                <Box variant="awsui-key-label">País emisor</Box>
+                <div>{datos?.pais_emisor}</div>
+              </div>
+              <div>
+                <Box variant="awsui-key-label">Tipo de moneda</Box>
+                <div>{datos?.tipo_moneda}</div>
+              </div>
+            </SpaceBetween>
+            <SpaceBetween size="s">
+              <div>
+                <Box variant="awsui-key-label">Tipo documento</Box>
+                <div>{datos?.tipo_documento}</div>
+              </div>
+              <div>
+                <Box variant="awsui-key-label">Fecha</Box>
+                <div>{datos?.fecha}</div>
+              </div>
+            </SpaceBetween>
+          </>
+        ) : (
+          <>
+            <SpaceBetween size="s">
+              <div>
+                <Box variant="awsui-key-label">Razón social</Box>
+                <div>{item.razon_social}</div>
+              </div>
+              <div>
+                <Box variant="awsui-key-label">Ruc del emisor</Box>
+                <div>{item.ruc}</div>
+              </div>
+            </SpaceBetween>
+            <SpaceBetween size="s">
+              <div>
+                <Box variant="awsui-key-label">Serie + N° comprobante</Box>
+                <div>{item.numero}</div>
+              </div>
+              <div>
+                <Box variant="awsui-key-label">Fecha</Box>
+                <div>{item.fecha}</div>
+              </div>
+            </SpaceBetween>
+          </>
+        )}
       </ColumnLayout>
       <ColumnLayout columns={1}>
         <SpaceBetween size="m">
