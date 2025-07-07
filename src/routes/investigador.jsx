@@ -204,6 +204,9 @@ const Convocatoria_registro_taller_2 = lazy(() =>
 const Convocatoria_registro_taller_1 = lazy(() =>
   import("../pages/investigador/convocatorias/taller/step1.jsx")
 );
+const Convocatoria_registro_taller_0 = lazy(() =>
+  import("../pages/investigador/convocatorias/taller/step0.jsx")
+);
 const Presentar_informe = lazy(() =>
   import(
     "../pages/investigador/informes/informe_academico/presentacion/index.jsx"
@@ -867,8 +870,12 @@ const routes = createBrowserRouter(
           ],
         },
         {
-          path: "taller",
+          path: "pinvpos",
           children: [
+            {
+              path: "",
+              element: <Convocatoria_registro_taller_0 />,
+            },
             {
               path: "paso1",
               element: <Convocatoria_registro_taller_1 />,
