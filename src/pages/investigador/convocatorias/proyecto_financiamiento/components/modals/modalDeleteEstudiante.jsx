@@ -19,7 +19,7 @@ export default ({ id, visible, setVisible, reload }) => {
   const eliminarIntegrante = async () => {
     setLoadingDelete(true);
     const res = await axiosBase.delete(
-      "investigador/convocatorias/eliminarIntegrante",
+      "investigador/convocatorias/pro-ctie/eliminarIntegrante",
       {
         params: {
           id: id,

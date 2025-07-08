@@ -19,7 +19,7 @@ export default ({ id, visible, setVisible, reload }) => {
   const eliminarPartida = async () => {
     setLoadingDelete(true);
     const res = await axiosBase.delete(
-      "investigador/convocatorias/eliminarPartida",
+      "investigador/convocatorias/pro-ctie/eliminarPartida",
       {
         params: {
           id: id,

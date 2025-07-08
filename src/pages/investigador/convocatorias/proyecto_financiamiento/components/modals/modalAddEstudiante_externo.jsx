@@ -81,7 +81,7 @@ export default ({ id, visible, setVisible, reload }) => {
       formData.append("telefono_movil", formValues.telefono_movil);
       formData.append("file", formValues.carta[0]);
       const res = await axiosBase.postForm(
-        "investigador/convocatorias/agregarIntegranteExterno",
+        "investigador/convocatorias/pro-ctie/agregarIntegranteExterno",
         formData
       );
       const data = res.data;

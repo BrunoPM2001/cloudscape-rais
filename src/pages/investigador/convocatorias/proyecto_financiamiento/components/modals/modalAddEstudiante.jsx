@@ -39,7 +39,7 @@ export default ({ id, visible, setVisible, reload }) => {
 
   //  Hooks
   const { loading, options, setOptions, value, setValue, setAvoidSelect } =
-    useAutosuggest("investigador/convocatorias/searchEstudiante");
+    useAutosuggest("investigador/convocatorias/pro-ctie/searchEstudiante");
   const {
     formValues,
     formErrors,
@@ -52,7 +52,7 @@ export default ({ id, visible, setVisible, reload }) => {
   const getData = async () => {
     setLoadingData(true);
     const res = await axiosBase.get(
-      "investigador/convocatorias/verificarEstudiante",
+      "investigador/convocatorias/pro-ctie/verificarEstudiante",
       {
         params: {
           codigo: form.codigo_alumno,
@@ -76,7 +76,7 @@ export default ({ id, visible, setVisible, reload }) => {
       formData.append("investigador_id", form.investigador_id);
       formData.append("file", formValues.carta[0]);
       const res = await axiosBase.postForm(
-        "investigador/convocatorias/agregarIntegrante",
+        "investigador/convocatorias/pro-ctie/agregarIntegrante",
         formData
       );
       const data = res.data;

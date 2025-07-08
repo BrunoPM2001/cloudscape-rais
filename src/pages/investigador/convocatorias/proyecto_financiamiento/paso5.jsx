@@ -60,7 +60,7 @@ export default function ({ proyecto_id, setRequisitos, loading, setLoading }) {
   const getData = async () => {
     setLoading(true);
     const res = await axiosBase.get(
-      "investigador/convocatorias/listarActividades",
+      "investigador/convocatorias/pro-ctie/listarActividades",
       {
         params: {
           proyecto_id: proyecto_id,

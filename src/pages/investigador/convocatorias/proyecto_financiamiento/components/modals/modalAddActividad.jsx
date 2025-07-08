@@ -42,7 +42,7 @@ export default ({ id, visible, setVisible, reload }) => {
     if (validateForm()) {
       setLoadingCreate(true);
       const res = await axiosBase.post(
-        "investigador/convocatorias/agregarActividad",
+        "investigador/convocatorias/pro-ctie/agregarActividad",
         { ...formValues, proyecto_id: id }
       );
       const data = res.data;

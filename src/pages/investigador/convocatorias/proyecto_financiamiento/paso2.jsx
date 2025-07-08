@@ -42,7 +42,7 @@ export default forwardRef(function ({ proyecto_id }, ref) {
   //  Function
   const getData = async () => {
     setLoading(true);
-    const res = await axiosBase.get("investigador/convocatorias/getDataPaso2", {
+    const res = await axiosBase.get("investigador/convocatorias/pro-ctie/getDataPaso2", {
       params: {
         proyecto_id,
       },
@@ -59,7 +59,7 @@ export default forwardRef(function ({ proyecto_id }, ref) {
         form.append("proyecto_id", proyecto_id);
         form.append("file", formValues.carta[0]);
         const res = await axiosBase.postForm(
-          "investigador/convocatorias/registrarPaso2",
+          "investigador/convocatorias/pro-ctie/registrarPaso2",
           form
         );
         const data = res.data;

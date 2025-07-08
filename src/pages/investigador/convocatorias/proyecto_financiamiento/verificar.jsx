@@ -30,12 +30,13 @@ export default function Verificar_requisitos() {
   //  Functions
   const verifyUser = async () => {
     if (proyecto_id == null) {
-      const res = await axiosBase.get("investigador/convocatorias/verificar");
+      const res = await axiosBase.get("investigador/convocatorias/pro-ctie/verificar");
       const data = res.data;
       setVerifyLoading(false);
       setVerifyRes(data);
       if (data.estado == true) {
-        window.location.href = data.paso;
+        const redirectionUrl = `/investigador/convocatoria/pro-ctie/${data.paso}`;
+        window.location.href = redirectionUrl;  // Redirigir a la página correcta
       }
     }
   };

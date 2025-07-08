@@ -93,7 +93,7 @@ export default forwardRef(function (props, ref) {
 
   //  Function;
   const getData1 = async () => {
-    const res = await axiosBase.get("investigador/convocatorias/datosPaso1", {
+    const res = await axiosBase.get("investigador/convocatorias/pro-ctie/datosPaso1", {
       params: {
         proyecto_id: props.proyecto_id,
       },
@@ -130,7 +130,7 @@ export default forwardRef(function (props, ref) {
 
   const getData = async () => {
     const res = await axiosBase.get(
-      "investigador/convocatorias/getDataToPaso1"
+      "investigador/convocatorias/pro-ctie/getDataToPaso1"
     );
     const data = res.data;
     setData(data.data);
@@ -142,7 +142,7 @@ export default forwardRef(function (props, ref) {
   const updateOds = async (value) => {
     handleChange("ods", null);
     setOdsStatus("loading");
-    const res = await axiosBase.get("investigador/convocatorias/getOds", {
+    const res = await axiosBase.get("investigador/convocatorias/pro-ctie/getOds", {
       params: {
         linea_investigacion_id: value,
       },
@@ -155,7 +155,7 @@ export default forwardRef(function (props, ref) {
   const updateOcde2 = async (value) => {
     handleChange("ocde_2", null);
     setOcde_2Status("loading");
-    const res = await axiosBase.get("investigador/convocatorias/getOcde", {
+    const res = await axiosBase.get("investigador/convocatorias/pro-ctie/getOcde", {
       params: {
         parent_id: value,
       },
@@ -168,7 +168,7 @@ export default forwardRef(function (props, ref) {
   const updateOcde3 = async (value) => {
     handleChange("ocde_3", null);
     setOcde_3Status("loading");
-    const res = await axiosBase.get("investigador/convocatorias/getOcde", {
+    const res = await axiosBase.get("investigador/convocatorias/pro-ctie/getOcde", {
       params: {
         parent_id: value,
       },
@@ -181,14 +181,14 @@ export default forwardRef(function (props, ref) {
   const registrar = async () => {
     if (validateForm()) {
       if (props.proyecto_id != null) {
-        await axiosBase.post("investigador/convocatorias/registrarPaso1", {
+        await axiosBase.post("investigador/convocatorias/pro-ctie/registrarPaso1", {
           ...formValues,
           proyecto_id: props.proyecto_id,
         });
         return { isValid: true, res_proyecto_id: null };
       } else {
         const res = await axiosBase.post(
-          "investigador/convocatorias/registrarPaso1",
+          "investigador/convocatorias/pro-ctie/registrarPaso1",
           formValues
         );
         const data = res.data;

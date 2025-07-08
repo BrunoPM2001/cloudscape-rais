@@ -54,7 +54,7 @@ export default function Registrar_proyecto_paso7() {
         }}
         onSubmit={async () => {
           setLoading(true);
-          await axiosBase.put("investigador/convocatorias/enviarProyecto", {
+          await axiosBase.put("investigador/convocatorias/pro-ctie/enviarProyecto", {
             proyecto_id,
           });
           setLoading(false);

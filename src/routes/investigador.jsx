@@ -792,10 +792,10 @@ const routes = createBrowserRouter(
           ],
         },
         {
-          path: "proctie",
+          path: "pro-ctie",
           children: [
             {
-              path: "verificar",
+              path: "",
               element: <Verificar_requisitos />,
             },
             {

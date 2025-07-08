@@ -14,7 +14,7 @@ export default function ({ proyecto_id }) {
       proyecto_id,
     });
     const res = await axiosBase.get(
-      "investigador/convocatorias/reportePDF?" + query,
+      "investigador/convocatorias/pro-ctie/reportePDF?" + query,
       {
         responseType: "blob",
       }
