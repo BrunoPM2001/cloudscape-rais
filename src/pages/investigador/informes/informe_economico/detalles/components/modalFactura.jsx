@@ -136,6 +136,8 @@ export default ({
       );
       const data = res.data;
       setOpts(data);
+          // Agregar el console.log para ver las opciones de partidas
+    console.log("Opciones de partidas:", data);
     }
   };
 

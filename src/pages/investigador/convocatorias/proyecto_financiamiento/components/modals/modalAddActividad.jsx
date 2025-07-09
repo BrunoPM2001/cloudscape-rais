@@ -23,7 +23,18 @@ const initialForm = {
 const formRules = {
   actividad: { required: true },
   fecha_inicio: { required: true },
-  fecha_fin: { required: true },
+  fecha_fin: { required: true,
+    custom: (value, values) => {
+      // Comprobar si fecha_fin es mayor que fecha_inicio
+      const fechaInicio = new Date(values.fecha_inicio);
+      const fechaFin = new Date(value);
+
+      if (fechaFin <= fechaInicio){
+        return "La fecha de fin debe ser posterior a la fecha de inicio.";
+      }
+      return null;
+    }
+   },
 };
 
 export default ({ id, visible, setVisible, reload }) => {
@@ -40,6 +51,18 @@ export default ({ id, visible, setVisible, reload }) => {
   //  Functions
   const agregarActividad = async () => {
     if (validateForm()) {
+
+      const fechaInicio = new Date(formValues.fecha_inicio);
+      const fechaFin = new Date(formValues.fecha_fin);
+      if (fechaFin <= fechaInicio){
+        pushNotification (
+          "La fecha de fin debe ser posterior a la fecha de inicio.",
+          "Warning",
+          notifications.length + 1 
+        );
+        return; //Detener la acción si la validación falla
+      }
+
       setLoadingCreate(true);
       const res = await axiosBase.post(
         "investigador/convocatorias/pro-ctie/agregarActividad",
