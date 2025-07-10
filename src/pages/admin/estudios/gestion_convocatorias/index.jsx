@@ -43,6 +43,7 @@ export default function Gestion_convocatorias() {
       helpInfo="Información sobre la páginal actual para poder mostrarla al público
       en general."
       disableOverlap
+      contentType="table"
     >
       <SpaceBetween size="l">
         <Tabs tabs={tabs} ariaLabel="Opciones de gestión de convocatorias" />

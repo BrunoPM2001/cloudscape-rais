@@ -209,6 +209,7 @@ export default () => {
         columnDefinitions={columnDefinitions}
         columnDisplay={columnDisplay}
         loading={loading}
+        wrapLines
         loadingText="Cargando datos"
         resizableColumns
         enableKeyboardNavigation
