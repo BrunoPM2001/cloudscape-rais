@@ -29,8 +29,11 @@ export default ({ data, loading, grupo_id, reload }) => {
       params: {
         grupo_id,
       },
+      responseType: "blob",
     });
-    const info = res.data;
+    const blob = res.data;
+    const url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
     setLoadingBtn(false);
   };
 
