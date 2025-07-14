@@ -21,7 +21,18 @@ const initialForm = {
 };
 
 const formRules = {
-  actividad: { required: true },
+  actividad: { 
+    required: true,
+    custom: (value) => {
+      //console.log("Valor de la actividad:", value); // Ver el valor que se está recibiendo
+      if (value && value.length < 15) {
+        const mensaje = `La actividad debe tener al menos 15 caracteres. Te faltan ${15 - value.length} caracteres.`;
+        //console.log("Mensaje de error:", mensaje); // Ver el mensaje que se va a mostrar
+        return mensaje;
+      }
+      return null;
+    } 
+  },
   fecha_inicio: { required: true },
   fecha_fin: { required: true,
     custom: (value, values) => {
@@ -50,6 +61,14 @@ export default ({ id, visible, setVisible, reload }) => {
 
   //  Functions
   const agregarActividad = async () => {
+    const actividadError = formRules.actividad.custom(formValues.actividad);
+    if (actividadError) {
+
+      pushNotification(actividadError,"warning", notifications.length + 1);
+      return;
+    }
+
+
     if (validateForm()) {
 
       const fechaInicio = new Date(formValues.fecha_inicio);
@@ -107,6 +126,12 @@ export default ({ id, visible, setVisible, reload }) => {
               value={formValues.actividad}
               onChange={({ detail }) => handleChange("actividad", detail.value)}
             />
+            {/* Mostrar el mensaje de error debajo del input si existe */}
+            {formErrors.actividad && formErrors.actividad.includes("faltan") && (
+              <Box color="danger" marginTop="xs">
+                {formErrors.actividad}
+              </Box>
+            )}
           </FormField>
           <ColumnLayout columns={2}>
             <FormField

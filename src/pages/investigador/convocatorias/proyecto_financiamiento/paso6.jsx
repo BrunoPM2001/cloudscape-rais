@@ -15,6 +15,7 @@ import axiosBase from "../../../../api/axios";
 import { useCollection } from "@cloudscape-design/collection-hooks";
 import ModalAddPartida from "./components/modals/modalAddPartida";
 import ModalDeletePartida from "./components/modals/modalDeletePartida";
+import ModalPanelDeAyuda from "./components/modals/modalPanelDeAyuda";
 
 const CANTIDAD_MINIMA = 1;
 
@@ -61,6 +62,9 @@ export default function ({ proyecto_id, setRequisitos, loading, setLoading }) {
   const [visible, setVisible] = useState(false);
   const [typeModal, setTypeModal] = useState(null);
 
+  // State Modal de ayuda
+  const [helpModalVisible, setHelpModalVisible] = useState(false);
+
   //  Hooks
   const { items, collectionProps, paginationProps } = useCollection(
     distributions,
@@ -94,10 +98,21 @@ export default function ({ proyecto_id, setRequisitos, loading, setLoading }) {
     getData();
   }, []);
 
+  const openHelpModal = () => {
+    setHelpModalVisible(true);
+  };
+
   return (
     <Container>
       <SpaceBetween size="m">
-        <Alert header="Para ver información respecto a la asignación de presupuesto revisar el panel de ayuda" />
+        <Alert header="Para ver información respecto a la asignación de presupuesto revisar el panel de ayuda: ">
+          {/*Enlace para abrir el Panel de Ayuda*/}
+          <Button variant="link" onClick={openHelpModal}>
+            <span style={{ justifyContent: "center", textDecoration: "underline", cursor: "pointer"}}>
+              Panel de Ayuda
+            </span>
+          </Button>
+        </Alert>
         <Table
           {...collectionProps}
           trackBy="id"
@@ -188,6 +203,12 @@ export default function ({ proyecto_id, setRequisitos, loading, setLoading }) {
           />
         )}
       </SpaceBetween>
+
+      {/*Modal de Ayuda*/}
+      <ModalPanelDeAyuda
+        visible={helpModalVisible}
+        setVisible={setHelpModalVisible}
+        />
     </Container>
   );
 }

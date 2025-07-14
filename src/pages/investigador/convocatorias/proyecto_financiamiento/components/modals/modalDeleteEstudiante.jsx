@@ -18,19 +18,34 @@ export default ({ id, visible, setVisible, reload }) => {
   //  Functions
   const eliminarIntegrante = async () => {
     setLoadingDelete(true);
-    const res = await axiosBase.delete(
-      "investigador/convocatorias/pro-ctie/eliminarIntegrante",
-      {
-        params: {
-          id: id,
-        },
+    try {
+      //console.log("Intentando eliminar al estudiante con ID:", id);
+      const res = await axiosBase.delete(
+        "investigador/convocatorias/pro-ctie/eliminarIntegrante",
+        {
+          params: {
+            id: id,
+          },
+        }
+      );
+      //console.log("Respuesta del servidor:", res);
+      const data = res.data;
+      //console.log("Recargando lista de estudiantes...");
+      reload();
+      if(data.message === "info") {
+        //console.log("Estudiante eliminado con éxito.");
+        pushNotification ("Estudiante eliminado con exito.", "success", notifications.length + 1);
+      } else {
+        //console.log("Error al eliminar al estudiante:", data.message);
+        pushNotification("Error al eliminar al estudiante. Intenta nuevamente.", "error", notifications.length+1);
       }
-    );
-    const data = res.data;
+    } catch (error) {
+      //console.log("Error al hacer la solicitud de eliminación:", error);
+      pushNotification("Hubo un error al eliminar al estudiante. Intenta nuevamente.", "error", notifications.length+1);
+    }
+
     setLoadingDelete(false);
     setVisible(false);
-    reload();
-    pushNotification(data.detail, data.message, notifications.length + 1);
   };
 
   return (

@@ -26,7 +26,7 @@ const formRules = {
   carta: { required: true, isFile: true, maxSize: 6 * 1024 * 1024 },
 };
 
-export default ({ id, visible, setVisible, reload }) => {
+export default ({ id, visible, setVisible, reload, existingStudents }) => {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
 
@@ -67,7 +67,24 @@ export default ({ id, visible, setVisible, reload }) => {
     }
   };
 
+  const checkIfStudentExists = (studentData) => {
+    //console.log("Estudiantes existentes:", existingStudents);  // Verifica los estudiantes existentes
+    //console.log("Estudiante que intenta agregar:", studentData);  // Datos del estudiante
+    return existingStudents.some(
+      (existingStudent) =>
+        existingStudent.codigo_alumno === studentData.codigo_alumno || // Compara código alumno
+        existingStudent.dni === studentData.dni // Compara DNI
+    );
+  };
+
   const agregarIntegrante = async () => {
+    //Verificar si el estudiante ya esta registrado
+    //console.log("Verificando si el estudiante ya existe ...");
+    if (checkIfStudentExists(form)){
+      //console.log("El estudiante ya esta registrado");
+      pushNotification("Este estudiante ya esta agregado.", "warning", notifications.length+1);
+      return;
+    }
     if (validateForm()) {
       setLoadingCreate(true);
       let formData = new FormData();

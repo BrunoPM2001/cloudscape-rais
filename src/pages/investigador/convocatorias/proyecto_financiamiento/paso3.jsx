@@ -8,12 +8,13 @@ import {
   SpaceBetween,
   Table,
 } from "@cloudscape-design/components";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axiosBase from "../../../../api/axios";
 import { useCollection } from "@cloudscape-design/collection-hooks";
 import ModalAddEstudiante from "./components/modals/modalAddEstudiante";
 import ModalDeleteEstudiante from "./components/modals/modalDeleteEstudiante";
 import ModalAddEstudiante_externo from "./components/modals/modalAddEstudiante_externo";
+import NotificationContext from "../../../../providers/notificationProvider";
 
 const CANTIDAD_MINIMA = 3;
 
@@ -61,10 +62,13 @@ const columnDisplay = [
 ];
 
 export default function ({ proyecto_id, setRequisitos, loading, setLoading }) {
+  // Context
+  const {pushNotification, notifications} = useContext(NotificationContext);
   //  State
   const [distributions, setDistribution] = useState([]);
   const [visible, setVisible] = useState(false);
   const [typeModal, setTypeModal] = useState(null);
+  const [existingStudents, setExistingStudents] = useState([]);
 
   //  Hooks
   const { items, collectionProps, paginationProps } = useCollection(
@@ -88,8 +92,18 @@ export default function ({ proyecto_id, setRequisitos, loading, setLoading }) {
       }
     );
     const data = res.data;
-    setRequisitos(CANTIDAD_MINIMA <= data.length ? true : false);
+
+    const estudiantesNormales = data.filter(
+      (student) => student.tipo_integrante === "Estudiante"
+    );
+    if (estudiantesNormales.length >= 2) {
+      setRequisitos(true);
+    } else {
+      setRequisitos(false);
+    }
+
     setDistribution(data);
+    setExistingStudents(data);
     setLoading(false);
   };
 
@@ -97,6 +111,37 @@ export default function ({ proyecto_id, setRequisitos, loading, setLoading }) {
   useEffect(() => {
     getData();
   }, []);
+
+    // Function to check if a student already exists
+  const checkIfStudentExists = (student) => {
+    //console.log("Estudiantes existentes:", existingStudents);  // Ver lista de estudiantes
+    //console.log("Estudiante que intenta agregar:", student);  // Datos del estudiante
+    return existingStudents.some(
+      (existingStudent) =>
+        existingStudent.codigo_orcid === student.codigo_orcid || // Compara código ORCID
+        existingStudent.dni === student.dni ||                  // Compara DNI
+        existingStudent.correo_electronico === student.direccion1 // Compara correo electrónico
+    );
+  };
+
+    // Agregar estudiante
+  const handleItemClick = ({ detail }) => {
+    if (detail.id == "action_2_1") {  // Si es un estudiante normal
+      // Comprobamos si ya existen 2 estudiantes normales
+      const estudiantesNormales = existingStudents.filter(
+        (student) => student.tipo === "Estudiante"
+      );
+      if (estudiantesNormales.length >= 2) {
+        pushNotification("Ya hay 2 estudiantes registrados. Solo puedes agregar estudiantes externos.", "warning", notifications.length + 1);
+      } else {
+        setTypeModal("add_estudiante");
+        setVisible(true);
+      }
+    } else if (detail.id == "action_2_2") {  // Si es un estudiante externo
+      setTypeModal("add_estudiante_externo");
+      setVisible(true);
+    }
+  };
 
   return (
     <Container>
@@ -142,15 +187,7 @@ export default function ({ proyecto_id, setRequisitos, loading, setLoading }) {
                 </ButtonDropdown>
                 <ButtonDropdown
                   variant="primary"
-                  onItemClick={({ detail }) => {
-                    if (detail.id == "action_2_1") {
-                      setTypeModal("add_estudiante");
-                      setVisible(true);
-                    } else if (detail.id == "action_2_2") {
-                      setTypeModal("add_estudiante_externo");
-                      setVisible(true);
-                    }
-                  }}
+                  onItemClick={handleItemClick}
                   items={[
                     {
                       text: "Estudiante",
@@ -185,6 +222,7 @@ export default function ({ proyecto_id, setRequisitos, loading, setLoading }) {
           visible={visible}
           setVisible={setVisible}
           reload={getData}
+          existingStudents={existingStudents} //Pasa la función de verificación
         />
       )}
       {visible && typeModal == "add_estudiante_externo" && (
@@ -193,6 +231,7 @@ export default function ({ proyecto_id, setRequisitos, loading, setLoading }) {
           visible={visible}
           setVisible={setVisible}
           reload={getData}
+          existingStudents={existingStudents} //Pasa la función de verificación
         />
       )}
       {visible && typeModal == "delete" && (
