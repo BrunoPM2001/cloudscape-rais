@@ -251,45 +251,29 @@ const Detalle_grupo_invest = lazy(() =>
 );
 
 const Verificar_requisitos = lazy(() =>
-  import(
-    "../pages/investigador/convocatorias/proyecto_financiamiento/verificar.jsx"
-  )
+  import("../pages/investigador/convocatorias/proyecto_financiamiento/verificar.jsx")
 );
 
 const Registrar_proyecto_paso1 = lazy(() =>
-  import(
-    "../pages/investigador/convocatorias/proyecto_financiamiento/layout1.jsx"
-  )
+  import("../pages/investigador/convocatorias/proyecto_financiamiento/layout1.jsx")
 );
 const Registrar_proyecto_paso2 = lazy(() =>
-  import(
-    "../pages/investigador/convocatorias/proyecto_financiamiento/layout2.jsx"
-  )
+  import("../pages/investigador/convocatorias/proyecto_financiamiento/layout2.jsx")
 );
 const Registrar_proyecto_paso3 = lazy(() =>
-  import(
-    "../pages/investigador/convocatorias/proyecto_financiamiento/layout3.jsx"
-  )
+  import("../pages/investigador/convocatorias/proyecto_financiamiento/layout3.jsx")
 );
 const Registrar_proyecto_paso4 = lazy(() =>
-  import(
-    "../pages/investigador/convocatorias/proyecto_financiamiento/layout4.jsx"
-  )
+  import("../pages/investigador/convocatorias/proyecto_financiamiento/layout4.jsx")
 );
 const Registrar_proyecto_paso5 = lazy(() =>
-  import(
-    "../pages/investigador/convocatorias/proyecto_financiamiento/layout5.jsx"
-  )
+  import("../pages/investigador/convocatorias/proyecto_financiamiento/layout5.jsx")
 );
 const Registrar_proyecto_paso6 = lazy(() =>
-  import(
-    "../pages/investigador/convocatorias/proyecto_financiamiento/layout6.jsx"
-  )
+  import("../pages/investigador/convocatorias/proyecto_financiamiento/layout6.jsx")
 );
 const Registrar_proyecto_paso7 = lazy(() =>
-  import(
-    "../pages/investigador/convocatorias/proyecto_financiamiento/layout7.jsx"
-  )
+  import("../pages/investigador/convocatorias/proyecto_financiamiento/layout7.jsx")
 );
 
 const Registrar_picv_paso0 = lazy(() =>
