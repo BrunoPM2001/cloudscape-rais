@@ -50,7 +50,7 @@ export default function Registrar_proyecto_fex_3() {
   const { id } = queryString.parse(location.search);
 
   //  Hooks
-  const { items, collectionProps } = useCollection(data.documentos, {
+  const { items, collectionProps, actions } = useCollection(data.documentos, {
     sorting: {},
     selection: {},
   });
@@ -208,6 +208,9 @@ export default function Registrar_proyecto_fex_3() {
                     { id: "url", visible: true },
                   ]}
                   selectionType="single"
+                  onRowClick={({ detail }) =>
+                    actions.setSelectedItems([detail.item])
+                  }
                   items={items}
                   loading={loadingData}
                   loadingText="Cargando datos"

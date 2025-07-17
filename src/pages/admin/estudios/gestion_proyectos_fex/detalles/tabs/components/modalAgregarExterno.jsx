@@ -19,6 +19,7 @@ import axiosBase from "../../../../../../../api/axios";
 
 const initialForm = {
   condicion: null,
+  responsabilidad: "",
   codigo_orcid: "",
   apellido1: "",
   apellido2: "",
@@ -244,7 +245,7 @@ export default ({ close, id, reload }) => {
                 options={opt_condicion}
               />
             </FormField>
-            {formValues?.condicion.value == 48 && (
+            {formValues?.condicion?.value == 48 && (
               <FormField
                 label="Otra condición"
                 stretch
@@ -506,7 +507,7 @@ export default ({ close, id, reload }) => {
                 />
               </FormField>
               <FormField
-                label="Posición en la UNMSM"
+                label="Posición en la institución"
                 stretch
                 errorText={formErrors.posicion_unmsm}
               >

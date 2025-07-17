@@ -1,4 +1,5 @@
 import {
+  Alert,
   Box,
   Button,
   ColumnLayout,
@@ -109,6 +110,7 @@ export default ({ close, id, reload }) => {
   const [loadingCreate, setLoadingCreate] = useState(false);
   const [loading, setLoading] = useState(false);
   const [paises, setPaises] = useState([]);
+  const [alert, setAlert] = useState(false);
 
   //  Hooks
   const { formValues, formErrors, handleChange, validateForm, setFormValues } =
@@ -129,8 +131,9 @@ export default ({ close, id, reload }) => {
     setPaises(data.paises);
     setFormValues({
       ...data.externo,
+      id,
       condicion: opt_condicion.find(
-        (opt) => opt.value == data.externo.condicion
+        (opt) => opt.value == data.externo.proyecto_integrante_tipo_id
       ),
       sexo: opt_sexo.find((opt) => opt.value == data.externo.sexo),
       pais: data.paises.find((opt) => opt.value == data.externo.pais),
@@ -141,16 +144,23 @@ export default ({ close, id, reload }) => {
 
   const editar = async () => {
     if (validateForm()) {
-      setLoadingCreate(true);
-      const res = await axiosBase.put(
-        "admin/estudios/proyectosFEX/editarExterno",
-        formValues
-      );
-      const data = res.data;
-      setLoadingCreate(false);
-      close();
-      reload();
-      pushNotification(data.detail, data.message, notifications.length + 1);
+      if (
+        formValues?.condicion?.value == 48 &&
+        (formValues.responsabilidad == "" || formValues.responsabilidad == null)
+      ) {
+        setAlert(true);
+      } else {
+        setLoadingCreate(true);
+        const res = await axiosBase.put(
+          "admin/estudios/proyectosFEX/editarExterno",
+          formValues
+        );
+        const data = res.data;
+        setLoadingCreate(false);
+        close();
+        reload();
+        pushNotification(data.detail, data.message, notifications.length + 1);
+      }
     }
   };
 
@@ -184,6 +194,12 @@ export default ({ close, id, reload }) => {
           </SpaceBetween>
         ) : (
           <>
+            {alert && (
+              <Alert
+                header="Necesita determinar el detalle de la otra condición"
+                type="warning"
+              />
+            )}
             <FormField
               label="Condición"
               errorText={formErrors.condicion}
@@ -410,7 +426,7 @@ export default ({ close, id, reload }) => {
                 />
               </FormField>
               <FormField
-                label="Posición en la UNMSM"
+                label="Posición en la institución"
                 stretch
                 errorText={formErrors.posicion_unmsm}
               >

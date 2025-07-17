@@ -524,7 +524,7 @@ export default ({ close, proyecto_id, reload }) => {
                 />
               </FormField>
               <FormField
-                label="Posición en la UNMSM"
+                label="Posición en la institución"
                 stretch
                 errorText={formErrors.posicion_unmsm}
               >

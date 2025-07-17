@@ -21,6 +21,21 @@ import axiosBase from "../../../../../api/axios";
 export default ({ data, loading, grupo_id, reload }) => {
   //  States
   const [modal, setModal] = useState("");
+  const [loadingBtn, setLoadingBtn] = useState(false);
+
+  const reporteCalificacion = async () => {
+    setLoadingBtn(true);
+    const res = await axiosBase.get("admin/estudios/grupos/calificacion", {
+      params: {
+        grupo_id,
+      },
+      responseType: "blob",
+    });
+    const blob = res.data;
+    const url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
+    setLoadingBtn(false);
+  };
 
   return (
     <Container
@@ -31,6 +46,7 @@ export default ({ data, loading, grupo_id, reload }) => {
             <SpaceBetween size="xs" direction="horizontal">
               <ButtonDropdown
                 disabled={loading || data.estado < 0}
+                loading={loadingBtn}
                 items={
                   data.tipo == "grupo"
                     ? [
@@ -63,7 +79,9 @@ export default ({ data, loading, grupo_id, reload }) => {
                       ]
                 }
                 onItemClick={async ({ detail }) => {
-                  if (detail.id == "action_1_3") {
+                  if (detail.id == "action_1_1") {
+                    reporteCalificacion();
+                  } else if (detail.id == "action_1_3") {
                     setModal("disolver_grupo");
                   } else if (detail.id == "action_2_1") {
                     setModal("aprobar_soli");

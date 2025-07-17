@@ -96,14 +96,10 @@ export default function Paso4({ info, loading, reload }) {
                   ]}
                   onItemClick={({ detail }) => {
                     if (detail.id == "action_4") {
-                      if (
-                        collectionProps.selectedItems[0].tipo_integrante ==
-                        "Tesista"
-                      ) {
+                      if (collectionProps.selectedItems[0].tipo == "Tesista") {
                         setType("editTe");
                       } else if (
-                        collectionProps.selectedItems[0].tipo_integrante ==
-                        "Externo"
+                        collectionProps.selectedItems[0].tipo == "Externo"
                       ) {
                         setType("editExterno");
                       } else {

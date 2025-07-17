@@ -379,7 +379,7 @@ export default ({ close, reload, grupo_id }) => {
               />
             </FormField>
             <FormField
-              label="Posición en la UNMSM"
+              label="Posición en la institución"
               stretch
               errorText={formErrors.posicion_unmsm}
             >

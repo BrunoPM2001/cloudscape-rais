@@ -16,13 +16,14 @@ import NotificationContext from "../../../../../../../providers/notificationProv
 import axiosBase from "../../../../../../../api/axios";
 
 const initialForm = {
+  condicion: null,
+  responsabilidad: "",
   nombres: "",
   codigo: "",
   doc_numero: "",
   categoria: "",
   dependencia: "",
   facultad: "",
-  condicion: null,
   cti_vitae: "",
   especialidad: "",
   titulo_profesional: "",
@@ -65,6 +66,7 @@ export default ({ id, close, reload }) => {
   const [creating, setCreating] = useState(false);
   const [loading, setLoading] = useState(false);
   const [institutos, setInstitutos] = useState([]);
+  const [alert, setAlert] = useState(false);
 
   //  Hooks
   const { formValues, formErrors, handleChange, validateForm, setFormValues } =
@@ -84,6 +86,7 @@ export default ({ id, close, reload }) => {
     const data = res.data;
     setFormValues({
       ...data.docente,
+      id,
       condicion: opt_condicion.find(
         (opt) => opt.value == data.docente.proyecto_integrante_tipo_id
       ),
@@ -98,16 +101,23 @@ export default ({ id, close, reload }) => {
 
   const editar = async () => {
     if (validateForm()) {
-      setCreating(true);
-      const res = await axiosBase.put(
-        "admin/estudios/proyectosFEX/editarDocente",
-        { ...formValues, id }
-      );
-      const data = res.data;
-      setCreating(false);
-      pushNotification(data.detail, data.message, notifications.length + 1);
-      close();
-      reload();
+      if (
+        formValues?.condicion?.value == 48 &&
+        (formValues.responsabilidad == "" || formValues.responsabilidad == null)
+      ) {
+        setAlert(true);
+      } else {
+        setCreating(true);
+        const res = await axiosBase.put(
+          "admin/estudios/proyectosFEX/editarDocente",
+          { ...formValues, id }
+        );
+        const data = res.data;
+        setCreating(false);
+        pushNotification(data.detail, data.message, notifications.length + 1);
+        close();
+        reload();
+      }
     }
   };
 
@@ -165,6 +175,12 @@ export default ({ id, close, reload }) => {
                 </div>
               </ColumnLayout>
             </Alert>
+            {alert && (
+              <Alert
+                header="Necesita determinar el detalle de la otra condición"
+                type="warning"
+              />
+            )}
             <FormField
               label="Condición"
               errorText={formErrors.condicion}
@@ -179,6 +195,20 @@ export default ({ id, close, reload }) => {
                 options={opt_condicion}
               />
             </FormField>
+            {formValues?.condicion?.value == 48 && (
+              <FormField
+                label="Otra condición"
+                stretch
+                errorText={formErrors.responsabilidad}
+              >
+                <Input
+                  value={formValues.responsabilidad}
+                  onChange={({ detail }) =>
+                    handleChange("responsabilidad", detail.value)
+                  }
+                />
+              </FormField>
+            )}
             <ColumnLayout columns={2}>
               <FormField
                 label="Cti vitae"
