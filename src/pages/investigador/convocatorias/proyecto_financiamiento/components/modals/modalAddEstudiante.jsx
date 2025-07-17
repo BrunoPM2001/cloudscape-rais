@@ -48,6 +48,7 @@ export default ({ id, visible, setVisible, reload, existingStudents }) => {
     registerFileInput,
   } = useFormValidation(initialForm, formRules);
 
+
   //  Functions
   const getData = async () => {
     setLoadingData(true);
@@ -56,6 +57,7 @@ export default ({ id, visible, setVisible, reload, existingStudents }) => {
       {
         params: {
           codigo: form.codigo_alumno,
+          investigador_id: form.investigador_id,
         },
       }
     );
@@ -64,12 +66,12 @@ export default ({ id, visible, setVisible, reload, existingStudents }) => {
     setLoadingData(false);
     if (data.message == "success") {
       setEnableCreate(false);
+    } else {
+      setEnableCreate(true);
     }
   };
 
   const checkIfStudentExists = (studentData) => {
-    //console.log("Estudiantes existentes:", existingStudents);  // Verifica los estudiantes existentes
-    //console.log("Estudiante que intenta agregar:", studentData);  // Datos del estudiante
     return existingStudents.some(
       (existingStudent) =>
         existingStudent.codigo_alumno === studentData.codigo_alumno || // Compara código alumno
@@ -78,10 +80,7 @@ export default ({ id, visible, setVisible, reload, existingStudents }) => {
   };
 
   const agregarIntegrante = async () => {
-    //Verificar si el estudiante ya esta registrado
-    //console.log("Verificando si el estudiante ya existe ...");
     if (checkIfStudentExists(form)){
-      //console.log("El estudiante ya esta registrado");
       pushNotification("Este estudiante ya esta agregado.", "warning", notifications.length+1);
       return;
     }
@@ -104,12 +103,13 @@ export default ({ id, visible, setVisible, reload, existingStudents }) => {
     }
   };
 
-  //  Effects
+    //  Effects
   useEffect(() => {
     if (Object.keys(form).length != 0) {
       getData();
     }
   }, [form]);
+
 
   return (
     <Modal
