@@ -27,7 +27,7 @@ export default function Sidebar({ activeHref = "#", data = [], loading }) {
         },
         {
           type: "link",
-          text: "Proyectos multidiciplinario",
+          text: "Proyectos multidisciplinario",
           href: "/investigador/actividades/proyectosMulti",
         },
         {
