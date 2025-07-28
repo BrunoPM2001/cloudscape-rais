@@ -664,12 +664,12 @@ export default function Formulario({
             />
           </FormField>
           <FormField
-            label="Posición UNMSM"
+            label="Posición en la institución"
             stretch
             errorText={formErrors.posicion_unmsm}
           >
             <Input
-              placeholder="Escriba su posición en la UNMSM"
+              placeholder="Escriba su posición en la institución"
               value={formValues.posicion_unmsm}
               onChange={({ detail }) =>
                 handleChange("posicion_unmsm", detail.value)

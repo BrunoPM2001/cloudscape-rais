@@ -408,7 +408,7 @@ export default ({ close, id }) => {
           </FormField>
         </Grid>
         <FormField
-          label="Posición en la UNMSM"
+          label="Posición en la institución"
           errorText={formErrors.posicion_unmsm}
           stretch
         >
