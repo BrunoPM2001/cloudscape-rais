@@ -158,7 +158,7 @@ export default ({
           />
         </FormField>
         <FormField
-          label="Otros documentos"
+          label="Otros documentos (Adjuntar la PECOSA y NEA)"
           description={
             files["anexo6"] && (
               <>

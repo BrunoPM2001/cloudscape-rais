@@ -48,7 +48,7 @@ export default ({ close, item, reload }) => {
       "admin/estudios/deudaProyecto/listadoDeudaAcademica",
       {
         params: {
-          tipo_proyecto: item[0].tipo_proyecto,
+          tipo_proyecto: item.tipo_proyecto,
         },
       }
     );
@@ -74,9 +74,8 @@ export default ({ close, item, reload }) => {
         "admin/estudios/deudaProyecto/asignarDeuda",
         {
           ...formValues,
-          proyecto_id: item[0].proyecto_id,
-          proyecto_origen: item[0].proyecto_origen,
-          tipo_proyecto: item[0].tipo_proyecto,
+          proyecto_id: item.id,
+          tipo_proyecto: item.tipo_proyecto,
         }
       );
       const res = response.data;

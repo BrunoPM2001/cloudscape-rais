@@ -1,4 +1,4 @@
-import { SpaceBetween, Tabs } from "@cloudscape-design/components";
+import { Box, SpaceBetween, Tabs } from "@cloudscape-design/components";
 import Listado from "./tabs/listado.jsx";
 import Generar_deuda from "./tabs/generar_deuda";
 import BaseLayout from "../../components/baseLayout.jsx";
@@ -34,9 +34,47 @@ export default function Deudas_proyectos() {
     <BaseLayout
       breadcrumbs={breadcrumbs}
       header="Deudas de proyectos:"
-      helpInfo="Información sobre la páginal actual para poder mostrarla al público
-      en general."
+      helpInfo={
+        <>
+          <Box variant="h4">Tipos de deuda según proyecto:</Box>
+          <Box variant="strong">
+            <strong>Deuda Informe Académico</strong>
+          </Box>
+          <ul>
+            <li>PCONFIGI</li>
+            <li>PSINFINV</li>
+            <li>PSINFIPU</li>
+            <li>PINVPOS</li>
+            <li>PEVENTO</li>
+            <li>ECI</li>
+          </ul>
+          <Box variant="strong">
+            <strong>Deuda Informe Académico Avance</strong>
+          </Box>
+          <ul>
+            <li>PTPGRADO</li>
+            <li>PTPMAEST</li>
+            <li>PTPDOCTO</li>
+          </ul>
+          <Box variant="strong">
+            <strong>Deuda Informe Académico Final</strong>
+          </Box>
+          <ul>
+            <li>PTPBACHILLER</li>
+            <li>PTPGRADO</li>
+            <li>PTPMAEST</li>
+            <li>PTPDOCTO</li>
+          </ul>
+          <Box variant="strong">
+            <strong>Deuda Segundo Informe Académico Avance</strong>
+          </Box>
+          <ul>
+            <li>PTPDOCTO</li>
+          </ul>
+        </>
+      }
       disableOverlap
+      contentType="table"
     >
       <Tabs tabs={tabs} ariaLabel="Opciones de deudas de proyectos" />
     </BaseLayout>
