@@ -14,9 +14,10 @@ import { useCollection } from "@cloudscape-design/collection-hooks";
 import ModalAddEstudiante from "./components/modals/modalAddEstudiante";
 import ModalDeleteEstudiante from "./components/modals/modalDeleteEstudiante";
 import ModalAddEstudiante_externo from "./components/modals/modalAddEstudiante_externo";
+import ModalAddAdherente from "./components/modals/modalAddAdherente";
 import NotificationContext from "../../../../providers/notificationProvider";
 
-const CANTIDAD_MINIMA = 3;
+const CANTIDAD_MINIMA = 2;
 
 const columnDefinitions = [
   {
@@ -69,6 +70,7 @@ export default function ({ proyecto_id, setRequisitos, loading, setLoading }) {
   const [visible, setVisible] = useState(false);
   const [typeModal, setTypeModal] = useState(null);
   const [existingStudents, setExistingStudents] = useState([]);
+  const [puedeAgregarEstudiantes, setPuedeAgregarEstudiantes] = useState(true);
 
   //  Hooks
   const { items, collectionProps, paginationProps } = useCollection(
@@ -93,14 +95,13 @@ export default function ({ proyecto_id, setRequisitos, loading, setLoading }) {
     );
     const data = res.data;
 
-    const estudiantesNormales = data.filter(
-      (student) => student.tipo_integrante === "Estudiante"
+    const estudiantesTotales = data.filter(
+      (student) => 
+        student.tipo === "Estudiante" || student.tipo === "Estudiante externo"
     );
-    if (estudiantesNormales.length >= 2) {
-      setRequisitos(true);
-    } else {
-      setRequisitos(false);
-    }
+
+    setRequisitos(estudiantesTotales.length >= CANTIDAD_MINIMA);
+    setPuedeAgregarEstudiantes(estudiantesTotales.length < CANTIDAD_MINIMA);
 
     setDistribution(data);
     setExistingStudents(data);
@@ -114,8 +115,6 @@ export default function ({ proyecto_id, setRequisitos, loading, setLoading }) {
 
     // Function to check if a student already exists
   const checkIfStudentExists = (student) => {
-    //console.log("Estudiantes existentes:", existingStudents);  // Ver lista de estudiantes
-    //console.log("Estudiante que intenta agregar:", student);  // Datos del estudiante
     return existingStudents.some(
       (existingStudent) =>
         existingStudent.codigo_orcid === student.codigo_orcid || // Compara código ORCID
@@ -126,21 +125,21 @@ export default function ({ proyecto_id, setRequisitos, loading, setLoading }) {
 
     // Agregar estudiante
   const handleItemClick = ({ detail }) => {
-    if (detail.id == "action_2_1") {  // Si es un estudiante normal
+    if ((detail.id == "action_2_1" || detail.id == "action_2_2") && !puedeAgregarEstudiantes) {
+      pushNotification("Solo se permiten 2 estudiantes en total (interno o externo)", "warning", notifications.length + 1);
+      return;
+    }
+
+    if (detail.id == "action_2_1") {  // Si es un estudiante 
       // Comprobamos si ya existen 2 estudiantes normales
-      const estudiantesNormales = existingStudents.filter(
-        (student) => student.tipo === "Estudiante"
-      );
-      if (estudiantesNormales.length >= 2) {
-        pushNotification("Ya hay 2 estudiantes registrados. Solo puedes agregar estudiantes externos.", "warning", notifications.length + 1);
-      } else {
-        setTypeModal("add_estudiante");
-        setVisible(true);
-      }
+      setTypeModal("add_estudiante");
     } else if (detail.id == "action_2_2") {  // Si es un estudiante externo
       setTypeModal("add_estudiante_externo");
-      setVisible(true);
+    } else if (detail.id == "action_2_3") {  // Si es un adherente
+      setTypeModal("add_adherente");
     }
+
+    setVisible(true);
   };
 
   return (
@@ -192,10 +191,16 @@ export default function ({ proyecto_id, setRequisitos, loading, setLoading }) {
                     {
                       text: "Estudiante",
                       id: "action_2_1",
+                      disabled: !puedeAgregarEstudiantes,
                     },
                     {
                       text: "Estudiante externo",
                       id: "action_2_2",
+                      disabled: !puedeAgregarEstudiantes,
+                    },
+                    {
+                      text: "Adherente",
+                      id: "action_2_3",
                     },
                   ]}
                 >
@@ -232,6 +237,15 @@ export default function ({ proyecto_id, setRequisitos, loading, setLoading }) {
           setVisible={setVisible}
           reload={getData}
           existingStudents={existingStudents} //Pasa la función de verificación
+        />
+      )}
+      {visible && typeModal == "add_adherente" && (
+        <ModalAddAdherente
+          id={proyecto_id}
+          visible={visible}
+          setVisible={setVisible}
+          reload={getData}
+          existingStudents={existingStudents}
         />
       )}
       {visible && typeModal == "delete" && (

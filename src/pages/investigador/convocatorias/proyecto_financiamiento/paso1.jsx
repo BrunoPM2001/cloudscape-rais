@@ -99,6 +99,7 @@ export default forwardRef(function (props, ref) {
       },
     });
     const res1 = res.data;
+    console.log("Lineas recibidas (getData1):", res1.data.lineas); //
     setData(res1.data.data);
     setLineas(res1.data.lineas);
     setOcde_1(res1.data.ocde1);
@@ -133,6 +134,7 @@ export default forwardRef(function (props, ref) {
       "investigador/convocatorias/pro-ctie/getDataToPaso1"
     );
     const data = res.data;
+    console.log("Lineas recibidas (getData):", data.lineas);
     setData(data.data);
     setLineas(data.lineas);
     setOcde_1(data.ocde1);

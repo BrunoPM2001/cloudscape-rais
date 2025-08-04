@@ -51,6 +51,12 @@ const styles = {
 };
 
 const Psinfinv = ({ data }) => {
+  console.log("🧪 data:", data);
+  console.log("📂 data.documentos:", data.documentos);
+  console.log("📄 METODOLOGIA_TRABAJO:", data.documentos?.METODOLOGIA_TRABAJO);
+  console.log("📄 PROPIEDAD_INTELECTUAL:", data.documentos?.PROPIEDAD_INTELECTUAL);
+  console.log("🔍 Archivo propiedad (archivos):", data.archivos?.propiedad);
+
   const rows = [
     { label: "Título", value: data.proyecto?.titulo || "No disponible" },
     {
@@ -78,6 +84,8 @@ const Psinfinv = ({ data }) => {
     { label: "Línea OCDE", value: data.proyecto?.ocde || "No disponible" },
   ];
 
+  console.log("📦 Archivos finales:", data.archivos);
+  console.log("📦 Documentos finales:", data.documentos);
   return (
     <div>
       <h1 style={{ textAlign: "center" }}>
@@ -200,11 +208,14 @@ const Psinfinv = ({ data }) => {
         <b>G. Propiedad Intelectual </b>
       </h2>
       <div>
-        {data.documentos.recurso == "PROPIEDAD_INTELECTUAL" ? (
+        console.log("📌 Renderizando bloque de propiedad intelectual");
+        console.log("📁 En documentos:", data.documentos?.PROPIEDAD_INTELECTUAL);
+
+        {data.documentos?.PROPIEDAD_INTELECTUAL ? (
           <>
             <Button
               ariaLabel="Archivo de propiedad intelectual"
-              href={data.documentos.PROPIEDAD_INTELECTUAL}
+              href={data.documentos?.PROPIEDAD_INTELECTUAL}
               iconAlign="right"
               iconName="external"
               variant="primary"

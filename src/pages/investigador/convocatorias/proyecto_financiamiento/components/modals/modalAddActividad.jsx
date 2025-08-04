@@ -34,15 +34,28 @@ const formRules = {
     } 
   },
   fecha_inicio: { required: true },
-  fecha_fin: { required: true,
+  fecha_fin: { 
+    required: true,
     custom: (value, values) => {
+      const fechaInicioStr = values.fecha_inicio;
+      if (!fechaInicioStr) {
+        return "Debes seleccionar primero la fecha de inicio.";
+      }
       // Comprobar si fecha_fin es mayor que fecha_inicio
-      const fechaInicio = new Date(values.fecha_inicio);
+      const fechaInicio = new Date(fechaInicioStr);
       const fechaFin = new Date(value);
 
       if (fechaFin <= fechaInicio){
         return "La fecha de fin debe ser posterior a la fecha de inicio.";
       }
+
+      const unAnioDespues = new Date(fechaInicio);
+      unAnioDespues.setFullYear(unAnioDespues.getFullYear() + 1);
+
+      if (fechaFin > unAnioDespues) {
+        return "El periodo no puede exceder los 12 meses desde la fecha de inicio.";
+      }
+
       return null;
     }
    },
@@ -145,6 +158,11 @@ export default ({ id, visible, setVisible, reload }) => {
                 onChange={({ detail }) =>
                   handleChange("fecha_inicio", detail.value)
                 }
+                isDateEnabled={(date) => {
+                  const today = new Date();
+                  today.setHours(0,0,0,0);
+                  return date >= today;
+                }}
               />
             </FormField>
             <FormField
@@ -158,6 +176,19 @@ export default ({ id, visible, setVisible, reload }) => {
                 onChange={({ detail }) =>
                   handleChange("fecha_fin", detail.value)
                 }
+                disabled={!formValues.fecha_inicio}
+                isDateEnabled={(date) => {
+                  if (!formValues.fecha_inicio) return false;
+
+                  const start = new Date(formValues.fecha_inicio);
+                  const min = new Date(start);
+                  const max = new Date(start);
+                  min.setDate(min.getDate() + 1);
+                  max.setFullYear(max.getFullYear() + 1);
+
+                  date.setHours(0, 0, 0, 0);
+                  return date >= min && date <= max;
+                }}
               />
             </FormField>
           </ColumnLayout>

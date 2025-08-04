@@ -15,6 +15,7 @@
   import { useFormValidation } from "../../../../../../hooks/useFormValidation";
   import axiosBase from "../../../../../../api/axios";
   import NotificationContext from "../../../../../../providers/notificationProvider";
+import { use } from "react";
 
   const initialForm = {
     codigo_orcid: "",
@@ -47,6 +48,7 @@
   };
 
   export default ({ id, visible, setVisible, reload, existingStudents }) => {
+    const [paises, setPaises] = useState([]);
     //  Context
     const { notifications, pushNotification } = useContext(NotificationContext);
 
@@ -61,6 +63,26 @@
       validateForm,
       registerFileInput,
     } = useFormValidation(initialForm, formRules);
+
+    const verificarDuplicadoEnBackend = async () => {
+      try {
+        const res = await axiosBase.post(
+          "investigador/convocatorias/pro-ctie/verificarEstudianteExterno",
+          {
+            proyecto_id: id,
+            apellido1: formValues.apellido1,
+            apellido2: formValues.apellido2,
+            nombres: formValues.nombres,
+            doc_numero: formValues.doc_numero,
+          }
+        );
+        return res.data; // { status: 'ok' } o { status: 'duplicate', field, message }
+      } catch (error) {
+        console.error("Error al verificar en backend:", error);
+        return { status: 'error', message: 'No se pudo verificar duplicados.' };
+      }
+    };
+
 
     // Unir apellidos y nombres
     const getFullName = (apellido1, apellido2, nombres) => {
@@ -101,17 +123,28 @@
 
     //  Functions
     const agregarIntegrante = async () => {
-      //console.log("Iniciando proceso de agregar integrante");
-      //console.log("Datos del estudiante a agregar: ", formValues);
-      // Comprobar si el estudiante ya existe
       if (checkIfStudentExists(formValues)) {
-        //console.log("Este estudiante ya esta agregado.");
         pushNotification("Este estudiante ya esta agregado.", "warning", notifications.length +1 );
         return;
       }
 
       if (validateForm()) {
         setLoadingCreate(true);
+
+        const validacion = await verificarDuplicadoEnBackend();
+
+        if(validacion.status === "duplicate") {
+          pushNotification(validacion.message, "warning", notifications.length + 1);
+          setLoadingCreate(false);
+          return;
+        }
+
+        if (validacion.status === "error") {
+          pushNotification("Error al verificar duplicados", "error", notifications.length + 1);
+          setLoadingCreate(false);
+          return;
+        }
+
         let formData = new FormData();
         formData.append("proyecto_id", id);
         formData.append("codigo_orcid", formValues.codigo_orcid);
@@ -126,18 +159,30 @@
         formData.append("doc_numero", formValues.doc_numero);
         formData.append("telefono_movil", formValues.telefono_movil);
         formData.append("file", formValues.carta[0]);
-        const res = await axiosBase.postForm(
-          "investigador/convocatorias/pro-ctie/agregarIntegranteExterno",
-          formData
+
+        try {
+          const res = await axiosBase.postForm(
+            "investigador/convocatorias/pro-ctie/agregarIntegranteExterno",
+            formData
         );
         const data = res.data;
-        setLoadingCreate(false);
+        pushNotification(data.detail, data.message, notifications.length + 1);
         setVisible(false);
         reload();
-        //console.log("Respuesta del servidor:", data);
-        pushNotification(data.detail, data.message, notifications.length + 1);
+        } catch (error) {
+          console.error("Error al registrar estudiante: ", error);
+          pushNotification("Error al registrar estudiante.", "error", notifications.length + 1);
+        }
+
+        setLoadingCreate(false);
       }
     };
+    
+    useEffect(() => {
+    axiosBase.get('investigador/convocatorias/pro-ctie/listarpaises')
+    .then(res => setPaises(res.data))
+    .catch(err => console.error("Error al cargar países", err));
+    }, []);
 
     // Efecto para obtener los datos del estudiante
     useEffect(() => {
@@ -254,11 +299,7 @@
                   onChange={({ detail }) =>
                     handleChange("pais", detail.selectedOption)
                   }
-                  options={[
-                    {
-                      value: "Perú",
-                    },
-                  ]}
+                  options={paises}
                 />
               </FormField>
               <FormField

@@ -43,7 +43,7 @@ const montoMaximoPorPartida = {
   },
   Servicios: {
     PasajesYViaticos: {
-      38: 3750, //Asesoria especializada
+      38: 3750, //Pasajes y gasto de transporte (interior)
       39: 3750, //Viaticos y asignaciones por comision de servicio
     },
     AsesoriasEspecializadas: {
@@ -57,7 +57,6 @@ const montoMaximoPorPartida = {
       45: 3750, //Servicio de impresiones, encuadernación y empastado
       47: 3750, //Servicio de mantenimiento, acondicionamiento y reparaciones
       43: 3750, //Correos y servicios de mensajeria
-      71: 3750, //Servicio de impresiones, encuadernaciones y empastados
     },
     MovilidadLocal: {
       40: 500, //Otros gastos (movilidad local)
@@ -137,6 +136,7 @@ export default ({ id, visible, setVisible, reload, limit }) => {
   ) {
     montoMaximo = montoMaximoPorPartida.Bienes.UtilesDeOficinaYMaterialesDeAseo[valuePartida];
   }
+
   // Validación para "Servicios"
   else if (
     [
@@ -219,6 +219,7 @@ export default ({ id, visible, setVisible, reload, limit }) => {
               variant="primary"
               onClick={agregarPartida}
               loading={loadingCreate}
+              disabled={loadingCreate}
             >
               Incluir partida
             </Button>

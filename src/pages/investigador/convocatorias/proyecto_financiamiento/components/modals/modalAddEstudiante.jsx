@@ -51,35 +51,54 @@ export default ({ id, visible, setVisible, reload, existingStudents }) => {
 
   //  Functions
   const getData = async () => {
-    setLoadingData(true);
-    const res = await axiosBase.get(
-      "investigador/convocatorias/pro-ctie/verificarEstudiante",
+    try {
+      setLoadingData(true);
+      setEnableCreate(true);
+
+      const res = await axiosBase.get(
+        "investigador/convocatorias/pro-ctie/verificarEstudiante",
       {
         params: {
           codigo: form.codigo_alumno,
-          investigador_id: form.investigador_id,
+          proyecto_id: id,
+          apellido1: form.apellido_paterno,
+          apellido2: form.apellido_materno,
+          nombres: form.nombres,
+          doc_numero: form.dni,
         },
       }
     );
-    const data = await res.data;
+
+    const data = res.data;
     setIncluirMiembroData(data);
+    setEnableCreate(data.message !== "success");
+  } catch (e) {
+    setIncluirMiembroData({
+      message: "error",
+      detail: "No se pudo verificar al estudiante. Intentalo nuevamente.",
+    })
+    setEnableCreate(true);
+  } finally {
     setLoadingData(false);
-    if (data.message == "success") {
-      setEnableCreate(false);
-    } else {
-      setEnableCreate(true);
-    }
+  }
   };
 
   const checkIfStudentExists = (studentData) => {
-    return existingStudents.some(
-      (existingStudent) =>
-        existingStudent.codigo_alumno === studentData.codigo_alumno || // Compara código alumno
-        existingStudent.dni === studentData.dni // Compara DNI
-    );
+    const normalize = (str) => (str || "").toUpperCase().trim();
+
+    return existingStudents.some((existingStudent) => {
+      const sameDNI = existingStudent.dni === studentData.dni;
+      const sameCode = existingStudent.codigo_alumno === studentData.codigo_alumno;
+      const sameFullName =
+        normalize(existingStudent.apellido_paterno) === normalize(studentData.apellido_paterno) &&
+        normalize(existingStudent.apellido_materno) === normalize(studentData.apellido_materno) &&
+        normalize(existingStudent.nombres) === normalize(studentData.nombres);
+      return sameDNI || sameCode || sameFullName;
+    })
   };
 
   const agregarIntegrante = async () => {
+    if (incluirMiembroData?.message !== 'success') return;
     if (checkIfStudentExists(form)){
       pushNotification("Este estudiante ya esta agregado.", "warning", notifications.length+1);
       return;
@@ -123,7 +142,7 @@ export default ({ id, visible, setVisible, reload, existingStudents }) => {
               Cancelar
             </Button>
             <Button
-              disabled={enableCreate}
+              disabled={enableCreate || loadingData}
               variant="primary"
               onClick={agregarIntegrante}
               loading={loadingCreate}
@@ -142,16 +161,25 @@ export default ({ id, visible, setVisible, reload, existingStudents }) => {
               onChange={({ detail }) => {
                 setOptions([]);
                 setValue(detail.value);
-                if (detail.value == "") {
+                if (detail.value === "") {
                   setForm({});
+                  setIncluirMiembroData({});
                 }
                 setEnableCreate(true);
               }}
               onSelect={({ detail }) => {
-                if (detail.selectedOption.id != undefined) {
-                  const { value, ...rest } = detail.selectedOption;
+                const selected = detail.selectedOption;
+                if (selected && selected.id !== undefined) {
+                  const { value, ...rest } = selected;
                   setForm(rest);
                   setAvoidSelect(false);
+
+                  setIncluirMiembroData({});
+                  setEnableCreate(true);
+                } else {
+                  setForm({});
+                  setEnableCreate(true);
+                  setIncluirMiembroData({});
                 }
               }}
               value={value}
@@ -212,9 +240,23 @@ export default ({ id, visible, setVisible, reload, existingStudents }) => {
               ) : (
                 <>
                   <Alert
-                    type={incluirMiembroData.message}
-                    header={incluirMiembroData.detail}
-                  />
+                    type={incluirMiembroData?.message === 'error' ? 'error': 'success'}
+                    header={
+                      incluirMiembroData?.message === 'error' 
+                      ? 'No se puede incluir al estudiante'
+                      : 'Validaciones superadas'
+                    }
+                  >
+                    {Array.isArray(incluirMiembroData?.detail) ? (
+                      <ul style={{ margin: 0, paddingLeft: '1rem' }}>
+                        {incluirMiembroData.detail.map((msg, i) => (
+                          <li key ={i}>{msg}</li>
+                        ))}
+                      </ul>
+                    ): (
+                      incluirMiembroData?.detail
+                    )}
+                  </Alert>
                   {enableCreate == false && (
                     <Form>
                       <FormField
