@@ -8,7 +8,7 @@ import { useContext, useState } from "react";
 import axiosBase from "../../../../../api/axios";
 import NotificationContext from "../../../../../providers/notificationProvider";
 
-export default ({ id, close, reload }) => {
+export default function ModalEliminarProyecto ({ id, close = () => {}, reload = () => {} }) {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
 
@@ -18,19 +18,25 @@ export default ({ id, close, reload }) => {
   //  Functions
   const eliminarProyecto = async () => {
     setLoading(true);
-    const res = await axiosBase.delete(
+    try {
+      const res = await axiosBase.delete(
       "investigador/publicaciones/utils/eliminarProyecto",
-      {
-        params: {
-          proyecto_id: id,
-        },
-      }
-    );
-    const data = res.data;
-    setLoading(false);
-    close();
-    reload();
-    pushNotification(data.detail, data.message, notifications.length + 1);
+      { params: { proyecto_id: id } }
+      );
+      const data = res.data;
+
+      typeof close === "function" && close();
+      typeof reload === "function" && reload();
+
+      pushNotification(data.detail, data.message, notifications.length + 1);
+    } catch (err) {
+      const msg = err?.response?.data?.message || "Ocurrió un error al eliminar el proyecto.";
+      pushNotification("Error", msg, notifications.length + 1 );
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+    
   };
 
   return (

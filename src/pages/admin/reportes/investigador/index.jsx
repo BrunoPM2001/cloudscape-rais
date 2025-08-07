@@ -39,22 +39,34 @@ export default function Reporte_investigador() {
   };
 
   const getData = async () => {
+    if (!value || value.trim() === "") return;
+  
     setLoading(true);
+  try {
     const res = await axiosBase.get(
-      "admin/admin/usuarios/searchInvestigadorBy/" + value
-    );
+      "admin/admin/usuarios/searchInvestigadorBy/", {
+        params: {query: value}
+    });
     const data = await res.data;
     const opt = data.map((item) => {
       return {
-        detail: item.id,
+        detail: item.investigador_id,
         value: `${item.codigo} | ${item.doc_numero} | ${item.apellido1} ${item.apellido2}, ${item.nombres}`,
       };
     });
     setOptions(opt);
+  } catch (err) {
+    console.error("Error al obtener investigaciones:", err);
+    setOptions([]);
+  }
     setLoading(false);
   };
 
   const reporte = async () => {
+    if (!investigadorId) {
+      alert("Por favor, selecciona un investigador de la lista.");
+      return;
+    }
     setLoadingReporte(true);
     const res = await axiosBase.get(
       "admin/reportes/docente/" + investigadorId,

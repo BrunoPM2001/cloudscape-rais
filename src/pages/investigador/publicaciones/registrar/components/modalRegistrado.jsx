@@ -13,7 +13,7 @@ import { useAutosuggest } from "../../../../../hooks/useAutosuggest";
 import axiosBase from "../../../../../api/axios";
 import NotificationContext from "../../../../../providers/notificationProvider";
 
-export default ({ id, close, reload }) => {
+export default function ModalRegistrado ({ id, close = () => {}, reload = () => {}, visible = true }) {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
 
@@ -27,37 +27,46 @@ export default ({ id, close, reload }) => {
 
   //  Functions
   const agregarProyecto = async () => {
-    setLoadingCreate(true);
-    const res = await axiosBase.post(
-      "investigador/publicaciones/utils/agregarProyecto",
-      {
-        publicacion_id: id,
-        proyecto_id: form.proyecto_id,
-        codigo_proyecto: form.codigo_proyecto,
-        nombre_proyecto: form.titulo,
-        entidad_financiadora: form.entidad_financiadora,
-      }
-    );
-    const data = res.data;
-    setLoadingCreate(false);
-    close();
-    reload();
-    pushNotification(data.detail, data.message, notifications.length + 1);
+    try {
+      setLoadingCreate(true);
+      const res = await axiosBase.post(
+        "investigador/publicaciones/utils/agregarProyecto",
+        {
+          publicacion_id: id,
+          proyecto_id: form.proyecto_id,
+          codigo_proyecto: form.codigo_proyecto,
+          nombre_proyecto: form.titulo,
+          entidad_financiadora: form.entidad_financiadora,
+        }
+      );
+      const data = res.data;
+
+      typeof close === "function" && close();
+      typeof reload === "function" && (await reload());
+          
+      pushNotification(data.detail, data.message, notifications.length +1 );
+    } catch (err) {
+      const msg = err?.response?.data?.message || "Ocurrió un error al agregar el proyecto.";
+      pushNotification("Error", msg, notifications.length +1 );
+      console.error(err);
+    } finally {
+      setLoadingCreate(false);
+    }
   };
 
   return (
     <Modal
-      visible
+      visible={visible}
       onDismiss={close}
       size="large"
       footer={
         <Box float="right">
           <SpaceBetween direction="horizontal" size="xs">
-            <Button variant="normal" onClick={close}>
+            <Button variant="normal" onClick={close} disabled={loadingCreate}>
               Cancelar
             </Button>
             <Button
-              disabled={!enableCreate}
+              disabled={!enableCreate || loadingCreate}
               variant="primary"
               onClick={agregarProyecto}
               loading={loadingCreate}
@@ -76,17 +85,20 @@ export default ({ id, close, reload }) => {
               onChange={({ detail }) => {
                 setOptions([]);
                 setValue(detail.value);
-                if (detail.value == "") {
+                if (detail.value === "") {
                   setForm({});
                   setEnableCreate(false);
                 }
               }}
               onSelect={({ detail }) => {
-                if (detail.selectedOption.proyecto_id != undefined) {
-                  const { value, ...rest } = detail.selectedOption;
+                const opt = detail?.selectedOption || {};
+                if (opt.proyecto_id != undefined) {
+                  const { value: _omitValue, ...rest } = opt;
                   setForm(rest);
                   setEnableCreate(true);
                   setAvoidSelect(false);
+                } else {
+                  setEnableCreate(false);
                 }
               }}
               value={value}
@@ -98,13 +110,13 @@ export default ({ id, close, reload }) => {
             />
           </FormField>
           <FormField label="Título del proyecto" stretch>
-            <Input disabled value={form.titulo} />
+            <Input disabled value={form.titulo || ""} />
           </FormField>
           <FormField label="Código de proyecto" stretch>
-            <Input disabled value={form.codigo_proyecto} />
+            <Input disabled value={form.codigo_proyecto || ""} />
           </FormField>
           <FormField label="Fuente financiadora" stretch>
-            <Input disabled value={form.entidad_financiadora} />
+            <Input disabled value={form.entidad_financiadora || ""} />
           </FormField>
         </SpaceBetween>
       </Form>
