@@ -7,7 +7,7 @@ import {
 import axiosBase from "../../../../api/axios";
 import queryString from "query-string";
 
-export default function ({ proyecto_id }) {
+export default function ({ proyecto_id, message, messageType }) {
   //  Functions
   const previsualizar = async () => {
     const query = queryString.stringify({
@@ -27,6 +27,14 @@ export default function ({ proyecto_id }) {
   return (
     <Container>
       <SpaceBetween size="m">
+          {message && (
+            <Alert
+                header={messageType === "success" ? "Éxito" : "Error"}
+                type={messageType === "success" ? "success" : "error"}
+              >
+              {message}
+            </Alert>
+          )}
         <Alert
           header="Resumen de proyecto"
           action={

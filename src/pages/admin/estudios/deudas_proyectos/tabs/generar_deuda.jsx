@@ -56,6 +56,12 @@ const FILTER_PROPS = [
     groupValuesLabel: "Deudas",
     operators: stringOperators,
   },
+    {
+    propertyLabel: "Periodo",
+    key: "periodo",
+    groupValuesLabel: "Periodos",
+    operators: stringOperators,
+  },
 ];
 
 const columnDefinitions = [
@@ -102,6 +108,12 @@ const columnDefinitions = [
     cell: (item) => item.deuda,
     sortingField: "deuda",
   },
+  {
+    id: "periodo",
+    header: "Periodo",
+    cell: (item) => item.periodo,
+    sortingField: "periodo",
+  },
 ];
 
 const columnDisplay = [
@@ -111,7 +123,8 @@ const columnDisplay = [
   { id: "titulo", visible: true },
   { id: "facultad", visible: true },
   { id: "responsable", visible: true },
-  { id: "deuda", visible: true },
+  { id: "deuda", visible: false },
+  { id: "periodo", visible: true },
 ];
 
 export default () => {
@@ -146,7 +159,12 @@ export default () => {
       ),
     },
     pagination: { pageSize: 10 },
-    sorting: { defaultState: { sortingColumn: columnDefinitions[0] } },
+    sorting: { 
+      defaultState: { 
+        sortingColumn: { sortingField: "periodo" },
+        isDescending: true,
+      } 
+    },
     selection: {},
   });
 

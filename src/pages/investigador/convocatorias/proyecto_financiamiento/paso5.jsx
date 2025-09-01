@@ -43,6 +43,7 @@ const columnDisplay = [
 export default function ({ proyecto_id, setRequisitos, loading, setLoading }) {
   //  State
   const [distributions, setDistribution] = useState([]);
+  const [actividadesRegistradas, setActividadesRegistradas] = useState([]);
   const [visible, setVisible] = useState(false);
   const [typeModal, setTypeModal] = useState(null);
 
@@ -70,6 +71,7 @@ export default function ({ proyecto_id, setRequisitos, loading, setLoading }) {
     const data = res.data;
     setRequisitos(CANTIDAD_MINIMA <= data.length ? true : false);
     setDistribution(data);
+    setActividadesRegistradas(data);
     setLoading(false);
   };
 
@@ -148,6 +150,7 @@ export default function ({ proyecto_id, setRequisitos, loading, setLoading }) {
           reload={getData}
           setVisible={setVisible}
           visible={visible}
+          actividadesPrevias={actividadesRegistradas} // Pasar las actividades previas como prop al modal
         />
       )}
       {visible && typeModal == "delete" && (

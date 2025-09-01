@@ -22,6 +22,8 @@ const breadcrumbs = [
 export default function Registrar_proyecto_paso7() {
   //  States
   const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");  // Estado para el mensaje
+  const [messageType, setMessageType] = useState("");  // Estado para el tipo de mensaje ('success', 'error', etc.)
 
   //  Url
   const location = useLocation();
@@ -39,11 +41,45 @@ export default function Registrar_proyecto_paso7() {
     window.location.href = "paso6?" + query;
   };
 
+    // Manejo del submit
+  const handleSubmit = async () => {
+    setLoading(true);
+    try {
+
+      if (!proyecto_id) {
+        console.error("El proyecto_id no está presente");
+        return;
+      }
+
+      const res = await axiosBase.put("investigador/convocatorias/pro-ctie/enviarProyecto", {
+        proyecto_id,
+      });
+
+      setLoading(false);
+      
+      if (res.data.message === 'info' && res.data.detail === 'Proyecto registrado exitosamente') {
+        setMessage("Proyecto registrado exitosamente");
+        setMessageType("success");
+                // Redirigir al usuario a la página principal (o a la página deseada)
+        setTimeout(() => {
+          window.location.href = "/investigador";  // Redirige a la página principal
+        }, 2000);  // Espera 2 segundos para mostrar el mensaje
+
+      } else {
+        setMessage(res.data.detail || "Hubo un problema al enviar el proyecto.");
+        setMessageType("error");
+      }
+    } catch (error) {
+      setLoading(false);
+      setMessage("Hubo un error al enviar el proyecto.");
+      setMessageType("error");
+    }
+  };
+
   return (
     <BaseLayout
       breadcrumbs={breadcrumbs}
-      helpInfo="Información sobre la páginal actual para poder mostrarla al público
-      en general."
+      helpInfo="Información sobre la páginal actual para poder mostrarla al público en general."
       disableOverlap
     >
       <Wizard
@@ -52,14 +88,7 @@ export default function Registrar_proyecto_paso7() {
         onCancel={() => {
           window.location.href = "../../";
         }}
-        onSubmit={async () => {
-          setLoading(true);
-          await axiosBase.put("investigador/convocatorias/pro-ctie/enviarProyecto", {
-            proyecto_id,
-          });
-          setLoading(false);
-          window.location.href = "../../";
-        }}
+        onSubmit={handleSubmit}
         isLoadingNextStep={loading}
         submitButtonText="Enviar proyecto"
         steps={[
@@ -89,6 +118,8 @@ export default function Registrar_proyecto_paso7() {
                 proyecto_id={proyecto_id}
                 loading={loading}
                 setLoading={setLoading}
+                message={message} 
+                messageType={messageType}
               />
             ),
           },

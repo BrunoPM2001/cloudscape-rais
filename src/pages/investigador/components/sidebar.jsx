@@ -1,10 +1,18 @@
 import { Badge, SideNavigation, Spinner } from "@cloudscape-design/components";
 import { useLocation } from "react-router-dom";
 
+// Flags de bloqueo
+const ACTIVIDADES_BLOQUEO = true;
+const PUBLICACIONES_BLOQUEO = false
+const GRUPO_BLOQUEO = false;
+const CONSTANCIAS_BLOQUEO = false;
+const CONVOCATORIA_BLOQUEO = false;
+const INFORMES_BLOQUEO = true;
+
 export default function Sidebar({ activeHref = "#", data = [], loading }) {
   const location = useLocation();
   const navItems = [
-    {
+    { 
       type: "section",
       text: "Actividades",
       defaultExpanded: false,
@@ -12,71 +20,98 @@ export default function Sidebar({ activeHref = "#", data = [], loading }) {
         {
           type: "link",
           text: "Proyectos con financiamiento",
-          href: "/investigador/actividades/proyectosConFinanciamiento",
+          href: ACTIVIDADES_BLOQUEO
+           ? "/investigador/bloqueado"
+           : "/investigador/actividades/proyectosConFinanciamiento",
+
         },
-        // { type: "divider" },
         {
           type: "link",
           text: "Proyectos sin financiamiento",
-          href: "/investigador/actividades/proyectosSinFinanciamiento",
+          href: ACTIVIDADES_BLOQUEO
+           ? "/investigador/bloqueado"
+           : "/investigador/actividades/proyectosSinFinanciamiento",
         },
         {
           type: "link",
           text: "Proyectos FEX",
-          href: "/investigador/actividades/proyectosFEX",
+          href: ACTIVIDADES_BLOQUEO
+            ?  "/investigador/bloqueado"
+            : "/investigador/actividades/proyectosFEX",
         },
         {
           type: "link",
           text: "Proyectos multidisciplinario",
-          href: "/investigador/actividades/proyectosMulti",
+          href: ACTIVIDADES_BLOQUEO
+            ? "/investigador/bloqueado" 
+            : "/investigador/actividades/proyectosMulti",
         },
         {
           type: "link",
           text: "Concurso para publicación de libros universitarios",
-          href: "/investigador/actividades/pubLibroUni",
+          href: ACTIVIDADES_BLOQUEO
+            ? "/investigador/bloqueado" 
+            : "/investigador/actividades/pubLibroUni",
         },
         { type: "divider" },
         {
           type: "link",
           text: "Asesoría de tesis pregrado",
-          href: "/investigador/actividades/asesoriaPre",
+          href: ACTIVIDADES_BLOQUEO
+           ? "/investigador/bloqueado"
+           : "/investigador/actividades/asesoriaPre",
         },
         {
           type: "link",
           text: "Asesoría de tesis posgrado",
-          href: "/investigador/actividades/asesoriaPos",
+          href: ACTIVIDADES_BLOQUEO
+           ? "/investigador/bloqueado"
+           : "/investigador/actividades/asesoriaPos",
         },
         { type: "divider" },
         {
           type: "link",
           text: "Talleres",
-          href: "/investigador/actividades/talleres",
+          href: ACTIVIDADES_BLOQUEO
+           ? "/investigador/bloqueado"
+           : "/investigador/actividades/talleres",
         },
         {
           type: "link",
           text: "Eventos",
-          href: "/investigador/actividades/eventos",
+          href: ACTIVIDADES_BLOQUEO
+           ? "/investigador/bloqueado"
+           : "/investigador/actividades/eventos",
         },
         {
           type: "link",
           text: "Equipamiento científico",
-          href: "/investigador/actividades/eci",
+          href: ACTIVIDADES_BLOQUEO
+           ? "/investigador/bloqueado"
+           : "/investigador/actividades/eci",
+
         },
         { type: "divider" },
         {
           type: "link",
           text: "Comité editorial",
-          href: "/investigador/actividades/comiteEdi",
+          href: ACTIVIDADES_BLOQUEO
+           ? "/investigador/bloqueado" 
+           : "/investigador/actividades/comiteEdi",
         },
         {
           type: "link",
           text: "Grupos de estudio",
-          href: "/investigador/actividades/gruposEstudio",
+          href: ACTIVIDADES_BLOQUEO
+           ? "/investigador/bloqueado"
+           : "/investigador/actividades/gruposEstudio",
         },
         {
           type: "link",
           text: "Deudas",
-          href: "/investigador/actividades/deudas",
+          href: ACTIVIDADES_BLOQUEO
+           ? "/investigador/bloqueado"
+           : "/investigador/actividades/deudas",
         },
       ],
     },
@@ -88,37 +123,51 @@ export default function Sidebar({ activeHref = "#", data = [], loading }) {
         {
           type: "link",
           text: "Artículo en revistas de investigación",
-          href: "/investigador/publicaciones/articulo",
+          href: PUBLICACIONES_BLOQUEO
+           ? "/investigador/bloqueado"
+           : "/investigador/publicaciones/articulo",
         },
         {
           type: "link",
           text: "Libro",
-          href: "/investigador/publicaciones/libro",
+          href: PUBLICACIONES_BLOQUEO
+           ? "/investigador/bloqueado"
+           : "/investigador/publicaciones/libro",
         },
         {
           type: "link",
           text: "Capítulo de libro",
-          href: "/investigador/publicaciones/capitulo",
+          href: PUBLICACIONES_BLOQUEO
+           ? "/investigador/bloqueado"
+           : "/investigador/publicaciones/capitulo",
         },
         {
           type: "link",
           text: "Resumen de evento científico",
-          href: "/investigador/publicaciones/evento",
+          href: PUBLICACIONES_BLOQUEO
+           ? "/investigador/bloqueado"
+           : "/investigador/publicaciones/evento",
         },
         {
           type: "link",
           text: "Tesis propias",
-          href: "/investigador/publicaciones/tesisPropia",
+          href: PUBLICACIONES_BLOQUEO
+           ? "/investigador/bloqueado"
+           : "/investigador/publicaciones/tesisPropia",
         },
         {
           type: "link",
           text: "Tesis asesoría",
-          href: "/investigador/publicaciones/tesisAsesoria",
+          href: PUBLICACIONES_BLOQUEO
+           ? "/investigador/bloqueado"
+           : "/investigador/publicaciones/tesisAsesoria",
         },
         {
           type: "link",
           text: "Propiedad intelectual",
-          href: "/investigador/publicaciones/patente",
+          href: PUBLICACIONES_BLOQUEO
+           ? "/investigador/bloqueado"
+           : "/investigador/publicaciones/patente",
         },
         {
           type: "expandable-link-group",
@@ -166,7 +215,9 @@ export default function Sidebar({ activeHref = "#", data = [], loading }) {
         {
           type: "link",
           text: "Grupos",
-          href: "/investigador/grupo",
+          href: GRUPO_BLOQUEO
+           ? "/investigador/bloqueado"
+           : "/investigador/grupo",
         },
       ],
     },
@@ -178,7 +229,9 @@ export default function Sidebar({ activeHref = "#", data = [], loading }) {
         {
           type: "link",
           text: "Reporte de constancias",
-          href: "/investigador/constancias",
+          href: CONSTANCIAS_BLOQUEO
+           ? "/investigador/bloqueado"
+           : "/investigador/constancias",
         },
       ],
     },
@@ -200,8 +253,9 @@ export default function Sidebar({ activeHref = "#", data = [], loading }) {
         : data.map((item) => ({
             type: "link",
             text: item.descripcion ?? "",
-            href:
-              item.estado == "Abierta"
+            href: CONVOCATORIA_BLOQUEO
+             ? "/investigador/bloqueado"
+             : item.estado == "Abierta"
                 ? "/investigador/convocatoria/" +
                   item.tipo.toLowerCase() +
                   (item.tipo == "PSINFINV" ? "/paso1" : "")
@@ -222,8 +276,9 @@ export default function Sidebar({ activeHref = "#", data = [], loading }) {
         {
           type: "link",
           text: "Informe académico",
-          href: "/investigador/informes/informeAcademico",
-          // href: "#",
+          href: INFORMES_BLOQUEO
+           ? "/investigador/bloqueado"
+           : "/investigador/informes/informeAcademico",
         },
         {
           type: "link",
@@ -239,7 +294,9 @@ export default function Sidebar({ activeHref = "#", data = [], loading }) {
         {
           type: "link",
           text: "Monitoreo",
-          href: "/investigador/informes/monitoreo",
+          href: INFORMES_BLOQUEO
+           ? "/investigador/bloqueado"
+           : "/investigador/informes/monitoreo",
         },
         {
           type: "link",

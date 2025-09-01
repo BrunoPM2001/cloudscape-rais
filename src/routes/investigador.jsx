@@ -1,6 +1,14 @@
 import { Suspense, lazy } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { NotificationProvider } from "../providers/notificationProvider.jsx";
+import ModalBloqueo from "../pages/investigador/ModalBloqueo.jsx";
+
+const InvestigadorMantenimiento = lazy(() =>
+  import("../pages/investigador/mantenimiento.jsx")
+);
+
+// 🔒 ACTIVA/DESACTIVA mantenimiento aquí:
+const INVESTIGADOR_MANTENIMIENTO =  false;
 
 const Registro_pconfigi_inv_7 = lazy(() =>
   import("../pages/investigador/convocatorias/pconfigi_inv/step7.jsx")
@@ -994,17 +1002,34 @@ const routes = createBrowserRouter(
         },
       ],
     },
+    {
+      path: "bloqueado",
+      element: <ModalBloqueo 
+        mensaje="Estimado(a) docente investigador(a)
+        Estamos restaurando, validando y visibilizando la información de manera 
+        gradual, en el Sistema RAIS, en el transcurso de las horas se continuará con el resto de la información." 
+        />,
+    },
   ],
   {
     basename: "/investigador",
   }
 );
 
+const maintenanceRouter = createBrowserRouter(
+  [
+    // Match TODO bajo /investigador
+    { path: "*", element: <InvestigadorMantenimiento /> },
+  ],
+  { basename: "/investigador" }
+);
+
 export default function InvestigadorRoutes() {
   return (
     <NotificationProvider>
       <Suspense fallback>
-        <RouterProvider router={routes} />
+        {/* <RouterProvider router={routes} /> */}
+        <RouterProvider router={INVESTIGADOR_MANTENIMIENTO ? maintenanceRouter : routes} />
       </Suspense>
     </NotificationProvider>
   );
