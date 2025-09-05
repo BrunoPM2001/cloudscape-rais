@@ -120,13 +120,6 @@ export default function Investigador_main() {
           />
         )}
 
-        {showModalDj && (
-          <ModalDj
-            onClose={() => setShowModalDj(false)}
-            proyecto_id={data.proyecto_id}
-          />
-        )}
-
         <Grid gridDefinition={gridDefinition}>
           <Cifras data={data.metricas} loading={loading} />
           <Extras data={data.detalles} loading={loading} />
@@ -134,6 +127,13 @@ export default function Investigador_main() {
           <Proyectos data={data.tipos_proyectos} loading={loading} />
         </Grid>
       </SpaceBetween>
+
+      {showModalDj && (
+        <ModalDj
+          onClose={() => setShowModalDj(false)}
+          proyecto_id={data.proyecto_id}
+        />
+      )}
     </BaseLayout>
   );
 }

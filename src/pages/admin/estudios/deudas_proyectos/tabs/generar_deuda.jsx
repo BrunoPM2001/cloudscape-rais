@@ -17,6 +17,12 @@ const stringOperators = [":", "!:", "=", "!=", "^", "!^"];
 
 const FILTER_PROPS = [
   {
+    propertyLabel: "Periodo",
+    key: "periodo",
+    groupValuesLabel: "Periodos",
+    operators: stringOperators,
+  },
+  {
     propertyLabel: "ID",
     key: "id",
     groupValuesLabel: "IDS",
@@ -50,12 +56,6 @@ const FILTER_PROPS = [
     propertyLabel: "Responsable",
     key: "responsable",
     groupValuesLabel: "Responsables",
-    operators: stringOperators,
-  },
-  {
-    propertyLabel: "Periodo",
-    key: "periodo",
-    groupValuesLabel: "Periodos",
     operators: stringOperators,
   },
   {

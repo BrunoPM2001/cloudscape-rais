@@ -52,18 +52,8 @@ export default ({ close, item, reload }) => {
         },
       }
     );
-
-    // Accede a 'opciones' desde 'res.data'
-    const opciones = res.data.opciones;
-
-    // Mapea el array asociativo en un formato adecuado
-    const opcionesDeuda = Object.entries(opciones).map(([key, value]) => ({
-      value: key, // Clave del objeto
-      label: value, // Valor del objeto
-    }));
-
-    // Actualiza el estado con las opciones formateadas
-    setOptDeudaAcademica(opcionesDeuda);
+    const opciones = res.data;
+    setOptDeudaAcademica([...opciones, { value: "Sin deuda" }]);
     setLoading(false);
   };
 
@@ -120,14 +110,15 @@ export default ({ close, item, reload }) => {
           errorText={formErrors.deuda_academica}
         >
           <Select
-            placeholder="-- Seleccione una opcion --"
-            options={optDeudaAcademica} // Usar las opciones de la deuda académica
+            placeholder="Escoge una opción"
+            options={optDeudaAcademica}
             selectedOption={formValues.deuda_academica}
             onChange={({ detail }) =>
               handleChange("deuda_academica", detail.selectedOption)
             }
             statusType={loading ? "loading" : "finished"}
             loadingText="Cargando data"
+            empty="No hay opciones disponibles"
           />
         </FormField>
         <FormField
@@ -135,11 +126,8 @@ export default ({ close, item, reload }) => {
           errorText={formErrors.deuda_economica}
         >
           <Select
-            placeholder="-- Seleccione una opcion --"
-            options={[
-              { label: "Deuda económica", value: 2 },
-              { label: "Sin deuda", value: 0 },
-            ]}
+            placeholder="Escoge una opción"
+            options={[{ value: "Deuda económica" }, { value: "Sin deuda" }]}
             selectedOption={formValues.deuda_economica}
             onChange={({ detail }) =>
               handleChange("deuda_economica", detail.selectedOption)

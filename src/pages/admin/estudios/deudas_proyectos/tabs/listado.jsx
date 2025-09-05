@@ -145,6 +145,7 @@ const columnDefinitions = [
     header: "Fecha de creación",
     cell: (item) => item.created_at,
     sortingField: "created_at",
+    minWidth: 120,
   },
   {
     id: "updated_at",

@@ -242,6 +242,7 @@ export default () => {
       onRowClick={({ detail }) => actions.setSelectedItems([detail.item])}
       header={
         <Header
+          counter={"(" + distributions.length + ")"}
           actions={
             <SpaceBetween direction="horizontal" size="m">
               <Button
