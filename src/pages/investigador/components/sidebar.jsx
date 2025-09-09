@@ -2,12 +2,12 @@ import { Badge, SideNavigation, Spinner } from "@cloudscape-design/components";
 import { useLocation } from "react-router-dom";
 
 // Flags de bloqueo
-const ACTIVIDADES_BLOQUEO = true;
+const ACTIVIDADES_BLOQUEO = false;
 const PUBLICACIONES_BLOQUEO = false
 const GRUPO_BLOQUEO = false;
 const CONSTANCIAS_BLOQUEO = false;
 const CONVOCATORIA_BLOQUEO = false;
-const INFORMES_BLOQUEO = true;
+const INFORMES_BLOQUEO = false;
 
 export default function Sidebar({ activeHref = "#", data = [], loading }) {
   const location = useLocation();

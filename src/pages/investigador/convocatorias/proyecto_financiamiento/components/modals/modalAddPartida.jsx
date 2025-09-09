@@ -18,21 +18,34 @@ import NotificationContext from "../../../../../../providers/notificationProvide
 const montoMaximoPorPartida = {
   Bienes: {
     EquiposBienesYDuraderos: {
+      24: 12500, // Maquinas y equipos
       26: 12500, // Equipos computacionales y periféricos
       27: 12500, // Equipos de telecomunicaciones
       28: 12500, // Mobiliario (laboratorio)
       29: 12500, // Equipos (laboratorio)
+      30: 12500, // Animales de cría
+      31: 12500, // Animales reproductores
+      34: 12500, // Semillas y almacigos
       37: 12500, // Software
       35: 12500, // Libros textos para bibliotecas
+      54: 12500, // Maquinarias, equipos y mobiliarios de otras instalaciones
       76: 12500, // Otros bienes agropecuarios, pesqueros y mineros
-      25: 12500, // Mobiliario (de oficina)
     },
     MaterialesEInsumos: {
       4: 7500, // Alimentos y bebidas para consumo animal
       5: 7500, // Repuestos y accesorios
       9: 7500, // Electricidad, iluminación y electrónica
+      11: 7500, // Otros accesorios y repuestos
+      13: 7500, // Vacunas
+      14: 7500, // Medicamentos
+      15: 7500, // Otros productos similares
       16: 7500, // Mat. insumos, instrumental y accesorios, quirúrgicos, odontológicos y de laboratorio
+      17: 7500, // Material biologico
+      18: 7500, // Animales para estudio
+      19: 7500, // Fertilizantes, insecticidas, plaguicidas y similares
+      20: 7500, // Productos farmacéuticos de uso animal
       21: 7500, // Herramientas
+      22: 7500, // Productos quimicos
       23: 7500, // Otros bienes
       77: 7500, // Suministros de uso zootécnico
     },
@@ -47,16 +60,16 @@ const montoMaximoPorPartida = {
       39: 3750, //Viaticos y asignaciones por comision de servicio
     },
     AsesoriasEspecializadas: {
-      79: 5000, //Asesoria especializada
-      78: 5000, //Servicio de Consultoria
+      79: 4000, //Asesoria especializada
+      78: 4000, //Servicio de Consultoria
+      50: 4000, //Realizadas por personas jurídicas
+      55: 4000, //Otros servicios de informatica
     },
     ServiciosDeTerceros: {
-      49: 3750, //Servicios diversos
-      50: 3750, //Realizadas por personas jurídicas
-      41: 3750, //Servicio de suministro de gas
-      45: 3750, //Servicio de impresiones, encuadernación y empastado
-      47: 3750, //Servicio de mantenimiento, acondicionamiento y reparaciones
-      43: 3750, //Correos y servicios de mensajeria
+      49: 8750, //Servicios diversos
+      46: 8750, //De mobiliario y similares
+      45: 8750, //Servicio de impresiones, encuadernación y empastado
+      47: 8750, //Servicio de mantenimiento, acondicionamiento y reparaciones
     },
     MovilidadLocal: {
       40: 500, //Otros gastos (movilidad local)
@@ -116,7 +129,7 @@ export default ({ id, visible, setVisible, reload, limit }) => {
     // Validacion para "Bienes"
     if (
       [
-        26, 27, 28, 29, 37, 35, 76, 25 //Equipos Bienes y Duraderos
+        24, 26, 27, 28, 29, 30, 31, 34, 37, 35, 54, 76 //Equipos Bienes y Duraderos
       ].includes(valuePartida)
     ) {
       montoMaximo = montoMaximoPorPartida.Bienes.EquiposBienesYDuraderos[valuePartida];
@@ -124,7 +137,7 @@ export default ({ id, visible, setVisible, reload, limit }) => {
     // Validacion para "Materiales e Insumos"
     else if (
       [
-        4, 5, 9, 16, 21, 23, 77 // Materiales e Insumos
+        4, 5, 9, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 77 // Materiales e Insumos
       ].includes(valuePartida)
     ) {
       montoMaximo = montoMaximoPorPartida.Bienes.MaterialesEInsumos[valuePartida];
@@ -148,14 +161,14 @@ export default ({ id, visible, setVisible, reload, limit }) => {
     }
     else if (
       [
-        79, 78 // AsesoriasEspecializadas
+        50, 55, 79, 78 // AsesoriasEspecializadas
       ].includes(valuePartida)
     ) {
       montoMaximo = montoMaximoPorPartida.Servicios.AsesoriasEspecializadas[valuePartida];
     }
     else if (
       [
-        49, 50, 41, 45, 47, 43, 71 //Servicios de terceros
+        49, 45, 46, 47 //Servicios de terceros
       ].includes(valuePartida)
     ) {
       montoMaximo = montoMaximoPorPartida.Servicios.ServiciosDeTerceros[valuePartida];

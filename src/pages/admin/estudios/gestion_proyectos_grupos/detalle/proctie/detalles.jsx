@@ -95,7 +95,61 @@ export default ({ data, loading, proyecto_id, reload }) => {
           </div>
           <div>
             <Box variant="awsui-key-label">Estado</Box>
-            {loading ? <Spinner /> : <StatusIndicator type="success">{data.estado}</StatusIndicator>}
+            {loading ? (
+              <Spinner /> 
+            ) : (
+              <StatusIndicator 
+                type={ 
+                  data.estado == -1
+                    ? "error"
+                    : data.estado == 0
+                    ? "stopped"
+                    : data.estado == 1
+                    ? "success"
+                    : data.estado == 3
+                    ? "in-progress"
+                    : data.estado == 5
+                    ? "in-progress"
+                    : data.estado == 6
+                    ? "in-progress"
+                    : data.estado == 7
+                    ? "stopped"
+                    : data.estado == 8
+                    ? "info"
+                    : data.estado == 9
+                    ? "in-progress"
+                    : data.estado == 10
+                    ? "success"
+                    : data.estado == 11
+                    ? "stopped"
+                    : "error"
+                }
+              >
+                {data.estado == -1
+                  ? "Eliminado"
+                  : data.estado == 0
+                  ? "No aprobado"
+                  : data.estado == 1
+                  ? "Aprobado"
+                  : data.estado == 3
+                  ? "En evaluación"
+                  : data.estado == 5
+                  ? "Enviado"
+                  : data.estado == 6
+                  ? "En proceso"
+                  : data.estado == 7
+                  ? "Anulado"
+                  : data.estado == 8
+                  ? "Sustentado"
+                  : data.estado == 9
+                  ? "En ejecución"
+                  : data.estado == 10
+                  ? "Ejecutado"
+                  : data.estado == 11
+                  ? "Concluido"
+                  : "Error"}
+                </StatusIndicator>
+              )}
           </div>
         </SpaceBetween>
         <SpaceBetween size="s">
