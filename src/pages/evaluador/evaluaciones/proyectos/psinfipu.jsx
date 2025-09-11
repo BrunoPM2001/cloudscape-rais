@@ -1,16 +1,6 @@
 import { Button } from "@cloudscape-design/components";
 import axiosBase from "../../../../api/axios";
 
-const rowT = {
-  border: "1px solid #ddd",
-  textAlign: "left",
-  padding: "8px",
-};
-
-const justifyText = {
-  textAlign: "justify",
-};
-
 const styles = {
   container: {
     marginTop: "15px",
@@ -95,24 +85,6 @@ const Psinfipu = ({ data }) => {
     {
       label: " Tipo de publicación que realizará la propuesta",
       value: data.detalles["publicacion_tipo"] ?? "-",
-    },
-  ];
-
-  const investigación_base = [
-    {
-      label: "Tesis maestria",
-      value:
-        "Documento sustentatorio recibido el 2024-10-02 09:42:02 (Click para Ver)",
-    },
-    {
-      label: "Tesis Doctorado",
-      value:
-        "Documento sustentatorio recibido el 2024-10-02 09:42:02 (Click para Ver)",
-    },
-    {
-      label: "Investigación UNMSM",
-      value:
-        "C19070811 - PCONFIGI - ESTUDIO FENOMENOLOGICO TEÓRICO-EXPERIMENTAL DE LAS PROPIEDADES ELECTRÓNICAS EN NANOESTRUCTURAS TIPO MOLIBDENO-COBRE (Mo-Cu) Y MOLIBDENO PLATA (Mo-Ag) APLICANDO RADIACIÓN MICROONDAS (Click para Ver)",
     },
   ];
 

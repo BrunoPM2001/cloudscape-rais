@@ -77,7 +77,6 @@ const opt_condicion = [
   { value: 48, label: "Otros" },
   { value: 49, label: "Cordinador administrativo" },
   { value: 91, label: "Responsable Técnico" },
-  { value: 90, label: "Externo" },
 ];
 
 export default ({ close, id, reload }) => {

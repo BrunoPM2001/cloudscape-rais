@@ -32,7 +32,7 @@ export default function ({ data, tipos, loading }) {
         height={200}
         series={series}
         xScaleType="categorical"
-        xDomain={[2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024]}
+        xDomain={[2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025]}
         yDomain={[0, 40]}
         xTitle="Periodo"
         yTitle="Cantidad de proyectos"

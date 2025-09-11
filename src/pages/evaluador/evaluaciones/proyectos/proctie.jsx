@@ -1,5 +1,3 @@
-import { Button } from "@cloudscape-design/components";
-
 const rowT = {
   border: "1px solid #ddd",
   textAlign: "left",
@@ -50,39 +48,42 @@ const styles = {
   },
 };
 
-const Psinfinv = ({ data }) => {
+const Proctie = ({ data }) => {
   const rows = [
     { label: "Título", value: data.proyecto?.titulo || "No disponible" },
-    {
-      label: "Grupo de Investigación",
-      value: data.proyecto?.grupo || "No disponible",
-    },
-    { label: "Área académica", value: data.proyecto?.area || "No disponible" },
-    {
-      label: "Unidad de investigación",
-      value: data.proyecto?.facultad || "No disponible",
-    },
-    { label: "Facultad", value: data.proyecto?.facultad || "No disponible" },
-    {
-      label: "Línea de investigación",
-      value: data.proyecto?.linea_investigacion || "No disponible",
-    },
-    {
-      label: "Tipo de investigación",
-      value: data.detalles["tipo_investigacion"] ?? "No disponible",
-    },
-    {
-      label: "Localización",
-      value: data.proyecto?.localizacion || "No disponible",
-    },
-    { label: "Línea OCDE", value: data.proyecto?.ocde || "No disponible" },
   ];
+
+  const resumenPresupuesto = {
+    Bienes: { cantidad: 0, monto: 0 },
+    Servicios: { cantidad: 0, monto: 0 },
+    Otros: { cantidad: 0, monto: 0 },
+  };
+
+  data.presupuesto.forEach((item) => {
+    if (resumenPresupuesto[item.tipo]) {
+      resumenPresupuesto[item.tipo].cantidad += 1;
+      resumenPresupuesto[item.tipo].monto += Number(item.monto); // Asegurar que es número
+    }
+  });
+
+  const montoTotal = Object.values(resumenPresupuesto).reduce(
+    (acc, curr) => acc + curr.monto,
+    0
+  );
+
+  Object.keys(resumenPresupuesto).forEach((tipo) => {
+    resumenPresupuesto[tipo].porcentaje =
+      montoTotal > 0
+        ? ((resumenPresupuesto[tipo].monto / montoTotal) * 100).toFixed(2)
+        : "0.00";
+  });
 
   return (
     <div>
       <h1 style={{ textAlign: "center" }}>
-        Proyecto de Investigación - Sin Financiamiento (PSINFINV)
+        Proyectos de Ciencia, Tecnología y
       </h1>
+      <h1 style={{ textAlign: "center" }}> Emprendimiento (PRO-CTIE) 2025</h1>
 
       <hr />
       <br />
@@ -138,20 +139,13 @@ const Psinfinv = ({ data }) => {
       <h2>
         <b>C. Objetivos</b>
       </h2>
-      <h4>C.1 Objetivo General</h4>
       <div
         style={justifyText}
         dangerouslySetInnerHTML={{
-          __html: data.detalles.objetivos_generales,
+          __html: data.detalles.objetivos,
         }}
       ></div>
-      <h4>C.2 Objetivos Específicos</h4>
-      <div
-        style={justifyText}
-        dangerouslySetInnerHTML={{
-          __html: data.detalles.objetivos_especificos,
-        }}
-      ></div>
+
       <h2>
         <b>D. Justificación</b>
       </h2>
@@ -179,54 +173,22 @@ const Psinfinv = ({ data }) => {
           __html: data.detalles.metodologia_trabajo,
         }}
       ></div>
-      <div>
-        {data.documentos.recurso == "METODOLOGIA_TRABAJO" ? (
-          <Button
-            ariaLabel="Archivo de metodología de trabajo"
-            href={data.documentos.METODOLOGIA_TRABAJO}
-            iconAlign="right"
-            iconName="external"
-            variant="primary"
-            fontSize="body-s"
-            target="_blank"
-          >
-            Descargar archivo
-          </Button>
-        ) : (
-          <>No se cargó ningún archivo</>
-        )}
-      </div>
       <h2>
-        <b>G. Propiedad Intelectual </b>
-      </h2>
-      <div>
-        {data.documentos?.recurso == "PROPIEDAD_INTELECTUAL" ? (
-          <>
-            <Button
-              ariaLabel="Archivo de propiedad intelectual"
-              href={data.documentos?.PROPIEDAD_INTELECTUAL}
-              iconAlign="right"
-              iconName="external"
-              variant="primary"
-              fontSize="body-s"
-              target="_blank"
-            >
-              Descargar archivo
-            </Button>
-          </>
-        ) : (
-          <>
-            <b>No se cargó ningún archivo</b>
-          </>
-        )}
-      </div>
-      <h2>
-        <b>H. Referencias Bibliograficas </b>
+        <b>G. Referencias Bibliograficas </b>
       </h2>
       <div
         style={justifyText}
         dangerouslySetInnerHTML={{
           __html: data.detalles.referencias_bibliograficas,
+        }}
+      ></div>
+      <h2>
+        <b>H. Contribución e Impacto </b>
+      </h2>
+      <div
+        style={justifyText}
+        dangerouslySetInnerHTML={{
+          __html: data.detalles.contribucion_impacto,
         }}
       ></div>
       <div style={styles.container}>
@@ -257,37 +219,99 @@ const Psinfinv = ({ data }) => {
           </tbody>
         </table>
       </div>
+
       <div style={styles.container}>
         <h2>
-          <b>J. Integrantes</b>
+          <b>J. Presupuesto</b>
         </h2>
         <table style={styles.table}>
           <thead>
             <tr>
-              <th style={styles.rowT}>Tipo Integrante</th>
-              <th style={styles.rowT}>Apellidos y Nombres</th>
-              <th style={styles.rowT}>Tipo</th>
-              <th style={styles.rowT}>Facultad</th>
-              <th style={styles.rowT}>Tipo integrante en el grupo</th>
-              <th style={styles.rowT}>Tipo Tesis</th>
-              <th style={styles.rowT}>Titulo Tesis</th>
+              <th style={rowT}>Tipo</th>
+              <th style={rowT}>Código</th>
+              <th style={rowT}>Partida</th>
+              <th style={rowT}>Justificación</th>
+              <th style={rowT}>Monto S/.</th>
             </tr>
           </thead>
           <tbody>
-            {data.integrantes.map((item, index) => (
-              <tr
-                key={index}
-                style={index % 2 === 0 ? styles.rowEven : styles.rowOdd}
-              >
-                <td style={styles.td}>{item.tipo_integrante}</td>
-                <td style={styles.td}>{item.integrante}</td>
-                <td style={styles.td}>{item.tipo}</td>
-                <td style={styles.td}>{item.facultad}</td>
-                <td style={styles.td}>{item.tipo_integrante_grupo}</td>
-                <td style={styles.td}>{item.tipo_tesis}</td>
-                <td style={styles.td}>{item.titulo_tesis}</td>
-              </tr>
-            ))}
+            {data.presupuesto.map((item) => {
+              return (
+                <tr>
+                  <td style={rowT}>{item.tipo}</td>
+                  <td style={rowT}>{item.codigo}</td>
+                  <td style={rowT}>{item.partida}</td>
+                  <td style={rowT}>{item.justificacion}</td>
+                  <td style={rowT}>{item.monto}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+        <br />
+        <table style={styles.table}>
+          <thead>
+            <tr>
+              <th style={rowT}>Bienes</th>
+              <th style={rowT}>Servicios</th>
+              <th style={rowT}>Otros</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style={rowT}>
+                Cantidad: {resumenPresupuesto.Bienes.cantidad}
+              </td>
+              <td style={rowT}>
+                Cantidad: {resumenPresupuesto.Servicios.cantidad}
+              </td>
+              <td style={rowT}>
+                Cantidad: {resumenPresupuesto.Otros.cantidad}
+              </td>
+            </tr>
+            <tr>
+              <td style={rowT}>
+                Monto: S/{" "}
+                {resumenPresupuesto.Bienes.monto.toLocaleString("es-PE", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
+              </td>
+              <td style={rowT}>
+                Monto: S/{" "}
+                {resumenPresupuesto.Servicios.monto.toLocaleString("es-PE", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
+              </td>
+              <td style={rowT}>
+                Monto: S/{" "}
+                {resumenPresupuesto.Otros.monto.toLocaleString("es-PE", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
+              </td>
+            </tr>
+            <tr>
+              <td style={rowT}>
+                Porcentaje: {resumenPresupuesto.Bienes.porcentaje}%
+              </td>
+              <td style={rowT}>
+                Porcentaje: {resumenPresupuesto.Servicios.porcentaje}%
+              </td>
+              <td style={rowT}>
+                Porcentaje: {resumenPresupuesto.Otros.porcentaje}%
+              </td>
+            </tr>
+            <tr>
+              <td style={{ ...rowT, fontWeight: "bold" }} colSpan="3">
+                Monto Total: S/{" "}
+                {montoTotal.toLocaleString("es-PE", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -295,4 +319,4 @@ const Psinfinv = ({ data }) => {
   );
 };
 
-export default Psinfinv;
+export default Proctie;

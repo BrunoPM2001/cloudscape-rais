@@ -5,9 +5,9 @@ import Pconfigi from "../proyectos/pconfigi";
 import Pmulti from "../proyectos/pmulti";
 import Eci from "../proyectos/eci";
 import Pconfiginv from "../proyectos/pconfiginv";
+import Proctie from "../proyectos/proctie";
 
 export default ({ loading, data }) => {
-  console.log(data);
   return (
     <Box>
       <div
@@ -36,6 +36,8 @@ export default ({ loading, data }) => {
               <Eci data={data} />
             ) : data.proyecto.tipo_proyecto === "PCONFIGI-INV" ? (
               <Pconfiginv data={data} />
+            ) : data.proyecto.tipo_proyecto === "PRO-CTIE" ? (
+              <Proctie data={data} />
             ) : (
               <p>Proyecto no reconocido</p>
             )}

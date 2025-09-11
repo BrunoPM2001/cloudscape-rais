@@ -2,6 +2,9 @@ import { Suspense, lazy } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { NotificationProvider } from "../providers/notificationProvider.jsx";
 
+const Convocatoria_registro_taller_0 = lazy(() =>
+  import("../pages/investigador/convocatorias/taller/step0.jsx")
+);
 const Registro_pconfigi_inv_7 = lazy(() =>
   import("../pages/investigador/convocatorias/pconfigi_inv/step7.jsx")
 );
@@ -248,45 +251,29 @@ const Detalle_grupo_invest = lazy(() =>
 );
 
 const Verificar_requisitos = lazy(() =>
-  import(
-    "../pages/investigador/convocatorias/proyecto_financiamiento/verificar.jsx"
-  )
+  import("../pages/investigador/convocatorias/proctie/verificar.jsx")
 );
 
-const Registrar_proyecto_paso1 = lazy(() =>
-  import(
-    "../pages/investigador/convocatorias/proyecto_financiamiento/layout1.jsx"
-  )
+const Registrar_proctie_paso1 = lazy(() =>
+  import("../pages/investigador/convocatorias/proctie/layout1.jsx")
 );
-const Registrar_proyecto_paso2 = lazy(() =>
-  import(
-    "../pages/investigador/convocatorias/proyecto_financiamiento/layout2.jsx"
-  )
+const Registrar_proctie_paso2 = lazy(() =>
+  import("../pages/investigador/convocatorias/proctie/layout2.jsx")
 );
-const Registrar_proyecto_paso3 = lazy(() =>
-  import(
-    "../pages/investigador/convocatorias/proyecto_financiamiento/layout3.jsx"
-  )
+const Registrar_proctie_paso3 = lazy(() =>
+  import("../pages/investigador/convocatorias/proctie/layout3.jsx")
 );
-const Registrar_proyecto_paso4 = lazy(() =>
-  import(
-    "../pages/investigador/convocatorias/proyecto_financiamiento/layout4.jsx"
-  )
+const Registrar_proctie_paso4 = lazy(() =>
+  import("../pages/investigador/convocatorias/proctie/layout4.jsx")
 );
-const Registrar_proyecto_paso5 = lazy(() =>
-  import(
-    "../pages/investigador/convocatorias/proyecto_financiamiento/layout5.jsx"
-  )
+const Registrar_proctie_paso5 = lazy(() =>
+  import("../pages/investigador/convocatorias/proctie/layout5.jsx")
 );
-const Registrar_proyecto_paso6 = lazy(() =>
-  import(
-    "../pages/investigador/convocatorias/proyecto_financiamiento/layout6.jsx"
-  )
+const Registrar_proctie_paso6 = lazy(() =>
+  import("../pages/investigador/convocatorias/proctie/layout6.jsx")
 );
-const Registrar_proyecto_paso7 = lazy(() =>
-  import(
-    "../pages/investigador/convocatorias/proyecto_financiamiento/layout7.jsx"
-  )
+const Registrar_proctie_paso7 = lazy(() =>
+  import("../pages/investigador/convocatorias/proctie/layout7.jsx")
 );
 
 const Registrar_picv_paso0 = lazy(() =>
@@ -789,39 +776,39 @@ const routes = createBrowserRouter(
           ],
         },
         {
-          path: "proctie",
+          path: "pro-ctie",
           children: [
             {
-              path: "verificar",
+              path: "",
               element: <Verificar_requisitos />,
             },
             {
               path: "paso1",
-              element: <Registrar_proyecto_paso1 />,
+              element: <Registrar_proctie_paso1 />,
             },
             {
               path: "paso2",
-              element: <Registrar_proyecto_paso2 />,
+              element: <Registrar_proctie_paso2 />,
             },
             {
               path: "paso3",
-              element: <Registrar_proyecto_paso3 />,
+              element: <Registrar_proctie_paso3 />,
             },
             {
               path: "paso4",
-              element: <Registrar_proyecto_paso4 />,
+              element: <Registrar_proctie_paso4 />,
             },
             {
               path: "paso5",
-              element: <Registrar_proyecto_paso5 />,
+              element: <Registrar_proctie_paso5 />,
             },
             {
               path: "paso6",
-              element: <Registrar_proyecto_paso6 />,
+              element: <Registrar_proctie_paso6 />,
             },
             {
               path: "paso7",
-              element: <Registrar_proyecto_paso7 />,
+              element: <Registrar_proctie_paso7 />,
             },
           ],
         },
@@ -867,8 +854,12 @@ const routes = createBrowserRouter(
           ],
         },
         {
-          path: "taller",
+          path: "pinvpos",
           children: [
+            {
+              path: "",
+              element: <Convocatoria_registro_taller_0 />,
+            },
             {
               path: "paso1",
               element: <Convocatoria_registro_taller_1 />,
