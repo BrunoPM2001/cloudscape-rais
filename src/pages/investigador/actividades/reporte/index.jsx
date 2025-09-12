@@ -44,7 +44,7 @@ export default function Proyecto_detalle() {
     );
     const data = res.data;
     setData(data);
-    opciones(data.detalles.tipo_proyecto, data.detalles.estado);
+    opciones(data.detalles?.tipo_proyecto, data.detalles?.estado);
     setLoading(false);
   };
 
