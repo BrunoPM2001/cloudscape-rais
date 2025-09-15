@@ -12,6 +12,7 @@ import {
 } from "@cloudscape-design/components";
 import axiosBase from "../../../../api/axios";
 import ModalDj from "../proyectos_con_financiamiento/components/modalSubirDj";
+import ModalDjECI from "../proyecto_eci/components/modalSubirDj";
 import { useState } from "react";
 
 export default ({ data, responsable, loading, id, items, antiguo }) => {
@@ -50,6 +51,24 @@ export default ({ data, responsable, loading, id, items, antiguo }) => {
     const url = URL.createObjectURL(blob);
     window.open(url, "_blank");
     setLoadingReporte(false);
+  };
+
+  const formatoDjECI = async () => {
+    setLoadingFormato(true);
+    const res = await axiosBase.get(
+      "investigador/actividades/eci/formatoDj",
+      {
+        params: {
+          proyectoId: data.id,
+        },
+        responseType: "blob",
+      }
+    );
+
+    const blob = await res.data;
+    const url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
+    setLoadingFormato(false);
   };
 
   const formatoDj = async () => {
@@ -173,8 +192,8 @@ export default ({ data, responsable, loading, id, items, antiguo }) => {
             {loading ? (
               <Spinner />
             ) : (
-              data.dj_aceptada == null &&
-              data.tipo_proyecto == "PCONFIGI" &&
+              (data.dj_aceptada == null || data.dj_aceptada == 0) &&
+              (data.tipo_proyecto == "PCONFIGI" || data.tipo_proyecto == "ECI") &&
               responsable == 1 && (
                 <div>
                   <Box variant="awsui-key-label">Dj Subvencion Económica</Box>
@@ -182,7 +201,13 @@ export default ({ data, responsable, loading, id, items, antiguo }) => {
                     <Button
                       variant="primary"
                       loading={loadingFormato}
-                      onClick={() => formatoDj()}
+                      onClick={() => {
+                        if(data.tipo_proyecto === "PCONFIGI") {
+                          formatoDj();
+                        } else if  (data.tipo_proyecto === "ECI") {
+                          formatoDjECI();
+                        }
+                      }}
                     >
                       Descargar Formato
                     </Button>
@@ -307,13 +332,23 @@ export default ({ data, responsable, loading, id, items, antiguo }) => {
       )}
 
       {modal === "firma" && (
-        <ModalDj
-          onClose={() => setModal("")}
-          proyecto_id={data.id}
-          reload={() => {
-            window.location.reload(); // esto es lo más directo si no tienes un sistema de estado
-          }}
-        />
+        data.tipo_proyecto === "PCONFIGI" ? (
+          <ModalDj
+            onClose={() => setModal("")}
+            proyecto_id={data.id}
+            reload={() => {
+              window.location.reload(); // esto es lo más directo si no tienes un sistema de estado
+            }}
+          />
+        ) : (
+          <ModalDjECI
+            onClose={() => setModal("")}
+            proyecto_id={data.id}
+            reload={() => {
+              window.location.reload();
+            }}
+          />
+        )
       )}
     </Container>
   );

@@ -46,23 +46,26 @@ export default function ModalDj({ onClose, proyecto_id, reload }) {
   const [loadingUpdate, setLoadingUpdate] = useState(false);
   const { notifications, pushNotification } = useContext(NotificationContext);
 
-  const enviarDj = async () => {
+    const enviarDj = async () => {
     if (validateForm()) {
-      setLoadingUpdate(true);
-      const form = new FormData();
-      form.append("proyecto_id", proyecto_id);
-      form.append("file", formValues.file[0]);
-      const res = await axiosBase.post(
-        "investigador/actividades/conFinanciamiento/uploadDocumento/",
+        console.log('Archivo a enviar:', formValues.file[0]);  // Verifica que el archivo esté presente
+
+        setLoadingUpdate(true);
+        const form = new FormData();
+        form.append("proyecto_id", proyecto_id);
+        form.append("file", formValues.file[0]);
+
+        const res = await axiosBase.post(
+        "investigador/actividades/eci/uploadDocumento/",
         form
-      );
-      const data = res.data;
-      setLoadingUpdate(false);
-      onClose();
-      reload();
-      pushNotification(data.detail, data.message, notifications.length + 1);
+        );
+        const data = res.data;
+        setLoadingUpdate(false);
+        onClose();
+        reload();
+        pushNotification(data.detail, data.message, notifications.length + 1);
     }
-  };
+    };
 
   return (
     <Modal
@@ -93,7 +96,7 @@ export default function ModalDj({ onClose, proyecto_id, reload }) {
           concurso
           <strong>
             {" "}
-            PROYECTOS DE INVESTIGACIÓN PARA GRUPOS DE INVESTIGACIÓN (PCONFIGI)
+            PROGRAMA DE PROYECTOS PARA EL EQUIPAMIENTO CIENTFICO (ECI)
           </strong>
           , se le solicita subir su
           <strong> Declaración Jurada firmada</strong>, la cual puede contar con{" "}
@@ -109,7 +112,7 @@ export default function ModalDj({ onClose, proyecto_id, reload }) {
           <br />
           Este documento es requisito indispensable para que la{" "}
           <strong> Oficina de Tesorería</strong> proceda con el
-          <strong> depósito de la subvención económica</strong> a su cuenta. Le
+          <strong> depósito de la subvención financiera</strong> a su cuenta. Le
           recomendamos revisar cuidadosamente el contenido antes de realizar la
           carga.
         </Box>
