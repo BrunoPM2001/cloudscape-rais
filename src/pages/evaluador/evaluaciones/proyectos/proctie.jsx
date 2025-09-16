@@ -1,5 +1,3 @@
-import { Button, SpaceBetween, Box } from "@cloudscape-design/components";
-
 const rowT = {
   border: "1px solid #ddd",
   textAlign: "left",
@@ -83,7 +81,7 @@ const Proctie = ({ data }) => {
   return (
     <div>
       <h1 style={{ textAlign: "center" }}>
-        Proyectos de Ciencia, Tecnología y 
+        Proyectos de Ciencia, Tecnología y
       </h1>
       <h1 style={{ textAlign: "center" }}> Emprendimiento (PRO-CTIE) 2025</h1>
 

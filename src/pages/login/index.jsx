@@ -9,7 +9,6 @@ import {
   Alert,
   CopyToClipboard,
   Spinner,
-  Box,
 } from "@cloudscape-design/components";
 import { useEffect, useState } from "react";
 import styles from "./index.module.css";
@@ -21,7 +20,6 @@ const userTypeRoutes = {
   Usuario_investigador: "/investigador",
   Usuario_evaluador: "/evaluador",
   Usuario_facultad: "/facultad",
-  Usuario_secretaria: "/secretaria",
 };
 
 export default function Login() {

@@ -64,9 +64,9 @@ const initialForm = {
 const opt_estado = [
   { value: 0, label: "No aprobado" },
   { value: 1, label: "Aprobado" },
-  { value: 2, label: "Observado"},
+  { value: 2, label: "Observado", disabled: true },
   { value: 5, label: "Enviado" },
-  { value: 6, label: "Por presentar" },
+  { value: 6, label: "En proceso" },
 ];
 
 export default function Monitoreo_detalles() {
@@ -122,7 +122,7 @@ export default function Monitoreo_detalles() {
 
   const guardar = async () => {
     if (
-      data.publicaciones.filter((item) => item.estado !== "Registrado" && item.estado !== "Eliminado" && item.estado !== "Anulado").length >
+      data.publicaciones.filter((item) => item.estado != "Registrado").length >
       0
     ) {
       pushNotification(
@@ -180,7 +180,7 @@ export default function Monitoreo_detalles() {
         <Form
           actions={
             <>
-              {data?.datos?.estado_meta == "Aprobado" ? (
+              {data?.datos?.estado_meta == "Por presentar" ? (
                 <Button
                   variant="primary"
                   onClick={guardar}
@@ -191,10 +191,11 @@ export default function Monitoreo_detalles() {
                   Remitir monitoreo
                 </Button>
               ) : (
-                <SpaceBetween size="xs" direction="horizontal">
-                    {data?.datos?.estado_meta === "Observado" && (
-                      <Button onClick={() => setModal("obs")}>Observaciones</Button>
-                    )}
+                data?.datos?.estado_meta != "Por presentar" && (
+                  <SpaceBetween size="xs" direction="horizontal">
+                    <Button onClick={() => setModal("obs")}>
+                      Observaciones
+                    </Button>
                     <Button onClick={reporte} loading={loadingBtn}>
                       Reporte
                     </Button>
@@ -206,7 +207,8 @@ export default function Monitoreo_detalles() {
                       Guardar monitoreo
                     </Button>
                   </SpaceBetween>
-                )}
+                )
+              )}
             </>
           }
         >
@@ -222,7 +224,7 @@ export default function Monitoreo_detalles() {
                 }
               />
             </FormField>
-            {data?.datos?.estado_meta != "Aprobado" && (
+            {data?.datos?.estado_meta != "Por presentar" && (
               <FormField label="Evaluación del monitoreo" stretch>
                 <Select
                   placeholder="Escoja una opción"

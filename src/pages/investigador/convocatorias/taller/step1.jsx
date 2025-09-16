@@ -75,7 +75,6 @@ export default function Convocatoria_registro_taller_1() {
       "investigador/convocatorias/pinvpos/verificar"
     );
     const data = res.data;
-    console.log(data);
     setData(data);
     setLoading(false);
   };
@@ -242,8 +241,8 @@ export default function Convocatoria_registro_taller_1() {
                 header="No puede registrarse en esta convocatoria"
                 type="warning"
               >
-                {data.message.map((item, index) => {
-                  return <li key={index}>{item}</li>;
+                {data.message.map((item) => {
+                  return <li>{item}</li>;
                 })}
               </Alert>
             </>

@@ -13,17 +13,10 @@ import {
   Textarea,
 } from "@cloudscape-design/components";
 
-const opts = [
-  { value: 0, label: "En proceso" },
-  { value: 1, label: "Aprobado" },
-  { value: 2, label: "Presentado" },
-  { value: 3, label: "Observado" },
-];
-
 const opt_informe = [
-  { value: "Informe de avance" },
-  { value: "Informe final" },
-  { value: "Informe en extenso" },
+  { value: "Informe de Avance" },
+  { value: "Informe Final" },
+  { value: "Informe en Extenso" },
 ];
 
 export default ({
@@ -34,6 +27,7 @@ export default ({
   handleChange,
   updating,
   updateInforme,
+  opts,
 }) => {
   return (
     <Container
@@ -73,19 +67,23 @@ export default ({
           </FormField>
           <FormField
             label="Estado del informe"
-            errorText={formErrors.estado}
+            errorText={formErrors.status}
             stretch
           >
             <Select
               placeholder="Escoja una opción"
               options={opts}
-              selectedOption={formValues.estado}
+              selectedOption={formValues.status}
               onChange={({ detail }) =>
-                handleChange("estado", detail.selectedOption)
+                handleChange("status", detail.selectedOption)
               }
             />
           </FormField>
-          <FormField label="Fecha de presentación VRI" stretch>
+          <FormField
+            label="Fecha de presentación VRI"
+            errorText={formErrors.fecha_presentacion}
+            stretch
+          >
             <DatePicker
               placeholder="YYYY-MM-DD"
               value={formValues.fecha_presentacion ?? ""}
@@ -94,25 +92,37 @@ export default ({
               }
             />
           </FormField>
-          <FormField label="N° de registro VRIP" stretch>
+          <FormField
+            label="N° de registro VRIP"
+            errorText={formErrors.registro_nro_vri}
+            stretch
+          >
             <Input
-              value={formValues.registro_nro_vrip}
+              value={formValues.registro_nro_vri}
               onChange={({ detail }) =>
-                handleChange("registro_nro_vrip", detail.value)
+                handleChange("registro_nro_vri", detail.value)
               }
             />
           </FormField>
-          <FormField label="Fecha de registro DGITT" stretch>
+          <FormField
+            label="Fecha de registro DGITT"
+            errorText={formErrors.registro_fecha_csi}
+            stretch
+          >
             <DatePicker
               placeholder="YYYY-MM-DD"
-              value={formValues.fecha_registro_csi ?? ""}
+              value={formValues.registro_fecha_csi ?? ""}
               onChange={({ detail }) =>
-                handleChange("fecha_registro_csi", detail.value)
+                handleChange("registro_fecha_csi", detail.value)
               }
             />
           </FormField>
         </ColumnLayout>
-        <FormField label="Observaciones al investigador" stretch>
+        <FormField
+          label="Observaciones al investigador"
+          errorText={formErrors.observaciones}
+          stretch
+        >
           <Textarea
             rows={2}
             placeholder="Escriba las observaciones para el investigador"
@@ -122,7 +132,11 @@ export default ({
             }
           />
         </FormField>
-        <FormField label="Observaciones para el administrador" stretch>
+        <FormField
+          label="Observaciones para el administrador"
+          errorText={formErrors.observaciones_admin}
+          stretch
+        >
           <Textarea
             rows={2}
             placeholder="Escriba las observaciones para el administrador"

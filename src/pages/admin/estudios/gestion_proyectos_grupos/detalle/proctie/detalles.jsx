@@ -79,7 +79,7 @@ export default ({ data, loading, proyecto_id, reload }) => {
         </Header>
       }
     >
-      <ColumnLayout columns={4} variant="text-grid">
+      <ColumnLayout columns={3} variant="text-grid">
         <SpaceBetween size="s">
           <div>
             <Box variant="awsui-key-label">Título</Box>
@@ -96,10 +96,10 @@ export default ({ data, loading, proyecto_id, reload }) => {
           <div>
             <Box variant="awsui-key-label">Estado</Box>
             {loading ? (
-              <Spinner /> 
+              <Spinner />
             ) : (
-              <StatusIndicator 
-                type={ 
+              <StatusIndicator
+                type={
                   data.estado == -1
                     ? "error"
                     : data.estado == 0
@@ -121,7 +121,7 @@ export default ({ data, loading, proyecto_id, reload }) => {
                     : data.estado == 10
                     ? "success"
                     : data.estado == 11
-                    ? "stopped"
+                    ? "success"
                     : "error"
                 }
               >
@@ -148,8 +148,8 @@ export default ({ data, loading, proyecto_id, reload }) => {
                   : data.estado == 11
                   ? "Concluido"
                   : "Error"}
-                </StatusIndicator>
-              )}
+              </StatusIndicator>
+            )}
           </div>
         </SpaceBetween>
         <SpaceBetween size="s">

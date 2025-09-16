@@ -22,10 +22,26 @@ export default function Detalle_proyecto_proctie() {
   const [loading, setLoading] = useState(true);
 
   const tabs = [
-    { id: "integrantes", label: "Integrantes", content: <Integrantes data={data.miembros} loading={loading} /> },
-    { id: "documentos", label: "Documentos", content: <Documentos data={data.documentos} loading={loading} /> },
-    { id: "descripcion", label: "Descripción", content: <Descripcion data={data.descripcion} loading={loading} /> },
-    { id: "calendario", label: "Calendario", content: <Calendario data={data.actividades} loading={loading} /> },
+    {
+      id: "integrantes",
+      label: "Integrantes",
+      content: <Integrantes data={data.miembros} loading={loading} />,
+    },
+    {
+      id: "documentos",
+      label: "Documentos",
+      content: <Documentos data={data.documentos} loading={loading} />,
+    },
+    {
+      id: "descripcion",
+      label: "Descripción",
+      content: <Descripcion data={data.descripcion} loading={loading} />,
+    },
+    {
+      id: "calendario",
+      label: "Calendario",
+      content: <Calendario data={data.actividades} loading={loading} />,
+    },
   ];
 
   const location = useLocation();
@@ -33,9 +49,12 @@ export default function Detalle_proyecto_proctie() {
 
   const getData = async () => {
     setLoading(true);
-    const res = await axiosBase.get("admin/estudios/proyectosGrupo/dataProyecto", {
-      params: { proyecto_id: id },
-    });
+    const res = await axiosBase.get(
+      "admin/estudios/proyectosGrupo/dataProyecto",
+      {
+        params: { proyecto_id: id },
+      }
+    );
     const data = res.data;
     setData(data);
     setLoading(false);

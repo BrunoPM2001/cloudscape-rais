@@ -32,10 +32,15 @@ export default function Convocatoria_step0() {
   const getEligibility = async () => {
     setLoading(true);
     try {
-      const res = await axiosBase.get("investigador/convocatorias/pinvpos/verificar");
+      const res = await axiosBase.get(
+        "investigador/convocatorias/pinvpos/verificar"
+      );
       setData(res.data);
     } catch (error) {
-      setData({ estado: false, message: ["Error al verificar la convocatoria"] });
+      setData({
+        estado: false,
+        message: ["Error al verificar la convocatoria"],
+      });
     }
     setLoading(false);
   };
@@ -64,7 +69,7 @@ export default function Convocatoria_step0() {
                 </Alert>
                 <Button
                   variant="primary"
-                  onClick={() => window.location.href = "pinvpos/paso1"}
+                  onClick={() => (window.location.href = "pinvpos/paso1")}
                 >
                   Continuar al registro
                 </Button>
@@ -80,7 +85,7 @@ export default function Convocatoria_step0() {
                 </Alert>
                 <Button
                   variant="normal"
-                  onClick={() => window.location.href = "/investigador"}
+                  onClick={() => (window.location.href = "/investigador")}
                 >
                   Volver
                 </Button>

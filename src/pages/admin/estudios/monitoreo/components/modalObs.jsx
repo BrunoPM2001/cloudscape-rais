@@ -79,7 +79,7 @@ export default ({ close, reload, id, estado }) => {
               variant="primary"
               loading={loadingForm || loadingForm}
               onClick={observar}
-              disabled={estado !== "Observado"}
+              disabled={estado == "Observado"}
             >
               Observar
             </Button>
@@ -134,7 +134,7 @@ export default ({ close, reload, id, estado }) => {
         >
           <Textarea
             value={formValues.observacion}
-            disabled={estado !== "Observado"}
+            disabled={estado == "Observado"}
             onChange={({ detail }) => handleChange("observacion", detail.value)}
             placeholder="Escriba aquí la nueva observación"
           />

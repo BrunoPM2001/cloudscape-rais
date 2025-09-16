@@ -18,6 +18,18 @@ const stringOperators = [":", "!:", "=", "!=", "^", "!^"];
 
 const FILTER_PROPS = [
   {
+    propertyLabel: "Periodo",
+    key: "periodo",
+    groupValuesLabel: "Periodos",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "Responsable",
+    key: "responsable",
+    groupValuesLabel: "Responsables",
+    operators: stringOperators,
+  },
+  {
     propertyLabel: "ID",
     key: "proyecto_id",
     groupValuesLabel: "IDS",
@@ -57,6 +69,18 @@ const FILTER_PROPS = [
     propertyLabel: "Deuda",
     key: "deuda",
     groupValuesLabel: "Deudas",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "Fecha de creación",
+    key: "created_at",
+    groupValuesLabel: "Fechas de creación",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "Fecha de actualización",
+    key: "updated_at",
+    groupValuesLabel: "Fechas de actualización",
     operators: stringOperators,
   },
 ];
@@ -101,6 +125,12 @@ const columnDefinitions = [
     sortingField: "responsable",
   },
   {
+    id: "periodo",
+    header: "Periodo",
+    cell: (item) => item.periodo,
+    sortingField: "periodo",
+  },
+  {
     id: "deuda",
     header: "Deuda",
     cell: (item) => (
@@ -109,6 +139,19 @@ const columnDefinitions = [
       </Badge>
     ),
     sortingField: "deuda",
+  },
+  {
+    id: "created_at",
+    header: "Fecha de creación",
+    cell: (item) => item.created_at,
+    sortingField: "created_at",
+    minWidth: 120,
+  },
+  {
+    id: "updated_at",
+    header: "Fecha de actualización",
+    cell: (item) => item.updated_at,
+    sortingField: "updated_at",
   },
 ];
 
@@ -119,7 +162,10 @@ const columnDisplay = [
   { id: "titulo", visible: true },
   { id: "facultad", visible: true },
   { id: "responsable", visible: true },
+  { id: "periodo", visible: true },
   { id: "deuda", visible: true },
+  { id: "created_at", visible: true },
+  { id: "updated_at", visible: true },
 ];
 
 export default () => {
@@ -253,6 +299,7 @@ export default () => {
                 </ButtonDropdown>
               </SpaceBetween>
             }
+            counter={`(${collectionProps.totalItemsCount})`}
           >
             Listado de proyectos
           </Header>
@@ -282,12 +329,6 @@ export default () => {
       <Table
         wrapLines
         columnDefinitions={[
-          {
-            id: "id",
-            header: "ID",
-            cell: (item) => item.id,
-            width: 70,
-          },
           {
             id: "doc_numero",
             header: "N° de documento",
@@ -335,13 +376,6 @@ export default () => {
             width: 180,
           },
           {
-            id: "informe",
-            header: "Informe",
-            cell: (item) => item.informe,
-            width: 180,
-          },
-
-          {
             id: "comentario",
             header: "Comentario/observación",
             cell: (item) => item.comentario,
@@ -361,7 +395,6 @@ export default () => {
           },
         ]}
         columnDisplay={[
-          { id: "id", visible: true },
           { id: "doc_numero", visible: true },
           { id: "apellido1", visible: true },
           { id: "apellido2", visible: true },
@@ -370,7 +403,7 @@ export default () => {
           { id: "licencia", visible: true },
           { id: "tipo_deuda", visible: true },
           { id: "detalle", visible: true },
-          { id: "informe", visible: true },
+          { id: "comentario", visible: true },
           { id: "fecha_deuda", visible: true },
           { id: "fecha_sub", visible: true },
         ]}
@@ -427,6 +460,7 @@ export default () => {
                 </ButtonDropdown>
               </SpaceBetween>
             }
+            counter={`(${integrantes.length})`}
           >
             Integrantes
           </Header>

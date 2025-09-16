@@ -98,11 +98,10 @@ export default function Monitoreo_detalle() {
   };
 
   const remitir = async () => {
-    const publicacioneNoRegistradas = data.publicaciones.filter(
-      (item) => item.estado !== "Registrado" && item.estado !== "Eliminado" && item.estado !== "Anulado"
-    )
-
-    if (publicacioneNoRegistradas.lenght > 0) {
+    if (
+      data.publicaciones.filter((item) => item.estado != "Registrado").length >
+      0
+    ) {
       pushNotification(
         "Para remitir el monitoreo todas las publicaciones asociadas tienen que estar en estado Registrado",
         "warning",

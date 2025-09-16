@@ -204,8 +204,8 @@ export default function Convocatoria_registro_taller_2() {
                 header="No puede registrarse en esta convocatoria"
                 type="warning"
               >
-                {data.message.map((item, index) => {
-                  return <li key={index}>{item}</li>;
+                {data.message.map((item) => {
+                  return <li>{item}</li>;
                 })}
               </Alert>
             </>

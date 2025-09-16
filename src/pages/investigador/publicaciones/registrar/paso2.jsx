@@ -125,10 +125,8 @@ export default function ({
                     collectionProps.selectedItems.length > 0 ? false : true
                   }
                   onClick={() => {
-                    if (collectionProps.selectedItems?.length) {
-                      setTypeModal("eliminar");
-                      setVisible(true);
-                    }
+                    setTypeModal("eliminar");
+                    setVisible(true);
                   }}
                 >
                   Eliminar
@@ -187,26 +185,25 @@ export default function ({
       {visible && typeModal == "registrado" && (
         <ModalRegistrado
           id={publicacion_id}
-          reload={async () => {await getData(); }}
-          close={() => setVisible(false)}
+          reload={getData}
+          setVisible={setVisible}
           visible={visible}
         />
       )}
       {visible && typeModal == "no_registrado" && (
         <ModalNoRegistrado
           id={publicacion_id}
-          reload={async () => {await getData(); }}
-          close={() => setVisible(false)}
+          reload={getData}
+          setVisible={setVisible}
           visible={visible}
         />
       )}
-      {visible && typeModal == "eliminar" && collectionProps.selectedItems?.length > 0 && (
+      {visible && typeModal == "eliminar" && (
         <ModalEliminarProyecto
           id={collectionProps.selectedItems[0].id}
-          reload={async () => {
-            await getData();
-          }}
-          close={() => setVisible(false)}
+          reload={getData}
+          setVisible={setVisible}
+          visible={visible}
         />
       )}
     </SpaceBetween>

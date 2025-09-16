@@ -11,9 +11,17 @@ export default ({ data, loading }) => {
     <Table
       columnDefinitions={[
         { id: "id", header: "Id", cell: (item) => item.id },
-        { id: "tipo_integrante", header: "Tipo de integrante", cell: (item) => item.tipo_integrante },
+        {
+          id: "tipo_integrante",
+          header: "Tipo de integrante",
+          cell: (item) => item.tipo_integrante,
+        },
         { id: "nombre", header: "Nombre", cell: (item) => item.nombre },
-        { id: "tipo_investigador", header: "Tipo de investigador", cell: (item) => item.tipo },
+        {
+          id: "tipo_investigador",
+          header: "Tipo de investigador",
+          cell: (item) => item.tipo,
+        },
         {
           id: "url",
           header: "Carta de compromiso",

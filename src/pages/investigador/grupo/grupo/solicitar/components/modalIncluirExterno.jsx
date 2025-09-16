@@ -26,9 +26,9 @@ const initialForm = {
   nombres: "",
   sexo: null,
   institucion: "",
-  pais: null,
+  pais: { value: "Perú" },
   direccion1: "",
-  doc_tipo: null,
+  doc_tipo: { value: "DNI" },
   doc_numero: "",
   telefono_movil: "",
   titulo_profesional: "",
@@ -249,6 +249,7 @@ export default ({ close, reload, grupo_id }) => {
                 statusType={paises.length == 0 ? "loading" : "finished"}
                 loadingText="Cargando datos"
                 options={paises}
+                disabled
               />
             </FormField>
             <FormField
@@ -288,6 +289,7 @@ export default ({ close, reload, grupo_id }) => {
                     value: "PASAPORTE",
                   },
                 ]}
+                disabled
               />
             </FormField>
             <FormField

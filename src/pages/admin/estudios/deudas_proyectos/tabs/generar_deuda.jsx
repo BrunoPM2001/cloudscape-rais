@@ -6,14 +6,22 @@ import {
   SpaceBetween,
   Table,
   Button,
+  Alert,
 } from "@cloudscape-design/components";
 import { useState, useEffect } from "react";
 import { useCollection } from "@cloudscape-design/collection-hooks";
 import axiosBase from "../../../../../api/axios";
+import ModalAsignarDeuda from "../components/modalAsignarDeuda";
 
 const stringOperators = [":", "!:", "=", "!=", "^", "!^"];
 
 const FILTER_PROPS = [
+  {
+    propertyLabel: "Periodo",
+    key: "periodo",
+    groupValuesLabel: "Periodos",
+    operators: stringOperators,
+  },
   {
     propertyLabel: "ID",
     key: "id",
@@ -54,12 +62,6 @@ const FILTER_PROPS = [
     propertyLabel: "Deuda",
     key: "deuda",
     groupValuesLabel: "Deudas",
-    operators: stringOperators,
-  },
-    {
-    propertyLabel: "Periodo",
-    key: "periodo",
-    groupValuesLabel: "Periodos",
     operators: stringOperators,
   },
 ];
@@ -103,16 +105,16 @@ const columnDefinitions = [
     sortingField: "responsable",
   },
   {
-    id: "deuda",
-    header: "Deuda",
-    cell: (item) => item.deuda,
-    sortingField: "deuda",
-  },
-  {
     id: "periodo",
     header: "Periodo",
     cell: (item) => item.periodo,
     sortingField: "periodo",
+  },
+  {
+    id: "deuda",
+    header: "Deuda",
+    cell: (item) => item.deuda,
+    sortingField: "deuda",
   },
 ];
 
@@ -123,16 +125,15 @@ const columnDisplay = [
   { id: "titulo", visible: true },
   { id: "facultad", visible: true },
   { id: "responsable", visible: true },
-  { id: "deuda", visible: false },
   { id: "periodo", visible: true },
+  { id: "deuda", visible: true },
 ];
 
 export default () => {
   //  Data states
   const [loading, setLoading] = useState(true);
   const [distributions, setDistribution] = useState([]);
-  const [selectedItems, setSelectedItems] = useState([]);
-  const [enableBtn, setEnableBtn] = useState(true);
+  const [modal, setModal] = useState("");
   const {
     items,
     actions,
@@ -159,12 +160,7 @@ export default () => {
       ),
     },
     pagination: { pageSize: 10 },
-    sorting: { 
-      defaultState: { 
-        sortingColumn: { sortingField: "periodo" },
-        isDescending: true,
-      } 
-    },
+    sorting: {},
     selection: {},
   });
 
@@ -184,57 +180,66 @@ export default () => {
     getData();
   }, []);
 
-  useEffect(() => {
-    if (selectedItems.length > 0) {
-      setEnableBtn(true);
-    } else {
-      setEnableBtn(false);
-    }
-  }, [selectedItems]);
-
   return (
-    <Table
-      {...collectionProps}
-      trackBy="id"
-      items={items}
-      columnDefinitions={columnDefinitions}
-      columnDisplay={columnDisplay}
-      loading={loading}
-      loadingText="Cargando datos"
-      resizableColumns
-      enableKeyboardNavigation
-      header={
-        <Header
-          actions={
-            <Button variant="primary" disabled={!enableBtn}>
-              Generar deuda
-            </Button>
-          }
-        >
-          Listado de proyectos sin deuda
-        </Header>
-      }
-      selectionType="single"
-      selectedItems={selectedItems}
-      onSelectionChange={({ detail }) => setSelectedItems(detail.selectedItems)}
-      onRowClick={({ detail }) => setSelectedItems([detail.item])}
-      filter={
-        <PropertyFilter
-          {...propertyFilterProps}
-          filteringPlaceholder="Buscar proyecto"
-          countText={`${filteredItemsCount} coincidencias`}
-          expandToViewport
-          virtualScroll
+    <SpaceBetween size="m">
+      <Alert header="Importante">
+        Según el tipo de proyecto que escoja se asignará un tipo de deuda, puede
+        hacer click en el botón de información del lado derecho para ver el tipo
+        de deuda a generar según el tipo de proyecto
+      </Alert>
+
+      <Table
+        {...collectionProps}
+        trackBy="id"
+        items={items}
+        columnDefinitions={columnDefinitions}
+        columnDisplay={columnDisplay}
+        loading={loading}
+        loadingText="Cargando datos"
+        wrapLines
+        enableKeyboardNavigation
+        header={
+          <Header
+            actions={
+              <Button
+                variant="primary"
+                disabled={!collectionProps.selectedItems.length}
+                onClick={() => setModal("gen_deuda")}
+              >
+                Generar deuda
+              </Button>
+            }
+          >
+            Listado de proyectos sin deuda
+          </Header>
+        }
+        selectionType="single"
+        onRowClick={({ detail }) => actions.setSelectedItems([detail.item])}
+        filter={
+          <PropertyFilter
+            {...propertyFilterProps}
+            filteringPlaceholder="Buscar proyecto"
+            countText={`${filteredItemsCount} coincidencias`}
+            expandToViewport
+            virtualScroll
+          />
+        }
+        pagination={<Pagination {...paginationProps} />}
+        empty={
+          <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
+            <SpaceBetween size="m">
+              <b>No hay registros...</b>
+            </SpaceBetween>
+          </Box>
+        }
+      />
+      {modal == "gen_deuda" && (
+        <ModalAsignarDeuda
+          close={() => setModal("")}
+          item={collectionProps.selectedItems[0]}
+          reload={getData}
         />
-      }
-      pagination={<Pagination {...paginationProps} />}
-      empty={
-        <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
-          <SpaceBetween size="m">
-            <b>No hay registros...</b>
-          </SpaceBetween>
-        </Box>
-      }
-    />
+      )}
+    </SpaceBetween>
   );
 };

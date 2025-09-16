@@ -468,7 +468,7 @@ export default () => {
                         query,
                       "_blank"
                     );
-                  }else {
+                  } else {
                     window.open(
                       "proyectos_grupos/detalle/pconfigi" + "?" + query,
                       "_blank"

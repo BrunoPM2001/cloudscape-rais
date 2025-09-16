@@ -30,7 +30,7 @@ const propsRepetidas = {
   accept: ".pdf",
 };
 
-export default function ModalDj({ onClose, proyecto_id, reload }) {
+export default ({ onClose, proyecto_id, reload }) => {
   //  Hooks
   const {
     formValues,
@@ -46,26 +46,24 @@ export default function ModalDj({ onClose, proyecto_id, reload }) {
   const [loadingUpdate, setLoadingUpdate] = useState(false);
   const { notifications, pushNotification } = useContext(NotificationContext);
 
-    const enviarDj = async () => {
+  const enviarDj = async () => {
     if (validateForm()) {
-        console.log('Archivo a enviar:', formValues.file[0]);  // Verifica que el archivo esté presente
+      setLoadingUpdate(true);
+      const form = new FormData();
+      form.append("proyecto_id", proyecto_id);
+      form.append("file", formValues.file[0]);
 
-        setLoadingUpdate(true);
-        const form = new FormData();
-        form.append("proyecto_id", proyecto_id);
-        form.append("file", formValues.file[0]);
-
-        const res = await axiosBase.post(
-        "investigador/actividades/eci/uploadDocumento/",
+      const res = await axiosBase.post(
+        "investigador/actividades/eci/uploadDocumento",
         form
-        );
-        const data = res.data;
-        setLoadingUpdate(false);
-        onClose();
-        reload();
-        pushNotification(data.detail, data.message, notifications.length + 1);
+      );
+      const data = res.data;
+      setLoadingUpdate(false);
+      onClose();
+      reload();
+      pushNotification(data.detail, data.message, notifications.length + 1);
     }
-    };
+  };
 
   return (
     <Modal
@@ -117,11 +115,7 @@ export default function ModalDj({ onClose, proyecto_id, reload }) {
           carga.
         </Box>
       </SpaceBetween>
-
-      <FormField
-        // errorText={formErrors.file}
-        stretch
-      >
+      <FormField label="Archivo" errorText={formErrors.file} stretch>
         <FileUpload
           {...propsRepetidas}
           value={formValues.file}
@@ -129,6 +123,7 @@ export default function ModalDj({ onClose, proyecto_id, reload }) {
           ref={(ref) => registerFileInput("file", ref)}
         />
       </FormField>
+       
     </Modal>
   );
-}
+};

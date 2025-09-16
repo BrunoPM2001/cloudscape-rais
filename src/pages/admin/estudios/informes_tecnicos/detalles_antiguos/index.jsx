@@ -34,12 +34,19 @@ const breadcrumbs = [
   },
 ];
 
+const opts = [
+  { value: 0, label: "En proceso" },
+  { value: 1, label: "Aprobado" },
+  { value: 2, label: "Presentado" },
+  { value: 3, label: "Observado" },
+];
+
 const initialForm = {
   tipo_informe: null,
-  estado: null,
+  status: null,
   fecha_presentacion: null,
-  registro_nro_vrip: null,
-  fecha_registro_csi: null,
+  registro_nro_vri: null,
+  registro_fecha_csi: null,
   observaciones: null,
   observaciones_admin: null,
   file1: [],
@@ -47,9 +54,9 @@ const initialForm = {
 
 const formRules = {
   tipo_informe: { required: true },
-  estado: { required: true },
-  fecha_registro_csi: { required: true },
-  file1: { required: true, isFile: true },
+  status: { required: true },
+  registro_fecha_csi: { required: true },
+  file1: { required: false, isFile: true },
 };
 
 export default function Detalle_informe_tecnico_antiguo() {
@@ -81,40 +88,45 @@ export default function Detalle_informe_tecnico_antiguo() {
       }
     );
     setData(res.data);
+    setFormValues({
+      ...res.data.detalles,
+      tipo_informe: { value: res.data.detalles.tipo_informe },
+      status: opts.find((opt) => opt.value == res.data.detalles.status),
+      file1: [],
+    });
     setLoading(false);
   };
 
   const updateInforme = async () => {
-    //   if (validateForm()) {
-    //     setUpdating(true);
-    //     let formData = new FormData();
-    //     formData.append("proyecto_id", proyecto_id);
-    //     formData.append("tipo_proyecto", tipo_proyecto);
-    //     formData.append("tipo_informe", formValues.tipo_informe.value);
-    //     formData.append("estado", formValues.estado.value);
-    //     formData.append(
-    //       "fecha_presentacion",
-    //       formValues.fecha_presentacion ?? ""
-    //     );
-    //     formData.append("registro_nro_vrip", formValues.registro_nro_vrip ?? "");
-    //     formData.append(
-    //       "fecha_registro_csi",
-    //       formValues.fecha_registro_csi ?? ""
-    //     );
-    //     formData.append("observaciones", formValues.observaciones ?? "");
-    //     formData.append(
-    //       "observaciones_admin",
-    //       formValues.observaciones_admin ?? ""
-    //     );
-    //     formData.append("file1", formValues.file1[0]);
-    //     const res = await axiosBase.post(
-    //       "admin/estudios/informesTecnicos/presentarInformeAntiguo",
-    //       formData
-    //     );
-    //     const data = res.data;
-    //     setUpdating(false);
-    //     pushNotification(data.detail, data.message, notifications.length + 1);
-    //   }
+    if (validateForm()) {
+      setUpdating(true);
+      let formData = new FormData();
+      formData.append("id", id);
+      formData.append("tipo_informe", formValues.tipo_informe.value);
+      formData.append("status", formValues.status.value);
+      formData.append(
+        "fecha_presentacion",
+        formValues.fecha_presentacion ?? ""
+      );
+      formData.append("registro_nro_vri", formValues.registro_nro_vri ?? "");
+      formData.append(
+        "registro_fecha_csi",
+        formValues.registro_fecha_csi ?? ""
+      );
+      formData.append("observaciones", formValues.observaciones ?? "");
+      formData.append(
+        "observaciones_admin",
+        formValues.observaciones_admin ?? ""
+      );
+      formData.append("file1", formValues.file1[0]);
+      const res = await axiosBase.post(
+        "admin/estudios/informesTecnicos/updateInformeAntiguo",
+        formData
+      );
+      const data = res.data;
+      setUpdating(false);
+      pushNotification(data.detail, data.message, notifications.length + 1);
+    }
   };
 
   useEffect(() => {
@@ -145,6 +157,7 @@ export default function Detalle_informe_tecnico_antiguo() {
               loading={loading}
               updating={updating}
               updateInforme={updateInforme}
+              opts={opts}
             />
             <Tabs
               tabs={[

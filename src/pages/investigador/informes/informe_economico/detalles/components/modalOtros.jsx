@@ -34,7 +34,7 @@ const initialForm = {
 const formRules = {
   descripcion_compra: { required: true },
   tipo_moneda: { required: true },
-  tipo_documento: {required: true},
+  tipo_documento: { required: true },
   pais_emisor: { required: true },
   monto_exterior: { required: true },
   fecha: { required: true },

@@ -9,17 +9,6 @@ import {
 } from "@cloudscape-design/components";
 
 export default function ({ data, loading }) {
-
-  const estadoColor = {
-    "Por presentar": "grey",
-    "No aprobado": "red",
-    "Aprobado": "green",
-    "Observado": "severity-medium",
-    "Enviado": "blue",
-  };
-
-  const badgeColor = estadoColor[data?.estado_meta];
-
   return (
     <Container
       header={
@@ -28,7 +17,25 @@ export default function ({ data, loading }) {
           info={
             <>
               {data && !loading && (
-                <Badge color={badgeColor}>{data.estado_meta}</Badge>
+                <Badge
+                  color={
+                    data.estado_meta == "Por presentar"
+                      ? "grey"
+                      : data.estado_meta == "No aprobado"
+                      ? "red"
+                      : data.estado_meta == "Aprobado"
+                      ? "green"
+                      : data.estado_meta == "Observado"
+                      ? "severity-medium"
+                      : data.estado_meta == "Enviado"
+                      ? "blue"
+                      : data.estado_meta == "En proceso"
+                      ? "severity-low"
+                      : "red"
+                  }
+                >
+                  {data.estado_meta}
+                </Badge>
               )}
             </>
           }

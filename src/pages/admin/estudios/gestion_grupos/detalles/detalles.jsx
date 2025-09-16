@@ -69,6 +69,10 @@ export default ({ data, loading, grupo_id, reload }) => {
                       ]
                     : [
                         {
+                          id: "action_1_1",
+                          text: "Calificación",
+                        },
+                        {
                           id: "action_2_1",
                           text: "Aprobar solicitud",
                         },
