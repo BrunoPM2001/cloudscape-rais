@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axiosBase from "../api/axios";
 
-const useAutosuggest = (url) => {
+const useAutosuggest = (url, minCharacters = 3) => {
   //  States
   const [loading, setLoading] = useState(false);
   const [options, setOptions] = useState([]);
@@ -24,7 +24,7 @@ const useAutosuggest = (url) => {
   //  Effects
   useEffect(() => {
     const temp = setTimeout(() => {
-      if (value.length > 2 && avoidSelect) {
+      if (value.length >= minCharacters && avoidSelect) {
         getData();
       } else {
         setAvoidSelect(true);
