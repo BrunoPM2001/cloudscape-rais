@@ -584,6 +584,7 @@ export default () => {
                       tipo_proyecto:
                         collectionProps.selectedItems[0].tipo_proyecto,
                       tipo_informe: selectedItems[0]["informe"],
+                      tipo: selectedItems[0]["tipo"],
                     });
                     if (selectedOption.value == "nuevos") {
                       window.open(

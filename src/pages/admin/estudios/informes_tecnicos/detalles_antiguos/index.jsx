@@ -12,8 +12,7 @@ import axiosBase from "../../../../../api/axios";
 import Detalles from "./detalles";
 import { useFormValidation } from "../../../../../hooks/useFormValidation";
 import NotificationContext from "../../../../../providers/notificationProvider";
-import Info from "./tabs/info";
-import Anexos from "./tabs/anexos";
+import Tabs_custom from "./tabs/tabs";
 
 const breadcrumbs = [
   {
@@ -74,7 +73,7 @@ export default function Detalle_informe_tecnico_antiguo() {
 
   //  Url
   const location = useLocation();
-  const { id, tipo_proyecto } = queryString.parse(location.search);
+  const { id, tipo_proyecto, tipo } = queryString.parse(location.search);
 
   //  Functions
   const getData = async () => {
@@ -159,24 +158,11 @@ export default function Detalle_informe_tecnico_antiguo() {
               updateInforme={updateInforme}
               opts={opts}
             />
-            <Tabs
-              tabs={[
-                {
-                  id: "info",
-                  label: "Info general",
-                  content: <Info proyecto={data.proyecto} />,
-                },
-                {
-                  id: "anexo",
-                  label: "Anexo",
-                  content: (
-                    <Anexos
-                      value1={formValues?.file1}
-                      handleChange={handleChange}
-                    />
-                  ),
-                },
-              ]}
+            <Tabs_custom
+              formValues={formValues}
+              handleChange={handleChange}
+              proyecto={data.proyecto}
+              it={tipo}
             />
           </>
         )}
