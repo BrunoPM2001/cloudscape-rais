@@ -28,7 +28,13 @@ import {
 } from "lucide-react";
 import "./app.css";
 
-export default ({ value, name, handleChange, limitWords }) => {
+export default ({
+  value,
+  name,
+  handleChange,
+  limitWords,
+  disabled = false,
+}) => {
   const editor = useEditor(
     {
       extensions: [
@@ -55,6 +61,7 @@ export default ({ value, name, handleChange, limitWords }) => {
         ),
         Color,
       ],
+      editable: !disabled,
       content: value,
       onUpdate: ({ editor }) => {
         const html = editor.getHTML();
