@@ -42,7 +42,9 @@ export default ({ data }) => {
               </Link>
             </Badge>
           </Box>
-          <StatusIndicator type="pending">No evaluado</StatusIndicator>
+          <StatusIndicator type={data.req1Val ? "success" : "error"}>
+            {data.req1Val ? "Sí cumple" : "No cumple"}
+          </StatusIndicator>
         </div>
         <div>
           <Box variant="awsui-key-label">
@@ -53,7 +55,9 @@ export default ({ data }) => {
               </Link>
             </Badge>
           </Box>
-          <StatusIndicator type="pending">No evaluado</StatusIndicator>
+          <StatusIndicator type={data.req2Val ? "success" : "error"}>
+            {data.req2Val ? "Sí cumple" : "No cumple"}
+          </StatusIndicator>
         </div>
         <div>
           <Box variant="awsui-key-label">
@@ -64,7 +68,9 @@ export default ({ data }) => {
               </Link>
             </Badge>
           </Box>
-          <StatusIndicator type="pending">No evaluado</StatusIndicator>
+          <StatusIndicator type={data.req3Val ? "success" : "error"}>
+            {data.req3Val ? "Sí cumple" : "No cumple"}
+          </StatusIndicator>
         </div>
         <div>
           <Box variant="awsui-key-label">
@@ -75,7 +81,9 @@ export default ({ data }) => {
               </Link>
             </Badge>
           </Box>
-          <StatusIndicator type="pending">No evaluado</StatusIndicator>
+          <StatusIndicator type={data.req4Val ? "success" : "error"}>
+            {data.req4Val ? "Sí cumple" : "No cumple"}
+          </StatusIndicator>
         </div>
         <div>
           <Box variant="awsui-key-label">
@@ -86,7 +94,9 @@ export default ({ data }) => {
               </Link>
             </Badge>
           </Box>
-          <StatusIndicator type="pending">No evaluado</StatusIndicator>
+          <StatusIndicator type={data.req5Val ? "success" : "error"}>
+            {data.req5Val ? "Sí cumple" : "No cumple"}
+          </StatusIndicator>
         </div>
         <div>
           <Box variant="awsui-key-label">

@@ -50,6 +50,10 @@ export default ({ id, data, loading, reload }) => {
             <Box variant="awsui-key-label">Email</Box>
             {loading ? <Spinner /> : <div>{data.email3}</div>}
           </div>
+          <div>
+            <Box variant="awsui-key-label">Facultad</Box>
+            {loading ? <Spinner /> : <div>{data?.facultad}</div>}
+          </div>
         </SpaceBetween>
         <SpaceBetween size="s">
           <div>
@@ -134,6 +138,10 @@ export default ({ id, data, loading, reload }) => {
           <div>
             <Box variant="awsui-key-label">Horas</Box>
             {loading ? <Spinner /> : <div>{data.horas}</div>}
+          </div>
+          <div>
+            <Box variant="awsui-key-label">Fecha de envío de la constancia</Box>
+            {loading ? <Spinner /> : <div>{data?.fecha_envio_mail}</div>}
           </div>
         </SpaceBetween>
       </ColumnLayout>

@@ -37,11 +37,7 @@ export default ({ data, close, reload, actividades = [], proyectos = [] }) => {
             variant="primary"
             onClick={presentar}
             loading={loading}
-            disabled={
-              !check ||
-              ((proyectos?.length || 0) === 0 &&
-                (actividades?.length || 0) === 0)
-            }
+            disabled={!check}
           >
             Presentar solicitud
           </Button>

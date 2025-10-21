@@ -43,6 +43,12 @@ const FILTER_PROPS = [
     operators: stringOperators,
   },
   {
+    propertyLabel: "Fecha de envío de correo",
+    key: "fecha_envio_mail",
+    groupValuesLabel: "Fechas de envío de correo",
+    operators: stringOperators,
+  },
+  {
     propertyLabel: "Facultad",
     key: "facultad",
     groupValuesLabel: "Facultades",
@@ -154,6 +160,13 @@ const columnDefinitions = [
     minWidth: 120,
   },
   {
+    id: "fecha_envio_mail",
+    header: "Fecha de envío de correo",
+    cell: (item) => item.fecha_envio_mail,
+    sortingField: "fecha_envio_mail",
+    minWidth: 120,
+  },
+  {
     id: "facultad",
     header: "Facultad",
     cell: (item) => item.facultad,
@@ -244,6 +257,7 @@ const columnDisplay = [
   { id: "tipo", visible: true },
   { id: "fecha_constancia", visible: true },
   { id: "fecha_fin", visible: true },
+  { id: "fecha_envio_mail", visible: true },
   { id: "facultad", visible: true },
   { id: "codigo_orcid", visible: true },
   { id: "docente_categoria", visible: true },
