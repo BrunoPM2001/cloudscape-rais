@@ -93,7 +93,7 @@ export default function ModalDj({ onClose, proyecto_id, reload }) {
           concurso
           <strong>
             {" "}
-            PROYECTOS DE INNOVACIÓN PARA GRUPOS DE INVESTIGACIÓN (PCONFIGI-INV)
+            Talleres de Investigación y Posgrado - TILI 2025
           </strong>
           , se le solicita subir su
           <strong> Declaración Jurada firmada</strong>, la cual puede contar con{" "}
@@ -109,7 +109,7 @@ export default function ModalDj({ onClose, proyecto_id, reload }) {
           <br />
           Este documento es requisito indispensable para que la{" "}
           <strong> Oficina de Tesorería</strong> proceda con el
-          <strong> depósito de la subvención económica</strong> a su cuenta. Le
+          <strong> depósito de la asignación financiera</strong> a su cuenta. Le
           recomendamos revisar cuidadosamente el contenido antes de realizar la
           carga.
         </Box>

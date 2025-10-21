@@ -116,7 +116,7 @@ export default function ModalDj({ onClose, proyecto_id, reload }) {
       </SpaceBetween>
 
       <FormField
-        // errorText={formErrors.file}
+        errorText={formErrors.file}
         stretch
       >
         <FileUpload

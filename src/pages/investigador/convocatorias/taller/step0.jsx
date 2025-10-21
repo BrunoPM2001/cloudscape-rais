@@ -41,7 +41,6 @@ export default function Convocatoria_step0() {
       const res = await axiosBase.get(
         "investigador/convocatorias/pinvpos/verificar"
       );
-      console.log(data)
       setData(res.data);
     } catch (error) {
       setData({

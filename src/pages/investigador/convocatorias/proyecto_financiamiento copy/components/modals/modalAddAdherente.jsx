@@ -31,10 +31,6 @@ export default ({ id, visible, setVisible, reload, existingStudents }) => {
         params: { proyecto_id: id },
       });
       const data = res.data;
-
-          // 🔍 LOG DE VERIFICACIÓN
-    console.log("✅ Adherentes recibidos desde el backend:", data);
-
       const filtrados = data.filter(adherente =>
         !existingStudents.some(est =>
           est.doc_numero === adherente.doc_numero || est.investigador_id === adherente.investigador_id
@@ -48,9 +44,7 @@ export default ({ id, visible, setVisible, reload, existingStudents }) => {
           ...item
         }))                 
       );
-    } catch (err) {
-      console.error("Error al cargar adherentes:", err);
-    } finally {
+    } catch (err) {} finally {
       setLoadingData(false);
     }
   };

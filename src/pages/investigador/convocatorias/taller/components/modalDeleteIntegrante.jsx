@@ -17,7 +17,6 @@ export default ({ id, close, reload }) => {
 
   //  Functions
   const eliminarIntegrante = async () => {
-    console.log('Eliminando integrante con proyecto_id:', id); // Verifica que el id esté correcto
     setLoadingDelete(true);
     const res = await axiosBase.delete(
       "investigador/convocatorias/pinvpos/eliminarIntegrante",
