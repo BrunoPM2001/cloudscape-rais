@@ -66,7 +66,7 @@ const opt_estado = [
   { value: 1, label: "Aprobado" },
   { value: 2, label: "Observado", disabled: true },
   { value: 5, label: "Enviado" },
-  { value: 6, label: "En proceso" },
+  { value: 6, label: "Por presentar" },
 ];
 
 export default function Monitoreo_detalles() {
@@ -120,7 +120,7 @@ export default function Monitoreo_detalles() {
     window.open(url, "_blank");
   };
 
-  const guardar = async () => {
+  const guardar = async (remitir = false) => {
     if (
       data.publicaciones.filter((item) => item.estado != "Registrado").length >
       0
@@ -136,7 +136,7 @@ export default function Monitoreo_detalles() {
         id: formValues.id,
         proyecto_id: id,
         descripcion: formValues.descripcion,
-        estado: formValues.estado?.value,
+        estado: remitir ? 5 : formValues.estado?.value,
       });
       const data = res.data;
       pushNotification(data.detail, data.message, notifications.length + 1);
@@ -183,7 +183,7 @@ export default function Monitoreo_detalles() {
               {data?.datos?.estado_meta == "Por presentar" ? (
                 <Button
                   variant="primary"
-                  onClick={guardar}
+                  onClick={() => guardar(true)}
                   loading={loadingBtn}
                   disabled={data.publicaciones.length == 0}
                   disabledReason="Necesita tener al menos una publicación asociada"
@@ -201,7 +201,7 @@ export default function Monitoreo_detalles() {
                     </Button>
                     <Button
                       variant="primary"
-                      onClick={guardar}
+                      onClick={() => guardar(false)}
                       loading={loadingBtn}
                     >
                       Guardar monitoreo

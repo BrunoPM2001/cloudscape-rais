@@ -41,9 +41,21 @@ const FILTER_PROPS = [
     operators: stringOperators,
   },
   {
+    propertyLabel: "Facultad",
+    key: "facultad",
+    groupValuesLabel: "Facultades",
+    operators: stringOperators,
+  },
+  {
     propertyLabel: "Estado de meta",
     key: "estado_meta",
     groupValuesLabel: "Estados de meta",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "Publicaciones",
+    key: "publicaciones",
+    groupValuesLabel: "Publicaciones",
     operators: stringOperators,
   },
   {
@@ -90,6 +102,13 @@ const columnDefinitions = [
     minWidth: 225,
   },
   {
+    id: "facultad",
+    header: "Facultad",
+    cell: (item) => item.facultad,
+    sortingField: "facultad",
+    minWidth: 225,
+  },
+  {
     id: "estado_meta",
     header: "Estado de meta",
     cell: (item) => (
@@ -117,6 +136,13 @@ const columnDefinitions = [
     minWidth: 150,
   },
   {
+    id: "publicaciones",
+    header: "Publicaciones",
+    cell: (item) => item.publicaciones,
+    sortingField: "publicaciones",
+    minWidth: 180,
+  },
+  {
     id: "tipo_proyecto",
     header: "Tipo",
     cell: (item) => item.tipo_proyecto,
@@ -137,7 +163,9 @@ const columnDisplay = [
   { id: "codigo_proyecto", visible: true },
   { id: "titulo", visible: true },
   { id: "responsable", visible: true },
+  { id: "facultad", visible: true },
   { id: "estado_meta", visible: true },
+  { id: "publicaciones", visible: true },
   { id: "tipo_proyecto", visible: true },
   { id: "periodo", visible: true },
 ];
@@ -146,7 +174,6 @@ export default () => {
   //  Data states
   const [loading, setLoading] = useState(true);
   const [distributions, setDistribution] = useState([]);
-  const [appliedFilters, setAppliedFilters] = useState({});
   const [loadingReport, setLoadingReport] = useState(false);
   const {
     items,
@@ -155,6 +182,7 @@ export default () => {
     collectionProps,
     paginationProps,
     propertyFilterProps,
+    allPageItems,
   } = useCollection(distributions, {
     propertyFiltering: {
       filteringProperties: FILTER_PROPS,
@@ -178,32 +206,15 @@ export default () => {
     selection: {},
   });
 
-  const onFilterChangeWrapper = (event) => {
-    // Llama a la función interna para que el filtrado siga funcionando
-    if (propertyFilterProps.onChange) {
-      propertyFilterProps.onChange(event);
-    }
-    // Verifica si existen tokens en el detalle del evento
-    const { tokens } = event.detail;
-    const nuevosFiltros = {};
-    if (tokens && Array.isArray(tokens) && tokens.length > 0) {
-      tokens.forEach((token) => {
-        // token: { propertyKey, operator, value }
-        nuevosFiltros[token.propertyKey] = token.value;
-      });
-    }
-    setAppliedFilters(nuevosFiltros);
-  };
-
   const reporteExcel = async () => {
     setLoadingReport(true);
-    const queryObject = { ...appliedFilters };
-    const query = queryString.stringify(queryObject);
-    console.log(query);
-    // Envío la petición GET, agregando el query string a la URL
-    const res = await axiosBase.get(`admin/estudios/monitoreo/excel?${query}`, {
-      responseType: "blob",
-    });
+    const res = await axiosBase.post(
+      "admin/estudios/monitoreo/excel",
+      allPageItems,
+      {
+        responseType: "blob",
+      }
+    );
     const blob = await res.data;
     const url = URL.createObjectURL(blob);
     window.open(url, "_blank");
@@ -276,7 +287,6 @@ export default () => {
           {...propertyFilterProps}
           filteringPlaceholder="Buscar proyecto"
           countText={`${filteredItemsCount} coincidencias`}
-          onChange={onFilterChangeWrapper}
           expandToViewport
           virtualScroll
         />
