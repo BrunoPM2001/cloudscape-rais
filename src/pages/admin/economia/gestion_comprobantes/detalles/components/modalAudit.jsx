@@ -79,6 +79,8 @@ export default ({ close, item }) => {
                     ? "blue"
                     : item.estado == 5
                     ? "red"
+                    : item.estado == 6
+                    ? "severity-low"
                     : "red"
                 }
               >
@@ -92,6 +94,8 @@ export default ({ close, item }) => {
                   ? "Enviado"
                   : item.estado == 5
                   ? "Anulado"
+                  : item.estado == 6
+                  ? "Aprobado V.B"
                   : "Error"}
               </Badge>
             ),
