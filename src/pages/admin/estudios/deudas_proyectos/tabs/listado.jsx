@@ -471,14 +471,14 @@ export default () => {
           <ModalAsignarDeuda
             close={() => setTypeModal("")}
             reload={getData}
-            item={collectionProps.selectedItems}
+            item={collectionProps.selectedItems[0]}
           />
         ) : (
           typeModal == "Subsanar" && (
             <ModalSubsanarDeuda
               close={() => setTypeModal("")}
               reload={getData}
-              item={collectionProps.selectedItems}
+              item={collectionProps.selectedItems[0]}
             />
           )
         ))}
