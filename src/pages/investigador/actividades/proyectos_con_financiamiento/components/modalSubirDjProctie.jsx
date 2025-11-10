@@ -89,11 +89,11 @@ export default function ModalDj({ onClose, proyecto_id, reload }) {
     >
       <SpaceBetween size="m">
         <Box variant="p">
-          Estimado(a) Responsable del <strong>Proyecto Ganador</strong> del
+          Estimado(a) Asesor del <strong>Proyecto Ganador</strong> del
           concurso
           <strong>
             {" "}
-            PROYECTOS DE INVESTIGACIÓN PARA GRUPOS DE INVESTIGACIÓN (PCONFIGI)
+            PROYECTOS DE CIENCIA, TECNOLOGIA, INNOVACIÓN Y EMPRENDIMIENTO (PRO-CTIE) para estudiantes de la UNMSM
           </strong>
           , se le solicita subir su
           <strong> Declaración Jurada firmada</strong>, la cual puede contar con{" "}

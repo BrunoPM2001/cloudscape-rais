@@ -1,4 +1,6 @@
 import {
+  Modal,
+  Button,
   Alert,
   Box,
   Container,
@@ -7,10 +9,17 @@ import {
   Spinner,
   Table,
   Wizard,
+  Pagination,
 } from "@cloudscape-design/components";
 import BaseLayout from "../../components/baseLayout.jsx";
 import { useEffect, useState } from "react";
 import axiosBase from "../../../../api/axios.js";
+import { useLocation } from "react-router-dom";
+import queryString from "query-string";
+import ModalDeleteIntegrante from "./components/modalDeleteIntegrante.jsx"; // Asegúrate de que la ruta sea correcta
+import ModalAddIntegrante from "./components/modalAddIntegrante.jsx";
+import { useCollection } from "@cloudscape-design/collection-hooks";
+import { getAdapter } from "axios";
 
 const breadcrumbs = [
   {
@@ -94,17 +103,44 @@ const columnDisplay = [
 export default function Convocatoria_registro_taller_2() {
   //  States
   const [loading, setLoading] = useState(true);
-  const [data, setData] = useState({ miembros: [] });
+  const [data, setData] = useState([]);
+  const [verificationData, setVerificationData] = useState(null);
+  const [modalAction, setModalAction] = useState(''); // Para gestionar la acción del modal (add o delete)
 
-  //  Functions
-  const getData = async () => {
-    setLoading(true);
-    const res = await axiosBase.get(
-      "investigador/convocatorias/pinvpos/verificar2"
+    //  Hooks
+  const { items, actions, collectionProps, paginationProps } = useCollection(
+      data,
+      {
+        pagination: { pageSize: 10 },
+        sorting: {},
+        selection: {},
+      }
     );
-    const data = res.data;
-    setData(data);
+
+  
+    // Url
+  const location = useLocation();
+  const { proyecto_id } = queryString.parse(location.search); 
+    if (proyecto_id == null) {
+    window.location.href = "paso1";
+  }
+  
+  const getVerificationData = async () => {
+    setLoading(true);
+    const res = await axiosBase.get("investigador/convocatorias/pinvpos/verificar2")
+    const info = res.data;
+    setVerificationData(info);
     setLoading(false);
+  };
+
+  const getIntegrantesData = async () => {
+    const res = await axiosBase.get("investigador/convocatorias/pinvpos/listarIntegrantes", {
+      params: {
+        proyecto_id
+      }
+    })
+    const integrantes = res.data; 
+    setData(integrantes);
   };
 
   const handleNavigate = (index) => {
@@ -112,7 +148,8 @@ export default function Convocatoria_registro_taller_2() {
   };
 
   useEffect(() => {
-    getData();
+    getVerificationData()
+    getIntegrantesData()
   }, []);
 
   return (
@@ -130,7 +167,8 @@ export default function Convocatoria_registro_taller_2() {
         </Box>
       ) : (
         <>
-          {data.estado ? (
+          {verificationData.estado ? (
+            <>     
             <Wizard
               onNavigate={({ detail }) =>
                 handleNavigate(detail.requestedStepIndex)
@@ -150,20 +188,43 @@ export default function Convocatoria_registro_taller_2() {
                   description: "Listado de integrantes para el taller",
                   content: (
                     <SpaceBetween size="m">
-                      <Container>
-                        <div>
-                          <Box variant="awsui-key-label">Título</Box>
-                          <Box>
-                            Líneas de investigación de los GI en el marco de los
-                            Objetivos de Desarrollo Sostenible (ODS)
-                          </Box>
-                        </div>
-                      </Container>
                       <Table
+                        {...collectionProps}
+                        trackBy="id"                   
+                        items={items}
+                        selectionType="single"
                         columnDefinitions={columnDefinitions}
                         columnDisplay={columnDisplay}
-                        header={<Header variant="h3">Miembros</Header>}
-                        items={data.miembros}
+                        variant="embedded"
+                        enableKeyboardNavigation
+                        onRowClick={({ detail }) => actions.setSelectedItems([detail.item])} // Selecciona la fila
+                        header={
+                          <Header
+                            counter={"(" + data.length + ")"}
+                            actions={
+                              <SpaceBetween direction="horizontal" size="xs">
+                                <Button
+                                  disabled={
+                                    collectionProps.selectedItems.length === 0 || 
+                                    collectionProps.selectedItems[0]?.condicion === "Responsable"
+                                  }
+                                  variant="normal"
+                                  onClick={() => setModalAction("delete")}                                >
+                                  Eliminar
+                                </Button>
+                                <Button
+                                  variant="primary"
+                                  onClick={() => setModalAction("add")}
+                                >
+                                  Agregar
+                                </Button>
+                              </SpaceBetween>
+                            }
+                          >
+                            Integrantes del proyecto
+                          </Header>
+                        }
+                        pagination={<Pagination {...paginationProps} />}
                         empty={
                           <Box
                             margin={{ vertical: "xs" }}
@@ -197,19 +258,24 @@ export default function Convocatoria_registro_taller_2() {
                 },
               ]}
             />
-          ) : (
-            <>
-              <br />
-              <Alert
-                header="No puede registrarse en esta convocatoria"
-                type="warning"
-              >
-                {data.message.map((item) => {
-                  return <li>{item}</li>;
-                })}
-              </Alert>
             </>
+          ) : (
+              <Alert header="No puede registrarse en esta convocatoria"type="warning"/>
           )}
+
+            {modalAction == 'add' ? (
+              <ModalAddIntegrante
+                id={proyecto_id}
+                close={() => setModalAction("")}
+                reload={getIntegrantesData}
+              />
+            ) : modalAction == 'delete' && (
+              <ModalDeleteIntegrante
+                id={collectionProps.selectedItems[0].id}
+                close={() => setModalAction("")}
+                reload={getIntegrantesData}
+              />
+            )}
         </>
       )}
     </BaseLayout>

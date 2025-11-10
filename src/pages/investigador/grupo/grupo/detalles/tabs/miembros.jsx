@@ -355,7 +355,7 @@ export default ({ grupo_estado }) => {
                     {
                       text: "Excluir",
                       id: "action_2_1",
-                      disabled: false,
+                      disabled: true,
                     },
                     {
                       text: "Visualizar",
