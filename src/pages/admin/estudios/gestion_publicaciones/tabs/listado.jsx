@@ -222,6 +222,13 @@ const columnDefinitions = [
     sortingField: "presentador",
   },
   {
+     id: "grupo_investigacion",
+     header: "Grupo de investigación",
+     cell: (item) => item.grupo_investigacion,
+     minWidth: 200,
+     sortingField: "grupo_investigacion",
+  },
+  {
     id: "facultad",
     header: "Facultad",
     cell: (item) => item.facultad,
@@ -366,6 +373,7 @@ const columnDisplay = [
   { id: "titulo", visible: true },
   { id: "calificacion", visible: true },
   { id: "presentador", visible: true },
+  { id: "grupo_investigacion", visible: true },
   { id: "facultad", visible: true },
   { id: "area", visible: true },
   { id: "filiacion", visible: true },
