@@ -26,17 +26,14 @@ export default ({ id, visible, setVisible, reload, existingStudents }) => {
 
   const getAdherentes = async () => {
     setLoadingData(true);
-    try {
       const res = await axiosBase.get("investigador/convocatorias/pro-ctie/listarAdherentes", {
         params: { proyecto_id: id },
       });
       const data = res.data;
-      const filtrados = data.filter(adherente =>
-        !existingStudents.some(est =>
+      const filtrados = data.filter(adherente => !existingStudents.some(est =>
           est.doc_numero === adherente.doc_numero || est.investigador_id === adherente.investigador_id
         )
       );
-
       setAdherentes(
         filtrados.map(item => ({
           label: `${item.apellidos}, ${item.nombres} (${item.doc_numero})`,
@@ -44,9 +41,7 @@ export default ({ id, visible, setVisible, reload, existingStudents }) => {
           ...item
         }))                 
       );
-    } catch (err) {} finally {
-      setLoadingData(false);
-    }
+    setLoadingData(false);
   };
 
   const handleChange = (key, value) => {
@@ -72,23 +67,16 @@ export default ({ id, visible, setVisible, reload, existingStudents }) => {
       return;
     }
     setLoadingAdd(true);
-    try {
-      if (!validateForm()) return;
-
-      let data = new FormData();
-      data.append("proyecto_id", id);
-      data.append("investigador_id", selected.investigador_id);
-      data.append("file", formValues.carta[0]);
-
-      const res = await axiosBase.postForm("investigador/convocatorias/pro-ctie/agregarAdherente", data);
-      pushNotification(res.data.detail, res.data.message, notifications.length + 1);
-      reload();
-      setVisible(false);
-    } catch (err) {
-      pushNotification("Error al agregar adherente.", "error", notifications.length + 1);
-    } finally {
-      setLoadingAdd(false);
-    }
+    if (!validateForm()) return;
+    let data = new FormData();
+    data.append("proyecto_id", id);
+    data.append("investigador_id", selected.investigador_id);
+    data.append("file", formValues.carta[0]);
+    const res = await axiosBase.postForm("investigador/convocatorias/pro-ctie/agregarAdherente", data);
+    pushNotification(res.data.detail, res.data.message, notifications.length + 1);
+    reload();
+    setVisible(false);
+    setLoadingAdd(false);
   };
 
   useEffect(() => {

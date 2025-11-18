@@ -37,17 +37,10 @@ export default function Convocatoria_step0() {
   // Function to fetch data for eligibility verification
   const getEligibility = async () => {
     setLoading(true);
-    try {
       const res = await axiosBase.get(
         "investigador/convocatorias/pinvpos/verificar"
       );
       setData(res.data);
-    } catch (error) {
-      setData({
-        estado: false,
-        message: ["Error al verificar la convocatoria"],
-      });
-    }
     setLoading(false);
   };
 
