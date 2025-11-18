@@ -95,6 +95,10 @@ export default function Reporte_constancias() {
       label: "Miembro de Grupo",
       value: "14",
     },
+    {
+      label: "Historial de Grupos de Investigación",
+      value: "15",
+    }
   ]);
 
   //  Functions
@@ -132,6 +136,8 @@ export default function Reporte_constancias() {
       tipoConst = "getConstanciaNoDeuda";
     } else if (form.tipo == 11) {
       tipoConst = "getConstanciaTesisAsesoria";
+    } else if (form.tipo == 15) {
+      tipoConst = "getConstanciaGrupoInvestigacionH";
     }
     const res = await axiosBase.get("admin/constancias/" + tipoConst, {
       params: {

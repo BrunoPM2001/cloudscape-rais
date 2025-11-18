@@ -23,7 +23,7 @@ import TablePartidas from "./tablePartidas";
 const initialForm = {
   descripcion_compra: "",
   tipo_moneda: "",
-  tipo_documento: "",
+  numero: "",
   pais_emisor: "",
   monto_exterior: "",
   fecha: "",
@@ -34,7 +34,7 @@ const initialForm = {
 const formRules = {
   descripcion_compra: { required: true },
   tipo_moneda: { required: true },
-  tipo_documento: { required: true },
+  numero: { required: true },
   pais_emisor: { required: true },
   monto_exterior: { required: true },
   fecha: { required: true },
@@ -151,7 +151,7 @@ export default ({
       formData.append("geco_documento_id", item?.id ?? "");
       formData.append("descripcion_compra", formValues.descripcion_compra);
       formData.append("tipo_moneda", formValues.tipo_moneda);
-      formData.append("tipo_documento", formValues.tipo_documento);
+      formData.append("numero", formValues.numero);
       formData.append("pais_emisor", formValues.pais_emisor);
       formData.append("monto_exterior", formValues.monto_exterior);
       formData.append("fecha", formValues.fecha);
@@ -311,14 +311,14 @@ export default ({
                 <FormField
                   label="Documento"
                   stretch
-                  errorText={formErrors.tipo_documento}
+                  errorText={formErrors.numero}
                 >
                   <Input
                     disabled={justview}
                     placeholder="Escriba el Documento"
-                    value={formValues.tipo_documento}
+                    value={formValues.numero}
                     onChange={({ detail }) =>
-                      handleChange("tipo_documento", detail.value)
+                      handleChange("numero", detail.value)
                     }
                   />
                 </FormField>
