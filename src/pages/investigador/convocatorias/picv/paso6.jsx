@@ -10,11 +10,18 @@ import {
   Spinner,
   Table,
 } from "@cloudscape-design/components";
-import { useEffect, useState } from "react";
+import { 
+  forwardRef, 
+  useContext,
+  useEffect, 
+  useImperativeHandle,
+  useState,   
+} from "react";
 import axiosBase from "../../../../api/axios";
 import { useCollection } from "@cloudscape-design/collection-hooks";
 import ModalAddPartida from "./components/modals/modalAddPartida";
 import ModalDeletePartida from "./components/modals/modalDeletePartida";
+import NotificationContext from "../../../../providers/notificationProvider";
 
 const CANTIDAD_MINIMA = 1;
 
@@ -54,7 +61,13 @@ const columnDisplay = [
   { id: "porcentaje", visible: true },
 ];
 
-export default function ({ proyecto_id, setRequisitos, loading, setLoading }) {
+export default forwardRef(function (
+  { proyecto_id, setRequisitos, loading, setLoading }, 
+  ref
+) {
+  //  Context
+  const { notifications, pushNotification } = useContext(NotificationContext);
+
   //  State
   const [distributions, setDistribution] = useState([]);
   const [montoDis, setMontoDis] = useState();
@@ -62,7 +75,7 @@ export default function ({ proyecto_id, setRequisitos, loading, setLoading }) {
   const [typeModal, setTypeModal] = useState(null);
 
   //  Hooks
-  const { items, collectionProps, paginationProps } = useCollection(
+  const { items, collectionProps, paginationProps, actions } = useCollection(
     distributions,
     {
       pagination: { pageSize: 10 },
@@ -75,7 +88,7 @@ export default function ({ proyecto_id, setRequisitos, loading, setLoading }) {
   const getData = async () => {
     setLoading(true);
     const res = await axiosBase.get(
-      "investigador/convocatorias/listarPartidas",
+      "investigador/convocatorias/picv/listarPartidas",
       {
         params: {
           proyecto_id: proyecto_id,
@@ -89,10 +102,32 @@ export default function ({ proyecto_id, setRequisitos, loading, setLoading }) {
     setLoading(false);
   };
 
+  const validarPresupuesto = async () => {
+    const res = await axiosBase.get(
+      "investigador/convocatorias/picv/validarPresupuesto",
+      {
+        params: {
+          id: proyecto_id,
+        },
+      }
+    );
+    const data = res.data;
+    pushNotification(data.detail, data.message, notifications.length + 1);
+    if (data.message != "warning") {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   //  Effect
   useEffect(() => {
     getData();
   }, []);
+
+  useImperativeHandle(ref, () => ({
+    validarPresupuesto,
+  }));
 
   return (
     <Container>
@@ -109,6 +144,7 @@ export default function ({ proyecto_id, setRequisitos, loading, setLoading }) {
           resizableColumns
           enableKeyboardNavigation
           selectionType="single"
+          onRowClick={({ detail }) => actions.setSelectedItems([detail.item])}
           variant="embedded"
           header={
             <Header
@@ -190,4 +226,4 @@ export default function ({ proyecto_id, setRequisitos, loading, setLoading }) {
       </SpaceBetween>
     </Container>
   );
-}
+});

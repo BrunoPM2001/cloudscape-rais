@@ -43,7 +43,7 @@ export default ({ id, visible, setVisible, reload, limit }) => {
   const listarTiposPartidas = async (value) => {
     setOptPartidas([]);
     const res = await axiosBase.get(
-      "investigador/convocatorias/listarTiposPartidas",
+      "investigador/convocatorias/picv/listarTiposPartidas",
       {
         params: {
           tipo: value,
@@ -58,7 +58,7 @@ export default ({ id, visible, setVisible, reload, limit }) => {
     if (validateForm()) {
       setLoadingCreate(true);
       const res = await axiosBase.post(
-        "investigador/convocatorias/agregarPartida",
+        "investigador/convocatorias/picv/agregarPartida",
         {
           partida_id: formValues.partida.value,
           proyecto_id: id,
@@ -109,6 +109,7 @@ export default ({ id, visible, setVisible, reload, limit }) => {
               options={[
                 {
                   value: "Bienes",
+                  disabled: true
                 },
                 {
                   value: "Servicios",

@@ -264,7 +264,7 @@ export default forwardRef(function ({ proyecto_id }, ref) {
   //  Function
   const getData = async () => {
     setLoading(true);
-    const res = await axiosBase.get("investigador/convocatorias/getDataPaso4", {
+    const res = await axiosBase.get("investigador/convocatorias/picv/getDataPaso4", {
       params: {
         proyecto_id,
       },
@@ -304,7 +304,7 @@ export default forwardRef(function ({ proyecto_id }, ref) {
     if (validateForm()) {
       if (proyecto_id != null) {
         const res = await axiosBase.postForm(
-          "investigador/convocatorias/registrarPaso4",
+          "investigador/convocatorias/picv/registrarPaso4",
           { ...formValues, proyecto_id }
         );
         const data = res.data;

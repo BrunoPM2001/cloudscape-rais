@@ -91,9 +91,9 @@ export default function Registrar_proyecto_paso2() {
           {
             title: "Calendario de actividades",
           },
-          // {
-          //   title: "Financiamiento del proyecto",
-          // },
+          {
+            title: "Financiamiento del proyecto",
+          },
           {
             title: "Instrucciones finales",
           },
