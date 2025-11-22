@@ -36,10 +36,6 @@ const formRules = {
 
 const localizaciones = [
   { value: "En las sedes de la UNMSM en Lima" },
-  { value: "En el área de Lima Metropolitana" },
-  { value: "En las Regiones de Lima provincias y El Callao" },
-  { value: "En otras Regiones del país" },
-  { value: "En otros lugares" },
 ];
 
 const tipo_investigaciones = [
