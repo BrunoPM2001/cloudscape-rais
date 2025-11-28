@@ -90,6 +90,7 @@ export default function Registro_psinfipu_0() {
   });
   const item = items[0] ?? 0; // Accedemos al primer elementotems", items);
   const { id, titulo, step, estado } = item; // Desestructuramos el objeto para acceder a sus propiedades
+  const [type, setType] = useState(null);
 
   const proyecto_id = id;
   //  Functions
@@ -128,6 +129,21 @@ export default function Registro_psinfipu_0() {
     const url = URL.createObjectURL(blob);
     window.open(url, "_blank");
     setLoadingReporte(false);
+  };
+
+  const eliminarProyecto = async (id) => {
+    try {
+      setLoading(true)
+      await axiosBase.delete("investigador/convocatorias/picv/eliminarProyecto", {
+        data: { proyecto_id: id }
+      });
+      await getData();
+    } catch (e) {
+      console.error(e);
+    } finally {
+      getData();
+      setLoading(false)
+    }
   };
 
   //  Effects
@@ -225,7 +241,7 @@ export default function Registro_psinfipu_0() {
                                 });
                                 window.location.href = "picv/paso1?" + query;
                               } else if (detail.id == "action_1_2") {
-                                setType("delete");
+                                eliminarProyecto(collectionProps.selectedItems[0].id);
                               }
                             }}
                             items={[
