@@ -72,8 +72,8 @@ export default function Pinvpost_tabs({
       ),
     },
     {
-      id: "documentos",
-      label: "Documentos adjuntos",
+      id: "anexos",
+      label: "Anexos",
       content: (
         <Anexos
           value1={formValues?.file1}

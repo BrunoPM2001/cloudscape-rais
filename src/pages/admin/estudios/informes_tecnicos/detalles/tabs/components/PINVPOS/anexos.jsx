@@ -38,7 +38,7 @@ export default ({
     <Container>
       <ColumnLayout columns={2}>
         <FormField
-          label="Documentos adjuntos"
+          label="Anexos"
           description={
             files["anexo1"] && (
               <>
