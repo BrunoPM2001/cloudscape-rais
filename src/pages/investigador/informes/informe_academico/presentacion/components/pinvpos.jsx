@@ -2,6 +2,8 @@ import {
   Alert,
   Box,
   Button,
+  FileUpload,
+  Link,
   Container,
   DatePicker,
   FormField,
@@ -27,9 +29,36 @@ const initialForm = {
   conclusion_taller: "",
   recomendacion_taller: "",
   asistencia_taller: "",
+  file1: [],
 };
 
-const formRules = {};
+const formRules = {
+  file1: { isFile: true, maxSize: 6 * 1024 * 1024 }
+};
+
+const propsRepetidas = {
+  showFileLastModified: true,
+  showFileSize: true,
+  showFileThumbnail: true,
+  constraintText: "El archivo cargado no debe superar los 6 MB",
+  i18nStrings: {
+    uploadButtonText: (e) => (e ? "Cargar archivos" : "Cargar archivo"),
+    dropzoneText: (e) =>
+      e
+        ? "Arrastre los archivos para cargarlos"
+        : "Arrastre el archivo para cargarlo",
+    removeFileAriaLabel: (e) => `Eliminar archivo ${e + 1}`,
+    errorIconAriaLabel: "Error",
+  },
+  accept: ".pdf",
+};
+
+const propsEnlaces = {
+  external: "true",
+  variant: "primary",
+  fontSize: "body-s",
+  target: "_blank",
+};
 
 export default () => {
   //  Context
@@ -98,6 +127,7 @@ export default () => {
     form.append("conclusion_taller", formValues.conclusion_taller);
     form.append("recomendacion_taller", formValues.recomendacion_taller);
     form.append("asistencia_taller", formValues.asistencia_taller);
+    form.append("file1", formValues.file1[0]);
     const res = await axiosBase.post(
       "investigador/informes/informe_academico/sendData",
       form
@@ -227,7 +257,7 @@ export default () => {
               {
                 title: "Información",
                 description:
-                  "Programa de equipamiento científico para investigación de la UNMSM",
+                  "Programa de Talleres de Investigación y Posgrado",
                 content: (
                   <Container>
                     <SpaceBetween size="m">
@@ -332,6 +362,37 @@ export default () => {
                     handleChange={handleChange}
                     name="asistencia_taller"
                   />
+                ),
+                isOptional: true,
+              },
+              {
+                title: "Anexos",
+                description: "Archivos adjuntos",
+                content: (
+                  <Container>
+                      <FormField
+                        description={
+                          files.anexo1 && (
+                            <>
+                              Ya ha cargado un{" "}
+                              <Link {...propsEnlaces} href={files.anexo1}>
+                                archivo.
+                              </Link>
+                            </>
+                          )
+                        }
+                        stretch
+                        errorText={formErrors.file1}
+                      >
+                        <FileUpload
+                          {...propsRepetidas}
+                          value={formValues.file1}
+                          onChange={({ detail }) => {
+                            handleChange("file1", detail.value);
+                          }}
+                        />
+                      </FormField>
+                  </Container>
                 ),
                 isOptional: true,
               },
