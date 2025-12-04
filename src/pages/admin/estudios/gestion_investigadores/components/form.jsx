@@ -507,7 +507,7 @@ export default function Formulario({
             label={
               <Link
                 external
-                href="https://ctivitae.concytec.gob.pe/appDirectorioCTI/"
+                href="https://ctivitae.concytec.gob.pe/appDirectorioCTI/VerDatosInvestigador.do?id_investigador="
                 variant="primary"
               >
                 CTI Vitae
