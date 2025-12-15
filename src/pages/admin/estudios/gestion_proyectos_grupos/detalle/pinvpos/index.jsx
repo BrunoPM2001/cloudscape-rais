@@ -60,7 +60,7 @@ export default function Detalle_proyecto_pinvpos() {
     {
       id: "presupuesto",
       label: "Presupuesto",
-      content: <Presupuesto data={data.presupuesto} loading={loading} />,
+      content: <Presupuesto data={data.presupuesto} loading={loading} isPinvpos={true}/>,
     },
   ];
 

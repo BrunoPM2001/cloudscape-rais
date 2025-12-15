@@ -14,16 +14,6 @@ export default function Pinvpost_tabs({
   handleChange,
   files,
 }) {
-
-    console.log("🔍 [Pinvpost_tabs] formValues:", formValues);
-  console.log("📄 [Pinvpost_tabs] files recibidos:", files);
-
-  // Logs específicos (los más importantes)
-  console.log("👉 file_asistencia:", formValues?.file_asistencia);
-  console.log("👉 file1:", formValues?.file1);
-  console.log("👉 files.asistencia:", files?.asistencia);
-  console.log("👉 files.anexo1:", files?.anexo1);
-
   const tabs = [
     {
       id: "info",

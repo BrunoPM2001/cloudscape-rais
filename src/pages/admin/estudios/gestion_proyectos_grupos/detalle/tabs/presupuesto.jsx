@@ -7,7 +7,12 @@ import {
   Spinner,
 } from "@cloudscape-design/components";
 
-export default ({ data, loading }) => {
+
+
+export default ({ data, loading, isPinvpos = false }) => {
+  const UIT = 5350;
+  const subvencionVrip = isPinvpos ? UIT * 0.5 : null;
+  
   return (
     <Table
       columnDefinitions={[
@@ -52,8 +57,8 @@ export default ({ data, loading }) => {
         </Box>
       }
       footer={
-        <ColumnLayout columns={3} variant="text-grid">
-          <SpaceBetween direction="vertical" size="s">
+        <ColumnLayout columns={isPinvpos ? 4 : 3} variant="text-grid">
+          <SpaceBetween key="bienes" direction="vertical" size="s">
             <div>
               <Box variant="awsui-key-label">Bienes</Box>
               <SpaceBetween direction="horizontal" size="m">
@@ -72,7 +77,7 @@ export default ({ data, loading }) => {
               </SpaceBetween>
             </div>
           </SpaceBetween>
-          <SpaceBetween direction="vertical" size="s">
+          <SpaceBetween key="servicios" direction="vertical" size="s">
             <div>
               <Box variant="awsui-key-label">Servicios</Box>
               <SpaceBetween direction="horizontal" size="m">
@@ -91,7 +96,7 @@ export default ({ data, loading }) => {
               </SpaceBetween>
             </div>
           </SpaceBetween>
-          <SpaceBetween direction="vertical" size="s">
+          <SpaceBetween key="otros" direction="vertical" size="s">
             <div>
               <Box variant="awsui-key-label">Otros</Box>
               <SpaceBetween direction="horizontal" size="m">
@@ -110,6 +115,19 @@ export default ({ data, loading }) => {
               </SpaceBetween>
             </div>
           </SpaceBetween>
+          {isPinvpos && (
+            <SpaceBetween key="subvencion" direction="vertical" size="s">
+              <div>
+                <Box variant="awsui-key-label">Subvención VRIP</Box>
+                <SpaceBetween direction="horizontal" size="m">
+                  <SpaceBetween direction="horizontal" size="xxs">
+                    <Box variant="div">Monto:</Box>
+                    {loading ? <Spinner /> : subvencionVrip}
+                  </SpaceBetween>
+                </SpaceBetween>
+              </div>
+            </SpaceBetween>
+          )}
         </ColumnLayout>
       }
       header={<Header>Presupuesto del proyecto</Header>}
