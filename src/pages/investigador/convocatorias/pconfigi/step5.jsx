@@ -130,9 +130,9 @@ export default function Registro_pconfigi_5() {
           "El monto total minimo para postular a esta convocatoria es de S/. 16,000.00"
         );
       }
-      if (totalMonto > 32000) {
+      if (totalMonto > 41000) {
         tempErrors.push(
-          "El monto total máximo para postular a esta convocatoria es de S/. 32,000.00"
+          "El monto total máximo para postular a esta convocatoria es de S/. 41,000.00"
         );
       }
 
@@ -145,22 +145,21 @@ export default function Registro_pconfigi_5() {
       }
     }
   };
-  // console.log(data.presupuesto)
 
   const limits = {
-    pasajesViaticos: 6000,
-    servicioTerceros: 8000,
-    movilidadLocal: 800,
+    pasajesViaticos: 8000,
+    servicioTerceros: 10000,
+    movilidadLocal: 5000,
     serviciosDiversos: 10000,
-    consultoriaEspecializada: 4000,
-    asesoriaEspecializada: 4000,
-    materialesInsumos: 32000,
-    utilesLimpieza: 800,
-    equiposBienes: 32000,
+    consultoriaEspecializada: 5000,
+    asesoriaEspecializada: 5000,
+    materialesInsumos: 41000,
+    utilesLimpieza: 1000,
+    equiposBienes: 41000,
   };
 
   const categories = {
-    pasajesViaticos: [66, 68, 38, 39, 63, 62, 67, 69],
+    pasajesViaticos: [66, 68, 38, 39, 67, 69],
     servicioTerceros: [70, 71, 43, 41, 44, 57, 46, 47, 48, 45, 52],
     movilidadLocal: [40, 53],
     serviciosDiversos: [49, 73],
@@ -282,7 +281,7 @@ export default function Registro_pconfigi_5() {
                         >
                           <ul>
                             <li>
-                              a)El incentivo a los investigadores será incluido
+                              a) El incentivo a los investigadores será incluido
                               en el presupuesto del proyecto posterior a la
                               evaluación y según el orden de mérito obtenido.
                             </li>
@@ -327,8 +326,8 @@ export default function Registro_pconfigi_5() {
                           <Header
                             variant="h3"
                             description={
-                              "Monto máximo: S/32,000.00, monto disponible: S/" +
-                              (32000 -
+                              "Monto máximo: S/41,000.00, monto disponible: S/" +
+                              (41000 -
                                 Number(
                                   items.reduce(
                                     (sum, item) =>
@@ -453,7 +452,7 @@ export default function Registro_pconfigi_5() {
                           options={data.partidas}
                           presupuesto={data.presupuesto}
                           limit={parseFloat(
-                            32000 -
+                            41000 -
                               items.reduce(
                                 (acc, curr) => acc + Number(curr.monto),
                                 0
@@ -467,7 +466,7 @@ export default function Registro_pconfigi_5() {
                           item={collectionProps.selectedItems[0]}
                           options={data.partidas}
                           limit={parseFloat(
-                            32000 -
+                            41000 -
                               items.reduce(
                                 (acc, curr) => acc + Number(curr.monto),
                                 0
