@@ -287,14 +287,7 @@ export default function Registro_pconfigi_5() {
                             </li>
                             <li>
                               b) El incentivo económico asignado a los
-                              investigadores será de acuerdo con el orden de
-                              mérito del proyecto, sin superar el límite
-                              establecido de 8,000 soles, según tabla.
-                              <ul>
-                                <li>Tercio superior (Incentivo S/8000)</li>
-                                <li>Tercio medio (Incentivo S/6000)</li>
-                                <li>Tercio inferior (Incentivo S/4000)</li>
-                              </ul>
+                              investigadores será de 8,000 soles.
                             </li>
                           </ul>
                         </Alert>
