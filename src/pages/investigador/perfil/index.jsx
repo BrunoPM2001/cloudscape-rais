@@ -39,6 +39,7 @@ const initialForm = {
   telefono_casa: "",
   codigo: "",
   dependencia_id: null,
+  instituto_id: null,
   facultad_id: null,
   email3: "",
   codigo_orcid: "",
@@ -80,7 +81,8 @@ export default function Perfil() {
   //  States
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
-  const [facultades, setFacultades] = useState([]);
+  const [facultades, setFacultades] = useState([]);  
+  const [institutos, setInstitutos] = useState([]);
   const [dependencias, setDependencias] = useState([]);
 
   //  Hooks
@@ -101,10 +103,14 @@ export default function Perfil() {
       facultad_id: data.facultades.find(
         (opt) => opt.value == data.data.facultad_id
       ),
+      instituto_id: data.institutos.find(
+        (opt) => opt.value == data.data.instituto_id
+      ),
       grado: { value: data.data.grado },
     });
     setFacultades(data.facultades);
     setDependencias(data.dependencias);
+    setInstitutos(data.institutos);
   };
 
   const updateData = async () => {
@@ -250,6 +256,20 @@ export default function Perfil() {
                         handleChange("dependencia_id", detail.selectedOption)
                       }
                       options={dependencias}
+                    />
+                  </FormField>
+                  <FormField
+                    label="Instituto"
+                    errorText={formErrors.instituto_id}
+                    stretch
+                  >
+                    <Select
+                      placeholder="Escoja una opción"
+                      selectedOption={formValues.instituto_id}
+                      onChange={({ detail }) =>
+                        handleChange("instituto_id", detail.selectedOption)
+                      }
+                      options={institutos}
                     />
                   </FormField>
                   <FormField
