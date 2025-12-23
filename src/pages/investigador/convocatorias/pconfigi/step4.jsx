@@ -65,6 +65,7 @@ export default function Registro_pconfigi_4() {
   const { id } = queryString.parse(location.search);
 
   //  States
+  const [rangoFechas, setRangoFechas] = useState(null);
   const [loading, setLoading] = useState(true);
   const [errors, setErrors] = useState([]);
   const [data, setData] = useState([]);
@@ -98,6 +99,7 @@ export default function Registro_pconfigi_4() {
     } else {
       setData(info.actividades);
     }
+    setRangoFechas(info.rango);
     setLoading(false);
   };
 
@@ -259,6 +261,7 @@ export default function Registro_pconfigi_4() {
                           id={id}
                           reload={getData}
                           close={() => setType("")}
+                          rangoFechas={rangoFechas}
                         />
                       ) : type == "delete" ? (
                         <ModalDeleteActividad
