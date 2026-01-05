@@ -14,6 +14,9 @@ import { useContext, useState } from "react";
 import axiosBase from "../../../../../api/axios";
 import NotificationContext from "../../../../../providers/notificationProvider";
 
+const UTILES_LIMPIEZA_IDS = [6, 7];
+const LIMITE_UTILES_LIMPIEZA = 800;
+
 const initialForm = {
   tipo: null,
   partida: null,
@@ -21,7 +24,7 @@ const initialForm = {
   justificacion: "",
 };
 
-export default ({ close, reload, id, options, limit }) => {
+export default ({ close, reload, id, options, limit, presupuesto  }) => {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
   //  States
@@ -57,12 +60,12 @@ export default ({ close, reload, id, options, limit }) => {
 
   const limits = {
     /**Pasajes y viaticos */
-    38: 8000,
-    39: 8000,
-    62: 8000,
-    63: 8000,
-    66: 8000,
-    67: 8000,
+    38: 6000,
+    39: 6000,
+    62: 6000,
+    63: 6000,
+    66: 6000,
+    67: 6000,
     /**Servicios de terceros */
     70: 10000,
     71: 10000,
@@ -89,37 +92,61 @@ export default ({ close, reload, id, options, limit }) => {
     73: 10000,
 
     /**Movilidad local */
-    40: 5000,
-    53: 5000,
+    40: 800,
 
     /* Materiales e insumos */
 
-    4: 41000,
-    5: 41000,
-    9: 41000,
-    16: 41000,
-    22: 41000,
-    13: 41000,
-    14: 41000,
-    23: 41000,
+    4: 32000,
+    5: 32000,
+    9: 32000,
+    16: 32000,
+    22: 32000,
+    13: 32000,
+    14: 32000,
+    23: 32000,
 
     /**Utiles y materiales de oficina */
     6: 1000,
     7: 1000,
 
     /**Equipos y bienes duraderos */
-    26: 41000,
-    27: 41000,
-    25: 41000,
-    28: 41000,
-    29: 41000,
-    76: 41000,
-    35: 41000,
-    37: 41000,
+    26: 32000,
+    27: 32000,
+    25: 32000,
+    28: 32000,
+    29: 32000,
+    76: 32000,
+    35: 32000,
+    37: 32000,
+  };
+
+  const getUtilesLimpiezaUsado = () => {
+  if (!presupuesto) return 0;
+
+    return presupuesto
+      .filter(p => UTILES_LIMPIEZA_IDS.includes(p.partida_id))
+      .reduce((sum, p) => sum + Number(p.monto), 0);
+  };
+
+  const getLimiteReal = () => {
+    if (UTILES_LIMPIEZA_IDS.includes(formValues.partida?.value)) {
+      return LIMITE_UTILES_LIMPIEZA - getUtilesLimpiezaUsado();
+    }
+    return limits[formValues.partida?.value];
+  };
+
+  const getDisponibleText = () => {
+    if (!UTILES_LIMPIEZA_IDS.includes(formValues.partida?.value)) return null;
+
+    const disponible = Math.max(0, getLimiteReal());
+
+    return `Disponible: S/ ${disponible.toLocaleString("es-PE", {
+      minimumFractionDigits: 2,
+    })} (compartido entre Útiles y Limpieza)`;
   };
 
   const isDisabled = () => {
-    const limit = limits[formValues.partida?.value];
+    const limit = getLimiteReal();
     const monto = parseFloat(formValues.monto); // Asegúrate de que sea un número válido
     return (
       isNaN(monto) || // Desactiva si el monto no es un número válido
@@ -132,12 +159,12 @@ export default ({ close, reload, id, options, limit }) => {
     // Define los límites para cada partida en un objeto
     const limits = {
       /**Pasajes y viaticos */
-      38: 8000,
-      39: 8000,
-      62: 8000,
-      63: 8000,
-      66: 8000,
-      67: 8000,
+      38: 6000,
+      39: 6000,
+      62: 6000,
+      63: 6000,
+      66: 6000,
+      67: 6000,
       /**Servicios de terceros */
       70: 10000,
       71: 10000,
@@ -164,33 +191,32 @@ export default ({ close, reload, id, options, limit }) => {
       73: 10000,
 
       /**Movilidad local */
-      40: 5000,
-      53: 5000,
+      40: 800,
 
       /* Materiales e insumos */
 
-      4: 41000,
-      5: 41000,
-      9: 41000,
-      16: 41000,
-      22: 41000,
-      13: 41000,
-      14: 41000,
-      23: 41000,
+      4: 32000,
+      5: 32000,
+      9: 32000,
+      16: 32000,
+      22: 32000,
+      13: 32000,
+      14: 32000,
+      23: 32000,
 
       /**Utiles y materiales de oficina */
       6: 1000,
       7: 1000,
 
       /**Equipos y bienes duraderos */
-      26: 41000,
-      27: 41000,
-      25: 41000,
-      28: 41000,
-      29: 41000,
-      76: 41000,
-      35: 41000,
-      37: 41000,
+      26: 32000,
+      27: 32000,
+      25: 32000,
+      28: 32000,
+      29: 32000,
+      76: 32000,
+      35: 32000,
+      37: 32000,
     };
 
     // Verifica si el valor actual de partida tiene un límite definido
@@ -262,14 +288,25 @@ export default ({ close, reload, id, options, limit }) => {
           <Select
             placeholder="Escoja una opción"
             disabled={!formValues.tipo}
-            options={options.filter(
-              (item) => item.tipo == formValues.tipo?.value
-            )}
+            options={options
+              .filter(item => item.tipo == formValues.tipo?.value)
+              .map(item => ({
+                label: item.label ?? item.partida,
+                value: item.value ?? item.id,
+                disabled: item.disabled === true,
+                description: item.disabledReason
+              }))
+            }
             selectedOption={formValues.partida}
             onChange={({ detail }) =>
               handleCustomChange("partida", detail.selectedOption)
             }
           />
+          {getDisponibleText() && (
+            <Box fontSize="body-s" color="text-status-info">
+              {getDisponibleText()}
+            </Box>
+          )}
         </FormField>
         <FormField label="Monto" errorText={formErrors.monto} stretch>
           <Input

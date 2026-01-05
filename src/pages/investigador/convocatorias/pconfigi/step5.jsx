@@ -130,9 +130,9 @@ export default function Registro_pconfigi_5() {
           "El monto total minimo para postular a esta convocatoria es de S/. 16,000.00"
         );
       }
-      if (totalMonto > 41000) {
+      if (totalMonto > 40000) {
         tempErrors.push(
-          "El monto total máximo para postular a esta convocatoria es de S/. 41,000.00"
+          "El monto total máximo para postular a esta convocatoria es de S/. 40,000.00"
         );
       }
 
@@ -147,21 +147,21 @@ export default function Registro_pconfigi_5() {
   };
 
   const limits = {
-    pasajesViaticos: 8000,
+    pasajesViaticos: 6000,
     servicioTerceros: 10000,
-    movilidadLocal: 5000,
+    movilidadLocal: 800,
     serviciosDiversos: 10000,
     consultoriaEspecializada: 5000,
     asesoriaEspecializada: 5000,
-    materialesInsumos: 41000,
-    utilesLimpieza: 1000,
-    equiposBienes: 41000,
+    materialesInsumos: 32000,
+    utilesLimpieza: 800,
+    equiposBienes: 32000,
   };
 
   const categories = {
     pasajesViaticos: [66, 68, 38, 39, 67, 69],
     servicioTerceros: [70, 71, 43, 41, 44, 57, 46, 47, 48, 45, 52],
-    movilidadLocal: [40, 53],
+    movilidadLocal: [40],
     serviciosDiversos: [49, 73],
     consultoriaEspecializada: [78, 50, 74, 55, 56],
     asesoriaEspecializada: [79],
@@ -181,6 +181,47 @@ export default function Registro_pconfigi_5() {
     utilesLimpieza: "Útiles de Limpieza",
     equiposBienes: "Equipos y Bienes",
   };
+
+  // 🔒 Determina qué categorías ya excedieron su límite
+  const getBlockedCategories = (presupuesto) => {
+    const blocked = {};
+
+    Object.entries(categories).forEach(([category, partidaIds]) => {
+      let total = 0;
+
+      presupuesto.forEach((p) => {
+        if (partidaIds.includes(p.partida_id)) {
+          total += Number(p.monto);
+        }
+      });
+
+      blocked[category] = total >= limits[category];
+    });
+
+    return blocked;
+  };
+
+  // 🔎 Devuelve la categoría a la que pertenece una partida
+  const getCategoryByPartidaId = (partidaId) => {
+    return Object.entries(categories).find(([_, ids]) =>
+      ids.includes(partidaId)
+    )?.[0];
+  };
+
+  const blockedCategories = getBlockedCategories(data.presupuesto);
+
+  const partidasConBloqueo = data.partidas.map((p) => {
+    const category = getCategoryByPartidaId(p.value); // 👈 usar value
+    const blocked = blockedCategories[category];
+
+    return {
+      ...p,                     // 👈 conserva value y label existentes
+      disabled: blocked === true,
+      disabledReason: blocked
+        ? `Límite alcanzado en ${categoryNames[category]}`
+        : null,
+    };
+  });
 
   // Función para calcular y verificar los montos
   Object.entries(categories).forEach(([category, partidaIds]) => {
@@ -205,7 +246,6 @@ export default function Registro_pconfigi_5() {
     }
   });
 
-  console.log(excedidos);
 
   useEffect(() => {
     getData();
@@ -319,8 +359,8 @@ export default function Registro_pconfigi_5() {
                           <Header
                             variant="h3"
                             description={
-                              "Monto máximo: S/41,000.00, monto disponible: S/" +
-                              (41000 -
+                              "Monto máximo: S/40,000.00, monto disponible: S/" +
+                              (40000 -
                                 Number(
                                   items.reduce(
                                     (sum, item) =>
@@ -442,10 +482,10 @@ export default function Registro_pconfigi_5() {
                           close={() => setType("")}
                           reload={getData}
                           id={id}
-                          options={data.partidas}
+                          options={partidasConBloqueo}
                           presupuesto={data.presupuesto}
                           limit={parseFloat(
-                            41000 -
+                            40000 -
                               items.reduce(
                                 (acc, curr) => acc + Number(curr.monto),
                                 0
@@ -458,8 +498,9 @@ export default function Registro_pconfigi_5() {
                           reload={getData}
                           item={collectionProps.selectedItems[0]}
                           options={data.partidas}
+                          presupuesto={data.presupuesto}
                           limit={parseFloat(
-                            41000 -
+                            40000 -
                               items.reduce(
                                 (acc, curr) => acc + Number(curr.monto),
                                 0
