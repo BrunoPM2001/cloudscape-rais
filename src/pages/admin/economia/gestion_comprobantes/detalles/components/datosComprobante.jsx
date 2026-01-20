@@ -111,7 +111,7 @@ export default ({
             <SpaceBetween size="s">
               <div>
                 <Box variant="awsui-key-label">Tipo documento</Box>
-                <div>{datos?.tipo_documento}</div>
+                <div>{datos?.numero}</div>
               </div>
               <div>
                 <Box variant="awsui-key-label">Fecha</Box>

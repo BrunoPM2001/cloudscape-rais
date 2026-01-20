@@ -19,7 +19,7 @@ export default ({ id, visible, setVisible, reload }) => {
   const eliminarActividad = async () => {
     setLoadingDelete(true);
     const res = await axiosBase.delete(
-      "investigador/convocatorias/eliminarActividad",
+      "investigador/convocatorias/picv/eliminarActividad",
       {
         params: {
           id: id,

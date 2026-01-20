@@ -143,6 +143,9 @@ export default function Reporte_proyecto() {
                     {
                       value: "PSINFIPU",
                     },
+                    {
+                      value: "PICV",
+                    },
                   ]}
                 />
               </FormField>
@@ -162,6 +165,7 @@ export default function Reporte_proyecto() {
                     }));
                   }}
                   options={[
+                    { value: "2026" },
                     { value: "2025" },
                     { value: "2024" },
                     { value: "2023" },

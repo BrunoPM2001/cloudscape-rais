@@ -64,18 +64,18 @@ export default ({ close }) => {
           },
           {
             rubro: "Pasajes y viáticos",
-            max: "Hasta S/ 6000",
+            max: "Hasta S/ 8000",
             partidas:
               "Pasajes y gastos de transporte (interior). Viáticos y asignaciones por comisión de servicios.",
           },
           {
             rubro: "Asesorías especializadas",
-            max: "Hasta S/ 4000",
+            max: "Hasta S/ 5000",
             partidas: "Servicio de consultoría.",
           },
           {
             rubro: "Servicios de terceros",
-            max: "Hasta S/ 8000",
+            max: "Hasta S/ 10000",
             partidas:
               "Servicio de suministro de gas. Servicio de mantenimiento, acondicionamiento y reparaciones. Correos y servicios de mensajería. Servicios diversos (traducciones, publicaciones justificadas en el proyecto). Realizado por personas jurídicas. Servicio de impresiones, encuadernación y empastado. Licencias de uso de software, incluidas suscripciones.",
           },

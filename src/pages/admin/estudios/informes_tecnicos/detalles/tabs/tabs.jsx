@@ -33,6 +33,7 @@ export default ({
           miembros={miembros}
           formValues={formValues}
           handleChange={handleChange}
+          files={files}
         />
       ) : tipo_proyecto == "PTPDOCTO" &&
         tipo_informe == "Informe académico de avance" ? (

@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import queryString from "query-string";
 import BaseLayout from "../../components/baseLayout";
 import Paso6 from "./paso6";
-import { useContext, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import NotificationContext from "../../../../providers/notificationProvider";
 
 const breadcrumbs = [
@@ -34,6 +34,8 @@ export default function Registrar_proyecto_paso6() {
   if (proyecto_id == null) {
     window.location.href = "paso1";
   }
+  //  Ref
+  const pasoRefs = useRef([]);
 
   //  Functions
   const handleNavigate = async (detail) => {
@@ -46,10 +48,15 @@ export default function Registrar_proyecto_paso6() {
         );
         return;
       }
-      const query = queryString.stringify({
-        proyecto_id: proyecto_id,
-      });
-      window.location.href = "paso7?" + query;
+      setLoading(true);
+      const isValid = await pasoRefs.current[0]?.validarPresupuesto();
+      setLoading(false);
+      if (isValid) {
+        const query = queryString.stringify({
+          proyecto_id: proyecto_id,
+        });
+        window.location.href = "paso7?" + query;
+      }
     } else {
       const query = queryString.stringify({
         proyecto_id,
@@ -152,6 +159,7 @@ export default function Registrar_proyecto_paso6() {
             description: "Asignación de presupuesto a partidas",
             content: (
               <Paso6
+                ref={(el) => (pasoRefs.current[0] = el)}
                 proyecto_id={proyecto_id}
                 setRequisitos={setRequisitos}
                 loading={loading}

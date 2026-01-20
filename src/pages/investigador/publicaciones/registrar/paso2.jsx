@@ -186,7 +186,7 @@ export default function ({
         <ModalRegistrado
           id={publicacion_id}
           reload={getData}
-          setVisible={setVisible}
+          close={() => setVisible(false)}
           visible={visible}
         />
       )}
@@ -194,7 +194,7 @@ export default function ({
         <ModalNoRegistrado
           id={publicacion_id}
           reload={getData}
-          setVisible={setVisible}
+          close={() => setVisible(false)}
           visible={visible}
         />
       )}
@@ -202,7 +202,7 @@ export default function ({
         <ModalEliminarProyecto
           id={collectionProps.selectedItems[0].id}
           reload={getData}
-          setVisible={setVisible}
+          close={() => setVisible(false)}
           visible={visible}
         />
       )}

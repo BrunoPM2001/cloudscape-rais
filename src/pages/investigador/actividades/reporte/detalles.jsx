@@ -14,6 +14,9 @@ import { useState } from "react";
 import axiosBase from "../../../../api/axios";
 import ModalDj from "../proyectos_con_financiamiento/components/modalSubirDj";
 import ModalSubirDj from "../proyecto_eci/components/modalSubirDj";
+import ModalSubirDjPconfigi_Inv from "../proyectos_con_financiamiento/components/modalSubirDjPconfigi_Inv";
+import ModalSubirDjPinvpos from "../talleres/components/modalSubirDj";
+import ModalSubirDjProctie from "../proyectos_con_financiamiento/components/modalSubirDjProctie";
 
 export default ({ data, responsable, loading, id, items, antiguo }) => {
   //  States
@@ -188,8 +191,9 @@ export default ({ data, responsable, loading, id, items, antiguo }) => {
               <Spinner />
             ) : (
               (data.dj_aceptada == null || data.dj_aceptada == 0) &&
-              (data.tipo_proyecto == "PCONFIGI" ||
-                data.tipo_proyecto == "ECI") &&
+              (data.tipo_proyecto == "PCONFIGI" || data.tipo_proyecto == "ECI" 
+                || data.tipo_proyecto == 'PCONFIGI-INV' || data.tipo_proyecto == "PINVPOS"
+                || data.tipo_proyecto == 'PRO-CTIE') &&
               responsable == 1 && (
                 <div>
                   <Box variant="awsui-key-label">Dj Subvencion Económica</Box>
@@ -198,7 +202,9 @@ export default ({ data, responsable, loading, id, items, antiguo }) => {
                       variant="primary"
                       loading={loadingFormato}
                       onClick={() => {
-                        if (data.tipo_proyecto === "PCONFIGI") {
+                        if (data.tipo_proyecto === "PCONFIGI" || data.tipo_proyecto === 'PCONFIGI-INV' || data.tipo_proyecto === "PINVPOS"
+                          || data.tipo_proyecto === 'PRO-CTIE'
+                        ) {
                           formatoDj();
                         } else if (data.tipo_proyecto === "ECI") {
                           formatoDjECI();
@@ -328,15 +334,15 @@ export default ({ data, responsable, loading, id, items, antiguo }) => {
       )}
 
       {modal === "firma" &&
-        (data.tipo_proyecto === "PCONFIGI" ? (
+        (data.tipo_proyecto == "PCONFIGI" ? (
           <ModalDj
             onClose={() => setModal("")}
             proyecto_id={data.id}
             reload={() => {
-              window.location.reload(); // esto es lo más directo si no tienes un sistema de estado
+              window.location.reload();
             }}
           />
-        ) : (
+        ) : data.tipo_proyecto == "ECI" ? (
           <ModalSubirDj
             onClose={() => setModal("")}
             proyecto_id={data.id}
@@ -344,7 +350,31 @@ export default ({ data, responsable, loading, id, items, antiguo }) => {
               window.location.reload();
             }}
           />
-        ))}
+        ): data.tipo_proyecto == "PCONFIGI-INV" ? (
+          <ModalSubirDjPconfigi_Inv
+            onClose={() => setModal("")}
+            proyecto_id={data.id}
+            reload={() => {
+              window.location.reload();
+            }}
+          />
+        ) : data.tipo_proyecto == "PINVPOS" ? (
+          <ModalSubirDjPinvpos
+            onClose={() => setModal("")}
+            proyecto_id={data.id}
+            reload={() => {
+              window.location.reload();
+            }}
+          />
+        ): data.tipo_proyecto == "PRO-CTIE" ? (
+          <ModalSubirDjProctie
+            onClose={() => setModal("")}
+            proyecto_id={data.id}
+            reload={() => {
+              window.location.reload();
+            }}
+          />
+        ) : null)}
     </Container>
   );
 };

@@ -58,7 +58,7 @@ const columnDisplay = [
   { id: "monto", visible: true },
 ];
 
-const MAX = 42800;
+const MAX = 44000;
 
 export default function Registro_eci_4() {
   //  Url
@@ -116,7 +116,7 @@ export default function Registro_eci_4() {
 
       if (totalMonto > MAX) {
         tempErrors.push(
-          "El monto total máximo para postular a esta convocatoria es de S/. 42,800.00"
+          "El monto total máximo para postular a esta convocatoria es de S/. 44,000.00"
         );
       }
 

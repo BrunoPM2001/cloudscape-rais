@@ -49,7 +49,7 @@ export default function Registrar_proyecto_paso5() {
       const query = queryString.stringify({
         proyecto_id: proyecto_id,
       });
-      window.location.href = "paso7?" + query;
+      window.location.href = "paso6?" + query;
     } else {
       const query = queryString.stringify({
         proyecto_id,
@@ -98,9 +98,9 @@ export default function Registrar_proyecto_paso5() {
               />
             ),
           },
-          // {
-          //   title: "Financiamiento del proyecto",
-          // },
+          {
+            title: "Financiamiento del proyecto",
+          },
           {
             title: "Instrucciones finales",
           },

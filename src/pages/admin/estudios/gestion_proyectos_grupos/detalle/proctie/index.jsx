@@ -7,6 +7,7 @@ import Integrantes from "./integrantes";
 import Descripcion from "./descripcion";
 import Calendario from "./calendario";
 import Documentos from "./documentos";
+import Presupuesto from "../tabs/presupuesto";
 import axiosBase from "../../../../../../api/axios";
 import BaseLayout from "../../../../components/baseLayout";
 
@@ -41,6 +42,11 @@ export default function Detalle_proyecto_proctie() {
       id: "calendario",
       label: "Calendario",
       content: <Calendario data={data.actividades} loading={loading} />,
+    },    
+    {
+      id: "presupuesto",
+      label: "Presupuesto",
+      content: <Presupuesto data={data.presupuesto} loading={loading} />,
     },
   ];
 

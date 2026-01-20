@@ -93,7 +93,7 @@ export default function ModalDj({ onClose, proyecto_id, reload }) {
           concurso
           <strong>
             {" "}
-            PROYECTOS DE INVESTIGACIÓN PARA GRUPOS DE INVESTIGACIÓN (PCONFIGI)
+            PROYECTOS DE INNOVACIÓN PARA GRUPOS DE INVESTIGACIÓN (PCONFIGI-INV)
           </strong>
           , se le solicita subir su
           <strong> Declaración Jurada firmada</strong>, la cual puede contar con{" "}

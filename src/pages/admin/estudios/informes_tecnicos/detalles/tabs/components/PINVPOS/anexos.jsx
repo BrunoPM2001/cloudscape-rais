@@ -1,10 +1,10 @@
-import { 
+import {
+  ColumnLayout,
   Container,
-  FileUpload, 
-  FormField,  
-  Link, 
+  FileUpload,
+  FormField,
+  Link,
 } from "@cloudscape-design/components";
-import Tiptap from "../../../../../../components/tiptap";
 
 const propsRepetidas = {
   showFileLastModified: true,
@@ -29,35 +29,24 @@ const propsEnlaces = {
   target: "_blank",
 };
 
-export default ({ 
-  value,
+export default ({
   value1,
   handleChange,
   files,
- }) => {
+}) => {
   return (
     <Container>
-      <FormField
-        label="Asistencia"
-        description="Obligatoria para docentes a tiempo completo y dedicación exclusiva"
-        stretch
-      >
-        <Tiptap
-          value={value}
-          handleChange={handleChange}
-          name="asistencia_taller"
-        />
-      </FormField>
-      <FormField
+      <ColumnLayout columns={2}>
+        <FormField
           label="Anexos"
           description={
-            files["asistencia"] && (
+            files["anexo1"] && (
               <>
                 Ya ha cargado un{" "}
-                <Link {...propsEnlaces} href={files["asistencia"].url}>
+                <Link {...propsEnlaces} href={files["anexo1"].url}>
                   archivo
                 </Link>{" "}
-                el {files["asistencia"].fecha}
+                el {files["anexo1"].fecha}
               </>
             )
           }
@@ -67,10 +56,11 @@ export default ({
             {...propsRepetidas}
             value={value1}
             onChange={({ detail }) => {
-              handleChange("file2", detail.value);
+              handleChange("file1", detail.value);
             }}
           />
         </FormField>
+      </ColumnLayout>
     </Container>
   );
 };

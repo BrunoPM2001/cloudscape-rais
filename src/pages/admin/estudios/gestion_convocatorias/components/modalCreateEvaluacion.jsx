@@ -33,6 +33,7 @@ const tipo_proyectos = [
   { value: "RFPLU" },
   { value: "SPINOFF" },
   { value: "GRUPO" },
+  { value: "PICV" },
 ];
 
 const initialForm = {

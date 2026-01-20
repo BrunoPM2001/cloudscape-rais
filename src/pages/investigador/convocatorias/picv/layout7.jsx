@@ -36,7 +36,7 @@ export default function Registrar_proyecto_paso7() {
     const query = queryString.stringify({
       proyecto_id,
     });
-    window.location.href = "paso5?" + query;
+    window.location.href = "paso6?" + query;
   };
 
   return (
@@ -48,13 +48,13 @@ export default function Registrar_proyecto_paso7() {
     >
       <Wizard
         onNavigate={({ detail }) => handleNavigate(detail)}
-        activeStepIndex={5}
+        activeStepIndex={6}
         onCancel={() => {
           window.location.href = "../../";
         }}
         onSubmit={async () => {
           setLoading(true);
-          await axiosBase.put("investigador/convocatorias/enviarProyecto", {
+          await axiosBase.put("investigador/convocatorias/picv/enviarProyecto", {
             proyecto_id,
           });
           setLoading(false);
@@ -78,9 +78,9 @@ export default function Registrar_proyecto_paso7() {
           {
             title: "Calendario de actividades",
           },
-          // {
-          //   title: "Financiamiento del proyecto",
-          // },
+          {
+            title: "Financiamiento del proyecto",
+          },
           {
             title: "Instrucciones finales",
             description: "Envío de proyecto para evaluación",

@@ -4,6 +4,7 @@ import Conclusiones from "./conclusiones";
 import Objetivos from "./objetivos";
 import Programa_taller from "./programa_taller";
 import Recomendaciones from "./recomendaciones";
+import Anexos from "./anexos";
 import Info from "./info";
 
 export default function Pinvpost_tabs({
@@ -11,6 +12,7 @@ export default function Pinvpost_tabs({
   miembros,
   formValues,
   handleChange,
+  files,
 }) {
   const tabs = [
     {
@@ -65,8 +67,22 @@ export default function Pinvpost_tabs({
       content: (
         <Asistencia
           value={formValues?.asistencia_taller}
+          value1={formValues?.file2}
           handleChange={handleChange}
+          files={files}
         />
+      ),
+    },
+    {
+      id: "anexos",
+      label: "Anexos",
+      content: (
+        <Anexos
+          value1={formValues?.file1}
+          handleChange={handleChange}
+          files={files}
+        />
+        //  CATEGORIA - Hasta 6 anexos anexo1 ... anexo6
       ),
     },
   ];

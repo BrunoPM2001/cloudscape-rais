@@ -15,6 +15,8 @@ import { useContext, useEffect, useState } from "react";
 import { useFormValidation } from "../../../../hooks/useFormValidation.js";
 import axiosBase from "../../../../api/axios.js";
 import NotificationContext from "../../../../providers/notificationProvider.jsx";
+import queryString from "query-string";
+import { useLocation } from "react-router-dom";
 
 const breadcrumbs = [
   {
@@ -63,6 +65,9 @@ export default function Convocatoria_registro_taller_1() {
   const [loading, setLoading] = useState(true);
   const [loadingBtn, setLoadingBtn] = useState(false);
   const [data, setData] = useState({});
+  //  Url
+  const location = useLocation();
+  const { proyecto_id } = queryString.parse(location.search);
 
   //  Hooks
   const { formValues, formErrors, handleChange, validateForm } =
@@ -91,7 +96,8 @@ export default function Convocatoria_registro_taller_1() {
       );
       const info = res.data;
       if (info.message == "success") {
-        window.location.href = "paso2";
+        const query = queryString.stringify({ proyecto_id: data.datos.proyecto_id })
+        window.location.href = "paso2?" + query;
       } else {
         pushNotification(info.detail, info.message, notifications.length + 1);
       }
@@ -107,8 +113,7 @@ export default function Convocatoria_registro_taller_1() {
     <BaseLayout
       breadcrumbs={breadcrumbs}
       header="Registro a la convocatoria vigente"
-      helpInfo="Información sobre la páginal actual para poder mostrarla al público
-      en general."
+      helpInfo="Información sobre la página actual para poder mostrarla al público en general."
       disableOverlap
     >
       {loading ? (
