@@ -147,25 +147,19 @@ export default function Registro_pconfigi_5() {
   };
 
   const limits = {
-    pasajesViaticos: 6000,
-    servicioTerceros: 10000,
+    pasajesViaticos: 8000,
+    servicioTerceros: 15000,
     movilidadLocal: 800,
-    serviciosDiversos: 10000,
-    consultoriaEspecializada: 5000,
-    asesoriaEspecializada: 5000,
     materialesInsumos: 32000,
     utilesLimpieza: 800,
     equiposBienes: 32000,
   };
 
   const categories = {
-    pasajesViaticos: [66, 68, 38, 39, 67, 69],
-    servicioTerceros: [70, 71, 43, 41, 44, 57, 46, 47, 48, 45, 52],
+    pasajesViaticos: [38, 39],
+    servicioTerceros: [43, 41, 46, 47, 45, 49],
     movilidadLocal: [40],
-    serviciosDiversos: [49, 73],
-    consultoriaEspecializada: [78, 50, 74, 55, 56],
-    asesoriaEspecializada: [79],
-    materialesInsumos: [4, 5, 9, 16, 22, 13, 14, 23],
+    materialesInsumos: [4, 5, 9, 16, 22, 14, 23],
     utilesLimpieza: [6, 7],
     equiposBienes: [26, 27, 76, 35],
   };
@@ -321,12 +315,7 @@ export default function Registro_pconfigi_5() {
                         >
                           <ul>
                             <li>
-                              a) El incentivo a los investigadores será incluido
-                              en el presupuesto del proyecto posterior a la
-                              evaluación y según el orden de mérito obtenido.
-                            </li>
-                            <li>
-                              b) El incentivo económico asignado a los
+                              a) El incentivo económico asignado a los
                               investigadores será de 8,000 soles.
                             </li>
                           </ul>
@@ -359,7 +348,7 @@ export default function Registro_pconfigi_5() {
                           <Header
                             variant="h3"
                             description={
-                              "Monto máximo: S/40,000.00, monto disponible: S/" +
+                              "Monto máximo: S/32,000.00, monto disponible: S/" +
                               (40000 -
                                 Number(
                                   items.reduce(

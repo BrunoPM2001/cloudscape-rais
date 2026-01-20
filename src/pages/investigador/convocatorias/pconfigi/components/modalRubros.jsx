@@ -64,7 +64,7 @@ export default ({ close }) => {
           },
           {
             rubro: "Pasajes y viáticos",
-            max: "Hasta S/ 6000",
+            max: "Hasta S/ 8000",
             partidas:
               "Pasajes y gastos de transporte (interior). Viáticos y asignaciones por comisión de servicios.",
           },

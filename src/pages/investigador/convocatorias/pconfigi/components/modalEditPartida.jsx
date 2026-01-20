@@ -25,48 +25,30 @@ export default ({ close, reload, item, options, limit, presupuesto }) => {
   const [loading, setLoading] = useState(false);
   const limits = {
     /**Pasajes y viaticos */
-    38: 6000,
-    39: 6000,
-    62: 6000,
-    63: 6000,
-    66: 6000,
-    67: 6000,
+    38: 8000,
+    39: 8000,
+
     /**Servicios de terceros */
-    70: 10000,
-    71: 10000,
-    43: 10000,
-    41: 10000,
-    44: 10000,
-    57: 10000,
-    46: 10000,
-    47: 10000,
-    48: 10000,
-    45: 10000,
-    49: 10000,
-    52: 10000,
+    43: 15000,
+    41: 15000,
+    46: 15000,
+    47: 15000,
+    45: 15000,
+    49: 15000,
+
     /**Asesoria Especializada */
-    78: 5000,
-    50: 5000,
-    74: 5000,
-    55: 5000,
-    56: 5000,
-    79: 5000,
 
     /**Servicios Diversos */
-    49: 10000,
-    73: 10000,
 
     /**Movilidad local */
     40: 800,
 
     /* Materiales e insumos */
-
     4: 32000,
     5: 32000,
     9: 32000,
     16: 32000,
     22: 32000,
-    13: 32000,
     14: 32000,
     23: 32000,
 
@@ -77,7 +59,6 @@ export default ({ close, reload, item, options, limit, presupuesto }) => {
     /**Equipos y bienes duraderos */
     26: 32000,
     27: 32000,
-    25: 32000,
     28: 32000,
     29: 32000,
     76: 32000,
