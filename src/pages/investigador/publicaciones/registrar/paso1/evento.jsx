@@ -68,12 +68,10 @@ const optsPresentacion = [
   { value: "Invitado" },
   { value: "Oral" },
   { value: "Poster" },
-  { value: "Simple" },
-  { value: "En extenso" },
 ];
 
 const optsTipos = [
-  { value: "Conferencias en congresos indizados" },
+  { value: "Conference Proceedings" },
   { value: "Resumen en evento científico" },
 ];
 
@@ -219,7 +217,7 @@ export default forwardRef(function (props, ref) {
                   />
                 </FormField>
                 <FormField
-                  label="Tipo de evento"
+                  label="Tipo de publicación"
                   stretch
                   errorText={formErrors.tipo_evento}
                 >

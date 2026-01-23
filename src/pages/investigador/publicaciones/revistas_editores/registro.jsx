@@ -94,7 +94,6 @@ export default function Revistas_editores_registro() {
       header="Revistas en las que puede nombrarse como editor"
       helpInfo="Información sobre la páginal actual para poder mostrarla al público
       en general."
-      disableOverlap
       contentType="form"
     >
       <Container>

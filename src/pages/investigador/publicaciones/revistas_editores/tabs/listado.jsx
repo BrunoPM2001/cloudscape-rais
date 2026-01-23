@@ -233,7 +233,7 @@ export default () => {
                     const query = queryString.stringify({
                       tipo: "revista",
                     });
-                    window.location.href = "registrar/paso1?" + query;
+                    window.location.href = "revistas_editores/registrar";
                   }}
                 >
                   Registrar
