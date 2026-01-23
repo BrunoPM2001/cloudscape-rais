@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosBase = axios.create({
-  baseURL: "/api/",
+  baseURL: "http://localhost:8000/api/",
 });
 
 //  Token requests
@@ -28,7 +28,7 @@ axiosBase.interceptors.response.use(
       console.error("Error: ", error.message);
     }
     return Promise.reject(error);
-  }
+  },
 );
 
 export default axiosBase;

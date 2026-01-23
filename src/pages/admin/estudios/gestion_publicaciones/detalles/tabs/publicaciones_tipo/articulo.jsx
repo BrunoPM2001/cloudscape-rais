@@ -68,6 +68,7 @@ const initialForm = {
   wos: [],
   url: "",
   resumen: "",
+  cuartil: {},
 };
 
 const formRules = {
@@ -85,6 +86,7 @@ const formRules = {
   edicion: { required: true },
   indexada: { required: false },
   url: { required: false },
+  cuartil: { required: false },
 };
 
 export default function ({ data, setData, reload }) {
@@ -116,12 +118,13 @@ export default function ({ data, setData, reload }) {
       data.revistas.map((item) => ({
         ...item,
         value: String(item.value),
-      }))
+      })),
     );
     setFormValues({
       ...initialForm,
       ...data.data,
       art_tipo: { value: data.data.art_tipo },
+      cuartil: { value: data.detalles.cuartil },
       palabras_clave: data.palabras_clave,
       indexada: data.indexada.map((item) => ({
         ...item,
@@ -138,7 +141,7 @@ export default function ({ data, setData, reload }) {
       data.wos.map((item) => ({
         ...item,
         value: String(item.value),
-      }))
+      })),
     );
   };
 
@@ -148,7 +151,7 @@ export default function ({ data, setData, reload }) {
       "admin/estudios/publicaciones/agregarRevista",
       {
         nombre: inputRevista,
-      }
+      },
     );
     const data = res.data;
     pushNotification(data.detail, data.message, notifications.length + 1);
@@ -164,7 +167,7 @@ export default function ({ data, setData, reload }) {
       "admin/estudios/publicaciones/agregarWos",
       {
         nombre: inputWos,
-      }
+      },
     );
     const data = res.data;
     pushNotification(data.detail, data.message, notifications.length + 1);
@@ -466,50 +469,89 @@ export default function ({ data, setData, reload }) {
         }
       >
         <SpaceBetween size="m">
-          <FormField
-            label="Revista"
-            stretch
-            errorText={formErrors.publicacion_nombre}
+          <Grid
+            gridDefinition={[
+              {
+                colspan: {
+                  default: 12,
+                  l: 9,
+                  m: 9,
+                  s: 9,
+                  xs: 9,
+                },
+              },
+              {
+                colspan: {
+                  default: 12,
+                  l: 3,
+                  m: 3,
+                  s: 3,
+                  xs: 3,
+                },
+              },
+            ]}
           >
-            <Autosuggest
-              onChange={({ detail }) => {
-                setOptions([]);
-                setValue(detail.value);
-                handleChange("publicacion_nombre", detail.value);
-                setData({
-                  ...data,
-                  data: {
-                    ...data.data,
-                    publicacion_nombre: detail.value,
-                  },
-                });
-              }}
-              onSelect={({ detail }) => {
-                if (detail.selectedOption.value != undefined) {
-                  const { value, ...rest } = detail.selectedOption;
-                  handleChange("publicacion_nombre", rest.revista);
-                  handleChange("issn", rest.issn);
-                  handleChange("issn_e", rest.issne);
+            <FormField
+              label="Revista"
+              stretch
+              errorText={formErrors.publicacion_nombre}
+            >
+              <Autosuggest
+                onChange={({ detail }) => {
+                  setOptions([]);
+                  setValue(detail.value);
+                  handleChange("publicacion_nombre", detail.value);
                   setData({
                     ...data,
                     data: {
                       ...data.data,
-                      publicacion_nombre: rest.revista,
-                      issn: rest.issn,
-                      issn_e: rest.issne,
+                      publicacion_nombre: detail.value,
                     },
                   });
-                  setAvoidSelect(false);
-                }
-              }}
-              value={value}
-              options={options}
-              loadingText="Cargando data"
-              placeholder="Issn, issn-e o nombre de la revista"
-              statusType={loading ? "loading" : "finished"}
-              empty="No se encontraron resultados"
-            />
-          </FormField>
+                }}
+                onSelect={({ detail }) => {
+                  if (detail.selectedOption.value != undefined) {
+                    const { value, ...rest } = detail.selectedOption;
+                    handleChange("publicacion_nombre", rest.revista);
+                    handleChange("issn", rest.issn);
+                    handleChange("issn_e", rest.issne);
+                    setData({
+                      ...data,
+                      data: {
+                        ...data.data,
+                        publicacion_nombre: rest.revista,
+                        issn: rest.issn,
+                        issn_e: rest.issne,
+                      },
+                    });
+                    setAvoidSelect(false);
+                  }
+                }}
+                value={value}
+                options={options}
+                loadingText="Cargando data"
+                placeholder="Issn, issn-e o nombre de la revista"
+                statusType={loading ? "loading" : "finished"}
+                empty="No se encontraron resultados"
+              />
+            </FormField>
+            <FormField label="Cuartil" stretch errorText={formErrors.cuartil}>
+              <Select
+                placeholder="Escoja una opción"
+                selectedOption={formValues.cuartil}
+                onChange={({ detail }) => {
+                  handleChange("cuartil", detail.selectedOption);
+                }}
+                options={[
+                  { value: "Sin cuartil asignado" },
+                  { value: "Cuartil Q1" },
+                  { value: "Cuartil Q2" },
+                  { value: "Cuartil Q3" },
+                  { value: "Cuartil Q4" },
+                ]}
+              />
+            </FormField>
+          </Grid>
           <ColumnLayout columns={4}>
             <FormField
               label="ISSN"

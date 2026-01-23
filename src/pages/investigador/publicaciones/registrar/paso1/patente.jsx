@@ -72,7 +72,7 @@ export default forwardRef(function (props, ref) {
         params: {
           publicacion_id: props.publicacion_id,
         },
-      }
+      },
     );
     const data = res.data;
     setFormValues({
@@ -88,7 +88,7 @@ export default forwardRef(function (props, ref) {
       if (props.publicacion_id != null) {
         const res = await axiosBase.post(
           "investigador/publicaciones/articulos/registrarPaso1",
-          { ...formValues, publicacion_id: props.publicacion_id }
+          { ...formValues, publicacion_id: props.publicacion_id },
         );
         const data = res.data;
         if (data.message == "error") {
@@ -102,7 +102,7 @@ export default forwardRef(function (props, ref) {
       } else {
         const res = await axiosBase.post(
           "investigador/publicaciones/articulos/registrarPaso1",
-          formValues
+          formValues,
         );
         const data = res.data;
         if (data.message == "error") {
@@ -186,6 +186,9 @@ export default forwardRef(function (props, ref) {
                     { value: "Patente de invención" },
                     { value: "Modelo de utilidad" },
                     { value: "Certificado de obtentor" },
+                    { value: "Derecho de obtentor" },
+                    { value: "Paquete tecnológico" },
+                    { value: "Registro de software" },
                   ]}
                 />
               </FormField>

@@ -20,6 +20,7 @@ import ModalIncluirmeAutor from "../components/modalIncluirmeAutor";
 const initialForm = {
   titulo: "",
   tipo_presentacion: null,
+  tipo_evento: null,
   palabras_clave_input: "",
   palabras_clave: [],
   publicacion_nombre: "",
@@ -43,6 +44,7 @@ const initialForm = {
 const formRules = {
   titulo: { required: true },
   tipo_presentacion: { required: true },
+  tipo_evento: { required: true },
   palabras_clave: { required: true, noEmpty: true },
   publicacion_nombre: { required: true },
   volumen: { required: true },
@@ -66,6 +68,13 @@ const optsPresentacion = [
   { value: "Invitado" },
   { value: "Oral" },
   { value: "Poster" },
+  { value: "Simple" },
+  { value: "En extenso" },
+];
+
+const optsTipos = [
+  { value: "Conferencias en congresos indizados" },
+  { value: "Resumen en evento científico" },
 ];
 
 export default forwardRef(function (props, ref) {
@@ -90,7 +99,7 @@ export default forwardRef(function (props, ref) {
   //  Function
   const listaPaises = async () => {
     const res = await axiosBase.get(
-      "investigador/publicaciones/utils/getPaises"
+      "investigador/publicaciones/utils/getPaises",
     );
     const data = res.data;
     setPaises(data);
@@ -104,7 +113,7 @@ export default forwardRef(function (props, ref) {
         params: {
           publicacion_id: props.publicacion_id,
         },
-      }
+      },
     );
     const data = res.data;
     setPaises(data.paises);
@@ -112,6 +121,7 @@ export default forwardRef(function (props, ref) {
       ...initialForm,
       ...data.data,
       tipo_presentacion: { value: data.data.tipo_presentacion },
+      tipo_evento: { value: data.detalles.tipo_evento },
       pais: { value: data.data.pais },
       palabras_clave: data.palabras_clave,
     });
@@ -124,13 +134,13 @@ export default forwardRef(function (props, ref) {
       if (props.publicacion_id != null) {
         await axiosBase.post(
           "investigador/publicaciones/eventos/registrarPaso1",
-          { ...formValues, publicacion_id: props.publicacion_id }
+          { ...formValues, publicacion_id: props.publicacion_id },
         );
         return { isValid: true, res_publicacion_id: null };
       } else {
         const res = await axiosBase.post(
           "investigador/publicaciones/eventos/registrarPaso1",
-          formValues
+          formValues,
         );
         const data = res.data;
         return { isValid: true, res_publicacion_id: data.publicacion_id };
@@ -193,20 +203,36 @@ export default forwardRef(function (props, ref) {
                   empty="No se encontraron resultados"
                 />
               </FormField>
-              <FormField
-                label="Tipo de presentación"
-                stretch
-                errorText={formErrors.tipo_presentacion}
-              >
-                <Select
-                  placeholder="Escoja una opción"
-                  selectedOption={formValues.tipo_presentacion}
-                  onChange={({ detail }) =>
-                    handleChange("tipo_presentacion", detail.selectedOption)
-                  }
-                  options={optsPresentacion}
-                />
-              </FormField>
+              <ColumnLayout columns={2}>
+                <FormField
+                  label="Tipo de presentación"
+                  stretch
+                  errorText={formErrors.tipo_presentacion}
+                >
+                  <Select
+                    placeholder="Escoja una opción"
+                    selectedOption={formValues.tipo_presentacion}
+                    onChange={({ detail }) =>
+                      handleChange("tipo_presentacion", detail.selectedOption)
+                    }
+                    options={optsPresentacion}
+                  />
+                </FormField>
+                <FormField
+                  label="Tipo de evento"
+                  stretch
+                  errorText={formErrors.tipo_evento}
+                >
+                  <Select
+                    placeholder="Escoja una opción"
+                    selectedOption={formValues.tipo_evento}
+                    onChange={({ detail }) =>
+                      handleChange("tipo_evento", detail.selectedOption)
+                    }
+                    options={optsTipos}
+                  />
+                </FormField>
+              </ColumnLayout>
               <FormField
                 label="Palabras clave"
                 description="Presionar la tecla de enter para añadir una palabra"
