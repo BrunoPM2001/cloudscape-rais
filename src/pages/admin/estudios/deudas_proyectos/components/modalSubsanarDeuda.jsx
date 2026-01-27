@@ -59,9 +59,9 @@ export default ({ close, item, reload }) => {
       "admin/estudios/deudaProyecto/proyectoDeuda",
       {
         params: {
-          proyecto_id: item[0].proyecto_id,
-          proyecto_origen: item[0].proyecto_origen,
-          tipo_proyecto: item[0].tipo_proyecto,
+          proyecto_id: item.proyecto_id,
+          proyecto_origen: item.proyecto_origen,
+          tipo_proyecto: item.tipo_proyecto,
         },
       }
     );
@@ -99,9 +99,9 @@ export default ({ close, item, reload }) => {
         const res = await axiosBase.post(
           "admin/estudios/deudaProyecto/subsanarDeuda",
           {
-            proyecto_id: item[0].proyecto_id,
-            proyecto_origen: item[0].proyecto_origen,
-            tipo_proyecto: item[0].tipo_proyecto,
+            proyecto_id: item.proyecto_id,
+            proyecto_origen: item.proyecto_origen,
+            tipo_proyecto: item.tipo_proyecto,
             subsanar_academica: formValues.subsanar_academica,
             subsanar_economica: formValues.subsanar_economica,
             fecha_subsanar: formValues.fecha_subsanar,
@@ -124,9 +124,9 @@ export default ({ close, item, reload }) => {
       "admin/estudios/deudaProyecto/getTipoDeuda",
       {
         params: {
-          proyecto_id: item[0].proyecto_id,
-          tipo_proyecto: item[0].tipo_proyecto,
-          proyecto_origen: item[0].proyecto_origen,
+          proyecto_id: item.proyecto_id,
+          tipo_proyecto: item.tipo_proyecto,
+          proyecto_origen: item.proyecto_origen,
         },
       }
     );
