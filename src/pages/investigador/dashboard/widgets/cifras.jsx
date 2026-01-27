@@ -8,6 +8,8 @@ import {
 } from "@cloudscape-design/components";
 
 export default function ({ data, loading }) {
+  const deudas = data?.deudas_vigentes ?? 0;
+
   return (
     <Container
       header={
@@ -69,6 +71,28 @@ export default function ({ data, loading }) {
             <Link variant="awsui-value-large" href="#">
               {data.puntaje_pasado}
             </Link>
+          )}
+        </div>
+        <div>
+          <Box variant="awsui-key-label">Deudas vigentes</Box>
+          {loading ? (
+            <Spinner size="large" />
+          ) : (
+          <Box variant="awsui-value-large"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 8,
+            }}
+          >
+            <Link variant="awsui-value-large" href="/investigador/actividades/deudas">
+              {deudas}
+            </Link>
+            <span style={{ fontSize: "2.0rem", lineHeight: 1, marginLeft: 8 }}>
+              {deudas === 0 ? "😊" : "😢"}
+            </span>
+          </Box>
           )}
         </div>
       </ColumnLayout>

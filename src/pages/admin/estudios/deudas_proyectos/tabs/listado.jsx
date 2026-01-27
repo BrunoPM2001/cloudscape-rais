@@ -283,7 +283,6 @@ export default () => {
                   onItemClick={({ detail }) => {
                     if (detail.id == "action_1_1") {
                       setIncluirVisible(true);
-                      console.log("AsignarDeuda");
                       setTypeModal("Asignar");
                     } else if (detail.id == "action_1_2") {
                       setIncluirVisible(true);
@@ -291,7 +290,6 @@ export default () => {
                     } else if (detail.id == "action_1_3") {
                       setIncluirVisible(true);
                       setTypeModal("Subsanar");
-                      console.log("SubsanarDeuda");
                     }
                   }}
                 >
