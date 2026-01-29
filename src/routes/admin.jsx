@@ -78,6 +78,9 @@ const Detalle_publicacion = lazy(() =>
 const Gestion_evaluadores = lazy(() =>
   import("../pages/admin/facultad/gestion_evaluadores/index.jsx")
 );
+const Gestion_usuarios_facultad = lazy(() =>
+  import("../pages/admin/facultad/gestion_usuarios_facultad/index.jsx")
+);
 const Docente_investigador_evaluacion = lazy(() =>
   import("../pages/admin/estudios/docentes/evaluacion/index.jsx")
 );
@@ -560,6 +563,15 @@ const routes = createBrowserRouter(
             {
               path: "detalle",
               element: <Detalle_convocatoria />,
+            },
+          ],
+        },
+        {
+          path: "gestion_usuarios_facultad",
+          children: [
+            {
+              path: "",
+              element: <Gestion_usuarios_facultad />,
             },
           ],
         },

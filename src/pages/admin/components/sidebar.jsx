@@ -170,7 +170,9 @@ const navItems = [
         info: <Badge color="blue">Histórico</Badge>,
       },
       { type: "divider" },
-      { type: "link", text: "Usuarios facultad", href: "#" },
+      { type: "link", text: "Usuarios facultad", 
+        href: "/admin/facultad/gestion_usuarios_facultad", 
+      },
       {
         type: "link",
         text: "Usuarios evaluadores",
