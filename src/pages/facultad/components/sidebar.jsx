@@ -4,19 +4,43 @@ import { useLocation } from "react-router-dom";
 const navItems = [
   {
     type: "section",
-    text: "Listado",
+    text: "Investigadores",
     defaultExpanded: true,
     items: [
       {
         type: "link",
-        text: "Investigadores",
+        text: "Usuarios docentes",
         href: "/facultad/listado/investigadores",
+      },
+      {
+        type: "link",
+        text: "Estudiantes investigadores",
+        href: "/facultad/listado/estudiantes",
       },
       {
         type: "link",
         text: "Docente Investigador",
         href: "/facultad/listado/docente_investigador",
       },
+    ],
+  },
+  {
+    type: "section",
+    text: "Grupos",
+    defaultExpanded: true,
+    items: [
+      {
+        type: "link",
+        text: "Grupos de Investigación",
+        href: "/facultad/listado/grupos",
+      },
+    ],
+  },
+  {
+    type: "section",
+    text: "Proyectos",
+    defaultExpanded: true,
+    items: [
       {
         type: "link",
         text: "Proyectos de Investigación",
@@ -24,27 +48,43 @@ const navItems = [
       },
       {
         type: "link",
-        text: "Proyectos de FEX",
+        text: "Proyectos con Financiamiento Externo",
         href: "/facultad/listado/proyectos_fex",
       },
-      {
-        type: "link",
-        text: "Grupos de Investigación",
-        href: "/facultad/listado/grupos",
-      },
+    ],
+  },
+  {
+    type: "section",
+    text: "Publicaciones",
+    defaultExpanded: true,
+    items: [
       {
         type: "link",
         text: "Publicaciones",
         href: "/facultad/listado/publicaciones",
       },
+    ],
+  },
+  {
+    type: "section",
+    text: "Informes",
+    defaultExpanded: true,
+    items: [
       {
         type: "link",
-        text: "Listado de Informes",
+        text: "Informes técnicos",
         href: "/facultad/listado/informes",
       },
+    ],
+  },
+  {
+    type: "section",
+    text: "Deudas",
+    defaultExpanded: true,
+    items: [
       {
         type: "link",
-        text: "Listado de deudas",
+        text: "Listado de Deudas",
         href: "/facultad/listado/deudas",
       },
     ],

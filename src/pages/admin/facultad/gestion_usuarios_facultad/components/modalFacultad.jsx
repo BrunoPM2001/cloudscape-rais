@@ -16,7 +16,9 @@ import { useAutosuggest } from "../../../../../hooks/useAutosuggest";
 
 const initialForm = {
   investigador_id: null,
-  apellidos: "",
+  facultad_id: null,
+  apellido1: "",
+  apellido2: "",
   nombres: "",
   institucion: "",
   username: "",
@@ -24,7 +26,7 @@ const initialForm = {
 };
 
 const formRules = {
-  apellidos: { required: true },
+  apellido1: { required: true },
   nombres: { required: true },
   institucion: { required: true },
   username: { required: true },
@@ -78,7 +80,7 @@ export default ({ close, reload }) => {
           </SpaceBetween>
         </Box>
       }
-      header="Crear usuario evaluador"
+      header="Crear usuario facultad"
     >
       <SpaceBetween direction="vertical" size="s">
         <FormField label="Buscar investigador" stretch>
@@ -89,12 +91,17 @@ export default ({ close, reload }) => {
             }}
             onSelect={({ detail }) => {
               if (detail.selectedOption.id != undefined) {
-                const { apellidos, nombres, institucion, id } =
+                const { apellido1, apellido2, nombres, institucion, codigo, id, facultad, facultad_id, sexo } =
                   detail.selectedOption;
-                handleChange("apellidos", apellidos);
+                handleChange("apellido1", apellido1);
+                handleChange("apellido2", apellido2);
                 handleChange("nombres", nombres);
                 handleChange("institucion", institucion);
                 handleChange("investigador_id", id);
+                handleChange("codigo", codigo);
+                handleChange("facultad", facultad);
+                handleChange("facultad_id", facultad_id);
+                handleChange("sexo", sexo);
                 setAvoidSelect(false);
               }
             }}
@@ -107,11 +114,18 @@ export default ({ close, reload }) => {
           />
         </FormField>
         <ColumnLayout columns={2}>
-          <FormField label="Apellidos" errorText={formErrors.apellidos} stretch>
+          <FormField label="Apellido paterno" errorText={formErrors.apellido1} stretch>
             <Input
-              placeholder="Escriba los apellidos"
-              value={formValues.apellidos}
-              onChange={({ detail }) => handleChange("apellidos", detail.value)}
+              placeholder="Apellido paterno"
+              value={formValues.apellido1}
+              onChange={({ detail }) => handleChange("apellido1", detail.value)}
+            />
+          </FormField>
+          <FormField label="Apellido materno" errorText={formErrors.apellido2} stretch>
+            <Input
+              placeholder="Apellido materno"
+              value={formValues.apellido2}
+              onChange={({ detail }) => handleChange("apellido2", detail.value)}
             />
           </FormField>
           <FormField label="Nombres" errorText={formErrors.nombres} stretch>
@@ -127,11 +141,18 @@ export default ({ close, reload }) => {
             stretch
           >
             <Input
-              placeholder="Institución de procedencia del evaluador"
+              placeholder="Institución de procedencia"
               value={formValues.institucion}
               onChange={({ detail }) =>
                 handleChange("institucion", detail.value)
               }
+            />
+          </FormField>
+          <FormField label="Facultad" errorText={formErrors.facultad} stretch>
+            <Input
+              placeholder="Nombre de la facultad"
+              value={formValues.facultad}
+              onChange={({ detail }) => handleChange("facultad", detail.value)}
             />
           </FormField>
           <FormField label="Usuario" errorText={formErrors.username} stretch>

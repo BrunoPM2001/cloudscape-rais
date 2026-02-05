@@ -11,7 +11,7 @@ import {
 import { useState, useEffect } from "react";
 import { useCollection } from "@cloudscape-design/collection-hooks";
 import axiosBase from "../../../../../api/axios";
-import ModalEvaluador from "../components/modalFacultad";
+import ModalFacultad from "../components/modalFacultad";
 
 const stringOperators = [":", "!:", "=", "!=", "^", "!^"];
 
@@ -182,7 +182,7 @@ export default () => {
                     },
                   ]}
                 >
-                  Opciones de evaluador
+                  Opciones de usuario
                 </ButtonDropdown>
                 <Button
                   variant="primary"
@@ -190,7 +190,7 @@ export default () => {
                     setModal("evaluador");
                   }}
                 >
-                  Nuevo evaluador
+                  Nuevo usuario
                 </Button>
               </SpaceBetween>
             }
@@ -216,7 +216,7 @@ export default () => {
         }
       />
       {modal == "evaluador" && (
-        <ModalEvaluador close={() => setModal("")} reload={getData} />
+        <ModalFacultad close={() => setModal("")} reload={getData} />
       )}
     </>
   );

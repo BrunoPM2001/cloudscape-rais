@@ -11,6 +11,10 @@ const Listado_investigadores = lazy(() =>
   import("../pages/facultad/listado/investigadores")
 );
 
+const Listado_estudiantes = lazy(() =>
+  import("../pages/facultad/listado/estudiantes")
+);
+
 const Listado_Docente_Investigador = lazy(() =>
   import("../pages/facultad/listado/docente_investigador")
 );
@@ -55,6 +59,10 @@ const routes = createBrowserRouter(
         {
           path: "investigadores",
           element: <Listado_investigadores />,
+        },
+        {
+          path: "estudiantes",
+          element: <Listado_estudiantes />,
         },
         {
           path: "docente_investigador",

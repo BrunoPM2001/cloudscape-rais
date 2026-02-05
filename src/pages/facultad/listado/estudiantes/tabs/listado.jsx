@@ -34,7 +34,7 @@ const FILTER_PROPS = [
     operators: stringOperators,
   },
   {
-    propertyLabel: "Tipo de docente",
+    propertyLabel: "Tipo de estudiante",
     key: "tipo",
     groupValuesLabel: "Tipos de docentes",
     operators: stringOperators,
@@ -111,7 +111,7 @@ const columnDefinitions = [
   },
   {
     id: "tipo",
-    header: "Tipo Docente",
+    header: "Tipo Estudiante",
     cell: (item) => item.tipo,
     sortingField: "tipo",
     minWidth: 200,
@@ -236,7 +236,7 @@ export default () => {
 
   const getData = async () => {
     setLoading(true);
-    const res = await axiosBase.get("facultad/listado/investigadores/listado");
+    const res = await axiosBase.get("facultad/listado/investigadores/listadoEstudiantes");
     setDistribution(res.data);
     setLoading(false);
   };
@@ -322,18 +322,12 @@ export default () => {
                   variant="primary"
                   items={[
                     {
-                      text: "Reporte de puntaje de pub.",
-                      id: "action_2_1",
-                    },
-                    {
                       text: "Descargar excel",
                       id: "action_2_2",
                     },
                   ]}
                   onItemClick={({ detail }) => {
-                    if (detail.id == "action_2_1") {
-                      exportPdf();
-                    } else if (detail.id == "action_2_2") {
+                    if (detail.id == "action_2_2") {
                       exportExcel();
                     }
                   }}
@@ -343,7 +337,7 @@ export default () => {
               </SpaceBetween>
             }
           >
-            Listado de Investigadores
+            Listado de Estudiantes
           </Header>
         }
         pagination={<Pagination {...paginationProps} />}
