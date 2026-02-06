@@ -60,7 +60,7 @@ const navItems = [
     items: [
       {
         type: "link",
-        text: "Publicaciones",
+        text: "Listado de Publicaciones",
         href: "/facultad/listado/publicaciones",
       },
     ],

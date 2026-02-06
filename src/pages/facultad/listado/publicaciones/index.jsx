@@ -2,6 +2,10 @@ import { Tabs } from "@cloudscape-design/components";
 import BaseLayout from "../../components/baseLayout";
 // import ListadoInvestigador from "./tabs/listado";
 import Listado from "./tabs/listado";
+import Articulos from "./articulos/listado";
+import Libros from "./libros/listado";
+import Tesis from "./tesis/listado";
+import Evento from "./eventos/listado";
 
 const breadcrumbs = [
   {
@@ -19,8 +23,28 @@ const breadcrumbs = [
 const tabs = [
   {
     id: "listado",
-    label: "Listado",
+    label: "General",
     content: <Listado />,
+  },
+  {
+    id: "articulos",
+    label: "Articulos",
+    content: <Articulos />,
+  },
+  {
+    id: "libros",
+    label: "Libros",
+    content: <Libros />,
+  },
+  {
+    id: "tesis",
+    label: "Tesis",
+    content: <Tesis />,
+  },
+  {
+    id: "evento",
+    label: "Eventos",
+    content: <Evento />,
   },
 ];
 
