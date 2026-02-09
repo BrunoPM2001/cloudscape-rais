@@ -22,6 +22,12 @@ const FILTER_PROPS = [
     operators: stringOperators,
   },
   {
+    propertyLabel: "Apellido y nombre",
+    key: "apno",
+    groupValuesLabel: "Apelidos y nombres",
+    operators: stringOperators,
+  },
+  {
     propertyLabel: "Tipo de Proyecto",
     key: "ptipo",
     groupValuesLabel: "Tipos de Proyecto",
@@ -75,6 +81,13 @@ const columnDefinitions = [
     minWidth: 150,
   },
   {
+    id: "apno",
+    header: "Apellidos y Nombres",
+    cell: (item) => item.nombre_completo,
+    sortingField: "apno",
+    minWidth: 200,
+  },
+  {
     id: "ptipo",
     header: "Tipo de Proyecto",
     cell: (item) => item.ptipo,
@@ -121,6 +134,7 @@ const columnDefinitions = [
 const columnDisplay = [
   { id: "id", visible: true },
   { id: "coddoc", visible: true },
+  { id: "apno", visible: true },
   { id: "ptipo", visible: true },
   { id: "categoria", visible: true },
   { id: "pcodigo", visible: true },

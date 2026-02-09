@@ -10,6 +10,8 @@ import {
 import { useEffect, useState } from "react";
 import BaseLayout from "../../components/baseLayout";
 import axiosBase from "../../../../api/axios";
+import { useAutosuggest } from "../../../../hooks/useAutosuggest";
+
 
 const breadcrumbs = [
   {
@@ -27,31 +29,15 @@ const breadcrumbs = [
 export default function Reporte_investigador() {
   //  States
   const [loadingReporte, setLoadingReporte] = useState(false);
-  const [value, setValue] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [options, setOptions] = useState([]);
   const [investigadorId, setInvestigadorId] = useState(null);
+
+  const { loading, options, setOptions, value, setValue, setAvoidSelect,} = 
+    useAutosuggest("admin/reportes/searchInvestigadorBy");
 
   //  Functions
   const clearForm = () => {
     setValue("");
     setOptions([]);
-  };
-
-  const getData = async () => {
-    setLoading(true);
-    const res = await axiosBase.get(
-      "admin/admin/usuarios/searchInvestigadorBy/" + value
-    );
-    const data = await res.data;
-    const opt = data.map((item) => {
-      return {
-        detail: item.id,
-        value: `${item.codigo} | ${item.doc_numero} | ${item.apellido1} ${item.apellido2}, ${item.nombres}`,
-      };
-    });
-    setOptions(opt);
-    setLoading(false);
   };
 
   const reporte = async () => {
@@ -67,14 +53,6 @@ export default function Reporte_investigador() {
     const url = URL.createObjectURL(blob);
     window.open(url, "_blank");
   };
-
-  //  Effects
-  useEffect(() => {
-    const temp = setTimeout(() => {
-      getData();
-    }, 1000);
-    return () => clearTimeout(temp);
-  }, [value]);
 
   return (
     <BaseLayout
@@ -106,11 +84,16 @@ export default function Reporte_investigador() {
             <FormField label="Investigador" stretch>
               <Autosuggest
                 onChange={({ detail }) => {
+                  setOptions([]);
                   setValue(detail.value);
+                  if (detail.value === "") {
+                    setInvestigadorId(null);
+                  }
                 }}
                 onSelect={({ detail }) => {
-                  if (detail.selectedOption.detail != undefined) {
-                    setInvestigadorId(detail.selectedOption.detail);
+                  if (detail.selectedOption.investigador_id != undefined) {
+                    setInvestigadorId(detail.selectedOption.investigador_id);
+                    setAvoidSelect(false);
                   }
                 }}
                 value={value}

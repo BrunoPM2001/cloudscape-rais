@@ -4,6 +4,7 @@ import {
   Pagination,
   PropertyFilter,
   SpaceBetween,
+  ButtonDropdown,
   Table,
   Badge,
   Button,
@@ -99,32 +100,6 @@ const columnDefinitions = [
     sortingField: "periodo",
   },
   {
-    id: "deuda",
-    header: "Deuda",
-    cell: (item) => (
-      <Badge
-        color={
-          item.deuda == "Sin deuda"
-            ? "green"
-            : item.deuda == "Deuda Académica"
-            ? "severity-medium"
-            : item.deuda == "Deuda Económica"
-            ? "severity-low"
-            : item.deuda == "Deuda Académica y Económica"
-            ? "red"
-            : item.deuda == "Subsanado"
-            ? "blue"
-            : "grey"
-        }
-      >
-        {item.deuda}
-      </Badge>
-    ),
-
-    sortingField: "deuda",
-    minWidth: 180,
-  },
-  {
     id: "responsable",
     header: "Responsable",
     cell: (item) => item.responsable,
@@ -182,7 +157,6 @@ const columnDisplay = [
   { id: "codigo_proyecto", visible: true },
   { id: "titulo", visible: true },
   { id: "periodo", visible: true },
-  { id: "deuda", visible: true },
   { id: "responsable", visible: true },
   { id: "fecha_inscripcion", visible: true },
   { id: "estado", visible: true },
@@ -194,6 +168,8 @@ export default () => {
 
   const [loading, setLoading] = useState(true);
   const [loadingReport, setLoadingReport] = useState(false);
+  const [loadingIntegrantes, setLoadingIntegrantes] = useState(false);
+  const [integrantes, setIntegrantes] = useState([]);
   const [distributions, setDistribution] = useState([]);
   const {
     items,
@@ -229,8 +205,31 @@ export default () => {
   const getData = async () => {
     setLoading(true);
     const res = await axiosBase.get("facultad/listado/proyectos/listado");
-    setDistribution(res.data);
+    const data = res.data;
+    setDistribution(data);
     setLoading(false);
+  };
+
+  const getIntegrantes = async () => {
+    setLoadingIntegrantes(true);
+
+    const selected = collectionProps.selectedItems[0];
+    if (!selected?.id) {
+      setLoadingIntegrantes(false);
+      return;
+    }
+
+    const res = await axiosBase.get(
+      "facultad/listado/proyectos/listadoIntegrantes",
+      {
+        params: {
+          id: collectionProps.selectedItems[0].id
+        },
+      }
+    );
+    const data = res.data;
+    setIntegrantes(data);
+    setLoadingIntegrantes(false);
   };
 
   const exportExcel = async () => {
@@ -269,7 +268,15 @@ export default () => {
     getData();
   }, []);
 
+  useEffect(() => {
+    const selected = collectionProps.selectedItems[0];
+    if (!selected?.id) return;
+
+    getIntegrantes();
+  }, [collectionProps.selectedItems]);
+
   return (
+    <SpaceBetween size="l">
     <Table
       {...collectionProps}
       trackBy="id"
@@ -319,5 +326,73 @@ export default () => {
         </Box>
       }
     />
+    <Table
+      wrapLines
+      columnDefinitions={[
+        {
+          id: "doc_numero",
+          header: "N° de documento",
+          cell: (item) => item.doc_numero,
+        },
+        {
+          id: "apellido1",
+          header: "Apellido Paterno",
+          cell: (item) => item.apellido1,
+          width: 130,
+        },
+        {
+          id: "apellido2",
+          header: "Apellido Materno",
+          cell: (item) => item.apellido2,
+          width: 130,
+        },
+        {
+          id: "nombres",
+          header: "Nombres",
+          cell: (item) => item.nombres,
+          width: 130,
+        },
+        {
+          id: "condicion",
+          header: "Condición",
+          cell: (item) => item.condicion,
+          width: 180,
+        },
+        {
+          id: "licencia",
+          header: "Licencia",
+          cell: (item) => item.licencia,
+        },
+      ]}
+      columnDisplay={[
+        { id: "doc_numero", visible: true },
+        { id: "apellido1", visible: true },
+        { id: "apellido2", visible: true },
+        { id: "nombres", visible: true },
+        { id: "condicion", visible: true },
+        { id: "licencia", visible: true },
+      ]}
+      enableKeyboardNavigation
+      items={integrantes}
+      loadingText="Cargando datos"
+      loading={loadingIntegrantes}
+      resizableColumns
+      trackBy="id"
+      empty={
+        <Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
+          <SpaceBetween size="m">
+            <b>No hay registros...</b>
+          </SpaceBetween>
+        </Box>
+      }
+      header={
+        <Header
+          counter={`(${integrantes.length})`}
+        >
+          Integrantes
+        </Header>
+      }
+    />
+    </SpaceBetween>
   );
 };

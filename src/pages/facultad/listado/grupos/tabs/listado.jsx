@@ -113,7 +113,7 @@ const columnDefinitions = [
             : item.estado === "Observado"
             ? "severity-medium"
             : item.estado === "Registrado"
-            ? "blue"
+            ? "green"
             : item.estado === "Enviado"
             ? "grey"
             : item.estado === "En proceso"
