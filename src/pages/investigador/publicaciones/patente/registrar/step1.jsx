@@ -112,7 +112,7 @@ export default function Registrar_patente_1() {
           params: {
             id,
           },
-        }
+        },
       );
       const data = res.data;
       handleChange("titulo", data.titulo);
@@ -148,7 +148,7 @@ export default function Registrar_patente_1() {
       }
       const res = await axiosBase.post(
         "investigador/publicaciones/propiedadInt/registrar1",
-        form
+        form,
       );
       const info = res.data;
       if (info.message == "success") {
@@ -252,6 +252,8 @@ export default function Registrar_patente_1() {
                             { value: "Patente de invención" },
                             { value: "Modelo de utilidad" },
                             { value: "Certificado de obtentor" },
+                            { value: "Registro de software" },
+                            { value: "Paquete tecnológico" },
                           ]}
                         />
                       </FormField>

@@ -68,7 +68,7 @@ export default function Registrar_articulo_1() {
         params: {
           id: publicacion_id,
         },
-      }
+      },
     );
     const data = res.data;
     setData(data);

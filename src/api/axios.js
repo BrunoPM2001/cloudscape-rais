@@ -28,7 +28,7 @@ axiosBase.interceptors.response.use(
       console.error("Error: ", error.message);
     }
     return Promise.reject(error);
-  }
+  },
 );
 
 export default axiosBase;

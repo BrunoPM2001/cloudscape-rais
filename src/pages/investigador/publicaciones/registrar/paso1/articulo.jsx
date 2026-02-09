@@ -7,6 +7,7 @@ import {
   DatePicker,
   Form,
   FormField,
+  Grid,
   Header,
   Input,
   Multiselect,
@@ -45,6 +46,7 @@ const initialForm = {
   edicion: "",
   indexada: [],
   url: "",
+  cuartil: null,
 };
 
 const formRules = {
@@ -58,6 +60,7 @@ const formRules = {
   publicacion_nombre: { required: true },
   volumen: { required: true },
   edicion: { required: true },
+  cuartil: { required: true },
 };
 
 export default forwardRef(function (props, ref) {
@@ -101,7 +104,7 @@ export default forwardRef(function (props, ref) {
   //  Functions
   const listaRevistasIndexadas = async () => {
     const res = await axiosBase.get(
-      "investigador/publicaciones/utils/listadoRevistasIndexadas"
+      "investigador/publicaciones/utils/listadoRevistasIndexadas",
     );
     const data = res.data;
     setRevistasIndexadas(data);
@@ -115,7 +118,7 @@ export default forwardRef(function (props, ref) {
         params: {
           publicacion_id: props.publicacion_id,
         },
-      }
+      },
     );
     const data = res.data;
     setRevistasIndexadas(data.revistas);
@@ -125,6 +128,7 @@ export default forwardRef(function (props, ref) {
       art_tipo: { value: data.data.art_tipo },
       palabras_clave: data.palabras_clave,
       indexada: data.indexada,
+      cuartil: { value: data.detalles.cuartil },
     });
     setValue1(data.data.titulo);
     setValue2(data.data.doi);
@@ -138,14 +142,14 @@ export default forwardRef(function (props, ref) {
         if (props.publicacion_id != null) {
           const res = await axiosBase.post(
             "investigador/publicaciones/articulos/registrarPaso1",
-            { ...formValues, publicacion_id: props.publicacion_id }
+            { ...formValues, publicacion_id: props.publicacion_id },
           );
           const data = res.data;
           if (data.message == "error") {
             pushNotification(
               data.detail,
               data.message,
-              notifications.length + 1
+              notifications.length + 1,
             );
             setTimeout(() => {
               window.location.href = "/investigador";
@@ -156,14 +160,14 @@ export default forwardRef(function (props, ref) {
         } else {
           const res = await axiosBase.post(
             "investigador/publicaciones/articulos/registrarPaso1",
-            formValues
+            formValues,
           );
           const data = res.data;
           if (data.message == "error") {
             pushNotification(
               data.detail,
               data.message,
-              notifications.length + 1
+              notifications.length + 1,
             );
             setTimeout(() => {
               window.location.href = "/investigador";
@@ -377,37 +381,76 @@ export default forwardRef(function (props, ref) {
               </FormField>
             </ColumnLayout>
             <Header>Datos de la revista</Header>
-            <FormField
-              label="Revista"
-              stretch
-              errorText={formErrors.publicacion_nombre}
+            <Grid
+              gridDefinition={[
+                {
+                  colspan: {
+                    default: 12,
+                    l: 9,
+                    m: 9,
+                    s: 9,
+                    xs: 9,
+                  },
+                },
+                {
+                  colspan: {
+                    default: 12,
+                    l: 3,
+                    m: 3,
+                    s: 3,
+                    xs: 3,
+                  },
+                },
+              ]}
             >
-              <Autosuggest
-                onChange={({ detail }) => {
-                  setOptions3([]);
-                  setValue3(detail.value);
-                  handleChange("publicacion_nombre", detail.value);
-                }}
-                onSelect={({ detail }) => {
-                  console.log(detail);
-                  if (detail.selectedOption?.value != undefined) {
-                    const { value, ...rest } = detail.selectedOption;
-                    handleChange("publicacion_nombre", rest.revista);
-                    handleChange("issn", rest.issn);
-                    handleChange("issn_e", rest.issne);
-                    setAvoidSelect3(false);
-                  } else {
+              <FormField
+                label="Revista"
+                stretch
+                errorText={formErrors.publicacion_nombre}
+              >
+                <Autosuggest
+                  onChange={({ detail }) => {
+                    setOptions3([]);
+                    setValue3(detail.value);
                     handleChange("publicacion_nombre", detail.value);
-                  }
-                }}
-                value={value3}
-                options={options3}
-                loadingText="Cargando data"
-                placeholder="Issn, issn-e o nombre de la revista"
-                statusType={loading3 ? "loading" : "finished"}
-                empty="No se encontraron resultados"
-              />
-            </FormField>
+                  }}
+                  onSelect={({ detail }) => {
+                    console.log(detail);
+                    if (detail.selectedOption?.value != undefined) {
+                      const { value, ...rest } = detail.selectedOption;
+                      handleChange("publicacion_nombre", rest.revista);
+                      handleChange("issn", rest.issn);
+                      handleChange("issn_e", rest.issne);
+                      setAvoidSelect3(false);
+                    } else {
+                      handleChange("publicacion_nombre", detail.value);
+                    }
+                  }}
+                  value={value3}
+                  options={options3}
+                  loadingText="Cargando data"
+                  placeholder="Issn, issn-e o nombre de la revista"
+                  statusType={loading3 ? "loading" : "finished"}
+                  empty="No se encontraron resultados"
+                />
+              </FormField>
+              <FormField label="Cuartil" stretch errorText={formErrors.cuartil}>
+                <Select
+                  placeholder="Escoja una opción"
+                  selectedOption={formValues.cuartil}
+                  onChange={({ detail }) => {
+                    handleChange("cuartil", detail.selectedOption);
+                  }}
+                  options={[
+                    { value: "Sin cuartil asignado" },
+                    { value: "Cuartil Q1" },
+                    { value: "Cuartil Q2" },
+                    { value: "Cuartil Q3" },
+                    { value: "Cuartil Q4" },
+                  ]}
+                />
+              </FormField>
+            </Grid>
             <ColumnLayout columns={4}>
               <FormField label="ISSN" stretch errorText={formErrors.issn}>
                 <Input
