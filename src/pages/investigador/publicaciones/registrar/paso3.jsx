@@ -114,7 +114,7 @@ export default function ({
         { text: "Estudiante", id: "action_2_2" },
         { text: "Externo", id: "action_2_3" },
       ]);
-    } else if (["libro", "capitulo", "evento"].includes(tipo)) {
+    } else if (["libro", "capitulo_libro", "evento"].includes(tipo)) {
       setOptAutor([{ value: "Autor" }]);
       setTipoAutor([
         { text: "Docente", id: "action_2_1" },
@@ -192,16 +192,16 @@ export default function ({
                         setOptAutor([{ value: "Asesor" }]);
                       }
                       setTypeModal("add_docente");
-                      setVisible(true);
+                      //setVisible(true);
                     } else if (detail.id == "action_2_2") {
                       if (tipo == "tesis_asesoria") {
                         setOptAutor([{ value: "Tesista" }]);
                       }
                       setTypeModal("add_estudiante");
-                      setVisible(true);
+                      //setVisible(true);
                     } else if (detail.id == "action_2_3") {
                       setTypeModal("add_externo");
-                      setVisible(true);
+                      //setVisible(true);
                     }
                   }}
                   items={tipoAutor}
