@@ -29,7 +29,6 @@ const initialForm = {
   nro_expediente: "",
   fecha_presentacion: "",
   fecha_publicacion: "",
-  fecha_presentacion: "",
   fecha_otorgamiento: "",
   enlace: "",
   url: "",
