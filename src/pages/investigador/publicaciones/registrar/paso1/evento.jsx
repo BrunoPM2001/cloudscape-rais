@@ -71,8 +71,18 @@ const optsPresentacion = [
 ];
 
 const optsTipos = [
-  { value: "Conference Proceedings" },
-  { value: "Resumen en evento científico" },
+  {
+    label: " Conferencias en congresos indizados",
+    options: [{ value: "Conference Proceedings" }],
+  },
+  {
+    label: "Resumen en evento científico",
+    options: [
+      { value: "Poster" },
+      { value: "Simple" },
+      { value: "En extenso" },
+    ],
+  },
 ];
 
 export default forwardRef(function (props, ref) {

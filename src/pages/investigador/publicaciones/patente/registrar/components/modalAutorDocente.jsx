@@ -29,7 +29,7 @@ const formRules = {
   condicion: { required: true },
 };
 
-export default ({ id, close, reload }) => {
+export default ({ id, close, reload, opt }) => {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
 
@@ -52,7 +52,7 @@ export default ({ id, close, reload }) => {
           ...formValues,
           tipo: "docente",
           id,
-        }
+        },
       );
       const data = res.data;
       setLoadingCreate(false);
@@ -137,7 +137,7 @@ export default ({ id, close, reload }) => {
               onChange={({ detail }) => {
                 handleChange("condicion", detail.selectedOption);
               }}
-              options={[{ value: "Autor" }, { value: "Inventor" }]}
+              options={[opt]}
             />
           </FormField>
         </SpaceBetween>

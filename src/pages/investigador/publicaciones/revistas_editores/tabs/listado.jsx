@@ -8,7 +8,6 @@ import {
   PropertyFilter,
   SpaceBetween,
   Table,
-  Link,
 } from "@cloudscape-design/components";
 import { useState, useEffect } from "react";
 import { useCollection } from "@cloudscape-design/collection-hooks";
@@ -34,9 +33,45 @@ const FILTER_PROPS = [
     operators: stringOperators,
   },
   {
-    propertyLabel: "Puntaje",
-    key: "puntaje",
-    groupValuesLabel: "Puntajes",
+    propertyLabel: "ISSN",
+    key: "issn",
+    groupValuesLabel: "ISSN",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "ISSN-E",
+    key: "issne",
+    groupValuesLabel: "ISSN-E",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "ISSN-E",
+    key: "issne",
+    groupValuesLabel: "ISSN-E",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "Casa",
+    key: "casa",
+    groupValuesLabel: "Casa",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "Fecha de inicio",
+    key: "fecha_inicio",
+    groupValuesLabel: "Fecha de inicio",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "Fecha de fin",
+    key: "fecha_fin",
+    groupValuesLabel: "Fecha de fin",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "País",
+    key: "pais",
+    groupValuesLabel: "Países",
     operators: stringOperators,
   },
   {
@@ -63,55 +98,65 @@ const columnDefinitions = [
     minWidth: 200,
   },
   {
-    id: "puntaje",
-    header: "Puntaje",
-    cell: (item) => item.puntaje,
-    sortingField: "puntaje",
+    id: "issn",
+    header: "ISSN",
+    cell: (item) => item.issn,
+    sortingField: "issn",
+    minWidth: 100,
   },
   {
-    id: "observaciones_usuario",
-    header: "Observaciones",
-    cell: (item) => item.observaciones_usuario,
-    sortingField: "observaciones_usuario",
-    minWidth: 400,
+    id: "issne",
+    header: "ISSN-E",
+    cell: (item) => item.issne,
+    sortingField: "issne",
+    minWidth: 100,
+  },
+  {
+    id: "casa",
+    header: "Casa",
+    cell: (item) => item.casa,
+    sortingField: "casa",
+    minWidth: 200,
+  },
+  {
+    id: "fecha_inicio",
+    header: "Fecha de inicio",
+    cell: (item) => item.fecha_inicio,
+    sortingField: "fecha_inicio",
+    minWidth: 200,
+  },
+  {
+    id: "fecha_fin",
+    header: "Fecha de fin",
+    cell: (item) => item.fecha_fin,
+    sortingField: "fecha_fin",
+    minWidth: 200,
+  },
+  {
+    id: "pais",
+    header: "País",
+    cell: (item) => item.pais,
+    sortingField: "pais",
+    minWidth: 200,
   },
   {
     id: "estado",
     header: "Estado",
-    cell: (item) => (
-      <Badge
-        color={
-          item.estado == "Eliminado"
-            ? "red"
-            : item.estado == "Registrado"
-              ? "green"
-              : item.estado == "Observado"
-                ? "grey"
-                : item.estado == "Enviado"
-                  ? "blue"
-                  : item.estado == "En proceso"
-                    ? "grey"
-                    : item.estado == "Anulado"
-                      ? "red"
-                      : item.estado == "No registrado"
-                        ? "grey"
-                        : item.estado == "Duplicado"
-                          ? "red"
-                          : "grey"
-        }
-      >
-        {item.estado}
-      </Badge>
-    ),
+    cell: (item) => item.estado,
     sortingField: "estado",
+    minWidth: 200,
   },
 ];
 
 const columnDisplay = [
   { id: "id", visible: true },
   { id: "revista", visible: true },
-  { id: "puntaje", visible: true },
-  { id: "observaciones_usuario", visible: true },
+  { id: "issn", visible: true },
+  { id: "issne", visible: true },
+  { id: "casa", visible: true },
+  { id: "fecha_inicio", visible: true },
+  { id: "fecha_fin", visible: true },
+  { id: "pais", visible: true },
   { id: "estado", visible: true },
 ];
 
@@ -158,7 +203,7 @@ export default () => {
       "investigador/publicaciones/revistas/listado",
     );
     const data = res.data;
-    setDistribution(data.data);
+    setDistribution(data);
     setLoading(false);
   };
 
@@ -184,61 +229,15 @@ export default () => {
         header={
           <Header
             actions={
-              <SpaceBetween direction="horizontal" size="s">
-                <ButtonDropdown
-                  loading={loadingBtn}
-                  disabled={collectionProps.selectedItems.length == 0}
-                  onItemClick={async ({ detail }) => {
-                    if (detail.id == "action_1") {
-                      const query = queryString.stringify({
-                        publicacion_id: collectionProps.selectedItems[0].id,
-                        tipo: "revista",
-                      });
-                      window.location.href =
-                        "registrar/paso" +
-                        collectionProps.selectedItems[0].step +
-                        "?" +
-                        query;
-                    } else if (detail.id == "action_2") {
-                      setModal("eliminarPublicacion");
-                    }
-                  }}
-                  items={[
-                    {
-                      text: "Editar",
-                      id: "action_1",
-                      disabled:
-                        collectionProps.selectedItems[0]?.estado !=
-                          "Observado" &&
-                        collectionProps.selectedItems[0]?.estado != "En proceso"
-                          ? true
-                          : false,
-                    },
-                    {
-                      text: "Eliminar",
-                      id: "action_2",
-                      disabled:
-                        collectionProps.selectedItems[0]?.estado != "En proceso"
-                          ? true
-                          : false,
-                    },
-                  ]}
-                >
-                  Acciones para revista
-                </ButtonDropdown>
-                <Button
-                  loading={loadingBtn}
-                  variant="primary"
-                  onClick={() => {
-                    const query = queryString.stringify({
-                      tipo: "revista",
-                    });
-                    window.location.href = "revistas_editores/registrar";
-                  }}
-                >
-                  Registrar
-                </Button>
-              </SpaceBetween>
+              <Button
+                loading={loadingBtn}
+                variant="primary"
+                onClick={() => {
+                  window.location.href = "revistas_editores/registrar";
+                }}
+              >
+                Registrar
+              </Button>
             }
           >
             Revistas ({distributions.length})

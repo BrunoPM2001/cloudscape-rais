@@ -1,5 +1,6 @@
 import {
   Button,
+  Checkbox,
   ColumnLayout,
   Container,
   DatePicker,
@@ -33,21 +34,23 @@ const breadcrumbs = [
 ];
 
 const initialForm = {
-  nombre: "",
+  revista: "",
   casa: "",
   issn: "",
-  issn_e: "",
+  issne: "",
   pais: "",
   fecha_inicio: "",
+  fecha_fin: "",
 };
 
 const formRules = {
-  nombre: { required: true },
+  revista: { required: true },
   casa: { required: true },
   issn: { required: true },
-  issn_e: { required: true },
+  issne: { required: true },
   pais: { required: true },
   fecha_inicio: { required: true },
+  fecha_fin: { required: false },
 };
 
 export default function Revistas_editores_registro() {
@@ -57,6 +60,7 @@ export default function Revistas_editores_registro() {
   //  State
   const [creating, setCreating] = useState(false);
   const [paises, setPaises] = useState([]);
+  const [currentEditor, setCurrentEditor] = useState(false);
 
   //  Hooks
   const { formValues, formErrors, handleChange, validateForm } =
@@ -75,12 +79,15 @@ export default function Revistas_editores_registro() {
     if (validateForm()) {
       setCreating(true);
       const res = await axiosBase.post(
-        "investigador/publicaciones/eventos/registrarPaso1",
+        "investigador/publicaciones/revistas/registrar",
         formValues,
       );
       const data = res.data;
       setCreating(false);
       pushNotification(data.detail, data.message, notifications.length + 1);
+      if (data.message == "success") {
+        window.location.href = "../revistas_editores";
+      }
     }
   };
 
@@ -91,7 +98,7 @@ export default function Revistas_editores_registro() {
   return (
     <BaseLayout
       breadcrumbs={breadcrumbs}
-      header="Revistas en las que puede nombrarse como editor"
+      header="Registro de solicitud como editor"
       helpInfo="Información sobre la páginal actual para poder mostrarla al público
       en general."
       contentType="form"
@@ -100,6 +107,7 @@ export default function Revistas_editores_registro() {
         <Form
           header={
             <Header
+              description="Por favor sea preciso ya que esta información se validará"
               actions={
                 <Button
                   variant="primary"
@@ -118,12 +126,12 @@ export default function Revistas_editores_registro() {
             <FormField
               label="Nombre de la revista"
               stretch
-              errorText={formErrors.nombre}
+              errorText={formErrors.revista}
             >
               <Input
                 placeholder="Escriba el nombre de la revista"
-                value={formValues.nombre}
-                onChange={({ detail }) => handleChange("nombre", detail.value)}
+                value={formValues.revista}
+                onChange={({ detail }) => handleChange("revista", detail.value)}
               />
             </FormField>
             <FormField
@@ -137,7 +145,8 @@ export default function Revistas_editores_registro() {
                 onChange={({ detail }) => handleChange("casa", detail.value)}
               />
             </FormField>
-            <ColumnLayout columns={4}>
+
+            <ColumnLayout columns={3}>
               <FormField label="ISSN" stretch errorText={formErrors.issn}>
                 <Input
                   placeholder="Escriba el ISSN"
@@ -145,13 +154,11 @@ export default function Revistas_editores_registro() {
                   onChange={({ detail }) => handleChange("issn", detail.value)}
                 />
               </FormField>
-              <FormField label="ISSN-E" stretch errorText={formErrors.issn_e}>
+              <FormField label="ISSN-E" stretch errorText={formErrors.issne}>
                 <Input
                   placeholder="Escriba el ISSN-E"
-                  value={formValues.issn_e}
-                  onChange={({ detail }) =>
-                    handleChange("issn_e", detail.value)
-                  }
+                  value={formValues.issne}
+                  onChange={({ detail }) => handleChange("issne", detail.value)}
                 />
               </FormField>
               <FormField label="País" stretch errorText={formErrors.pais}>
@@ -166,9 +173,10 @@ export default function Revistas_editores_registro() {
                   options={paises}
                 />
               </FormField>
+            </ColumnLayout>
+            <ColumnLayout columns={2}>
               <FormField
                 label="Fecha de inicio como editor"
-                constraintText="Por favor sea preciso ya que esta información se validará"
                 stretch
                 errorText={formErrors.fecha_inicio}
               >
@@ -178,6 +186,58 @@ export default function Revistas_editores_registro() {
                   onChange={({ detail }) =>
                     handleChange("fecha_inicio", detail.value)
                   }
+                  isDateEnabled={(date) => {
+                    if (formValues.fecha_fin != "") {
+                      const newDate = new Date(formValues.fecha_fin);
+                      return date < newDate;
+                    } else {
+                      return true;
+                    }
+                  }}
+                  dateDisabledReason={() => {
+                    return "La fecha inicial no puede ser mayor a la fecha final";
+                  }}
+                />
+              </FormField>
+              <FormField
+                label="Fecha de fin como editor"
+                constraintText={
+                  <SpaceBetween
+                    direction="horizontal"
+                    alignItems="center"
+                    size="xxs"
+                  >
+                    <Checkbox
+                      checked={currentEditor}
+                      onChange={() => {
+                        setCurrentEditor(!currentEditor);
+                        handleChange("fecha_fin", "");
+                      }}
+                    />
+                    <>Marque si es editor actualmente</>
+                  </SpaceBetween>
+                }
+                stretch
+                errorText={formErrors.fecha_fin}
+              >
+                <DatePicker
+                  placeholder="YYYY/MM/DD"
+                  value={formValues.fecha_fin}
+                  onChange={({ detail }) =>
+                    handleChange("fecha_fin", detail.value)
+                  }
+                  disabled={currentEditor}
+                  isDateEnabled={(date) => {
+                    if (formValues.fecha_inicio != "") {
+                      const newDate = new Date(formValues.fecha_inicio);
+                      return date > newDate;
+                    } else {
+                      return true;
+                    }
+                  }}
+                  dateDisabledReason={() => {
+                    return "La fecha final no puede ser menor a la fecha inicial";
+                  }}
                 />
               </FormField>
             </ColumnLayout>

@@ -10,7 +10,9 @@ import {
   Grid,
   Header,
   Input,
+  Link,
   Multiselect,
+  Popover,
   Select,
   SpaceBetween,
   Spinner,
@@ -47,6 +49,8 @@ const initialForm = {
   indexada: [],
   url: "",
   cuartil: null,
+  filiacion: null,
+  filiacion_unica: null,
 };
 
 const formRules = {
@@ -61,7 +65,20 @@ const formRules = {
   volumen: { required: true },
   edicion: { required: true },
   cuartil: { required: true },
+  filiacion: { required: true },
+  filiacion_unica: { required: true },
 };
+
+const optFiliacion = [
+  {
+    value: "1",
+    label: "Sí",
+  },
+  {
+    value: "0",
+    label: "No",
+  },
+];
 
 export default forwardRef(function (props, ref) {
   //  Context
@@ -377,6 +394,54 @@ export default forwardRef(function (props, ref) {
                   onChange={({ detail }) =>
                     handleChange("fecha_publicacion", detail.value)
                   }
+                />
+              </FormField>
+            </ColumnLayout>
+            <ColumnLayout columns={2}>
+              <FormField
+                label="Filiación"
+                info={
+                  <Popover
+                    header="Descripción"
+                    content="En caso la publicación presente filiación con San Marcos"
+                    triggerType="custom"
+                  >
+                    <Link variant="info">Info</Link>
+                  </Popover>
+                }
+                stretch
+                errorText={formErrors.filiacion}
+              >
+                <Select
+                  placeholder="Escoja una opción"
+                  selectedOption={formValues.filiacion}
+                  onChange={({ detail }) => {
+                    handleChange("filiacion", detail.selectedOption);
+                  }}
+                  options={optFiliacion}
+                />
+              </FormField>
+              <FormField
+                label="Filiación única con UNMSM"
+                info={
+                  <Popover
+                    header="Descripción"
+                    content="En caso la publicación solo presente filiación con una institución"
+                    triggerType="custom"
+                  >
+                    <Link variant="info">Info</Link>
+                  </Popover>
+                }
+                stretch
+                errorText={formErrors.filiacion_unica}
+              >
+                <Select
+                  placeholder="Escoja una opción"
+                  selectedOption={formValues.filiacion_unica}
+                  onChange={({ detail }) => {
+                    handleChange("filiacion_unica", detail.selectedOption);
+                  }}
+                  options={optFiliacion}
                 />
               </FormField>
             </ColumnLayout>

@@ -1,8 +1,6 @@
 import {
   Box,
   Button,
-  ColumnLayout,
-  DatePicker,
   FormField,
   Input,
   Modal,
@@ -38,7 +36,7 @@ export default ({ close, reload, id }) => {
       setLoading(true);
       const res = await axiosBase.post(
         "investigador/publicaciones/propiedadInt/addTitular",
-        { ...formValues, id }
+        { ...formValues, id },
       );
       const data = res.data;
       pushNotification(data.detail, data.message, notifications.length + 1);

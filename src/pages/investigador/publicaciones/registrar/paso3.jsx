@@ -85,7 +85,7 @@ export default function ({
       pagination: { pageSize: 10 },
       sorting: { defaultState: { sortingColumn: columnDefinitions[0] } },
       selection: {},
-    }
+    },
   );
 
   //  Function
@@ -97,7 +97,7 @@ export default function ({
         params: {
           publicacion_id: publicacion_id,
         },
-      }
+      },
     );
     const data = res.data;
     setDistribution(data.listado);
@@ -108,7 +108,11 @@ export default function ({
   //  Effect
   useEffect(() => {
     if (tipo == "articulo") {
-      setOptAutor([{ value: "Autor" }, { value: "Autor de correspondencia" }]);
+      setOptAutor([
+        { value: "Autor" },
+        { value: "Autor de correspondencia" },
+        { value: "Editor" },
+      ]);
       setTipoAutor([
         { text: "Docente", id: "action_2_1" },
         { text: "Estudiante", id: "action_2_2" },

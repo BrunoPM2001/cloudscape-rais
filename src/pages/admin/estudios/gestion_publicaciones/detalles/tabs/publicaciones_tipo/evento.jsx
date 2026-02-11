@@ -22,6 +22,7 @@ import NotificationContext from "../../../../../../../providers/notificationProv
 const initialForm = {
   titulo: "",
   tipo_presentacion: null,
+  tipo_evento: null,
   palabras_clave_input: "",
   palabras_clave: [],
   publicacion_nombre: "",
@@ -45,6 +46,7 @@ const initialForm = {
 const formRules = {
   titulo: { required: true },
   tipo_presentacion: { required: true },
+  tipo_evento: { required: true },
   palabras_clave: { required: true, noEmpty: true },
   publicacion_nombre: { required: true },
   volumen: { required: true },
@@ -71,6 +73,21 @@ const optsPresentacion = [
   { value: "Poster" },
 ];
 
+const optsTipos = [
+  {
+    label: " Conferencias en congresos indizados",
+    options: [{ value: "Conference Proceedings" }],
+  },
+  {
+    label: "Resumen en evento científico",
+    options: [
+      { value: "Poster" },
+      { value: "Simple" },
+      { value: "En extenso" },
+    ],
+  },
+];
+
 export default function ({ data, setData }) {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
@@ -94,6 +111,7 @@ export default function ({ data, setData }) {
       ...initialForm,
       ...data.data,
       tipo_presentacion: { value: data.data.tipo_presentacion },
+      tipo_evento: { value: data.detalles.tipo_evento },
       pais: { value: data.data.pais },
       palabras_clave: data.palabras_clave,
     });
@@ -153,27 +171,43 @@ export default function ({ data, setData }) {
               }}
             />
           </FormField>
-          <FormField
-            label="Tipo de presentación"
-            stretch
-            errorText={formErrors.tipo_presentacion}
-          >
-            <Select
-              placeholder="Escoja una opción"
-              selectedOption={formValues.tipo_presentacion}
-              onChange={({ detail }) => {
-                handleChange("tipo_presentacion", detail.selectedOption);
-                setData({
-                  ...data,
-                  data: {
-                    ...data.data,
-                    tipo_presentacion: detail.selectedOption.value,
-                  },
-                });
-              }}
-              options={optsPresentacion}
-            />
-          </FormField>
+          <ColumnLayout columns={2}>
+            <FormField
+              label="Tipo de presentación"
+              stretch
+              errorText={formErrors.tipo_presentacion}
+            >
+              <Select
+                placeholder="Escoja una opción"
+                selectedOption={formValues.tipo_presentacion}
+                onChange={({ detail }) => {
+                  handleChange("tipo_presentacion", detail.selectedOption);
+                  setData({
+                    ...data,
+                    data: {
+                      ...data.data,
+                      tipo_presentacion: detail.selectedOption.value,
+                    },
+                  });
+                }}
+                options={optsPresentacion}
+              />
+            </FormField>
+            <FormField
+              label="Tipo de publicación"
+              stretch
+              errorText={formErrors.tipo_evento}
+            >
+              <Select
+                placeholder="Escoja una opción"
+                selectedOption={formValues.tipo_evento}
+                onChange={({ detail }) =>
+                  handleChange("tipo_evento", detail.selectedOption)
+                }
+                options={optsTipos}
+              />
+            </FormField>
+          </ColumnLayout>
           <FormField
             label="Palabras clave"
             description="Presionar la tecla de enter para añadir una palabra"

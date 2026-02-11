@@ -41,16 +41,19 @@ const columnDefinitions = [
     id: "condicion",
     header: "Tipo",
     cell: (item) => item.condicion,
+    minWidth: 150,
   },
   {
     id: "nombres",
     header: "Nombres",
     cell: (item) => item.nombres,
+    minWidth: 250,
   },
   {
     id: "tipo",
     header: "Condición",
     cell: (item) => item.tipo,
+    minWidth: 150,
   },
   {
     id: "es_presentador",
@@ -60,6 +63,7 @@ const columnDefinitions = [
         {item.es_presentador == 1 ? "Sí" : "No"}
       </Badge>
     ),
+    minWidth: 150,
   },
 ];
 
@@ -78,6 +82,7 @@ export default function Registrar_patente_3() {
   //  States
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
+  const [opts, setOpts] = useState({});
   const [type, setType] = useState("");
   const { items, actions, collectionProps } = useCollection(data, {
     sorting: {},
@@ -93,9 +98,17 @@ export default function Registrar_patente_3() {
         params: {
           id,
         },
-      }
+      },
     );
-    const data = res.data;
+    const data = res.data.listado;
+    if (
+      res.data.tipo == "Paquete tecnológico" ||
+      res.data.tipo == "Registro de software"
+    ) {
+      setOpts({ value: "Autor" });
+    } else {
+      setOpts({ value: "Inventor" });
+    }
     setData(data);
     setLoading(false);
   };
@@ -140,8 +153,8 @@ export default function Registrar_patente_3() {
               description: "Listado de titulares",
             },
             {
-              title: "Autores de la patente",
-              description: "Listado de autores de esta patente",
+              title: "Creadores de la patente",
+              description: "Listado de creadores de esta patente",
               content: (
                 <>
                   <Table
@@ -224,6 +237,7 @@ export default function Registrar_patente_3() {
                       close={() => setType("")}
                       reload={getData}
                       id={id}
+                      opt={opts}
                     />
                   ) : type == "estudiante" ? (
                     <ModalAutorEstudiante
@@ -236,6 +250,7 @@ export default function Registrar_patente_3() {
                       close={() => setType("")}
                       reload={getData}
                       id={id}
+                      opt={opts}
                     />
                   ) : (
                     type == "delete" && (

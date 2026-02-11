@@ -1,35 +1,43 @@
 import {
   Box,
   Button,
-  FormField,
-  Input,
   Modal,
-  Select,
   SpaceBetween,
 } from "@cloudscape-design/components";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import axiosBase from "../../../../../api/axios";
-import { useFormValidation } from "../../../../../hooks/useFormValidation";
 import NotificationContext from "../../../../../providers/notificationProvider";
+import RuleTree from "../metas/metasTree";
+import { queryToTree } from "../metas/helpers";
 
-const opt_publicaciones = [
-  { value: "articulo", label: "Artículo" },
-  { value: "capitulo", label: "Capítulo" },
-  { value: "evento", label: "R. en evento científico" },
-  { value: "libro", label: "Libro" },
-  { value: "tesis", label: "Tesis propia" },
-  { value: "tesis-asesoria", label: "Tesis asesoria" },
-  { value: "patente", label: "Patente" },
-];
+const newGroup = (children = [newCondition()]) => ({
+  id: crypto.randomUUID(),
+  type: "group",
+  operator: "AND",
+  children,
+});
 
-const initialForm = {
-  tipo_publicacion: null,
-  cantidad: 0,
-};
+const newCondition = () => ({
+  id: crypto.randomUUID(),
+  type: "condition",
+  key: "Artículo",
+  number: 0,
+});
 
-const formRules = {
-  tipo_publicacion: { required: true },
-  cantidad: { required: true },
+const treeToQuery = (node, isRoot = false) => {
+  if (node.type === "condition") {
+    return `${node.key} = ${node.number}`;
+  }
+
+  const parts = node.children
+    .map((child) => treeToQuery(child))
+    .filter(Boolean);
+
+  if (parts.length === 0) return "";
+
+  const joined = parts.join(` ${node.operator} `);
+
+  return isRoot ? `(${joined})` : `(${joined})`;
 };
 
 export default ({ close, reload, item }) => {
@@ -38,37 +46,31 @@ export default ({ close, reload, item }) => {
 
   //  States
   const [loading, setLoading] = useState(false);
-
-  //  Hooks
-  const { formValues, formErrors, handleChange, validateForm } =
-    useFormValidation(initialForm, formRules);
+  const [tree, setTree] = useState(() => newGroup());
+  const query = useMemo(() => treeToQuery(tree, true), [tree]);
 
   //  Functions
-  const getData = () => {
-    handleChange(
-      "tipo_publicacion",
-      opt_publicaciones.find((opt) => opt.value == item.tipo_publicacion)
-    );
-    handleChange("cantidad", item.cantidad);
-  };
   const editar = async () => {
-    if (validateForm()) {
-      setLoading(true);
-      const res = await axiosBase.put("admin/estudios/monitoreo/editarMeta", {
-        id: item.id,
-        tipo_publicacion: formValues.tipo_publicacion.value,
-        cantidad: formValues.cantidad,
-      });
-      const data = res.data;
-      pushNotification(data.detail, data.message, notifications.length + 1);
-      setLoading(false);
-      close();
-      reload();
-    }
+    setLoading(true);
+    const res = await axiosBase.post("admin/estudios/monitoreo/editarMeta", {
+      meta_tipo_proyecto: item.id,
+      condicion: query,
+    });
+    const data = res.data;
+    pushNotification(data.detail, data.message, notifications.length + 1);
+    setLoading(false);
+    close();
+    reload();
   };
 
   useEffect(() => {
-    getData();
+    if (!item.condicion || item.condicion.trim() === "") return;
+
+    const parsedTree = queryToTree(item.condicion);
+
+    if (parsedTree) {
+      setTree(parsedTree);
+    }
   }, []);
 
   return (
@@ -88,27 +90,7 @@ export default ({ close, reload, item }) => {
         </Box>
       }
     >
-      <SpaceBetween size="m">
-        <FormField
-          label="Tipo de publicacion"
-          errorText={formErrors.tipo_publicacion}
-          stretch
-        >
-          <Select
-            disabled
-            placeholder="Escoja una opción"
-            selectedOption={formValues.tipo_publicacion}
-            options={opt_publicaciones}
-          />
-        </FormField>
-        <FormField label="Cantidad" errorText={formErrors.cantidad} stretch>
-          <Input
-            type="number"
-            value={formValues.cantidad}
-            onChange={({ detail }) => handleChange("cantidad", detail.value)}
-          />
-        </FormField>
-      </SpaceBetween>
+      <RuleTree value={tree} onChange={setTree} />
     </Modal>
   );
 };

@@ -28,7 +28,9 @@ const initialForm = {
   tipo: null,
   nro_expediente: "",
   fecha_presentacion: "",
-  oficina_presentacion: "",
+  fecha_publicacion: "",
+  fecha_presentacion: "",
+  fecha_otorgamiento: "",
   enlace: "",
   url: "",
   comentario: "",
@@ -53,9 +55,11 @@ const opt_estado = [
 ];
 
 const opt_tipo = [
+  { value: "Paquete tecnológico" },
   { value: "Patente de invención" },
-  { value: "Modelo de utilidad" },
   { value: "Certificado de obtentor" },
+  { value: "Modelo de utilidad" },
+  { value: "Registro de software" },
 ];
 
 export default ({ id }) => {
@@ -85,6 +89,8 @@ export default ({ id }) => {
       comentario: data.comentario ?? "",
       observaciones_usuario: data.observaciones_usuario ?? "",
       fecha_presentacion: data.fecha_presentacion ?? "",
+      fecha_publicacion: data.fecha_publicacion ?? "",
+      fecha_otorgamiento: data.fecha_otorgamiento ?? "",
       tipo: opt_tipo.find((opt) => opt.value == data.tipo),
       estado: opt_estado.find((opt) => opt.value == data.estado),
       file: [],
@@ -117,20 +123,22 @@ export default ({ id }) => {
       form.append("tipo", formValues.tipo.value);
       form.append("nro_expediente", formValues.nro_expediente ?? "");
       form.append("fecha_presentacion", formValues.fecha_presentacion ?? "");
+      form.append("fecha_publicacion", formValues.fecha_publicacion ?? "");
+      form.append("fecha_otorgamiento", formValues.fecha_otorgamiento ?? "");
       form.append(
         "oficina_presentacion",
-        formValues.oficina_presentacion ?? ""
+        formValues.oficina_presentacion ?? "",
       );
       form.append("enlace", formValues.enlace ?? "");
       form.append("comentario", formValues.comentario ?? "");
       form.append(
         "observaciones_usuario",
-        formValues.observaciones_usuario ?? ""
+        formValues.observaciones_usuario ?? "",
       );
       form.append("file", formValues.file[0]);
       const res = await axiosBase.post(
         "admin/estudios/patentes/updateDetalle",
-        form
+        form,
       );
       const data = res.data;
       pushNotification(data.detail, data.message, notifications.length + 1);
@@ -239,6 +247,30 @@ export default ({ id }) => {
                 value={formValues.fecha_presentacion}
                 onChange={({ detail }) =>
                   handleChange("fecha_presentacion", detail.value)
+                }
+              />
+            </FormField>
+            <FormField
+              label="Fecha de publicación"
+              stretch
+              errorText={formErrors.fecha_publicacion}
+            >
+              <DatePicker
+                value={formValues.fecha_publicacion}
+                onChange={({ detail }) =>
+                  handleChange("fecha_publicacion", detail.value)
+                }
+              />
+            </FormField>
+            <FormField
+              label="Fecha de otorgamiento de la patente"
+              stretch
+              errorText={formErrors.fecha_otorgamiento}
+            >
+              <DatePicker
+                value={formValues.fecha_otorgamiento}
+                onChange={({ detail }) =>
+                  handleChange("fecha_otorgamiento", detail.value)
                 }
               />
             </FormField>

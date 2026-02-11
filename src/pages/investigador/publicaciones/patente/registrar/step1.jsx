@@ -65,6 +65,8 @@ const initialForm = {
   nro_expediente: "",
   fecha_presentacion: "",
   oficina_presentacion: "",
+  fecha_publicacion: "",
+  fecha_otorgamiento: "",
   enlace: "",
   file: [],
 };
@@ -74,6 +76,8 @@ const formRules = {
   nro_registro: { required: true },
   tipo: { required: true },
   fecha_presentacion: { required: true },
+  fecha_publicacion: { required: true },
+  fecha_otorgamiento: { required: true },
 };
 
 export default function Registrar_patente_1() {
@@ -121,6 +125,8 @@ export default function Registrar_patente_1() {
       handleChange("nro_expediente", data.nro_expediente);
       handleChange("fecha_presentacion", data.fecha_presentacion);
       handleChange("oficina_presentacion", data.oficina_presentacion);
+      handleChange("fecha_publicacion", data.fecha_publicacion);
+      handleChange("fecha_otorgamiento", data.fecha_otorgamiento);
       handleChange("enlace", data.enlace);
       if (data.url) {
         setUrl(data.url);
@@ -141,6 +147,8 @@ export default function Registrar_patente_1() {
       form.append("nro_expediente", formValues.nro_expediente);
       form.append("fecha_presentacion", formValues.fecha_presentacion);
       form.append("oficina_presentacion", formValues.oficina_presentacion);
+      form.append("fecha_publicacion", formValues.fecha_publicacion);
+      form.append("fecha_otorgamiento", formValues.fecha_otorgamiento);
       form.append("enlace", formValues.enlace);
       form.append("file", formValues.file[0]);
       if (id) {
@@ -249,11 +257,11 @@ export default function Registrar_patente_1() {
                             handleChange("tipo", detail.selectedOption)
                           }
                           options={[
-                            { value: "Patente de invención" },
-                            { value: "Modelo de utilidad" },
-                            { value: "Certificado de obtentor" },
-                            { value: "Registro de software" },
                             { value: "Paquete tecnológico" },
+                            { value: "Patente de invención" },
+                            { value: "Certificado de obtentor" },
+                            { value: "Modelo de utilidad" },
+                            { value: "Registro de software" },
                           ]}
                         />
                       </FormField>
@@ -304,6 +312,30 @@ export default function Registrar_patente_1() {
                           value={formValues.enlace}
                           onChange={({ detail }) =>
                             handleChange("enlace", detail.value)
+                          }
+                        />
+                      </FormField>
+                      <FormField
+                        label="Fecha de publicación"
+                        stretch
+                        errorText={formErrors.fecha_publicacion}
+                      >
+                        <DatePicker
+                          value={formValues.fecha_publicacion}
+                          onChange={({ detail }) =>
+                            handleChange("fecha_publicacion", detail.value)
+                          }
+                        />
+                      </FormField>
+                      <FormField
+                        label="Fecha de otorgamiento de la patente"
+                        stretch
+                        errorText={formErrors.fecha_otorgamiento}
+                      >
+                        <DatePicker
+                          value={formValues.fecha_otorgamiento}
+                          onChange={({ detail }) =>
+                            handleChange("fecha_otorgamiento", detail.value)
                           }
                         />
                       </FormField>

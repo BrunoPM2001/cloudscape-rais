@@ -121,6 +121,12 @@ export default function Sidebar({ activeHref = "#", data = [], loading }) {
           href: "/investigador/publicaciones/patente",
         },
         {
+          type: "link",
+          text: "Editores de revista",
+          href: "/investigador/publicaciones/revistas_editores",
+          info: <Badge color="blue">Nuevo</Badge>,
+        },
+        {
           type: "expandable-link-group",
           text: "Listado de revistas y editoriales reconocidas",
           items: [

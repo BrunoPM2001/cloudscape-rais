@@ -162,7 +162,7 @@ export default () => {
   const getData = async () => {
     setLoading(true);
     const res = await axiosBase.get(
-      "admin/estudios/revistas/listado_solicitudes",
+      "admin/estudios/revistas/listadoRevistaEditores",
     );
     const data = res.data;
     setDistribution(data);
