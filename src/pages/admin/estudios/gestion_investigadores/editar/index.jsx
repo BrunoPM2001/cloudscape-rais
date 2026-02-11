@@ -232,6 +232,8 @@ export default function Editar_investigador() {
     });
     const data = res.data.data;
     setData(res.data);
+    console.log("📦 Respuesta completa backend:", res.data);
+    console.log("👥 Grupos recibidos:", res.data.grupos);
     setPaises(res.data.paises);
     setFacultades(res.data.facultades);
     setDependencias(res.data.dependencias);

@@ -350,8 +350,8 @@ export default ({ grupo_estado }) => {
                       text: "Excluir",
                       id: "action_2_1",
                       disabled:
-                        collectionProps.selectedItems[0]?.cargo ==
-                          "Coordinador" ||
+                        //collectionProps.selectedItems[0]?.cargo ==
+                        //  "Coordinador" ||
                         collectionProps.selectedItems[0]?.condicion.startsWith(
                           "Ex"
                         ),
