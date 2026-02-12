@@ -261,7 +261,7 @@ export default () => {
     selection: {},
   });
   const [selectedOption, setSelectedOption] = useState({
-    value: "2025",
+    value: "2026",
   });
 
   const reporteExcel = async () => {

@@ -191,6 +191,7 @@ export default ({ data, responsable, loading, id, items, antiguo }) => {
               <Spinner />
             ) : (
               (data.dj_aceptada == null || data.dj_aceptada == 0) &&
+              data.estado == "Aprobado" &&
               (data.tipo_proyecto == "PCONFIGI" || data.tipo_proyecto == "ECI" 
                 || data.tipo_proyecto == 'PCONFIGI-INV' || data.tipo_proyecto == "PINVPOS"
                 || data.tipo_proyecto == 'PRO-CTIE') &&
