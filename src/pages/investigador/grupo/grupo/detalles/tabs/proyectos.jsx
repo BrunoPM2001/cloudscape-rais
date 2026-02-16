@@ -237,7 +237,26 @@ export default () => {
     setLoading(false);
   };
 
-  const reporte = () => {};
+  const reporte = async () => {
+    if (!collectionProps.selectedItems.length) return;
+    const proyecto = collectionProps.selectedItems[0];
+    console.log("Proyecto seleccionado:", proyecto);
+    setLoadingBtn(true);
+    const res = await axiosBase.get(
+      "investigador/grupo/reporteProyecto",
+      {
+        params: {
+          id: proyecto.id, 
+          tipo_proyecto: proyecto.tipo_proyecto,
+        },
+        responseType: "blob",
+      }
+    );
+    const blob = await res.data;
+    const url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
+    setLoadingBtn(false);
+  };
 
   //  Data
   useEffect(() => {

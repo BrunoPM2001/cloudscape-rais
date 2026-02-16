@@ -235,7 +235,6 @@ export default ({ grupo_estado }) => {
         item.cargo == "Coordinador" &&
         item.nombres == localStorage.getItem("User")
     );
-    console.log(data.data);
     setCoordinador(result ? true : false);
   };
 
