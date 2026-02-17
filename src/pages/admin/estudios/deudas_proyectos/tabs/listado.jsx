@@ -13,6 +13,8 @@ import { useCollection } from "@cloudscape-design/collection-hooks";
 import ModalAsignarDeuda from "../components/modalAsignarDeuda";
 import ModalSubsanarDeuda from "../components/modalSubsanarDeuda";
 import axiosBase from "../../../../../api/axios";
+import { Autosuggest, FormField } from "@cloudscape-design/components";
+import { useAutosuggest } from "../../../../../hooks/useAutosuggest";
 
 const stringOperators = [":", "!:", "=", "!=", "^", "!^"];
 
@@ -176,6 +178,8 @@ export default () => {
   const [integrantes, setIntegrantes] = useState([]);
   const [distributions, setDistribution] = useState([]);
   const [typeModal, setTypeModal] = useState("");
+  const [form, setForm] = useState({});
+
 
   const {
     items,
@@ -207,11 +211,20 @@ export default () => {
     selection: {},
   });
 
+  const { loading: loadingInvestigador, options, setOptions, value, setValue, setAvoidSelect } =
+    useAutosuggest("admin/admin/usuarios/searchInvestigadorBy");
+
+
   //  Functions
   const getData = async () => {
     setLoading(true);
     const res = await axiosBase.get(
-      "admin/estudios/deudaProyecto/listadoProyectos"
+      "admin/estudios/deudaProyecto/listadoProyectos",
+      {
+        params: {
+          investigador_id: form.investigador_id,
+        },
+      }
     );
     const data = res.data;
     setDistribution(data);
@@ -238,6 +251,10 @@ export default () => {
   useEffect(() => {
     getData();
   }, []);
+
+  useEffect(() => {
+    getData();
+  }, [form]);
 
   useEffect(() => {
     if (collectionProps.selectedItems.length != 0) {
@@ -312,6 +329,33 @@ export default () => {
             countText={`${filteredItemsCount} coincidencias`}
             expandToViewport
             virtualScroll
+            customControl={
+              <FormField label="Buscar por investigador" stretch>
+                <Autosuggest
+                  onChange={({ detail }) => {
+                    setOptions([]);
+                    setValue(detail.value);
+
+                    if (detail.value === "") {
+                      setForm({});
+                    }
+                  }}
+                  onSelect={({ detail }) => {
+                    if (detail.selectedOption.investigador_id !== undefined) {
+                      setAvoidSelect(false);
+                      const { value, ...rest } = detail.selectedOption;
+                      setForm(rest);
+                    }
+                  }}
+                  value={value}
+                  options={options}
+                  loadingText="Cargando data"
+                  placeholder="Código, DNI o nombre del investigador"
+                  statusType={loadingInvestigador ? "loading" : "finished"}
+                  empty="No se encontraron resultados"
+                />
+              </FormField>
+            }
           />
         }
         pagination={<Pagination {...paginationProps} />}
