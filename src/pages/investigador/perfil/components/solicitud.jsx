@@ -36,7 +36,7 @@ export default ({ data, reload }) => {
   return (
     <Form
       actions={
-        data.estado == "Observado" || data.estado === "No aprobado" && (
+        (data.estado == "Observado" || data.estado === "No aprobado") && (
           <SpaceBetween size="xs" direction="horizontal">
             <Button onClick={() => setModal("obs")}>Ver Observación</Button>
             <Button variant="primary" onClick={() => setModal("observado")}>
