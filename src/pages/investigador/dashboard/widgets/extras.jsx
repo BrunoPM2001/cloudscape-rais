@@ -11,6 +11,8 @@ import {
 } from "@cloudscape-design/components";
 
 export default function ({ data, loading }) {
+  const convocatorias = data?.convocatorias || [];
+  const abiertas = convocatorias.filter(c => c.estado === "Abierta");
   return (
     <Container
       header={
@@ -24,13 +26,32 @@ export default function ({ data, loading }) {
         <ColumnLayout columns={2} minColumnWidth={140}>
           <div>
             <Box variant="awsui-key-label">Convocatorias</Box>
-            <Popover
-              header="Convocatoria en curso"
-              content={<>No hay convocatorias vigentes para inscribirse</>}
-              position="bottom"
-            >
-              <StatusIndicator type="pending">Cerradas</StatusIndicator>
-            </Popover>
+
+            {loading ? (
+              <Spinner />
+            ) : (
+              <Popover
+                header="Convocatoria en curso"
+                position="bottom"
+                content={
+                  abiertas.length > 0 ? (
+                    <>
+                      {abiertas.map((c, i) => (
+                        <div key={i}>{c.descripcion}</div>
+                      ))}
+                    </>
+                  ) : (
+                    <>No hay convocatorias vigentes para inscribirse</>
+                  )
+                }
+              >
+                <StatusIndicator type={abiertas.length > 0 ? "success" : "pending"}>
+                  {abiertas.length > 0
+                    ? `Abiertas (${abiertas.length})`
+                    : "Cerradas"}
+                </StatusIndicator>
+              </Popover>
+            )}
           </div>
           <div>
             <Box variant="awsui-key-label">Publicaciones pendientes</Box>
