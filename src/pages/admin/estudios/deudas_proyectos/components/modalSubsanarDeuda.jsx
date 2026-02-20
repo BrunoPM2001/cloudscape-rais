@@ -96,6 +96,10 @@ export default ({ close, item, reload }) => {
         setAlert("Necesita escoger una opción para subsanar deuda");
       } else {
         setLoading(true);
+        console.log({
+          detalle: formValues.detalle_deuda,
+          comentario: formValues.comentario_deuda
+        });
         const res = await axiosBase.post(
           "admin/estudios/deudaProyecto/subsanarDeuda",
           {
@@ -203,12 +207,16 @@ export default ({ close, item, reload }) => {
                     <FormField label="Subsanar deuda académica">
                       <Select
                         placeholder="-- Seleccione una opción --"
-                        options={[
+                        options={
+                          item.proyecto_origen === "Antiguo" ?
+                          [
+                            {label: "Deuda técnica subsanada",
+                              value: 4,
+                            }
+                          ]
+                          : [
                           { label: "Presentó informe de avance", value: 5 },
-                          {
-                            label: "Presentó informe de avance final",
-                            value: 7,
-                          },
+                          { label: "Presentó informe de avance final", value: 7 },
                           { label: "Presentó informe académico", value: 4 },
                         ]}
                         selectedOption={formValues.subsanar_academica}
