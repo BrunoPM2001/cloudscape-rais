@@ -76,6 +76,7 @@ const initialForm = {
   presentacion: "",
   objetivos: "",
   servicios: "",
+  redes:"",
 };
 
 const formRules = {
@@ -119,6 +120,26 @@ export default ({ close, item, grupo_id, reload }) => {
         grupo_categoria: item.tipo == "solicitud" ? null : { require: true },
       }
     );
+  
+  const buildRedes = (values) => {
+    const redes = [];
+
+    if (values.red1_nombre || values.red1_link) {
+      redes.push({
+        nombre: values.red1_nombre,
+        link: values.red1_link,
+      });
+    }
+
+    if (values.red2_nombre || values.red2_link) {
+      redes.push({
+        nombre: values.red2_nombre,
+        link: values.red2_link,
+      });
+    }
+
+    return redes;
+  };
 
   //  Functions
   const editarGrupo = async () => {
@@ -126,6 +147,7 @@ export default ({ close, item, grupo_id, reload }) => {
       setLoading(true);
       const res = await axiosBase.put("admin/estudios/grupos/updateDetalle", {
         ...formValues,
+        redes: buildRedes(formValues),
         grupo_id,
       });
       const data = res.data;
@@ -135,6 +157,23 @@ export default ({ close, item, grupo_id, reload }) => {
       close();
     }
   };
+
+  useEffect(() => {
+    if (item.redes) {
+      try {
+        const redes = Array.isArray(item.redes)
+          ? item.redes
+          : JSON.parse(item.redes);
+
+        handleChange("red1_nombre", redes[0]?.nombre || "");
+        handleChange("red1_link", redes[0]?.link || "");
+        handleChange("red2_nombre", redes[1]?.nombre || "");
+        handleChange("red2_link", redes[1]?.link || "");
+      } catch {
+        // si falla, no hace nada
+      }
+    }
+  }, []);
 
   useEffect(() => {
     if (item.tipo == "grupo") {
@@ -385,6 +424,49 @@ export default ({ close, item, grupo_id, reload }) => {
                   handleChange={handleChange}
                   name="servicios"
                 />
+              ),
+            },
+            {
+              id: "edit_4",
+              label: "Redes ",
+              content: (
+                <ColumnLayout columns={2}>
+                  <FormField label="Red 1 - Nombre">
+                    <Input
+                      value={formValues.red1_nombre || ""}
+                      onChange={({ detail }) =>
+                        handleChange("red1_nombre", detail.value)
+                      }
+                    />
+                  </FormField>
+
+                  <FormField label="Red 1 - Link">
+                    <Input
+                      value={formValues.red1_link || ""}
+                      onChange={({ detail }) =>
+                        handleChange("red1_link", detail.value)
+                      }
+                    />
+                  </FormField>
+
+                  <FormField label="Red 2 - Nombre">
+                    <Input
+                      value={formValues.red2_nombre || ""}
+                      onChange={({ detail }) =>
+                        handleChange("red2_nombre", detail.value)
+                      }
+                    />
+                  </FormField>
+
+                  <FormField label="Red 2 - Link">
+                    <Input
+                      value={formValues.red2_link || ""}
+                      onChange={({ detail }) =>
+                        handleChange("red2_link", detail.value)
+                      }
+                    />
+                  </FormField>
+                </ColumnLayout>
               ),
             },
           ]}

@@ -14,6 +14,15 @@ export default ({ data, loading }) => {
   const [visible, setVisible] = useState(false);
   const [typeModal, setTypeModal] = useState("");
 
+  let redes = [];
+  try {
+    redes = Array.isArray(data?.redes)
+      ? data.redes
+      : JSON.parse(data?.redes || "[]");
+  } catch {
+    redes = [];
+  }
+
   return (
     <Container header={<Header variant="h2">Detalles del grupo</Header>}>
       <ColumnLayout columns={3} variant="text-grid">
@@ -105,6 +114,29 @@ export default ({ data, loading }) => {
           <div>
             <Box variant="awsui-key-label">Página web</Box>
             {loading ? <Spinner /> : <div>{data.web}</div>}
+          </div>
+          <div>
+            <Box variant="awsui-key-label">Redes de Investigación</Box>
+            {loading ? (
+              <Spinner />
+            ) : redes.length > 0 ? (
+              <SpaceBetween size="xs">
+                {redes.map((red, index) => (
+                  <StatusIndicator key={index} type="info">
+                    <a
+                      href={red.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ color: "#0972d3", textDecoration: "none" }}
+                    >
+                      {red.nombre}
+                    </a>
+                  </StatusIndicator>
+                ))}
+              </SpaceBetween>
+            ) : (
+              <Box color="text-body-secondary">No registrado</Box>
+            )}
           </div>
         </SpaceBetween>
       </ColumnLayout>
