@@ -11,6 +11,8 @@ import {
   Table,
   Textarea,
   Wizard,
+  ColumnLayout,
+  Input,
 } from "@cloudscape-design/components";
 import BaseLayout from "../../../components/baseLayout.jsx";
 import { useEffect, useState } from "react";
@@ -39,6 +41,10 @@ const initialForm = {
   presentacion: "",
   objetivos: "",
   servicios: "",
+  red1_nombre: "",
+  red1_link: "",
+  red2_nombre: "",
+  red2_link: "",
 };
 
 const formRules = {
@@ -106,8 +112,33 @@ export default function Solicitar_grupo4() {
       handleChange("objetivos", data.datos.objetivos ?? "");
       handleChange("servicios", data.datos.servicios ?? "");
       handleChange("id", id);
+      const redes = data.datos.redes || [];
+        handleChange("red1_nombre", redes[0]?.nombre ?? "");
+        handleChange("red1_link", redes[0]?.link ?? "");
+        handleChange("red2_nombre", redes[1]?.nombre ?? "");
+        handleChange("red2_link", redes[1]?.link ?? "");
     }
     setLoading(false);
+  };
+
+  const buildRedes = () => {
+    const redes = [];
+
+    if (formValues.red1_nombre || formValues.red1_link) {
+      redes.push({
+        nombre: formValues.red1_nombre,
+        link: formValues.red1_link,
+      });
+    }
+
+    if (formValues.red2_nombre || formValues.red2_link) {
+      redes.push({
+        nombre: formValues.red2_nombre,
+        link: formValues.red2_link,
+      });
+    }
+
+    return redes;
   };
 
   const siguiente = async (index) => {
@@ -127,7 +158,10 @@ export default function Solicitar_grupo4() {
           setLoadingBtn(true);
           const res = await axiosBase.post(
             "investigador/grupo/solicitar/registrar4",
-            formValues
+            {
+              ...formValues,
+              redes: buildRedes(),
+            } 
           );
           const info = res.data;
           if (info.message == "success") {
@@ -273,6 +307,44 @@ export default function Solicitar_grupo4() {
                                 handleChange("servicios", detail.value)
                               }
                             />
+                          </FormField>
+                          <FormField label="Redes de Investigación asociadas (Opcional)" stretch>
+                            <ColumnLayout columns={2}>
+                              <FormField label="Red 1 - Nombre">
+                                <Input
+                                  placeholder="Ej: CITBM"
+                                  value={formValues.red1_nombre}
+                                  onChange={({ detail }) =>
+                                    handleChange("red1_nombre", detail.value)
+                                  }
+                                />
+                              </FormField>
+                              <FormField label="Red 1 - Link">
+                                <Input
+                                  placeholder="https://..."
+                                  value={formValues.red1_link}
+                                  onChange={({ detail }) =>
+                                    handleChange("red1_link", detail.value)
+                                  }
+                                />
+                              </FormField>
+                              <FormField label="Red 2 - Nombre">
+                                <Input
+                                  value={formValues.red2_nombre}
+                                  onChange={({ detail }) =>
+                                    handleChange("red2_nombre", detail.value)
+                                  }
+                                />
+                              </FormField>
+                              <FormField label="Red 2 - Link">
+                                <Input
+                                  value={formValues.red2_link}
+                                  onChange={({ detail }) =>
+                                    handleChange("red2_link", detail.value)
+                                  }
+                                />
+                              </FormField>
+                            </ColumnLayout>
                           </FormField>
                         </SpaceBetween>
                       </Container>
