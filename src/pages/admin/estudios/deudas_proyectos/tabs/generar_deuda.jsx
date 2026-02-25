@@ -132,6 +132,7 @@ const columnDisplay = [
 export default () => {
   //  Data states
   const [loading, setLoading] = useState(true);
+  const [selectAllFiltered, setSelectAllFiltered] = useState(false);
   const [distributions, setDistribution] = useState([]);
   const [modal, setModal] = useState("");
   const {
@@ -175,6 +176,23 @@ export default () => {
     setLoading(false);
   };
 
+  const generarDeuda = async () => {
+    let payload = {};
+
+    if (selectAllFiltered) {
+      payload = {
+        select_all: true,
+        filtros: propertyFilterProps.query,};
+    } else {
+      payload = {ids: collectionProps.selectedItems.map(i => i.id),};
+    }
+    await axiosBase.post(
+      "admin/estudios/deudaProyecto/asignarMasivo",
+      payload
+    );
+    getData();
+  };
+
   //  Effects
   useEffect(() => {
     getData();
@@ -201,13 +219,24 @@ export default () => {
         header={
           <Header
             actions={
+              <SpaceBetween direction="horizontal" size="xs">
+              <Button
+                variant="normal"
+                disabled={!distributions.length}
+                onClick={() => setSelectAllFiltered(!selectAllFiltered)}
+              >
+                {selectAllFiltered 
+                ? `Deseleccionar todo (filtro) ${filteredItemsCount}` 
+                : `Seleccionar todo (filtro) • ${filteredItemsCount}`}
+              </Button>
               <Button
                 variant="primary"
-                disabled={!collectionProps.selectedItems.length}
+                disabled={!selectAllFiltered && !collectionProps.selectedItems.length}
                 onClick={() => setModal("gen_deuda")}
               >
                 Generar deuda
               </Button>
+              </SpaceBetween>
             }
           >
             Listado de proyectos sin deuda
@@ -238,6 +267,8 @@ export default () => {
           close={() => setModal("")}
           item={collectionProps.selectedItems[0]}
           reload={getData}
+          selectAllFiltered={selectAllFiltered}
+          filtros={propertyFilterProps.query}
         />
       )}
     </SpaceBetween>

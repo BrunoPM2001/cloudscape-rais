@@ -12,6 +12,7 @@ import { useState, useEffect } from "react";
 import { useCollection } from "@cloudscape-design/collection-hooks";
 import ModalAsignarDeuda from "../components/modalAsignarDeuda";
 import ModalSubsanarDeuda from "../components/modalSubsanarDeuda";
+import ModalEditarDeuda from "../components/modalEditarDeuda";
 import axiosBase from "../../../../../api/axios";
 import { Autosuggest, FormField } from "@cloudscape-design/components";
 import { useAutosuggest } from "../../../../../hooks/useAutosuggest";
@@ -284,17 +285,17 @@ export default () => {
                     {
                       text: "Asignar deuda",
                       id: "action_1_1",
-                      disabled: false,
+                      disabled: collectionProps.selectedItems[0]?.deuda?.toUpperCase() === "SI",
                     },
                     {
                       text: "Editar deuda",
                       id: "action_1_2",
-                      disabled: false,
+                      disabled: collectionProps.selectedItems[0]?.deuda === "NO",
                     },
                     {
                       text: "Subsanar deuda",
                       id: "action_1_3",
-                      disabled: false,
+                      disabled: collectionProps.selectedItems[0]?.deuda?.toUpperCase() !== "SI",
                     },
                   ]}
                   onItemClick={({ detail }) => {
@@ -508,22 +509,27 @@ export default () => {
           </Header>
         }
       />
-      {incluirVisible &&
-        (typeModal == "Asignar" ? (
-          <ModalAsignarDeuda
-            close={() => setTypeModal("")}
-            reload={getData}
-            item={collectionProps.selectedItems[0]}
-          />
-        ) : (
-          typeModal == "Subsanar" && (
-            <ModalSubsanarDeuda
-              close={() => setTypeModal("")}
-              reload={getData}
-              item={collectionProps.selectedItems[0]}
-            />
-          )
-        ))}
+      {incluirVisible && typeModal === "Asignar" && (
+        <ModalAsignarDeuda
+          close={() => setTypeModal("")}
+          reload={getData}
+          item={collectionProps.selectedItems[0]}
+        />
+      )} 
+      {incluirVisible && typeModal === "Subsanar" && (
+        <ModalSubsanarDeuda
+          close={() => setTypeModal("")}
+          reload={getData}
+          item={collectionProps.selectedItems[0]}
+        />
+      )}
+      {incluirVisible && typeModal === "EditarDeuda" && (
+        <ModalEditarDeuda
+          close={() => setTypeModal("")}
+          reload={getData}
+          item={collectionProps.selectedItems[0]}
+        />
+      )} 
     </SpaceBetween>
   );
 };

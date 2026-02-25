@@ -30,7 +30,7 @@ const formRules = {
   comentario_deuda: { required: false },
 };
 
-export default ({ close, item, reload, selectAllFiltered = false, filtros = null }) => {
+export default ({ close, item, reload }) => {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
 
@@ -38,10 +38,12 @@ export default ({ close, item, reload, selectAllFiltered = false, filtros = null
   const [loading, setLoading] = useState(true);
   const [optDeudaAcademica, setOptDeudaAcademica] = useState([]);
   const [creating, setCreating] = useState(false);
-  //  Hooks
 
+  //  Hooks
   const { formValues, formErrors, handleChange, validateForm } =
     useFormValidation(initialForm, formRules);
+
+  const bloquearTipoDeuda = item.deuda === "SUBSANADA";
 
   const getDeudaAcademica = async () => {
     const res = await axiosBase.get(
@@ -53,7 +55,9 @@ export default ({ close, item, reload, selectAllFiltered = false, filtros = null
       }
     );
     const opciones = res.data;
-    setOptDeudaAcademica([...opciones, { value: "Sin deuda" }]);
+    setOptDeudaAcademica([...opciones.map(op => 
+        ({label: op.value, value: op.value})),
+         {label: "Sin deuda", value: "Sin deuda" }]);
     setLoading(false);
   };
 
@@ -64,8 +68,7 @@ export default ({ close, item, reload, selectAllFiltered = false, filtros = null
         "admin/estudios/deudaProyecto/asignarDeuda",
         {
           ...formValues,
-          proyecto_id: selectAllFiltered ? null : item.id,
-          filtros: selectAllFiltered ? filtros : null,
+          proyecto_id: item.id,
           tipo_proyecto: item.tipo_proyecto,
         }
       );
@@ -77,8 +80,45 @@ export default ({ close, item, reload, selectAllFiltered = false, filtros = null
     }
   };
 
+  const getDeudaActual = async () => {
+    const res = await axiosBase.get(
+        "admin/estudios/deudaProyecto/proyectoDeuda",
+        {
+            params: {
+                proyecto_id: item.proyecto_id,
+                proyecto_origen: item.proyecto_origen,
+                tipo_proyecto: item.tipo_proyecto,
+            },
+        }
+    );
+
+    const deuda = res.data.deuda;
+
+    if (deuda) {
+        handleChange("detalle_deuda", deuda.informe || "");
+        handleChange("comentario_deuda", deuda.detalle || "");
+        handleChange("fecha_deuda", deuda.fecha_deuda || "");
+
+        // Selecciones
+        if (res.data.deuda_academica !== "Sin deuda") {
+        handleChange("deuda_academica", {
+            label: res.data.deuda_academica,
+            value: res.data.deuda_academica,
+        });
+        }
+
+        if (res.data.deuda_economica !== "Sin deuda") {
+        handleChange("deuda_economica", {
+            label: res.data.deuda_economica,
+            value: res.data.deuda_economica,
+        });
+        }
+    }
+    };
+
   useEffect(() => {
     getDeudaAcademica();
+    getDeudaActual();
   }, []);
 
   return (
@@ -98,12 +138,12 @@ export default ({ close, item, reload, selectAllFiltered = false, filtros = null
               disabled={loading}
               onClick={() => sendDeuda()}
             >
-              Agregar deuda
+              Editar deuda
             </Button>
           </SpaceBetween>
         </Box>
       }
-      header="Asignar Deuda"
+      header="Editar deuda"
     >
       <SpaceBetween direction="vertical" size="l">
         <FormField
@@ -111,6 +151,7 @@ export default ({ close, item, reload, selectAllFiltered = false, filtros = null
           errorText={formErrors.deuda_academica}
         >
           <Select
+            disabled={bloquearTipoDeuda}
             placeholder="Escoge una opción"
             options={optDeudaAcademica}
             selectedOption={formValues.deuda_academica}
@@ -127,8 +168,11 @@ export default ({ close, item, reload, selectAllFiltered = false, filtros = null
           errorText={formErrors.deuda_economica}
         >
           <Select
+            disabled={bloquearTipoDeuda}
             placeholder="Escoge una opción"
-            options={[{ value: "Deuda económica" }, { value: "Sin deuda" }]}
+            options={[
+                { label: "Deuda económica", value: "Deuda económica" }, 
+                { label: "Sin deuda", value: "Sin deuda" }]}
             selectedOption={formValues.deuda_economica}
             onChange={({ detail }) =>
               handleChange("deuda_economica", detail.selectedOption)

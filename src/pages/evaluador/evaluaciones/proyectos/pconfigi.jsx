@@ -85,7 +85,7 @@ const Pconfigi = ({ data }) => {
       <h1 style={{ textAlign: "center" }}>
         PROGRAMA DE PROYECTOS DE INVESTIGACIÓN PARA GRUPOS DE
       </h1>
-      <h1 style={{ textAlign: "center" }}> INVESTIGACIÓN (PCONFIGI) 2025</h1>
+      <h1 style={{ textAlign: "center" }}> INVESTIGACIÓN (PCONFIGI) 2026</h1>
 
       <hr />
       <br />
