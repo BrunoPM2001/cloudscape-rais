@@ -72,6 +72,12 @@ const FILTER_PROPS = [
     operators: stringOperators,
   },
   {
+    propertyLabel: "Aporte Asociada y/o Colaboradora",
+    key: "entidad_asociada",
+    groupValuesLabel: "Aporte asociadas y/o colaboradoras",
+    operators: stringOperators,
+  },
+  {
     propertyLabel: "Aporte externo",
     key: "financiamiento_fuente_externa",
     groupValuesLabel: "Aportes externo",
@@ -175,6 +181,12 @@ const columnDefinitions = [
     sortingField: "aporte_unmsm",
   },
   {
+    id: "entidad_asociada",
+    header: "Aporte Asociada y/o Colaboradora",
+    cell: (item) => item.entidad_asociada,
+    sortingField: "entidad_asociada",
+  },
+  {
     id: "financiamiento_fuente_externa",
     header: "Aporte externo",
     cell: (item) => item.financiamiento_fuente_externa,
@@ -212,7 +224,7 @@ const columnDefinitions = [
   },
   {
     id: "resolucion_rectoral",
-    header: "Resolución rectoral",
+    header: "Resolución Rectoral o Decanal",
     cell: (item) => item.resolucion_rectoral,
     sortingField: "resolucion_rectoral",
   },
@@ -224,7 +236,7 @@ const columnDefinitions = [
   },
   {
     id: "entidad_asociada",
-    header: "Entidad asociada",
+    header: "Entidad asociada y/o colaboradora",
     cell: (item) => item.entidad_asociada,
     sortingField: "entidad_asociada",
   },
@@ -296,10 +308,12 @@ const columnDisplay = [
   { id: "moneda", visible: true },
   { id: "aporte_no_unmsm", visible: true },
   { id: "aporte_unmsm", visible: true },
+  { id: "entidad_asociada", visible: true },
   { id: "financiamiento_fuente_externa", visible: true },
   { id: "monto_asignado", visible: true },
   { id: "participacion_unmsm", visible: true },
   { id: "fuente_fin", visible: true },
+  { id: "resolucion_rectoral", visible: true },
   { id: "estado", visible: true },
   { id: "registrado", visible: true },
   { id: "actualizado", visible: true },
