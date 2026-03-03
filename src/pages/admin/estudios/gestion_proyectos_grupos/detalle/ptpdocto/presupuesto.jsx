@@ -12,11 +12,6 @@ export default ({ data, loading }) => {
     <Table
       columnDefinitions={[
         {
-          id: "codigo",
-          header: "Código",
-          cell: (item) => item.codigo,
-        },
-        {
           id: "partida",
           header: "Partida",
           cell: (item) => item.partida,
@@ -33,9 +28,8 @@ export default ({ data, loading }) => {
         },
       ]}
       columnDisplay={[
-        { id: "codigo", visible: true },
-        { id: "partida", visible: true },
         { id: "tipo", visible: true },
+        { id: "partida", visible: true },
         { id: "monto", visible: true },
       ]}
       enableKeyboardNavigation

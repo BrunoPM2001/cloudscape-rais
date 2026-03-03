@@ -7,7 +7,7 @@ import {
 export default ({ data, loading }) => {
   return (
     <Container>
-      <ExpandableSection headerText="Resumen ejecutivo" defaultExpanded>
+      <ExpandableSection headerText="Resumen ejecutivo">
         {loading ? (
           <Spinner />
         ) : (
