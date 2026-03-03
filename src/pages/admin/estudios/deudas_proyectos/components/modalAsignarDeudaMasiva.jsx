@@ -30,26 +30,26 @@ const formRules = {
   comentario_deuda: { required: false },
 };
 
-export default ({ close, item, reload }) => {
-  //  Context
+export default function ModalAsignarDeudaMasiva({ close, item, reload }) {
+  //  Cont
   const { notifications, pushNotification } = useContext(NotificationContext);
 
   //  States
   const [loading, setLoading] = useState(true);
   const [optDeudaAcademica, setOptDeudaAcademica] = useState([]);
   const [creating, setCreating] = useState(false);
-  
+  const [tipoProyecto, setTipoProyecto] = useState(null);
+  const [errorTipo, setErrorTipo] = useState(false);
+
   //  Hooks
   const { formValues, formErrors, handleChange, validateForm } =
     useFormValidation(initialForm, formRules);
 
-  const getDeudaAcademica = async () => {
+  const getDeudaAcademica = async (tipo) => {
     const res = await axiosBase.get(
       "admin/estudios/deudaProyecto/listadoDeudaAcademica",
       {
-        params: {
-          tipo_proyecto: item.tipo_proyecto,
-        },
+        params: { tipo_proyecto: tipo },
       }
     );
     const opciones = res.data;
@@ -58,27 +58,45 @@ export default ({ close, item, reload }) => {
   };
 
   const sendDeuda = async () => {
-    if (validateForm()) {
-      setCreating(true);
-      const response = await axiosBase.post(
-        "admin/estudios/deudaProyecto/asignarDeuda",
-        {
-          ...formValues,
-          proyecto_id: item.id,
-          tipo_proyecto: item.tipo_proyecto,
-        }
-      );
-      const res = response.data;
-      pushNotification(res.detail, res.message, notifications.length + 1);
-      setCreating(false);
-      reload();
-      close();
-    }
-  };
+    if (!validateForm()) return;
+    setCreating(true);
+    const payload = {
+        ...formValues,
+        ids: item.map(i => i.id),
+        tipo_proyecto: item[0].tipo_proyecto,
+    };
+    const response = await axiosBase.post(
+        "admin/estudios/deudaProyecto/asignarMasivo",
+        payload
+    );
+    const res = response.data;
+    pushNotification(res.detail, res.message, notifications.length + 1);
+    setCreating(false);
+    reload();
+    close();
+};
+  
 
   useEffect(() => {
-    getDeudaAcademica();
-  }, []);
+    if (!item || item.length === 0) return;
+    const tipos = [...new Set(item.map(i => i.tipo_proyecto))];
+
+    if (tipos.length > 1) {
+      setErrorTipo(true);
+      setLoading(false);
+      return;
+    }
+    
+    const periodos = [...new Set(item.map(i => i.periodo))];
+    if (periodos.length > 1) {
+        setErrorTipo(true);
+        setLoading(false);
+        return;
+    }
+
+    setTipoProyecto(tipos[0]);
+    getDeudaAcademica(tipos[0]);
+  }, [item]);
 
   return (
     <Modal
@@ -94,21 +112,18 @@ export default ({ close, item, reload }) => {
             <Button
               variant="primary"
               loading={creating}
-              disabled={loading}
-              onClick={() => sendDeuda()}
+              disabled={loading || errorTipo}
+              onClick={sendDeuda}
             >
-              Agregar deuda
+              Aplicar a todos
             </Button>
           </SpaceBetween>
         </Box>
       }
-      header="Asignar Deuda"
+      header="Asignar Deuda Masiva"
     >
       <SpaceBetween direction="vertical" size="l">
-        <FormField
-          label="Deuda académica"
-          errorText={formErrors.deuda_academica}
-        >
+        <FormField label="Deuda académica" errorText={formErrors.deuda_academica}>
           <Select
             placeholder="Escoge una opción"
             options={optDeudaAcademica}
@@ -121,10 +136,7 @@ export default ({ close, item, reload }) => {
             empty="No hay opciones disponibles"
           />
         </FormField>
-        <FormField
-          label="Deuda económica"
-          errorText={formErrors.deuda_economica}
-        >
+        <FormField label="Deuda económica" errorText={formErrors.deuda_economica}>
           <Select
             placeholder="Escoge una opción"
             options={[{ value: "Deuda económica" }, { value: "Sin deuda" }]}

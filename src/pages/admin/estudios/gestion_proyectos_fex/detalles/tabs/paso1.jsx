@@ -460,7 +460,7 @@ export default function Paso1({ data, loading, reload }) {
                     }
                   />
                 </FormField>
-                <FormField label="Nro RR" stretch>
+                <FormField label="Nro RR o RD" stretch>
                   <Input
                     value={formValues.resolucion_rectoral}
                     onChange={({ detail }) =>

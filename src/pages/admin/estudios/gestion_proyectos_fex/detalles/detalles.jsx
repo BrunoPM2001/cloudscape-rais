@@ -163,7 +163,7 @@ export default ({ id }) => {
                 }
               />
             </FormField>
-            <FormField label="N° de R.R." stretch>
+            <FormField label="N° de R.R. o R.D." stretch>
               <Input
                 value={formValues.resolucion_rectoral}
                 onChange={({ detail }) =>
@@ -171,7 +171,7 @@ export default ({ id }) => {
                 }
               />
             </FormField>
-            <FormField label="Fecha de R.R." stretch>
+            <FormField label="Fecha de R.R. o R.D." stretch>
               <DatePicker
                 value={formValues.resolucion_fecha}
                 onChange={({ detail }) =>
