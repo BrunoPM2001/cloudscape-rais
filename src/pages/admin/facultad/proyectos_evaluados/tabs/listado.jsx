@@ -30,9 +30,21 @@ const FILTER_PROPS = [
     operators: stringOperators,
   },
   {
+    propertyLabel: "Evaluador ID",
+    key: "evaluador_id",
+    groupValuesLabel: "Evaluador IDs",
+    operators: stringOperators,
+  },
+  {
     propertyLabel: "Evaluado",
     key: "evaluado",
     groupValuesLabel: "Evaluado",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "Proyecto ID",
+    key: "proyecto_id",
+    groupValuesLabel: "Proyecto IDs",
     operators: stringOperators,
   },
   {
@@ -54,8 +66,8 @@ const FILTER_PROPS = [
     operators: stringOperators,
   },
   {
-    propertyLabel: "Linea",
-    key: "linea",
+    propertyLabel: "Linea de investigación",
+    key: "linea_investigacion",
     groupValuesLabel: "Lineas",
     operators: stringOperators,
   },
@@ -109,6 +121,12 @@ const columnDefinitions = [
     sortingField: "facultad",
   },
   {
+    id: "linea_investigacion",
+    header: "Linea de investigación",
+    cell: (item) => item.linea_investigacion,
+    sortingField: "linea_investigacion",
+  },
+  {
     id: "periodo",
     header: "Periodo",
     cell: (item) => item.periodo,
@@ -154,6 +172,7 @@ const columnDisplay = [
   { id: "tipo_proyecto", visible: true },
   { id: "titulo", visible: true },
   { id: "facultad", visible: true },
+  { id: "linea_investigacion", visible: true },
   { id: "periodo", visible: true },
   { id: "criterios", visible: true },
   { id: "criterios_evaluados", visible: true },
@@ -261,6 +280,7 @@ export default () => {
       columnDisplay={columnDisplay}
       loading={loading}
       loadingText="Cargando datos"
+      resizableColumns
       enableKeyboardNavigation
       selectionType="single"
       onRowClick={({ detail }) => actions.setSelectedItems([detail.item])}
