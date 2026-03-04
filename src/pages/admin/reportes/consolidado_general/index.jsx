@@ -100,6 +100,7 @@ export default function Consolidado_general() {
                   }));
                 }}
                 options={[
+                  { value: "2026" },
                   { value: "2025" },
                   { value: "2024" },
                   { value: "2023" },
