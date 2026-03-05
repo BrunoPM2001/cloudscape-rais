@@ -16,6 +16,15 @@ import queryString from "query-string";
 import axiosBase from "../../../../../../api/axios";
 import { useFormValidation } from "../../../../../../hooks/useFormValidation";
 
+const formatNumber = (value) => {
+  if (value === "" || value === null || value === undefined) return "";
+  return new Intl.NumberFormat("en-US").format(Number(value));
+};
+
+const parseNumber = (value) => {
+  return value.replace(/,/g, "");
+};
+
 const initialForm = {
   titulo: "",
   periodo: "",
@@ -342,10 +351,9 @@ export default function Paso1({ data, loading, reload }) {
                   stretch
                 >
                   <Input
-                    type="number"
-                    value={formValues.aporte_unmsm}
+                    value={formatNumber(formValues.aporte_unmsm)}
                     onChange={({ detail }) =>
-                      handleChange("aporte_unmsm", detail.value)
+                      handleChange("aporte_unmsm", parseNumber(detail.value))
                     }
                   />
                 </FormField>
@@ -355,10 +363,9 @@ export default function Paso1({ data, loading, reload }) {
                   stretch
                 >
                   <Input
-                    type="number"
-                    value={formValues.aporte_no_unmsm}
+                    value={formatNumber(formValues.aporte_no_unmsm)}
                     onChange={({ detail }) =>
-                      handleChange("aporte_no_unmsm", detail.value)
+                      handleChange("aporte_no_unmsm", parseNumber(detail.value))
                     }
                   />
                 </FormField>
@@ -368,12 +375,11 @@ export default function Paso1({ data, loading, reload }) {
                   stretch
                 >
                   <Input
-                    type="number"
-                    value={formValues.financiamiento_fuente_externa}
+                    value={formatNumber(formValues.financiamiento_fuente_externa)}
                     onChange={({ detail }) =>
                       handleChange(
                         "financiamiento_fuente_externa",
-                        detail.value
+                        parseNumber(detail.value)
                       )
                     }
                   />
@@ -384,23 +390,21 @@ export default function Paso1({ data, loading, reload }) {
                   stretch
                 >
                   <Input
-                    type="number"
-                    value={formValues.entidad_asociada}
+                    value={formatNumber(formValues.entidad_asociada)}
                     onChange={({ detail }) =>
-                      handleChange("entidad_asociada", detail.value)
+                      handleChange("entidad_asociada", parseNumber(detail.value))
                     }
                   />
                 </FormField>
                 <FormField label="Aporte total del proyecto" stretch>
                   <Input
                     disabled
-                    type="number"
-                    value={parseFloat(
+                    value={formatNumber(
                       parseFloat(formValues.aporte_unmsm) +
                         parseFloat(formValues.aporte_no_unmsm) +
                         parseFloat(formValues.financiamiento_fuente_externa) +
                         parseFloat(formValues.entidad_asociada)
-                    ).toFixed(3)}
+                    )}
                   />
                 </FormField>
               </ColumnLayout>

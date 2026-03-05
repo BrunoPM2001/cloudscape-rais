@@ -185,10 +185,10 @@ export default () => {
   const [loading, setLoading] = useState(true);
   const [loadingFicha, setLoadingFicha] = useState(false);
   const [distributions, setDistribution] = useState([]);
-  const [periodo, setPeriodo] = useState({ value: "2025" });
+  const [periodo, setPeriodo] = useState({ value: "2026" });
   const [optPeriodos, setOptPeriodos] = useState([]);
 
-  const [tipo_proyecto, setTipo_proyecto] = useState({ value: "PRO-CTIE" });
+  const [tipo_proyecto, setTipo_proyecto] = useState({ value: "PCONFIGI" });
   const [optTipos, setOptTipos] = useState([]);
 
   //  Hooks

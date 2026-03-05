@@ -106,16 +106,18 @@ export default ({ id, close, reload }) => {
         ) : (
           <SpaceBetween size="m">
             <Alert>
+              <div>
+                <Box variant="awsui-key-label">Apellidos y nombres</Box>
+                <div>{`${formValues?.apellido1} ${formValues?.apellido2}, ${formValues.nombres}`}</div>
+              </div>
               <ColumnLayout columns={2}>
-                <div>
-                  <Box variant="awsui-key-label">Apellidos y nombres</Box>
-                  <div>
-                    {`${formValues?.apellido1} ${formValues?.apellido2}, ${formValues.nombres}`}{" "}
-                  </div>
-                </div>
                 <div>
                   <Box variant="awsui-key-label">Código de estudiante</Box>
                   <div>{formValues?.codigo}</div>
+                </div>
+                <div>
+                  <Box variant="awsui-key-label">Facultad</Box>
+                  <div>{formValues?.facultad}</div>
                 </div>
               </ColumnLayout>
             </Alert>

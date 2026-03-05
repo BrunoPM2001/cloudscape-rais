@@ -224,7 +224,7 @@ const columnDefinitions = [
   },
   {
     id: "resolucion_rectoral",
-    header: "Resolución Rectoral o Decanal",
+    header: "RR o RD",
     cell: (item) => item.resolucion_rectoral,
     sortingField: "resolucion_rectoral",
   },
@@ -236,7 +236,7 @@ const columnDefinitions = [
   },
   {
     id: "entidad_asociada",
-    header: "Entidad asociada y/o colaboradora",
+    header: "Aporte asociada y/o colaboradora",
     cell: (item) => item.entidad_asociada,
     sortingField: "entidad_asociada",
   },
