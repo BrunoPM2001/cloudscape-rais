@@ -65,9 +65,6 @@ export default ({ data, reload }) => {
               </Link>
             </Badge>
           </Box>
-          <StatusIndicator type={data.d1.cumple ? "success" : "error"}>
-            {data.d1.cumple ? "Sí cumple" : "No cumple"}
-          </StatusIndicator>
         </div>
         <div>
           <Box variant="awsui-key-label">
@@ -78,9 +75,6 @@ export default ({ data, reload }) => {
               </Link>
             </Badge>
           </Box>
-          <StatusIndicator type={data.d2.cumple ? "success" : "error"}>
-            {data.d2.cumple ? "Sí cumple" : "No cumple"}
-          </StatusIndicator>
         </div>
         <div>
           <Box variant="awsui-key-label">
@@ -91,9 +85,6 @@ export default ({ data, reload }) => {
               </Link>
             </Badge>
           </Box>
-          <StatusIndicator type={data.d3.cumple ? "success" : "error"}>
-            {data.d3.cumple ? "Sí cumple" : "No cumple"}
-          </StatusIndicator>
         </div>
         <div>
           <Box variant="awsui-key-label">
@@ -104,9 +95,6 @@ export default ({ data, reload }) => {
               </Link>
             </Badge>
           </Box>
-          <StatusIndicator type={data.d4.cumple ? "success" : "error"}>
-            {data.d4.cumple ? "Sí cumple" : "No cumple"}
-          </StatusIndicator>
         </div>
         <div>
           <Box variant="awsui-key-label">
@@ -117,9 +105,6 @@ export default ({ data, reload }) => {
               </Link>
             </Badge>
           </Box>
-          <StatusIndicator type={data.d5.cumple ? "success" : "error"}>
-            {data.d5.cumple ? "Sí cumple" : "No cumple"}
-          </StatusIndicator>
         </div>
         <div>
           <Box variant="awsui-key-label">
@@ -130,9 +115,6 @@ export default ({ data, reload }) => {
               </Link>
             </Badge>
           </Box>
-          <StatusIndicator type={data.d6.cumple > 0 ? "success" : "error"}>
-            {data.d6.cumple > 0 ? "Sí cumple" : "No cumple"}
-          </StatusIndicator>
         </div>
       </SpaceBetween>
       <SpaceBetween size="m">

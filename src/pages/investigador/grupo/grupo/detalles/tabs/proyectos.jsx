@@ -15,6 +15,7 @@ import { useLocation } from "react-router-dom";
 import axiosBase from "../../../../../../api/axios";
 import { useCollection } from "@cloudscape-design/collection-hooks";
 import ModalAutorizarProyecto from "../components/modalAutorizarProyecto";
+import ModalAutorizarPmulti from "../components/modalAutorizarPmulti";
 
 const stringOperators = [":", "!:", "=", "!=", "^", "!^"];
 
@@ -291,7 +292,15 @@ export default () => {
                 </Button>
                 <Button
                   variant="primary"
-                  onClick={() => setType("autorizar")}
+                    onClick={() => {
+                      const proyecto = collectionProps.selectedItems[0];
+
+                      if (proyecto.tipo_proyecto === "PMULTI") {
+                        setType("autorizar_pmulti");
+                      } else {
+                        setType("autorizar");
+                      }
+                    }}
                   disabled={loading || !collectionProps.selectedItems.length}
                 >
                   Autorizar
@@ -321,6 +330,13 @@ export default () => {
       />
       {type == "autorizar" && (
         <ModalAutorizarProyecto
+          reload={getData}
+          close={() => setType("")}
+          item={collectionProps.selectedItems[0]}
+        />
+      )}
+      {type == "autorizar_pmulti" && (
+        <ModalAutorizarPmulti
           reload={getData}
           close={() => setType("")}
           item={collectionProps.selectedItems[0]}
