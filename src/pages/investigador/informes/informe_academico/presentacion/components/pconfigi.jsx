@@ -86,6 +86,7 @@ export default () => {
   const [files, setFiles] = useState({});
   const [proyecto, setProyecto] = useState({});
   const [miembros, setMiembros] = useState([]);
+  const [faltantes, setFaltantes] = useState([]);
 
   //  Hooks
   const { formValues, formErrors, handleChange, validateForm, setFormValues } =
@@ -166,8 +167,11 @@ export default () => {
       }
     );
     const data = res.data;
-    data;
-    pushNotification(data.detail, data.message, notifications.length + 1);
+    if (data.faltantes) {
+      setFaltantes(data.faltantes);
+      setLoadingSave(false);
+      return;
+    }
     getData();
     setLoadingSave(false);
   };
@@ -253,6 +257,20 @@ export default () => {
               </Alert>
             </Box>
           )}
+          {faltantes.length > 0 && (
+            <Box margin={{ top: "s" }}>
+              <Alert
+                type="error"
+                header="Faltan completar los siguientes apartados"
+                dismissible
+                onDismiss={() => setFaltantes([])}
+              >
+                {faltantes.map((item, index) => (
+                  <li key={index}>{item}</li>
+                ))}
+              </Alert>
+            </Box>
+          )}
           <Wizard
             onNavigate={({ detail }) => setStep(detail.requestedStepIndex)}
             activeStepIndex={step}
@@ -275,7 +293,7 @@ export default () => {
               {
                 title: "Información",
                 description:
-                  "Programa de equipamiento científico para investigación de la UNMSM",
+                  "Proyectos con financiamiento para grupos de investigación",
                 content: (
                   <SpaceBetween size="l">
                     <Container>
