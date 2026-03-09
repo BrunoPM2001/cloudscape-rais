@@ -87,7 +87,17 @@ export default ({
             <Box variant="h1">Informe técnico</Box>
             <Badge color="grey">{data.id}</Badge>
             <Badge color="green">{data.tipo_proyecto}</Badge>
-            <Badge color="blue">
+            <Badge
+              color={
+                data.estado == 0
+                  ? "grey"
+                  : data.estado == 1
+                  ? "green"
+                  : data.estado == 2
+                  ? "blue"
+                  : "red"
+              }
+            >
               {data.estado == 1
                 ? "Aprobado"
                 : data.estado == 2
