@@ -66,6 +66,7 @@ export default function Detalle_informe_tecnico_antiguo() {
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
+  const [urls, setUrls] = useState({});
 
   //  Hooks
   const { formValues, formErrors, handleChange, validateForm, setFormValues } =
@@ -87,6 +88,7 @@ export default function Detalle_informe_tecnico_antiguo() {
       }
     );
     setData(res.data);
+    setUrls(res.data.archivos);
     setFormValues({
       ...res.data.detalles,
       tipo_informe: { value: res.data.detalles.tipo_informe },
@@ -103,20 +105,11 @@ export default function Detalle_informe_tecnico_antiguo() {
       formData.append("id", id);
       formData.append("tipo_informe", formValues.tipo_informe.value);
       formData.append("status", formValues.status.value);
-      formData.append(
-        "fecha_presentacion",
-        formValues.fecha_presentacion ?? ""
-      );
+      formData.append("fecha_presentacion",formValues.fecha_presentacion ?? "");
       formData.append("registro_nro_vri", formValues.registro_nro_vri ?? "");
-      formData.append(
-        "registro_fecha_csi",
-        formValues.registro_fecha_csi ?? ""
-      );
+      formData.append("registro_fecha_csi",formValues.registro_fecha_csi ?? "");
       formData.append("observaciones", formValues.observaciones ?? "");
-      formData.append(
-        "observaciones_admin",
-        formValues.observaciones_admin ?? ""
-      );
+      formData.append("observaciones_admin",formValues.observaciones_admin ?? "");
       formData.append("file1", formValues.file1[0]);
       const res = await axiosBase.post(
         "admin/estudios/informesTecnicos/updateInformeAntiguo",
@@ -163,6 +156,7 @@ export default function Detalle_informe_tecnico_antiguo() {
               handleChange={handleChange}
               proyecto={data.proyecto}
               it={tipo}
+              files={urls}
             />
           </>
         )}

@@ -29,7 +29,7 @@ export default ({ proyecto }) => {
             </div>
             <div>
               <Box variant="awsui-key-label">Resolución</Box>
-              <Box>{proyecto?.resolucion_rectoral}</Box>
+              <Box>{proyecto?.resolucion}</Box>
             </div>
           </div>
           <div>

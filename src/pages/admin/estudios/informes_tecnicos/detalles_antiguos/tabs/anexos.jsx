@@ -2,6 +2,7 @@ import {
   Container,
   FileUpload,
   FormField,
+  Link,
 } from "@cloudscape-design/components";
 
 const propsRepetidas = {
@@ -20,10 +21,34 @@ const propsRepetidas = {
   accept: ".pdf",
 };
 
-export default ({ value1, handleChange }) => {
+const propsEnlaces = {
+  external: "true",
+  variant: "primary",
+  fontSize: "body-s",
+  target: "_blank",
+};
+
+export default ({ value1, handleChange, files }) => {
   return (
     <Container>
-      <FormField label="Archivo digital" stretch>
+      <FormField 
+        label="Archivo digital" 
+        stretch
+        description={
+          files["informe-tecnico-antiguo"] && (
+            <>
+              Ya ha cargado un {" "}
+              <Link
+                {...propsEnlaces}
+                href={files["informe-tecnico-antiguo"].url}
+              >
+                archivo
+              </Link>{" "}
+              el {files["informe-tecnico-antiguo"].fecha}
+            </>
+          )
+        }
+      >
         <FileUpload
           {...propsRepetidas}
           value={value1}

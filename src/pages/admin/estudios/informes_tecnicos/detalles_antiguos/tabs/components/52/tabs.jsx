@@ -29,7 +29,7 @@ export default function Con_con_52_tabs({
       label: "Hipótesis",
       content: (
         <Hipotesis
-          value={formValues?.resumen_ejecutivo}
+          value={formValues?.infinal11}
           handleChange={handleChange}
         />
       ),
@@ -39,7 +39,7 @@ export default function Con_con_52_tabs({
       label: "Introducción",
       content: (
         <Introduccion
-          value={formValues?.actividades1}
+          value={formValues?.infinal1}
           handleChange={handleChange}
         />
       ),
@@ -49,7 +49,7 @@ export default function Con_con_52_tabs({
       label: "Metodología",
       content: (
         <Metodologia
-          value={formValues?.actividades2}
+          value={formValues?.infinal2}
           handleChange={handleChange}
         />
       ),
@@ -59,7 +59,7 @@ export default function Con_con_52_tabs({
       label: "Exposición",
       content: (
         <Exposicion
-          value={formValues?.resultado_preliminar}
+          value={formValues?.infinal3}
           handleChange={handleChange}
         />
       ),
@@ -69,7 +69,7 @@ export default function Con_con_52_tabs({
       label: "Interpretación",
       content: (
         <Interpretacion
-          value={formValues?.resultado_preliminar}
+          value={formValues?.infinal4}
           handleChange={handleChange}
         />
       ),
@@ -79,7 +79,7 @@ export default function Con_con_52_tabs({
       label: "Conclusiones",
       content: (
         <Conclusiones
-          value={formValues?.resultado_preliminar}
+          value={formValues?.infinal5}
           handleChange={handleChange}
         />
       ),
@@ -89,7 +89,7 @@ export default function Con_con_52_tabs({
       label: "Referencias",
       content: (
         <Referencias
-          value={formValues?.resultado_preliminar}
+          value={formValues?.infinal6}
           handleChange={handleChange}
         />
       ),
@@ -99,7 +99,7 @@ export default function Con_con_52_tabs({
       label: "Anexos",
       content: (
         <Anexos
-          value={formValues?.resultado_preliminar}
+          value={formValues?.infinal7}
           handleChange={handleChange}
         />
       ),
@@ -109,7 +109,7 @@ export default function Con_con_52_tabs({
       label: "Recomendaciones",
       content: (
         <Recomendaciones
-          value={formValues?.resultado_preliminar}
+          value={formValues?.infinal8}
           handleChange={handleChange}
         />
       ),
@@ -119,7 +119,7 @@ export default function Con_con_52_tabs({
       label: "Resultados finales",
       content: (
         <Resultados_finales
-          value={formValues?.resultado_preliminar}
+          value={formValues?.infinal9}
           handleChange={handleChange}
         />
       ),
@@ -129,7 +129,7 @@ export default function Con_con_52_tabs({
       label: "Aplicación práctica",
       content: (
         <Aplicacion_practica
-          value={formValues?.resultado_preliminar}
+          value={formValues?.infinal10}
           handleChange={handleChange}
         />
       ),
@@ -139,7 +139,7 @@ export default function Con_con_52_tabs({
       label: "Resumen ejecutivo",
       content: (
         <Resumen_ejecutivo
-          value={formValues?.resultado_preliminar}
+          value={formValues?.resumen_ejecutivo}
           handleChange={handleChange}
         />
       ),
