@@ -238,7 +238,7 @@ export default () => {
       {
         params: {
           publicacion_id: collectionProps.selectedItems[0].id,
-          tipo: "tesis-propia",
+          tipo: "tesis",
         },
         responseType: "blob",
       }

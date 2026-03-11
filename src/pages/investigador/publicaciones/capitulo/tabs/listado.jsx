@@ -91,10 +91,10 @@ const columnDefinitions = [
     sortingField: "titulo",
   },
   {
-    id: "revista",
-    header: "Revista",
-    cell: (item) => item.revista,
-    sortingField: "revista",
+    id: "editorial",
+    header: "Editorial",
+    cell: (item) => item.editorial,
+    sortingField: "editorial",
   },
   {
     id: "isbn",
@@ -195,7 +195,7 @@ const columnDefinitions = [
 const columnDisplay = [
   { id: "id", visible: true },
   { id: "titulo", visible: true },
-  { id: "revista", visible: true },
+  { id: "editorial", visible: true },
   { id: "isbn", visible: true },
   { id: "año_publicacion", visible: true },
   { id: "puntaje", visible: true },
@@ -263,7 +263,7 @@ export default () => {
       {
         params: {
           publicacion_id: collectionProps.selectedItems[0].id,
-          tipo: "capitulo",
+          tipo: "capitulo_libro",
         },
         responseType: "blob",
       }
