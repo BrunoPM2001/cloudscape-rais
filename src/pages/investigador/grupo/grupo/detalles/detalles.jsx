@@ -104,6 +104,10 @@ export default ({ data, loading }) => {
         </SpaceBetween>
         <SpaceBetween size="s">
           <div>
+            <Box variant="awsui-key-label">Categoria</Box>
+            {loading ? (<Spinner />) : <div>{data.grupo_categoria}</div>}
+          </div>
+          <div>
             <Box variant="awsui-key-label">Correo</Box>
             {loading ? (
               <Spinner />

@@ -196,6 +196,10 @@ export default ({ data, loading, grupo_id, reload }) => {
         </SpaceBetween>
         <SpaceBetween size="s">
           <div>
+            <Box variant="awsui-key-label">Categoria del Grupo</Box>
+            {loading ? <Spinner /> : <div>{data.grupo_categoria}</div>}
+          </div>
+          <div>
             <Box variant="awsui-key-label">Resolución de creación</Box>
             {loading ? (
               <Spinner />

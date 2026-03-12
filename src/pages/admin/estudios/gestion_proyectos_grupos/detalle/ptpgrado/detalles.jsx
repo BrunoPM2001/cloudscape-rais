@@ -97,33 +97,19 @@ export default ({ data, loading, proyecto_id, reload }) => {
       }
     >
       <SpaceBetween size="m">
-        <div>
-          <Box variant="awsui-key-label">Título</Box>
-          {loading ? <Spinner /> : <div>{data.titulo}</div>}
-        </div>
-        <ColumnLayout columns={3}>
+        <ColumnLayout columns={4} variant="text-grid">
           <SpaceBetween size="s">
+            <div>
+              <Box variant="awsui-key-label">Título</Box>
+              {loading ? <Spinner /> : <div>{data.titulo}</div>}
+            </div>
             <div>
               <Box variant="awsui-key-label">Código del proyecto</Box>
               {loading ? <Spinner /> : <div>{data.codigo_proyecto}</div>}
             </div>
             <div>
-              <Box variant="awsui-key-label">Resolución rectoral</Box>
-              {loading ? <Spinner /> : <div>{data.resolucion_rectoral}</div>}
-            </div>
-            <div>
-              <Box variant="awsui-key-label">Fecha de resolución rectoral</Box>
-              {loading ? <Spinner /> : <div>{data.resolucion_fecha}</div>}
-            </div>
-          </SpaceBetween>
-          <SpaceBetween size="s">
-            <div>
-              <Box variant="awsui-key-label">Facultad</Box>
-              {loading ? <Spinner /> : <div>{data.facultad}</div>}
-            </div>
-            <div>
-              <Box variant="awsui-key-label">Línea de investigación</Box>
-              {loading ? <Spinner /> : <div>{data.linea}</div>}
+              <Box variant="awsui-key-label">Tipo de proyecto</Box>
+              {loading ? <Spinner /> : <div>{data.tipo_proyecto}</div>}
             </div>
             <div>
               <Box variant="awsui-key-label">Estado</Box>
@@ -186,75 +172,98 @@ export default ({ data, loading, proyecto_id, reload }) => {
           </SpaceBetween>
           <SpaceBetween size="s">
             <div>
-              <Box variant="awsui-key-label">Tipo de proyecto</Box>
-              {loading ? <Spinner /> : <div>{data.tipo_proyecto}</div>}
+              <Box variant="awsui-key-label">Resolución rectoral</Box>
+              {loading ? <Spinner /> : <div>{data.resolucion_rectoral}</div>}
             </div>
             <div>
-              <Box variant="awsui-key-label">Localización</Box>
-              {loading ? <Spinner /> : <div>{data.localizacion}</div>}
+              <Box variant="awsui-key-label">Fecha de resolución rectoral</Box>
+              {loading ? <Spinner /> : <div>{data.resolucion_fecha}</div>}
+            </div>
+          </SpaceBetween>
+          <SpaceBetween size="s">
+            <div>
+              <Box variant="awsui-key-label">Facultad</Box>
+              {loading ? <Spinner /> : <div>{data.facultad}</div>}
             </div>
             <div>
               <Box variant="awsui-key-label">Grupo</Box>
               {loading ? <Spinner /> : <div>{data.grupo_nombre}</div>}
             </div>
-          </SpaceBetween>
-        </ColumnLayout>
-        <div>
-          <Box variant="awsui-key-label">Declaración Jurada</Box>
-          {loading ? (
-            <Spinner />
-          ) : (
             <div>
-              {data.dj_aceptada == 1 ? (
-                <>
-                  <Link
-                    href={data.url2}
-                    external="true"
-                    variant="primary"
-                    target="_blank"
-                  >
-                    Descargar archivo
-                  </Link>
-                </>
+              <Box variant="awsui-key-label">Línea de investigación</Box>
+              {loading ? <Spinner /> : <div>{data.linea}</div>}
+            </div>
+            <div>
+              <Box variant="awsui-key-label">Área de conocimiento OCDE</Box>
+              {loading ? <Spinner /> : <div>{data.ocde}</div>}
+            </div>
+            <div>
+              <Box variant="awsui-key-label">Localización</Box>
+              {loading ? <Spinner /> : <div>{data.localizacion}</div>}
+            </div>
+          </SpaceBetween>
+          <SpaceBetween size="s">
+            <div>
+              <Box variant="awsui-key-label">Comentarios</Box>
+              {loading ? (
+                <Spinner />
               ) : (
-                <StatusIndicator type="pending">Pendiente</StatusIndicator>
+                <StatusIndicator type="info">
+                  {data.comentario == "" || data.comentario == null
+                    ? "Ninguno"
+                    : data.comentario}
+                </StatusIndicator>
               )}
             </div>
-          )}
-        </div>
-        <ColumnLayout columns={2}>
-          <div>
-            <Box variant="awsui-key-label">Comentarios</Box>
-            {loading ? (
-              <Spinner />
-            ) : (
-              <StatusIndicator type="info">
-                {data.comentario == "" || data.comentario == null
-                  ? "Ninguno"
-                  : data.comentario}
-              </StatusIndicator>
-            )}
-          </div>
-          <div>
-            <Box variant="awsui-key-label">Observaciones</Box>
-            {loading ? (
-              <Spinner />
-            ) : (
-              <StatusIndicator
-                type={
-                  data.observaciones_admin == "" ||
+            <div>
+              <Box variant="awsui-key-label">Observaciones</Box>
+              {loading ? (
+                <Spinner />
+              ) : (
+                <StatusIndicator
+                  type={
+                    data.observaciones_admin == "" ||
+                    data.observaciones_admin == null
+                      ? "success"
+                      : "pending"
+                  }
+                >
+                  {data.observaciones_admin == "" ||
                   data.observaciones_admin == null
-                    ? "success"
-                    : "pending"
-                }
-              >
-                {data.observaciones_admin == "" ||
-                data.observaciones_admin == null
-                  ? "Ninguna"
-                  : data.observaciones_admin}
-              </StatusIndicator>
-            )}
-          </div>
+                    ? "Ninguna"
+                    : data.observaciones_admin}
+                </StatusIndicator>
+              )}
+            </div>
+            <div>
+              <Box variant="awsui-key-label">Declaración Jurada</Box>
+              {loading ? (
+                <Spinner />
+              ) : (
+                <div>
+                  {data.dj_aceptada == 1 ? (
+                    <>
+                      <Link
+                        href={data.url2}
+                        external="true"
+                        variant="primary"
+                        target="_blank"
+                      >
+                        Descargar archivo
+                      </Link>
+                    </>
+                  ) : (
+                    <StatusIndicator type="pending">Pendiente</StatusIndicator>
+                  )}
+                </div>
+              )}
+            </div>
+          </SpaceBetween>
+        </ColumnLayout>
+
+        <ColumnLayout columns={2}>
+
+
         </ColumnLayout>
       </SpaceBetween>
       {visible && (
