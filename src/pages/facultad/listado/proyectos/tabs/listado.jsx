@@ -233,35 +233,42 @@ export default () => {
   };
 
   const exportExcel = async () => {
-    if (allPageItems.length > 15000) {
-      pushNotification(
-        "La cantidad de items a exportar es demasiada, redúzcala a menos de 15000",
-        "warning",
-        notifications.length + 1
-      );
-    } else {
-      const visibleColumns = columnDisplay
-        .filter((item) => item.visible)
-        .map((item) => item.id);
-      const filteredItems = allPageItems.map((item) =>
-        Object.fromEntries(
-          Object.entries(item).filter(([key]) => visibleColumns.includes(key))
-        )
-      );
+    setLoadingReport(true);
 
-      setLoadingReport(true);
       const res = await axiosBase.post(
-        "facultad/reportes/excel",
-        filteredItems,
+        "facultad/reportes/proyectos",
         {
-          responseType: "blob",
+          filters: propertyFilterProps.query
+        },
+        {
+          responseType: "blob"
         }
       );
-      const blob = await res.data;
+
+      const contentType = res.headers["content-type"] || "";
+
+      if (contentType.includes("application/json")) {
+        const text = await res.data.text();
+        const json = JSON.parse(text);
+
+          pushNotification(
+            json.detail,
+            json.message,
+            notifications.length + 1
+          );
+
+          setLoadingReport(false);
+          return;
+        }
+
+      const blob = new Blob([res.data]);
       const url = URL.createObjectURL(blob);
-      window.open(url, "_blank");
-      setLoadingReport(false);
-    }
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "proyectos.xlsx";
+      link.click();
+
+    setLoadingReport(false);
   };
 
   useEffect(() => {

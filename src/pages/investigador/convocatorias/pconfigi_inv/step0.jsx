@@ -163,7 +163,7 @@ export default function Registro_pconfigi_inv_0() {
                                   id: collectionProps.selectedItems[0]["id"],
                                 });
                                 window.location.href =
-                                  "pconfigi_inv/paso1?" + query;
+                                  "pconfigi-inv/paso1?" + query;
                               } else if (detail.id == "action_1_2") {
                                 setType("delete");
                               } else if (detail.id == "action_1_3") {
@@ -200,7 +200,7 @@ export default function Registro_pconfigi_inv_0() {
                           <Button
                             variant="primary"
                             onClick={() => {
-                              window.location.href = "pconfigi_inv/paso1";
+                              window.location.href = "pconfigi-inv/paso1";
                             }}
                             disabled={distributions.length > 0 || loading}
                           >
