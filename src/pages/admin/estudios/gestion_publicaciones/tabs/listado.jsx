@@ -115,6 +115,18 @@ const FILTER_PROPS = [
     operators: stringOperators,
   },
   {
+    propertyLabel: "Filiación",
+    key: "filiacion",
+    groupValuesLabel: "Filiaciones",
+    operators: stringOperators,
+  },
+  {
+    propertyLabel: "Filiación Unica",
+    key: "filiacion_unica",
+    groupValuesLabel: "Filaciones unicas",
+    operators: stringOperators,
+  },
+  {
     propertyLabel: "Facultad",
     key: "facultad",
     groupValuesLabel: "Facultades",
@@ -220,6 +232,13 @@ const columnDefinitions = [
     cell: (item) => item.presentador,
     minWidth: 200,
     sortingField: "presentador",
+  },
+  {
+    id: "categoria",
+    header: "Categoria",
+    cell: (item) => item.docente_categoria,
+    minWidth: 100,
+    sortingField: "categoria",
   },
   {
      id: "grupo_investigacion",
@@ -373,6 +392,7 @@ const columnDisplay = [
   { id: "titulo", visible: true },
   { id: "calificacion", visible: true },
   { id: "presentador", visible: true },
+  { id: "categoria", visible: true },
   { id: "grupo_investigacion", visible: true },
   { id: "facultad", visible: true },
   { id: "area", visible: true },

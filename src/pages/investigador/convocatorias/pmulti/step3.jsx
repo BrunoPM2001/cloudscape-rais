@@ -233,16 +233,16 @@ export default function Registro_pmulti_3() {
         );
       }
 
-      if (
-        data.filter((item) => item.tipo_integrante == "Gestor Administrativo")
-          .length < GESTOR_ADMIN
-      ) {
-        tempErrors.push(
-          "Necesita registrar al menos " +
-            GESTOR_ADMIN +
-            " gestor administrativo"
-        );
-      }
+      //if (
+      //  data.filter((item) => item.tipo_integrante == "Gestor Administrativo")
+      //    .length < GESTOR_ADMIN
+      //) {
+      //  tempErrors.push(
+      //    "Necesita registrar al menos " +
+      //      GESTOR_ADMIN +
+      //      " gestor administrativo"
+      //  );
+      //}
 
       setAlert(tempErrors);
       if (tempErrors.length == 0) {
@@ -381,16 +381,16 @@ export default function Registro_pmulti_3() {
                                       text: "Tesista",
                                       id: "action_2_3",
                                     },
-                                    {
-                                      text: "Gestor administrativo",
-                                      id: "action_2_4",
-                                      disabled:
-                                        data.filter(
-                                          (item) =>
-                                            item.tipo_integrante ==
-                                            "Gestor Administrativo"
-                                        ).length == 1,
-                                    },
+                                    //{
+                                    //  text: "Gestor administrativo",
+                                    //  id: "action_2_4",
+                                    //  disabled:
+                                    //    data.filter(
+                                    //      (item) =>
+                                    //        item.tipo_integrante ==
+                                    //</SpaceBetween>        "Gestor Administrativo"
+                                    //    ).length == 1,
+                                    //},
                                   ]}
                                 >
                                   Agregar integrante
