@@ -12,15 +12,32 @@ import {
   SpaceBetween,
 } from "@cloudscape-design/components";
 import { useAutosuggest } from "../../../../../hooks/useAutosuggest";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axiosBase from "../../../../../api/axios";
 
 export default () => {
   //  States
   const [form, setForm] = useState({});
+  const [loadingSync, setLoadingSync] = useState(false);
 
   //  Hooks
   const { loading, options, setOptions, value, setValue, setAvoidSelect } =
     useAutosuggest("admin/estudios/sum/listadoSum");
+
+  // Functions
+  const actualizarTodo = async () => {
+    setLoadingSync(true);
+
+    try {
+      await axiosBase.post("admin/estudios/sum/sync-total");
+      alert("Sincronización completada");
+    } catch (error) {
+      console.error(error);
+      alert("Error al sincronizar");
+    }
+
+    setLoadingSync(false);
+  };
 
   return (
     <Container>
@@ -28,7 +45,18 @@ export default () => {
         <Form
           variant="embedded"
           header={
-            <Header variant="h2">
+            <Header variant="h2" 
+              actions={
+              <Button
+                variant="primary"
+                onClick={actualizarTodo}
+                loading={loadingSync}
+                //disabled={loadingSync}
+                disabled={true}
+              >
+                Sincronizar SUM completo
+              </Button>}
+            >
               Búsqueda de alumnos en la base de datos del SUM
             </Header>
           }
