@@ -99,7 +99,7 @@ export default function Paso4({ info, loading, reload }) {
                       if (collectionProps.selectedItems[0].tipo == "Tesista") {
                         setType("editTe");
                       } else if (
-                        collectionProps.selectedItems[0].tipo == "Externo"
+                        collectionProps.selectedItems[0].usuario_tipo == "Externo"
                       ) {
                         setType("editExterno");
                       } else {

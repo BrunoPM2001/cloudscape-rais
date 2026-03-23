@@ -419,6 +419,7 @@ export default () => {
       loading={loading}
       loadingText="Cargando datos"
       wrapLines
+      resizableColumns
       selectionType="single"
       onRowClick={({ detail }) => actions.setSelectedItems([detail.item])}
       enableKeyboardNavigation
