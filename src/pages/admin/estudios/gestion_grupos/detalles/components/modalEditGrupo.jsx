@@ -67,6 +67,7 @@ const initialForm = {
   observaciones_admin: "",
   estado: null,
   grupo_categoria: null,
+  facultad_id: null,
   telefono: "",
   anexo: "",
   oficina: "",
@@ -90,6 +91,7 @@ const formRules = {
   observaciones_admin: { required: false },
   estado: { required: true },
   grupo_categoria: { required: true },
+  facultad_id: {required: true},
   telefono: { required: false },
   anexo: { required: false },
   oficina: { required: false },
@@ -105,6 +107,7 @@ export default ({ close, item, grupo_id, reload }) => {
   //  States
   const [optEstado, setOptEstado] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [optFacultad, setOptFacultad] = useState([]);
 
   //  Hooks
   const { formValues, formErrors, handleChange, validateForm } =
@@ -114,6 +117,8 @@ export default ({ close, item, grupo_id, reload }) => {
         ...item,
         grupo_categoria:
           item.grupo_categoria == null ? null : { value: item.grupo_categoria },
+        facultad_id:
+          item.facultad_id == null ? null : { value: item.facultad_id, label: item.facultad },
       },
       {
         ...formRules,
@@ -189,6 +194,19 @@ export default ({ close, item, grupo_id, reload }) => {
         statesSolicitud.find((opt) => opt.value == item.estado)
       );
     }
+  }, []);
+
+  useEffect(() => {
+    axiosBase
+      .get("admin/estudios/grupos/listadoFacultades")
+      .then((res) => {
+        const opciones = res.data.map((f) => ({
+          value: f.id,
+          label: f.nombre,
+        }));
+
+        setOptFacultad(opciones);
+      });
   }, []);
 
   return (
@@ -314,7 +332,7 @@ export default ({ close, item, grupo_id, reload }) => {
             }
           />
         </FormField>
-        <ColumnLayout columns={item.tipo == "grupo" ? 2 : 1}>
+        <ColumnLayout columns={item.tipo == "grupo" ? 3 : 1}>
           <FormField label="Estado" stretch errorText={formErrors.estado}>
             <Select
               options={optEstado}
@@ -341,6 +359,24 @@ export default ({ close, item, grupo_id, reload }) => {
                 selectedOption={formValues.grupo_categoria}
                 onChange={({ detail }) =>
                   handleChange("grupo_categoria", detail.selectedOption)
+                }
+              />
+            </FormField>
+          )}
+          {item.tipo == "grupo" && (
+            <FormField
+              label="Facultad"
+              stretch
+              errorText={formErrors.facultad_id}
+            >
+              <Select
+                placeholder="Seleccione facultad"
+                options={optFacultad}
+                selectedOption={formValues.facultad_id}
+                loadingText="Cargando facultades..."
+                statusType={optFacultad.length === 0 ? "loading" : "finished"}
+                onChange={({ detail }) =>
+                  handleChange("facultad_id", detail.selectedOption)
                 }
               />
             </FormField>
