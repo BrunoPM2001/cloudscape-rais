@@ -167,6 +167,7 @@ export default () => {
   const { notifications, pushNotification } = useContext(NotificationContext);
 
   const [loading, setLoading] = useState(true);
+  const [loadingBtn, setLoadingBtn] = useState(false);
   const [loadingReport, setLoadingReport] = useState(false);
   const [loadingIntegrantes, setLoadingIntegrantes] = useState(false);
   const [integrantes, setIntegrantes] = useState([]);
@@ -223,7 +224,8 @@ export default () => {
       "facultad/listado/proyectos/listadoIntegrantes",
       {
         params: {
-          id: collectionProps.selectedItems[0].id
+          id: collectionProps.selectedItems[0].id,
+          origen: selected.origen
         },
       }
     );
@@ -271,6 +273,27 @@ export default () => {
     setLoadingReport(false);
   };
 
+  const reporte = async () => {
+    if (!collectionProps.selectedItems.length) return;
+    const proyecto = collectionProps.selectedItems[0];
+    console.log("Proyecto seleccionado:", proyecto);
+    setLoadingBtn(true);
+    const res = await axiosBase.get(
+      "facultad/listado/proyectos/reporteProyecto",
+      {
+        params: {
+          id: proyecto.id, 
+          tipo_proyecto: proyecto.tipo_proyecto,
+        },
+        responseType: "blob",
+      }
+    );
+    const blob = await res.data;
+    const url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
+    setLoadingBtn(false);
+  };
+
   useEffect(() => {
     getData();
   }, []);
@@ -286,7 +309,7 @@ export default () => {
     <SpaceBetween size="l">
     <Table
       {...collectionProps}
-      trackBy="id"
+      trackBy={(item) => item.id + '-' + item.origen}
       items={items}
       columnDefinitions={columnDefinitions}
       columnDisplay={columnDisplay}
@@ -310,6 +333,14 @@ export default () => {
           counter={"(" + distributions.length + ")"}
           actions={
             <SpaceBetween direction="horizontal" size="xs">
+              <Button
+                disabled={loading || collectionProps.selectedItems.length == 0}
+                variant="primary"
+                onClick={reporte}
+                loading={loadingReport}
+              >
+                Reporte
+              </Button>
               <Button
                 disabled={loading}
                 variant="primary"
@@ -340,24 +371,25 @@ export default () => {
           id: "doc_numero",
           header: "N° de documento",
           cell: (item) => item.doc_numero,
+          width: 130,
         },
         {
           id: "apellido1",
           header: "Apellido Paterno",
           cell: (item) => item.apellido1,
-          width: 130,
+          width: 180,
         },
         {
           id: "apellido2",
           header: "Apellido Materno",
           cell: (item) => item.apellido2,
-          width: 130,
+          width: 180,
         },
         {
           id: "nombres",
           header: "Nombres",
           cell: (item) => item.nombres,
-          width: 130,
+          width: 180,
         },
         {
           id: "condicion",
@@ -369,6 +401,12 @@ export default () => {
           id: "licencia",
           header: "Licencia",
           cell: (item) => item.licencia,
+          width: 180,
+        },
+        {
+          id: "grupo",
+          header: "Grupo de Investigacón",
+          cell: (item) => item.grupo,
         },
       ]}
       columnDisplay={[
@@ -378,6 +416,7 @@ export default () => {
         { id: "nombres", visible: true },
         { id: "condicion", visible: true },
         { id: "licencia", visible: true },
+        { id: "grupo", visible: true },
       ]}
       enableKeyboardNavigation
       items={integrantes}

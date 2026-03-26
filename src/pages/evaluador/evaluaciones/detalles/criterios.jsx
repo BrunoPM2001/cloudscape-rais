@@ -107,7 +107,7 @@ export default ({
                 );
               },
               disabledReason: (item) => {
-                if (item.editable != 1 || item.nivel == 2 || cerrado) {
+                if (item.editable != 1 || cerrado) {
                   return "Este campo no se puede editar.";
                 }
                 return undefined;
@@ -124,7 +124,7 @@ export default ({
             cell: (item) =>
               item.nivel != 2 || item.opcion == "SUB TOTAL"
                 ? item.puntaje
-                : null,
+                : item.puntaje,
           },
           {
             id: "comentario",
@@ -141,7 +141,7 @@ export default ({
                 );
               },
               disabledReason: (item) => {
-                if (item.editable != 1 || item.nivel == 2 || cerrado) {
+                if (item.editable != 1 || cerrado) {
                   return "Este campo no se puede editar.";
                 }
                 return undefined;
