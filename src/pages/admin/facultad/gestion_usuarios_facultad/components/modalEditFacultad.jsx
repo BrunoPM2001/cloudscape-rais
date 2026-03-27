@@ -23,7 +23,6 @@ const initialForm = {
   institucion: "",
   username: "",
   password: "",
-  password_confirm: "",
 };
 
 const formRules = {
@@ -32,10 +31,9 @@ const formRules = {
   institucion: { required: true },
   username: { required: true },
   password: { required: true },
-  password_confirm: { required: true },
 };
 
-export default ({ close, reload }) => {
+export default ({ close, reload, item }) => {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
 
@@ -44,32 +42,24 @@ export default ({ close, reload }) => {
 
   //  Hooks
   const { formValues, formErrors, handleChange, validateForm } =
-    useFormValidation(initialForm, formRules);
+    useFormValidation({...initialForm,...item,}, formRules);
 
   const { loading, options, setOptions, value, setValue, setAvoidSelect } =
     useAutosuggest("admin/facultad/gestionUFacultad/searchInvestigador");
 
   //  Functions
-  const create = async () => {
+  const update = async () => {
     if (validateForm()) {
-
-      if (formValues.password !== formValues.password_confirm) {
-        pushNotification(
-          "Las contraseñas no coinciden",
-          "error",
-          notifications.length + 1
-        );
-        return;
-      }
-      
       setCreating(true);
-      const res = await axiosBase.post(
-        "admin/facultad/gestionUFacultad/crearUsuarioFacultad",
-        formValues
+
+      const res = await axiosBase.put("admin/facultad/gestionUFacultad/updateUsuarioFacultad",
+      formValues
       );
       const data = res.data;
+
       setCreating(false);
       close();
+
       pushNotification(data.detail, data.message, notifications.length + 1);
       reload();
     }
@@ -86,13 +76,13 @@ export default ({ close, reload }) => {
             <Button variant="normal" onClick={close}>
               Cancelar
             </Button>
-            <Button variant="primary" loading={creating} onClick={create}>
-              Crear usuario
+            <Button variant="primary" loading={creating} onClick={update}>
+              Guardar cambios
             </Button>
           </SpaceBetween>
         </Box>
       }
-      header="Crear usuario facultad"
+      header="Editar usuario facultad"
     >
       <SpaceBetween direction="vertical" size="s">
         <FormField label="Buscar investigador" stretch>
@@ -126,60 +116,59 @@ export default ({ close, reload }) => {
           />
         </FormField>
         <ColumnLayout columns={2}>
-          <FormField label="Apellido paterno" errorText={formErrors.apellido1}>
+          <FormField label="Apellido paterno" errorText={formErrors.apellido1} stretch>
             <Input
               placeholder="Apellido paterno"
               value={formValues.apellido1}
               onChange={({ detail }) => handleChange("apellido1", detail.value)}
             />
           </FormField>
-          <FormField label="Apellido materno" errorText={formErrors.apellido2}>
+          <FormField label="Apellido materno" errorText={formErrors.apellido2} stretch>
             <Input
               placeholder="Apellido materno"
               value={formValues.apellido2}
               onChange={({ detail }) => handleChange("apellido2", detail.value)}
             />
           </FormField>
-          <FormField label="Nombres" errorText={formErrors.nombres}>
+          <FormField label="Nombres" errorText={formErrors.nombres} stretch>
             <Input
               placeholder="Escriba los nombres"
               value={formValues.nombres}
               onChange={({ detail }) => handleChange("nombres", detail.value)}
             />
           </FormField>
-          <FormField label="Código" errorText={formErrors.institucion}>
+          <FormField
+            label="Institución"
+            errorText={formErrors.institucion}
+            stretch
+          >
             <Input
-              placeholder="Codigo"
-              value={formValues.codigo}
-              onChange={({ detail }) => handleChange("codigo", detail.value)}
+              placeholder="Institución de procedencia"
+              value={formValues.institucion}
+              onChange={({ detail }) =>
+                handleChange("institucion", detail.value)
+              }
             />
           </FormField>
-          <FormField label="Facultad" errorText={formErrors.facultad}>
+          <FormField label="Facultad" errorText={formErrors.facultad} stretch>
             <Input
               placeholder="Nombre de la facultad"
               value={formValues.facultad}
               onChange={({ detail }) => handleChange("facultad", detail.value)}
             />
           </FormField>
-          <FormField label="Usuario" errorText={formErrors.username}>
+          <FormField label="Usuario" errorText={formErrors.username} stretch>
             <Input
               placeholder="Nombre de usuario"
               value={formValues.username}
               onChange={({ detail }) => handleChange("username", detail.value)}
             />
           </FormField>
-          <FormField label="Contraseña" errorText={formErrors.password}>
+          <FormField label="Contraseña" errorText={formErrors.password} stretch>
             <Input
               type="password"
               value={formValues.password}
               onChange={({ detail }) => handleChange("password", detail.value)}
-            />
-          </FormField>
-          <FormField label="Confirmar contraseña" errorText={formErrors.password_confirm}>
-            <Input
-              type="password"
-              value={formValues.password_confirm}
-              onChange={({ detail }) => handleChange("password_confirm", detail.value)}
             />
           </FormField>
         </ColumnLayout>

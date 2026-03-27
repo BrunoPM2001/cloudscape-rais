@@ -17,8 +17,12 @@ import axiosBase from "../../../../../../api/axios";
 import { useFormValidation } from "../../../../../../hooks/useFormValidation";
 
 const formatNumber = (value) => {
-  if (value === "" || value === null || value === undefined) return "";
-  return new Intl.NumberFormat("en-US").format(Number(value));
+  if (!value) return "";
+
+  return new Intl.NumberFormat("en-US", {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 10,
+  }).format(Number(value));
 };
 
 const parseNumber = (value) => {
@@ -87,6 +91,7 @@ export default function Paso1({ data, loading, reload }) {
   const [ocde, setOcde] = useState([]);
   const [paises, setPaises] = useState([]);
   const [loadingUpdate, setLoadingUpdate] = useState(false);
+  const [typingField, setTypingField] = useState(null);
 
   //  Url
   const location = useLocation();
@@ -351,7 +356,9 @@ export default function Paso1({ data, loading, reload }) {
                   stretch
                 >
                   <Input
-                    value={formatNumber(formValues.aporte_unmsm)}
+                    value={typingField === "aporte_unmsm" ? formValues.aporte_unmsm : formatNumber(formValues.aporte_unmsm)}
+                    onFocus={() => setTypingField("aporte_unmsm")}
+                    onBlur={() => setTypingField(null)}
                     onChange={({ detail }) =>
                       handleChange("aporte_unmsm", parseNumber(detail.value))
                     }
@@ -363,7 +370,9 @@ export default function Paso1({ data, loading, reload }) {
                   stretch
                 >
                   <Input
-                    value={formatNumber(formValues.aporte_no_unmsm)}
+                    value={typingField === "aporte_no_unmsm" ? formValues.aporte_no_unmsm : formatNumber(formValues.aporte_no_unmsm)}
+                    onFocus={() => setTypingField("aporte_no_unmsm")}
+                    onBlur={() => setTypingField(null)}
                     onChange={({ detail }) =>
                       handleChange("aporte_no_unmsm", parseNumber(detail.value))
                     }
@@ -375,12 +384,11 @@ export default function Paso1({ data, loading, reload }) {
                   stretch
                 >
                   <Input
-                    value={formatNumber(formValues.financiamiento_fuente_externa)}
+                    value={typingField === "financiamiento_fuente_externa" ? formValues.financiamiento_fuente_externa : formatNumber(formValues.financiamiento_fuente_externa)}
+                    onFocus={() => setTypingField("financiamiento_fuente_externa")}
+                    onBlur={() => setTypingField(null)}
                     onChange={({ detail }) =>
-                      handleChange(
-                        "financiamiento_fuente_externa",
-                        parseNumber(detail.value)
-                      )
+                      handleChange("financiamiento_fuente_externa", parseNumber(detail.value))
                     }
                   />
                 </FormField>
@@ -390,7 +398,9 @@ export default function Paso1({ data, loading, reload }) {
                   stretch
                 >
                   <Input
-                    value={formatNumber(formValues.entidad_asociada)}
+                    value={typingField === "entidad_asociada" ? formValues.entidad_asociada : formatNumber(formValues.entidad_asociada)}
+                    onFocus={() => setTypingField("entidad_asociada")}
+                    onBlur={() => setTypingField(null)}
                     onChange={({ detail }) =>
                       handleChange("entidad_asociada", parseNumber(detail.value))
                     }

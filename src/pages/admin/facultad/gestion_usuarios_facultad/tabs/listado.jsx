@@ -12,6 +12,7 @@ import { useState, useEffect } from "react";
 import { useCollection } from "@cloudscape-design/collection-hooks";
 import axiosBase from "../../../../../api/axios";
 import ModalFacultad from "../components/modalFacultad";
+import ModalEdit from "../components/modalEditFacultad";
 
 const stringOperators = [":", "!:", "=", "!=", "^", "!^"];
 
@@ -107,6 +108,7 @@ export default () => {
   const [loading, setLoading] = useState(true);
   const [modal, setModal] = useState("");
   const [distributions, setDistribution] = useState([]);
+  const [selectedItem, setSelectedItem] = useState(null);
   const {
     items,
     filteredItemsCount,
@@ -165,6 +167,8 @@ export default () => {
         resizableColumns
         enableKeyboardNavigation
         selectionType="single"
+        selectedItems={selectedItem ? [selectedItem] : []}
+        onSelectionChange={({ detail }) =>setSelectedItem(detail.selectedItems[0])}
         header={
           <Header
             counter={
@@ -181,13 +185,22 @@ export default () => {
                       text: "Editar",
                     },
                   ]}
+                  onItemClick={({ detail }) => {
+                    if (detail.id === "action_1") {
+                      if (!selectedItem) {
+                        alert("Seleccione un registro");
+                        return;
+                      }
+                      setModal("editar");
+                    }
+                  }}
                 >
                   Opciones de usuario
                 </ButtonDropdown>
                 <Button
                   variant="primary"
                   onClick={() => {
-                    setModal("evaluador");
+                    setModal("nuevo");
                   }}
                 >
                   Nuevo usuario
@@ -215,8 +228,18 @@ export default () => {
           </Box>
         }
       />
-      {modal == "evaluador" && (
-        <ModalFacultad close={() => setModal("")} reload={getData} />
+      {modal == "nuevo" && (
+        <ModalFacultad 
+          close={() => setModal("")} 
+          reload={getData} 
+        />
+      )}
+      {modal == "editar" && (
+        <ModalEdit
+          close={() => setModal("")}
+          reload={getData}
+          item={selectedItem}
+        />
       )}
     </>
   );

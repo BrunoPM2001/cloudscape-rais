@@ -128,19 +128,21 @@ const columnDefinitions = [
     cell: (item) => item.id,
     sortingField: "id",
     isRowHeader: true,
+    width: 90,
   },
   {
     id: "codigo_proyecto",
     header: "Código",
     cell: (item) => item.codigo_proyecto,
     sortingField: "codigo_proyecto",
+    width: 130,
   },
   {
     id: "titulo",
     header: "Título",
     cell: (item) => item.titulo,
     sortingField: "titulo",
-    minWidth: 250,
+    minWidth: 400,
   },
   {
     id: "responsable",
@@ -173,6 +175,7 @@ const columnDefinitions = [
     header: "Aporte no UNMSM",
     cell: (item) => item.aporte_no_unmsm,
     sortingField: "aporte_no_unmsm",
+    width: 130,
   },
   {
     id: "aporte_unmsm",
@@ -185,30 +188,35 @@ const columnDefinitions = [
     header: "Aporte Asociada y/o Colaboradora",
     cell: (item) => item.entidad_asociada,
     sortingField: "entidad_asociada",
+    width: 180,
   },
   {
     id: "financiamiento_fuente_externa",
     header: "Aporte externo",
     cell: (item) => item.financiamiento_fuente_externa,
     sortingField: "financiamiento_fuente_externa",
+    width: 130,
   },
   {
     id: "monto_asignado",
     header: "Monto asignado",
     cell: (item) => item.monto_asignado,
     sortingField: "monto_asignado",
+    width: 130,
   },
   {
     id: "participacion_unmsm",
     header: "Participación UNMSM",
     cell: (item) => item.participacion_unmsm,
     sortingField: "participacion_unmsm",
+    width: 160,
   },
   {
     id: "fuente_fin",
     header: "Fuente financiamiento",
     cell: (item) => item.fuente_fin,
     sortingField: "fuente_fin",
+    width: 180,
   },
   {
     id: "fecha_inicio",
@@ -227,18 +235,13 @@ const columnDefinitions = [
     header: "RR o RD",
     cell: (item) => item.resolucion_rectoral,
     sortingField: "resolucion_rectoral",
+    width: 160,
   },
   {
     id: "resolucion_fecha",
     header: "Resolución fecha",
     cell: (item) => item.resolucion_fecha,
     sortingField: "resolucion_fecha",
-  },
-  {
-    id: "entidad_asociada",
-    header: "Aporte asociada y/o colaboradora",
-    cell: (item) => item.entidad_asociada,
-    sortingField: "entidad_asociada",
   },
   {
     id: "pais",
@@ -289,12 +292,14 @@ const columnDefinitions = [
     header: "Registrado",
     cell: (item) => item.registrado,
     sortingField: "registrado",
+    width: 140,
   },
   {
     id: "actualizado",
     header: "Actualizado",
     cell: (item) => item.actualizado,
     sortingField: "actualizado",
+    width: 140,
   },
 ];
 
@@ -352,7 +357,7 @@ export default () => {
       ),
     },
     pagination: { pageSize: 10 },
-    sorting: { defaultState: { sortingColumn: columnDefinitions[0] } },
+    sorting: {},
     selection: {},
   });
 

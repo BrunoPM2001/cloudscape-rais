@@ -80,6 +80,7 @@ const columnDefinitions = [
     cell: (item) => item.id,
     sortingField: "id",
     isRowHeader: true,
+    width: 100,
   },
   {
     id: "evaluador_id",
@@ -87,6 +88,7 @@ const columnDefinitions = [
     cell: (item) => item.evaluador_id,
     sortingField: "evaluador_id",
     isRowHeader: true,
+    width: 130,
   },
   {
     id: "proyecto_id",
@@ -99,7 +101,7 @@ const columnDefinitions = [
     id: "evaluador",
     header: "Evaluador",
     cell: (item) => item.evaluador,
-    sortingField: "evaluador",
+    width: 130,
   },
   {
     id: "tipo_proyecto",
@@ -119,12 +121,14 @@ const columnDefinitions = [
     header: "Facultad",
     cell: (item) => item.facultad,
     sortingField: "facultad",
+    width: 150,
   },
   {
     id: "linea_investigacion",
     header: "Linea de investigación",
     cell: (item) => item.linea_investigacion,
     sortingField: "linea_investigacion",
+    minWidth: 300,
   },
   {
     id: "periodo",
@@ -143,6 +147,7 @@ const columnDefinitions = [
     header: "Criterios evaluados",
     cell: (item) => item.criterios_evaluados,
     sortingField: "criterios_evaluados",
+    width: 130,
   },
   {
     id: "evaluado",
@@ -274,6 +279,7 @@ export default () => {
   return (
     <Table
       {...collectionProps}
+      wrapLines
       trackBy="id"
       items={items}
       columnDefinitions={columnDefinitions}
