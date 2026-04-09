@@ -20,7 +20,6 @@ const initialForm = {
   apellido1: "",
   apellido2: "",
   nombres: "",
-  institucion: "",
   username: "",
   password: "",
   password_confirm: "",
@@ -29,7 +28,6 @@ const initialForm = {
 const formRules = {
   apellido1: { required: true },
   nombres: { required: true },
-  institucion: { required: true },
   username: { required: true },
   password: { required: true },
   password_confirm: { required: true },
@@ -61,7 +59,7 @@ export default ({ close, reload }) => {
         );
         return;
       }
-      
+
       setCreating(true);
       const res = await axiosBase.post(
         "admin/facultad/gestionUFacultad/crearUsuarioFacultad",
@@ -159,6 +157,13 @@ export default ({ close, reload }) => {
               placeholder="Nombre de la facultad"
               value={formValues.facultad}
               onChange={({ detail }) => handleChange("facultad", detail.value)}
+            />
+          </FormField>
+          <FormField label="Correo" errorText={formErrors.facultad} stretch>
+            <Input
+              placeholder="Correo electronico de instituto"
+              value={formValues.correo}
+              onChange={({ detail }) => handleChange("correo", detail.value)}
             />
           </FormField>
           <FormField label="Usuario" errorText={formErrors.username}>

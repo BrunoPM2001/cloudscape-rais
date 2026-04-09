@@ -20,7 +20,6 @@ const initialForm = {
   apellido1: "",
   apellido2: "",
   nombres: "",
-  institucion: "",
   username: "",
   password: "",
 };
@@ -28,7 +27,6 @@ const initialForm = {
 const formRules = {
   apellido1: { required: true },
   nombres: { required: true },
-  institucion: { required: true },
   username: { required: true },
   password: { required: true },
 };
@@ -137,17 +135,11 @@ export default ({ close, reload, item }) => {
               onChange={({ detail }) => handleChange("nombres", detail.value)}
             />
           </FormField>
-          <FormField
-            label="Institución"
-            errorText={formErrors.institucion}
-            stretch
-          >
+          <FormField label="Código" errorText={formErrors.institucion}>
             <Input
-              placeholder="Institución de procedencia"
-              value={formValues.institucion}
-              onChange={({ detail }) =>
-                handleChange("institucion", detail.value)
-              }
+              placeholder="Codigo"
+              value={formValues.codigo}
+              onChange={({ detail }) => handleChange("codigo", detail.value)}
             />
           </FormField>
           <FormField label="Facultad" errorText={formErrors.facultad} stretch>
@@ -155,6 +147,13 @@ export default ({ close, reload, item }) => {
               placeholder="Nombre de la facultad"
               value={formValues.facultad}
               onChange={({ detail }) => handleChange("facultad", detail.value)}
+            />
+          </FormField>
+          <FormField label="Correo" errorText={formErrors.facultad} stretch>
+            <Input
+              placeholder="Correo electronico de instituto"
+              value={formValues.correo}
+              onChange={({ detail }) => handleChange("correo", detail.value)}
             />
           </FormField>
           <FormField label="Usuario" errorText={formErrors.username} stretch>

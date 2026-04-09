@@ -212,7 +212,7 @@ export default function Registro_pmulti_3() {
       }
 
       if (
-        data.filter((item) => item.tipo == "Estudiante pregrado").length <
+        data.filter((item) => item.tipo == "Estudiante pregrado" || item.tipo == "Egresado pregrado").length <
         TESISTA_PRE_MIN
       ) {
         tempErrors.push(
@@ -223,7 +223,7 @@ export default function Registro_pmulti_3() {
       }
 
       if (
-        data.filter((item) => item.tipo == "Estudiante posgrado").length <
+        data.filter((item) => item.tipo == "Estudiante posgrado" || item.tipo == "Egresado posgrado").length <
         TESISTA_POS_MIN
       ) {
         tempErrors.push(

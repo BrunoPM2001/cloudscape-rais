@@ -61,12 +61,14 @@ const columnDefinitions = [
     header: "ID",
     cell: (item) => item.id,
     sortingField: "id",
+    width: 80,
   },
   {
     id: "codigo_trabajador",
-    header: "Código trabajador",
-    cell: (item) => item.codigo_trabajador,
+    header: "Código",
+    cell: (item) => item.codigo,
     sortingField: "codigo_trabajador",
+    width: 110,
   },
   {
     id: "apellidos",
@@ -85,6 +87,14 @@ const columnDefinitions = [
     header: "Facultad",
     cell: (item) => item.facultad,
     sortingField: "facultad",
+    width: 250,
+  },
+  {
+    id: "correo",
+    header: "Correo electrónico",
+    cell: (item) => item.correo,
+    sortingField: "correo",
+    width: 250,
   },
   {
     id: "username",
@@ -100,6 +110,7 @@ const columnDisplay = [
   { id: "codigo_trabajador", visible: true },
   { id: "apellidos", visible: true },
   { id: "nombres", visible: true },
+  { id: "correo", visible: true },
   { id: "username", visible: true },
 ];
 
