@@ -58,6 +58,23 @@ export default ({ data, loading, proyecto_id, reload }) => {
     window.open(url, "_blank");
   };
 
+  const exportPdfCompleto = async () => {
+    setLoadingReporte(true);
+    const res = await axiosBase.get(
+      "admin/estudios/proyectosGrupo/reporteCompleto",
+      {
+        params: {
+          proyecto_id,
+        },
+        responseType: "blob",
+      }
+    );
+    const blob = await res.data;
+    const url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
+    setLoadingReporte(false);
+  };
+
   const generarDeclaracion = async () => {
     setLoadingRegeneracion(true);
     const res = await axiosBase.get(
@@ -90,12 +107,18 @@ export default ({ data, loading, proyecto_id, reload }) => {
                     id: "action_2",
                     text: "Pdf",
                   },
+                  {
+                    id: "action_3",
+                    text: "Pdf Completo",
+                  },
                 ]}
                 onItemClick={({ detail }) => {
                   if (detail.id == "action_1") {
                     exportWord();
                   } else if (detail.id == "action_2") {
                     exportPdf();
+                  } else if (detail.id == "action_3") {
+                    exportPdfCompleto();
                   }
                 }}
                 disabled={loading}

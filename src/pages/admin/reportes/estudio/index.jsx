@@ -7,7 +7,7 @@ import {
   Select,
   SpaceBetween,
 } from "@cloudscape-design/components";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import BaseLayout from "../../components/baseLayout";
 import axiosBase from "../../../../api/axios";
 
@@ -39,6 +39,8 @@ export default function Reporte_estudio() {
   });
 
   const [loading, setLoading] = useState(false);
+  const [tipos, setTipos] = useState([]);
+  const [periodos, setPeriodos] = useState([]);
 
   //  Functions
   const clearForm = () => {
@@ -47,6 +49,46 @@ export default function Reporte_estudio() {
       periodo: null,
       facultad: null,
     });
+
+    setForm({
+      tipo_proyecto: null,
+      periodo: null,
+      facultad: null,
+    });
+
+    setPeriodos([]);
+  };
+
+  const handleTipoChange = async (selectedOption) => {
+    const tipo = selectedOption.value;
+
+    // actualizar selects
+    setSelectedOptions((prev) => ({
+      ...prev,
+      tipo_proyecto: selectedOption,
+      periodo: null,
+    }));
+
+    // actualizar form
+    setForm((prev) => ({
+      ...prev,
+      tipo_proyecto: tipo,
+      periodo: null,
+    }));
+
+    // cargar periodos
+    const res = await axiosBase.get(
+      "admin/reportes/estudio/periodos/" + tipo
+    );
+
+    const data = res.data;
+
+    setPeriodos(
+      data.map((item) => ({
+        label: String(item.periodo),
+        value: String(item.periodo),
+      }))
+    );
   };
 
   const reporte = async () => {
@@ -67,6 +109,22 @@ export default function Reporte_estudio() {
     const url = URL.createObjectURL(blob);
     window.open(url, "_blank");
   };
+
+  useEffect(() => {
+    const getTipos = async () => {
+      const res = await axiosBase.get("admin/reportes/estudio/tipos");
+      const data = res.data;
+
+      setTipos(
+        data.map((item) => ({
+          label: item.value,
+          value: item.value,
+        }))
+      );
+    };
+
+    getTipos();
+  }, []);
 
   return (
     <BaseLayout
@@ -99,44 +157,10 @@ export default function Reporte_estudio() {
               <FormField label="Tipo de proyecto" stretch>
                 <Select
                   controlId="periodo"
-                  placeholder="Escoga un tipo de proyecto"
+                  placeholder="Escoja un tipo de proyecto"
                   selectedOption={selectedOptions.tipo_proyecto}
-                  onChange={({ detail }) => {
-                    setSelectedOptions((prev) => ({
-                      ...prev,
-                      tipo_proyecto: detail.selectedOption,
-                    }));
-                    setForm((prev) => ({
-                      ...prev,
-                      tipo_proyecto: detail.selectedOption.value,
-                    }));
-                  }}
-                  options={[
-                    {
-                      value: "CON-CON",
-                    },
-                    {
-                      value: "PCONFIGI",
-                    },
-                    {
-                      value: "FEX",
-                    },
-                    {
-                      value: "ECI",
-                    },
-                    {
-                      value: "EVENTO",
-                    },
-                    {
-                      value: "PSINFINV",
-                    },
-                    {
-                      value: "PINVPOS",
-                    },
-                    {
-                      value: "PSINFIPU",
-                    },
-                  ]}
+                  onChange={({ detail }) => handleTipoChange(detail.selectedOption)}
+                  options={tipos}
                 />
               </FormField>
               <FormField label="Periodo" stretch>
@@ -154,18 +178,7 @@ export default function Reporte_estudio() {
                       periodo: detail.selectedOption.value,
                     }));
                   }}
-                  options={[
-                    { value: "2025" },
-                    { value: "2024" },
-                    { value: "2023" },
-                    { value: "2022" },
-                    { value: "2021" },
-                    { value: "2020" },
-                    { value: "2019" },
-                    { value: "2018" },
-                    { value: "2017" },
-                    { value: "2016" },
-                  ]}
+                  options={periodos}
                 />
               </FormField>
               <FormField label="Facultad" stretch>
@@ -190,10 +203,7 @@ export default function Reporte_estudio() {
                     { label: "Farmacia y Bioquímica", value: "4" },
                     { label: "Odontología", value: "5" },
                     { label: "Educación", value: "6" },
-                    {
-                      label: "Química e Ingeniería Química",
-                      value: "7",
-                    },
+                    { label: "Química e Ingeniería Química", value: "7" },
                     { label: "Medicina Veterinaria", value: "8" },
                     { label: "Ciencias Administrativas", value: "9" },
                     { label: "Ciencias Biológicas", value: "10" },
@@ -202,21 +212,11 @@ export default function Reporte_estudio() {
                     { label: "Ciencias Físicas", value: "13" },
                     { label: "Ciencias Matemáticas", value: "14" },
                     { label: "Ciencias Sociales", value: "15" },
-                    {
-                      label:
-                        "Ingeniería Geológica, Minera, Metalúrgica y Geográfica",
-                      value: "16",
-                    },
+                    { label: "Ingeniería Geológica, Minera, Metalúrgica y Geográfica", value: "16" },
                     { label: "Ingeniería Industrial", value: "17" },
                     { label: "Psicología", value: "18" },
-                    {
-                      label: "Ingeniería Electrónica y Eléctrica",
-                      value: "19",
-                    },
-                    {
-                      label: "Ingeniería de Sistemas e Informática",
-                      value: "20",
-                    },
+                    { label: "Ingeniería Electrónica y Eléctrica", value: "19" },
+                    { label: "Ingeniería de Sistemas e Informática", value: "20" },
                   ]}
                 />
               </FormField>
