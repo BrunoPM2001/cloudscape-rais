@@ -151,6 +151,20 @@ const columnDefinitions = [
     sortingField: "issn",
     minWidth: 150,
   },
+  {
+    id: "url",
+    header: "URL",
+    cell: (item) => item.url,
+    sortingField: "url",
+    minWidth: 150,
+  },
+  {
+    id: "uri",
+    header: "URI",
+    cell: (item) => item.uri,
+    sortingField: "uri",
+    minWidth: 150,
+  },
 ];
 
 const columnDisplay = [
@@ -163,6 +177,8 @@ const columnDisplay = [
   { id: "fecha_inscripcion", visible: true },
   { id: "isbn", visible: true },
   { id: "issn", visible: true },
+  { id: "url", visible: true },
+  { id: "uri", visible: true },
 ];
 
 export default () => {

@@ -84,7 +84,7 @@ export default function Detalle_grupo() {
             {
               id: "lineas",
               label: "Lineas",
-              content: <Lineas />,
+              content: <Lineas  facultad_id={data.facultad_id} />,
             },
             {
               id: "proyectos",
