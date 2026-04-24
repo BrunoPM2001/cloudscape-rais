@@ -20,6 +20,9 @@ const Presentar_informe_tecnico_antiguo = lazy(() =>
 const Reporte_deudores = lazy(() =>
   import("../pages/admin/reportes/deudores/index.jsx")
 );
+const Reporte_deudores_reporte = lazy(() =>
+  import("../pages/admin/reportes/deudores_reporte/index.jsx")
+);
 const Detalle_proyecto_ptpgrado = lazy(() =>
   import(
     "../pages/admin/estudios/gestion_proyectos_grupos/detalle/ptpgrado/index.jsx"
@@ -543,6 +546,10 @@ const routes = createBrowserRouter(
         {
           path: "deudores",
           element: <Reporte_deudores />,
+        },
+        {
+          path: "deudores_reporte",
+          element: <Reporte_deudores_reporte />,
         },
       ],
     },

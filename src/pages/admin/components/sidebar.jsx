@@ -136,7 +136,10 @@ const navItems = [
         text: "Reporte de presupuesto",
         href: "/admin/reportes/presupuesto",
       },
-      { type: "link", text: "Reporte de deudores", href: "#" },
+      { 
+        type: "link", 
+        text: "Reporte de deudores", 
+        href: "/admin/reportes/deudores_reporte" },
       {
         type: "link",
         text: "Lista de deudores",

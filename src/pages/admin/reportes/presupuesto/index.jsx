@@ -143,7 +143,7 @@ export default function Reporte_presupuesto() {
               <FormField label="Periodo" stretch>
                 <Select
                   controlId="periodo"
-                  placeholder="Escoga un periodo"
+                  placeholder="Escoja un periodo"
                   selectedOption={selectedOptions.periodo}
                   onChange={({ detail }) => {
                     setSelectedOptions((prev) => ({
