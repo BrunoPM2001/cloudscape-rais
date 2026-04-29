@@ -32,8 +32,8 @@ export default function ReporteDeudores() {
   });
 
   const [selectedOptions, setSelectedOptions] = useState({
-    periodo: null, 
-    facultad: null
+    periodo: { label: "Todos", value: null },
+    facultad: { label: "Todos", value: null }
   });
   const [facultadesOptions, setFacultadesOptions] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -57,14 +57,10 @@ export default function ReporteDeudores() {
 
   const generarReporte = async () => {
     setLoading(true);
-    const url =
-      form.periodo && form.facultad
-        ? `admin/reportes/deudores?periodo=${form.periodo}&facultad=${form.facultad}`
-        : form.periodo
-        ? `admin/reportes/deudores?periodo=${form.periodo}`
-        : form.facultad
-        ? `admin/reportes/deudores?facultad=${form.facultad}`
-        : `admin/reportes/deudores`;
+    let params = [];
+      if (form.periodo) params.push(`periodo=${form.periodo}`);
+      if (form.facultad) params.push(`facultad=${form.facultad}`);
+    const url = `admin/reportes/deudores${params.length ? '?' + params.join('&') : ''}`;
 
     const res = await axiosBase.get(url, {
       responseType: "blob",
@@ -79,7 +75,10 @@ export default function ReporteDeudores() {
   // Effect
   useEffect(() => {
     getFacultades().then(data => {
-      setFacultadesOptions(data);
+      setFacultadesOptions([
+        { label: "Todos", value: null },
+        ...data
+      ]);
     });
   }, []);
 
@@ -144,6 +143,7 @@ export default function ReporteDeudores() {
                     });
                   }}
                   options={[
+                    { label: "Todos", value: null },
                     { label: "2026", value: "2026" },
                     { label: "2025", value: "2025" },
                     { label: "2024", value: "2024" },
