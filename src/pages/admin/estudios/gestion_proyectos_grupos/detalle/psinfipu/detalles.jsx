@@ -277,9 +277,9 @@ export default ({ data, loading, proyecto_id, reload }) => {
               <Spinner />
             ) : (
               <StatusIndicator type="info">
-                {data.comentarios == "" || data.comentarios == null
+                {data.comentario == "" || data.comentario == null
                   ? "Ninguno"
-                  : data.comentarios}
+                  : data.comentario}
               </StatusIndicator>
             )}
           </div>

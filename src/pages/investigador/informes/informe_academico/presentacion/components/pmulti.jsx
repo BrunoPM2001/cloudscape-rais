@@ -164,6 +164,7 @@ export default () => {
           id,
           proyecto_id,
           tipo_proyecto,
+          informe,
         },
       }
     );
@@ -197,6 +198,7 @@ export default () => {
     form.append("id", id);
     form.append("proyecto_id", proyecto_id);
     form.append("tipo_proyecto", tipo_proyecto);
+    form.append("informe", informe);
     form.append("resumen_ejecutivo", formValues.resumen_ejecutivo);
     form.append("palabras_clave", formValues.palabras_clave);
     form.append("infinal1", formValues.infinal1);
@@ -235,6 +237,7 @@ export default () => {
         id,
         proyecto_id,
         tipo_proyecto,
+        informe,
       }
     );
     const data = res.data;
@@ -591,12 +594,12 @@ export default () => {
                     <FormField
                       label="Adjuntar archivo digital"
                       description={
-                        files["informe-PMULTI-INFORME"] && (
+                        files["informe-PMULTI-INFORME-100"] && (
                           <>
                             Ya ha cargado un{" "}
                             <Link
                               {...propsEnlaces}
-                              href={files["informe-PMULTI-INFORME"]}
+                              href={files["informe-PMULTI-INFORME-100"]}
                             >
                               archivo.
                             </Link>
@@ -934,7 +937,10 @@ export default () => {
                           files["registro"] && (
                             <>
                               Ya ha cargado un{" "}
-                              <Link {...propsEnlaces} href={files["registro"]}>
+                              <Link 
+                                {...propsEnlaces} 
+                                href={files["registro"]}
+                              >
                                 archivo.
                               </Link>
                             </>

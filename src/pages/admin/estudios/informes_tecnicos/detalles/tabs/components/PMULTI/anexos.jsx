@@ -28,23 +28,23 @@ const propsEnlaces = {
   target: "_blank",
 };
 
-export default ({ value1, handleChange, files }) => {
+export default ({ value1, handleChange, files, categoria }) => {
   return (
     <Container>
       <FormField
         label="Archivo digital"
         stretch
         description={
-          files["informe-PMULTI-INFORME"] && (
+          files[categoria] && (
             <>
               Ya ha cargado un{" "}
               <Link
                 {...propsEnlaces}
-                href={files["informe-PMULTI-INFORME"]?.url}
+                href={files[categoria]?.url}
               >
                 archivo
               </Link>{" "}
-              el {files["informe-PMULTI-INFORME"]?.fecha}
+              el {files[categoria]?.fecha}
             </>
           )
         }

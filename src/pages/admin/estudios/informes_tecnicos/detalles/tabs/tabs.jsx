@@ -5,11 +5,11 @@ import Pconfigi_inv_tabs from "./components/PCONFIGI_INV/tabs";
 import Pevento_tabs from "./components/PEVENTO/tabs";
 import Pinterdis_tabs from "./components/PINTERDIS/tabs";
 import Pinvpos_tabs from "./components/PINVPOS/tabs";
-import Pmulti_tabs from "./components/PMULTI/tabs";
 import Psinfinv_tabs from "./components/PSINFINV/tabs";
 import Psinfipu_tabs from "./components/PSINFIPU/tabs";
 import Ptpbachiller_tabs from "./components/PTPBACHILLER/tabs";
 import Picv_tabs from "./components/PICV/tabs";
+import { Pmulti_tabs, Pmulti_final_tabs } from "./components/PMULTI/tabs";
 import { Ptpdocto_tabs, Ptpdocto_final_tabs } from "./components/PTPDOCTO/tabs";
 import { Ptpgrado_tabs, Ptpgrado_final_tabs } from "./components/PTPGRADO/tabs";
 import { Ptpmaest_final_tabs, Ptpmaest_tabs } from "./components/PTPMAEST/tabs";
@@ -147,14 +147,33 @@ export default ({
           actividades={actividades}
           files={files}
         />
-      ) : tipo_proyecto == "PMULTI" ? (
+      ) : tipo_proyecto == "PMULTI" &&
+        tipo_informe != "Informe académico al 100%" &&
+        tipo_informe != "Informe académico" ? (
         <Pmulti_tabs
           formValues={formValues}
           handleChange={handleChange}
           actividades={actividades}
           files={files}
           reload={reload}
+          categoria={
+            tipo_informe == "Informe académico al 40%"
+              ? "informe-PMULTI-INFORME-40"
+              : "informe-PMULTI-INFORME-80"
+          }
         />
+      ) : tipo_proyecto == "PMULTI" &&
+        (tipo_informe == "Informe académico al 100%" ||
+          tipo_informe == "Informe académico"
+        ) ? (
+        <Pmulti_final_tabs
+          formValues={formValues}
+          handleChange={handleChange}
+          actividades={actividades}
+          files={files}
+          reload={reload}
+          categoria="informe-PMULTI-INFORME"
+        /> 
       ) : tipo_proyecto == "PSINFINV" ? (
         <Psinfinv_tabs
           proyecto={proyecto}

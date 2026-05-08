@@ -2,6 +2,8 @@ import {
   Alert,
   Box,
   Button,
+  ButtonDropdown,
+  ColumnLayout,
   Container,
   FileUpload,
   FormField,
@@ -20,14 +22,14 @@ import axiosBase from "../../../../../../api/axios";
 import { useLocation, useSearchParams } from "react-router-dom";
 import queryString from "query-string";
 import NotificationContext from "../../../../../../providers/notificationProvider";
+import { useCollection } from "@cloudscape-design/collection-hooks";
 
 const initialForm = {
   id: null,
   estado: 0,
-  infinal7: "",
   infinal1: "",
-  infinal3: "",
   infinal2: "",
+  infinal3: "",
   file1: [],
 };
 
@@ -58,6 +60,47 @@ const propsEnlaces = {
   target: "_blank",
 };
 
+const columnDefinitions = [
+  {
+    id: "actividad",
+    header: "Actividad",
+    cell: (item) => item.actividad,
+    minWidth: 160,
+  },
+  {
+    id: "justificacion",
+    header: "Justificación",
+    cell: (item) => item.justificacion,
+    minWidth: 160,
+  },
+  {
+    id: "responsable",
+    header: "Responsable",
+    cell: (item) => item.responsable,
+    minWidth: 140,
+  },
+  {
+    id: "fecha_inicio",
+    header: "Fecha de inicio",
+    cell: (item) => item.fecha_inicio,
+    minWidth: 115,
+  },
+  {
+    id: "fecha_fin",
+    header: "Fecha de fin",
+    cell: (item) => item.fecha_fin,
+    minWidth: 115,
+  },
+];
+
+const columnDisplay = [
+  { id: "actividad", visible: true },
+  { id: "justificacion", visible: true },
+  { id: "responsable", visible: true },
+  { id: "fecha_inicio", visible: true },
+  { id: "fecha_fin", visible: true },
+];
+
 export default () => {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
@@ -77,10 +120,21 @@ export default () => {
   const [files, setFiles] = useState({});
   const [proyecto, setProyecto] = useState({});
   const [miembros, setMiembros] = useState([]);
+  const [actividades, setActividades] = useState([]);
+  const [modal, setModal] = useState("");
+  const [faltantes, setFaltantes] = useState([]);
 
   //  Hooks
   const { formValues, formErrors, handleChange, validateForm, setFormValues } =
     useFormValidation(initialForm, formRules);
+
+  const { items, actions, collectionProps, paginationProps } = useCollection(
+    actividades,
+    {
+      sorting: {},
+      selection: {},
+    }
+  );
 
   //  Functions
   const getData = async () => {
@@ -100,11 +154,11 @@ export default () => {
     setProyecto(data.proyecto);
     setMiembros(data.miembros);
     setFiles(data.archivos);
+    setActividades(data.actividades);
     if (data.informe) {
-      handleChange("infinal7", data.informe.infinal7 ?? "");
-      handleChange("infinal3", data.informe.infinal3 ?? "");
       handleChange("infinal1", data.informe.infinal1 ?? "");
       handleChange("infinal2", data.informe.infinal2 ?? "");
+      handleChange("infinal3", data.informe.infinal3 ?? "");
       handleChange("estado", data.informe.estado);
       handleChange("observaciones", data.informe.observaciones);
       handleChange("id", data.informe.id);
@@ -119,10 +173,9 @@ export default () => {
     form.append("proyecto_id", proyecto_id);
     form.append("tipo_proyecto", tipo_proyecto);
     form.append("informe", informe);
-    form.append("infinal7", formValues.infinal7);
-    form.append("infinal3", formValues.infinal3);
     form.append("infinal1", formValues.infinal1);
     form.append("infinal2", formValues.infinal2);
+    form.append("infinal3", formValues.infinal3);
     form.append("file1", formValues.file1[0]);
     const res = await axiosBase.post(
       "investigador/informes/informe_academico/sendData",
@@ -138,33 +191,21 @@ export default () => {
 
   const presentar = async () => {
     setLoadingSave(true);
-    const form = new FormData();
-    form.append("id", id);
-    form.append("proyecto_id", proyecto_id);
-    form.append("tipo_proyecto", tipo_proyecto);
-    form.append("informe", informe);
-    form.append("infinal7", formValues.infinal7);
-    form.append("infinal3", formValues.infinal3);
-    form.append("infinal1", formValues.infinal1);
-    form.append("infinal2", formValues.infinal2);
-    form.append("file1", formValues.file1[0]);
-    const res1 = await axiosBase.post(
-      "investigador/informes/informe_academico/sendData",
-      form
-    );
-    const info = res1.data;
     const res = await axiosBase.put(
       "investigador/informes/informe_academico/presentar",
       {
-        id: info.id,
+        id,
         proyecto_id,
         tipo_proyecto,
         informe,
       }
     );
     const data = res.data;
-    data;
-    pushNotification(data.detail, data.message, notifications.length + 1);
+    if (data.faltantes) {
+      setFaltantes(data.faltantes);
+      setLoadingSave(false);
+      return;
+    }
     getData();
     setLoadingSave(false);
   };
@@ -247,6 +288,20 @@ export default () => {
             <Box margin={{ top: "s" }}>
               <Alert type="error" header="Observaciones">
                 {formValues.observaciones}
+              </Alert>
+            </Box>
+          )}
+          {faltantes.length > 0 && (
+            <Box margin={{ top: "s" }}>
+              <Alert
+                type="error"
+                header="Faltan completar los siguientes apartados"
+                dismissible
+                onDismiss={() => setFaltantes([])}
+              >
+                {faltantes.map((item, index) => (
+                  <li key={index}>{item}</li>
+                ))}
               </Alert>
             </Box>
           )}
@@ -333,6 +388,16 @@ export default () => {
                           </Box>
                           {loading ? <Spinner /> : <Box>{proyecto.linea}</Box>}
                         </div>
+                        <div>
+                          <Box variant="awsui-key-label">
+                            Tipo de investigación
+                          </Box>
+                          {loading ? (
+                            <Spinner />
+                          ) : (
+                            <Box>{proyecto.tipo_investigacion}</Box>
+                          )}
+                        </div>
                       </SpaceBetween>
                     </Container>
                     <Table
@@ -362,56 +427,14 @@ export default () => {
                 ),
               },
               {
-                title: "Porcentaje estimado de avance académico",
-                content: (
-                  <FormField label="Porcentaje estimado de avance" stretch>
-                    <Input
-                      value={formValues.infinal7}
-                      onChange={({ detail }) =>
-                        handleChange("infinal7", detail.value)
-                      }
-                    />
-                  </FormField>
-                ),
-                isOptional: true,
-              },
-              {
                 title: "Descripción de actividades realizadas",
                 content: (
-                  <SpaceBetween size="m">
-                    <Tiptap
-                      value={formValues.infinal1}
-                      handleChange={handleChange}
-                      name="infinal1"
-                      limitWords={200}
-                    />
-                    <FormField
-                      label="Medios probatorios"
-                      description={
-                        files["informe-PTPDOCTO-INFORME-AVANCE"] && (
-                          <>
-                            Ya ha cargado un{" "}
-                            <Link
-                              {...propsEnlaces}
-                              href={files["informe-PTPDOCTO-INFORME-AVANCE"]}
-                            >
-                              archivo.
-                            </Link>
-                          </>
-                        )
-                      }
-                      stretch
-                      errorText={formErrors.file1}
-                    >
-                      <FileUpload
-                        {...propsRepetidas}
-                        value={formValues.file1}
-                        onChange={({ detail }) => {
-                          handleChange("file1", detail.value);
-                        }}
-                      />
-                    </FormField>
-                  </SpaceBetween>
+                  <Tiptap
+                    value={formValues.infinal1}
+                    handleChange={handleChange}
+                    name="infinal1"
+                    limitWords={200}
+                  />
                 ),
                 isOptional: true,
               },
@@ -436,6 +459,42 @@ export default () => {
                     name="infinal2"
                     limitWords={600}
                   />
+                ),
+                isOptional: true,
+              },
+              {
+                title: "Anexos",
+                description:
+                  "Medios probatorios de avance (ninguno debe superar los 6 MB)",
+                content: (
+                  <Container>
+                    <FormField
+                      label="Adjuntar archivo digital"
+                      description={
+                        files["informe-PMULTI-INFORME-80"] && (
+                          <>
+                            Ya ha cargado un{" "}
+                            <Link
+                              {...propsEnlaces}
+                              href={files["informe-PMULTI-INFORME-80"]}
+                            >
+                              archivo.
+                            </Link>
+                          </>
+                        )
+                      }
+                      stretch
+                      errorText={formErrors.file1}
+                    >
+                      <FileUpload
+                        {...propsRepetidas}
+                        value={formValues.file1}
+                        onChange={({ detail }) => {
+                          handleChange("file1", detail.value);
+                        }}
+                      />
+                    </FormField>
+                  </Container>
                 ),
                 isOptional: true,
               },

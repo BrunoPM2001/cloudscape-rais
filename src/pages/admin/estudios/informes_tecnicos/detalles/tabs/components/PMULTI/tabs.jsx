@@ -12,14 +12,72 @@ import Anexos from "./anexos";
 import Aplicacion from "./aplicacion";
 import Publicacion from "./publicacion";
 import Calendario from "./calendario";
+import Entregables from "./entregables";
 
-export default function Pmulti_tabs({
+const Pmulti_tabs = ({
   formValues,
   handleChange,
   actividades,
   files,
   reload,
-}) {
+  categoria,
+}) => {
+  const tabs = [
+    {
+      id: "descripcion",
+      label: "Descripción de actividades realizadas",
+      content: (
+        <Introduccion
+          value={formValues?.infinal1}
+          handleChange={handleChange}
+        />
+      ),
+    },
+    {
+      id: "problemas",
+      label: "Problemas identificados",
+      content: (
+        <Metodologias
+          value={formValues?.infinal2}
+          handleChange={handleChange}
+        />
+      ),
+    },
+    {
+      id: "evaluación",
+      label: "Evaluación global de ejecución académica",
+      content: (
+        <Resultados 
+          value={formValues?.infinal3} 
+          handleChange={handleChange} 
+        />
+      ),
+    },
+    {
+      id: "anexos",
+      label: "Anexos",
+      content: (
+        <Anexos
+          value1={formValues?.file1} //  CATEGORIA = informe-PMULTI-INFORME
+          handleChange={handleChange}
+          files={files}
+          categoria={categoria}
+        />
+      ),
+    },
+  ];
+
+  return <Tabs tabs={tabs} />;
+}
+
+const Pmulti_final_tabs = ({
+  formValues,
+  handleChange,
+  actividades,
+  files,
+  reload,
+  categoria,
+}) => {
   const tabs = [
     {
       id: "resumen",
@@ -65,14 +123,20 @@ export default function Pmulti_tabs({
       id: "resultados",
       label: "Resultados",
       content: (
-        <Resultados value={formValues?.infinal3} handleChange={handleChange} />
+        <Resultados 
+          value={formValues?.infinal3} 
+          handleChange={handleChange} 
+        />
       ),
     },
     {
       id: "discusion",
       label: "Discusión",
       content: (
-        <Discusion value={formValues?.infinal4} handleChange={handleChange} />
+        <Discusion 
+          value={formValues?.infinal4} 
+          handleChange={handleChange} 
+        />
       ),
     },
     {
@@ -99,7 +163,10 @@ export default function Pmulti_tabs({
       id: "referencias",
       label: "Referencias bibliográficas",
       content: (
-        <Referencias value={formValues?.infinal7} handleChange={handleChange} />
+        <Referencias 
+          value={formValues?.infinal7} 
+          handleChange={handleChange} 
+        />
       ),
     },
     {
@@ -110,6 +177,7 @@ export default function Pmulti_tabs({
           value1={formValues?.file1} //  CATEGORIA = informe-PMULTI-INFORME
           handleChange={handleChange}
           files={files}
+          categoria={categoria}
         />
       ),
     },
@@ -117,7 +185,10 @@ export default function Pmulti_tabs({
       id: "aplicacion",
       label: "Aplicación práctica e impacto",
       content: (
-        <Aplicacion value={formValues?.infinal9} handleChange={handleChange} />
+        <Aplicacion 
+          value={formValues?.infinal9} 
+          handleChange={handleChange} 
+        />
       ),
     },
     {
@@ -133,10 +204,27 @@ export default function Pmulti_tabs({
     {
       id: "calendario",
       label: "Calendario",
-      content: <Calendario data={actividades} files={files} reload={reload} />,
+      content: 
+        <Calendario 
+          data={actividades} 
+          files={files} 
+          reload={reload} 
+        />,
     },
-    //  TODO - Implementar las últimas dos tabs (flojera)
+    {
+      id: "entregables",
+      label: "Entregables",
+      content: (
+        <Entregables
+          formValues={formValues}
+          handleChange={handleChange}
+          files={files}
+        />
+      ),
+    },
   ];
 
   return <Tabs tabs={tabs} />;
 }
+
+export { Pmulti_tabs, Pmulti_final_tabs };

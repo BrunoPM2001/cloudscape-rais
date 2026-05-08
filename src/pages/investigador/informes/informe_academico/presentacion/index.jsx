@@ -7,6 +7,8 @@ import Pconfigi_inv from "./components/pconfigi_inv";
 import Pevento from "./components/pevento";
 import Pinterdis from "./components/pinterdis";
 import Pmulti from "./components/pmulti";
+import Pmulti2 from "./components/pmulti2";
+import Pmulti3 from "./components/pmulti3";
 import Pinvpos from "./components/pinvpos";
 import Psinfinv from "./components/psinfinv";
 import Psinfipu from "./components/psinfipu";
@@ -95,7 +97,15 @@ export default function Presentar_informe() {
           )}
         </>
       ) : tipo_proyecto == "PMULTI" ? (
-        <Pmulti />
+        <>
+          {informe == "Informe académico al 40%" ? (
+            <Pmulti2 />
+          ) : informe == "Informe académico al 80%" ? (
+            <Pmulti3 />
+          ) : (
+            informe == "Informe académico al 100%" && <Pmulti />
+          )}
+        </>
       ) : tipo_proyecto == "PICV" ? (
         <Picv />
       ) : (
