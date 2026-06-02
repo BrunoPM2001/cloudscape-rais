@@ -44,11 +44,11 @@ export default function Proyecto_detalle() {
     );
     const data = res.data;
     setData(data);
-    opciones(data.detalles?.tipo_proyecto, data.detalles?.estado);
+    opciones(data.detalles?.tipo_proyecto, data.detalles?.estado, data.detalles?.resolucion_rectoral);
     setLoading(false);
   };
 
-  const opciones = (tipo, estado) => {
+  const opciones = (tipo, estado, resolucionRectoral) => {
     if (estado != -1 && estado != 0) {
       if (
         tipo == "PCONFIGI" ||
@@ -60,6 +60,7 @@ export default function Proyecto_detalle() {
           {
             id: "action_1",
             text: "Presupuesto",
+            disabled: !resolucionRectoral,
           },
           {
             id: "action_2",
