@@ -351,10 +351,11 @@ export default ({ close, item, grupo_id, reload }) => {
               <Select
                 placeholder="Escoja una categoría"
                 options={[
-                  { value: "A" },
-                  { value: "B" },
-                  { value: "C" },
-                  { value: "D" },
+                  { value: null, label: "Sin categoría" },
+                  { value: "A", label: "A" },
+                  { value: "B", label: "B" },
+                  { value: "C", label: "C" },
+                  { value: "D", label: "D" },
                 ]}
                 selectedOption={formValues.grupo_categoria}
                 onChange={({ detail }) =>

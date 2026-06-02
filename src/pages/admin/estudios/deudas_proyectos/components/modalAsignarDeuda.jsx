@@ -36,26 +36,11 @@ export default ({ close, item, reload }) => {
 
   //  States
   const [loading, setLoading] = useState(true);
-  const [optDeudaAcademica, setOptDeudaAcademica] = useState([]);
   const [creating, setCreating] = useState(false);
   
   //  Hooks
   const { formValues, formErrors, handleChange, validateForm } =
     useFormValidation(initialForm, formRules);
-
-  const getDeudaAcademica = async () => {
-    const res = await axiosBase.get(
-      "admin/estudios/deudaProyecto/listadoDeudaAcademica",
-      {
-        params: {
-          tipo_proyecto: item.tipo_proyecto,
-        },
-      }
-    );
-    const opciones = res.data;
-    setOptDeudaAcademica([...opciones, { value: "Sin deuda" }]);
-    setLoading(false);
-  };
 
   const sendDeuda = async () => {
     if (validateForm()) {
@@ -77,7 +62,7 @@ export default ({ close, item, reload }) => {
   };
 
   useEffect(() => {
-    getDeudaAcademica();
+    setLoading(false);
   }, []);
 
   return (
@@ -111,14 +96,11 @@ export default ({ close, item, reload }) => {
         >
           <Select
             placeholder="Escoge una opción"
-            options={optDeudaAcademica}
+            options={[{ value: "Deuda académica" }, { value: "Sin deuda" }]}
             selectedOption={formValues.deuda_academica}
             onChange={({ detail }) =>
               handleChange("deuda_academica", detail.selectedOption)
             }
-            statusType={loading ? "loading" : "finished"}
-            loadingText="Cargando data"
-            empty="No hay opciones disponibles"
           />
         </FormField>
         <FormField

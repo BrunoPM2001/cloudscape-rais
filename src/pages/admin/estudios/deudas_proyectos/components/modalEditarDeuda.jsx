@@ -36,30 +36,11 @@ export default ({ close, item, reload }) => {
 
   //  States
   const [loading, setLoading] = useState(true);
-  const [optDeudaAcademica, setOptDeudaAcademica] = useState([]);
   const [creating, setCreating] = useState(false);
 
   //  Hooks
   const { formValues, formErrors, handleChange, validateForm } =
     useFormValidation(initialForm, formRules);
-
-  const bloquearTipoDeuda = item.deuda === "SUBSANADA";
-
-  const getDeudaAcademica = async () => {
-    const res = await axiosBase.get(
-      "admin/estudios/deudaProyecto/listadoDeudaAcademica",
-      {
-        params: {
-          tipo_proyecto: item.tipo_proyecto,
-        },
-      }
-    );
-    const opciones = res.data;
-    setOptDeudaAcademica([...opciones.map(op => 
-        ({label: op.value, value: op.value})),
-         {label: "Sin deuda", value: "Sin deuda" }]);
-    setLoading(false);
-  };
 
   const sendDeuda = async () => {
     if (validateForm()) {
@@ -81,15 +62,17 @@ export default ({ close, item, reload }) => {
   };
 
   const getDeudaActual = async () => {
+    setLoading(true);
+
     const res = await axiosBase.get(
-        "admin/estudios/deudaProyecto/proyectoDeuda",
-        {
-            params: {
-                proyecto_id: item.proyecto_id,
-                proyecto_origen: item.proyecto_origen,
-                tipo_proyecto: item.tipo_proyecto,
-            },
-        }
+      "admin/estudios/deudaProyecto/proyectoDeuda",
+      {
+        params: {
+          proyecto_id: item.proyecto_id,
+          proyecto_origen: item.proyecto_origen,
+          tipo_proyecto: item.tipo_proyecto,
+        },
+      }
     );
 
     const deuda = res.data.deuda;
@@ -112,12 +95,12 @@ export default ({ close, item, reload }) => {
             label: res.data.deuda_economica,
             value: res.data.deuda_economica,
         });
-        }
+      }
     }
-    };
+    setLoading(false);
+  };
 
   useEffect(() => {
-    getDeudaAcademica();
     getDeudaActual();
   }, []);
 
@@ -151,16 +134,13 @@ export default ({ close, item, reload }) => {
           errorText={formErrors.deuda_academica}
         >
           <Select
-            disabled={bloquearTipoDeuda}
+            disabled
             placeholder="Escoge una opción"
-            options={optDeudaAcademica}
+            options={[{ value: "Deuda académica" }, { value: "Sin deuda" }]}
             selectedOption={formValues.deuda_academica}
             onChange={({ detail }) =>
               handleChange("deuda_academica", detail.selectedOption)
             }
-            statusType={loading ? "loading" : "finished"}
-            loadingText="Cargando data"
-            empty="No hay opciones disponibles"
           />
         </FormField>
         <FormField
@@ -168,11 +148,9 @@ export default ({ close, item, reload }) => {
           errorText={formErrors.deuda_economica}
         >
           <Select
-            disabled={bloquearTipoDeuda}
+            disabled
             placeholder="Escoge una opción"
-            options={[
-                { label: "Deuda económica", value: "Deuda económica" }, 
-                { label: "Sin deuda", value: "Sin deuda" }]}
+            options={[{ value: "Deuda económica" }, { value: "Sin deuda" }]}
             selectedOption={formValues.deuda_economica}
             onChange={({ detail }) =>
               handleChange("deuda_economica", detail.selectedOption)
@@ -181,6 +159,7 @@ export default ({ close, item, reload }) => {
         </FormField>
         <FormField label="Fecha de la deuda" errorText={formErrors.fecha_deuda}>
           <DatePicker
+            disabled
             placeholder="YYYY/MM/DD"
             value={formValues.fecha_deuda}
             onChange={({ detail }) => handleChange("fecha_deuda", detail.value)}

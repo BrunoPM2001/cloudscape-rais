@@ -318,14 +318,17 @@ export default ({ grupo_estado }) => {
                         {
                           id: "action_1_2_1",
                           text: "Externo",
+                          disabled: true,
                         },
                         {
                           id: "action_1_2_2",
                           text: "Estudiante UNMSM",
+                          disabled: true,
                         },
                         {
                           id: "action_1_2_3",
                           text: "Egresado UNMSM",
+                          disabled: true,
                         },
                       ],
                     },

@@ -46,6 +46,7 @@ export default ({ close, item, reload }) => {
   const [proyectoDeuda, setProyectoDeuda] = useState([]);
   const [deudaAcademica, setDeudaAcademica] = useState([]);
   const [deudaEconomica, setDeudaEconomica] = useState([]);
+  const [opcionesSubsanacionAcademica, setOpcionesSubsanacionAcademica] = useState([]);
   const [tipoDeuda, setTipoDeuda] = useState();
   const [alert, setAlert] = useState("");
 
@@ -78,6 +79,21 @@ export default ({ close, item, reload }) => {
     setDeudaAcademica(deudaAcademica);
     setDeudaEconomica(deudaEconomica);
     setLoading(false);
+  };
+
+  const getOpcionesSubsanacionAcademica = async () => {
+    const response = await axiosBase.get(
+      "admin/estudios/deudaProyecto/listadoSubsanacionAcademica",
+      {
+        params: {
+          tipo_proyecto: item.tipo_proyecto,
+          proyecto_origen: item.proyecto_origen,
+          periodo: item.periodo,
+        },
+      }
+    );
+
+    setOpcionesSubsanacionAcademica(response.data);
   };
 
   const sendSubsanar = async () => {
@@ -144,6 +160,7 @@ export default ({ close, item, reload }) => {
   useEffect(() => {
     getTipoDeuda();
     getProyectoDeuda();
+    getOpcionesSubsanacionAcademica();
   }, []);
 
   return (
@@ -207,18 +224,7 @@ export default ({ close, item, reload }) => {
                     <FormField label="Subsanar deuda académica">
                       <Select
                         placeholder="-- Seleccione una opción --"
-                        options={
-                          item.proyecto_origen === "Antiguo" ?
-                          [
-                            {label: "Deuda técnica subsanada",
-                              value: 4,
-                            }
-                          ]
-                          : [
-                          { label: "Presentó informe de avance", value: 5 },
-                          { label: "Presentó informe de avance final", value: 7 },
-                          { label: "Presentó informe académico", value: 4 },
-                        ]}
+                        options={opcionesSubsanacionAcademica}
                         selectedOption={formValues.subsanar_academica}
                         onChange={({ detail }) =>
                           handleChange(

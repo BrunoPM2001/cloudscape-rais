@@ -132,7 +132,7 @@ const columnDefinitions = [
     header: "N° documento",
     cell: (item) => item.doc_numero,
     sortingField: "doc_numero",
-    minWidth: 150,
+    minWidth: 160,
   },
   {
     id: "nombres",
@@ -218,6 +218,13 @@ const columnDefinitions = [
     sortingField: "detalle",
     minWidth: 150,
   },
+  {
+    id: "comentario_observacion",
+    header: "Comentario/observación",
+    cell: (item) => item.comentario_observacion,
+    sortingField: "comentario_observacion",
+    minWidth: 225,
+  },
 ];
 
 const columnDisplay = [
@@ -236,6 +243,7 @@ const columnDisplay = [
   { id: "periodo", visible: true },
   { id: "categoria", visible: true },
   { id: "detalle", visible: true },
+  { id: "comentario_observacion", visible: true },
 ];
 
 export default () => {
