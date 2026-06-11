@@ -8,6 +8,7 @@ import {
 } from "@cloudscape-design/components";
 import { useCollection } from "@cloudscape-design/collection-hooks";
 import { useState } from "react";
+import axiosBase from "../../../../../../api/axios";
 import ModalDetalleHistorial from "../components/modalDetalleHistorial";
 
 const columnDefinitions = [
@@ -41,7 +42,9 @@ const columnDefinitions = [
             ? "red"
             : item.estado == 1
             ? "green"
-            : "grey"
+            : item.estado == 4
+            ? "grey"
+            : "red"
         }
       >
         {item.estado == 3
@@ -50,7 +53,9 @@ const columnDefinitions = [
           ? "Rechazado"
           : item.estado == 1
           ? "Completado"
-          : "Temporal"}
+          : item.estado == 4
+          ? "Temporal"
+          : "Eliminado"}
       </Badge>
     ),
     sortingField: "estado",
@@ -64,15 +69,36 @@ const columnDisplay = [
   { id: "estado", visible: true },
 ];
 
-export default ({ data, loading }) => {
+export default ({ data, loading, gecoProyectoId  }) => {
   //  States
   const [visible, setVisible] = useState(false);
+  const [loadingReporte, setLoadingReporte] = useState(false);
 
   //  Hooks
   const { items, collectionProps, actions } = useCollection(data, {
     sorting: {},
     selection: {},
   });
+
+  //  Functions
+  const reporte = async () => {
+    if (collectionProps.selectedItems.length === 0) return;
+
+    setLoadingReporte(true);
+
+    const res = await axiosBase.get("admin/economia/transferencias/reporte", {
+      params: {
+         geco_operacion_id: collectionProps.selectedItems[0].id,
+      },
+      responseType: "blob",
+    });
+
+    const blob = await res.data;
+    const url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
+
+    setLoadingReporte(false);
+  };
 
   return (
     <>
@@ -91,15 +117,24 @@ export default ({ data, loading }) => {
           <Header
             counter={"(" + items.length + ")"}
             actions={
-              <Button
-                variant="primary"
-                disabled={
-                  collectionProps.selectedItems.length > 0 ? false : true
-                }
-                onClick={() => setVisible(true)}
-              >
-                Ver detalle
-              </Button>
+              <SpaceBetween direction="horizontal" size="xs">
+                <Button
+                  onClick={reporte}
+                  loading={loadingReporte}
+                  disabled={collectionProps.selectedItems.length === 0}
+                >
+                  Reporte
+                </Button>
+                <Button
+                  variant="primary"
+                  disabled={
+                    collectionProps.selectedItems.length > 0 ? false : true
+                  }
+                  onClick={() => setVisible(true)}
+                >
+                  Ver detalle
+                </Button>
+              </SpaceBetween>
             }
           >
             Historial de transferencias

@@ -180,8 +180,6 @@ export default () => {
   const [distributions, setDistribution] = useState([]);
   const [typeModal, setTypeModal] = useState("");
   const [form, setForm] = useState({});
-
-
   const {
     items,
     actions,
@@ -214,7 +212,6 @@ export default () => {
 
   const { loading: loadingInvestigador, options, setOptions, value, setValue, setAvoidSelect } =
     useAutosuggest("admin/admin/usuarios/searchInvestigadorBy");
-
 
   //  Functions
   const getData = async () => {

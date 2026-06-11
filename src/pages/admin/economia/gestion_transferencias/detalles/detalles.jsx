@@ -8,6 +8,7 @@ import {
   SpaceBetween,
   Spinner,
 } from "@cloudscape-design/components";
+import Modal from "@cloudscape-design/components/modal";
 import ModalCalificarTransferencia from "./components/modalCalificarTransferencia";
 import { useState } from "react";
 import axiosBase from "../../../../../api/axios";
@@ -16,20 +17,26 @@ export default ({ id, proyecto, solicitud, loading, reload }) => {
   //  States
   const [visible, setVisible] = useState(false);
   const [loadingReporte, setLoadingReporte] = useState(false);
+  const [visibleEliminar, setVisibleEliminar] = useState(false);
+  const [loadingEliminar, setLoadingEliminar] = useState(false);
 
   //  Functions
-  const reporte = async () => {
-    setLoadingReporte(true);
-    const res = await axiosBase.get("admin/economia/transferencias/reporte", {
-      params: {
+  const eliminar = async () => {
+    setLoadingEliminar(true);
+
+    const res = await axiosBase.post(
+      "admin/economia/transferencias/eliminar",
+      {
         geco_proyecto_id: id,
-      },
-      responseType: "blob",
-    });
-    setLoadingReporte(false);
-    const blob = await res.data;
-    const url = URL.createObjectURL(blob);
-    window.open(url, "_blank");
+      }
+    );
+
+    setLoadingEliminar(false);
+
+    if (res.data.message === "success") {
+      setVisibleEliminar(false);
+      reload();
+    }
   };
 
   return (
@@ -82,8 +89,13 @@ export default ({ id, proyecto, solicitud, loading, reload }) => {
             variant="h2"
             actions={
               <SpaceBetween direction="horizontal" size="s">
-                <Button onClick={reporte} loading={loadingReporte}>
-                  Reporte
+                <Button
+                  iconName="remove"
+                  variant="normal"
+                  onClick={() => setVisibleEliminar(true)}
+                  disabled={solicitud?.estado !== 3 && solicitud?.estado !== 4}
+                >
+                  Eliminar
                 </Button>
                 <Button
                   variant="primary"
@@ -118,7 +130,9 @@ export default ({ id, proyecto, solicitud, loading, reload }) => {
                     ? "red"
                     : solicitud.estado == 3
                     ? "blue"
-                    : "grey"
+                    : solicitud.estado == 4
+                    ? "grey"
+                    : "red"
                 }
               >
                 {solicitud.estado == 1
@@ -127,7 +141,9 @@ export default ({ id, proyecto, solicitud, loading, reload }) => {
                   ? "Rechazado"
                   : solicitud.estado == 3
                   ? "Nueva transferencia"
-                  : "Temporal"}
+                  : solicitud.estado == 4
+                  ? "Temporal"
+                  : "Eliminado"}
               </Badge>
             )}
           </div>
@@ -143,6 +159,35 @@ export default ({ id, proyecto, solicitud, loading, reload }) => {
           setVisible={setVisible}
           reload={reload}
         />
+      )}
+      {visibleEliminar && (
+        <Modal
+          visible={visibleEliminar}
+          onDismiss={() => setVisibleEliminar(false)}
+          header="Eliminar transferencia"
+          footer={
+            <Box float="right">
+              <SpaceBetween direction="horizontal" size="xs">
+                <Button
+                  variant="link"
+                  onClick={() => setVisibleEliminar(false)}
+                >
+                  Cancelar
+                </Button>
+
+                <Button
+                  variant="primary"
+                  loading={loadingEliminar}
+                  onClick={eliminar}
+                >
+                  Confirmar
+                </Button>
+              </SpaceBetween>
+            </Box>
+          }
+        >
+          ¿Está seguro de eliminar esta solicitud de transferencia?
+        </Modal>
       )}
     </Grid>
   );

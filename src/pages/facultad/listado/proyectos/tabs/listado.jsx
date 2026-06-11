@@ -165,7 +165,6 @@ const columnDisplay = [
 export default () => {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
-
   const [loading, setLoading] = useState(true);
   const [loadingBtn, setLoadingBtn] = useState(false);
   const [loadingReport, setLoadingReport] = useState(false);
@@ -235,40 +234,30 @@ export default () => {
   };
 
   const exportExcel = async () => {
+    if (allPageItems.length > 80000) {
+      pushNotification(
+        "La cantidad de items a exportar es demasiada, redúzcala a menos de 15000",
+        "warning",
+        notifications.length + 1
+      );
+      return;
+    }
+
+    const filteredItems = allPageItems.map((item) => ({ ...item }));
+
     setLoadingReport(true);
 
-      const res = await axiosBase.post(
-        "facultad/reportes/proyectos",
-        {
-          filters: propertyFilterProps.query
-        },
-        {
-          responseType: "blob"
-        }
-      );
+    const res = await axiosBase.post(
+      "facultad/reportes/proyectos",
+      filteredItems,
+      {
+        responseType: "blob",
+      }
+    );
 
-      const contentType = res.headers["content-type"] || "";
-
-      if (contentType.includes("application/json")) {
-        const text = await res.data.text();
-        const json = JSON.parse(text);
-
-          pushNotification(
-            json.detail,
-            json.message,
-            notifications.length + 1
-          );
-
-          setLoadingReport(false);
-          return;
-        }
-
-      const blob = new Blob([res.data]);
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = "proyectos.xlsx";
-      link.click();
+    const blob = await res.data;
+    const url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
 
     setLoadingReport(false);
   };
@@ -276,7 +265,6 @@ export default () => {
   const reporte = async () => {
     if (!collectionProps.selectedItems.length) return;
     const proyecto = collectionProps.selectedItems[0];
-    console.log("Proyecto seleccionado:", proyecto);
     setLoadingBtn(true);
     const res = await axiosBase.get(
       "facultad/listado/proyectos/reporteProyecto",
@@ -337,7 +325,7 @@ export default () => {
                 disabled={loading || collectionProps.selectedItems.length == 0}
                 variant="primary"
                 onClick={reporte}
-                loading={loadingReport}
+                loading={loadingBtn}
               >
                 Reporte
               </Button>

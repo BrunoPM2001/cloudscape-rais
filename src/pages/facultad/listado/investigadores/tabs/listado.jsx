@@ -78,7 +78,7 @@ const FILTER_PROPS = [
   },
   {
     propertyLabel: "Nivel de renacyt",
-    key: "nivel_renacyt",
+    key: "renacyt_nivel",
     groupValuesLabel: "Niveles de renacyt",
     operators: stringOperators,
   },
@@ -191,7 +191,7 @@ const columnDisplay = [
   { id: "tipo_documento", visible: true },
   { id: "num_documento", visible: true },
   { id: "renacyt", visible: true },
-  { id: "nivel_renacyt", visible: true },
+  { id: "renacyt_nivel", visible: true },
   { id: "codigo_orcid", visible: true },
   { id: "sexo", visible: true },
   { id: "puntaje_total", visible: true },

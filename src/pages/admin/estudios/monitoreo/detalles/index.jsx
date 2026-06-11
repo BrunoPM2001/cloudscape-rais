@@ -16,6 +16,7 @@ import queryString from "query-string";
 import Detalle from "./detalle";
 import Metas from "./metas";
 import Publicaciones from "./tabs/publicaciones";
+import Anexos from "./tabs/anexos";
 import { useFormValidation } from "../../../../../hooks/useFormValidation";
 import NotificationContext from "../../../../../providers/notificationProvider";
 import ModalObs from "../components/modalObs";
@@ -57,8 +58,10 @@ const gridDefinition = [
 ];
 
 const initialForm = {
+  id: null,
   descripcion: "",
   estado: null,
+  file1: [],
 };
 
 const opt_estado = [
@@ -145,6 +148,26 @@ export default function Monitoreo_detalles() {
     }
   };
 
+  const guardarAnexo = async () => {
+    if (!formValues.file1 || formValues.file1.length === 0) return;
+    setLoadingBtn(true);
+
+    const formData = new FormData();
+    formData.append("proyecto_id", id);
+    formData.append("file1", formValues.file1[0]);
+
+    const res = await axiosBase.post(
+      "admin/estudios/monitoreo/guardarAnexo",
+      formData
+    );
+
+    const data = res.data;
+    pushNotification(data.detail, data.message, notifications.length + 1);
+
+    setLoadingBtn(false);
+    getData();
+  };
+
   //  Tabs
   const tabs = [
     {
@@ -159,6 +182,22 @@ export default function Monitoreo_detalles() {
         />
       ),
     },
+    {
+      id: "anexos",
+      label: "Anexos",
+      content: (
+        <Anexos
+          data={data.anexos ?? []}
+          loading={loading}
+          reload={getData}
+          disabledBtn={data?.datos?.estado_meta == "Enviado"}
+          value1={formValues.file1}
+          handleChange={handleChange}
+          guardarAnexo={guardarAnexo}
+          loadingBtn={loadingBtn}
+        />
+      ),
+    }
   ];
 
   useEffect(() => {

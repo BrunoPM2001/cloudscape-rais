@@ -31,6 +31,11 @@ const navItems = [
     items: [
       {
         type: "link",
+        text: "Lineas de Investigación",
+        href: "/facultad/listado/lineas",
+      },
+      {
+        type: "link",
         text: "Grupos de Investigación",
         href: "/facultad/listado/grupos",
       },

@@ -1,4 +1,5 @@
 import {
+  Badge,
   Box,
   Header,
   Pagination,
@@ -97,7 +98,11 @@ const columnDefinitions = [
   {
     id: "categoria",
     header: "Categoría",
-    cell: (item) => item.categoria,
+    cell: (item) => (
+      <Badge color="red">
+        {item.categoria}
+      </Badge>
+    ),
     sortingField: "categoria",
     minWidth: 200,
   },
@@ -135,10 +140,10 @@ const columnDisplay = [
   { id: "id", visible: true },
   { id: "coddoc", visible: true },
   { id: "apno", visible: true },
-  { id: "ptipo", visible: true },
-  { id: "categoria", visible: true },
-  { id: "pcodigo", visible: true },
   { id: "condicion", visible: true },
+  { id: "ptipo", visible: true },
+  { id: "pcodigo", visible: true },
+  { id: "categoria", visible: true },
   { id: "detalle", visible: true },
   { id: "periodo", visible: true },
 ];

@@ -53,7 +53,7 @@ export default function Geco_detalle_transferencia() {
     {
       id: "historial",
       label: "Historial de transferencia",
-      content: <Historial data={data.historial} loading={loading} />,
+      content: <Historial data={data.historial} loading={loading} gecoProyectoId={id} />,
     },
   ];
 

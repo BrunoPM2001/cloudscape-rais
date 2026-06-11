@@ -307,7 +307,7 @@ export default () => {
                 loading={loadingReport}
                 onClick={exportExcel}
               >
-                Reporte en xlsx
+                Reporte en Excel
               </Button>
             </SpaceBetween>
           }

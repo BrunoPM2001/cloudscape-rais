@@ -33,6 +33,8 @@ const Listado_proyectos_fex = lazy(() =>
 
 const Listado_grupos = lazy(() => import("../pages/facultad/listado/grupos"));
 
+const Listado_lineas = lazy(() => import("../pages/facultad/listado/lineas"));
+
 const Listado_publicaciones = lazy(() =>
   import("../pages/facultad/listado/publicaciones")
 );
@@ -83,6 +85,10 @@ const routes = createBrowserRouter(
         {
           path: "grupos",
           element: <Listado_grupos />,
+        },
+        {
+          path: "lineas",
+          element: <Listado_lineas />,
         },
         {
           path: "publicaciones",
