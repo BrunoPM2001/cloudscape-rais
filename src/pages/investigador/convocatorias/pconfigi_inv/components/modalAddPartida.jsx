@@ -43,7 +43,7 @@ export default ({ id, close, reload, limit, options }) => {
     if (validateForm()) {
       setLoadingCreate(true);
       const res = await axiosBase.post(
-        "investigador/convocatorias/pmulti/agregarPartida",
+        "investigador/convocatorias/pconfigi_inv/agregarPartida",
         {
           ...formValues,
           id,

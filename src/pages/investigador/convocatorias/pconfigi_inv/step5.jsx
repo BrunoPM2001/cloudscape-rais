@@ -53,8 +53,7 @@ const columnDefinitions = [
   },
 ];
 
-const MAX = 51000;
-const MIN = 25000;
+const MAX = 60000;
 
 const columnDisplay = [
   { id: "partida", visible: true },
@@ -145,11 +144,6 @@ export default function Registro_pconfigi_inv_5() {
       if (totalMonto > MAX) {
         tempErrors.push(
           "El monto total máximo para postular a esta convocatoria es de S/. 60,000.00"
-        );
-      }
-      if (totalMonto < MIN) {
-        tempErrors.push(
-          "El monto total mínimo para postular a esta convocatoria es de S/. 25,000.00"
         );
       }
 

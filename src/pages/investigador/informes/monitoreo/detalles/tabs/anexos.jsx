@@ -36,25 +36,33 @@ export default ({ data, loading, reload, disabledBtn, value1, handleChange, guar
     <Container>
       <SpaceBetween size="m">
         <FormField
-        label="Declaración jurada o Carta"
-        description={
+          label="Declaración jurada"
+          info={
+            <Link
+              {...propsEnlaces}
+              href="/minio/templates/DJ_FORMATO_MONITOREO.docx"
+            >
+              Descargar formato
+            </Link>
+          }
+          description={
             data?.declaracion_jurada && (
-            <>
+              <>
                 Ya ha cargado un{" "}
                 <Link {...propsEnlaces} href={data.declaracion_jurada.url}>
-                archivo
+                  archivo
                 </Link>{" "}
                 el {data.declaracion_jurada.fecha}
-            </>
+              </>
             )
-        }
-        stretch
+          }
+          stretch
         >
-        <FileUpload
+          <FileUpload
             {...propsRepetidas}
             value={value1}
             onChange={({ detail }) => handleChange("file1", detail.value)}
-        />
+          />
         </FormField>
 
         <Button

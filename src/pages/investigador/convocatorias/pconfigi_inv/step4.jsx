@@ -68,6 +68,7 @@ export default function Registro_pconfigi_inv_4() {
   const { id } = queryString.parse(location.search);
 
   //  States
+  const [rangoFechas, setRangoFechas] = useState(null);
   const [loading, setLoading] = useState(true);
   const [errors, setErrors] = useState([]);
   const [data, setData] = useState([]);
@@ -91,16 +92,15 @@ export default function Registro_pconfigi_inv_4() {
       "investigador/convocatorias/pconfigi_inv/verificar4",
       {
         params: {
-          id,
+          proyecto_id: id
         },
       }
     );
     const info = res.data;
-    if (!info.estado) {
-      setErrors(info.errores);
-    } else {
-      setData(info.actividades);
-    }
+    setData(info.actividades);
+    setRangoFechas(info.rango);
+    setErrors([]);
+
     setLoading(false);
   };
 
@@ -263,6 +263,7 @@ export default function Registro_pconfigi_inv_4() {
                           reload={getData}
                           close={() => setType("")}
                           reset={() => setAlert([])}
+                          rangoFechas={rangoFechas}
                         />
                       ) : type == "delete" ? (
                         <ModalDeleteActividad
