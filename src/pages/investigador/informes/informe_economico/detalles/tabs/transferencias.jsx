@@ -12,6 +12,7 @@ export default ({ data, loading, reload }) => {
         <Solicitud
           data={data?.solicitud ?? []}
           disponible={data?.habilitado ?? false}
+          puedeEliminarTransferencia={data?.puedeEliminarTransferencia ?? false}
           loading={loading}
           reload={reload}
         />

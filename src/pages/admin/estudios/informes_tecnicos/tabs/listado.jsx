@@ -192,6 +192,13 @@ const columnDefinitions = [
     minWidth: 150,
   },
   {
+    id: "detalle_deuda",
+    header: "Detalle de deuda",
+    cell: (item) => item.detalle_deuda,
+    sortingField: "detalle_deuda",
+    minWidth: 150,
+  },
+  {
     id: "cantidad_informes",
     header: "N° informes",
     cell: (item) => item.cantidad_informes,
@@ -249,6 +256,7 @@ const columnDisplay = [
   { id: "titulo", visible: true },
   { id: "deuda", visible: true },
   { id: "tipo_deuda", visible: true },
+  { id: "detalle_deuda", visible: true },
   { id: "cantidad_informes", visible: true },
   { id: "responsable", visible: true },
   { id: "facultad", visible: true },

@@ -166,7 +166,7 @@ const doc_opt = [
 
 const tipo_opt = [
   {
-    value: "Docente permanente",
+    value: "DOCENTE PERMANENTE",
   },
   {
     value: "Estudiante pregrado",
@@ -245,6 +245,7 @@ export default function Editar_investigador() {
       sexo: sexo_opt.find((opt) => opt.value == data.sexo),
       doc_tipo: doc_opt.find((opt) => opt.value == data.doc_tipo),
       pais: res.data.paises.find((opt) => opt.value == data.pais),
+      rrhh_status: data.rrhh_status == 1 ? "Activo" : "Inactivo",
       fecha_icsi: data.fecha_icsi ?? "",
       fecha_nac: data.fecha_nac ?? "",
       facultad_id: res.data.facultades.find(

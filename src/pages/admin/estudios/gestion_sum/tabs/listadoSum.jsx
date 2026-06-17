@@ -51,8 +51,8 @@ export default () => {
                 variant="primary"
                 onClick={actualizarTodo}
                 loading={loadingSync}
-                disabled={loadingSync}
-                //disabled={true}
+                //disabled={loadingSync}
+                disabled={true}
               >
                 Sincronizar SUM completo
               </Button>}

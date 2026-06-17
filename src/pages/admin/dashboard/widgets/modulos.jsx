@@ -31,7 +31,7 @@ export default function ({ loading }) {
           {loading ? (
             <Spinner />
           ) : (
-            <StatusIndicator type="pending">En mantenimiento</StatusIndicator>
+            <StatusIndicator type="success">Ok</StatusIndicator>
           )}
         </div>
         <div>
@@ -47,7 +47,7 @@ export default function ({ loading }) {
           {loading ? (
             <Spinner />
           ) : (
-            <StatusIndicator type="warning">En desarrollo</StatusIndicator>
+            <StatusIndicator type="success">Ok</StatusIndicator>
           )}
         </div>
       </ColumnLayout>

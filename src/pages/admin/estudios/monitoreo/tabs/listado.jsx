@@ -95,6 +95,31 @@ const columnDefinitions = [
     minWidth: 450,
   },
   {
+    id: "deuda",
+    header: "Deuda",
+    cell: (item) => (
+      <Badge color={item.deuda == "Sí" || item.deuda == "SI" ? "red" : "green"}>
+        {item.deuda}
+      </Badge>
+    ),
+    sortingField: "deuda",
+    minWidth: 150,
+  },
+  {
+    id: "deuda_categoria",
+    header: "Tipo de deuda",
+    cell: (item) => item.deuda_categoria,
+    sortingField: "deuda_categoria",
+    minWidth: 150,
+  },
+  {
+    id: "deuda_detalle",
+    header: "Detalle de deuda",
+    cell: (item) => item.deuda_detalle,
+    sortingField: "deuda_detalle",
+    minWidth: 150,
+  },
+  {
     id: "responsable",
     header: "Responsable",
     cell: (item) => item.responsable,
@@ -162,6 +187,9 @@ const columnDisplay = [
   { id: "id", visible: true },
   { id: "codigo_proyecto", visible: true },
   { id: "titulo", visible: true },
+  { id: "deuda", visible: true },
+  { id: "deuda_categoria", visible: true },
+  { id: "deuda_detalle", visible: true },
   { id: "responsable", visible: true },
   { id: "facultad", visible: true },
   { id: "estado_meta", visible: true },

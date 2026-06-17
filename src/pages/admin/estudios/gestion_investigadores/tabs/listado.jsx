@@ -34,7 +34,7 @@ const FILTER_PROPS = [
   },
   {
     propertyLabel: "Rrhh estado",
-    key: "rrhh_status",
+    key: "rrhh_status_label",
     groupValuesLabel: "Rrhh estado",
     operators: stringOperators,
   },

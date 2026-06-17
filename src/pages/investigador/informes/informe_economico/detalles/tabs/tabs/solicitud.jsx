@@ -6,6 +6,7 @@ import {
   Form,
   FormField,
   Header,
+  Modal,
   SpaceBetween,
   Table,
   Textarea,
@@ -83,13 +84,15 @@ const formRules = {
   justificacion: { required: true },
 };
 
-export default ({ data, loading, reload, disponible }) => {
+export default ({ data, loading, reload, disponible, puedeEliminarTransferencia, }) => {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
 
   //  States
   const [visible, setVisible] = useState(false);
   const [loadingBtn, setLoadingBtn] = useState(false);
+  const [visibleEliminar, setVisibleEliminar] = useState(false);
+  const [loadingEliminar, setLoadingEliminar] = useState(false);
 
   //  Hooks
   const { formValues, formErrors, handleChange, validateForm } =
@@ -115,6 +118,23 @@ export default ({ data, loading, reload, disponible }) => {
       pushNotification(data.detail, data.message, notifications.length);
       reload();
     }
+  };
+
+  const eliminar = async () => {
+    setLoadingEliminar(true);
+
+    const res = await axiosBase.post(
+      "investigador/informes/informe_economico/eliminarTransferenciaTemporal",
+      {
+        geco_proyecto_id: id,
+      }
+    );
+
+    const data = res.data;
+    setLoadingEliminar(false);
+    setVisibleEliminar(false);
+    pushNotification(data.detail, data.message, notifications.length + 1);
+    reload();
   };
 
   return (
@@ -148,14 +168,23 @@ export default ({ data, loading, reload, disponible }) => {
           <Header
             counter={"(" + data.length + ")"}
             actions={
-              <Button
-                variant="primary"
-                iconName="add-plus"
-                disabled={!disponible}
-                onClick={() => setVisible(true)}
-              >
-                Agregar movimiento
-              </Button>
+              <SpaceBetween direction="horizontal" size="xs">
+                <Button
+                  onClick={() => setVisibleEliminar(true)}
+                  disabled={!puedeEliminarTransferencia}
+                >
+                  Eliminar transferencia
+                </Button>
+
+                <Button
+                  variant="primary"
+                  iconName="add-plus"
+                  disabled={!disponible}
+                  onClick={() => setVisible(true)}
+                >
+                  Agregar movimiento
+                </Button>
+              </SpaceBetween>
             }
           >
             Listado de partidas
@@ -200,6 +229,34 @@ export default ({ data, loading, reload, disponible }) => {
           setVisible={setVisible}
           reload={reload}
         />
+      )}
+      {visibleEliminar && (
+        <Modal
+          visible={visibleEliminar}
+          onDismiss={() => setVisibleEliminar(false)}
+          header="Eliminar transferencia temporal"
+          footer={
+            <Box float="right">
+              <SpaceBetween direction="horizontal" size="xs">
+                <Button
+                  variant="normal"
+                  onClick={() => setVisibleEliminar(false)}
+                >
+                  Cancelar
+                </Button>
+                <Button
+                  variant="primary"
+                  loading={loadingEliminar}
+                  onClick={eliminar}
+                >
+                  Sí, eliminar
+                </Button>
+              </SpaceBetween>
+            </Box>
+          }
+        >
+          ¿Está seguro de eliminar la transferencia temporal actual? Esta acción quitará los movimientos registrados y permitirá iniciar nuevamente.
+        </Modal>
       )}
     </SpaceBetween>
   );

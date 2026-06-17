@@ -5,6 +5,7 @@ import {
   ColumnLayout,
   FormField,
   Grid,
+  Header,
   Input,
   Modal,
   Select,
@@ -153,6 +154,9 @@ export default ({ setVisible, id, reload }) => {
       header="Nueva transferencia"
     >
       <SpaceBetween size="m">
+        <Header variant="h3" description="Seleccione la partida de origen desde donde se retirará el monto.">
+          Partida de origen
+        </Header>
         <Grid gridDefinition={gridDefinition}>
           <FormField label="Tipo" stretch errorText={formErrors.tipoA}>
             <Select
@@ -202,7 +206,7 @@ export default ({ setVisible, id, reload }) => {
             }
             type={formValues.partidaA.max > 0 ? "info" : "error"}
           >
-            <ColumnLayout columns={4} variant="text-grid">
+            <ColumnLayout columns={3} variant="text-grid">
               <div>
                 <Box variant="awsui-key-label">Presupuesto</Box>
                 <div>S/. {formValues.partidaA.monto}</div>
@@ -214,10 +218,6 @@ export default ({ setVisible, id, reload }) => {
               <div>
                 <Box variant="awsui-key-label">Monto aprobado</Box>
                 <div>S/. {formValues.partidaA.monto_rendido}</div>
-              </div>
-              <div>
-                <Box variant="awsui-key-label">Monto excedido</Box>
-                <div>S/. 0</div>
               </div>
             </ColumnLayout>
           </Alert>
@@ -239,6 +239,9 @@ export default ({ setVisible, id, reload }) => {
             onChange={({ detail }) => handleChange("monto", detail.value)}
           />
         </FormField>
+        <Header variant="h3" description="Seleccione la partida de destino donde se agregará el monto transferido.">
+          Partida de destino
+        </Header>
         <Grid gridDefinition={gridDefinition}>
           <FormField label="Tipo" stretch errorText={formErrors.tipoB}>
             <Select
