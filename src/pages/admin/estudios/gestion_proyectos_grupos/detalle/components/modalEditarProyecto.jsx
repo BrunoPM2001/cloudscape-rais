@@ -79,6 +79,7 @@ const initialForm = {
   resolucion_decanal: "",
   comentario: "",
   estado: null,
+  orden_merito: "",
 };
 
 const formRules = {
@@ -89,6 +90,7 @@ const formRules = {
   resolucion_decanal: { required: false },
   comentario: { required: false },
   estado: { required: true },
+  orden_merito: { required: false },
 };
 
 export default ({ visible, setVisible, item, proyecto_id, reload }) => {
@@ -233,15 +235,28 @@ export default ({ visible, setVisible, item, proyecto_id, reload }) => {
               }
             />
           </FormField>
-          <FormField label="Estado" stretch errorText={formErrors.estado}>
-            <Select
-              options={optsEstado}
-              selectedOption={formValues.estado}
-              onChange={({ detail }) =>
-                handleChange("estado", detail.selectedOption)
-              }
-            />
-          </FormField>
+          <ColumnLayout columns={2}>
+            <FormField label="Estado" stretch errorText={formErrors.estado}>
+              <Select
+                options={optsEstado}
+                selectedOption={formValues.estado}
+                onChange={({ detail }) =>
+                  handleChange("estado", detail.selectedOption)
+                }
+              />
+            </FormField>
+            
+            <FormField label="Orden de mérito" stretch errorText={formErrors.orden_merito}>
+              <Input
+                type="number"
+                placeholder="Ej. 1"
+                value={formValues.orden_merito}
+                onChange={({ detail }) =>
+                  handleChange("orden_merito", detail.value)
+                }
+              />
+            </FormField>
+          </ColumnLayout>
         </SpaceBetween>
       </Form>
     </Modal>

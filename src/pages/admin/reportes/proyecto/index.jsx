@@ -195,16 +195,14 @@ export default function Reporte_proyecto() {
                     }));
                   }}
                   options={[
+                    { label: "General", value: "" },
                     { label: "Medicina", value: "1" },
                     { label: "Derecho y Ciencia Política", value: "2" },
                     { label: "Letras y Ciencias Humanas", value: "3" },
                     { label: "Farmacia y Bioquímica", value: "4" },
                     { label: "Odontología", value: "5" },
                     { label: "Educación", value: "6" },
-                    {
-                      label: "Química e Ingeniería Química",
-                      value: "7",
-                    },
+                    { label: "Química e Ingeniería Química", value: "7" },
                     { label: "Medicina Veterinaria", value: "8" },
                     { label: "Ciencias Administrativas", value: "9" },
                     { label: "Ciencias Biológicas", value: "10" },
@@ -213,21 +211,11 @@ export default function Reporte_proyecto() {
                     { label: "Ciencias Físicas", value: "13" },
                     { label: "Ciencias Matemáticas", value: "14" },
                     { label: "Ciencias Sociales", value: "15" },
-                    {
-                      label:
-                        "Ingeniería Geológica, Minera, Metalúrgica y Geográfica",
-                      value: "16",
-                    },
+                    { label: "Ingeniería Geológica, Minera, Metalúrgica y Geográfica", value: "16" },
                     { label: "Ingeniería Industrial", value: "17" },
                     { label: "Psicología", value: "18" },
-                    {
-                      label: "Ingeniería Electrónica y Eléctrica",
-                      value: "19",
-                    },
-                    {
-                      label: "Ingeniería de Sistemas e Informática",
-                      value: "20",
-                    },
+                    { label: "Ingeniería Electrónica y Eléctrica", value: "19" },
+                    { label: "Ingeniería de Sistemas e Informática", value: "20" },
                   ]}
                 />
               </FormField>
