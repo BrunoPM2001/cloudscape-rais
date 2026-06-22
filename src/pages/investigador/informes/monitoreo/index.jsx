@@ -11,7 +11,7 @@ const breadcrumbs = [
     text: "Informes",
   },
   {
-    text: "Monitoreo",
+    text: "Monitoreo (productos entregables)",
   },
 ];
 

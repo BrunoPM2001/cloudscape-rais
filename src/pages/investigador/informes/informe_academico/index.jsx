@@ -36,6 +36,7 @@ export default function Informe_academico() {
       header="Proyectos para informe académico"
       helpInfo="Solo aparecerán los proyectos para informe."
       disableOverlap
+      contentType="table"
     >
       <Tabs tabs={tabs} />
     </BaseLayout>

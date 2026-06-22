@@ -46,11 +46,13 @@ export default ({ close, item, reload }) => {
     if (validateForm()) {
       setCreating(true);
       const response = await axiosBase.post(
-        "admin/estudios/deudaProyecto/asignarDeuda",
+        "admin/estudios/deudaProyecto/editarDetalleDeuda",
         {
-          ...formValues,
           proyecto_id: item.id,
-          tipo_proyecto: item.tipo_proyecto,
+          proyecto_id_real: item.proyecto_id,
+          proyecto_origen: item.proyecto_origen,
+          detalle_deuda: formValues.detalle_deuda,
+          comentario_deuda: formValues.comentario_deuda,
         }
       );
       const res = response.data;

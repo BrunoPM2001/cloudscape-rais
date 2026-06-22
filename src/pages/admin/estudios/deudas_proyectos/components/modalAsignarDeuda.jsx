@@ -51,6 +51,8 @@ export default ({ close, item, reload }) => {
           ...formValues,
           proyecto_id: item.id,
           tipo_proyecto: item.tipo_proyecto,
+          proyecto_id_real: item.proyecto_id,
+          proyecto_origen: item.proyecto_origen,
         }
       );
       const res = response.data;
@@ -61,8 +63,47 @@ export default ({ close, item, reload }) => {
     }
   };
 
-  useEffect(() => {
+  const getDeudaActual = async () => {
+    setLoading(true);
+
+    const res = await axiosBase.get(
+      "admin/estudios/deudaProyecto/proyectoDeuda",
+      {
+        params: {
+          proyecto_id: item.proyecto_id,
+          proyecto_origen: item.proyecto_origen,
+          tipo_proyecto: item.tipo_proyecto,
+        },
+      }
+    );
+
+    const deuda = res.data.deuda;
+
+    if (deuda) {
+      handleChange("detalle_deuda", deuda.informe || "");
+      handleChange("comentario_deuda", deuda.detalle || "");
+      handleChange("fecha_deuda", deuda.fecha_deuda || "");
+
+      if (res.data.deuda_academica !== "Sin deuda") {
+        handleChange("deuda_academica", {
+          label: res.data.deuda_academica,
+          value: res.data.deuda_academica,
+        });
+      }
+
+      if (res.data.deuda_economica !== "Sin deuda") {
+        handleChange("deuda_economica", {
+          label: res.data.deuda_economica,
+          value: res.data.deuda_economica,
+        });
+      }
+    }
+
     setLoading(false);
+  };
+
+  useEffect(() => {
+    getDeudaActual();
   }, []);
 
   return (

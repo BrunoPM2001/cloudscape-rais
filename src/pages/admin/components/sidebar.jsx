@@ -39,7 +39,10 @@ const navItems = [
         text: "Informes técnicos",
         href: "/admin/estudios/informes_tecnicos",
       },
-      { type: "link", text: "Monitoreo", href: "/admin/estudios/monitoreo" },
+      { 
+        type: "link", 
+        text: "Monitoreo (productos entregables)", 
+        href: "/admin/estudios/monitoreo" },
       {
         type: "link",
         text: "Deuda de proyectos",

@@ -55,6 +55,7 @@ const columnDefinitions = [
     header: "Código",
     cell: (item) => item.codigo_proyecto,
     sortingField: "codigo_proyecto",
+    width: 150,
   },
   {
     id: "titulo",
@@ -67,18 +68,21 @@ const columnDefinitions = [
     header: "Tipo",
     cell: (item) => item.tipo_proyecto,
     sortingField: "tipo_proyecto",
+    width: 180,
   },
   {
     id: "informe",
     header: "Informe",
     cell: (item) => item.informe,
     sortingField: "informe",
+    width: 250,
   },
   {
     id: "periodo",
     header: "Periodo",
     cell: (item) => item.periodo,
     sortingField: "periodo",
+    width: 150,
   },
   {
     id: "estado",
@@ -101,6 +105,7 @@ const columnDefinitions = [
       </Badge>
     ),
     sortingField: "estado",
+    width: 150,
   },
 ];
 

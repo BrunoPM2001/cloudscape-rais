@@ -89,6 +89,12 @@ const columnDefinitions = [
 
     sortingField: "deuda",
   },
+  {
+    id: "deuda_detalle",
+    header: "Detalle de deuda",
+    cell: (item) => item.deuda_detalle,
+    sortingField: "deuda_detalle",
+  },
 ];
 
 const columnDisplay = [
@@ -98,6 +104,7 @@ const columnDisplay = [
   { id: "condicion", visible: true },
   { id: "periodo", visible: true },
   { id: "deuda", visible: true },
+  { id: "deuda_detalle", visible: true },
 ];
 
 export default () => {

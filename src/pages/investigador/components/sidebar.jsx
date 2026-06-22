@@ -238,7 +238,7 @@ export default function Sidebar({ activeHref = "#", data = [], loading }) {
         },
         {
           type: "link",
-          text: "Monitoreo",
+          text: "Monitoreo (productos entregables)",
           href: "/investigador/informes/monitoreo",
         },
         {
