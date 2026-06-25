@@ -12,11 +12,13 @@ import axiosBase from "../../../../../api/axios";
 import NotificationContext from "../../../../../providers/notificationProvider";
 
 const initialForm = {
+  periodo: null,
   tipo: null,
   partida: null,
 };
 
 const formRules = {
+  periodo: { required: true },
   tipo: { required: true },
   partida: { required: true },
 };
@@ -25,6 +27,13 @@ const opt_tipo = [
   { value: "Bienes" },
   { value: "Servicios" },
   { value: "Otros" },
+];
+
+const opt_periodo = [
+  { value: "2026" },
+  { value: "2025" },
+  { value: "2024" },
+  { value: "2023" },
 ];
 
 export default ({ item, close, reload }) => {
@@ -48,6 +57,7 @@ export default ({ item, close, reload }) => {
         "admin/estudios/convocatorias/addPartida",
         {
           id: item.id,
+          periodo: formValues.periodo.value,
           partida_id: formValues.partida.value,
         }
       );
@@ -97,13 +107,26 @@ export default ({ item, close, reload }) => {
       header="Agregar criterio"
     >
       <SpaceBetween size="m">
+        <FormField label="Periodo" errorText={formErrors.periodo} stretch>
+          <Select
+            placeholder="Escoja un periodo"
+            selectedOption={formValues.periodo}
+            onChange={({ detail }) => {
+              handleChange("periodo", detail.selectedOption);
+              handleChange("tipo", null);
+              handleChange("partida", null);
+            }}
+            options={opt_periodo}
+          />
+        </FormField>
         <FormField label="Tipo" errorText={formErrors.tipo} stretch>
           <Select
             placeholder="Escoja una opción"
             selectedOption={formValues.tipo}
-            onChange={({ detail }) =>
-              handleChange("tipo", detail.selectedOption)
-            }
+            onChange={({ detail }) => {
+              handleChange("tipo", detail.selectedOption);
+              handleChange("partida", null);
+            }}
             options={opt_tipo}
           />
         </FormField>
@@ -114,7 +137,9 @@ export default ({ item, close, reload }) => {
               loading
                 ? []
                 : partidas.filter(
-                    (item) => item.tipo == formValues?.tipo?.value
+                    (item) => 
+                      Number(item.periodo) === Number(formValues?.periodo?.value) &&
+                      item.tipo == formValues?.tipo?.value
                   )
             }
             selectedOption={formValues.partida}

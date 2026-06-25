@@ -89,6 +89,8 @@ const opt_pintelectual = [
   { value: "Patentes de invención" },
   { value: "Modelos de utilidad" },
   { value: "Certificados de obtentor" },
+  { value: "Paquete tecnológico" },
+  { value: "Software" },
   { value: "Otros" },
 ];
 

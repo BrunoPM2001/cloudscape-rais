@@ -33,10 +33,12 @@ const breadcrumbs = [
 
 const initialForm = {
   carta: [],
+  carta2: [],
 };
 
 const formRules = {
   carta: { required: false, isFile: true, maxSize: 6 * 1024 * 1024 },
+  carta2: { required: false, isFile: true, maxSize: 6 * 1024 * 1024 },
 };
 
 export default function Registro_pconfigi_inv_2() {
@@ -76,6 +78,8 @@ export default function Registro_pconfigi_inv_2() {
         ...info.data,
         url: info.carta?.url,
         url_fecha: info.carta?.url_fecha,
+        url2: info.carta2?.url,
+        url2_fecha: info.carta2?.url_fecha,
       });
     }
     setLoading(false);
@@ -86,11 +90,36 @@ export default function Registro_pconfigi_inv_2() {
       id,
     });
     if (index == 2) {
+      const tieneCarta = Boolean(data.url) || formValues.carta.length > 0;
+      const tieneCarta2 = Boolean(data.url2) || formValues.carta2.length > 0;
+      if (!tieneCarta) {
+        pushNotification(
+          "Debe cargar la carta de compromiso de confidencialidad",
+          "error",
+          notifications.length + 1
+        );
+        return;
+      }
+
+      if (!tieneCarta2) {
+        pushNotification(
+          "Debe cargar la carta o documento de vinculación",
+          "error",
+          notifications.length + 1
+        );
+        return;
+      }
+
       if (validateForm()) {
         setLoadingForm(true);
         let form = new FormData();
         form.append("id", id);
-        form.append("file", formValues.carta[0]);
+        if (formValues.carta.length > 0) {
+          form.append("file", formValues.carta[0]);
+        }
+        if (formValues.carta2.length > 0) {
+          form.append("file_vinculacion", formValues.carta2[0]);
+        }
         const res = await axiosBase.postForm(
           "investigador/convocatorias/pconfigi_inv/registrar2",
           form
@@ -224,62 +253,106 @@ export default function Registro_pconfigi_inv_2() {
                         </ColumnLayout>
                       </Container>
                       <Container>
-                        <FormField
-                          label="Carta de compromiso de confidencialidad"
-                          description={
-                            <>
-                              Puede descargar la plantilla de la carta de
-                              compromiso en{" "}
-                              <Link
-                                href="/minio/templates/compromiso-confidencialidad.docx"
-                                variant="primary"
-                                fontSize="body-s"
-                                target="_blank"
-                              >
-                                este enlace.
-                              </Link>{" "}
-                              {data.url && (
-                                <>
-                                  Ya ha cargado un archivo el {data.url_fecha},{" "}
-                                  <Link
-                                    href={data.url}
-                                    external="true"
-                                    variant="primary"
-                                    fontSize="body-s"
-                                    target="_blank"
-                                  >
-                                    descargar archivo.
-                                  </Link>
-                                </>
-                              )}
-                            </>
-                          }
-                          stretch
-                          errorText={formErrors.carta}
-                        >
-                          <FileUpload
-                            value={formValues.carta}
-                            onChange={({ detail }) => {
-                              handleChange("carta", detail.value);
-                            }}
-                            showFileLastModified
-                            showFileSize
-                            showFileThumbnail
-                            constraintText="El archivo cargado no debe superar los 6 MB"
-                            i18nStrings={{
-                              uploadButtonText: (e) =>
-                                e ? "Cargar archivos" : "Cargar archivo",
-                              dropzoneText: (e) =>
-                                e
-                                  ? "Arrastre los archivos para cargarlos"
-                                  : "Arrastre el archivo para cargarlo",
-                              removeFileAriaLabel: (e) =>
-                                `Eliminar archivo ${e + 1}`,
-                              errorIconAriaLabel: "Error",
-                            }}
-                            accept=".jpeg, .jpg, .png, .pdf"
-                          />
-                        </FormField>
+                        <ColumnLayout columns={2}>
+                          <FormField
+                            label="Carta de compromiso de confidencialidad"
+                            description={
+                              <>
+                                Puede descargar la plantilla de la carta de
+                                compromiso en{" "}
+                                <Link
+                                  href="/minio/templates/compromiso-confidencialidad.docx"
+                                  variant="primary"
+                                  fontSize="body-s"
+                                  target="_blank"
+                                >
+                                  este enlace.
+                                </Link>{" "}
+                                {data.url && (
+                                  <>
+                                    Ya ha cargado un archivo el {data.url_fecha},{" "}
+                                    <Link
+                                      href={data.url}
+                                      external="true"
+                                      variant="primary"
+                                      fontSize="body-s"
+                                      target="_blank"
+                                    >
+                                      descargar archivo.
+                                    </Link>
+                                  </>
+                                )}
+                              </>
+                            }
+                            stretch
+                            errorText={formErrors.carta}
+                          >
+                            <FileUpload
+                              value={formValues.carta}
+                              onChange={({ detail }) => {
+                                handleChange("carta", detail.value);
+                              }}
+                              showFileLastModified
+                              showFileSize
+                              showFileThumbnail
+                              constraintText="El archivo cargado no debe superar los 6 MB"
+                              i18nStrings={{
+                                uploadButtonText: (e) =>
+                                  e ? "Cargar archivos" : "Cargar archivo",
+                                dropzoneText: (e) =>
+                                  e
+                                    ? "Arrastre los archivos para cargarlos"
+                                    : "Arrastre el archivo para cargarlo",
+                                removeFileAriaLabel: (e) =>
+                                  `Eliminar archivo ${e + 1}`,
+                                errorIconAriaLabel: "Error",
+                              }}
+                              accept=".jpeg, .jpg, .png, .pdf"
+                            />
+                          </FormField>
+
+                          <FormField
+                            label="Carta o documento de vinculación"
+                            description={
+                              <>
+                                {data.url2 && (
+                                  <>
+                                    Ya ha cargado un archivo el {data.url2_fecha},{" "}
+                                    <Link
+                                      href={data.url2}
+                                      external="true"
+                                      variant="primary"
+                                      fontSize="body-s"
+                                      target="_blank"
+                                    >
+                                      descargar archivo.
+                                    </Link>
+                                  </>
+                                )}
+                              </>
+                            }
+                            stretch
+                            errorText={formErrors.carta2}
+                          >
+                            <FileUpload
+                              value={formValues.carta2}
+                              onChange={({ detail }) => {
+                                handleChange("carta2", detail.value)
+                              }}
+                              showFileLastModified
+                              showFileSize
+                              showFileThumbnail
+                              constraintText="El archivo cargado no debe superar los 6 MB"
+                              i18nStrings={{
+                                uploadButtonText: () => "Cargar archivo",
+                                dropzoneText: () => "Arrastre el archivo para cargarlo",
+                                removeFileAriaLabel: (e) => `Eliminar archivo ${e + 1}`,
+                                errorIconAriaLabel: "Error",
+                              }}
+                              accept=".jpeg, .jpg, .png, .pdf"
+                            />
+                          </FormField>
+                        </ColumnLayout>
                       </Container>
                     </SpaceBetween>
                   ),

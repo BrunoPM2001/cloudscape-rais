@@ -135,12 +135,6 @@ export default function Registro_pconfigi_inv_5() {
         (sum, item) => sum + parseFloat(item.monto),
         0
       );
-
-      if (
-        data.presupuesto.filter((item) => item.tipo == "Bienes").length == 0
-      ) {
-        tempErrors.push("Debe tener al menos un bien en su presupuesto");
-      }
       if (totalMonto > MAX) {
         tempErrors.push(
           "El monto total máximo para postular a esta convocatoria es de S/. 60,000.00"

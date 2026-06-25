@@ -134,6 +134,7 @@ export default ({ data, loading, reload, disabledBtn }) => {
                     {
                       id: "action_21",
                       text: "Reporte",
+                      disabled: collectionProps.selectedItems[0]?.estado !== "Registrado",
                     },
                     {
                       id: "action_22",

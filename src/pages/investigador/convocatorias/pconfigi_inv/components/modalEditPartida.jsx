@@ -18,6 +18,7 @@ export default ({ close, reload, item, options, limit }) => {
   const { notifications, pushNotification } = useContext(NotificationContext);
   //  States
   const [loading, setLoading] = useState(false);
+  const [localAlert, setLocalAlert] = useState(null);
 
   const initialForm = {
     tipo: { value: item.tipo },
@@ -43,14 +44,20 @@ export default ({ close, reload, item, options, limit }) => {
     if (validateForm()) {
       setLoading(true);
       const res = await axiosBase.put(
-        "investigador/convocatorias/pmulti/actualizarPartida",
+        "investigador/convocatorias/pconfigi_inv/actualizarPartida",
         { ...formValues, id: item.id }
       );
       const data = res.data;
+      setLoading(false);
+
+      if (data.message === "warning") {
+        setLocalAlert(data.detail);
+        return;
+      }
+
       pushNotification(data.detail, data.message, notifications.length + 1);
       close();
       reload();
-      setLoading(false);
     }
   };
 
@@ -74,6 +81,15 @@ export default ({ close, reload, item, options, limit }) => {
       }
     >
       <SpaceBetween size="s">
+        {localAlert && (
+          <Alert
+            type="warning"
+            dismissible
+            onDismiss={() => setLocalAlert(null)}
+          >
+            {localAlert}
+          </Alert>
+        )}
         <Alert
           header={`Tiene disponible S/ ${limit} para asignar a esta partida`}
         />

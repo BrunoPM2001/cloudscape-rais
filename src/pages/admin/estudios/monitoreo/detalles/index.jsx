@@ -124,28 +124,23 @@ export default function Monitoreo_detalles() {
   };
 
   const guardar = async (remitir = false) => {
-    if (
-      data.publicaciones.filter((item) => item.estado != "Registrado").length >
-      0
-    ) {
-      pushNotification(
-        "Para remitir el monitoreo todas las publicaciones asociadas tienen que estar en estado Registrado",
-        "warning",
-        notifications.length + 1
-      );
-    } else {
-      setLoadingBtn(true);
-      const res = await axiosBase.put("admin/estudios/monitoreo/guardar", {
-        id: formValues.id,
-        proyecto_id: id,
-        descripcion: formValues.descripcion,
-        estado: remitir ? 5 : formValues.estado?.value,
-      });
-      const data = res.data;
-      pushNotification(data.detail, data.message, notifications.length + 1);
-      setLoadingBtn(false);
-      getData();
+    setLoadingBtn(true);
+
+    const res = await axiosBase.put("admin/estudios/monitoreo/guardar", {
+      id: formValues.id,
+      proyecto_id: id,
+      descripcion: formValues.descripcion,
+      estado: remitir ? 5 : formValues.estado?.value,
+    });
+    const data = res.data;
+    pushNotification(data.detail, data.message, notifications.length + 1);
+    setLoadingBtn(false);
+
+    if (data.message === "warning") {
+      return;
     }
+
+    getData();
   };
 
   const guardarAnexo = async () => {

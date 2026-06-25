@@ -85,12 +85,19 @@ const columnDefinitions = [
     cell: (item) => item.partida,
     sortingField: "partida",
   },
+  {
+    id: "periodo",
+    header: "Periodo",
+    cell: (item) => item.periodo,
+    sortingField: "periodo",
+  },
 ];
 
 const columnDisplay = [
   { id: "id", visible: true },
   { id: "tipo", visible: true },
   { id: "partida", visible: true },
+  { id: "periodo", visible: true},
 ];
 
 const initialForm = {

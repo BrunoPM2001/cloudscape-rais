@@ -8,6 +8,7 @@ import {
   FormField,
   Input,
   ColumnLayout,
+  Alert,
 } from "@cloudscape-design/components";
 import { useContext, useState } from "react";
 import NotificationContext from "../../../../../providers/notificationProvider";
@@ -39,13 +40,21 @@ export default ({ id, close, reload, reset, rangoFechas }) => {
     useFormValidation(initialForm, formRules);
 
   //  Functions
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
   const agregarActividad = async () => {
     if (validateForm()) {
-      if (
-        formValues.fecha_inicio <= formValues.fecha_fin &&
-        formValues.fecha_inicio >= rangoFechas.fecha_inicial &&
-        formValues.fecha_fin <= rangoFechas.fecha_final
-      ) {
+        const fechaInicio = new Date(formValues.fecha_inicio);
+        const fechaFin = new Date(formValues.fecha_fin);
+
+        if (
+          formValues.fecha_inicio <= formValues.fecha_fin &&
+          fechaInicio >= today &&
+          fechaFin >= today &&
+          formValues.fecha_inicio >= rangoFechas.fecha_inicial &&
+          formValues.fecha_fin <= rangoFechas.fecha_final
+        ) {
         setLoadingCreate(true);
         const res = await axiosBase.post(
           "investigador/convocatorias/pconfigi_inv/addActividad",
@@ -111,13 +120,18 @@ export default ({ id, close, reload, reset, rangoFechas }) => {
               placeholder="YYYY/MM/DD"
               value={formValues.fecha_inicio}
               isDateEnabled={(date) => {
-                const newDate = new Date(formValues.fecha_fin);
-                const limit = new Date(rangoFechas?.fecha_inicial);
-                if (formValues.fecha_fin != "") {
-                  return date < newDate && date > limit;
-                } else {
-                  return date > limit;
+                const fechaFin = new Date(formValues.fecha_fin);
+                const fechaInicialConvocatoria = new Date(rangoFechas?.fecha_inicial);
+
+                if (formValues.fecha_fin !== "") {
+                  return (
+                    date >= today &&
+                    date >= fechaInicialConvocatoria &&
+                    date <= fechaFin
+                  );
                 }
+
+                return date >= today && date > fechaInicialConvocatoria;
               }}
               dateDisabledReason={() => {
                 return "La fecha inicial no puede ser mayor a la fecha final";
@@ -136,13 +150,18 @@ export default ({ id, close, reload, reset, rangoFechas }) => {
               placeholder="YYYY/MM/DD"
               value={formValues.fecha_fin}
               isDateEnabled={(date) => {
-                const limit = new Date(rangoFechas?.fecha_final);
-                const newDate = new Date(formValues.fecha_inicio);
-                if (formValues.fecha_inicio != "") {
-                  return date > newDate && date < limit;
-                } else {
-                  return date < limit;
+                const fechaFinalConvocatoria = new Date(rangoFechas?.fecha_final);
+                const fechaInicio = new Date(formValues.fecha_inicio);
+
+                if (formValues.fecha_inicio !== "") {
+                  return (
+                    date >= today &&
+                    date >= fechaInicio &&
+                    date <= fechaFinalConvocatoria
+                  );
                 }
+
+                return date >= today && date < fechaFinalConvocatoria;
               }}
               dateDisabledReason={() => {
                 return "La fecha final no puede ser menor a la fecha inicial";

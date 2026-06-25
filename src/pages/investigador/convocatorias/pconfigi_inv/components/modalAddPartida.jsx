@@ -33,6 +33,7 @@ export default ({ id, close, reload, limit, options }) => {
 
   //  States
   const [loadingCreate, setLoadingCreate] = useState(false);
+  const [localAlert, setLocalAlert] = useState(null);
 
   //  Hooks
   const { formValues, formErrors, handleChange, validateForm } =
@@ -51,6 +52,12 @@ export default ({ id, close, reload, limit, options }) => {
       );
       const data = res.data;
       setLoadingCreate(false);
+
+      if (data.message === "warning") {
+        setLocalAlert(data.detail);
+        return;
+      }
+
       close();
       reload();
       pushNotification(data.detail, data.message, notifications.length + 1);
@@ -82,6 +89,15 @@ export default ({ id, close, reload, limit, options }) => {
     >
       <Form>
         <SpaceBetween size="s">
+          {localAlert && (
+            <Alert
+              type="warning"
+              dismissible
+              onDismiss={() => setLocalAlert(null)}
+            >
+              {localAlert}
+            </Alert>
+          )}
           <Alert header={`Saldo disponible: S/. ${limit}`} />
           <FormField
             label="Tipo de partida"

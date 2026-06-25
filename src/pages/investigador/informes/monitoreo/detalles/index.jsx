@@ -100,29 +100,21 @@ export default function Monitoreo_detalle() {
   };
 
   const remitir = async () => {
-    if (
-      data.publicaciones.filter((item) => item.estado != "Registrado").length >
-      0
-    ) {
-      pushNotification(
-        "Para remitir el monitoreo todas las publicaciones asociadas tienen que estar en estado Registrado",
-        "warning",
-        notifications.length + 1
-      );
-    } else {
-      setLoadingBtn(true);
-      const res = await axiosBase.post(
-        "investigador/informes/monitoreo/remitir",
-        {
-          proyecto_id: id,
-          descripcion: formValues.descripcion,
-        }
-      );
-      const data = res.data;
-      pushNotification(data.detail, data.message, notifications.length + 1);
-      setLoadingBtn(false);
-      getData();
+    setLoadingBtn(true);
+    const res = await axiosBase.post(
+      "investigador/informes/monitoreo/remitir",
+      {
+        proyecto_id: id,
+        descripcion: formValues.descripcion,
+      }
+    );
+    const data = res.data;
+    pushNotification(data.detail, data.message, notifications.length + 1);
+    setLoadingBtn(false);
+    if (data.message === "warning") {
+      return;
     }
+    getData();
   };
 
   const reporte = async () => {
