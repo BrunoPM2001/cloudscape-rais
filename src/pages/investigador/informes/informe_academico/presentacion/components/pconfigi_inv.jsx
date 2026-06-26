@@ -9,6 +9,7 @@ import {
   Input,
   Link,
   SpaceBetween,
+  ColumnLayout,
   Spinner,
   Table,
   Wizard,
@@ -36,10 +37,12 @@ const initialForm = {
   infinal9: "",
   infinal10: "",
   file1: [],
+  file2: [],
 };
 
 const formRules = {
   file1: { isFile: true, maxSize: 6 * 1024 * 1024 },
+  file2: { isFile: true, maxSize: 6 * 1024 * 1024 },
 };
 
 const propsRepetidas = {
@@ -143,6 +146,7 @@ export default () => {
     form.append("infinal9", formValues.infinal9);
     form.append("infinal10", formValues.infinal10);
     form.append("file1", formValues.file1[0]);
+    form.append("file2", formValues.file2[0]);
     const res = await axiosBase.post(
       "investigador/informes/informe_academico/sendData",
       form
@@ -506,32 +510,67 @@ export default () => {
                   "Archivos adjuntos (ninguno debe superar los 6 MB)",
                 content: (
                   <Container>
-                    <FormField
-                      label="Adjuntar archivo digital"
-                      description={
-                        files["informe-PCONFIGI-INV-INFORME"] && (
-                          <>
-                            Ya ha cargado un{" "}
-                            <Link
-                              {...propsEnlaces}
-                              href={files["informe-PCONFIGI-INV-INFORME"]}
-                            >
-                              archivo.
-                            </Link>
-                          </>
-                        )
-                      }
-                      stretch
-                      errorText={formErrors.file1}
-                    >
-                      <FileUpload
-                        {...propsRepetidas}
-                        value={formValues.file1}
-                        onChange={({ detail }) => {
-                          handleChange("file1", detail.value);
-                        }}
-                      />
-                    </FormField>
+                    <ColumnLayout columns={2}>
+                      <FormField
+                        label="Adjuntar archivo digital"
+                        description={
+                          files["informe-PCONFIGI-INV-INFORME"] && (
+                            <>
+                              Ya ha cargado un{" "}
+                              <Link
+                                {...propsEnlaces}
+                                href={files["informe-PCONFIGI-INV-INFORME"]}
+                              >
+                                archivo.
+                              </Link>
+                            </>
+                          )
+                        }
+                        stretch
+                        errorText={formErrors.file1}
+                      >
+                        <FileUpload
+                          {...propsRepetidas}
+                          value={formValues.file1}
+                          onChange={({ detail }) => {
+                            handleChange("file1", detail.value);
+                          }}
+                        />
+                      </FormField>
+                      <FormField
+                        label="Reporte de viabilidad"
+                        info={
+                          <Link
+                            variant="info"
+                            href="/minio/templates/Modelo_Reporte_Viabilidad.xlsx"
+                            external
+                          >
+                            Descargar modelo
+                          </Link>
+                        }
+                        constraintText="Remitir el formulario con los campos completados a la Dirección de Promoción DGITT-VRIP dp.vrip@unmsm.edu.pe"
+                        description={
+                          files["viabilidad"] && (
+                            <>
+                              Ya ha cargado un{" "}
+                              <Link {...propsEnlaces} href={files["viabilidad"]}>
+                                archivo.
+                              </Link>
+                            </>
+                          )
+                        }
+                        stretch
+                        errorText={formErrors.file2}
+                      >
+                        <FileUpload
+                          {...propsRepetidas}
+                          value={formValues.file2}
+                          onChange={({ detail }) => {
+                            handleChange("file2", detail.value);
+                          }}
+                        />
+                      </FormField>
+                    </ColumnLayout>
                   </Container>
                 ),
                 isOptional: true,

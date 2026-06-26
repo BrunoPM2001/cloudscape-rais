@@ -58,7 +58,7 @@ export default function Detalle_grupo() {
     <BaseLayout
       breadcrumbs={breadcrumbs}
       header="Detalle del grupo de investigación:"
-      helpInfo="Información sobre la páginal actual para poder mostrarla al público
+      helpInfo="Información sobre la página actual para poder mostrarla al público
       en general."
       contentType="table"
     >

@@ -116,7 +116,7 @@ export default ({ close, item, grupo_id, reload }) => {
         ...initialForm,
         ...item,
         grupo_categoria:
-          item.grupo_categoria == null ? null : { value: item.grupo_categoria },
+          item.grupo_categoria == null ? { value: null, label: "Sin categoría" } : { value: item.grupo_categoria, label: item.grupo_categoria },
         facultad_id:
           item.facultad_id == null ? null : { value: item.facultad_id, label: item.facultad },
       },
