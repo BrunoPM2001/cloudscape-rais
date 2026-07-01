@@ -15,8 +15,8 @@ import axiosBase from "../../../../../api/axios";
 import { useFormValidation } from "../../../../../hooks/useFormValidation";
 
 const initialForm = {
-  deuda_academica: "",
-  deuda_economica: "",
+  deuda_academica: { label: "Sin deuda", value: "Sin deuda" },
+  deuda_economica: { label: "Sin deuda", value: "Sin deuda" },
   fecha_deuda: "",
   detalle_deuda: "",
   comentario_deuda: "",
@@ -25,8 +25,8 @@ const initialForm = {
 const formRules = {
   deuda_academica: { required: false },
   deuda_economica: { required: false },
-  fecha_deuda: { required: true },
-  detalle_deuda: { required: true },
+  fecha_deuda: { required: false },
+  detalle_deuda: { required: false },
   comentario_deuda: { required: false },
 };
 
@@ -51,6 +51,10 @@ export default ({ close, item, reload }) => {
           proyecto_id: item.id,
           proyecto_id_real: item.proyecto_id,
           proyecto_origen: item.proyecto_origen,
+          tipo_proyecto: item.tipo_proyecto,
+          deuda_academica: formValues.deuda_academica,
+          deuda_economica: formValues.deuda_economica,
+          fecha_deuda: formValues.fecha_deuda,
           detalle_deuda: formValues.detalle_deuda,
           comentario_deuda: formValues.comentario_deuda,
         }
@@ -80,24 +84,22 @@ export default ({ close, item, reload }) => {
     const deuda = res.data.deuda;
 
     if (deuda) {
-        handleChange("detalle_deuda", deuda.informe || "");
-        handleChange("comentario_deuda", deuda.detalle || "");
-        handleChange("fecha_deuda", deuda.fecha_deuda || "");
+      handleChange("detalle_deuda", deuda.informe || "");
+      handleChange("comentario_deuda", deuda.detalle || "");
+      handleChange("fecha_deuda", deuda.fecha_deuda || "");
 
-        // Selecciones
-        if (res.data.deuda_academica !== "Sin deuda") {
-        handleChange("deuda_academica", {
-            label: res.data.deuda_academica,
-            value: res.data.deuda_academica,
-        });
-        }
+      const deudaAcademica = res.data.deuda_academica || "Sin deuda";
+      const deudaEconomica = res.data.deuda_economica || "Sin deuda";
 
-        if (res.data.deuda_economica !== "Sin deuda") {
-        handleChange("deuda_economica", {
-            label: res.data.deuda_economica,
-            value: res.data.deuda_economica,
-        });
-      }
+      handleChange("deuda_academica", {
+        label: deudaAcademica,
+        value: deudaAcademica,
+      });
+
+      handleChange("deuda_economica", {
+        label: deudaEconomica,
+        value: deudaEconomica,
+      });
     }
     setLoading(false);
   };
@@ -136,9 +138,11 @@ export default ({ close, item, reload }) => {
           errorText={formErrors.deuda_academica}
         >
           <Select
-            disabled
             placeholder="Escoge una opción"
-            options={[{ value: "Deuda académica" }, { value: "Sin deuda" }]}
+            options={[
+              { label: "Deuda Académica", value: "Deuda Académica" }, 
+              { label: "Sin deuda", value: "Sin deuda" }
+            ]}
             selectedOption={formValues.deuda_academica}
             onChange={({ detail }) =>
               handleChange("deuda_academica", detail.selectedOption)
@@ -150,9 +154,11 @@ export default ({ close, item, reload }) => {
           errorText={formErrors.deuda_economica}
         >
           <Select
-            disabled
             placeholder="Escoge una opción"
-            options={[{ value: "Deuda económica" }, { value: "Sin deuda" }]}
+            options={[
+              { label: "Deuda Económica", value: "Deuda Económica" }, 
+              { label: "Sin deuda", value: "Sin deuda" },
+            ]}
             selectedOption={formValues.deuda_economica}
             onChange={({ detail }) =>
               handleChange("deuda_economica", detail.selectedOption)
@@ -161,7 +167,6 @@ export default ({ close, item, reload }) => {
         </FormField>
         <FormField label="Fecha de la deuda" errorText={formErrors.fecha_deuda}>
           <DatePicker
-            disabled
             placeholder="YYYY/MM/DD"
             value={formValues.fecha_deuda}
             onChange={({ detail }) => handleChange("fecha_deuda", detail.value)}
