@@ -14,7 +14,7 @@ import { useFormValidation } from "../../../../../../hooks/useFormValidation";
 import axiosBase from "../../../../../../api/axios";
 import NotificationContext from "../../../../../../providers/notificationProvider";
 
-export default ({ id, close, reload, limit }) => {
+export default ({ id, close, reload, limit, options = [] }) => {
   //  Const
   const initialForm = {
     tipo: null,
@@ -33,27 +33,13 @@ export default ({ id, close, reload, limit }) => {
 
   //  States
   const [loadingCreate, setLoadingCreate] = useState(false);
-  const [optPartidas, setOptPartidas] = useState([]);
+  const [localAlert, setLocalAlert] = useState(null);
 
   //  Hooks
   const { formValues, formErrors, handleChange, validateForm } =
     useFormValidation(initialForm, formRules);
 
   //  Functions
-  const listarTiposPartidas = async (value) => {
-    setOptPartidas([]);
-    const res = await axiosBase.get(
-      "investigador/convocatorias/pro-ctie/listarTiposPartidas",
-      {
-        params: {
-          tipo: value,
-        },
-      }
-    );
-    const data = res.data;
-    setOptPartidas(data);
-  };
-
   const agregarPartida = async () => {
     if (validateForm()) {
       setLoadingCreate(true);
@@ -67,6 +53,12 @@ export default ({ id, close, reload, limit }) => {
       );
       const data = res.data;
       setLoadingCreate(false);
+
+      if (data.message === "warning") {
+        setLocalAlert(data.detail);
+        return;
+      }
+      
       close();
       reload();
       pushNotification(data.detail, data.message, notifications.length + 1);
@@ -98,6 +90,15 @@ export default ({ id, close, reload, limit }) => {
     >
       <Form>
         <SpaceBetween size="s">
+          {localAlert && (
+            <Alert
+              type="warning"
+              dismissible
+              onDismiss={() => setLocalAlert(null)}
+            >
+              {localAlert}
+            </Alert>
+          )}
           <Alert header={`Saldo disponible: S/. ${limit}`} />
           <FormField
             label="Tipo de partida"
@@ -117,15 +118,17 @@ export default ({ id, close, reload, limit }) => {
               selectedOption={formValues.tipo}
               onChange={({ detail }) => {
                 handleChange("tipo", detail.selectedOption);
-                listarTiposPartidas(detail.selectedOption.value);
+                handleChange("partida", null);
               }}
             />
           </FormField>
           <FormField label="Partida" stretch errorText={formErrors.partida}>
             <Select
               placeholder="Escoja una opción"
-              statusType={optPartidas.length == 0 ? "loading" : "finished"}
-              options={optPartidas}
+              disabled={!formValues.tipo}
+              options={options.filter(
+                (item) => item.tipo == formValues.tipo?.value
+              )}
               selectedOption={formValues.partida}
               onChange={({ detail }) =>
                 handleChange("partida", detail.selectedOption)

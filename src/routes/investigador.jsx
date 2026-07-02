@@ -254,6 +254,9 @@ const Verificar_requisitos = lazy(() =>
   import("../pages/investigador/convocatorias/proctie/verificar.jsx")
 );
 
+const Registrar_proctie_paso0 = lazy(() =>
+  import("../pages/investigador/convocatorias/proctie/paso0.jsx")
+);
 const Registrar_proctie_paso1 = lazy(() =>
   import("../pages/investigador/convocatorias/proctie/layout1.jsx")
 );
@@ -780,7 +783,7 @@ const routes = createBrowserRouter(
           children: [
             {
               path: "",
-              element: <Verificar_requisitos />,
+              element: <Registrar_proctie_paso0 />,
             },
             {
               path: "paso1",

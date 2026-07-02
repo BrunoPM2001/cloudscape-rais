@@ -60,7 +60,7 @@ export default function Registrar_proyecto_paso1() {
         activeStepIndex={0}
         isLoadingNextStep={loading}
         onCancel={() => {
-          window.location.href = "../../";
+          window.location.href = "../pro-ctie";
         }}
         steps={[
           {

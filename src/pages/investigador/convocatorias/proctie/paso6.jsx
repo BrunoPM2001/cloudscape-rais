@@ -70,6 +70,7 @@ export default forwardRef(function (
 
   //  State
   const [distributions, setDistribution] = useState([]);
+  const [partidas, setPartidas] = useState([]);
   const [montoDis, setMontoDis] = useState();
   const [typeModal, setTypeModal] = useState(null);
 
@@ -97,6 +98,7 @@ export default forwardRef(function (
     const data = res.data;
     setRequisitos(CANTIDAD_MINIMA <= data.presupuesto.length ? true : false);
     setDistribution(data.presupuesto);
+    setPartidas(data.partidas ?? []);
     setMontoDis(data.monto_disponible);
     setLoading(false);
   };
@@ -209,6 +211,7 @@ export default forwardRef(function (
             reload={getData}
             close={() => setTypeModal("")}
             limit={montoDis}
+            options={partidas}
           />
         ) : (
           typeModal == "delete" && (

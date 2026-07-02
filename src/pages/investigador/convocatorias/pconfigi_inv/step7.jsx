@@ -99,7 +99,7 @@ export default function Registro_pconfigi_inv_7() {
       setLoadingBtn(false);
       if (info.message == "info") {
         setTimeout(() => {
-          window.location.href = "/investigador/convocatoria/pconfigi_inv";
+          window.location.href = "/investigador/convocatoria/pconfigi-inv";
         }, 5000);
       }
     } else {
