@@ -11,6 +11,7 @@ import Referencias from "./referencias";
 import Anexos from "./anexos";
 import Aplicacion from "./aplicacion";
 import Publicacion from "./publicacion";
+import Productos_entregables from "./productos_entregables";
 import Info from "./info";
 
 export default function Pconfigi_tabs({
@@ -133,6 +134,19 @@ export default function Pconfigi_tabs({
         <Publicacion
           value={formValues?.infinal10}
           handleChange={handleChange}
+        />
+      ),
+    },
+    {
+      id: "productos",
+      label: "Productos entregables",
+      content: (
+        <Productos_entregables
+          value3={formValues?.file3}
+          value4={formValues?.file4}
+          valueProductoEntregable={formValues?.producto_entregable}
+          handleChange={handleChange}
+          files={files}
         />
       ),
     },

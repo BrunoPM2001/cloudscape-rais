@@ -9,6 +9,7 @@ import {
   Header,
   Input,
   Link,
+  Select,
   SpaceBetween,
   Spinner,
   Table,
@@ -38,6 +39,8 @@ const initialForm = {
   infinal10: "",
   file1: [],
   file2: [],
+  file3: [],
+  file4: [],
 };
 
 const formRules = {};
@@ -65,6 +68,45 @@ const propsEnlaces = {
   target: "_blank",
 };
 
+const productosEntregablesOptions = [
+  {
+    label: "Pruebas de concepto.",
+    value: "Pruebas de concepto.",
+  },
+  {
+    label: "Prototipos básicos viables.",
+    value: "Prototipos básicos viables.",
+  },
+  {
+    label: "Producción de materiales educativos.",
+    value: "Producción de materiales educativos.",
+  },
+  {
+    label: "Desarrollo de herramientas digitales.",
+    value: "Desarrollo de herramientas digitales.",
+  },
+  {
+    label: "Software o aplicaciones.",
+    value: "Software o aplicaciones.",
+  },
+  {
+    label: "Modelos de emprendimiento.",
+    value: "Modelos de emprendimiento.",
+  },
+  {
+    label: "Planes de negocio.",
+    value: "Planes de negocio.",
+  },
+  {
+    label: "Propuestas de políticas o mejoras institucionales.",
+    value: "Propuestas de políticas o mejoras institucionales.",
+  },
+  {
+    label: "Tesis sustentadas, cuando hayan sido consideradas en el proyecto.",
+    value: "Tesis sustentadas, cuando hayan sido consideradas en el proyecto.",
+  },
+];
+
 export default () => {
   //  Context
   const { notifications, pushNotification } = useContext(NotificationContext);
@@ -88,6 +130,36 @@ export default () => {
   //  Hooks
   const { formValues, formErrors, handleChange, validateForm, setFormValues } =
     useFormValidation(initialForm, formRules);
+
+  // Helpers
+  const getFileUrl = (key) => {
+    if (!files?.[key]) return null;
+
+    if (typeof files[key] === "string") {
+      return files[key];
+    }
+
+    return files[key]?.url ?? null;
+  };
+
+  const getFileNombre = (key) => {
+    if (!files?.[key] || typeof files[key] === "string") {
+      return null;
+    }
+
+    return files[key]?.nombre ?? null;
+  };
+
+  const productoGuardado = getFileNombre("producto_entregable");
+
+  const selectedProductoEntregable =
+    formValues.producto_entregable ??
+    (productoGuardado
+      ? {
+          label: productoGuardado,
+          value: productoGuardado,
+        }
+      : null);
 
   //  Functions
   const getData = async () => {
@@ -143,6 +215,10 @@ export default () => {
     form.append("infinal9", formValues.infinal9);
     form.append("infinal10", formValues.infinal10);
     form.append("file1", formValues.file1[0]);
+    form.append("file2", formValues.file2[0]);
+    form.append("file3", formValues.file3[0]);
+    form.append("file4", formValues.file4[0]);
+    form.append("producto_entregable", formValues.producto_entregable?.value ?? null);
     const res = await axiosBase.post(
       "investigador/informes/informe_academico/sendData",
       form
@@ -519,12 +595,12 @@ export default () => {
                       <FormField
                         label="Adjuntar archivo digital"
                         description={
-                          files["informe-PRO-CTIE-INFORME"] && (
+                          getFileUrl("informe-PRO-CTIE-INFORME") && (
                             <>
                               Ya ha cargado un{" "}
                               <Link
                                 {...propsEnlaces}
-                                href={files["informe-PRO-CTIE-INFORME"]}
+                                href={getFileUrl["informe-PRO-CTIE-INFORME"]}
                               >
                                 archivo.
                               </Link>
@@ -554,10 +630,10 @@ export default () => {
                         }
                         constraintText="Remitir el formulario con los campos completados (ver modelo) a la Dirección de Promoción DGITT-VRIP dp.vrip@unmsm.edu.pe"
                         description={
-                          files.viabilidad && (
+                          getFileUrl("viabilidad") && (
                             <>
                               Ya ha cargado un{" "}
-                              <Link {...propsEnlaces} href={files.viabilidad}>
+                              <Link {...propsEnlaces} href={getFileUrl.viabilidad}>
                                 archivo.
                               </Link>
                             </>
@@ -600,6 +676,90 @@ export default () => {
                     name="infinal10"
                     limitWords={2000}
                   />
+                ),
+                isOptional: true,
+              },
+              {
+                title: "Productos entregables",
+                description: "Adjunte los documentos sustentatorios de los productos entregables del proyecto.",
+                content: (
+                  <Container>
+                    <ColumnLayout columns={2}>
+                      <FormField
+                        label="Aprobación del curso 'Gestión de la Madurez Tecnológica (TRL)' de la plataforma VÍNCULATE (CONCYTEC)"
+                        constraintText="Adjunte el certificado o constancia de aprobación del curso por parte de todo el equipo de trabajo."
+                        description={
+                          getFileUrl("trl_vinculate_concytec") && (
+                            <>
+                              Ya ha cargado un{" "}
+                              <Link
+                                {...propsEnlaces}
+                                href={getFileUrl("trl_vinculate_concytec")}
+                              >
+                                archivo.
+                              </Link>
+                            </>
+                          )
+                        }
+                        stretch
+                        errorText={formErrors.file3}
+                      >
+                        <FileUpload
+                          {...propsRepetidas}
+                          value={formValues.file3}
+                          onChange={({ detail }) => {
+                            handleChange("file3", detail.value);
+                          }}
+                        />
+                      </FormField>
+
+                      <FormField
+                        label="Otro producto entregable del proyecto"
+                        constraintText="Seleccione el producto entregable que corresponda al proyecto y adjunte el archivo que lo sustente."
+                        description={
+                          getFileUrl("producto_entregable") && (
+                            <>
+                              Ya ha cargado un{" "}
+                              <Link
+                                {...propsEnlaces}
+                                href={getFileUrl("producto_entregable")}
+                              >
+                                archivo.
+                              </Link>
+                              {getFileNombre("producto_entregable") && (
+                                <>
+                                  {" "}
+                                  como producto entregable:{" "}
+                                  <b>{getFileNombre("producto_entregable")}</b>
+                                </>
+                              )}
+                            </>
+                          )
+                        }
+                        stretch
+                        errorText={formErrors.file4}
+                      >
+                        <SpaceBetween size="s">
+                          <Select
+                            placeholder="Seleccione una opción"
+                            selectedOption={selectedProductoEntregable}
+                            options={productosEntregablesOptions}
+                            onChange={({ detail }) => {
+                              handleChange("producto_entregable", detail.selectedOption);
+                            }}
+                          />
+
+                          <FileUpload
+                            {...propsRepetidas}
+                            value={formValues.file4}
+                            onChange={({ detail }) => {
+                              handleChange("file4", detail.value);
+                            }}
+                          />
+                        </SpaceBetween>
+                      </FormField>
+                    </ColumnLayout>
+                  </Container>
                 ),
                 isOptional: true,
               },

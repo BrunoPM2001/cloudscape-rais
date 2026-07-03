@@ -179,6 +179,7 @@ export default function Detalle_informe_tecnico() {
     formData.append("file11", formValues.file11[0]);
     formData.append("file12", formValues.file12[0]);
     formData.append("estado_trabajo", formValues.estado_trabajo?.value ?? null);
+    formData.append("producto_entregable", formValues.producto_entregable?.value ?? null);
     const res = await axiosBase.post(
       "admin/estudios/informesTecnicos/updateInforme",
       formData
