@@ -3,6 +3,7 @@ import {
   Box,
   ButtonDropdown,
   Header,
+  Link,
   SpaceBetween,
   Table,
 } from "@cloudscape-design/components";
@@ -18,7 +19,15 @@ const columnDefinitions = [
   {
     id: "publicacion_id",
     header: "ID",
-    cell: (item) => item.publicacion_id,
+    cell: (item) => (
+      <Link
+        href={`/admin/estudios/gestion_publicaciones/detalle?id=${item.publicacion_id}`}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {item.publicacion_id}
+      </Link>
+    ),
     sortingField: "publicacion_id",
   },
   {

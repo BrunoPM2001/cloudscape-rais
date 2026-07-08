@@ -51,6 +51,23 @@ export default ({ data, loading, proyecto_id, reload }) => {
     window.open(url, "_blank");
   };
 
+  const exportPdfCompleto = async () => {
+    setLoadingReporte(true);
+    const res = await axiosBase.get(
+      "admin/estudios/proyectosGrupo/reporteCompleto",
+      {
+        params: {
+          proyecto_id,
+        },
+        responseType: "blob",
+      }
+    );
+    const blob = await res.data;
+    const url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
+    setLoadingReporte(false);
+  };
+
   return (
     <Container
       header={
@@ -72,12 +89,16 @@ export default ({ data, loading, proyecto_id, reload }) => {
                   {
                     text: "Archivo word",
                     id: "action_1",
-                    disabled: true,
+                    disabled: false,
                   },
                   {
                     text: "Pdf",
                     id: "action_2",
                     disabled: false,
+                  },
+                  {
+                    id: "action_3",
+                    text: "Pdf Completo",
                   },
                 ]}
               >
