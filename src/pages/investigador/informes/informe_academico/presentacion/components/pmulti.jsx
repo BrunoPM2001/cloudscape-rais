@@ -594,12 +594,12 @@ export default () => {
                     <FormField
                       label="Adjuntar archivo digital"
                       description={
-                        files["informe-PMULTI-INFORME-100"] && (
+                        files["informe-PMULTI-INFORME"] && (
                           <>
                             Ya ha cargado un{" "}
                             <Link
                               {...propsEnlaces}
-                              href={files["informe-PMULTI-INFORME-100"]}
+                              href={files["informe-PMULTI-INFORME"]}
                             >
                               archivo.
                             </Link>
