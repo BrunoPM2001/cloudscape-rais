@@ -66,6 +66,7 @@ export default function Registrar_patente_4() {
       {
         params: {
           id,
+          publicacion_id: id,
           tipo: "patente",
         },
         responseType: "blob",

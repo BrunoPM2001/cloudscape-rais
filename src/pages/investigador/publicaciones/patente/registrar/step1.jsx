@@ -64,6 +64,8 @@ const initialForm = {
   tipo: null,
   nro_expediente: "",
   fecha_presentacion: "",
+  fecha_publicacion: "",
+  fecha_otorgamiento: "",
   oficina_presentacion: "",
   enlace: "",
   file: [],
@@ -120,6 +122,8 @@ export default function Registrar_patente_1() {
       handleChange("tipo", { value: data.tipo });
       handleChange("nro_expediente", data.nro_expediente);
       handleChange("fecha_presentacion", data.fecha_presentacion);
+      handleChange("fecha_publicacion", data.fecha_publicacion);
+      handleChange("fecha_otorgamiento", data.fecha_otorgamiento);
       handleChange("oficina_presentacion", data.oficina_presentacion);
       handleChange("enlace", data.enlace);
       if (data.url) {
@@ -140,6 +144,8 @@ export default function Registrar_patente_1() {
       form.append("tipo", formValues.tipo["value"]);
       form.append("nro_expediente", formValues.nro_expediente);
       form.append("fecha_presentacion", formValues.fecha_presentacion);
+      form.append("fecha_publicacion", formValues.fecha_publicacion);
+      form.append("fecha_otorgamiento", formValues.fecha_otorgamiento);
       form.append("oficina_presentacion", formValues.oficina_presentacion);
       form.append("enlace", formValues.enlace);
       form.append("file", formValues.file[0]);
@@ -249,9 +255,11 @@ export default function Registrar_patente_1() {
                             handleChange("tipo", detail.selectedOption)
                           }
                           options={[
+                            { value: "Paquete tecnológico" },
                             { value: "Patente de invención" },
                             { value: "Modelo de utilidad" },
                             { value: "Certificado de obtentor" },
+                            { value: "Software" },
                           ]}
                         />
                       </FormField>
@@ -302,6 +310,32 @@ export default function Registrar_patente_1() {
                           value={formValues.enlace}
                           onChange={({ detail }) =>
                             handleChange("enlace", detail.value)
+                          }
+                        />
+                      </FormField>
+                    </ColumnLayout>
+                    <ColumnLayout columns={2}>
+                      <FormField
+                        label="Fecha de publicación"
+                        stretch
+                        errorText={formErrors.fecha_publicacion}
+                      >
+                        <DatePicker
+                          value={formValues.fecha_publicacion}
+                          onChange={({ detail }) =>
+                            handleChange("fecha_publicacion", detail.value)
+                          }
+                        />
+                      </FormField>
+                      <FormField
+                        label="Fecha de otorgamiento de la patente"
+                        stretch
+                        errorText={formErrors.fecha_otorgamiento}
+                      >
+                        <DatePicker
+                          value={formValues.fecha_otorgamiento}
+                          onChange={({ detail }) =>
+                            handleChange("fecha_otorgamiento", detail.value)
                           }
                         />
                       </FormField>
