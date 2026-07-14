@@ -82,7 +82,7 @@ export default function ({ data, loading, tipo, reload }) {
     { id: "tipo", visible: true },
     { id: "nombres", visible: true },
     { id: "filiacion", visible: true },
-    { id: "filiacion_unica", visible: tipo != "tesis-asesoria" },
+    { id: "filiacion_unica", visible: true },
     { id: "puntaje", visible: true },
     { id: "created_at", visible: true },
     { id: "updated_at", visible: true },

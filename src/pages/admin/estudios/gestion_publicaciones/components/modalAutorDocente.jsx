@@ -40,7 +40,7 @@ export default ({ id, reload, close, optAutor, tipo }) => {
   const formRules = {
     autor: { required: true },
     filiacion: { required: true },
-    filiacion_unica: { required: tipo != "tesis-asesoria" },
+    filiacion_unica: { required: true },
     categoria: { required: true },
   };
 
@@ -184,31 +184,29 @@ export default ({ id, reload, close, optAutor, tipo }) => {
                 options={optFiliacion}
               />
             </FormField>
-            {tipo != "tesis-asesoria" && (
-              <FormField
-                label="Filiación única con UNMSM"
-                info={
-                  <Popover
-                    header="Descripción"
-                    content="En caso la publicación solo presente filiación con una institución"
-                  >
-                    <Link variant="info">Info</Link>
-                  </Popover>
-                }
-                stretch
-                errorText={formErrors.filiacion_unica}
-              >
-                <Select
-                  placeholder="Escoja una opción"
-                  disabled={!enableCreate}
-                  selectedOption={formValues.filiacion_unica}
-                  onChange={({ detail }) => {
-                    handleChange("filiacion_unica", detail.selectedOption);
-                  }}
-                  options={optFiliacion}
-                />
-              </FormField>
-            )}
+            <FormField
+              label="Filiación única con UNMSM"
+              info={
+                <Popover
+                  header="Descripción"
+                  content="En caso la publicación solo presente filiación con una institución"
+                >
+                  <Link variant="info">Info</Link>
+                </Popover>
+              }
+              stretch
+              errorText={formErrors.filiacion_unica}
+            >
+              <Select
+                placeholder="Escoja una opción"
+                disabled={!enableCreate}
+                selectedOption={formValues.filiacion_unica}
+                onChange={({ detail }) => {
+                  handleChange("filiacion_unica", detail.selectedOption);
+                }}
+                options={optFiliacion}
+              />
+            </FormField>
             <FormField
               label="Condición"
               stretch
