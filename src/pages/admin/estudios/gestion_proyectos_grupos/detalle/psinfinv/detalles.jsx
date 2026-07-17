@@ -83,7 +83,9 @@ export default ({ data, loading, proyecto_id, reload }) => {
                     exportWord();
                   } else if (detail.id == "action_2") {
                     reporte();
-                  }
+                  } else if (detail.id == "action_3") {
+                    exportPdfCompleto();
+                  } 
                 }}
                 items={[
                   {

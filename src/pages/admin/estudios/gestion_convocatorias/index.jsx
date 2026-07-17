@@ -3,6 +3,7 @@ import BaseLayout from "../../components/baseLayout";
 import Listado_convocatorias from "./tabs/listado_convocatorias.jsx";
 import Listado_evaluaciones from "./tabs/listado_evaluaciones.jsx";
 import GrupoPartidas from "./tabs/grupoPartidas.jsx";
+import Listado_partidas from "./tabs/listado_partidas.jsx"
 
 const breadcrumbs = [
   {
@@ -32,6 +33,11 @@ const tabs = [
     id: "grupoPartidas",
     label: "Grupo de partidas",
     content: <GrupoPartidas />,
+  },
+  {
+    id: "listado_partidas",
+    label: "Listado de partidas",
+    content: <Listado_partidas />,
   },
 ];
 

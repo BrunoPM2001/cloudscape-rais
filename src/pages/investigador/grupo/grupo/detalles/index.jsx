@@ -1,4 +1,8 @@
-import { SpaceBetween, Tabs } from "@cloudscape-design/components";
+import { 
+  Alert,
+  SpaceBetween, 
+  Tabs 
+} from "@cloudscape-design/components";
 import Detalles from "./detalles";
 import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -88,6 +92,14 @@ export default function Detalle_grupo_invest() {
       contentType="table"
     >
       <SpaceBetween size="l">
+        {!loading && data.estado == 12 && (
+          <Alert
+            type="warning"
+            header="El grupo de investigación se encuentra observado"
+          >
+            {data.observaciones_admin || "No se registraron observaciones."}
+          </Alert>
+        )}
         <Detalles
           data={data}
           loading={loading}
